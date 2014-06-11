@@ -1,0 +1,42 @@
+package platform.view.build.system.manage.resource;
+
+import platform.view.build.form.control.Action;
+
+
+public class ResourceDeleteAction extends Action
+{
+    public int doBusiness() {
+         for (int i=0; i<this.req.getRecorderCount();i++ ){
+
+                   this.dc.executeUpdate(" delete from  PTRoleRes where (ResID='"+this.req.getFieldValue(i,"keycode")+"') ");
+
+                   String SQLStr = "select  * from  PTRoleRes where (ResID='"+this.req.getFieldValue(i,"keycode")+"') ";
+
+
+                  this.rs = this.dc.executeQuery(SQLStr);
+                  if (!this.rs.next()){
+                       SQLStr = "delete from PTResource where (ResID='" + this.req.getFieldValue(i,"keycode") + "')";
+                       int retcount = this.dc.executeUpdate(SQLStr);
+                       if(retcount < 0) {
+                            this.res.setType(0);
+                            this.res.setResult(false);
+                            this.res.setMessage("É¾³ý¼ÇÂ¼Ê§°Ü");
+                            return retcount;
+                       }
+
+                  }else{
+                       this.res.setType(0);
+                       this.res.setResult(false);
+                       this.res.setMessage("½ÇÉ«×ÊÔ´É¾³ýÊ§°Ü£¡");
+                       return -1;
+
+                  }
+
+         }
+
+         this.res.setType(0);
+         this.res.setResult(true);
+         this.res.setMessage("É¾³ý¼ÇÂ¼³É¹¦");
+         return 0;
+    }
+}

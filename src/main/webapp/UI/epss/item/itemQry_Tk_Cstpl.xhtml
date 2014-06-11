@@ -1,0 +1,200 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <link type="text/css" href="#{request.contextPath}/UI/epss/epss.css" rel="stylesheet"/>
+        <script type="text/javascript" src="#{request.contextPath}/UI/support/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="false"/>
+            <p:contextMenu for="pdt" id="pcm">
+                <p:menuitem value="浏览" icon="ui-icon-arrowrefresh-1-w"
+                            actionListener="#{itemCstplAction.selectRecordAction('Sel')}"
+                            update="pgView,pdt,msgs"
+                            onclick="PF('wVDlgView').show()">
+                </p:menuitem>
+            </p:contextMenu>
+            <p:dataTable id="pdt" style="width:100%;"
+                         value="#{itemCstplAction.cstplItemShowList}"
+                         var="record"
+                         rowKey="#{record.pkid}"
+                         selection="#{itemCstplAction.cstplItemShowSelected}"
+                         selectionMode="single"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="20"
+                         rowsPerPageTemplate="200,100,50,40,30,20,15"
+                         rowIndexVar="row"
+                         emptyMessage="数据记录为空..."
+                         rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.nameContrast eq '合计'? 'rowDoneStyle':
+                                             record.name eq '总合计'? 'rowDoneStyle':record.nameContrast eq '总合计'? 'rowDoneStyle':null}"
+                         scrollable="true">
+                <p:column style="width:30px" id="rowid" headerText="序号">
+                    <h:outputText value="#{row + 1}"/>
+                </p:column>
+                <p:column style="width:100px" headerText="总包编号">
+                    <h:outputText value="#{record.strNo}" escape="false"/>
+                </p:column>
+                <p:column style="width:250px" headerText="总包名称">
+                    <h:outputText value="#{record.name}" />
+                </p:column>
+                <p:column style="width:60px" headerText="总包单位">
+                    <h:outputText value="#{record.unit}" style="text-align:right"/>
+                </p:column>
+                <p:column style="width:80px" headerText="总包单价">
+                    <h:outputText value="#{record.contractUnitPrice}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:80px" headerText="总包数量">
+                    <h:outputText value="#{record.contractQuantity}" style="float: right">
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:100px" headerText="总包金额">
+                    <h:outputText value="#{record.contractAmount}" style="float: right">
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <!--成本计划-->
+                <p:column style="width:100px" headerText="成本编号">
+                    <h:outputText value="#{record.strNoContrast}" escape="false"/>
+                </p:column>
+                <p:column style="width:250px" headerText="成本名称">
+                    <h:outputText value="#{record.nameContrast}" />
+                </p:column>
+                <p:column style="width:60px" headerText="成本单位">
+                    <h:outputText value="#{record.unitContrast}" style="text-align:right"/>
+                </p:column>
+                <p:column style="width:80px" headerText="成本单价">
+                    <h:outputText value="#{record.contractUnitPriceContrast}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:80px" headerText="成本数量">
+                    <h:outputText value="#{record.contractQuantityContrast}" style="float: right">
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:100px" headerText="成本金额">
+                    <h:outputText value="#{record.contractAmountContrast}" style="float: right">
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:300px" headerText="成本备注">
+                    <h:outputText value="#{record.noteContrast}" />
+                </p:column>
+            </p:dataTable>
+            <p:dialog id="dlgView" header="成本计划内容查询" widgetVar="wVDlgView"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgView">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel for="noItemHieRelap" value="项目编号：" />
+                        <h:inputText id="noItemHieRelap"
+                                     value="#{itemCstplAction.cttItemShowSel.strNo}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:328px;">
+                        </h:inputText>
+                        <p:outputLabel for="name" value="项目名称：" />
+                        <h:inputText id="name"
+                                     value="#{itemCstplAction.cttItemShowSel.name}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:328px;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+                        <p:outputLabel for="unitItemInfo" value="单位："/>
+                        <h:inputText id="unitItemInfo"
+                                     value="#{itemCstplAction.cttItemShowSel.unit}"
+                                     style="background-color:gainsboro;"
+                                     readonly="true"/>
+                        <p:outputLabel for="contractUnitPriceItemInfo" value="合同单价："/>
+                        <h:inputText id="contractUnitPriceItemInfo"
+                                     value="#{itemCstplAction.cttItemShowSel.contractUnitPrice}"
+                                     style="background-color:gainsboro;;text-align:right;float:left"
+                                     readonly="true" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:inputText>
+                        <p:outputLabel for="contractQuantityItemInfo" value="合同数量："/>
+                        <h:inputText id="contractQuantityItemInfo"
+                                     value="#{itemCstplAction.cttItemShowSel.contractQuantity}"
+                                     style="background-color:gainsboro;;text-align:right;float:left"
+                                     readonly="true">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:inputText>
+                        <p:outputLabel for="contractAmountItemInfo" value="合同金额："/>
+                        <h:inputText id="contractAmountItemInfo"
+                                     value="#{itemCstplAction.cttItemShowSel.contractAmount}"
+                                     style="background-color:gainsboro;text-align:right;"
+                                     readonly="true">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:inputText>
+                        <p:outputLabel for="note" value="备注内容：" />
+                        <h:inputText id="note"
+                                     value="#{itemCstplAction.cttItemShowSel.note}"
+                                     style="background-color:gainsboro;"
+                                     readonly="true"/>
+                        <p:outputLabel for="originFlagItemInfo" value="数据来源：" />
+                        <h:inputText id="originFlagItemInfo"
+                                     value="#{esCommon.originFlagListValueOfAlias(
+                                                 itemCstplAction.cttItemShowSel.originFlag)}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="createdByItemInfo" value="创建人：" />
+                        <h:inputText id="createdByItemInfo"
+                                     value="#{itemCstplAction.cttItemShowSel.createdByName}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="createdDateItemInfo" value="创建时间：" />
+                        <h:inputText id="createdDateItemInfo"
+                                     value="#{itemCstplAction.cttItemShowSel.createdDate}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="lastUpdByItemInfo" value="修改人：" />
+                        <h:inputText id="lastUpdByItemInfo"
+                                     value="#{itemCstplAction.cttItemShowSel.lastUpdByName}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="lastUpdDateItemInfo" value="修改时间：" />
+                        <h:inputText id="lastUpdDateItemInfo"
+                                     value="#{itemCstplAction.cttItemShowSel.lastUpdDate}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="modificationNumItemInfo" value="修改次数：" />
+                        <h:inputText id="modificationNumItemInfo"
+                                     value="#{itemCstplAction.cttItemShowSel.modificationNum}"
+                                     style="background-color:gainsboro;text-align:right;"
+                                     readonly="true">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                        </h:inputText>
+                        <p:outputLabel for="correspondingPkidItemInfo" value="对应编号：" />
+                        <h:inputText id="correspondingPkidItemInfo"
+                                     value="#{itemCstplAction.cttItemShowSel.strCorrespondingItemNo}"
+                                     style="background-color:gainsboro;"
+                                     readonly="true">
+                        </h:inputText>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+<!--（1）输出的时间与原来的时间差8个小时,原因是没加上时间的属性,改成:
+<h:outputText value="#{data.t_Date}">
+    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" locale="cn" />
+</h:outputText>
+加上 timeZone="GMT+8"之后，则显示正常的时间
+（2）有的需要显示是12小时格式，有的需要显示24小时格式
+主要在 pattern="yyyy-MM-dd HH:mm:ss"这句的hh上面，要是大写的HH则是24小时格式，小写hh则是12小时格式-->

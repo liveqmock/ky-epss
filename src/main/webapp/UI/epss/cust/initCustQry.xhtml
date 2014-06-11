@@ -1,0 +1,184 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <script type="text/javascript" src="#{request.contextPath}/UI/support/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:focus for="id"/>
+            <p:panel>
+                <h:panelGrid id="pdQry" columns="2" style="width: 100%">
+                    <h:panelGrid columns="6">
+                        <p:outputLabel value="客户编号：" for="idQry"/>
+                        <p:inputText id="idQry" value="#{esInitCustAction.signPartShowQry.id}"/>
+                        <p:outputLabel value="客户名称：" for="nameQry"/>
+                        <p:inputText id="nameQry" value="#{esInitCustAction.signPartShowQry.name}"/>
+                        <p:outputLabel value="手机：" for="mobilephoneQry"/>
+                        <p:inputText id="mobilephoneQry" value="#{esInitCustAction.signPartShowQry.mobilephone}"/>
+                        <p:outputLabel value="电话：" for="operphoneQry"/>
+                        <p:inputText id="operphoneQry" value="#{esInitCustAction.signPartShowQry.operphone}"/>
+                        <p:outputLabel value="传真：" for="faxQry"/>
+                        <p:inputText id="faxQry" value="#{esInitCustAction.signPartShowQry.fax}"/>
+                        <p:outputLabel value="邮箱：" for="emailQry"/>
+                        <p:inputText id="emailQry" value="#{esInitCustAction.signPartShowQry.email}"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <h:panelGrid>
+                            <p:commandButton id="qryBtnQry" value="查询"
+                                             action="#{esInitCustAction.onQueryAction('true')}"
+                                             update="pdt,msgs,pdQry">
+                            </p:commandButton>
+                            <p:commandButton id="resetBtnQqry" value="重置"
+                                             type="reset"
+                                             update="pdQry,msgs">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <!--列表维护-->
+            <p:contextMenu for="pdt">
+                <p:menuitem value="浏览" icon="ui-icon-search"
+                            actionListener="#{esInitCustAction.selectRecordAction('Sel')}"
+                            update="pdt,msgs,pgView"
+                            onclick="PF('wVDlgView').show()">
+                </p:menuitem>
+                <p:menuitem value="附件" icon="ui-icon-search"
+                            oncomplete="actSelect(DtInitCustList.selection,'Attachment')">
+                </p:menuitem>
+            </p:contextMenu>
+            <p:dataTable id="pdt" style="width:100%;"
+                         value="#{esInitCustAction.signPartShowList}"
+                         var="record"
+                         rowKey="#{record.pkid}"
+                         selection="#{esInitCustAction.signPartShowSelected}"
+                         selectionMode="single"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="15"
+                         rowIndexVar="row"
+                         rowsPerPageTemplate="200,100,50,40,30,20,15"
+                         emptyMessage="数据记录为空..."
+                         widgetVar="DtInitCustList"
+                         scrollable="true">
+                <p:column headerText="序号" style="width:30px">
+                    <h:outputText value="#{row + 1}"/>
+                </p:column>
+                <p:column headerText="客户编号" style="width:160px;text-align:center">
+                    <h:outputText value="#{record.id}"/>
+                </p:column>
+                <p:column headerText="客户名称" style="width:300px;text-align:left">
+                    <h:outputText value="#{record.name}"/>
+                </p:column>
+                <p:column headerText="手机" style="width:80px;text-align:center">
+                    <h:outputText value="#{record.mobilephone}"/>
+                </p:column>
+                <p:column headerText="邮箱" style="width:150px;text-align:center">
+                    <h:outputText value="#{record.email}"/>
+                </p:column>
+                <p:column headerText="电话" style="width:100px;text-align:center">
+                    <h:outputText value="#{record.operphone}"/>
+                </p:column>
+                <p:column headerText="其他电话" style="width:100px;text-align:center">
+                    <h:outputText value="#{record.otherphone}"/>
+                </p:column>
+                <p:column headerText="传真" style="width:100px;text-align:center">
+                    <h:outputText value="#{record.fax}"/>
+                </p:column>
+                <p:column headerText="备注内容" style="width:150px;text-align:center">
+                    <h:outputText value="#{record.note}"/>
+                </p:column>
+            </p:dataTable>
+            <p:dialog id="dlgView" header="签约客户信息" widgetVar="wVDlgView"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgView">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="客户编号：" for="id"/>
+                        <p:inputText id="id" value="#{esInitCustAction.signPartShowSel.id}"
+                                     readonly="true"
+                                     style="background-color:gainsboro"/>
+                        <p:outputLabel value="客户名称：" for="name"/>
+                        <p:inputText id="name" value="#{esInitCustAction.signPartShowSel.name}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:328px;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="手机：" for="mobilephone"/>
+                        <p:inputText id="mobilephone" value="#{esInitCustAction.signPartShowSel.mobilephone}"
+                                     readonly="true"
+                                     style="background-color:gainsboro"/>
+                        <p:outputLabel value="电话：" for="operphone"/>
+                        <p:inputText id="operphone" value="#{esInitCustAction.signPartShowSel.operphone}"
+                                     readonly="true"
+                                     style="background-color:gainsboro"/>
+                        <p:outputLabel value="备注内容：" for="note"/>
+                        <p:inputText id="note" value="#{esInitCustAction.signPartShowSel.note}"
+                                     readonly="true"
+                                     style="background-color:gainsboro"/>
+                        <p:outputLabel value="其他电话：" for="otherphone"/>
+                        <p:inputText id="otherphone" value="#{esInitCustAction.signPartShowSel.otherphone}"
+                                     readonly="true"
+                                     style="background-color:gainsboro"/>
+                        <p:outputLabel value="传真：" for="fax"/>
+                        <p:inputText id="fax" value="#{esInitCustAction.signPartShowSel.fax}"
+                                     readonly="true"
+                                     style="background-color:gainsboro"/>
+                        <p:outputLabel value="邮箱：" for="email"/>
+                        <p:inputText id="email" value="#{esInitCustAction.signPartShowSel.email}"
+                                     readonly="true"
+                                     style="background-color:gainsboro"/>
+                        <p:outputLabel for="createdByItemInfoForUpd" value="创建人:" />
+                        <h:inputText id="createdByItemInfoForUpd"
+                                     value="#{esInitCustAction.signPartShowSel.createdByName}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="createdDateItemInfoForUpd" value="创建时间:" />
+                        <h:inputText id="createdDateItemInfoForUpd"
+                                     value="#{esInitCustAction.signPartShowSel.createdDate}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="lastUpdByItemInfoForUpd" value="修改人:" />
+                        <h:inputText id="lastUpdByItemInfoForUpd"
+                                     value="#{esInitCustAction.signPartShowSel.lastUpdByName}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="lastUpdDateItemInfoForUpd" value="修改时间:" />
+                        <h:inputText id="lastUpdDateItemInfoForUpd"
+                                     value="#{esInitCustAction.signPartShowSel.lastUpdDate}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="modificationNumItemInfoForUpd" value="修改次数:" />
+                        <h:inputText id="modificationNumItemInfoForUpd"
+                                     value="#{esInitCustAction.signPartShowSel.modificationNum}"
+                                     style="background-color:gainsboro;text-align:right;" readonly="true">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                        </h:inputText>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
