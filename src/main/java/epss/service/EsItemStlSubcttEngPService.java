@@ -2,9 +2,6 @@ package epss.service;
 
 import epss.common.utils.ToolUtil;
 import epss.repository.dao.EsItemStlSubcttEngPMapper;
-import epss.repository.dao.EsItemStlSubcttEngPMapper;
-import epss.repository.dao.common.CommonMapper;
-import epss.repository.model.EsItemStlSubcttEngP;
 import epss.repository.model.EsItemStlSubcttEngP;
 import epss.repository.model.EsItemStlSubcttEngPExample;
 import org.springframework.stereotype.Service;
@@ -31,7 +28,7 @@ public class EsItemStlSubcttEngPService {
         return esItemStlSubcttEngPMapper.selectByPrimaryKey(strPkId);
     }
 
-     public List<EsItemStlSubcttEngP> selectRecordsByDetailExample(EsItemStlSubcttEngP esItemStlSubcttEngPPara){
+    public List<EsItemStlSubcttEngP> selectRecordsByDetailExample(EsItemStlSubcttEngP esItemStlSubcttEngPPara){
         EsItemStlSubcttEngPExample example = new EsItemStlSubcttEngPExample();
         example.createCriteria().andPeriodNoEqualTo(esItemStlSubcttEngPPara.getPeriodNo());
         return esItemStlSubcttEngPMapper.selectByExample(example);
@@ -42,9 +39,9 @@ public class EsItemStlSubcttEngPService {
     }
 
     public void updateRecordDetail(EsItemStlSubcttEngP esItemStlSubcttEngPPara){
-        esItemStlSubcttEngPPara.setModificationNum(
-                ToolUtil.getIntIgnoreNull(esItemStlSubcttEngPPara.getModificationNum())+1);
-        esItemStlSubcttEngPPara.setDeleteFlag("0");
+        esItemStlSubcttEngPPara.setRecVersion(
+                ToolUtil.getIntIgnoreNull(esItemStlSubcttEngPPara.getRecVersion())+1);
+        esItemStlSubcttEngPPara.setArchivedFlag("0");
         esItemStlSubcttEngPPara.setLastUpdBy(platformService.getStrLastUpdBy());
         esItemStlSubcttEngPPara.setLastUpdDate(platformService.getStrLastUpdDate());
         esItemStlSubcttEngPMapper.updateByPrimaryKey(esItemStlSubcttEngPPara) ;
@@ -53,9 +50,17 @@ public class EsItemStlSubcttEngPService {
     public void insertRecordDetail(EsItemStlSubcttEngP esItemStlSubcttEngPPara){
         esItemStlSubcttEngPPara.setCreatedBy(platformService.getStrLastUpdBy());
         esItemStlSubcttEngPPara.setCreatedDate(platformService.getStrLastUpdDate());
-        esItemStlSubcttEngPPara.setDeleteFlag("0");
+        esItemStlSubcttEngPPara.setArchivedFlag("0");
         esItemStlSubcttEngPPara.setLastUpdBy(platformService.getStrLastUpdBy());
         esItemStlSubcttEngPPara.setLastUpdDate(platformService.getStrLastUpdDate());
         esItemStlSubcttEngPMapper.insert(esItemStlSubcttEngPPara) ;
+    }
+
+    public void deleteRecordByExample(String strSubcttInfoPkidPara,String strPeriodNoPara){
+        EsItemStlSubcttEngPExample example = new EsItemStlSubcttEngPExample();
+        example.createCriteria()
+                .andSubcttPkidEqualTo(strSubcttInfoPkidPara)
+                .andPeriodNoEqualTo(strPeriodNoPara);
+        esItemStlSubcttEngPMapper.deleteByExample(example);
     }
 }

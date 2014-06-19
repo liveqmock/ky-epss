@@ -1,6 +1,8 @@
 package epss.view.item;
 
 import epss.common.enums.ESEnum;
+import epss.common.enums.ESEnumPreStatusFlag;
+import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.model_show.CommStlSubcttEngH;
 import epss.repository.model.model_show.ProgSubstlItemShow;
 import epss.common.utils.JxlsManager;
@@ -13,6 +15,7 @@ import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.transaction.annotation.Transactional;
 import platform.service.PlatformService;
 
 import javax.annotation.PostConstruct;
@@ -52,6 +55,8 @@ public class ItemSubcttEngPStlAction {
     private EsItemStlSubcttEngMService esItemStlSubcttEngMService;
     @ManagedProperty(value = "#{esItemStlSubcttEngQService}")
     private EsItemStlSubcttEngQService esItemStlSubcttEngQService;
+    @ManagedProperty(value = "#{esInitPowerService}")
+    private EsInitPowerService esInitPowerService;
 
     private List<ProgSubstlItemShow> progSubstlItemShowList;
     private CommStlSubcttEngH commStlSubcttEngH;
@@ -60,11 +65,13 @@ public class ItemSubcttEngPStlAction {
     private EsInitStl esInitStl;
 
     /*所属号*/
-    private String strEsInitStlSubcttEng;
+    private String strEsInitStlPkid;
     private Date nowDate;
 
     // 画面上控件的显示控制
     private String strExportToExcelRendered;
+    // 控制记账按钮的显示
+    private String strAccountBtnRendered;
 
     @PostConstruct
     public void init() {
@@ -72,8 +79,8 @@ public class ItemSubcttEngPStlAction {
         beansMap = new HashMap();
         commStlSubcttEngH =new CommStlSubcttEngH();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if(parammap.containsKey("strEsInitStlSubcttEng")){
-            strEsInitStlSubcttEng=parammap.get("strEsInitStlSubcttEng").toString();
+        if(parammap.containsKey("strEsInitStlPkid")){
+            strEsInitStlPkid=parammap.get("strEsInitStlPkid").toString();
         }
         initData();
     }
@@ -87,7 +94,19 @@ public class ItemSubcttEngPStlAction {
         List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
         progSubstlItemShowList =new ArrayList<ProgSubstlItemShow>();
         // From StlPkid To SubcttPkid
-        esInitStl = esInitStlService.selectRecordsByPrimaryKey(strEsInitStlSubcttEng);
+        esInitStl = esInitStlService.selectRecordsByPrimaryKey(strEsInitStlPkid);
+        // 如果该分包合同价格结算已经记账，则在记账页面上不显示记账按钮
+        EsInitPower esInitPowerTemp=new EsInitPower();
+        esInitPowerTemp.setPowerType(esInitStl.getStlType());
+        esInitPowerTemp.setPowerPkid(esInitStl.getStlPkid());
+        esInitPowerTemp.setPeriodNo(esInitStl.getPeriodNo());
+        EsInitPower esInitPower =  esInitPowerService.selectByPrimaryKey(esInitPowerTemp);
+        if(ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(esInitPower.getStatusFlag())){
+            strAccountBtnRendered="false";
+        }else{
+            strAccountBtnRendered="true";
+        }
+        // Excel中的头信息
         commStlSubcttEngH.setStrSubcttPkid(esInitStl.getStlPkid());
         commStlSubcttEngH.setStrStlId(esInitStl.getId());
         // From SubcttPkid To CstplPkid
@@ -123,6 +142,20 @@ public class ItemSubcttEngPStlAction {
         }
     }
 
+    /**
+     * 根据权限进行审核
+     */
+    @Transactional
+    public void accountAction(){
+        try {
+            esInitPowerService.accountAction(esInitStl);
+            MessageUtil.addInfo("结算数据记账成功！");
+        } catch (Exception e) {
+            logger.error("结算数据记账失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+
     private void setStlSubCttEngPMngConstructList_AddSettle(){
         try {
             BigDecimal bd0=new BigDecimal(0);
@@ -136,18 +169,22 @@ public class ItemSubcttEngPStlAction {
             //扣款用
             List<ProgSubstlItemShow> progSubstlItemShowListForReduction =new ArrayList<ProgSubstlItemShow>() ;
             for(ProgSubstlItemShow itemUnit: progSubstlItemShowList){
-                if(!ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_ItemPkid()).equals("")){
-                    // 从工程数量结算中抽取结算数据
-                    EsItemStlSubcttEngQ esItemStlSubcttEngQ=new EsItemStlSubcttEngQ();
-                    esItemStlSubcttEngQ.setSubcttPkid(commStlSubcttEngH.getStrSubcttPkid());
-                    esItemStlSubcttEngQ.setSubcttItemPkid(itemUnit.getSubctt_ItemPkid());
-                    esItemStlSubcttEngQ.setPeriodNo(esInitStl.getPeriodNo());
-                    List<EsItemStlSubcttEngQ> esItemStlSubcttEngQList = esItemStlSubcttEngQService.selectRecordsByExample(esItemStlSubcttEngQ);
-                    if(esItemStlSubcttEngQList.size()>0){
-                        esItemStlSubcttEngQ= esItemStlSubcttEngQList.get(0);
-                        itemUnit.setEngPMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngQ.getBeginToCurrentPeriodEQty());
-                        itemUnit.setEngPMng_CurrentPeriodEQty(esItemStlSubcttEngQ.getCurrentPeriodEQty());
-                    }
+                ProgSubstlItemShow progSubstlItemShowTemp=(ProgSubstlItemShow)BeanUtils.cloneBean(itemUnit);
+                //扣款用
+                if(ToolUtil.getBdIgnoreNull(progSubstlItemShowTemp.getSubctt_SignPartAPrice()).compareTo(bd0)!=0) {
+                    progSubstlItemShowListForReduction.add(progSubstlItemShowTemp);
+                }
+                // 从工程数量结算中抽取结算数据
+                EsItemStlSubcttEngQ esItemStlSubcttEngQTemp=new EsItemStlSubcttEngQ();
+                esItemStlSubcttEngQTemp.setSubcttPkid(commStlSubcttEngH.getStrSubcttPkid());
+                esItemStlSubcttEngQTemp.setSubcttItemPkid(itemUnit.getSubctt_ItemPkid());
+                esItemStlSubcttEngQTemp.setPeriodNo(esInitStl.getPeriodNo());
+                List<EsItemStlSubcttEngQ> esItemStlSubcttEngQList =
+                        esItemStlSubcttEngQService.selectRecordsByExample(esItemStlSubcttEngQTemp);
+                if(esItemStlSubcttEngQList.size()>0){
+                    esItemStlSubcttEngQTemp= esItemStlSubcttEngQList.get(0);
+                    itemUnit.setEngPMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngQTemp.getBeginToCurrentPeriodEQty());
+                    itemUnit.setEngPMng_CurrentPeriodEQty(esItemStlSubcttEngQTemp.getCurrentPeriodEQty());
                 }
 
                 BigDecimal bdContractUnitPriceInSubctt=itemUnit.getSubctt_ContractUnitPrice() == null ?
@@ -168,7 +205,7 @@ public class ItemSubcttEngPStlAction {
                 }
 
                 EsItemStlSubcttEngP esItemStlSubcttEngPTemp=new EsItemStlSubcttEngP();
-                esItemStlSubcttEngPTemp.setPeriodNo(esCommon.getStrDateThisPeriod());
+                esItemStlSubcttEngPTemp.setPeriodNo(esInitStl.getPeriodNo());
                 List<EsItemStlSubcttEngP> esItemStlSubcttEngPListTemp =
                         esItemStlSubcttEngPService.selectRecordsByDetailExample(esItemStlSubcttEngPTemp);
                 if(esItemStlSubcttEngPListTemp.size()>0){
@@ -178,17 +215,17 @@ public class ItemSubcttEngPStlAction {
                     itemUnit.setEngPMng_SubcttPkid(commStlSubcttEngH.getStrSubcttPkid());
                     itemUnit.setEngPMng_ItemPkid(esItemStlSubcttEngPTemp.getSubcttItemPkid());
 
-                    itemUnit.setEngPMng_CurrentPeriodEQty(esItemStlSubcttEngPTemp.getCurrentPeriodEQty());
-                    itemUnit.setEngPMng_CurrentPeriodAmt(esItemStlSubcttEngPTemp.getCurrentPeriodEAmt());
-                    itemUnit.setEngPMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngPTemp.getBeginToCurrentPeriodEQty());
-                    itemUnit.setEngPMng_BeginToCurrentPeriodAmt(esItemStlSubcttEngPTemp.getBeginToCurrentPeriodEAmt());
+                    itemUnit.setEngPMng_CurrentPeriodEQty(esItemStlSubcttEngPTemp.getThisStageQty());
+                    itemUnit.setEngPMng_CurrentPeriodAmt(esItemStlSubcttEngPTemp.getThisStageAmt());
+                    itemUnit.setEngPMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngPTemp.getAddUpQty());
+                    itemUnit.setEngPMng_BeginToCurrentPeriodAmt(esItemStlSubcttEngPTemp.getAddUpAmt());
 
-                    itemUnit.setEngPMng_DeletedFlag(esItemStlSubcttEngPTemp.getDeleteFlag());
+                    itemUnit.setEngPMng_DeletedFlag(esItemStlSubcttEngPTemp.getArchivedFlag());
                     itemUnit.setEngPMng_CreatedBy(esItemStlSubcttEngPTemp.getCreatedBy());
                     itemUnit.setEngPMng_CreatedDate(esItemStlSubcttEngPTemp.getCreatedDate());
                     itemUnit.setEngPMng_LastUpdBy(esItemStlSubcttEngPTemp.getLastUpdBy());
                     itemUnit.setEngPMng_LastUpdDate(esItemStlSubcttEngPTemp.getLastUpdDate());
-                    itemUnit.setEngPMng_ModificationNum(esItemStlSubcttEngPTemp.getModificationNum());
+                    itemUnit.setEngPMng_ModificationNum(esItemStlSubcttEngPTemp.getRecVersion());
                 }
                 //税金率
                 if(ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_SpareField()).equals("0")){
@@ -206,10 +243,7 @@ public class ItemSubcttEngPStlAction {
                 if(ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_SpareField()).equals("3")){
                     bdRates[3]=ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount());
                 }
-                //扣款用
-                if(itemUnit.getSubctt_SignPartAPrice()!=null && itemUnit.getSubctt_SignPartAPrice().compareTo(bd0)!=0) {
-                    progSubstlItemShowListForReduction.add(itemUnit);
-                }
+
                 bdCurrentPeriodTotalAmtTemp=bdCurrentPeriodTotalAmtTemp.add(
                         getBdIgnoreNull(itemUnit.getEngPMng_CurrentPeriodAmt()));
                 bdBeginToCurrentPeriodTotalAmtTemp=bdBeginToCurrentPeriodTotalAmtTemp.add(
@@ -255,8 +289,9 @@ public class ItemSubcttEngPStlAction {
                 EsItemStlSubcttEngM esItemStlSubcttEngM=new EsItemStlSubcttEngM();
                 esItemStlSubcttEngM.setSubcttPkid(commStlSubcttEngH.getStrSubcttPkid());
                 esItemStlSubcttEngM.setSubcttItemPkid(progSubstlItemShowTemp.getSubctt_ItemPkid());
-                esItemStlSubcttEngM.setPeriodNo(esCommon.getStrDateThisPeriod());
-                List<EsItemStlSubcttEngM> esItemStlSubcttEngMList = esItemStlSubcttEngMService.selectRecordsByExample(esItemStlSubcttEngM);
+                esItemStlSubcttEngM.setPeriodNo(esInitStl.getPeriodNo());
+                List<EsItemStlSubcttEngM> esItemStlSubcttEngMList =
+                        esItemStlSubcttEngMService.selectRecordsByExample(esItemStlSubcttEngM);
                 if(esItemStlSubcttEngMList.size()>0){
                     esItemStlSubcttEngM= esItemStlSubcttEngMList.get(0);
                     progSubstlItemShowTemp.setEngPMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngM.getBeginToCurrentPeriodMQty());
@@ -275,8 +310,10 @@ public class ItemSubcttEngPStlAction {
                     bdTotalAmt=bdTotalAmt.add(bdEngPMng_CurrentPeriodAmtTemp);
                     bdTotalAllAmt=bdTotalAllAmt.add(bdSubctt_ContractUnitPrice.multiply(bdEngPMng_BeginToCurrentPeriodEQty));
 
-                    progSubstlItemShowTemp.setEngPMng_CurrentPeriodAmt(bdEngPMng_CurrentPeriodAmtTemp);
-                    progSubstlItemShowTemp.setEngPMng_BeginToCurrentPeriodAmt(bdEngPMng_BeginToCurrentPeriodAmtTemp);
+                    progSubstlItemShowTemp.setEngPMng_CurrentPeriodAmt(
+                            ToolUtil.getBdFrom0ToNull(bdEngPMng_CurrentPeriodAmtTemp));
+                    progSubstlItemShowTemp.setEngPMng_BeginToCurrentPeriodAmt(
+                            ToolUtil.getBdFrom0ToNull(bdEngPMng_BeginToCurrentPeriodAmtTemp));
                 }
                 records1.add(progSubstlItemShowTemp);
                 progSubstlItemShowList.add(progSubstlItemShowTemp);
@@ -367,15 +404,13 @@ public class ItemSubcttEngPStlAction {
             progSubstlItemShowTemp.setSubctt_Orderid(itemUnit.getOrderid());
             progSubstlItemShowTemp.setSubctt_ItemPkid(itemUnit.getPkid());
             progSubstlItemShowTemp.setSubctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
-
             progSubstlItemShowTemp.setSubctt_Name(itemUnit.getName());
-            progSubstlItemShowTemp.setSubctt_Note(itemUnit.getNote());
-
             progSubstlItemShowTemp.setSubctt_Unit(itemUnit.getUnit());
             progSubstlItemShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             progSubstlItemShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
             progSubstlItemShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
             progSubstlItemShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
+            progSubstlItemShowTemp.setSubctt_Note(itemUnit.getNote());
             sProgSubstlItemShowListPara.add(progSubstlItemShowTemp) ;
             recursiveDataTable(progSubstlItemShowTemp.getSubctt_Pkid(), esCttItemListPara, sProgSubstlItemShowListPara);
         }
@@ -443,6 +478,14 @@ public class ItemSubcttEngPStlAction {
     }
 
    /* 智能字段Start*/
+    public EsInitPowerService getEsInitPowerService() {
+        return esInitPowerService;
+    }
+
+    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
+        this.esInitPowerService = esInitPowerService;
+    }
+
     public EsCttItemService getEsCttItemService() {
         return esCttItemService;
     }
@@ -530,5 +573,14 @@ public class ItemSubcttEngPStlAction {
     public void setCommStlSubcttEngH(CommStlSubcttEngH commStlSubcttEngH) {
         this.commStlSubcttEngH = commStlSubcttEngH;
     }
+
+    public String getStrAccountBtnRendered() {
+        return strAccountBtnRendered;
+    }
+
+    public void setStrAccountBtnRendered(String strAccountBtnRendered) {
+        this.strAccountBtnRendered = strAccountBtnRendered;
+    }
+
     /*智能字段End*/
 }

@@ -692,24 +692,25 @@ public class ItemCstplAction {
                     return false;
                 }
             }
-            cttItemShowSel = getItemOfEsItemHieRelapByItem(cstplItemShowSelected,"Tkctt");
-            cttItemShowSel.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowSel.getStrNo())) ;
-            cttItemShowSel.setBelongToType(strBelongToType) ;
-            cttItemShowSel.setBelongToPkid(strBelongToPkid) ;
+            cttItemShowAdd = getItemOfEsItemHieRelapByItem(cstplItemShowSelected,"Tkctt");
+            cttItemShowAdd.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowAdd.getStrNo())) ;
+            cttItemShowAdd.setBelongToType(strBelongToType) ;
+            cttItemShowAdd.setBelongToPkid(strBelongToPkid) ;
             Integer intLastIndexof=strIgnoreSpaceOfStr.lastIndexOf(".");
             if(intLastIndexof>0){
                 String strParentNo=strIgnoreSpaceOfStr.substring(0,intLastIndexof);
                 CstplItemShow cstplItemShowTemp =new CstplItemShow();
                 cstplItemShowTemp =
                         getItemOfTkcttAndCstplByStrNo(strParentNo, cstplItemShowList,"Cstpl");
-                cttItemShowSel.setParentPkid(cstplItemShowTemp.getPkid());
-                cttItemShowSel.setGrade(cstplItemShowTemp.getGrade() + 1) ;
+                cttItemShowAdd.setParentPkid(cstplItemShowTemp.getPkid());
+                cttItemShowAdd.setGrade(cstplItemShowTemp.getGrade() + 1) ;
             }else{
-                cttItemShowSel.setParentPkid("root");
+                cttItemShowAdd.setParentPkid("root");
             }
 
-            cttItemShowSel.setCorrespondingPkid(cttItemShowSel.getPkid()) ;
-            cttItemShowSel.setStrCorrespondingItemNo(cttItemShowSel.getStrNo()) ;
+            cttItemShowAdd.setCorrespondingPkid(cttItemShowAdd.getPkid()) ;
+            cttItemShowAdd.setStrCorrespondingItemNo(cttItemShowAdd.getStrNo()) ;
+            strSubmitType="Add";
             submitThisRecordAction();
             initData();
             return true;

@@ -55,12 +55,22 @@ public class EsFlowService {
         return flowMapper.selectFormedEsInitSubcttStlPList(strParentPkid,strStlPkid,strPeriodNo);
     }
 
+    public List<ProgInfoShow> getFormedAfterEsInitSubcttStlPList(String strParentPkid,
+                                                                  String strStlPkid,
+                                                                  String strPeriodNo){
+        return flowMapper.getFormedAfterEsInitSubcttStlPList(strParentPkid,strStlPkid,strPeriodNo);
+    }
+
     public List<EsInitStl> selectIsUsedInQMPBySubcttPkid(String strSubcttPkid){
         return flowMapper.selectIsUsedInQMPBySubcttPkid(strSubcttPkid);
     }
 
     public List<ProgInfoShow> selectTkcttStlSMByStatusFlagBegin_End(ProgInfoShow progInfoShowPara){
         return flowMapper.selectTkcttStlSMByStatusFlagBegin_End(progInfoShowPara);
+    }
+
+    public String getLatestDoubleCkeckedPeriodNo(String strPowerType,String strPowerPkid) {
+        return flowMapper.getLatestDoubleCkeckedPeriodNo(strPowerType, strPowerPkid);
     }
 
     public String getLatestApprovedPeriodNo(String strPowerType,String strPowerPkid) {
@@ -113,7 +123,7 @@ public class EsFlowService {
                         strReturnTemp="分包数量结算第["+quantityMaxPeriod+"]期数据还未批准通过，不能录入新数据!";
                         return strReturnTemp;
                     }
-                    if (ESEnumStatusFlag.STATUS_FLAG3.getCode().compareTo(quantityStatus)>0){ //判断是否有非批准状态的数据存在，如果有不能录入
+                    if (ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(quantityStatus)>0){ //判断是否有非批准状态的数据存在，如果有不能录入
                         if (!quantityStatus.equals("")){
                             strReturnTemp="分包数量结算第["+quantityMaxPeriod+"]期数据还未批准通过，不能录入新数据！";
                             return strReturnTemp;
@@ -143,7 +153,7 @@ public class EsFlowService {
                         return strReturnTemp;
                     }
 
-                    if (ESEnumStatusFlag.STATUS_FLAG3.getCode().compareTo(materialStatus)>0){ //判断是否有非批准状态的数据存在，如果有不能录入
+                    if (ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(materialStatus)>0){ //判断是否有非批准状态的数据存在，如果有不能录入
                         if (!materialMaxPeriod.equals("")){
                             strReturnTemp="分包材料结算第["+materialMaxPeriod+"]期数据还未批准通过，不能录入新数据！";
                             return strReturnTemp;

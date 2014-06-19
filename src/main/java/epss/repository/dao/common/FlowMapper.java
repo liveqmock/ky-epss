@@ -280,7 +280,7 @@ public interface FlowMapper {
                 " where eis.STL_PKID like CONCAT('%',CONCAT(trim(#{strStlPkid}),'%'))" +
                 " and eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{strPeriodNo}),'%'))" +
                 " and eis.STL_TYPE='5'" +
-                " and eip.STATUS_FLAG='3'" +
+                " and eip.STATUS_FLAG>='3'" +
             " )eispower" +
             " on ecinfo.PKID=eispower.STL_PKID" +
             " left outer join ES_INIT_CUST eicust" +
@@ -288,8 +288,66 @@ public interface FlowMapper {
             " where ecinfo.PARENT_PKID = #{strParentPkid}" +
             " order by eispower.STATUS_FLAG£¬eispower.PERIOD_NO desc£¬eispower.ID asc")
     List<ProgInfoShow> selectFormedEsInitSubcttStlPList(@Param("strParentPkid") String strParentPkid,
-                                                         @Param("strStlPkid") String strStlPkid,
-                                                         @Param("strPeriodNo") String strPeriodNo);
+                                                        @Param("strStlPkid") String strStlPkid,
+                                                        @Param("strPeriodNo") String strPeriodNo);
+
+    @Select("select eispower.PKID as pkid" +
+                ",eispower.ID as id" +
+                ",eispower.STL_TYPE as stlType" +
+                ",eispower.STL_PKID as stlPkid" +
+                ",eispower.PERIOD_NO as periodNo" +
+                ",eispower.ATTACHMENT as attachment" +
+                ",ecinfo.NAME as stlName" +
+                ",eicust.NAME as signPartBName"+
+                ",eispower.NOTE as note" +
+                ",eispower.END_FLAG as endFlag" +
+                ",eispower.DELETED_FLAG as deletedFlag" +
+                ",eispower.CREATED_BY as createdBy" +
+                ",eispower.CREATED_DATE as createdDate"+
+                ",eispower.LAST_UPD_BY as lastUpdBy" +
+                ",eispower.LAST_UPD_DATE as lastUpdDate" +
+                ",eispower.POWER_TYPE as powerType" +
+                ",eispower.POWER_PKID as powerPkid" +
+                ",eispower.POWER_PERIOD_NO as powerPeriodNo" +
+                ",eispower.STATUS_FLAG as statusFlag" +
+                ",eispower.PRE_STATUS_FLAG as preStatusFlag" +
+                ",eispower.SPARE_FIELD as spareField"+
+            " from ES_CTT_INFO ecinfo inner join"+
+                " (select eis.PKID" +
+                ",eis.ID" +
+                ",eis.STL_TYPE" +
+                ",eis.STL_PKID" +
+                ",eis.PERIOD_NO" +
+                ",eis.ATTACHMENT" +
+                ",eis.NOTE" +
+                ",eis.END_FLAG" +
+                ",eis.DELETED_FLAG" +
+                ",eis.CREATED_BY" +
+                ",eis.CREATED_DATE"+
+                ",eis.LAST_UPD_BY" +
+                ",eis.LAST_UPD_DATE" +
+                ",eip.POWER_TYPE" +
+                ",eip.POWER_PKID" +
+                ",eip.PERIOD_NO AS POWER_PERIOD_NO" +
+                ",eip.STATUS_FLAG" +
+                ",eip.PRE_STATUS_FLAG" +
+                ",eip.SPARE_FIELD"+
+                " from" +
+                " ES_INIT_STL eis left outer join ES_INIT_POWER eip" +
+                " on" +
+                " eis.STL_TYPE=eip.POWER_TYPE and eis.STL_PKID=eip.POWER_PKID and eis.PERIOD_NO=eip.PERIOD_NO" +
+                " where eis.STL_PKID like CONCAT('%',CONCAT(trim(#{strStlPkid}),'%'))" +
+                " and eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{strPeriodNo}),'%'))" +
+                " and eis.STL_TYPE='5'" +
+                " )eispower" +
+            " on ecinfo.PKID=eispower.STL_PKID" +
+            " left outer join ES_INIT_CUST eicust" +
+            " on ecinfo.SIGN_PART_B=eicust.PKID" +
+            " where ecinfo.PARENT_PKID = #{strParentPkid}" +
+            " order by eispower.STATUS_FLAG£¬eispower.PERIOD_NO desc£¬eispower.ID asc")
+    List<ProgInfoShow> getFormedAfterEsInitSubcttStlPList(@Param("strParentPkid") String strParentPkid,
+                                                          @Param("strStlPkid") String strStlPkid,
+                                                          @Param("strPeriodNo") String strPeriodNo);
 
     @Select("select count(1)" +
             " from ES_CTT_INFO" +
@@ -318,6 +376,13 @@ public interface FlowMapper {
             " from ES_INIT_POWER" +
             " where POWER_TYPE = #{strPowerType}" +
             " and POWER_PKID = #{strPowerPkid}" +
+            " and STATUS_FLAG='2'")
+    String getLatestDoubleCkeckedPeriodNo(@Param("strPowerType") String strPowerType,
+                                     @Param("strPowerPkid") String strPowerPkid);
+    @Select("select max(PERIOD_NO)" +
+            " from ES_INIT_POWER" +
+            " where POWER_TYPE = #{strPowerType}" +
+            " and POWER_PKID = #{strPowerPkid}" +
             " and STATUS_FLAG='3'")
     String getLatestApprovedPeriodNo(@Param("strPowerType") String strPowerType,
                                      @Param("strPowerPkid") String strPowerPkid);
@@ -338,7 +403,7 @@ public interface FlowMapper {
             " on s.stl_pkid=p.power_pkid"+
             " and s.stl_type=p.power_type"+
             " and s.period_no=p.period_no" +
-            " and (p.status_flag <='3' or p.status_flag is null)"+
+            " and (p.status_flag <='2' or p.status_flag is null)"+
             " where s.stl_type=#{stlType}"+
             " and s.stl_pkid=#{subCttPkid}")
     String getMaxPeriodNo(@Param("stlType") String stlType,

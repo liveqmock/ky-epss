@@ -59,7 +59,7 @@ public class ToolUtil {
             int intMonth=endCalendar.get(Calendar.MONTH)-startCalendar.get(Calendar.MONTH);
             intDiff = intYear*12+intMonth;
         } catch (ParseException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         return intDiff;
     }
@@ -88,6 +88,10 @@ public class ToolUtil {
 
     public static BigDecimal getBdIgnoreNull(BigDecimal bigDecimalPara){
         return bigDecimalPara==null?new BigDecimal(0):bigDecimalPara;
+    }
+
+    public static BigDecimal getBdFrom0ToNull(BigDecimal bigDecimalPara){
+        return bigDecimalPara.equals(new BigDecimal(0))?null:bigDecimalPara;
     }
 
     public static String getStrIgnoreNull(String strValue){

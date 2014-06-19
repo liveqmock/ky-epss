@@ -73,6 +73,14 @@ public class EsInitStlService {
         progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
         esInitStlMapper.insert(fromConstructToModel(progInfoShowPara)) ;
     }
+    public void insertRecord(EsInitStl esInitStlPara){
+        esInitStlPara.setCreatedBy(platformService.getStrLastUpdBy());
+        esInitStlPara.setCreatedDate(platformService.getStrLastUpdDate());
+        esInitStlPara.setDeletedFlag("0");
+        esInitStlPara.setLastUpdBy(platformService.getStrLastUpdBy());
+        esInitStlPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitStlMapper.insert(esInitStlPara) ;
+    }
     public void updateRecord(ProgInfoShow progInfoShowPara){
         progInfoShowPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(progInfoShowPara.getModificationNum())+1);
@@ -80,6 +88,14 @@ public class EsInitStlService {
         progInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
         progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
         esInitStlMapper.updateByPrimaryKey(fromConstructToModel(progInfoShowPara)) ;
+    }
+    public void updateRecord(EsInitStl esInitStlPara){
+        esInitStlPara.setModificationNum(
+                ToolUtil.getIntIgnoreNull(esInitStlPara.getModificationNum())+1);
+        esInitStlPara.setDeletedFlag("0");
+        esInitStlPara.setLastUpdBy(platformService.getStrLastUpdBy());
+        esInitStlPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitStlMapper.updateByPrimaryKey(esInitStlPara) ;
     }
     public void deleteRecord(ProgInfoShow progInfoShowPara){
         EsInitStlExample example = new EsInitStlExample();
@@ -93,7 +109,20 @@ public class EsInitStlService {
                 , progInfoShowPara.getStlPkid()
                 , progInfoShowPara.getPeriodNo());
     }
+    public void deleteRecord(EsInitStl esInitStlPara){
+        EsInitStlExample example = new EsInitStlExample();
+        example.createCriteria()
+                .andStlTypeEqualTo(esInitStlPara.getStlType())
+                .andStlPkidEqualTo(esInitStlPara.getStlPkid())
+                .andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
+        esInitStlMapper.deleteByExample(example);
 
+        esInitPowerService.deleteRecord(
+                esInitStlPara.getStlType()
+                , esInitStlPara.getStlPkid()
+                , esInitStlPara.getPeriodNo());
+
+    }
     public int deleteRecord(String strPkId){
         return esInitStlMapper.deleteByPrimaryKey(strPkId);
     }

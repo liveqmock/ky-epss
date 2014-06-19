@@ -236,6 +236,7 @@ public class EsInitSubcttStlPAction {
                                 strCstplPkid,
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getStlPkid()),
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo()));
+                // 已经批准了的分包价格结算
                 List<ProgInfoShow> progInfoShowApprovedListTemp =
                         esFlowService.selectFormedEsInitSubcttStlP(
                                 strCstplPkid,
@@ -258,15 +259,27 @@ public class EsInitSubcttStlPAction {
                 }
                 // 已经生成结算单并批准了的
                 for(int i=0;i< progInfoShowApprovedListTemp.size();i++){
-                    progInfoShowList.add(progInfoShowApprovedListTemp.get(i));
+                    if(progInfoShowApprovedListTemp.get(i).getStatusFlag().equals(ESEnumStatusFlag.STATUS_FLAG3.getCode())){
+                        progInfoShowList.add(progInfoShowApprovedListTemp.get(i));
+                    }
                 }
             }
-            else if(strQryFlag.equals("Qry")||strQryFlag.equals("Print")){
+            else if(strQryFlag.equals("Qry")){
                 progInfoShowList =
-                        esFlowService.selectFormedEsInitSubcttStlP(
+                        esFlowService.getFormedAfterEsInitSubcttStlPList(
                                 strCstplPkid,
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getStlPkid()),
-                                ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo()));
+                                ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo())
+                        );
+
+            }
+            else if(strQryFlag.equals("Account")){
+                progInfoShowList =
+                        esFlowService.getFormedAfterEsInitSubcttStlPList(
+                                strCstplPkid,
+                                ToolUtil.getStrIgnoreNull(progInfoShow.getStlPkid()),
+                                ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo())
+                        );
             }
             if(strQryMsgOutPara.equals("true")){
                 if (progInfoShowList.isEmpty()){

@@ -157,19 +157,6 @@ public class ItemSubcttEngMStlAction {
                 progMatQtyItemShowTemp.setEngMMng_LastUpdDate(esItemStlSubcttEngM.getLastUpdDate());
                 progMatQtyItemShowTemp.setEngMMng_ModificationNum(esItemStlSubcttEngM.getModificationNum());
             }
-            if(strLatestApprovedPeriodNo!=null && progMatQtyItemShowTemp.getEngMMng_BeginToCurrentPeriodMQty()==null){
-                EsItemStlSubcttEngM esItemStlSubcttEngMLatestApprovedPeriodNo=new EsItemStlSubcttEngM();
-                esItemStlSubcttEngMLatestApprovedPeriodNo.setSubcttPkid(strSubcttPkid);
-                esItemStlSubcttEngMLatestApprovedPeriodNo.setSubcttItemPkid(itemUnit.getPkid());
-                esItemStlSubcttEngMLatestApprovedPeriodNo.setPeriodNo(strLatestApprovedPeriodNo);
-                List<EsItemStlSubcttEngM> esItemStlSubcttEngMListLatestApprovedPeriodNo =
-                        esItemStlSubcttEngMService.selectRecordsByExample(esItemStlSubcttEngMLatestApprovedPeriodNo);
-                if(esItemStlSubcttEngMListLatestApprovedPeriodNo.size()>0){
-                    esItemStlSubcttEngMLatestApprovedPeriodNo= esItemStlSubcttEngMListLatestApprovedPeriodNo.get(0);
-                    progMatQtyItemShowTemp.setEngMMng_BeginToCurrentPeriodMQty(
-                            esItemStlSubcttEngMLatestApprovedPeriodNo.getBeginToCurrentPeriodMQty());
-                }
-            }
             sProgMatQtyItemShowListPara.add(progMatQtyItemShowTemp) ;
             recursiveDataTable(progMatQtyItemShowTemp.getSubctt_Pkid(), esCttItemListPara, sProgMatQtyItemShowListPara);
         }
@@ -291,24 +278,19 @@ public class ItemSubcttEngMStlAction {
 
             if(strBlurOrSubmitFlag.equals("blur")) {
                 if(bigDecimalTemp.compareTo(bDSubctt_ContractQuantity)>0){
-                    MessageUtil.addError("上期材料累计供应数量+本期材料供应数量>合同工程量，请确认您输入的本期材料供应数量（"
-                            + bDEngQMng_CurrentPeriodMQtyTemp.toString() + "）！");
-                    return false;
+                    MessageUtil.addInfo("上期材料累计供应数量+本期材料供应数量>合同数量，确认输入的本期材料供应数量（"
+                            + bDEngQMng_CurrentPeriodMQtyTemp.toString() + "）是否正确！");
                  }
                 progMatQtyItemShowUpd.setEngMMng_BeginToCurrentPeriodMQty(bigDecimalTemp);
             }else if (strBlurOrSubmitFlag.equals("submit")) {
                 BigDecimal bDEngQMng_BeginToCurrentPeriodMQtyTemp=
                         ToolUtil.getBdIgnoreNull(progMatQtyItemShowUpd.getEngMMng_BeginToCurrentPeriodMQty());
-
                 if(bDEngQMng_BeginToCurrentPeriodMQtyTemp.compareTo(bDEngMMng_BeginToCurrentPeriodMQtyInDB)==0){
                     if(bigDecimalTemp.compareTo(bDSubctt_ContractQuantity)>0){
-                        MessageUtil.addError("上期开累工程数量+本期工程数量>合同数量，请确认您输入的本期工程数量（"
-                                + bDEngQMng_CurrentPeriodMQtyTemp.toString() + "）！");
-                        return false;
+                        MessageUtil.addInfo("上期材料累计供应数量+本期材料供应数量>合同数量，确认输入的本期材料供应数量（"
+                                + bDEngQMng_CurrentPeriodMQtyTemp.toString() + "）是否正确！");
                     }
-                    return true;
                 }
-                return true;
             }
         }
         return true;

@@ -173,6 +173,8 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel for="noItemHieRelapForUpd" value="编号:" />
                         <h:inputText id="noItemHieRelapForUpd"
+                                     readonly="true"
+                                     style="background-color:gainsboro"
                                      value="#{itemTkcttAction.cttItemShowUpd.strNo}">
                             <p:ajax event="blur" update="msgs,noItemHieRelapForUpd"
                                     listener="#{itemTkcttAction.blurStrNoToGradeAndOrderidAction}"/>

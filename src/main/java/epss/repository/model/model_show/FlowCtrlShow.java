@@ -59,6 +59,22 @@ public class FlowCtrlShow {
         this.statusFlag = statusFlag;
     }
 
+    public String getStatusFlagName() {
+        return statusFlagName;
+    }
+
+    public void setStatusFlagName(String statusFlagName) {
+        this.statusFlagName = statusFlagName;
+    }
+
+    public String getPreStatusFlagName() {
+        return preStatusFlagName;
+    }
+
+    public void setPreStatusFlagName(String preStatusFlagName) {
+        this.preStatusFlagName = preStatusFlagName;
+    }
+
     public String getPreStatusFlag() {
         return preStatusFlag;
     }

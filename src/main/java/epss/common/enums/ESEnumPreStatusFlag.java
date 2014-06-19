@@ -16,7 +16,9 @@ public enum ESEnumPreStatusFlag {
     PRE_STATUS_FLAG3("3","复核通过"),
     PRE_STATUS_FLAG4("4","复核未过"),
     PRE_STATUS_FLAG5("5","批准通过"),
-    PRE_STATUS_FLAG6("6","批准未过");
+    PRE_STATUS_FLAG6("6","批准未过"),
+    PRE_STATUS_FLAG7("7","记账通过"),
+    PRE_STATUS_FLAG8("8","归档成功");
     private String code = null;
     private String title = null;
     private static Hashtable<String, ESEnumPreStatusFlag> aliasEnums;

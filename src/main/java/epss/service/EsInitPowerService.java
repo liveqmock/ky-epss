@@ -1,5 +1,7 @@
 package epss.service;
 
+import epss.common.enums.ESEnumPreStatusFlag;
+import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.FlowCtrlShow;
 import epss.repository.model.model_show.ProgInfoShow;
@@ -74,21 +76,23 @@ public class EsInitPowerService {
         return esInitPowerMapper.selectByExample(example);
     }
 
-    private EsInitPowerHis fromEsInitPowerToEsInitPowerHis(EsInitPower esInitPowerPara,String strOperType){
-        EsInitPowerHis esInitPowerHis =new EsInitPowerHis();
-        esInitPowerHis.setPowerType(esInitPowerPara.getPowerType());
-        esInitPowerHis.setPowerPkid(esInitPowerPara.getPowerPkid());
-        esInitPowerHis.setPeriodNo(esInitPowerPara.getPeriodNo());
-        esInitPowerHis.setStatusFlag(esInitPowerPara.getStatusFlag());
-        esInitPowerHis.setPreStatusFlag(esInitPowerPara.getPreStatusFlag());
-        esInitPowerHis.setCreatedDate(esInitPowerPara.getCreatedDate());
-        esInitPowerHis.setCreatedBy(esInitPowerPara.getCreatedBy());
-        esInitPowerHis.setSpareField(strOperType);
-        return esInitPowerHis;
+    public void accountAction(EsInitStl esInitStlPara) {
+        EsInitPower esInitPowerTemp = new EsInitPower();
+        esInitPowerTemp.setPowerType(esInitStlPara.getStlType());
+        esInitPowerTemp.setPowerPkid(esInitStlPara.getStlPkid());
+        esInitPowerTemp.setPeriodNo(esInitStlPara.getPeriodNo());
+        esInitPowerTemp.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG4.getCode());
+        esInitPowerTemp.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG7.getCode());
+        esInitPowerTemp.setCreatedBy(esInitStlPara.getCreatedBy());
+        esInitPowerTemp.setCreatedDate(esInitStlPara.getCreatedDate());
+        esInitPowerTemp.setLastUpdBy(esInitStlPara.getLastUpdBy());
+        esInitPowerTemp.setLastUpdDate(esInitStlPara.getLastUpdDate());
+        esInitPowerMapper.updateByPrimaryKey(esInitPowerTemp);
+        esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
     }
 
     public void insertRecord(FlowCtrlShow flowCtrlShowPara) {
-        EsInitPower esInitPowerTemp= fromItemConstructToPower(flowCtrlShowPara);
+        EsInitPower esInitPowerTemp= fromFlowCtrlShowToPower(flowCtrlShowPara);
         esInitPowerTemp.setCreatedBy(platformService.getStrLastUpdBy());
         esInitPowerTemp.setCreatedDate(platformService.getStrLastUpdDate());
         esInitPowerMapper.insertSelective(esInitPowerTemp);
@@ -98,8 +102,8 @@ public class EsInitPowerService {
         cttInfoShowPara.setDeletedFlag("0");
         cttInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
         cttInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
-        EsInitPower esInitPowerTemp=fromCttConstructToPower(cttInfoShowPara);
-        esInitPowerMapper.insertSelective(fromCttConstructToPower(cttInfoShowPara));
+        EsInitPower esInitPowerTemp=fromCttInfoShowToPower(cttInfoShowPara);
+        esInitPowerMapper.insertSelective(fromCttInfoShowToPower(cttInfoShowPara));
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"insert"));
     }
     public void insertRecordByStl(ProgInfoShow progInfoShowPara) {
@@ -108,13 +112,13 @@ public class EsInitPowerService {
         progInfoShowPara.setCreatedDate(platformService.getStrLastUpdDate());
         progInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
         progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
-        EsInitPower esInitPowerTemp=fromStlConstructToPower(progInfoShowPara);
+        EsInitPower esInitPowerTemp=fromProgInfoShowToPower(progInfoShowPara);
         esInitPowerMapper.insertSelective(esInitPowerTemp);
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"insert"));
     }
 
     public void updateRecord(FlowCtrlShow flowCtrlShowPara){
-        EsInitPower esInitPowerTemp= fromItemConstructToPower(flowCtrlShowPara);
+        EsInitPower esInitPowerTemp= fromFlowCtrlShowToPower(flowCtrlShowPara);
         esInitPowerTemp.setLastUpdBy(platformService.getStrLastUpdBy());
         esInitPowerTemp.setLastUpdDate(platformService.getStrLastUpdDate());
         esInitPowerMapper.updateByPrimaryKey(esInitPowerTemp);
@@ -125,8 +129,8 @@ public class EsInitPowerService {
                 ToolUtil.getIntIgnoreNull(cttInfoShowPara.getModificationNum())+1);
         cttInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
         cttInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
-        EsInitPower esInitPowerTemp=fromCttConstructToPower(cttInfoShowPara);
-        esInitPowerMapper.updateByPrimaryKey(fromCttConstructToPower(cttInfoShowPara));
+        EsInitPower esInitPowerTemp=fromCttInfoShowToPower(cttInfoShowPara);
+        esInitPowerMapper.updateByPrimaryKey(fromCttInfoShowToPower(cttInfoShowPara));
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
     }
     public void updateRecordByStl(ProgInfoShow progInfoShowPara){
@@ -135,12 +139,12 @@ public class EsInitPowerService {
         progInfoShowPara.setDeletedFlag("0");
         progInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
         progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
-        EsInitPower esInitPowerTemp=fromStlConstructToPower(progInfoShowPara);
+        EsInitPower esInitPowerTemp=fromProgInfoShowToPower(progInfoShowPara);
         esInitPowerMapper.updateByPrimaryKey(esInitPowerTemp);
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
     }
 
-    private EsInitPower fromCttConstructToPower(CttInfoShow cttInfoShowPara) {
+    private EsInitPower fromCttInfoShowToPower(CttInfoShow cttInfoShowPara) {
         EsInitPower esInitPowerTemp = new EsInitPower();
         esInitPowerTemp.setPowerType(cttInfoShowPara.getPowerType());
         esInitPowerTemp.setPowerPkid(cttInfoShowPara.getPowerPkid());
@@ -154,8 +158,7 @@ public class EsInitPowerService {
         esInitPowerTemp.setSpareField(cttInfoShowPara.getSpareField());
         return esInitPowerTemp;
     }
-
-    private EsInitPower fromItemConstructToPower(FlowCtrlShow flowCtrlShowPara) {
+    private EsInitPower fromFlowCtrlShowToPower(FlowCtrlShow flowCtrlShowPara) {
         EsInitPower esInitPowerTemp = new EsInitPower();
         esInitPowerTemp.setPowerType(flowCtrlShowPara.getPowerType());
         esInitPowerTemp.setPowerPkid(flowCtrlShowPara.getPowerPkid());
@@ -169,8 +172,7 @@ public class EsInitPowerService {
         esInitPowerTemp.setSpareField(flowCtrlShowPara.getSpareField());
         return esInitPowerTemp;
     }
-
-    private EsInitPower fromStlConstructToPower(ProgInfoShow progInfoShowPara) {
+    private EsInitPower fromProgInfoShowToPower(ProgInfoShow progInfoShowPara) {
         EsInitPower esInitPowerTemp=new EsInitPower();
         esInitPowerTemp.setPowerType(progInfoShowPara.getPowerType());
         esInitPowerTemp.setPowerPkid(progInfoShowPara.getPowerPkid());
@@ -183,6 +185,18 @@ public class EsInitPowerService {
         esInitPowerTemp.setLastUpdDate(progInfoShowPara.getLastUpdDate());
         esInitPowerTemp.setSpareField(progInfoShowPara.getSpareField());
         return esInitPowerTemp;
+    }
+    private EsInitPowerHis fromEsInitPowerToEsInitPowerHis(EsInitPower esInitPowerPara,String strOperType){
+        EsInitPowerHis esInitPowerHis =new EsInitPowerHis();
+        esInitPowerHis.setPowerType(esInitPowerPara.getPowerType());
+        esInitPowerHis.setPowerPkid(esInitPowerPara.getPowerPkid());
+        esInitPowerHis.setPeriodNo(esInitPowerPara.getPeriodNo());
+        esInitPowerHis.setStatusFlag(esInitPowerPara.getStatusFlag());
+        esInitPowerHis.setPreStatusFlag(esInitPowerPara.getPreStatusFlag());
+        esInitPowerHis.setCreatedDate(esInitPowerPara.getCreatedDate());
+        esInitPowerHis.setCreatedBy(esInitPowerPara.getCreatedBy());
+        esInitPowerHis.setSpareField(strOperType);
+        return esInitPowerHis;
     }
 
     public int deleteRecord(String strPowerType,String strPowerPkid,String strPeriodNo){

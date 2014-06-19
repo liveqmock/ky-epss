@@ -60,7 +60,7 @@ public class EsItemStlSubcttEngMService {
     public void setFromLastStageApproveDataToThisStageBeginData(ProgInfoShow progInfoShowPara){
         // 插入新数据之后,就得把上期批准了的数据作为今期数据的起始数据
         String strLatestApprovedPeriodNo= ToolUtil.getStrIgnoreNull(
-                esFlowService.getLatestApprovedPeriodNo(progInfoShowPara.getStlType(), progInfoShowPara.getStlPkid()));
+                esFlowService.getLatestDoubleCkeckedPeriodNo(progInfoShowPara.getStlType(), progInfoShowPara.getStlPkid()));
         if(strLatestApprovedPeriodNo!=null){
             EsItemStlSubcttEngMExample example = new EsItemStlSubcttEngMExample();
             example.createCriteria()

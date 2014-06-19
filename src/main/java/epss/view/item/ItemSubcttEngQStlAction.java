@@ -157,19 +157,6 @@ public class ItemSubcttEngQStlAction {
                 progWorkqtyItemShowTemp.setEngQMng_LastUpdDate(esItemStlSubcttEngQ.getLastUpdDate());
                 progWorkqtyItemShowTemp.setEngQMng_ModificationNum(esItemStlSubcttEngQ.getModificationNum());
             }
-            if(strLatestApprovedPeriodNo!=null && progWorkqtyItemShowTemp.getEngQMng_BeginToCurrentPeriodEQty()==null){
-                EsItemStlSubcttEngQ esItemStlSubcttEngQLatestApprovedPeriodNo=new EsItemStlSubcttEngQ();
-                esItemStlSubcttEngQLatestApprovedPeriodNo.setSubcttPkid(strSubcttPkid);
-                esItemStlSubcttEngQLatestApprovedPeriodNo.setSubcttItemPkid(itemUnit.getPkid());
-                esItemStlSubcttEngQLatestApprovedPeriodNo.setPeriodNo(strLatestApprovedPeriodNo);
-                List<EsItemStlSubcttEngQ> esItemStlSubcttEngQListLatestApprovedPeriodNo =
-                        esItemStlSubcttEngQService.selectRecordsByExample(esItemStlSubcttEngQLatestApprovedPeriodNo);
-                if(esItemStlSubcttEngQListLatestApprovedPeriodNo.size()>0){
-                    esItemStlSubcttEngQLatestApprovedPeriodNo= esItemStlSubcttEngQListLatestApprovedPeriodNo.get(0);
-                    progWorkqtyItemShowTemp.setEngQMng_BeginToCurrentPeriodEQty(
-                            esItemStlSubcttEngQLatestApprovedPeriodNo.getBeginToCurrentPeriodEQty());
-                }
-            }
             sProgWorkqtyItemShowListPara.add(progWorkqtyItemShowTemp) ;
             recursiveDataTable(progWorkqtyItemShowTemp.getSubctt_Pkid(), esCttItemListPara, sProgWorkqtyItemShowListPara);
         }

@@ -14,7 +14,8 @@ public enum ESEnumStatusFlag {
     STATUS_FLAG1("1","…Û∫À"),
     STATUS_FLAG2("2","∏¥∫À"),
     STATUS_FLAG3("3","≈˙◊º"),
-    STATUS_FLAG4("4","¥Ú”°");
+    STATUS_FLAG4("4","º«’À"),
+    STATUS_FLAG5("5","πÈµµ");
     private String code = null;
     private String title = null;
     private static Hashtable<String, ESEnumStatusFlag> aliasEnums;

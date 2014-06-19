@@ -57,9 +57,7 @@ public class EsItemStlSubcttEngQService {
     }
 
     public List<EsItemStlSubcttEngQ> selectEsItemStlSubcttEngQListByPeriod(
-            String strSubcttPkid,
-            String strPeriodNoBegin,
-            String strPeriodNoEnd){
+            String strSubcttPkid,String strPeriodNoBegin,String strPeriodNoEnd){
         return commonMapper.selectEsItemStlSubcttEngQListByPeriod(strSubcttPkid,strPeriodNoBegin,strPeriodNoEnd);
     }
 
@@ -115,7 +113,7 @@ public class EsItemStlSubcttEngQService {
     public void setFromLastStageApproveDataToThisStageBeginData(ProgInfoShow progInfoShowPara){
         // 插入新数据之后,就得把上期批准了的数据作为今期数据的起始数据
         String strLatestApprovedPeriodNo= ToolUtil.getStrIgnoreNull(
-                esFlowService.getLatestApprovedPeriodNo(progInfoShowPara.getStlType(), progInfoShowPara.getStlPkid()));
+                esFlowService.getLatestDoubleCkeckedPeriodNo(progInfoShowPara.getStlType(), progInfoShowPara.getStlPkid()));
         if(strLatestApprovedPeriodNo!=null){
             EsItemStlSubcttEngQExample example = new EsItemStlSubcttEngQExample();
             example.createCriteria()

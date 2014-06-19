@@ -16,7 +16,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -79,7 +78,6 @@ public class ItemTkcttEngMeaStlAction {
     // 画面上控件的显示控制
     private String strExportToExcelRendered;
     private List<ProgEstMeaItemShow> progMeaItemShowListForExcel;
-
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
@@ -271,7 +269,6 @@ public class ItemTkcttEngMeaStlAction {
         /*分包合同*/
         List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
         progMeaItemShowListForExcel=new ArrayList<ProgEstMeaItemShow>();
-
         esCttItemList = esCttItemService.getEsItemHieRelapListByTypeAndPkid(
                 ESEnum.ITEMTYPE0.getCode(), strTkcttPkid);
         if(esCttItemList.size()<=0){
@@ -331,14 +328,15 @@ public class ItemTkcttEngMeaStlAction {
                 progEstMeaItemShowTemp.setEng_PeriodNo(esItemStlTkcttEngMea.getPeriodNo());
                 progEstMeaItemShowTemp.setEng_TkcttPkid(esItemStlTkcttEngMea.getTkcttPkid());
                 progEstMeaItemShowTemp.setEng_TkcttItemPkid (esItemStlTkcttEngMea.getTkcttItemPkid());
-
                 progEstMeaItemShowTemp.setEng_CurrentPeriodEQty(esItemStlTkcttEngMea.getCurrentPeriodQty());
                 bdCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getCurrentPeriodQty());
-                progEstMeaItemShowTemp.setEng_CurrentPeriodEAmount(bdContractUnitPrice.multiply(bdCurrentPeriodQty));
+                progEstMeaItemShowTemp.setEng_CurrentPeriodEAmount(
+                        ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdCurrentPeriodQty)));
 
                 progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEQty(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
                 bdBeginToCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
-                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(bdContractUnitPrice.multiply(bdBeginToCurrentPeriodQty));
+                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
+                        ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdBeginToCurrentPeriodQty)));
 
                 progEstMeaItemShowTemp.setEng_DeletedFlag(esItemStlTkcttEngMea.getDeleteFlag());
                 progEstMeaItemShowTemp.setEng_CreatedBy(esItemStlTkcttEngMea.getCreatedBy());
@@ -348,21 +346,6 @@ public class ItemTkcttEngMeaStlAction {
                 progEstMeaItemShowTemp.setEng_LastUpdByName(strLastUpdByName);
                 progEstMeaItemShowTemp.setEng_LastUpdDate(esItemStlTkcttEngMea.getLastUpdDate());
                 progEstMeaItemShowTemp.setEng_ModificationNum(esItemStlTkcttEngMea.getModificationNum());
-            }
-            if(strLatestApprovedPeriodNo!=null && progEstMeaItemShowTemp.getEng_BeginToCurrentPeriodEQty()==null){
-                EsItemStlTkcttEngMea esItemStlTkcttEngMeaLatestApprovedPeriodNo=new EsItemStlTkcttEngMea();
-                esItemStlTkcttEngMeaLatestApprovedPeriodNo.setTkcttPkid(strTkcttPkid);
-                esItemStlTkcttEngMeaLatestApprovedPeriodNo.setTkcttItemPkid(esItemStlTkcttEngMea.getTkcttItemPkid());
-                esItemStlTkcttEngMeaLatestApprovedPeriodNo.setPeriodNo(strLatestApprovedPeriodNo);
-                List<EsItemStlTkcttEngMea> esItemStlTkcttEngMeaListLatestApprovedPeriodNo =
-                        esItemStlTkcttEngMeaService.selectRecordsByKeyExample(esItemStlTkcttEngMeaLatestApprovedPeriodNo);
-                if(esItemStlTkcttEngMeaListLatestApprovedPeriodNo.size()>0){
-                    esItemStlTkcttEngMeaLatestApprovedPeriodNo= esItemStlTkcttEngMeaListLatestApprovedPeriodNo.get(0);
-                    progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEQty(
-                            esItemStlTkcttEngMeaLatestApprovedPeriodNo.getBeginToCurrentPeriodQty());
-                    bdBeginToCurrentPeriodQty=ToolUtil.getBdIgnoreNull(progEstMeaItemShowTemp.getEng_BeginToCurrentPeriodEQty());
-                    progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(bdContractUnitPrice.multiply(bdBeginToCurrentPeriodQty));
-                }
             }
             sProgEstMeaItemShowListPara.add(progEstMeaItemShowTemp) ;
             recursiveDataTable(progEstMeaItemShowTemp.getTkctt_Pkid(), esCttItemListPara, sProgEstMeaItemShowListPara);
@@ -437,13 +420,18 @@ public class ItemTkcttEngMeaStlAction {
                     ProgEstMeaItemShow itemOfEsItemHieRelapTemp=new ProgEstMeaItemShow();
                     itemOfEsItemHieRelapTemp.setTkctt_Name("合计");
                     itemOfEsItemHieRelapTemp.setTkctt_Pkid("total"+i);
-                    itemOfEsItemHieRelapTemp.setTkctt_ContractQuantity(bdQuantityTotal);
-                    itemOfEsItemHieRelapTemp.setTkctt_ContractAmount(bdAmountTotal);
-
-                    itemOfEsItemHieRelapTemp.setEng_BeginToCurrentPeriodEQty(bdBeginToCurrentPeriodEQtyTotal);
-                    itemOfEsItemHieRelapTemp.setEng_CurrentPeriodEQty(bdCurrentPeriodEQtyTotal);
-                    itemOfEsItemHieRelapTemp.setEng_BeginToCurrentPeriodEAmount(bdBeginToCurrentPeriodEAmountTotal);
-                    itemOfEsItemHieRelapTemp.setEng_CurrentPeriodEAmount(bdCurrentPeriodEAmountTotal);
+                    itemOfEsItemHieRelapTemp.setTkctt_ContractQuantity(
+                            ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
+                    itemOfEsItemHieRelapTemp.setTkctt_ContractAmount(
+                            ToolUtil.getBdFrom0ToNull(bdAmountTotal));
+                    itemOfEsItemHieRelapTemp.setEng_BeginToCurrentPeriodEQty(
+                            ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyTotal));
+                    itemOfEsItemHieRelapTemp.setEng_CurrentPeriodEQty(
+                            ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal));
+                    itemOfEsItemHieRelapTemp.setEng_BeginToCurrentPeriodEAmount(
+                            ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEAmountTotal));
+                    itemOfEsItemHieRelapTemp.setEng_CurrentPeriodEAmount(
+                            ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEAmountTotal));
                     progEstMeaItemShowList.add(itemOfEsItemHieRelapTemp);
                     bdQuantityTotal=new BigDecimal(0);
                     bdAmountTotal=new BigDecimal(0);
@@ -457,13 +445,18 @@ public class ItemTkcttEngMeaStlAction {
                 ProgEstMeaItemShow progEstMeaItemShowTemp =new ProgEstMeaItemShow();
                 progEstMeaItemShowTemp.setTkctt_Name("合计");
                 progEstMeaItemShowTemp.setTkctt_Pkid("total"+i);
-                progEstMeaItemShowTemp.setTkctt_ContractQuantity(bdQuantityTotal);
-                progEstMeaItemShowTemp.setTkctt_ContractAmount(bdAmountTotal);
-
-                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEQty(bdBeginToCurrentPeriodEQtyTotal);
-                progEstMeaItemShowTemp.setEng_CurrentPeriodEQty(bdCurrentPeriodEQtyTotal);
-                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(bdBeginToCurrentPeriodEAmountTotal);
-                progEstMeaItemShowTemp.setEng_CurrentPeriodEAmount(bdCurrentPeriodEAmountTotal);
+                progEstMeaItemShowTemp.setTkctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
+                progEstMeaItemShowTemp.setTkctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(bdAmountTotal));
+                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyTotal));
+                progEstMeaItemShowTemp.setEng_CurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal));
+                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
+                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEAmountTotal));
+                progEstMeaItemShowTemp.setEng_CurrentPeriodEAmount(
+                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEAmountTotal));
                 progEstMeaItemShowList.add(progEstMeaItemShowTemp);
                 bdQuantityTotal=new BigDecimal(0);
                 bdAmountTotal=new BigDecimal(0);
@@ -476,13 +469,19 @@ public class ItemTkcttEngMeaStlAction {
                 progEstMeaItemShowTemp =new ProgEstMeaItemShow();
                 progEstMeaItemShowTemp.setTkctt_Name("总合计");
                 progEstMeaItemShowTemp.setTkctt_Pkid("total_all"+i);
-                progEstMeaItemShowTemp.setTkctt_ContractQuantity(bdQuantityAllTotal);
-                progEstMeaItemShowTemp.setTkctt_ContractAmount(bdAmountAllTotal);
+                progEstMeaItemShowTemp.setTkctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(bdQuantityAllTotal));
+                progEstMeaItemShowTemp.setTkctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(bdAmountAllTotal));
 
-                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEQty(bdBeginToCurrentPeriodEQtyAllTotal);
-                progEstMeaItemShowTemp.setEng_CurrentPeriodEQty(bdCurrentPeriodEQtyAllTotal);
-                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(bdBeginToCurrentPeriodEAmountAllTotal);
-                progEstMeaItemShowTemp.setEng_CurrentPeriodEAmount(bdCurrentPeriodEAmountAllTotal);
+                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyAllTotal));
+                progEstMeaItemShowTemp.setEng_CurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyAllTotal));
+                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
+                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEAmountAllTotal));
+                progEstMeaItemShowTemp.setEng_CurrentPeriodEAmount(
+                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEAmountAllTotal));
                 progEstMeaItemShowList.add(progEstMeaItemShowTemp);
             }
         }
