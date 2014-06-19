@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="epss.repository.dao.notMyBits.MyCstplInfoMapper">
+    <resultMap id="BaseResultMap" type="epss.repository.model.model_show.CstplInfoShow">
+        <id column="PKID" jdbcType="VARCHAR" property="pkid" />
+        <result column="TKCTT_INFO_PKID" jdbcType="VARCHAR" property="tkcttInfoPkid" />
+        <result column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="NAME" jdbcType="VARCHAR" property="name" />
+        <result column="SIGN_DATE" jdbcType="VARCHAR" property="signDate" />
+        <result column="ARCHIVED_FLAG" jdbcType="CHAR" property="archivedFlag" />
+        <result column="ORIGIN_FLAG" jdbcType="CHAR" property="originFlag" />
+        <result column="FLOW_STATUS" jdbcType="CHAR" property="flowStatus" />
+        <result column="FLOW_STATUS_REMARK" jdbcType="CHAR" property="flowStatusRemark" />
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+        <result column="CREATED_BY_NAME" jdbcType="VARCHAR" property="createdByName" />
+        <result column="CREATED_TIME" jdbcType="VARCHAR" property="createdTime" />
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="UPDATED_BY_NAME" jdbcType="VARCHAR" property="updatedByName" />
+        <result column="UPDATED_TIME" jdbcType="VARCHAR" property="updatedTime" />
+        <result column="REC_VERSION" jdbcType="DECIMAL" property="recVersion"/>
+        <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment" />
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+        <result column="TID" jdbcType="VARCHAR" property="tid" />
+    </resultMap>
+    <select id="getCstplInfoListByFlowStatusBegin_End"
+            parameterType="epss.repository.model.model_show.CstplInfoShow"
+            resultMap="BaseResultMap">
+        <![CDATA[
+             select ci.PKID               ,
+                    ci.TKCTT_INFO_PKID    ,
+                    ci.ID                 ,
+                    ci.NAME               ,
+                    ci.SIGN_DATE           ,
+                    ci.ARCHIVED_FLAG      ,
+                    ci.ORIGIN_FLAG        ,
+                    ci.FLOW_STATUS        ,
+                    ci.FLOW_STATUS_REMARK ,
+                    ci.CREATED_BY         ,
+                    (select Max(OPERNAME) from PTOPER where OPERID=ci.CREATED_BY) as CREATED_BY_Name,
+                    ci.CREATED_TIME       ,
+                    ci.UPDATED_BY         ,
+                    (select Max(OPERNAME) from PTOPER where OPERID=ci.UPDATED_BY) as UPDATED_BY_NAME,
+                    ci.UPDATED_TIME       ,
+                    ci.REC_VERSION        ,
+                    ci.ATTACHMENT         ,
+                    ci.REMARK             ,
+                    ci.TID                
+            from CSTPL_INFO ci
+            where
+                1=1
+         ]]>
+        <if test="pkid != null and pkid != ''">
+            and ci.pkid like CONCAT('%',CONCAT(trim(#{pkid}),'%'))
+        </if>
+        <if test="tkcttInfoPkid != null and tkcttInfoPkid != ''">
+            and ci.TKCTT_INFO_PKID like CONCAT('%',CONCAT(trim(#{tkcttInfoPkid}),'%'))
+        </if>
+
+        <if test="id != null and id != ''">
+            and ci.id like CONCAT('%',CONCAT(trim(#{id}),'%'))
+        </if>
+
+        <if test="name != null and name != ''">
+            and ci.NAME like CONCAT('%',CONCAT(trim(#{name}),'%'))
+        </if>
+        <if test="signDate != null and signDate != ''">
+            and ci.SIGN_DATE like CONCAT('%',CONCAT(trim(#{signDate}),'%'))
+        </if>
+        <if test="archivedFlag != null and archivedFlag != ''">
+            and ci.ARCHIVED_FLAG like CONCAT('%',CONCAT(trim(#{archivedFlag}),'%'))
+        </if>
+        <if test="originFlag != null and originFlag != ''">
+            and ci.ORIGIN_FLAG like CONCAT('%',CONCAT(trim(#{originFlag}),'%'))
+        </if>
+        <if test="flowStatusBegin == null and flowStatusEnd == null">
+            and (ci.FLOW_STATUS is null
+            or ci.FLOW_STATUS='0')
+        </if>
+        <if test="flowStatusBegin != null and flowStatusBegin !='' and
+                       flowStatusEnd != null and flowStatusEnd != ''">
+            and ci.FLOW_STATUS <![CDATA[>=]]> #{flowStatusBegin}
+            and ci.FLOW_STATUS <![CDATA[<=]]> #{flowStatusEnd}
+        </if>
+        
+        order by ci.FLOW_STATUS asc,ci.ID asc
+    </select>
+
+</mapper>

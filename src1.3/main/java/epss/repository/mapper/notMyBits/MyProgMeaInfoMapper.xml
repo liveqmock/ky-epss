@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="epss.repository.dao.notMyBits.MyProgMeaInfoMapper">
+    <resultMap id="BaseResultMap" type="epss.repository.model.model_show.ProgMeaInfoShow">
+        <id column="PKID" jdbcType="VARCHAR" property="pkid" />
+        <result column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="TKCTT_INFO_PKID" jdbcType="VARCHAR" property="tkcttInfoPkid" />
+        <result column="TKCTT_INFO_NAME" jdbcType="VARCHAR" property="tkcttInfoName" />
+        <result column="STAGE_NO" jdbcType="VARCHAR" property="stageNo" />
+        <result column="ARCHIVED_FLAG" jdbcType="CHAR" property="archivedFlag" />
+        <result column="ORIGIN_FLAG" jdbcType="CHAR" property="originFlag" />
+        <result column="FLOW_STATUS" jdbcType="CHAR" property="flowStatus" />
+        <result column="FLOW_STATUS_REMARK" jdbcType="CHAR" property="flowStatusRemark" />
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+        <result column="CREATED_BY_NAME" jdbcType="VARCHAR" property="createdByName" />
+        <result column="CREATED_TIME" jdbcType="VARCHAR" property="createdTime" />
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="UPDATED_BY_NAME" jdbcType="VARCHAR" property="updatedByName" />
+        <result column="UPDATED_TIME" jdbcType="VARCHAR" property="updatedTime" />
+        <result column="REC_VERSION" jdbcType="DECIMAL" property="recVersion"/>
+        <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment" />
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+        <result column="TID" jdbcType="VARCHAR" property="tid" />
+    </resultMap>
+    <select id="getProgMeaInfoListByFlowStatusBegin_End"
+            parameterType="epss.repository.model.model_show.ProgMeaInfoShow"
+            resultMap="BaseResultMap">
+        <![CDATA[
+             select pei.PKID               ,
+                    pei.ID                 ,
+                    pei.TKCTT_INFO_PKID    ,
+                    ctt.NAME               as TKCTT_INFO_NAME,
+                    pei.STAGE_NO           ,
+                    pei.ARCHIVED_FLAG      ,
+                    pei.ORIGIN_FLAG        ,
+                    pei.FLOW_STATUS        ,
+                    pei.FLOW_STATUS_REMARK ,
+                    pei.CREATED_BY         ,
+                    (select Max(OPERNAME) from PTOPER where OPERID=pei.CREATED_BY) as CREATED_BY_Name,
+                    pei.CREATED_TIME       ,
+                    pei.UPDATED_BY         ,
+                    (select Max(OPERNAME) from PTOPER where OPERID=pei.UPDATED_BY) as UPDATED_BY_NAME,
+                    pei.UPDATED_TIME       ,
+                    pei.REC_VERSION        ,
+                    pei.ATTACHMENT         ,
+                    pei.REMARK             ,
+                    pei.TID                
+            from PROG_MEA_INFO pei,TKCTT_INFO ctt
+            where
+                pei.TKCTT_INFO_PKID=ctt.PKID
+         ]]>
+        <if test="pkid != null and pkid != ''">
+            and pei.pkid like CONCAT('%',CONCAT(trim(#{pkid}),'%'))
+        </if>
+        <if test="tkcttInfoPkid != null and tkcttInfoPkid != ''">
+            and pei.TKCTT_INFO_PKID like CONCAT('%',CONCAT(trim(#{tkcttInfoPkid}),'%'))
+        </if>
+        <if test="id != null and id != ''">
+            and pei.id like CONCAT('%',CONCAT(trim(#{id}),'%'))
+        </if>
+        <if test="stageNo != null and stageNo != ''">
+            and pei.STAGE_NO like CONCAT('%',CONCAT(trim(#{stageNo}),'%'))
+        </if>
+        <if test="archivedFlag != null and archivedFlag != ''">
+            and pei.ARCHIVED_FLAG like CONCAT('%',CONCAT(trim(#{archivedFlag}),'%'))
+        </if>
+        <if test="originFlag != null and originFlag != ''">
+            and pei.ORIGIN_FLAG like CONCAT('%',CONCAT(trim(#{originFlag}),'%'))
+        </if>
+        <if test="flowStatusBegin == null and flowStatusEnd == null">
+            and (pei.FLOW_STATUS is null
+            or pei.FLOW_STATUS='0')
+        </if>
+        <if test="flowStatusBegin != null and flowStatusBegin !='' and
+                       flowStatusEnd != null and flowStatusEnd != ''">
+            and pei.FLOW_STATUS <![CDATA[>=]]> #{flowStatusBegin}
+            and pei.FLOW_STATUS <![CDATA[<=]]> #{flowStatusEnd}
+        </if>
+        
+        order by pei.FLOW_STATUS asc,pei.ID asc
+    </select>
+
+</mapper>

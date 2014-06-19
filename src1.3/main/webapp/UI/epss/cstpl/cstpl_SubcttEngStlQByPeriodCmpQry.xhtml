@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <script type="text/javascript" src="#{request.contextPath}/UI/support/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+            function actSelect(obj) {
+                var pkid=obj;
+                var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
+                var arg = new Object();
+                arg.doType = "select";
+                // 分包合同
+                var rtn =dialog("../subctt/subctt_CSStlQPeriodCmpPrt.xhtml?strCstplInfoPkid="+pkid,arg,sfeature);
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:focus for="id"/>
+            <p:panel>
+                <h:panelGrid columns="2" style="width: 100%">
+                    <h:panelGrid id="pgCondition" columns="4">
+                        <p:outputLabel value="计划编号：" for="id"/>
+                        <p:inputText id="id" value="#{cstplInfoAction.cstplInfoShowQry.id}"/>
+                        <p:outputLabel value="计划名称：" for="cstplName"/>
+                        <p:inputText id="cstplName" value="#{cstplInfoAction.cstplInfoShowQry.name}"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <p:commandButton id="qryBtn" value="查询"
+                                         action="#{cstplInfoAction.onQueryAction('ApprovedQry','true')}"
+                                         update="pdt,msgs">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtn" value="重置"
+                                         type="reset"
+                                         update="pgCondition,msgs">
+                        </p:commandButton>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </h:panelGrid>
+                 </h:panelGrid>
+            </p:panel>
+            <p:contextMenu for="pdt">
+                <p:menuitem value="分包阶段工程量_查询" icon="ui-icon-search"
+                            oncomplete="actSelect(DtInitCstplList.selection)">
+                </p:menuitem>
+            </p:contextMenu>
+            <p:dataTable id="pdt" style="width:100%;"
+                         value="#{cstplInfoAction.cstplInfoShowList}"
+                         var="record"
+                         rowKey="#{record.pkid}"
+                         selection="#{cstplInfoAction.cstplInfoShowSelected}"
+                         selectionMode="single"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="15"
+                         rowsPerPageTemplate="500,200,100,45,30,15"
+                         emptyMessage="数据记录为空..."
+                         widgetVar="DtInitCstplList"
+                         scrollable="true">
+                <p:column headerText="Pkid" rendered="false">
+                    <h:outputText id="tetid" value="#{record.pkid}"/>
+                </p:column>
+                <p:column headerText="成本计划号" style="width:130px;text-align:center">
+                    <h:outputText value="#{record.id}"/>
+                </p:column>
+                <p:column headerText="成本计划名" style="width:300px;text-align:left">
+                    <h:outputText value="#{record.name}"/>
+                </p:column>
+                <p:column headerText="状态标志" style="width:66px;text-align:center">
+                    <h:outputText value="#{esFlowControl.getLabelByValueInFlowStatuslist(record.flowStatus)}"/>
+                </p:column>
+                <p:column headerText="原因" style="width:66px;text-align:center">
+                    <h:outputText value="#{esFlowControl.getLabelByValueInPreFlowStatuslist(record.flowStatusRemark)}"/>
+                </p:column>
+                <p:column headerText="制定日期" style="width:66px;text-align:center">
+                    <h:outputText value="#{record.signDate}"/>
+                </p:column>
+                <p:column headerText="备注内容" style="width:200px;text-align:center">
+                    <h:outputText value="#{record.remark}"/>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,137 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <script type="text/javascript" src="#{request.contextPath}/UI/support/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:panel>
+                <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="成本计划：" for="cstplPkid" />
+                        <p:selectOneMenu id="cstplPkid"
+                                         value="#{itemQryByCSubAction.cstplInfoQry.pkid}">
+                            <f:selectItems value="#{itemQryByCSubAction.cstplList}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <p:commandButton id="qryBtn" value="查询"
+                                         action="#{itemQryByCSubAction.onQueryAction()}"
+                                         update="pgCondition,pdt,msgs,exportToExcel">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtn" value="重置"
+                                         type="reset"
+                                         update="pgCondition,msgs">
+                        </p:commandButton>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <h:panelGrid id="exportToExcel">
+                <p:commandButton value="导出到EXCEL"
+                                 action="#{itemQryByCSubAction.onExportExcel}"
+                                 ajax="false"
+                                 rendered="#{itemQryByCSubAction.strExportToExcelRendered}">
+                </p:commandButton>
+            </h:panelGrid>
+            <p:dataTable id="pdt" style="width:100%;"
+                         value="#{itemQryByCSubAction.qryCSShowList}"
+                         var="record"
+                         rowKey="#{record.strCstpl_Pkid}"
+                         selectionMode="single"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="15"
+                         rowsPerPageTemplate="500,200,100,45,30,15"
+                         rowIndexVar="row"
+                         emptyMessage="数据记录为空..."
+                         scrollable="true">
+                <p:column style="width:30px" headerText="序号">
+                    <h:outputText value="#{row + 1}"/>
+                </p:column>
+                <p:column style="width:100px" headerText="成本_编号">
+                    <h:outputText value="#{record.strCstpl_No}" escape="false"/>
+                </p:column>
+                <p:column style="width:200px" headerText="成本_项目名称">
+                    <h:outputText value="#{record.strCstpl_Name}" escape="false"/>
+                </p:column>
+                <p:column style="width:60px" headerText="成本_单位">
+                    <h:outputText value="#{record.strCstpl_Unit}" escape="false"/>
+                </p:column>
+                <p:column style="width:80px" headerText="成本_数量">
+                    <h:outputText value="#{record.bdCstpl_Qty}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:60px" headerText="成本_单价">
+                    <h:outputText value="#{record.bdCstpl_UnitPrice}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:80px" headerText="成本_合计">
+                    <h:outputText value="#{record.bdCstpl_Amt}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:80px" headerText="分包_数量">
+                    <h:outputText value="#{record.bdSubctt_Qty}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:60px" headerText="分包_单价">
+                    <h:outputText value="#{record.bdSubctt_UnitPrice}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:80px" headerText="分包_合计">
+                    <h:outputText value="#{record.bdSubctt_Amt}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:250px" headerText="分包_协作单位">
+                    <h:outputText value="#{record.strSubctt_SignPartName}" style="text-align:left">
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:100px" headerText="成分比较_数量">
+                    <h:outputText value="#{record.bdC_S_Qty}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:100px" headerText="成分比较_单价">
+                    <h:outputText value="#{record.bdC_S_UnitPrice}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:100px" headerText="成分比较_合计">
+                    <h:outputText value="#{record.bdC_S_Amt}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

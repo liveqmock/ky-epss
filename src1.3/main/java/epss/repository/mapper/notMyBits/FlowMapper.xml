@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="epss.repository.dao.notMyBits.FlowMapper">
+    <resultMap id="BaseResultMapCtt" type="epss.repository.model.model_show.SubcttInfoShow">
+        <id column="PKID" jdbcType="VARCHAR" property="pkid" />
+        <result column="CTT_TYPE" jdbcType="VARCHAR" property="cttType" />
+        <result column="PARENT_PKID" jdbcType="VARCHAR" property="parentPkid" />
+        <result column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="NAME" jdbcType="VARCHAR" property="name" />
+        <result column="SIGN_TIME" jdbcType="VARCHAR" property="signDate" />
+        <result column="SIGN_PART_PKID_A" jdbcType="VARCHAR" property="signPartPkidA" />
+        <result column="SIGN_PART_NAME_A" jdbcType="VARCHAR" property="signPartNameA" />
+        <result column="SIGN_PART_PKID_B" jdbcType="VARCHAR" property="signPartPkidB" />
+        <result column="SIGN_PART_NAME_B" jdbcType="VARCHAR" property="signPartNameB" />
+        <result column="START_DATE" jdbcType="VARCHAR" property="startDate" />
+        <result column="END_DATE" jdbcType="VARCHAR" property="endDate" />
+        <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment" />
+        <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+
+        <result column="INFO_TYPE" jdbcType="VARCHAR" property="powerType" />
+        <result column="INFO_PKID" jdbcType="VARCHAR" property="powerPkid" />
+        <result column="STAGE_NO" jdbcType="VARCHAR" property="stageNo" />
+        <result column="FLOW_STATUS" jdbcType="VARCHAR" property="flowStatus" />
+        <result column="STR_FLOW_STATUS_BEGIN" jdbcType="VARCHAR" property="strFlowStatusBegin" />
+        <result column="STR_FLOW_STATUS_END" jdbcType="VARCHAR" property="strFlowStatusEnd" />
+        <result column="FLOW_STATUS_REMARK" jdbcType="VARCHAR" property="flowStatusRemark"/>
+        <result column="END_FLAG" jdbcType="VARCHAR" property="endFlag" />
+        <result column="ARCHIVED_FLAG" jdbcType="VARCHAR" property="archivedFlag"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+        <result column="CREATED_TIME" jdbcType="VARCHAR" property="createdTime" />
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="UPDATED_TIME" jdbcType="VARCHAR" property="updatedTime" />
+    </resultMap>
+    <select id="selectCttByFlowStatusBegin_End" parameterType="epss.repository.model.model_show.SubcttInfoShow"
+            resultMap="BaseResultMapCtt">
+        <![CDATA[
+            select
+                eic.PKID,
+                eic.CTT_TYPE,
+                eic.PARENT_PKID,
+                eic.ID,
+                eic.NAME,
+                eic.SIGN_TIME,
+                eic.SIGN_PART_PKID_A,
+                (select Max(Name) from ES_INIT_CUST where PKID=eic.SIGN_PART_PKID_A) as SIGN_PART_NAME_A,
+                eic.SIGN_PART_PKID_B,
+                (select Max(Name) from ES_INIT_CUST where PKID=eic.SIGN_PART_PKID_B) as SIGN_PART_NAME_B,
+                eic.START_DATE,
+                eic.END_DATE,
+                eic.ATTACHMENT,
+                eic.REMARK,
+                eic.END_FLAG,
+                eic.ARCHIVED_FLAG,
+                eic.CREATED_BY,
+                eic.CREATED_TIME,
+                eic.UPDATED_BY,
+                eic.UPDATED_TIME,
+
+                fc.INFO_TYPE,
+                fc.INFO_PKID,
+                fc.STAGE_NO,
+                fc.FLOW_STATUS,
+                '' AS STR_FLOW_STATUS_BEGIN,
+                '' AS STR_FLOW_STATUS_END,
+                fc.FLOW_STATUS_REMARK
+            from
+                ES_CTT_INFO eic
+            left outer join
+                FLOW_CTRL fc
+            on
+                eic.CTT_TYPE=fc.INFO_TYPE
+            and
+                eic.PKID=fc.INFO_PKID
+            where
+                1=1
+        ]]>
+        <if test="pkid != null and pkid != ''">
+            and eic.pkid like CONCAT('%',CONCAT(trim(#{pkid}),'%'))
+        </if>
+        <if test="cttType != null and cttType != ''">
+            and eic.CTT_TYPE like CONCAT('%',CONCAT(trim(#{cttType}),'%'))
+        </if>
+        <if test="parentPkid != null and parentPkid != ''">
+            and eic.PARENT_PKID like CONCAT('%',CONCAT(trim(#{parentPkid}),'%'))
+        </if>
+        <if test="id != null and id != ''">
+            and eic.id like CONCAT('%',CONCAT(trim(#{id}),'%'))
+        </if>
+        <if test="name != null and name != ''">
+            and eic.name like CONCAT('%',CONCAT(trim(#{name}),'%'))
+        </if>
+        <if test="signDate != null and signDate != ''">
+            and eic.SIGN_TIME = #{signDate}
+        </if>
+        <if test="signPartPkidA != null and signPartPkidA != ''">
+            and eic.SIGN_PART_PKID_A = #{signPartPkidA}
+        </if>
+        <if test="signPartPkidB != null and signPartPkidB != ''">
+            and eic.SIGN_PART_PKID_B = #{signPartPkidB}
+        </if>
+        <if test="startDate != null and startDate != ''">
+            and eic.START_DATE = #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and eic.END_DATE = #{endDate}
+        </if>
+        <if test="attachment != null and attachment != ''">
+            and eic.attachment like CONCAT('%',CONCAT(trim(#{attachment}),'%'))
+        </if>
+        <if test="remark != null and remark != ''">
+            and eic.remark like CONCAT('%',CONCAT(trim(#{Remark}),'%'))
+        </if>
+        <if test="endFlag != null and endFlag != ''">
+            and eic.end_flag = #{endFlag}
+        </if>
+        <if test="archivedFlag != null and archivedFlag != ''">
+            and eic.deleted_flag = #{archivedFlag}
+        </if>
+
+        <!--<if test='strFlowStatusBegin == null and strFlowStatusEnd == "0"'>-->
+        <if test="strFlowStatusBegin == null and strFlowStatusEnd == '0'.toString()">
+            and (fc.FLOW_STATUS is null
+            or fc.FLOW_STATUS='0')
+        </if>
+
+        <if test="strFlowStatusBegin != null and strFlowStatusBegin !='' and
+                       strFlowStatusEnd != null and strFlowStatusEnd != ''">
+            and fc.FLOW_STATUS <![CDATA[>=]]> #{strFlowStatusBegin}
+            and fc.FLOW_STATUS <![CDATA[<=]]> #{strFlowStatusEnd}
+        </if>
+
+        <if test="flowStatusRemark != null and flowStatusRemark != ''">
+            and fc.pre_status_flag = #{flowStatusRemark}
+        </if>
+        order by fc.FLOW_STATUS asc,eic.ID asc
+    </select>
+
+    <resultMap id="BaseResultMapStl" type="epss.repository.model.model_show.ProgEstInfoShow">
+        <id column="PKID" jdbcType="VARCHAR" property="pkid" />
+        <result column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="STL_TYPE" jdbcType="VARCHAR" property="stlType" />
+        <result column="STL_PKID" jdbcType="VARCHAR" property="stlPkid" />
+        <result column="STL_NAME" jdbcType="VARCHAR" property="stlName" />
+        <result column="STAGE_NO" jdbcType="VARCHAR" property="stageNo" />
+        <result column="SIGN_PART_NAME_B" jdbcType="VARCHAR" property="signPartNameB" />
+        <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+        <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment" />
+
+        <result column="INFO_TYPE" jdbcType="VARCHAR" property="powerType" />
+        <result column="INFO_PKID" jdbcType="VARCHAR" property="powerPkid" />
+        <result column="POWER_STAGE_NO" jdbcType="VARCHAR" property="powerStageNo" />
+        <result column="FLOW_STATUS" jdbcType="CHAR" property="flowStatus" />
+        <result column="FLOW_STATUS_REMARK" jdbcType="CHAR" property="flowStatusRemark"/>
+        <result column="END_FLAG" jdbcType="CHAR" property="endFlag" />
+        <result column="ARCHIVED_FLAG" jdbcType="CHAR" property="archivedFlag"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+        <result column="CREATED_TIME" jdbcType="VARCHAR" property="createdTime" />
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy" />
+        <result column="UPDATED_TIME" jdbcType="VARCHAR" property="updatedTime" />
+    </resultMap>
+    <select id="selectSubcttStlQMByFlowStatusBegin_End"
+            parameterType="epss.repository.model.model_show.ProgEstInfoShow"
+            resultMap="BaseResultMapStl">
+        <![CDATA[
+             select
+                eis.PKID,
+                eis.ID,
+                eis.STL_TYPE,
+                eis.STL_PKID,
+                eic.NAME AS STL_NAME,
+                eis.STAGE_NO,
+                eis.ATTACHMENT,
+                eicust.NAME AS SIGN_PART_NAME_B,
+                eis.REMARK,
+                eis.END_FLAG,
+                eis.ARCHIVED_FLAG,
+                eis.CREATED_BY,
+                eis.CREATED_TIME,
+                eis.UPDATED_BY,
+                eis.UPDATED_TIME,
+
+                fc.INFO_TYPE,
+                fc.INFO_PKID,
+                fc.STAGE_NO AS POWER_STAGE_NO,
+                fc.FLOW_STATUS,
+                fc.FLOW_STATUS_REMARK
+            from
+                ES_INIT_STL eis
+            left outer join
+                FLOW_CTRL fc
+            on
+                eis.STL_TYPE=fc.INFO_TYPE
+            and
+                eis.STL_PKID=fc.INFO_PKID
+            and
+                eis.STAGE_NO=fc.STAGE_NO
+            left outer join
+                ES_CTT_INFO eic
+            on
+                eis.stl_pkid=eic.pkid
+            and
+                eic.CTT_TYPE='2'
+            left outer join
+                 ES_INIT_CUST eicust
+            on
+                 eic.SIGN_PART_B=eicust.PKID
+            where
+                 1=1
+         ]]>
+        <if test="pkid != null and pkid != ''">
+            and eis.pkid like CONCAT('%',CONCAT(trim(#{pkid}),'%'))
+        </if>
+        <if test="id != null and id != ''">
+            and eis.id like CONCAT('%',CONCAT(trim(#{id}),'%'))
+        </if>
+        <if test="stlType != null and stlType != ''">
+            and eis.STL_TYPE like CONCAT('%',CONCAT(trim(#{stlType}),'%'))
+        </if>
+        <if test="stlPkid != null and stlPkid != ''">
+            and eis.STL_PKID like CONCAT('%',CONCAT(trim(#{stlPkid}),'%'))
+        </if>
+        <if test="stageNo != null and stageNo != ''">
+            and eis.STAGE_NO like CONCAT('%',CONCAT(trim(#{stageNo}),'%'))
+        </if>
+        <if test="attachment != null and attachment != ''">
+            and eis.attachment like CONCAT('%',CONCAT(trim(#{attachment}),'%'))
+        </if>
+        <if test="remark != null and remark != ''">
+            and eis.remark like CONCAT('%',CONCAT(trim(#{Remark}),'%'))
+        </if>
+        <if test="endFlag != null and endFlag != ''">
+            and eis.end_flag = #{endFlag}
+        </if>
+        <if test="archivedFlag != null and archivedFlag != ''">
+            and eis.deleted_flag = #{archivedFlag}
+        </if>
+
+        <!--<if test='strFlowStatusBegin == null and strFlowStatusEnd == "0"'>-->
+        <if test="strFlowStatusBegin == null and strFlowStatusEnd == '0'.toString()">
+            and (fc.FLOW_STATUS is null
+            or fc.FLOW_STATUS='0')
+        </if>
+
+        <if test="strFlowStatusBegin != null and strFlowStatusBegin !='' and
+                       strFlowStatusEnd != null and strFlowStatusEnd != ''">
+            and fc.FLOW_STATUS <![CDATA[>=]]> #{strFlowStatusBegin}
+            and fc.FLOW_STATUS <![CDATA[<=]]> #{strFlowStatusEnd}
+        </if>
+
+        <if test="flowStatusRemark != null and flowStatusRemark != ''">
+            and fc.pre_status_flag = #{flowStatusRemark}
+        </if>
+        order by fc.FLOW_STATUS asc,eic.ID asc
+    </select>
+    <select id="selectTkcttStlSMByFlowStatusBegin_End"
+            parameterType="epss.repository.model.model_show.ProgEstInfoShow"
+            resultMap="BaseResultMapStl">
+        <![CDATA[
+             select
+                eis.PKID,
+                eis.ID,
+                eis.STL_TYPE,
+                eis.STL_PKID,
+                eic.NAME AS STL_NAME,
+                eis.STAGE_NO,
+                eis.ATTACHMENT,
+                eicust.NAME AS SIGN_PART_NAME_B,
+                eis.REMARK,
+                eis.END_FLAG,
+                eis.ARCHIVED_FLAG,
+                eis.CREATED_BY,
+                eis.CREATED_TIME,
+                eis.UPDATED_BY,
+                eis.UPDATED_TIME,
+
+                fc.INFO_TYPE,
+                fc.INFO_PKID,
+                fc.STAGE_NO AS POWER_STAGE_NO,
+                fc.FLOW_STATUS,
+                fc.FLOW_STATUS_REMARK
+            from
+                ES_INIT_STL eis
+            left outer join
+                FLOW_CTRL fc
+            on
+                eis.STL_TYPE=fc.INFO_TYPE
+            and
+                eis.STL_PKID=fc.INFO_PKID
+            and
+                eis.STAGE_NO=fc.STAGE_NO
+
+            left outer join
+                ES_CTT_INFO eic
+            on
+                eic.pkid=eis.stl_pkid
+            and
+                eic.CTT_TYPE='0'
+            left outer join
+                 ES_INIT_CUST eicust   --连客户信息
+            on
+                 eicust.PKID=eic.SIGN_PART_B
+            where
+                1=1
+         ]]>
+        <if test="pkid != null and pkid != ''">
+            and eis.pkid like CONCAT('%',CONCAT(trim(#{pkid}),'%'))
+        </if>
+        <if test="id != null and id != ''">
+            and eis.id like CONCAT('%',CONCAT(trim(#{id}),'%'))
+        </if>
+        <if test="stlType != null and stlType != ''">
+            and eis.STL_TYPE like CONCAT('%',CONCAT(trim(#{stlType}),'%'))
+        </if>
+        <if test="stlPkid != null and stlPkid != ''">
+            and eis.STL_PKID like CONCAT('%',CONCAT(trim(#{stlPkid}),'%'))
+        </if>
+        <if test="stageNo != null and stageNo != ''">
+            and eis.STAGE_NO like CONCAT('%',CONCAT(trim(#{stageNo}),'%'))
+        </if>
+        <if test="attachment != null and attachment != ''">
+            and eis.attachment like CONCAT('%',CONCAT(trim(#{attachment}),'%'))
+        </if>
+        <if test="remark != null and remark != ''">
+            and eis.remark like CONCAT('%',CONCAT(trim(#{Remark}),'%'))
+        </if>
+        <if test="endFlag != null and endFlag != ''">
+            and eis.end_flag = #{endFlag}
+        </if>
+        <if test="archivedFlag != null and archivedFlag != ''">
+            and eis.deleted_flag = #{archivedFlag}
+        </if>
+
+        <!--<if test='strFlowStatusBegin == null and strFlowStatusEnd == "0"'>-->
+        <if test="strFlowStatusBegin == null and strFlowStatusEnd == '0'.toString()">
+            and (fc.FLOW_STATUS is null
+            or fc.FLOW_STATUS='0')
+        </if>
+
+        <if test="strFlowStatusBegin != null and strFlowStatusBegin !='' and
+                       strFlowStatusEnd != null and strFlowStatusEnd != ''">
+            and fc.FLOW_STATUS <![CDATA[>=]]> #{strFlowStatusBegin}
+            and fc.FLOW_STATUS <![CDATA[<=]]> #{strFlowStatusEnd}
+        </if>
+        <if test="flowStatusRemark != null and flowStatusRemark != ''">
+            and fc.pre_status_flag = #{flowStatusRemark}
+        </if>
+        order by fc.FLOW_STATUS asc,eic.ID asc
+    </select>
+</mapper>

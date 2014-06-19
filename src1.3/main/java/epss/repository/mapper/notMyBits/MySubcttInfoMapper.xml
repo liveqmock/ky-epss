@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="epss.repository.dao.notMyBits.MySubcttInfoMapper">
+    <resultMap id="BaseResultMap" type="epss.repository.model.model_show.SubcttInfoShow">
+        <id column="PKID" jdbcType="VARCHAR" property="pkid"/>
+        <result column="ID" jdbcType="VARCHAR" property="id"/>
+        <result column="NAME" jdbcType="VARCHAR" property="name"/>
+        <result column="SIGN_DATE" jdbcType="VARCHAR" property="signDate"/>
+        <result column="SIGN_PART_PKID_A" jdbcType="VARCHAR" property="signPartPkidA"/>
+        <result column="SIGN_PART_PKID_B" jdbcType="VARCHAR" property="signPartPkidB"/>
+        <result column="START_DATE" jdbcType="VARCHAR" property="startDate"/>
+        <result column="END_DATE" jdbcType="VARCHAR" property="endDate"/>
+        <result column="ARCHIVED_FLAG" jdbcType="CHAR" property="archivedFlag"/>
+        <result column="ORIGIN_FLAG" jdbcType="CHAR" property="originFlag"/>
+        <result column="FLOW_STATUS" jdbcType="CHAR" property="flowStatus"/>
+        <result column="FLOW_STATUS_REMARK" jdbcType="CHAR" property="flowStatusRemark"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="CREATED_TIME" jdbcType="VARCHAR" property="createdTime"/>
+        <result column="UPDATED_BY" jdbcType="VARCHAR" property="updatedBy"/>
+        <result column="UPDATED_TIME" jdbcType="VARCHAR" property="updatedTime"/>
+        <result column="REC_VERSION" jdbcType="DECIMAL" property="recVersion"/>
+        <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+        <result column="TID" jdbcType="VARCHAR" property="tid"/>
+    </resultMap>
+    <select id="getSubcttInfoListByFlowStatusBegin_End"
+            parameterType="epss.repository.model.model_show.SubcttInfoShow"
+            resultMap="BaseResultMap">
+        <![CDATA[
+    select ti.PKID,
+            ti.CSTPL_INFO_PKID,
+            ti.ID,
+            ti.NAME,
+            ti.SIGN_DATE,
+            ti.SIGN_PART_PKID_A ,
+            (select Max(Name) from SIGN_PART where PKID=ti.SIGN_PART_PKID_A) as signPartNameA,
+            ti.SIGN_PART_PKID_B   as signPartPkidB,
+            (select Max(Name) from SIGN_PART where PKID=ti.SIGN_PART_PKID_B) as signPartNameB,
+            ti.START_DATE,
+            ti.END_DATE,
+            ti.ATTACHMENT,
+            ti.REMARK,
+            ti.ARCHIVED_FLAG,
+            ti.ORIGIN_FLAG,
+            ti.CREATED_BY,
+            (select Max(OPERNAME) from PTOPER where OPERID=ti.CREATED_BY) as createdByName,
+            ti.CREATED_TIME,
+            ti.UPDATED_BY,
+            (select Max(OPERNAME) from PTOPER where OPERID=ti.UPDATED_BY) as updatedByName,
+            ti.UPDATED_TIME,
+            ti.REC_VERSION,
+            ti.FLOW_STATUS,
+            ti.FLOW_STATUS_REMARK ,
+            ti.TID
+             from SUBCTT_INFO ti
+             where
+             (case when #{flowStatusBegin} is null
+             then nvl(ti.FLOW_STATUS,' ')
+             else #{flowStatusBegin} end)
+             <=nvl(ti.FLOW_STATUS,' ')
+             and
+             (case when #{flowStatusEnd} is null
+             then nvl(ti.FLOW_STATUS,' ')
+             else #{flowStatusEnd} end)
+             >=nvl(ti.FLOW_STATUS,' ')
+        ]]>
+       <if test="id != null and id != ''">
+            and ti.ID like CONCAT('%',CONCAT(trim(#{id}),'%'))
+        </if>
+        <if test="cstplInfoPkid != null and cstplInfoPkid != ''">
+            and ti.CSTPL_INFO_PKID like CONCAT('%',CONCAT(trim(#{cstplInfoPkid}),'%'))
+        </if>
+        <if test="name != null and name != ''">
+            and ti.NAME like CONCAT('%',CONCAT(trim(#{name}),'%'))
+        </if>
+        <if test="signDate != null and signDate != ''">
+            and ti.SIGN_DATE = #{signDate}
+        </if>
+        <if test="remark != null and remark != ''">
+            and ti.REMARK like CONCAT('%',CONCAT(trim(#{remark}),'%'))
+        </if>
+        <if test="signPartPkidA != null and signPartPkidA != ''">
+            and ti.SIGN_PART_PKID_A = #{signPartPkidA}
+        </if>
+        <if test="signPartPkidB != null and signPartPkidB != ''">
+            and ti.SIGN_PART_PKID_B = #{signPartPkidB}
+        </if>
+    </select>
+    <select id="getSubcttInfoShowListByShowModel"
+            parameterType="epss.repository.model.model_show.SubcttInfoShow"
+            resultMap="BaseResultMap">
+        <![CDATA[
+    select ti.PKID,
+            ti.CSTPL_INFO_PKID,
+            ti.ID,
+            ti.NAME,
+            ti.SIGN_DATE,
+            ti.SIGN_PART_PKID_A ,
+            (select Max(Name) from SIGN_PART where PKID=ti.SIGN_PART_PKID_A) as signPartNameA,
+            ti.SIGN_PART_PKID_B   as signPartPkidB,
+            (select Max(Name) from SIGN_PART where PKID=ti.SIGN_PART_PKID_B) as signPartNameB,
+            ti.START_DATE,
+            ti.END_DATE,
+            ti.ATTACHMENT,
+            ti.REMARK,
+            ti.ARCHIVED_FLAG,
+            ti.ORIGIN_FLAG,
+            ti.CREATED_BY,
+            (select Max(OPERNAME) from PTOPER where OPERID=ti.CREATED_BY) as createdByName,
+            ti.CREATED_TIME,
+            ti.UPDATED_BY,
+            (select Max(OPERNAME) from PTOPER where OPERID=ti.UPDATED_BY) as updatedByName,
+            ti.UPDATED_TIME,
+            ti.REC_VERSION,
+            ti.FLOW_STATUS,
+            ti.FLOW_STATUS_REMARK ,
+            ti.TID
+             from SUBCTT_INFO ti
+             where
+             1=1
+        ]]>
+        <if test="id != null and id != ''">
+            and ti.ID like CONCAT('%',CONCAT(trim(#{id}),'%'))
+        </if>
+        <if test="cstplInfoPkid != null and cstplInfoPkid != ''">
+            and ti.CSTPL_INFO_PKID like CONCAT('%',CONCAT(trim(#{cstplInfoPkid}),'%'))
+        </if>
+        <if test="name != null and name != ''">
+            and ti.NAME like CONCAT('%',CONCAT(trim(#{name}),'%'))
+        </if>
+        <if test="signDate != null and signDate != ''">
+            and ti.SIGN_DATE = #{signDate}
+        </if>
+        <if test="remark != null and remark != ''">
+            and ti.REMARK like CONCAT('%',CONCAT(trim(#{remark}),'%'))
+        </if>
+        <if test="signPartPkidA != null and signPartPkidA != ''">
+            and ti.SIGN_PART_PKID_A = #{signPartPkidA}
+        </if>
+        <if test="signPartPkidB != null and signPartPkidB != ''">
+            and ti.SIGN_PART_PKID_B = #{signPartPkidB}
+        </if>
+    </select>
+</mapper>

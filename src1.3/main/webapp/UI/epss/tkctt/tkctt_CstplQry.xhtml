@@ -1,0 +1,194 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+        <script type="text/javascript" src="#{request.contextPath}/UI/support/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+            function actSelect(obj) {
+                var pkid = obj;
+                var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
+                var arg = new Object();
+                arg.doType = "select";
+                var rtn = dialog("../cstpl/cstpl_Qry.xhtml?strTkcttInfoPkid=" + pkid + "", arg, sfeature);
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:focus for="id"/>
+            <p:panel>
+                <h:panelGrid id="pdQry" columns="2" style="width: 100%">
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="合同编号：" for="id"/>
+                        <p:inputText id="id" value="#{tkcttInfoAction.tkcttInfoShowQry.id}"
+                                     style="width: 175px"/>
+                        <p:outputLabel value="合同名称：" for="cttName"/>
+                        <p:inputText id="cttName" value="#{tkcttInfoAction.tkcttInfoShowQry.name}"
+                                     style="width: 300px"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <p:commandButton id="qryBtn" value="查询"
+                                         action="#{tkcttInfoAction.onQueryAction('ApprovedQry','true')}"
+                                         update="pdt,msgs">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtn" value="重置"
+                                         type="reset"
+                                         update="pdQry,msgs">
+                        </p:commandButton>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <!--列表维护-->
+            <p:contextMenu for="pdt">
+                <p:menuitem value="浏览" icon="ui-icon-search"
+                            actionListener="#{tkcttInfoAction.selectRecordAction('Qry','')}"
+                            update="pgView,pdt,msgs"
+                            onclick="PF('wVDlgView').show()">
+                </p:menuitem>
+                <p:menuitem value="成本计划" icon="ui-icon-search"
+                            oncomplete="actSelect(DtInitTkcttList.selection)">
+                </p:menuitem>
+            </p:contextMenu>
+            <p:dataTable id="pdt" style="width:100%;"
+                         value="#{tkcttInfoAction.tkcttInfoShowList}"
+                         var="record"
+                         rowKey="#{record.pkid}"
+                         selection="#{tkcttInfoAction.tkcttInfoShowSelected}"
+                         selectionMode="single"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="15"
+                         rowIndexVar="row"
+                         rowsPerPageTemplate="500,200,100,45,30,15"
+                         emptyMessage="数据记录为空..."
+                         widgetVar="DtInitTkcttList"
+                         scrollable="true">
+                <p:column headerText="序号" style="width:30px">
+                    <h:outputText value="#{row + 1}"/>
+                </p:column>
+                <p:column headerText="总包合同号" style="width:120px;text-align:center">
+                    <h:outputText value="#{record.id}"/>
+                </p:column>
+                <p:column headerText="总包合同名" style="width:300px;text-align:left">
+                    <h:outputText value="#{record.name}"/>
+                </p:column>
+                <p:column headerText="签订甲方" style="width:200px;text-align:left">
+                    <h:outputText value="#{esCommon.getCustNameByCustIdFromList(record.signPartPkidA)}"/>
+                </p:column>
+                <p:column headerText="签订乙方" style="width:200px;text-align:left">
+                    <h:outputText value="#{esCommon.getCustNameByCustIdFromList(record.signPartPkidB)}"/>
+                </p:column>
+                <p:column headerText="开始时间" style="width:66px;text-align:center">
+                    <h:outputText value="#{record.startDate}"/>
+                </p:column>
+                <p:column headerText="截止时间" style="width:66px;text-align:center">
+                    <h:outputText value="#{record.endDate}"/>
+                </p:column>
+                <p:column headerText="签订日期" style="width:66px;text-align:center">
+                    <h:outputText value="#{record.signDate}"/>
+                </p:column>
+            </p:dataTable>
+            <p:dialog id="dlgView" header="总包合同维护" widgetVar="wVDlgView"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgView">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="合同编号：" for="idForDlg"/>
+                        <p:inputText id="idForDlg"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.id}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="合同名称：" for="cttNameForDlg"/>
+                        <p:inputText id="cttNameForDlg"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.name}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:328px;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="备注内容：" for="remarkForDlg"/>
+                        <p:inputText id="remarkForDlg"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.remark}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="签订日期：" for="signDateForDlg"/>
+                        <p:inputText id="signDateForDlg"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.signDate}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="开始时间：" for="startDateForDlg"/>
+                        <p:inputText id="startDateForDlg"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.startDate}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="截止时间：" for="endDateForDlg"/>
+                        <p:inputText id="endDateForDlg"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.endDate}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="签订甲方：" for="signPartPkidAForDlg"/>
+                        <p:inputText id="signPartPkidAForDlg"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.signPartNameA}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:328px;">
+                        </p:inputText>
+                        <p:outputLabel value="签订乙方：" for="signPartPkidBForDlg"/>
+                        <p:inputText id="signPartPkidBForDlg"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.signPartNameB}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:328px;">
+                        </p:inputText>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+                        <p:outputLabel for="createdByNameSel" value="创建人：" />
+                        <h:inputText id="createdByNameSel"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.createdByName}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="createdTimeSel" value="创建时间：" />
+                        <h:inputText id="createdTimeSel"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.createdTime}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="updatedByNameSel" value="修改人：" />
+                        <h:inputText id="updatedByNameSel"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.updatedByName}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="updatedTimeSel" value="修改时间：" />
+                        <h:inputText id="updatedTimeSel"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.updatedTime}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="recVersionSel" value="修改次数：" />
+                        <h:inputText id="recVersionSel"
+                                     value="#{tkcttInfoAction.tkcttInfoShowSel.recVersion}"
+                                     style="background-color:gainsboro;text-align:right;" readonly="true">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                        </h:inputText>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
