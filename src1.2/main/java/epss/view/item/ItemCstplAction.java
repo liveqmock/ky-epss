@@ -455,13 +455,13 @@ public class ItemCstplAction {
         EsCttInfo esCttInfo = esCttInfoService.getCttInfoByPkId(strBelongToPkid);
         String strTkcttPkidInCstpl= esCttInfo.getParentPkid();
         esCttItemListTkctt =
-                esCttItemService.getEsItemHieRelapListByTypeAndPkid(ESEnum.ITEMTYPE0.getCode(), strTkcttPkidInCstpl);
+                esCttItemService.getEsItemList(ESEnum.ITEMTYPE0.getCode(), strTkcttPkidInCstpl);
         List<CttItemShow> cttItemShowListTkctt =new ArrayList<>();
         recursiveDataTable("root", esCttItemListTkctt, cttItemShowListTkctt);
         cttItemShowListTkctt =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowListTkctt);
 
         /*成本计划列表*/
-        List<EsCttItem> esCttItemListCstpl = esCttItemService.getEsItemHieRelapListByTypeAndPkid(
+        List<EsCttItem> esCttItemListCstpl = esCttItemService.getEsItemList(
                 strBelongToType, strBelongToPkid);
 
         List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();

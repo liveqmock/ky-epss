@@ -47,7 +47,7 @@ public class EsCttItemService {
             return  esCttItemList.get(0).getOrderid();
         }
     }
-    public List<EsCttItem> getEsItemHieRelapListByTypeAndPkid(String strBelongToType,String strItemBelongToPkid){
+    public List<EsCttItem> getEsItemList(String strBelongToType,String strItemBelongToPkid){
         EsCttItemExample example = new EsCttItemExample();
         example.createCriteria().andBelongToTypeEqualTo(strBelongToType)
                 .andBelongToPkidEqualTo(strItemBelongToPkid);

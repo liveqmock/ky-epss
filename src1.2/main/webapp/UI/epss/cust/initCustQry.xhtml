@@ -60,22 +60,10 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <!--列表维护-->
-            <p:contextMenu for="pdt">
-                <p:menuitem value="浏览" icon="ui-icon-search"
-                            actionListener="#{esInitCustAction.selectRecordAction('Sel')}"
-                            update="pdt,msgs,pgView"
-                            onclick="PF('wVDlgView').show()">
-                </p:menuitem>
-                <p:menuitem value="附件" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitCustList.selection,'Attachment')">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{esInitCustAction.signPartShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{esInitCustAction.signPartShowSelected}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -87,6 +75,13 @@
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitCustList"
                          scrollable="true">
+                <p:column headerText="操作" style="width:30px">
+                    <p:commandButton  icon="ui-icon-search"
+                                      actionListener="#{esInitCustAction.selectRecordAction('Sel',record)}"
+                                      update="pdt,:form:pgView,:form:msgs"
+                                      onclick="PF('wVDlgView').show()">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>

@@ -100,7 +100,7 @@ public class ItemTkcttAction {
         /*形成关系树*/
         esCttItemList =new ArrayList<EsCttItem>();
         cttItemShowList =new ArrayList<CttItemShow>();
-        esCttItemList = esCttItemService.getEsItemHieRelapListByTypeAndPkid(
+        esCttItemList = esCttItemService.getEsItemList(
                 strBelongToType, strBelongToPkid);
         recursiveDataTable("root", esCttItemList);
         cttItemShowList =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList);

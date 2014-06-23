@@ -109,14 +109,14 @@ public class ItemSubcttAction {
         cttItemShowList_Cstpl =new ArrayList<CttItemShow>();
         EsCttInfo esCttInfo = esCttInfoService.getCttInfoByPkId(strBelongToPkid);
         String strCstplPkidInInitCtt= esCttInfo.getParentPkid() ;
-        esCttItemList = esCttItemService.getEsItemHieRelapListByTypeAndPkid(
+        esCttItemList = esCttItemService.getEsItemList(
                 ESEnum.ITEMTYPE1.getCode(), strCstplPkidInInitCtt);
         recursiveDataTable("root", esCttItemList, cttItemShowList_Cstpl);
         cttItemShowList_Cstpl =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList_Cstpl);
         /*分包合同*/
         esCttItemList =new ArrayList<EsCttItem>();
         cttItemShowList =new ArrayList<CttItemShow>();
-        esCttItemList = esCttItemService.getEsItemHieRelapListByTypeAndPkid(
+        esCttItemList = esCttItemService.getEsItemList(
                 strBelongToType, strBelongToPkid);
         cttItemShowList.clear();
         recursiveDataTable("root", esCttItemList, cttItemShowList);

@@ -272,7 +272,7 @@ public class ItemTkcttEngStaStlAction {
         /*分包合同*/
         List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
         progEstItemShowListForExcel=new ArrayList<ProgEstStaItemShow>();
-        esCttItemList = esCttItemService.getEsItemHieRelapListByTypeAndPkid(
+        esCttItemList = esCttItemService.getEsItemList(
                 ESEnum.ITEMTYPE0.getCode(), strTkcttPkid);
         if(esCttItemList.size()<=0){
             return;

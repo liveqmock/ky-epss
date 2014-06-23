@@ -156,7 +156,7 @@ public class ItemQryByCSubStlQPeriodAction {
         /*分包合同*/
         esCttItemList =new ArrayList<EsCttItem>();
 
-        esCttItemList = esCttItemService.getEsItemHieRelapListByTypeAndPkid(
+        esCttItemList = esCttItemService.getEsItemList(
                 ESEnum.ITEMTYPE2.getCode(), strSubcttPkid);
         if(esCttItemList.size()<=0){
             return;

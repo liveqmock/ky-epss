@@ -105,7 +105,7 @@ public class ItemQryByCSubAction {
         beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
         /*成本计划列表*/
         List<EsCttItem> esCttItemListCstpl =new ArrayList<EsCttItem>();
-        esCttItemListCstpl = esCttItemService.getEsItemHieRelapListByTypeAndPkid(
+        esCttItemListCstpl = esCttItemService.getEsItemList(
                 ESEnum.ITEMTYPE1.getCode(),
                 esCttItem.getBelongToPkid());
         List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();

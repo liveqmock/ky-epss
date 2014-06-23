@@ -128,7 +128,7 @@ public class ItemSubcttEngPStlAction {
         commStlSubcttEngH.setStrTkcttName(esCttInfo_Tkctt.getName());
 
         // 表内容设定
-        esCttItemList = esCttItemService.getEsItemHieRelapListByTypeAndPkid(
+        esCttItemList = esCttItemService.getEsItemList(
                 ESEnum.ITEMTYPE2.getCode(), commStlSubcttEngH.getStrSubcttPkid());
         if(esCttItemList.size()>0){
             strExportToExcelRendered="true";

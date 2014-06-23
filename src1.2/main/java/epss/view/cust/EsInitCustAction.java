@@ -44,7 +44,6 @@ public class EsInitCustAction {
     private SignPartShow signPartShowDel;
     private SignPartShow signPartShowSel;
     private List<SignPartShow> signPartShowList;
-    private SignPartShow signPartShowSelected;
 
     private String strSubmitType;
     private String rowSelectedFlag;
@@ -63,7 +62,6 @@ public class EsInitCustAction {
         signPartShowUpd=new SignPartShow() ;
         signPartShowDel=new SignPartShow() ;
         signPartShowSel=new SignPartShow() ;
-        signPartShowSelected=new SignPartShow() ;
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType="Add";
@@ -182,17 +180,17 @@ public class EsInitCustAction {
         }
     }
 
-    public void selectRecordAction(String strSubmitTypePara){
+    public void selectRecordAction(String strSubmitTypePara,SignPartShow signPartShowSelectedPara){
         try {
             if (strSubmitTypePara.equals("Sel")){
-                signPartShowSel=(SignPartShow) BeanUtils.cloneBean(signPartShowSelected);
+                signPartShowSel=(SignPartShow) BeanUtils.cloneBean(signPartShowSelectedPara);
             }
             strSubmitType=strSubmitTypePara;
             if(strSubmitTypePara.equals("Add")){
             }else if(strSubmitTypePara.equals("Upd")){
-                signPartShowUpd =(SignPartShow) BeanUtils.cloneBean(signPartShowSelected);
+                signPartShowUpd =(SignPartShow) BeanUtils.cloneBean(signPartShowSelectedPara);
             }else if(strSubmitTypePara.equals("Del")){
-                signPartShowDel =(SignPartShow) BeanUtils.cloneBean(signPartShowSelected);
+                signPartShowDel =(SignPartShow) BeanUtils.cloneBean(signPartShowSelectedPara);
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
@@ -269,14 +267,6 @@ public class EsInitCustAction {
 
     public void setSignPartShowList(List<SignPartShow> signPartShowList) {
         this.signPartShowList = signPartShowList;
-    }
-
-    public SignPartShow getSignPartShowSelected() {
-        return signPartShowSelected;
-    }
-
-    public void setSignPartShowSelected(SignPartShow signPartShowSelected) {
-        this.signPartShowSelected = signPartShowSelected;
     }
 
     public String getStrSubmitType() {

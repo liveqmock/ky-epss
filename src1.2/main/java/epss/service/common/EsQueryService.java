@@ -31,11 +31,11 @@ public class EsQueryService {
         return queryMapper.getCSStlQList(strBelongToPkid,strPeriodNo) ;
     }
 
-    public List<QryShow> getCSStlQBySignPartList(String strCstplPkid,String strPeriodNo){
-        return queryMapper.getCSStlQBySignPartList(strCstplPkid,strPeriodNo) ;
+    public List<QryShow> getCSStlQBySignPartList(String strCstplInfoPkidPara,String strPeriodNo){
+        return queryMapper.getCSStlQBySignPartList(strCstplInfoPkidPara,strPeriodNo) ;
     }
 
-    public List<CttItemShow> getEsItemHieRelapOfCstplList(String strBelongToPkid){
-        return queryMapper.getEsItemHieRelapOfCstplList(strBelongToPkid) ;
+    public List<CttItemShow> getEsCstplItemList(String strTkcttInfoPkidPara){
+        return queryMapper.getEsCstplItemList(strTkcttInfoPkidPara) ;
     }
 }

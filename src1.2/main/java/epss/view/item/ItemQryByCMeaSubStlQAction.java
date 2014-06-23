@@ -113,7 +113,7 @@ public class ItemQryByCMeaSubStlQAction {
         beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
         /*成本计划列表*/
         List<EsCttItem> esCttItemListCstpl =new ArrayList<EsCttItem>();
-        esCttItemListCstpl = esCttItemService.getEsItemHieRelapListByTypeAndPkid(
+        esCttItemListCstpl = esCttItemService.getEsItemList(
                 ESEnum.ITEMTYPE1.getCode(),
                 strCstplPkid);
         List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();

@@ -58,23 +58,11 @@
                                  update="pdt,msgs,pgCondition,pgViewForAdd"
                                  onclick="PF('wVDlgViewForAdd').show()"/>
             </h:panelGrid>
-            <p:contextMenu for="pdt">
-                <p:menuitem value="更新" icon="ui-icon-arrowrefresh-1-w"
-                            actionListener="#{esInitCustAction.selectRecordAction('Upd')}"
-                            update="pdt,msgs,pgViewForUpd,pgCondition"
-                            onclick="PF('wVDlgViewForUpd').show()">
-                </p:menuitem>
-                <p:menuitem value="删除" icon="ui-icon-close"
-                            actionListener="#{esInitCustAction.selectRecordAction('Del')}"
-                            update="pdt,msgs,pgViewForDel,pgCondition"
-                            onclick="PF('wVDlgViewForDel').show()">
-                </p:menuitem>
-            </p:contextMenu>
+
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{esInitCustAction.signPartShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{esInitCustAction.signPartShowSelected}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -85,6 +73,18 @@
                          rowsPerPageTemplate="200,100,50,40,30,20,15"
                          emptyMessage="数据记录为空..."
                          scrollable="true">
+                <p:column headerText="操作" style="width:62px">
+                    <p:commandButton  icon="ui-icon-arrowrefresh-1-w"
+                                actionListener="#{esInitCustAction.selectRecordAction('Upd',record)}"
+                                update="pdt,:form:pgViewForUpd,:form:msgs"
+                                onclick="PF('wVDlgViewForUpd').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-close"
+                                actionListener="#{esInitCustAction.selectRecordAction('Del',record)}"
+                                update="pdt,:form:pgViewForDel,:form:msgs"
+                                onclick="PF('wVDlgViewForDel').show()">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>

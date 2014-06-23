@@ -212,109 +212,80 @@ public interface QueryMapper {
                                      @Param("strPeriodNo") String strPeriodNo);
 
     @Select(" select " +
-            "      eisPerEdItem.CORRESPONDING_PKID as strCorrespondingPkid," +
+            "      subPerEd.CORRESPONDING_PKID as strCorrespondingPkid," +
             "      subPerEd.SIGN_PART_B_NAME as strName," +
-            "      max(eisPerEdItem.CONTRACT_UNIT_PRICE) as bdUnitPrice," +
-            "      sum(eisPerEdItem.CURRENT_PERIOD_E_QTY) as bdCurrentPeriodQuantity," +
-            "      sum(eisPerEdItem.BEGIN_TO_CURRENT_PERIOD_E_QTY) as bdBeginToCurrentPeriodQuantity" +
+            "      max(eissep.UNIT_PRICE) as bdUnitPrice," +
+            "      sum(eissep.THIS_STAGE_QTY) as bdCurrentPeriodQuantity," +
+            "      sum(eissep.ADD_UP_QTY) as bdBeginToCurrentPeriodQuantity" +
             " from " +
             "      ( " +
-            "          select " +
-            "            subctt.PKID, " +
-            "            subctt.SIGN_PART_B_NAME " +
-            "          from  " +
-            "             ( " +
-            "               select  " +
-            "                      " +
-            "                      PKID " +
-            "               from " +
-            "                      ES_CTT_INFO " +
-            "               where                      " +
-            "                      CTT_TYPE = '1' " +
-            "               and  " +
-            "                      PARENT_PKID = #{strParentPkid}" +
-            "             )cstpl " +
-            "          inner join " +
-            "             ( " +
-            "               select  " +
-            "                      ecinfo.PKID, " +
-            "                      ecinfo.PARENT_PKID, " +
-            "                      eicust.NAME AS SIGN_PART_B_NAME " +
-            "               from " +
-            "                      ES_CTT_INFO ecinfo " +
-            "               inner join " +
-            "                      ES_INIT_POWER eip " +
-            "               on " +
-            "                      eip.POWER_TYPE=ecinfo.CTT_TYPE " +
-            "               and " +
-            "                      eip.POWER_PKID=ecinfo.PKID " +
-            "               and " +
-            "                      eip.PERIOD_NO='NULL' " +
-            "               and " +
-            "                      eip.STATUS_FLAG='3' " +
-            "               left outer join " +
-            "                      ES_INIT_CUST eicust " +
-            "               on " +
-            "                      eicust.PKID=ecinfo.SIGN_PART_B " +
-            "               where                       " +
-            "                      ecinfo.CTT_TYPE = '2' " +
-            "             )subctt " +
-            "          on " +
-            "             subctt.PARENT_PKID=cstpl.PKID " +
-            "      )subPerEd " +
-            "   inner join" +
-            "      ( " +
-            "         select " +
-            "            eisPered.STL_PKID," +
-            "            eisPered.PERIOD_NO," +
-            "            ecitem.CORRESPONDING_PKID," +
-            "            ecitem.CONTRACT_UNIT_PRICE," +
-            "            eisseq.CURRENT_PERIOD_E_QTY," +
-            "            eisseq.BEGIN_TO_CURRENT_PERIOD_E_QTY " +
-            "         from" +
-            "            (" +
-            "               select " +
-            "                  eis.STL_TYPE," +
-            "                  eis.STL_PKID," +
-            "                  (" +
-            "                   select " +
-            "                      max(PERIOD_NO) " +
+            "           select" +
+            "                aprdsubctt.PKID as INFO_PKID," +
+            "                aprdsubctt.SIGN_PART_B_NAME," +
+            "                aprdsubctt.MAX_PERIOD_NO_INP," +
+            "                ecitem.PKID as ITEM_PKID," +
+            "                ecitem.CORRESPONDING_PKID" +
+            "           from " +
+            "               (" +
+            "                   select  " +
+            "                          ecinfo.PKID, " +
+            "                          eicust.NAME AS SIGN_PART_B_NAME," +
+            "                          (" +
+            "                              select " +
+            "                                     max(PERIOD_NO)" +
+            "                              from " +
+            "                                 ES_INIT_POWER eip " +
+            "                              where " +
+            "                                 eip.POWER_TYPE='5'" +
+            "                              and " +
+            "                                 eip.POWER_PKID=ecinfo.PKID " +
+            "                              and " +
+            "                                 eip.STATUS_FLAG>='3'" +
+            "                              and" +
+            "                                 eip.PERIOD_NO<=#{strPeriodNo}" +
+            "                          ) as MAX_PERIOD_NO_INP" +
             "                   from " +
-            "                      ES_INIT_POWER eip " +
-            "                   where " +
-            "                      eip.POWER_TYPE=eis.STL_TYPE " +
+            "                          ES_CTT_INFO ecinfo " +
+            "                   inner join " +
+            "                          ES_INIT_POWER eip " +
+            "                   on " +
+            "                          eip.POWER_TYPE=ecinfo.CTT_TYPE " +
             "                   and " +
-            "                      eip.POWER_PKID=eis.STL_PKID " +
+            "                          eip.POWER_PKID=ecinfo.PKID " +
             "                   and " +
-            "                      eip.STATUS_FLAG='3'" +
+            "                          eip.PERIOD_NO='NULL' " +
+            "                   and " +
+            "                          eip.STATUS_FLAG='3' " +
+            "                   left outer join " +
+            "                          ES_INIT_CUST eicust " +
+            "                   on " +
+            "                          eicust.PKID=ecinfo.SIGN_PART_B " +
+            "                   where                       " +
+            "                          ecinfo.CTT_TYPE = '2' " +
             "                   and" +
-            "                      eip.PERIOD_NO<=#{strPeriodNo}" +
-            "                 )as PERIOD_NO" +
-            "               from" +
-            "                  ES_INIT_STL eis " +
-            "            )eisPered" +
-            "         left outer join" +
-            "            ES_CTT_ITEM ecitem" +
-            "         on" +
-            "            ecitem.belong_to_type='2'" +
-            "         and" +
-            "            ecitem.belong_to_pkid=eisPered.stl_pkid " +
-            "         left outer join" +
-            "            ES_ITEM_STL_SUBCTT_ENG_Q eisseq" +
-            "         on" +
-            "            eisseq.subctt_pkid=ecitem.belong_to_pkid" +
-            "         and" +
-            "            eisseq.subctt_item_pkid=ecitem.pkid" +
-            "         where" +
-            "            eisPered.STL_TYPE='3' " +
-            "         order by STL_PKID,PERIOD_NO" +
-            "       )eisPerEdItem " +
-            "    on" +
-            "         eisPerEdItem.STL_PKID=subPerEd.PKID" +
-            "    group by eisPerEdItem.CORRESPONDING_PKID,subPerEd.SIGN_PART_B_NAME " +
-            "    order by eisPerEdItem.CORRESPONDING_PKID,subPerEd.SIGN_PART_B_NAME")
-    List<QryShow> getCSStlQBySignPartList(@Param("strParentPkid") String strParentPkid,
-                                           @Param("strPeriodNo") String strPeriodNo);
+            "                          ecinfo.PARENT_PKID = #{strCstplInfoPkid}" +
+            "                   ) aprdsubctt" +
+            "          inner join" +
+            "                 ES_CTT_ITEM ecitem" +
+            "          on" +
+            "             ecitem.belong_to_type='2'" +
+            "          and" +
+            "             ecitem.belong_to_pkid=aprdsubctt.pkid " +
+            "      )subPerEd " +
+            " inner join" +
+            "      ES_ITEM_STL_SUBCTT_ENG_P eissep" +
+            " on" +
+            "      eissep.SUBSTL_TYPE='3'" +
+            " and" +
+            "      eissep.SUBCTT_PKID=subPerEd.INFO_PKID" +
+            " and " +
+            "      eissep.PERIOD_NO=subPerEd.MAX_PERIOD_NO_INP" +
+            " and" +
+            "      eissep.SUBCTT_ITEM_PKID=subPerEd.ITEM_PKID" +
+            " group by subPerEd.CORRESPONDING_PKID,subPerEd.SIGN_PART_B_NAME " +
+            " order by subPerEd.CORRESPONDING_PKID,subPerEd.SIGN_PART_B_NAME")
+    List<QryShow> getCSStlQBySignPartList(@Param("strCstplInfoPkid") String strCstplInfoPkid,
+                                          @Param("strPeriodNo") String strPeriodNo);
 
     @Select("select " +
             "    ecitem.pkid as pkid," +
@@ -343,7 +314,7 @@ public interface QueryMapper {
             " where" +                       //根据成本计划号得到分包合同列表
             "    ecinfo.CTT_TYPE = '1'" +
             " and " +
-            "    ecinfo.PARENT_PKID = #{strParentPkid}"
+            "    ecinfo.PARENT_PKID = #{strTkcttInfoPkid}"
          )
-    public List<CttItemShow> getEsItemHieRelapOfCstplList(@Param("strParentPkid") String strParentPkid);
+    public List<CttItemShow> getEsCstplItemList(@Param("strTkcttInfoPkid") String strTkcttInfoPkid);
 }
