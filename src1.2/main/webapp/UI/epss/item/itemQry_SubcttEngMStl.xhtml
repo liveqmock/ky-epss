@@ -23,7 +23,7 @@
             <p:growl id="msgs" showDetail="false"/>
             <p:contextMenu for="pdt" id="pcm" rendered='#{itemSubcttEngMStlAction.strMngNotFinishFlag}'>
                 <!--process="@this"执行范围-->
-                <p:menuitem value="浏览" icon="ui-icon-arrowrefresh-1-w"
+                <p:menuitem value="浏览" icon="ui-icon-pencil"
                             actionListener="#{itemSubcttEngMStlAction.selectRecordAction('Sel')}"
                             update="pgView,pdt,msgs"
                             onclick="PF('wVDlgView').show()">

@@ -29,12 +29,12 @@
                              onclick="PF('wVDlgViewForAdd').show()">
             </p:commandButton>
             <p:contextMenu id="pcm" for="ptt" rendered='#{itemCstplAction.strMngNotFinishFlag}'>
-                <p:menuitem value="更新" icon="ui-icon-arrowrefresh-1-w"
+                <p:menuitem value="更新" icon="ui-icon-pencil"
                             actionListener="#{itemCstplAction.selectRecordAction('Upd')}"
                             update="pgViewForUpd,msgs,ptt,pcm"
                             oncomplete="PF('wVDlgViewForUpd').show()">
                 </p:menuitem>
-                <p:menuitem value="删除" icon="ui-icon-close"
+                <p:menuitem value="删除" icon="ui-icon-trash"
                             actionListener="#{itemCstplAction.selectRecordAction('Del')}"
                             update="pgViewForDel,msgs,ptt,pcm"
                             oncomplete="PF('wVDlgViewForDel').show()">

@@ -69,16 +69,13 @@
             <h:panelGrid columns='3' id="pgCondition">
                 <p:commandButton id="checkPassBtn" value="复核通过"
                                  action="#{tkCttInfoAction.onClickForPowerAction('DoubleCheckPass')}"
-                                 update="pdt,msgs,pgCondition"
-                                 rendered="#{tkCttInfoAction.rowSelectedFlag}">
+                                 update="pdt,msgs,pgCondition">
                 </p:commandButton>
                 <p:commandButton id="checkFailBtn" value="复核未过至状态:"
                                  action="#{tkCttInfoAction.onClickForPowerAction('DoubleCheckFail')}"
-                                 update="pdt,msgs,pgCondition"
-                                 rendered="#{tkCttInfoAction.rowSelectedFlag}">
+                                 update="pdt,msgs,pgCondition">
                 </p:commandButton>
-                <p:selectOneMenu id="statusFlag" value="#{tkCttInfoAction.strNotPassToStatus}"
-                                 rendered="#{tkCttInfoAction.rowSelectedFlag}">
+                <p:selectOneMenu id="statusFlag" value="#{tkCttInfoAction.strNotPassToStatus}">
                     <f:selectItems value="#{esFlowControl.statusFlagList}"/>
                 </p:selectOneMenu>
             </h:panelGrid>

@@ -22,12 +22,12 @@
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
             <p:contextMenu for="pdt" id="pcm" rendered='#{itemSubcttEngQStlAction.strMngNotFinishFlag}'>
-                <p:menuitem value="更新" icon="ui-icon-arrowrefresh-1-w"
+                <p:menuitem value="更新" icon="ui-icon-pencil"
                             actionListener="#{itemSubcttEngQStlAction.selectRecordAction('Upd')}"
                             update="pgViewForUpd,pdt,msgs"
                             onclick="PF('wVDlgViewForUpd').show()">
                 </p:menuitem>
-                <p:menuitem value="删除" icon="ui-icon-close"
+                <p:menuitem value="删除" icon="ui-icon-trash"
                             actionListener="#{itemSubcttEngQStlAction.selectRecordAction('Del')}"
                             update="pgViewForDel,pdt,msgs"
                             onclick="PF('wVDlgViewForDel').show()">

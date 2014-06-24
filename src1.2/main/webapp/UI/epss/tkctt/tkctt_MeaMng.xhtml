@@ -87,12 +87,12 @@
                             actionListener="#{esInitTkcttStlMeaAction.selectRecordAction('Mng','Sel')}"
                             update="pdt,msgs,pgCondition">
                 </p:menuitem>
-                <p:menuitem value="更新" icon="ui-icon-arrowrefresh-1-w"
+                <p:menuitem value="更新" icon="ui-icon-pencil"
                             actionListener="#{esInitTkcttStlMeaAction.selectRecordAction('Mng','Upd')}"
                             update="pgViewForUpd,pdt,msgs,pgCondition"
                             onclick="PF('wVDlgViewForUpd').show()">
                 </p:menuitem>
-                <p:menuitem value="删除" icon="ui-icon-close"
+                <p:menuitem value="删除" icon="ui-icon-trash"
                             actionListener="#{esInitTkcttStlMeaAction.selectRecordAction('Mng','Del')}"
                             update="pgViewForDel,pdt,msgs,pgCondition"
                             onclick="PF('wVDlgViewForDel').show()">

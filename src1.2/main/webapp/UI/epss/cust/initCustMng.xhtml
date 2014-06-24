@@ -74,12 +74,12 @@
                          emptyMessage="数据记录为空..."
                          scrollable="true">
                 <p:column headerText="操作" style="width:62px">
-                    <p:commandButton  icon="ui-icon-arrowrefresh-1-w"
+                    <p:commandButton  icon="ui-icon-pencil"
                                 action="#{esInitCustAction.selectRecordAction('Upd',record)}"
                                 update="pdt,:form:pgViewForUpd,:form:msgs"
                                 onclick="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
-                    <p:commandButton  icon="ui-icon-close"
+                    <p:commandButton  icon="ui-icon-trash"
                                 action="#{esInitCustAction.selectRecordAction('Del',record)}"
                                 update="pdt,:form:pgViewForDel,:form:msgs"
                                 onclick="PF('wVDlgViewForDel').show()">

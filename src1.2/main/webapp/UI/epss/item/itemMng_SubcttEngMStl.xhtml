@@ -30,12 +30,12 @@
             </f:facet>
         </p:ajaxStatus>
         <p:contextMenu for="ptt" id="pcm" rendered='#{itemSubcttEngMStlAction.strMngNotFinishFlag}'>
-            <p:menuitem value="更新" icon="ui-icon-arrowrefresh-1-w"
+            <p:menuitem value="更新" icon="ui-icon-pencil"
                         actionListener="#{itemSubcttEngMStlAction.selectRecordAction('Upd')}"
                         update="pgViewForUpd,msgs,ptt,pgOperBtnForUpd"
                         onclick="PF('wVDlgViewForUpd').show()">
             </p:menuitem>
-            <p:menuitem value="删除" icon="ui-icon-close"
+            <p:menuitem value="删除" icon="ui-icon-trash"
                         actionListener="#{itemSubcttEngMStlAction.selectRecordAction('Del')}"
                         update="pgViewForDel,msgs,ptt,pgOperBtnForDel"
                         onclick="PF('wVDlgViewForDel').show()">

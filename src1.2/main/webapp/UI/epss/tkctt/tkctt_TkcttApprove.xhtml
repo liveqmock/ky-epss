@@ -18,7 +18,7 @@
                 }
             }
             function actSelect(obj,pageName) {
-                var pkid=obj.parentNode.parentNode.children[0].innerHTML;
+                var pkid=obj.parentNode.parentNode.parentNode.children[0].children[1].innerHTML;
                 alert(pkid);
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
@@ -96,17 +96,17 @@
                          widgetVar="DtInitTkcttList"
                          rowStyleClass="#{record.statusFlag eq '2' ? null: 'rowDoneStyle'}"
                          scrollable="true">
-                <p:column headerText="操作" style="width:95px">
+                <p:column headerText="操作" style="width:91px">
                     <p:commandButton  icon="ui-icon-search"
                                       action="#{tkCttInfoAction.selectRecordAction('Qry','',record)}"
                                       update="pdt,:form:pgView,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
                     </p:commandButton>
-                    <p:commandButton icon="ui-icon-disk"
-                                      onclick="actSelect(this,'Tk_Detail')">
-                    </p:commandButton>
-                    <p:commandButton icon="ui-icon-arrowrefresh-1-w"
+                    <p:commandButton icon="ui-icon-document"
                                       onclick="actSelect(this,'Attachment')">
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-triangle-1-e"
+                                     onclick="actSelect(this,'Tk_Detail')">
                     </p:commandButton>
                 </p:column>
                 <p:column headerText="序号" style="width:30px">
