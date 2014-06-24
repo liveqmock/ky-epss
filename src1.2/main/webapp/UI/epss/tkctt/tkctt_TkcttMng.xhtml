@@ -17,7 +17,7 @@
                 }
             }
             function actSelect(obj, pageName) {
-                var pkid = obj;
+                var pkid=obj.parentNode.parentNode.parentNode.children[0].children[11].innerHTML;
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
@@ -147,6 +147,9 @@
                 </p:column>
                 <p:column headerText="备注内容" style="width:200px;text-align:left">
                     <h:outputText value="#{record.note}"/>
+                </p:column>
+                <p:column style="display:none;">
+                    <h:outputText value="#{record.pkid}"/>
                 </p:column>
             </p:dataTable>
             <p:dialog id="dlgViewForAdd" header="总包合同增加信息" widgetVar="wVDlgViewForAdd"

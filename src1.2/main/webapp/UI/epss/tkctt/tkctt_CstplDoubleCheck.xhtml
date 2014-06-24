@@ -17,7 +17,7 @@
                 }
             }
             function actSelect(obj) {
-                var pkid = obj;
+                var pkid=obj.parentNode.parentNode.parentNode.children[0].children[9].innerHTML;
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
@@ -73,14 +73,14 @@
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitTkcttList"
                          scrollable="true">
-                <p:column headerText="操作" style="width:100px">
+                <p:column headerText="操作" style="width:61px">
                     <p:commandButton  icon="ui-icon-search"
                                       action="#{tkCttInfoAction.selectRecordAction('Qry','',record)}"
                                       update="pdt,:form:pgView,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
                     </p:commandButton>
-                    <p:commandButton value="成本"
-                                     oncomplete="actSelect(this)">
+                    <p:commandButton icon="ui-icon-triangle-1-e"
+                                     onclick="actSelect(this)">
                     </p:commandButton>
                 </p:column>
                 <p:column headerText="序号" style="width:30px">
@@ -106,6 +106,9 @@
                 </p:column>
                 <p:column headerText="签订日期" style="width:66px;text-align:center">
                     <h:outputText value="#{record.signDate}"/>
+                </p:column>
+                <p:column style="display:none;">
+                    <h:outputText value="#{record.pkid}"/>
                 </p:column>
             </p:dataTable>
             <p:dialog id="dlgView" header="总包合同维护" widgetVar="wVDlgView"

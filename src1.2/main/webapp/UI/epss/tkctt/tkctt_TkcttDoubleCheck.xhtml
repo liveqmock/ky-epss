@@ -18,7 +18,7 @@
                 }
             }
             function actSelect(obj,pageName) {
-                var pkid=obj;
+                var pkid=obj.parentNode.parentNode.parentNode.children[0].children[11].innerHTML;
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
@@ -83,7 +83,6 @@
                          value="#{tkCttInfoAction.cttInfoShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          paginator="true"
@@ -95,17 +94,17 @@
                          widgetVar="DtInitTkcttList"
                          rowStyleClass="#{record.statusFlag eq '1'? null : 'rowDoneStyle'}"
                          scrollable="true">
-                <p:column headerText="操作" style="width:100px">
+                <p:column headerText="操作" style="width:91px">
                     <p:commandButton  icon="ui-icon-search"
                                       action="#{tkCttInfoAction.selectRecordAction('Qry','',record)}"
                                       update="pdt,:form:pgView,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
                     </p:commandButton>
-                    <p:commandButton value="祥"
-                                     oncomplete="actSelect(this,'Tk_Detail')">
+                    <p:commandButton icon="ui-icon-document"
+                                     onclick="actSelect(this,'Attachment')">
                     </p:commandButton>
-                    <p:commandButton  value="附"
-                                      oncomplete="actSelect(this,'Attachment')">
+                    <p:commandButton icon="ui-icon-triangle-1-e"
+                                     onclick="actSelect(this,'Tk_Detail')">
                     </p:commandButton>
                 </p:column>
                 <p:column headerText="序号" style="width:30px">
@@ -137,6 +136,9 @@
                 </p:column>
                 <p:column headerText="签订日期" style="width:66px;text-align:center">
                     <h:outputText value="#{record.signDate}"/>
+                </p:column>
+                <p:column style="display:none;">
+                    <h:outputText value="#{record.pkid}"/>
                 </p:column>
             </p:dataTable>
             <p:dialog id="dlgView" header="总包合同信息" widgetVar="wVDlgView"
