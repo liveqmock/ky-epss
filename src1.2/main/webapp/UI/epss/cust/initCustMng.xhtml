@@ -75,12 +75,12 @@
                          scrollable="true">
                 <p:column headerText="操作" style="width:62px">
                     <p:commandButton  icon="ui-icon-arrowrefresh-1-w"
-                                actionListener="#{esInitCustAction.selectRecordAction('Upd',record)}"
+                                action="#{esInitCustAction.selectRecordAction('Upd',record)}"
                                 update="pdt,:form:pgViewForUpd,:form:msgs"
                                 onclick="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
                     <p:commandButton  icon="ui-icon-close"
-                                actionListener="#{esInitCustAction.selectRecordAction('Del',record)}"
+                                action="#{esInitCustAction.selectRecordAction('Del',record)}"
                                 update="pdt,:form:pgViewForDel,:form:msgs"
                                 onclick="PF('wVDlgViewForDel').show()">
                     </p:commandButton>

@@ -69,42 +69,20 @@
             <h:panelGrid columns="3" id="pgCondition">
                 <p:commandButton id="checkPassBtn" value="审核通过"
                                  action="#{tkCttInfoAction.onClickForPowerAction('CheckPass')}"
-                                 update="pdt,msgs,pgCondition"
-                                 rendered="#{tkCttInfoAction.rowSelectedFlag}">
+                                 update="pdt,msgs,pgCondition">
                 </p:commandButton>
                 <p:commandButton id="checkFailBtn" value="审核未过至状态:"
                                  action="#{tkCttInfoAction.onClickForPowerAction('CheckFail')}"
-                                 update="pdt,msgs,pgCondition"
-                                 rendered="#{tkCttInfoAction.rowSelectedFlag}">
+                                 update="pdt,msgs,pgCondition">
                 </p:commandButton>
-                <p:selectOneMenu id="statusFlag" value="#{tkCttInfoAction.strNotPassToStatus}"
-                                 rendered="#{tkCttInfoAction.rowSelectedFlag}">
+                <p:selectOneMenu id="statusFlag" value="#{tkCttInfoAction.strNotPassToStatus}">
                     <f:selectItems value="#{esFlowControl.statusFlagList}"/>
                 </p:selectOneMenu>
             </h:panelGrid>
-            <!--列表维护-->
-            <p:contextMenu for="pdt">
-                <p:menuitem value="浏览" icon="ui-icon-search"
-                            actionListener="#{tkCttInfoAction.selectRecordAction('Qry','')}"
-                            update="pgView,pdt,msgs,pgCondition"
-                            onclick="PF('wVDlgView').show()">
-                </p:menuitem>
-                <p:menuitem value="选择" icon="ui-icon-plus"
-                            actionListener="#{tkCttInfoAction.selectRecordAction('Check','')}"
-                            update="pdt,msgs,pgCondition">
-                </p:menuitem>
-                <p:menuitem value="详细内容" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitTkcttList.selection,'Tk_Detail')" >
-                </p:menuitem>
-                <p:menuitem value="附件" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitTkcttList.selection,'Attachment')" >
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{tkCttInfoAction.cttInfoShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{tkCttInfoAction.cttInfoShowSelected}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -117,6 +95,19 @@
                          widgetVar="DtInitTkcttList"
                          rowStyleClass="#{record.statusFlag eq '0' ? null : 'rowDoneStyle'}"
                          scrollable="true">
+                <p:column headerText="操作" style="width:100px">
+                    <p:commandButton  icon="ui-icon-search"
+                                      action="#{tkCttInfoAction.selectRecordAction('Qry','',record)}"
+                                      update="pdt,:form:pgView,:form:msgs"
+                                      onclick="PF('wVDlgView').show()">
+                    </p:commandButton>
+                    <p:commandButton value="祥"
+                                      oncomplete="actSelect(this,'Tk_Detail')">
+                    </p:commandButton>
+                    <p:commandButton  value="附"
+                                      oncomplete="actSelect(this,'Attachment')">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>

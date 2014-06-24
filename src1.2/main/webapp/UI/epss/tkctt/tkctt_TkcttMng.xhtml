@@ -74,42 +74,17 @@
                 </p:commandButton>
                 <p:commandButton id="endInputBtn" value="录入完成"
                                  action="#{tkCttInfoAction.onClickForPowerAction('MngPass')}"
-                                 update="pdt,msgs,pgCondition"
-                                 rendered="#{tkCttInfoAction.rowSelectedFlag}">
+                                 update="pdt,msgs,pgCondition">
                 </p:commandButton>
                 <p:commandButton id="startInputBtn" value="录入未完"
                                  action="#{tkCttInfoAction.onClickForPowerAction('MngFail')}"
-                                 update="pdt,msgs,pgCondition"
-                                 rendered="#{tkCttInfoAction.rowSelectedFlag}">
+                                 update="pdt,msgs,pgCondition">
                 </p:commandButton>
             </h:panelGrid>
-            <p:contextMenu for="pdt">
-                <p:menuitem value="选择" icon="ui-icon-plus"
-                            actionListener="#{tkCttInfoAction.selectRecordAction('Mng','Sel')}"
-                            update="pdt,msgs,pgCondition">
-                </p:menuitem>
-                <p:menuitem value="更新" icon="ui-icon-arrowrefresh-1-w"
-                            actionListener="#{tkCttInfoAction.selectRecordAction('Mng','Upd')}"
-                            update="pdt,msgs,pgViewForUpd,pgCondition"
-                            onclick="PF('wVDlgViewForUpd').show()">
-                </p:menuitem>
-                <p:menuitem value="删除" icon="ui-icon-close"
-                            actionListener="#{tkCttInfoAction.selectRecordAction('Mng','Del')}"
-                            update="pdt,msgs,pgViewForDel,pgCondition"
-                            onclick="PF('wVDlgViewForDel').show()">
-                </p:menuitem>
-                <p:menuitem value="详细内容" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitTkcttList.selection,'Tk_Detail')">
-                </p:menuitem>
-                <p:menuitem value="附件" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitTkcttList.selection,'Attachment')">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{tkCttInfoAction.cttInfoShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{tkCttInfoAction.cttInfoShowSelected}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                              {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -122,6 +97,24 @@
                          widgetVar="DtInitTkcttList"
                          rowStyleClass="#{record.statusFlag eq null? null:'rowDoneStyle'}"
                          scrollable="true">
+                <p:column headerText="操作" style="width:92px">
+                    <p:commandButton  icon="ui-icon-arrowrefresh-1-w"
+                                      action="#{tkCttInfoAction.selectRecordAction('Mng','Upd',record)}"
+                                      update="pdt,:form:pgViewForUpd,:form:msgs"
+                                      onclick="PF('wVDlgViewForUpd').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-close"
+                                      action="#{tkCttInfoAction.selectRecordAction('Mng','Del',record)}"
+                                      update="pdt,:form:pgViewForDel,:form:msgs"
+                                      onclick="PF('wVDlgViewForDel').show()">
+                    </p:commandButton>
+                    <p:commandButton value="祥"
+                                     oncomplete="actSelect(this,'Tk_Detail')">
+                    </p:commandButton>
+                    <p:commandButton  value="附"
+                                     oncomplete="actSelect(this,'Attachment')">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>

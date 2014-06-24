@@ -60,23 +60,10 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <!--列表维护-->
-            <p:contextMenu for="pdt">
-                <p:menuitem value="浏览" icon="ui-icon-search"
-                            actionListener="#{tkCttInfoAction.selectRecordAction('Qry','')}"
-                            update="pgView,pdt,msgs"
-                            onclick="PF('wVDlgView').show()">
-                </p:menuitem>
-                <p:menuitem value="成本计划" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitTkcttList.selection)">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{tkCttInfoAction.cttInfoShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{tkCttInfoAction.cttInfoShowSelected}"
-                         selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          paginator="true"
@@ -87,6 +74,16 @@
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitTkcttList"
                          scrollable="true">
+                <p:column headerText="操作" style="width:100px">
+                    <p:commandButton  icon="ui-icon-search"
+                                      action="#{tkCttInfoAction.selectRecordAction('Qry','',record)}"
+                                      update="pdt,:form:pgView,:form:msgs"
+                                      onclick="PF('wVDlgView').show()">
+                    </p:commandButton>
+                    <p:commandButton value="成本"
+                                     oncomplete="actSelect(this)">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>

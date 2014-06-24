@@ -54,10 +54,8 @@ public class TkCttInfoAction {
     private CttInfoShow cttInfoShowUpd;
     private CttInfoShow cttInfoShowDel;
     private List<CttInfoShow> cttInfoShowList;
-    private CttInfoShow cttInfoShowSelected;
 
     private String strSubmitType;
-    private String rowSelectedFlag;
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
 
@@ -81,7 +79,6 @@ public class TkCttInfoAction {
         styleModel.setDisabled_Flag("false");
         strSubmitType = "Add";
         esFlowControl.setStatusFlagListByPower("Qry");
-        rowSelectedFlag = "false";
     }
 
     public void setMaxNoPlusOne() {
@@ -142,7 +139,6 @@ public class TkCttInfoAction {
                     MessageUtil.addWarn("没有查询到数据。");
                 }
             }
-            rowSelectedFlag = "false";
         } catch (Exception e) {
             logger.error("合同信息查询失败", e);
             MessageUtil.addError("合同信息查询失败");
@@ -158,38 +154,33 @@ public class TkCttInfoAction {
         strSubmitType="Add";
         cttInfoShowAdd = new CttInfoShow();
         cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE0.getCode());
-        rowSelectedFlag = "false";
     }
 
     public void selectRecordAction(String strPowerTypePara,
-                                   String strSubmitTypePara) {
+                                   String strSubmitTypePara,
+                                   CttInfoShow cttInfoShowPara) {
         try {
             strSubmitType = strSubmitTypePara;
             esFlowControl.setStatusFlagListByPower(strPowerTypePara);
             // 查询
-            cttInfoShowSelected.setCreatedByName(esCommon.getOperNameByOperId(cttInfoShowSelected.getCreatedBy()));
-            cttInfoShowSelected.setLastUpdByName(esCommon.getOperNameByOperId(cttInfoShowSelected.getLastUpdBy()));
+            cttInfoShowPara.setCreatedByName(esCommon.getOperNameByOperId(cttInfoShowPara.getCreatedBy()));
+            cttInfoShowPara.setLastUpdByName(esCommon.getOperNameByOperId(cttInfoShowPara.getLastUpdBy()));
             if (strPowerTypePara.equals("Qry")) {
-                cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
+                cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
             } else if (strPowerTypePara.equals("Mng")) { // 维护
                 if (strSubmitTypePara.equals("Sel")) {
-                    cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
-                    rowSelectedFlag = "true";
+                    cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                 } else if (strSubmitTypePara.equals("Add")) {
                     cttInfoShowAdd = new CttInfoShow();
-                    rowSelectedFlag = "false";
                 } else {
                     if (strSubmitTypePara.equals("Upd")) {
-                        cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
-                        rowSelectedFlag = "false";
+                        cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                     } else if (strSubmitTypePara.equals("Del")) {
-                        cttInfoShowDel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
-                        rowSelectedFlag = "false";
+                        cttInfoShowDel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                     }
                 }
             } else {
-                cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
-                rowSelectedFlag = "true";
+                cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                 //根据流程环节,显示不同的退回的状态
                 esFlowControl.setStatusFlagListByPower(strPowerTypePara);
             }
@@ -327,7 +318,6 @@ public class TkCttInfoAction {
             }
             // 重新查询，已操作的结果
             onQueryAction(strPowerTypePara,"false");
-            rowSelectedFlag="false";
         } catch (Exception e) {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -440,14 +430,6 @@ public class TkCttInfoAction {
         this.esFlowControl = esFlowControl;
     }
 
-    public CttInfoShow getCttInfoShowSelected() {
-        return cttInfoShowSelected;
-    }
-
-    public void setCttInfoShowSelected(CttInfoShow cttInfoShowSelected) {
-        this.cttInfoShowSelected = cttInfoShowSelected;
-    }
-
     public String getStrNotPassToStatus() {
         return strNotPassToStatus;
     }
@@ -474,10 +456,6 @@ public class TkCttInfoAction {
 
     public StyleModel getStyleModel() {
         return styleModel;
-    }
-
-    public String getRowSelectedFlag() {
-        return rowSelectedFlag;
     }
 
     public CttInfoShow getCttInfoShowUpd() {
