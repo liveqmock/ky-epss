@@ -20,6 +20,7 @@ public class ProgSubstlItemShow implements Serializable {
     private Integer subctt_Grade;
     private String subctt_CorrespondingPkid;
     private String subctt_ItemPkid;
+    private String subctt_ItemName;
     private String subctt_ParentPkid;
     private String subctt_Name;
     private String subctt_Note;
@@ -31,6 +32,7 @@ public class ProgSubstlItemShow implements Serializable {
     private String subctt_SpareField ;
 
     private String engPMng_Pkid;
+    private String engPMng_SubStlType;
     private String engPMng_PeriodNo;
     private String engPMng_SubcttPkid;
     private String engPMng_ItemPkid;
@@ -43,8 +45,10 @@ public class ProgSubstlItemShow implements Serializable {
     private String engPMng_DeletedFlag;
     private String engPMng_OriginFlag;
     private String engPMng_CreatedBy;
+    private String engPMng_CreatedByName;
     private String engPMng_CreatedDate;
     private String engPMng_LastUpdBy;
+    private String engPMng_LastUpdByName;
     private String engPMng_LastUpdDate;
     private Integer engPMng_ModificationNum;
 
@@ -322,5 +326,37 @@ public class ProgSubstlItemShow implements Serializable {
 
     public void setEngPMng_ModificationNum(Integer engPMng_ModificationNum) {
         this.engPMng_ModificationNum = engPMng_ModificationNum;
+    }
+
+    public String getEngPMng_CreatedByName() {
+        return engPMng_CreatedByName;
+    }
+
+    public void setEngPMng_CreatedByName(String engPMng_CreatedByName) {
+        this.engPMng_CreatedByName = engPMng_CreatedByName;
+    }
+
+    public String getEngPMng_LastUpdByName() {
+        return engPMng_LastUpdByName;
+    }
+
+    public void setEngPMng_LastUpdByName(String engPMng_LastUpdByName) {
+        this.engPMng_LastUpdByName = engPMng_LastUpdByName;
+    }
+
+    public String getSubctt_ItemName() {
+        return subctt_ItemName;
+    }
+
+    public void setSubctt_ItemName(String subctt_ItemName) {
+        this.subctt_ItemName = subctt_ItemName;
+    }
+
+    public String getEngPMng_SubStlType() {
+        return engPMng_SubStlType;
+    }
+
+    public void setEngPMng_SubStlType(String engPMng_SubStlType) {
+        this.engPMng_SubStlType = engPMng_SubStlType;
     }
 }
