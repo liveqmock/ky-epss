@@ -24,7 +24,8 @@
                 if(typeFlag=="Print"){
                     var rtn =dialog("../item/subctt_StlFlowPrint.xhtml?strEsInitStlPkid="+pkid+"",arg,sfeature);
                 }else if(typeFlag=="Detail"){
-                    var rtn =dialog("../item/itemAct_SubcttEngPStl.xhtml?strEsInitStlPkid="+pkid+"",arg,sfeature);
+                    var rtn =dialog("../item/itemAct_SubcttEngPStl.xhtml?strSubmitType=Account&amp;strEsInitStlPkid="+pkid+"",arg,sfeature);
+                    document.getElementById("form:qryBtn").click();
                 }
             }
         </script>

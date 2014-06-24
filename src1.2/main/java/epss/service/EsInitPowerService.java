@@ -106,15 +106,13 @@ public class EsInitPowerService {
         esInitPowerMapper.insertSelective(fromCttInfoShowToPower(cttInfoShowPara));
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"insert"));
     }
-    public void insertRecordByStl(ProgInfoShow progInfoShowPara) {
-        progInfoShowPara.setDeletedFlag("0");
-        progInfoShowPara.setCreatedBy(platformService.getStrLastUpdBy());
-        progInfoShowPara.setCreatedDate(platformService.getStrLastUpdDate());
-        progInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
-        EsInitPower esInitPowerTemp=fromProgInfoShowToPower(progInfoShowPara);
-        esInitPowerMapper.insertSelective(esInitPowerTemp);
-        esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"insert"));
+    public void insertRecordByStl( EsInitPower esInitPowerPara) {
+        esInitPowerPara.setCreatedBy(platformService.getStrLastUpdBy());
+        esInitPowerPara.setCreatedDate(platformService.getStrLastUpdDate());
+        esInitPowerPara.setLastUpdBy(platformService.getStrLastUpdBy());
+        esInitPowerPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitPowerMapper.insertSelective(esInitPowerPara);
+        esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerPara,"insert"));
     }
 
     public void updateRecord(FlowCtrlShow flowCtrlShowPara){
@@ -133,6 +131,7 @@ public class EsInitPowerService {
         esInitPowerMapper.updateByPrimaryKey(fromCttInfoShowToPower(cttInfoShowPara));
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
     }
+
     public void updateRecordByStl(ProgInfoShow progInfoShowPara){
         progInfoShowPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(progInfoShowPara.getModificationNum())+1);
@@ -142,6 +141,12 @@ public class EsInitPowerService {
         EsInitPower esInitPowerTemp=fromProgInfoShowToPower(progInfoShowPara);
         esInitPowerMapper.updateByPrimaryKey(esInitPowerTemp);
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
+    }
+    public void updateRecordByPower(EsInitPower esInitPowerPara){
+        esInitPowerPara.setLastUpdBy(platformService.getStrLastUpdBy());
+        esInitPowerPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitPowerMapper.updateByPrimaryKey(esInitPowerPara);
+        esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerPara,"update"));
     }
 
     private EsInitPower fromCttInfoShowToPower(CttInfoShow cttInfoShowPara) {

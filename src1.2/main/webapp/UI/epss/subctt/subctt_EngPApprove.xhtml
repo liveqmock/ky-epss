@@ -21,7 +21,8 @@
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                var rtn =dialog("../item/itemMng_SubcttEngPStl.xhtml?strEsInitStlPkid="+pkid+"",arg,sfeature);
+                var rtn =dialog("../item/itemMng_SubcttEngPStl.xhtml?strSubmitType=Approve&amp;strEsInitStlPkid="+pkid+"",arg,sfeature);
+                document.getElementById("form:qryBtn").click();
             }
         </script>
     </ui:define>
@@ -115,30 +116,9 @@
                                          update="pgCondition,msgs">
                         </p:commandButton>
                     </h:panelGrid>
-                    <h:panelGrid columns="3" rendered="#{esInitSubcttStlPAction.strRowSelectedFlag}">
-                        <p:commandButton id="ApprovePassBtn" value="批准通过"
-                                         action="#{esInitSubcttStlPAction.onClickForPowerAction('ApprovePass')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{esInitSubcttStlPAction.strApprovedFlag}">
-                        </p:commandButton>
-                        <p:commandButton id="ApproveFailToQBtn" value="批准未过至分包数量结算"
-                                         action="#{esInitSubcttStlPAction.onClickForPowerAction('ApproveFailToQ')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{esInitSubcttStlPAction.strApprovedFlag eq 'true'?'false':'true'}">
-                        </p:commandButton>
-                        <p:commandButton id="ApproveFailToMBtn" value="批准未过至分包材料结算"
-                                         action="#{esInitSubcttStlPAction.onClickForPowerAction('ApproveFailToM')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{esInitSubcttStlPAction.strApprovedFlag eq 'true'?'false':'true'}">
-                        </p:commandButton>
-                    </h:panelGrid>
                 </h:panelGrid>
                 <!--列表维护-->
                 <p:contextMenu for="pdt">
-                    <p:menuitem value="选择" icon="ui-icon-plus"
-                                actionListener="#{esInitSubcttStlPAction.selectRecordAction('Approve','')}"
-                                update="pdt,msgs,pgCondition">
-                    </p:menuitem>
                     <p:menuitem value="详细内容" icon="ui-icon-search"
                                 oncomplete="actSelect(DtInitSubcttList.selection)" >
                     </p:menuitem>

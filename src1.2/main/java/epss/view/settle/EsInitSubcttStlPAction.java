@@ -295,7 +295,7 @@ public class EsInitSubcttStlPAction {
     public void selectRecordAction(String strPowerTypePara,String strSubmitTypePara){
         try {
             strSubmitType=strSubmitTypePara;
-            strRowSelectedFlag="true";
+            strApprovedFlag="true";
             String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowSelected.getStatusFlag());
             String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowSelected.getStatusFlag());
             if(strPowerTypePara.equals("Approve")){
@@ -325,59 +325,6 @@ public class EsInitSubcttStlPAction {
         }
     }
 
-    /**
-     * 根据权限进行审核
-     * @param strPowerType
-     */
-    @Transactional
-    public void onClickForPowerAction(String strPowerType){
-        try {
-            if(progInfoShow !=null&& progInfoShow.getPkid()!=null){
-                // 批准
-                if(strPowerType.contains("Approve")){
-                    if(strPowerType.equals("ApprovePass")){
-                        // 状态标志：批准
-                        progInfoShow.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                        // 原因：批准通过
-                        progInfoShow.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                        // 价格结算
-                        if(!ESEnum.ITEMTYPE5.getCode().equals(progInfoShow.getStlType())){
-                            progInfoShow.setStlType(ESEnum.ITEMTYPE5.getCode());
-                            progInfoShow.setPowerType(progInfoShow.getStlType());
-                            progInfoShow.setPowerPkid(progInfoShow.getStlPkid());
-                            progInfoShow.setId(getMaxIdPlusOne());
-                            // 结算登记表更新
-                            esInitStlService.insertRecord(progInfoShow);
-                            esInitPowerService.insertRecordByStl(progInfoShow);
-                        }
-                    }else if(strPowerType.equals("ApproveFailToQ")){
-                        // 结算登记表更新
-                        esInitStlService.deleteRecord(progInfoShow);
-                        // 这样写可以实现越级退回
-                        progInfoShow.setPowerType(ESEnum.ITEMTYPE3.getCode());
-                        progInfoShow.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                        progInfoShow.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-                        esInitPowerService.updateRecordByStl(progInfoShow);
-                    }
-                    else if(strPowerType.equals("ApproveFailToM")){
-                        // 结算登记表更新
-                        esInitStlService.deleteRecord(progInfoShow);
-                        // 这样写可以实现越级退回
-                        progInfoShow.setPowerType(ESEnum.ITEMTYPE4.getCode());
-                        progInfoShow.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                        progInfoShow.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-                        esInitPowerService.updateRecordByStl(progInfoShow);
-                    }
-
-                    MessageUtil.addInfo("批准数据完成。");
-                    onQueryFormedAction("Approve","false");
-                }
-            }
-        } catch (Exception e) {
-            logger.error("批准数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
     /*智能字段Start*/
 
     public EsItemStlSubcttEngQService getEsItemStlSubcttEngQService() {

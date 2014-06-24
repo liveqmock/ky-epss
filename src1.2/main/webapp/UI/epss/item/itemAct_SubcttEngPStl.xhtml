@@ -55,11 +55,11 @@
                                  readonly="true"
                                  style="background-color:gainsboro;width:200px;"/>
                 </h:panelGrid>
-                <h:panelGrid columns="3">
+                <h:panelGrid id="AccountPass" columns="3">
                     <p:commandButton value="分包合同附件" oncomplete="actSelect()"/>
                     <p:commandButton id="ApprovePassBtn" value="记账"
                                      action="#{itemSubcttEngPStlAction.accountAction()}"
-                                     update="pgCondition,pdt,msgs"
+                                     update="AccountPass,msgs"
                                      rendered="#{itemSubcttEngPStlAction.strAccountBtnRendered}">
                     </p:commandButton>
                     <p:ajaxStatus style="width:16px;height:16px;">
@@ -106,7 +106,7 @@
                 </p:column>
                 <p:column headerText="合同单价" style="width:100px">
                     <h:outputText value="#{record.subctt_ContractUnitPrice}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <!--<f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>-->
                     </h:outputText>
                 </p:column>
                 <p:column headerText="合同数量" style="width:100px">
