@@ -61,6 +61,7 @@ public class ItemSubcttEngPStlAction {
 
     private List<ProgSubstlItemShow> progSubstlItemShowList;
     private List<ProgSubstlItemShow> progSubstlItemShowListForApprove;
+    private List<EsItemStlSubcttEngP> progSubstlItemShowListForAccountAndQry;
     private CommStlSubcttEngH commStlSubcttEngH;
 
     private Map beansMap;
@@ -99,8 +100,13 @@ public class ItemSubcttEngPStlAction {
         commStlSubcttEngH.setStrDate(PlatformService.dateFormat(nowDate, "yyyy-MM-dd"));
         /*分包合同数据*/
         List<EsCttItem> esCttItemList = new ArrayList<EsCttItem>();
-        progSubstlItemShowList = new ArrayList<ProgSubstlItemShow>();
-        progSubstlItemShowListForApprove = new ArrayList<ProgSubstlItemShow>();
+        if ("Account".equals(strSubmitType)||"Qry".equals(strSubmitType)){
+            progSubstlItemShowListForAccountAndQry = new ArrayList<EsItemStlSubcttEngP>();
+        }
+        if ("Approve".equals(strSubmitType)){
+            progSubstlItemShowList = new ArrayList<ProgSubstlItemShow>();
+            progSubstlItemShowListForApprove = new ArrayList<ProgSubstlItemShow>();
+        }
         // From StlPkid To SubcttPkid
         esInitStl = esInitStlService.selectRecordsByPrimaryKey(strEsInitStlPkid);
         // 如果该分包合同价格结算已经记账，则在记账页面上不显示记账按钮
@@ -143,6 +149,15 @@ public class ItemSubcttEngPStlAction {
         commStlSubcttEngH.setStrTkcttName(esCttInfo_Tkctt.getName());
 
         // 表内容设定
+        //记账
+        if ("Account".equals(strSubmitType)||"Qry".equals(strSubmitType)){
+            EsItemStlSubcttEngP esItemStlSubcttEngPTemp=new EsItemStlSubcttEngP();
+            esItemStlSubcttEngPTemp.setSubcttPkid(commStlSubcttEngH.getStrSubcttPkid());
+            esItemStlSubcttEngPTemp.setPeriodNo(esInitStl.getPeriodNo());
+            progSubstlItemShowListForAccountAndQry= esItemStlSubcttEngPService.selectRecordsByDetailExampleForAccount(esItemStlSubcttEngPTemp);
+            return;
+        }
+        //批准
         esCttItemList = esCttItemService.getEsItemList(
                 ESEnum.ITEMTYPE2.getCode(), commStlSubcttEngH.getStrSubcttPkid());
         if (esCttItemList.size() > 0) {
@@ -223,9 +238,6 @@ public class ItemSubcttEngPStlAction {
                         if ("Approve".equals(strSubmitType)) {
                             progSubstlItemShowListForApprove.add(itemUnit);
                         }
-                        if ("Account".equals(strSubmitType)) {
-                            progSubstlItemShowList.add(itemUnit);
-                        }
                     }
                 } else {
                     esItemStlSubcttEngQTemp = esItemStlSubcttEngQList.get(0);
@@ -298,9 +310,6 @@ public class ItemSubcttEngPStlAction {
                 if (esItemStlSubcttEngMList.size() <= 0) {
                     if ("Approve".equals(strSubmitType)) {
                         progSubstlItemShowListForApprove.add(itemUnit);
-                    }
-                    if ("Account".equals(strSubmitType)&&"".equals(ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_SpareField()))) {
-                        progSubstlItemShowList.add(itemUnit);
                     }
                 } else {
                     esItemStlSubcttEngM = esItemStlSubcttEngMList.get(0);
@@ -740,5 +749,14 @@ public class ItemSubcttEngPStlAction {
     public void setStrApprovedNotBtnRendered(String strApprovedNotBtnRendered) {
         this.strApprovedNotBtnRendered = strApprovedNotBtnRendered;
     }
+
+    public List<EsItemStlSubcttEngP> getProgSubstlItemShowListForAccountAndQry() {
+        return progSubstlItemShowListForAccountAndQry;
+    }
+
+    public void setProgSubstlItemShowListForAccountAndQry(List<EsItemStlSubcttEngP> progSubstlItemShowListForAccountAndQry) {
+        this.progSubstlItemShowListForAccountAndQry = progSubstlItemShowListForAccountAndQry;
+    }
+
 /*智能字段End*/
 }

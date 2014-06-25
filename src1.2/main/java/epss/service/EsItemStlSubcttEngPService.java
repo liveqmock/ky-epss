@@ -39,6 +39,12 @@ public class EsItemStlSubcttEngPService {
         example.createCriteria().andPeriodNoEqualTo(esItemStlSubcttEngPPara.getPeriodNo());
         return esItemStlSubcttEngPMapper.selectByExample(example);
     }
+    public List<EsItemStlSubcttEngP> selectRecordsByDetailExampleForAccount(EsItemStlSubcttEngP esItemStlSubcttEngPPara){
+        EsItemStlSubcttEngPExample example = new EsItemStlSubcttEngPExample();
+        example.createCriteria().andSubcttPkidEqualTo(esItemStlSubcttEngPPara.getSubcttPkid())
+                .andPeriodNoEqualTo(esItemStlSubcttEngPPara.getPeriodNo());
+        return esItemStlSubcttEngPMapper.selectByExample(example);
+    }
 
     public void deleteRecordDetail(String strPkId){
         esItemStlSubcttEngPMapper.deleteByPrimaryKey(strPkId);
@@ -88,6 +94,9 @@ public class EsItemStlSubcttEngPService {
         esItemStlSubcttEngP.setLastUpdByName(progSubstlItemShowPara.getEngPMng_LastUpdByName());
         esItemStlSubcttEngP.setLastUpdDate(progSubstlItemShowPara.getEngPMng_LastUpdDate());
         esItemStlSubcttEngP.setRemark("");
+        esItemStlSubcttEngP.setContractQuantity(progSubstlItemShowPara.getSubctt_ContractQuantity());
+        esItemStlSubcttEngP.setContractAmount(progSubstlItemShowPara.getSubctt_ContractAmount());
+        esItemStlSubcttEngP.setStrno(progSubstlItemShowPara.getSubctt_StrNo());
         return esItemStlSubcttEngP;
     }
 

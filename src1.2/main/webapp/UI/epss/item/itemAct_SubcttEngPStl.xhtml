@@ -73,9 +73,9 @@
                 </h:panelGrid>
             </h:panelGrid>
             <p:dataTable id="pdt" style="heiht:100%;width:100%;"
-                     value="#{itemSubcttEngPStlAction.progSubstlItemShowList}"
+                     value="#{itemSubcttEngPStlAction.progSubstlItemShowListForAccountAndQry}"
                      var="record"
-                     rowKey="#{record.subctt_Pkid}"
+                     rowKey="#{record.pkid}"
                      selectionMode="single"
                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                      {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -86,61 +86,60 @@
                      rowIndexVar="row"
                      emptyMessage="数据记录为空..."
                      widgetVar="dtItemDetail"
-                     rowStyleClass="#{record.subctt_Name eq '小计'? 'rowDoneStyle':
-                                         record.subctt_Name eq '本期净结算额'? 'rowTotalStyle':
-                                         record.subctt_Name eq '合计(扣除其它栏款项后本期结算价值)'?'rowTotalStyle':
-                                         record.subctt_Name eq '其中:安全施工措施费'?'rowDoneStyle':
-                                         record.subctt_Name eq '质保金'? 'rowTotalStyle':null}"
+                     rowStyleClass="#{record.subcttItemName eq '小计'? 'rowDoneStyle':
+                                         record.subcttItemName eq '本期净结算额'? 'rowTotalStyle':
+                                         record.subcttItemName eq '合计(扣除其它栏款项后本期结算价值)'?'rowTotalStyle':
+                                         record.subcttItemName eq '其中:安全施工措施费'?'rowDoneStyle':
+                                         record.subcttItemName eq '质保金'? 'rowTotalStyle':null}"
                      scrollable="true">
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
                 <p:column headerText="编号" style="width:100px">
-                    <h:outputText value="#{record.subctt_StrNo}" escape="false"/>
+                    <h:outputText value="#{record.strno}" escape="false"/>
                 </p:column>
                 <p:column headerText="分项项目名称" style="width:200px">
-                    <h:outputText value="#{record.subctt_Name}" />
+                    <h:outputText value="#{record.subcttItemName}" />
                 </p:column>
                 <p:column headerText="单位" style="width:60px">
-                    <h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
+                    <h:outputText value="#{record.unit}" style="text-align:right"/>
                 </p:column>
                 <p:column headerText="合同单价" style="width:100px">
-                    <h:outputText value="#{record.subctt_ContractUnitPrice}" style="float: right" >
-                        <!--<f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>-->
+                    <h:outputText value="#{record.unitPrice}" style="float: right" >
                     </h:outputText>
                 </p:column>
                 <p:column headerText="合同数量" style="width:100px">
-                    <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right" >
+                    <h:outputText value="#{record.contractQuantity}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="合同金额" style="width:100px">
-                    <h:outputText value="#{record.subctt_ContractAmount}" style="float: right" >
+                    <h:outputText value="#{record.contractAmount}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:outputText>
                 </p:column>
-                <p:column headerText="本期_数量" style="width:100px">
-                    <h:outputText value="#{record.engPMng_CurrentPeriodEQty}" style="float: right">
+                <p:column headerText="本期数量" style="width:100px">
+                    <h:outputText value="#{record.thisStageQty}" style="float: right">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="本期_金额" style="width:100px">
-                    <h:outputText value="#{record.engPMng_CurrentPeriodAmt}" style="float: right">
+                    <h:outputText value="#{record.thisStageAmt}" style="float: right">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="开累_数量" style="width:100px">
-                    <h:outputText value="#{record.engPMng_BeginToCurrentPeriodEQty}" style="float: right">
+                    <h:outputText value="#{record.addUpQty}" style="float: right">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="开累_金额" style="width:100px">
-                    <h:outputText value="#{record.engPMng_BeginToCurrentPeriodAmt}" style="float: right">
+                    <h:outputText value="#{record.addUpAmt}" style="float: right">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="备注内容" style="width:200px">
-                    <h:outputText value="#{record.subctt_Note}" />
+                    <h:outputText value="#{record.remark}" />
                 </p:column>
             </p:dataTable>
         </h:form>
