@@ -349,10 +349,8 @@ public class TkCttInfoAction {
             attachmentList.clear();
             if (!StringUtils.isEmpty(strAttachmentTemp)) {
                 String strTemps[] = strAttachmentTemp.split(";");
-                String fileName;
                 for (int i = 0; i < strTemps.length; i++) {
-                    fileName = strTemps[i].substring(strTemps[i].lastIndexOf('\\') + 1);
-                    AttachmentModel attachmentModelTemp = new AttachmentModel(i + "", fileName, strTemps[i]);
+                AttachmentModel attachmentModelTemp = new AttachmentModel(i + "", strTemps[i], strTemps[i]);
                     attachmentList.add(attachmentModelTemp);
                 }
             }
@@ -389,14 +387,14 @@ public class TkCttInfoAction {
                 logger.error("路径为空，无法下载！");
             }
             else {
-                File file = new File(strAttachment);
-                InputStream stream = new FileInputStream(strAttachment);
-                String fileName = strAttachment.substring(strAttachment.lastIndexOf('\\') + 1);
-                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), fileName);
+                String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload")+"/"+strAttachment;
+                File file = new File(fileName);
+                InputStream stream = new FileInputStream(fileName);
+                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), new String(strAttachment.getBytes("gbk"),"iso8859-1"));
             }
         } catch (Exception e) {
             logger.error("下载文件失败", e);
-            MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
+            MessageUtil.addError("下载文件失败");
         }
     }
 
@@ -415,8 +413,8 @@ public class TkCttInfoAction {
             attachmentModel.setCOLUMN_ID(ToolUtil.getIntIgnoreNull(attachmentList.size()) + "");
             attachmentModel.setCOLUMN_NAME(uploadedFile.getFileName());
             attachmentModel.setCOLUMN_PATH(descFile.getAbsolutePath());
-            for (AttachmentModel item : attachmentList) {
-                if (item.getCOLUMN_PATH().equals(attachmentModel.getCOLUMN_PATH())) {
+            for (AttachmentModel item : attachmentList){
+                if (item.getCOLUMN_NAME().equals(attachmentModel.getCOLUMN_NAME())) {
                     MessageUtil.addError("附件已存在！");
                     return;
                 }
@@ -426,7 +424,7 @@ public class TkCttInfoAction {
 
             StringBuffer sb = new StringBuffer();
             for (AttachmentModel item : attachmentList) {
-                sb.append(item.getCOLUMN_PATH() + ";");
+                sb.append(item.getCOLUMN_NAME() + ";");
             }
             if(sb.length()>4000){
                 MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
