@@ -18,17 +18,12 @@
                 }
             }
             function actSelect(obj,pageName) {
-                var pkid=obj.parentNode.parentNode.parentNode.childNodes[0].childNodes[11].innerHTML;
+                // 寻找当前行的PKID思路：参数传递
+                var pkid=obj;
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                if (pageName=="Tk_Detail"){
-                    var rtn =dialog("../item/itemQry_Tkctt.xhtml?strType=0&amp;strTkCttPkid="+pkid+"",arg,sfeature);
-                }else if(pageName=="Attachment"){
-                    var rtn = window.open("/epss/servlet/ShowServlet?operType=Qry&amp;strType=0&amp;strPkid="+pkid+"",
-                            'popupwindow',
-                            'height = 300,width = 450,location = no,resizable = no,scrollbars = no,status = no,toolbar = no,top = 100');
-                }
+                var rtn = dialog("../item/itemQry_Tkctt.xhtml?strTkCttPkid=" + pkid + "", arg, sfeature);
             }
         </script>
     </ui:define>
@@ -107,7 +102,7 @@
                         <f:setPropertyActionListener value="#{record}" target="#{tkCttInfoAction.cttInfoShowAttachment}" />
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-triangle-1-e"
-                                     onclick="actSelect(this,'Tk_Detail')">
+                                     onclick="actSelect('#{record.pkid}')">
                     </p:commandButton>
                 </p:column>
                 <p:column headerText="序号" style="width:30px">
@@ -144,7 +139,6 @@
                     <h:outputText value="#{record.pkid}"/>
                 </p:column>
             </p:dataTable>
-
             <!--附件列表查询-->
             <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
                       showEffect="clip" hideEffect="fold" header="附件列表">
@@ -192,7 +186,6 @@
                     </p:dialog>
                 </h:panelGrid>
             </p:dialog>
-
             <p:dialog id="dlgView" header="总包合同信息" widgetVar="wVDlgView"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">

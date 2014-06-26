@@ -85,10 +85,7 @@ public class ItemSubcttAction {
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if(parammap.containsKey("strType")){
-            strBelongToType=parammap.get("strType").toString();
-        }
-
+        strBelongToType=ESEnum.ITEMTYPE2.getCode();
         strBelongToPkid=parammap.get("strSubCttPkid").toString();
 
 		List<EsInitPower> esInitPowerList=

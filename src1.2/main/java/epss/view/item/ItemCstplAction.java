@@ -76,13 +76,7 @@ public class ItemCstplAction {
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if  (parammap.containsKey("strType")){
-            strBelongToType=parammap.get("strType").toString();
-        }
-
-        if(strBelongToType==null){
-            return ;
-        }
+        strBelongToType=ESEnum.ITEMTYPE1.getCode();
         strBelongToPkid=parammap.get("strCstplPkid").toString();
 
         List<EsInitPower> esInitPowerList=

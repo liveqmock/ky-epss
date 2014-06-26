@@ -16,18 +16,12 @@
                         event.srcElement.click();
                 }
             }
-            function actSelect(obj, pageName) {
-                var pkid=obj.parentNode.parentNode.parentNode.childNodes[0].childNodes[12].innerHTML;
+            function actSelect(obj) {
+                var pkid=obj;
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                if (pageName == "Tk_Detail") {
-                    var rtn = dialog("../item/itemMng_Tkctt.xhtml?strType=0&amp;strTkCttPkid=" + pkid + "", arg, sfeature);
-                } else if (pageName == "Attachment") {
-                    var rtn = window.open("/epss/servlet/ShowServlet?operType=Mng&amp;strType=0&amp;strPkid=" + pkid + "",
-                            'popupwindow',
-                            'height = 300,width = 450,location = no,resizable = no,scrollbars = no,status = no,toolbar = no,top = 100');
-                }
+                var rtn = dialog("../item/itemMng_Tkctt.xhtml?strTkCttPkid=" + pkid + "", arg, sfeature);
             }
         </script>
     </ui:define>
@@ -115,9 +109,8 @@
                         <f:setPropertyActionListener value="#{record}" target="#{tkCttInfoAction.cttInfoShowAttachment}" />
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-triangle-1-e"
-                                     onclick="actSelect(this,'Tk_Detail')">
+                                     onclick="actSelect('#{record.pkid}')">
                     </p:commandButton>
-
                 </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
@@ -151,9 +144,6 @@
                 </p:column>
                 <p:column headerText="备注内容" style="width:200px;text-align:left">
                     <h:outputText value="#{record.note}"/>
-                </p:column>
-                <p:column style="display:none;">
-                    <h:outputText value="#{record.pkid}"/>
                 </p:column>
             </p:dataTable>
 

@@ -394,7 +394,7 @@ public class TkCttInfoAction {
             }
         } catch (Exception e) {
             logger.error("下载文件失败", e);
-            MessageUtil.addError("下载文件失败");
+            MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
         }
     }
 
