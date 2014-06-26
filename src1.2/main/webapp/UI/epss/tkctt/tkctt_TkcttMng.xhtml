@@ -17,7 +17,7 @@
                 }
             }
             function actSelect(obj, pageName) {
-                var pkid=obj.parentNode.parentNode.parentNode.children[0].children[11].innerHTML;
+                var pkid=obj.parentNode.parentNode.parentNode.childNodes[0].childNodes[12].innerHTML;
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
@@ -115,8 +115,9 @@
                         <f:setPropertyActionListener value="#{record}" target="#{tkCttInfoAction.cttInfoShowAttachment}" />
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-triangle-1-e"
-                                      oncomplete="actSelect(this,'Tk_Detail')">
+                                     onclick="actSelect(this,'Tk_Detail')">
                     </p:commandButton>
+
                 </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
