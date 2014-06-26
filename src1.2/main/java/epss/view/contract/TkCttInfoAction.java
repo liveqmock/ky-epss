@@ -4,6 +4,8 @@ import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.EsCttInfo;
+import epss.repository.model.model_show.AttachmentModel;
+import epss.repository.model.model_show.CommColModel;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
@@ -15,14 +17,22 @@ import epss.view.common.EsCommon;
 import epss.view.common.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import epss.common.utils.MessageUtil;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.html.HtmlGraphicImage;
+import javax.faces.context.FacesContext;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,7 +63,14 @@ public class TkCttInfoAction {
     private CttInfoShow cttInfoShowAdd;
     private CttInfoShow cttInfoShowUpd;
     private CttInfoShow cttInfoShowDel;
+    private CttInfoShow cttInfoShowAttachment;
     private List<CttInfoShow> cttInfoShowList;
+
+    private List<AttachmentModel> attachmentList;
+    private HtmlGraphicImage image;
+    //上传下载文件
+    private StreamedContent downloadFile;
+    private UploadedFile uploadedFile;
 
     private String strSubmitType;
     /*控制维护画面层级部分的显示*/
@@ -64,6 +81,7 @@ public class TkCttInfoAction {
         initData();
     }
     public void initData() {
+        this.attachmentList=new ArrayList<AttachmentModel>();
         this.cttInfoShowList = new ArrayList<CttInfoShow>();
         cttInfoShowQry = new CttInfoShow();
         cttInfoShowQry.setCttType(ESEnum.ITEMTYPE0.getCode());
@@ -324,6 +342,127 @@ public class TkCttInfoAction {
         }
     }
 
+    public void attachmentStrToList(){
+
+        String strAttachmentTemp=cttInfoShowAttachment.getAttachment();
+        if(strAttachmentTemp!=null){
+            attachmentList.clear();
+            if (!StringUtils.isEmpty(strAttachmentTemp)) {
+                String strTemps[] = strAttachmentTemp.split(";");
+                String fileName;
+                for (int i = 0; i < strTemps.length; i++) {
+                    fileName = strTemps[i].substring(strTemps[i].lastIndexOf('\\') + 1);
+                    AttachmentModel attachmentModelTemp = new AttachmentModel(i + "", fileName, strTemps[i]);
+                    attachmentList.add(attachmentModelTemp);
+                }
+            }
+        }else{
+            attachmentList.clear();
+        }
+    }
+
+    public void onViewAttachment(AttachmentModel attachmentModelPara) {
+        image.setValue("/upload/" + attachmentModelPara.getCOLUMN_NAME());
+    }
+
+    public void delAttachmentRecordAction(AttachmentModel attachmentModelPara){
+        try {
+            File deletingFile = new File(attachmentModelPara.getCOLUMN_PATH());
+            deletingFile.delete();
+            attachmentList.remove(attachmentModelPara) ;
+            StringBuffer sbTemp = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sbTemp.append(item.getCOLUMN_PATH() + ";");
+            }
+            cttInfoShowAttachment.setAttachment(sbTemp.toString());
+            updRecordAction(cttInfoShowAttachment);
+        } catch (Exception e) {
+            logger.error("删除数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+
+    public void download(String strAttachment){
+        try{
+            if(StringUtils .isEmpty(strAttachment) ){
+                MessageUtil.addError("路径为空，无法下载！");
+                logger.error("路径为空，无法下载！");
+            }
+            else {
+                File file = new File(strAttachment);
+                InputStream stream = new FileInputStream(strAttachment);
+                String fileName = strAttachment.substring(strAttachment.lastIndexOf('\\') + 1);
+                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), fileName);
+            }
+        } catch (Exception e) {
+            logger.error("下载文件失败", e);
+            MessageUtil.addError("下载文件失败");
+        }
+    }
+
+    public void upload(FileUploadEvent event) {
+        BufferedInputStream inStream = null;
+        FileOutputStream fileOutputStream = null;
+        UploadedFile uploadedFile = event.getFile();
+        AttachmentModel attachmentModel = new AttachmentModel();
+        if (uploadedFile != null) {
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload");
+            File superFile = new File(path);
+            if (!superFile.exists()) {
+                superFile.mkdirs();
+            }
+            File descFile = new File(superFile, uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_ID(ToolUtil.getIntIgnoreNull(attachmentList.size()) + "");
+            attachmentModel.setCOLUMN_NAME(uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_PATH(descFile.getAbsolutePath());
+            for (AttachmentModel item : attachmentList) {
+                if (item.getCOLUMN_PATH().equals(attachmentModel.getCOLUMN_PATH())) {
+                    MessageUtil.addError("附件已存在！");
+                    return;
+                }
+            }
+
+            attachmentList.add(attachmentModel);
+
+            StringBuffer sb = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sb.append(item.getCOLUMN_PATH() + ";");
+            }
+            if(sb.length()>4000){
+                MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
+                return;
+            }
+            cttInfoShowAttachment.setAttachment(sb.toString());
+            updRecordAction(cttInfoShowAttachment);
+            try {
+                inStream = new BufferedInputStream(uploadedFile.getInputstream());
+                fileOutputStream = new FileOutputStream(descFile);
+                byte[] buf = new byte[1024];
+                int num;
+                while ((num = inStream.read(buf)) != -1) {
+                    fileOutputStream.write(buf, 0, num);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (inStream != null) {
+                    try {
+                        inStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * 提交维护权限
      *
@@ -338,11 +477,14 @@ public class TkCttInfoAction {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             } else {
                 addRecordAction(cttInfoShowAdd);
+                MessageUtil.addInfo("新增数据完成。");
             }
         } else if (strSubmitType.equals("Upd")) {
             updRecordAction(cttInfoShowUpd);
+            MessageUtil.addInfo("更新数据完成。");
         } else if (strSubmitType.equals("Del")) {
             deleteRecordAction(cttInfoShowDel);
+            MessageUtil.addInfo("删除数据完成。");
         }
         onQueryAction("Mng","false");
     }
@@ -354,7 +496,6 @@ public class TkCttInfoAction {
                 cttInfoShowPara.setParentPkid("ROOT");
             }
             esCttInfoService.insertRecord(cttInfoShowPara);
-            MessageUtil.addInfo("新增数据完成。");
         } catch (Exception e) {
             logger.error("新增数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -364,7 +505,6 @@ public class TkCttInfoAction {
         try {
             cttInfoShowPara.setCttType(ESEnum.ITEMTYPE0.getCode());
             esCttInfoService.updateRecord(cttInfoShowPara);
-            MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -382,7 +522,6 @@ public class TkCttInfoAction {
                 MessageUtil.addInfo("该记录已删除。");
                 return;
             }
-            MessageUtil.addInfo("删除数据完成。");
         } catch (Exception e) {
             logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -390,6 +529,39 @@ public class TkCttInfoAction {
     }
 
     /*智能字段 Start*/
+
+    public List<AttachmentModel> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public void setAttachmentList(List<AttachmentModel> attachmentList) {
+        this.attachmentList = attachmentList;
+    }
+
+    public HtmlGraphicImage getImage() {
+        return image;
+    }
+
+    public void setImage(HtmlGraphicImage image) {
+        this.image = image;
+    }
+
+    public StreamedContent getDownloadFile() {
+        return downloadFile;
+    }
+
+    public void setDownloadFile(StreamedContent downloadFile) {
+        this.downloadFile = downloadFile;
+    }
+
+    public UploadedFile getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(UploadedFile uploadedFile) {
+        this.uploadedFile = uploadedFile;
+    }
+
     public EsCttInfoService getEsCttInfoService() {
         return esCttInfoService;
     }
@@ -490,5 +662,12 @@ public class TkCttInfoAction {
         this.cttInfoShowSel = cttInfoShowSel;
     }
 
-    /*智能字段 End*/
+    public CttInfoShow getCttInfoShowAttachment() {
+        return cttInfoShowAttachment;
+    }
+
+    public void setCttInfoShowAttachment(CttInfoShow cttInfoShowAttachment) {
+        this.cttInfoShowAttachment = cttInfoShowAttachment;
+    }
+/*智能字段 End*/
 }

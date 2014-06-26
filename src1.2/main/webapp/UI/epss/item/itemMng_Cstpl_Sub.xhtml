@@ -124,7 +124,9 @@
                     <h:outputText value="#{record.note}"/>
                 </p:column>
             </p:dataTable>
-            <p:dialog id="dLCstplDetail" widgetVar="wvCstplDetail"  header="成本计划">
+            <p:dialog id="dLCstplDetail" widgetVar="wvCstplDetail"  header="成本计划"
+                      esizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
                 <p:dataTable id="pdtCstpl"
                                value="#{(itemSubcttAction.cttItemShowList_Cstpl)}"
                                var="recordCstpl"
@@ -136,10 +138,11 @@
                                {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                paginator="true"
                                paginatorPosition="bottom"
-                               rows="15"
-                               rowsPerPageTemplate="100,50,30,20,10"
+                               rows="20"
+                               rowsPerPageTemplate="500,200,100,50,30,20,10"
                                emptyMessage="数据记录为空..."
-                               scrollable="true">
+                               scrollable="true"
+                               scrollHeight="460">
                     <p:column headerText="成本计划项编码">
                         <h:outputText value="#{recordCstpl.strNo}" escape="false"/>
                     </p:column>
