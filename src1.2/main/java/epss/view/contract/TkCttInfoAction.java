@@ -58,7 +58,6 @@ public class TkCttInfoAction {
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
     private CttInfoShow cttInfoShowQry;
-    private String strNotPassToStatus;
     private CttInfoShow cttInfoShowSel;
     private CttInfoShow cttInfoShowAdd;
     private CttInfoShow cttInfoShowUpd;
@@ -236,112 +235,6 @@ public class TkCttInfoAction {
         }
         return true;
     }
-
-    /**
-     * 根据权限进行审核
-     *
-     * @param strPowerTypePara
-     */
-    public void onClickForPowerAction(String strPowerTypePara) {
-        try {
-            if (strPowerTypePara.contains("Mng")) {
-                if (strPowerTypePara.equals("MngPass")) {
-                    esFlowControl.mngFinishAction(
-                            cttInfoShowSel.getCttType(),
-                            cttInfoShowSel.getPkid(),
-                            "NULL");
-                    MessageUtil.addInfo("数据录入完成！");
-                } else if (strPowerTypePara.equals("MngFail")) {
-                    esFlowControl.mngNotFinishAction(
-                            cttInfoShowSel.getCttType(),
-                            cttInfoShowSel.getPkid(),
-                            "NULL");
-                    MessageUtil.addInfo("数据录入未完！");
-                }
-            }// 审核
-            else if (strPowerTypePara.contains("Check") && !strPowerTypePara.contains("DoubleCheck")) {
-                if (strPowerTypePara.equals("CheckPass")) {
-                    // 状态标志：审核
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                    // 原因：审核通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
-                    MessageUtil.addInfo("数据审核通过！");
-                } else if (strPowerTypePara.equals("CheckFail")) {
-                    // 状态标志：初始
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-                    // 原因：审核未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
-                    MessageUtil.addInfo("数据审核未过！");
-                }
-            } // 复核
-            else if (strPowerTypePara.contains("DoubleCheck")) {
-                if (strPowerTypePara.equals("DoubleCheckPass")) {
-                    // 状态标志：复核
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
-                    // 原因：复核通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
-                    MessageUtil.addInfo("数据复核通过！");
-                } else if (strPowerTypePara.equals("DoubleCheckFail")) {
-                    // 这样写可以实现越级退回
-                    cttInfoShowSel.setStatusFlag(strNotPassToStatus);
-                    // 原因：复核未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
-                    MessageUtil.addInfo("数据复核未过！");
-                }
-            }// 批准
-            else if (strPowerTypePara.contains("Approve")) {
-                if (strPowerTypePara.equals("ApprovePass")) {
-                    // 状态标志：批准
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                    // 原因：批准通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
-                    MessageUtil.addInfo("数据批准通过！");
-                } else if (strPowerTypePara.equals("ApproveFail")) {
-                    // 检查是否被使用
-                    String strCttTypeTemp = "";
-                    if (cttInfoShowSel.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
-                        strCttTypeTemp = ESEnum.ITEMTYPE1.getCode();
-                    } else if (cttInfoShowSel.getCttType().equals(ESEnum.ITEMTYPE1.getCode())) {
-                        strCttTypeTemp = ESEnum.ITEMTYPE2.getCode();
-                    }
-
-                    // 这样写可以实现越级退回
-                    cttInfoShowSel.setStatusFlag(strNotPassToStatus);
-                    // 原因：批准未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
-
-                    List<EsInitStl> esInitStlListTemp =
-                            esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfoShowSel.getPkid());
-                    if (esInitStlListTemp.size() > 0) {
-                        MessageUtil.addInfo("该数据已经被["
-                                + ESEnum.valueOfAlias(esInitStlListTemp.get(0).getStlType()).getTitle()
-                                + "]使用，数据批准未过,请慎重编辑！");
-                    } else {
-                        if (esFlowService.getChildrenOfThisRecordInEsInitCtt(strCttTypeTemp,
-                                cttInfoShowSel.getPkid()) > 0) {
-                            MessageUtil.addInfo("该数据已经被[" + ESEnum.valueOfAlias(strCttTypeTemp).getTitle()
-                                    + "]使用，数据批准未过,请慎重编辑！");
-                        } else {
-                            MessageUtil.addInfo("数据批准未过！");
-                        }
-                    }
-                }
-            }
-            // 重新查询，已操作的结果
-            onQueryAction(strPowerTypePara,"false");
-        } catch (Exception e) {
-            logger.error("数据流程化失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-
     public void attachmentStrToList(){
 
         String strAttachmentTemp=cttInfoShowAttachment.getAttachment();
@@ -598,14 +491,6 @@ public class TkCttInfoAction {
 
     public void setEsFlowControl(EsFlowControl esFlowControl) {
         this.esFlowControl = esFlowControl;
-    }
-
-    public String getStrNotPassToStatus() {
-        return strNotPassToStatus;
-    }
-
-    public void setStrNotPassToStatus(String strNotPassToStatus) {
-        this.strNotPassToStatus = strNotPassToStatus;
     }
 
     public CttInfoShow getCttInfoShowQry() {

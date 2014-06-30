@@ -21,13 +21,30 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
-            <p:commandButton id="addBtn"
-                             value="增加" icon="ui-icon-plus"
-                             rendered='#{itemTkcttAction.strMngNotFinishFlag}'
-                             action="#{itemTkcttAction.resetActionForAdd()}"
-                             update="pgViewForAdd,ptt,msgs"
-                             onclick="PF('wVDlgViewForAdd').show()">
-            </p:commandButton>
+            <h:panelGrid id="pgCondition" columns="3">
+                <p:commandButton id="addBtn"
+                                 value="增加" icon="ui-icon-plus"
+                                 rendered='#{itemTkcttAction.strMngNotFinishFlag}'
+                                 action="#{itemTkcttAction.resetActionForAdd()}"
+                                 update="pgViewForAdd,ptt,msgs"
+                                 onclick="PF('wVDlgViewForAdd').show()">
+                </p:commandButton>
+                <p:commandButton id="endInputBtn" value="录入完成"
+                                 action="#{itemTkcttAction.onClickForPowerAction('Pass')}"
+                                 rendered='#{itemTkcttAction.strMngNotFinishFlag}'
+                                 update="msgs,pgCondition">
+                </p:commandButton>
+                <p:commandButton id="startInputBtn" value="录入未完"
+                                 action="#{itemTkcttAction.onClickForPowerAction('Fail')}"
+                                 rendered='#{!itemTkcttAction.strMngNotFinishFlag}'
+                                 update="msgs,pgCondition">
+                </p:commandButton>
+                <p:selectOneMenu id="statusFlag" value="#{tkCttInfoAction.strNotPassToStatus}"
+                        rendered="#{itemTkcttAction.strFlowType eq 'Mng'?'false':
+                        itemTkcttAction.strFlowType eq 'Check'?'false':'true'}">
+                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
             <p:contextMenu id="pcm" for="ptt" rendered='#{itemTkcttAction.strMngNotFinishFlag}'>
                 <p:menuitem value="更新" icon="ui-icon-pencil"
                             actionListener="#{itemTkcttAction.selectRecordAction('Upd')}"
