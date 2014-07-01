@@ -21,6 +21,27 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
+            <h:panelGrid id="pgCondition" columns="2">
+                <p:commandButton id="endInputBtn" value="#{itemTkcttAction.strFlowType eq 'Check'? '审核通过':
+                     itemTkcttAction.strFlowType eq 'DoubleCheck'? '复核通过':
+                     itemTkcttAction.strFlowType eq 'Approve'? '批准通过':null}"
+                                 action="#{itemTkcttAction.onClickForPowerAction('Pass')}"
+                                 rendered='#{!itemTkcttAction.strMngNotFinishFlag}'
+                                 update="msgs,pgCondition">
+                </p:commandButton>
+                <p:commandButton id="startInputBtn" value="#{itemTkcttAction.strFlowType eq 'Check'? '审核未过':
+                     itemTkcttAction.strFlowType eq 'DoubleCheck'? '复核未过至状态:':
+                     itemTkcttAction.strFlowType eq 'Approve'? '批准未过至状态:':null}"
+                                 action="#{itemTkcttAction.onClickForPowerAction('Fail')}"
+                                 rendered='#{itemTkcttAction.strMngNotFinishFlag}'
+                                 update="msgs,pgCondition">
+                </p:commandButton>
+                <p:selectOneMenu id="statusFlag" value="#{itemTkcttAction.strNotPassToStatus}"
+                                 rendered="#{itemTkcttAction.strFlowType eq 'Check'?'false':
+                                 itemTkcttAction.strMngNotFinishFlag eq 'true'?'true':'false'}">
+                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
+                </p:selectOneMenu>
+            </h:panelGrid>
             <p:contextMenu for="pdt" id="pcm">
                 <p:menuitem value="浏览" icon="ui-icon-pencil"
                             actionListener="#{itemTkcttAction.selectRecordAction('Sel')}"

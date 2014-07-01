@@ -23,7 +23,8 @@
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                var rtn = dialog("../item/itemQry_Tkctt.xhtml?strTkCttPkid=" + pkid + "", arg, sfeature);
+                var rtn = dialog("../item/itemQry_Tkctt.xhtml?strFlowType=Check&amp;strTkCttPkid=" + pkid + "", arg, sfeature);
+                document.getElementById("form:qryBtn").click();
             }
         </script>
     </ui:define>
@@ -61,19 +62,6 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid columns="3" id="pgCondition">
-                <p:commandButton id="checkPassBtn" value="审核通过"
-                                 action="#{tkCttInfoAction.onClickForPowerAction('CheckPass')}"
-                                 update="pdt,msgs,pgCondition">
-                </p:commandButton>
-                <p:commandButton id="checkFailBtn" value="审核未过至状态:"
-                                 action="#{tkCttInfoAction.onClickForPowerAction('CheckFail')}"
-                                 update="pdt,msgs,pgCondition">
-                </p:commandButton>
-                <p:selectOneMenu id="statusFlag" value="#{tkCttInfoAction.strNotPassToStatus}">
-                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
-                </p:selectOneMenu>
-            </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{tkCttInfoAction.cttInfoShowList}"
                          var="record"
