@@ -31,6 +31,7 @@
         <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
         <result column="LAST_UPD_DATE" jdbcType="VARCHAR" property="lastUpdDate" />
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
+        <result column="TYPE" jdbcType="CHAR" property="type" />
     </resultMap>
     <select id="selectCttByStatusFlagBegin_End" parameterType="epss.repository.model.model_show.CttInfoShow"
             resultMap="BaseResultMapCtt">
@@ -64,7 +65,8 @@
                 '' AS STR_STATUS_FLAG_BEGIN,
                 '' AS STR_STATUS_FLAG_END,
                 eip.PRE_STATUS_FLAG,
-                eip.SPARE_FIELD
+                eip.SPARE_FIELD,
+                eic.TYPE
             from
                 ES_CTT_INFO eic
             left outer join

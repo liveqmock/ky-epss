@@ -34,17 +34,10 @@
                          rowKey="#{record.pkid}"
                          selection="#{itemTkcttAction.cttItemShowSelected}"
                          selectionMode="single"
-                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         rows="20"
-                         rowsPerPageTemplate="500,200,100,50,30,20,10"
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
-                         rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle':
-                         record.name eq '总合计'? 'rowDoneStyle':null}"
-                         scrollable="true">
+                         rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle':record.name eq '总合计'? 'rowDoneStyle':null}"
+                         stickyHeader="#{itemTkcttAction.strStickyHeaderFlag}">
                 <p:column style="width:30px" headerText="序号">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
@@ -59,12 +52,12 @@
                 </p:column>
                 <p:column style="width:80px" headerText="合同单价">
                     <h:outputText value="#{record.contractUnitPrice}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="合同数量">
                     <h:outputText value="#{record.contractQuantity}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="合同金额">
@@ -104,14 +97,14 @@
                                      value="#{itemTkcttAction.cttItemShowSel.contractUnitPrice}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true" >
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractQuantityItemInfo" value="合同数量:"/>
                         <h:inputText id="contractQuantityItemInfo"
                                      value="#{itemTkcttAction.cttItemShowSel.contractQuantity}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractAmountItemInfo" value="合同金额:"/>
                         <h:inputText id="contractAmountItemInfo"

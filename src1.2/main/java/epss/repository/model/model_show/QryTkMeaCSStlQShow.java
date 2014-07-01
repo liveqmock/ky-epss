@@ -24,6 +24,7 @@ public class QryTkMeaCSStlQShow implements Serializable {
 
     // 成本计划
     private String strCstpl_Pkid;
+    private String strCstpl_No;
     private BigDecimal bdCstpl_ContractUnitPrice;
     private BigDecimal bdCstpl_ContractQuantity;
     private BigDecimal bdCstpl_ContractAmount;
@@ -108,6 +109,14 @@ public class QryTkMeaCSStlQShow implements Serializable {
 
     public void setStrCstpl_Pkid(String strCstpl_Pkid) {
         this.strCstpl_Pkid = strCstpl_Pkid;
+    }
+
+    public String getStrCstpl_No() {
+        return strCstpl_No;
+    }
+
+    public void setStrCstpl_No(String strCstpl_No) {
+        this.strCstpl_No = strCstpl_No;
     }
 
     public BigDecimal getBdCstpl_ContractQuantity() {

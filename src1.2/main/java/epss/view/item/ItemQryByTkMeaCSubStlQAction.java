@@ -110,9 +110,9 @@ public class ItemQryByTkMeaCSubStlQAction {
         beansMap.put("strThisMonth", ToolUtil.getStrThisMonth());
         // 1。总包合同信息
         // 1。1。取出总包合同信息
-        EsCttInfo esCttInfoTkctt= esCttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
-        commStlSubcttEngH.setStrTkcttId(esCttInfoTkctt.getId());
-        commStlSubcttEngH.setStrTkcttName(esCttInfoTkctt.getName());
+        EsCttInfo esTkcttInfo= esCttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
+        commStlSubcttEngH.setStrTkcttId(esTkcttInfo.getId());
+        commStlSubcttEngH.setStrTkcttName(esTkcttInfo.getName());
         beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
         // 1。2。抽取相应总包合同的详细内容
         List<EsCttItem> esCttItemOfTkcttList =new ArrayList<EsCttItem>();
@@ -122,17 +122,21 @@ public class ItemQryByTkMeaCSubStlQAction {
         // 根据总包合同内容的信息，拼成合同原稿
         List<CttItemShow> tkcttItemShowList =new ArrayList<>();
         recursiveDataTable("root", esCttItemOfTkcttList, tkcttItemShowList);
-        tkcttItemShowList =getItemOfEsItemHieRelapList_DoFromatNo(tkcttItemShowList);
+        tkcttItemShowList =getItemList_DoFromatNo(tkcttItemShowList);
 
         // 2。成本计划信息
         List<EsCttInfo> esCstplInfoList=esCttInfoService.getEsInitCttByCttTypeAndBelongToPkId(
-                ESEnum.ITEMTYPE1.getCode(),esCttInfoTkctt.getPkid());
+                ESEnum.ITEMTYPE1.getCode(),esTkcttInfo.getPkid());
         if(esCstplInfoList.size()==0){
             return;
         }
         EsCttInfo esCstplInfo =esCstplInfoList.get(0);
-        List<CttItemShow> cstplItemListTemp=
-                esQueryService.getEsCstplItemList(strTkcttInfoPkid);
+        List<EsCttItem> cstplItemListTemp=
+                esCttItemService.getEsItemList(ESEnum.ITEMTYPE1.getCode(),esCstplInfo.getPkid());
+        List<CttItemShow> cstplItemShowListTemp =new ArrayList<>();
+        recursiveDataTable("root", cstplItemListTemp, cstplItemShowListTemp);
+        // 成本计划排版
+        cstplItemShowListTemp =getItemList_DoFromatNo(cstplItemShowListTemp) ;
 
         // 3。总包合同最近批准了的总包计量数据
         // 小于等于所选期码的最近已经批准了的计量期码
@@ -147,14 +151,13 @@ public class ItemQryByTkMeaCSubStlQAction {
             esItemStlTkcttEngMeaList=esItemStlTkcttEngMeaService.selectRecordsByPkidPeriodNoExample(esItemStlTkcttEngMea);
         }
 
-        // 4。分包结算
-        List<QryShow> subcttStlQBySignPartList=esQueryService.getCSStlQBySignPartList(esCstplInfo.getPkid(), strPeriodNo);
-
         /*拼装列表*/
         try {
             qryTkMeaCSStlQShowList =new ArrayList<QryTkMeaCSStlQShow>();
-            for(CttItemShow cttItemShowTkctt : tkcttItemShowList){
-                QryTkMeaCSStlQShow qryTkMeaCSStlQShowNew =new QryTkMeaCSStlQShow();
+            String strFrontNoAndName="";
+            for(CttItemShow tkcttItemShowUnit : tkcttItemShowList){
+                Boolean insertedFlag=false ;
+                QryTkMeaCSStlQShow qryTkMeaCSStlQShowTemp =new QryTkMeaCSStlQShow();
                 // 总包合同单价
                 BigDecimal bdTkcttContractUnitPrice=new BigDecimal(0);
                 // 当期计量
@@ -164,61 +167,90 @@ public class ItemQryByTkMeaCSubStlQAction {
                 BigDecimal bdTkcttStlBToCMeaQuantity=new BigDecimal(0);
                 BigDecimal bdTkcttStlBToCMeaAmount=new BigDecimal(0);
                 // 总包合同
-                qryTkMeaCSStlQShowNew.setStrTkctt_Pkid(cttItemShowTkctt.getPkid());
-                qryTkMeaCSStlQShowNew.setStrTkctt_ParentPkid(cttItemShowTkctt.getParentPkid());
-                qryTkMeaCSStlQShowNew.setStrTkctt_No(cttItemShowTkctt.getStrNo());
-                qryTkMeaCSStlQShowNew.setStrTkctt_Name(cttItemShowTkctt.getName());
-                qryTkMeaCSStlQShowNew.setStrTkctt_Unit(cttItemShowTkctt.getUnit());
-                qryTkMeaCSStlQShowNew.setBdTkctt_ContractUnitPrice(cttItemShowTkctt.getContractUnitPrice());
-                qryTkMeaCSStlQShowNew.setBdTkctt_ContractQuantity(cttItemShowTkctt.getContractQuantity());
-                if(cttItemShowTkctt.getContractUnitPrice()!=null&&
-                        cttItemShowTkctt.getContractQuantity()!=null) {
-                    qryTkMeaCSStlQShowNew.setBdTkctt_ContractAmount(
-                            cttItemShowTkctt.getContractUnitPrice().multiply(cttItemShowTkctt.getContractQuantity()));
+                qryTkMeaCSStlQShowTemp.setStrTkctt_Pkid(tkcttItemShowUnit.getPkid());
+                qryTkMeaCSStlQShowTemp.setStrTkctt_ParentPkid(tkcttItemShowUnit.getParentPkid());
+                qryTkMeaCSStlQShowTemp.setStrTkctt_No(tkcttItemShowUnit.getStrNo());
+                qryTkMeaCSStlQShowTemp.setStrTkctt_Name(tkcttItemShowUnit.getName());
+                qryTkMeaCSStlQShowTemp.setStrTkctt_Unit(tkcttItemShowUnit.getUnit());
+                qryTkMeaCSStlQShowTemp.setBdTkctt_ContractUnitPrice(tkcttItemShowUnit.getContractUnitPrice());
+                qryTkMeaCSStlQShowTemp.setBdTkctt_ContractQuantity(tkcttItemShowUnit.getContractQuantity());
+                if(tkcttItemShowUnit.getContractUnitPrice()!=null&&
+                        tkcttItemShowUnit.getContractQuantity()!=null) {
+                    qryTkMeaCSStlQShowTemp.setBdTkctt_ContractAmount(
+                            tkcttItemShowUnit.getContractUnitPrice().multiply(tkcttItemShowUnit.getContractQuantity()));
                 }
                 // 计量
                 for(EsItemStlTkcttEngMea esItemStlTkcttEngMea:esItemStlTkcttEngMeaList){
-                    if(ToolUtil.getStrIgnoreNull(cttItemShowTkctt.getPkid()).equals(esItemStlTkcttEngMea.getTkcttItemPkid())){
-                        bdTkcttContractUnitPrice=ToolUtil.getBdIgnoreNull(cttItemShowTkctt.getContractUnitPrice());
+                    if(ToolUtil.getStrIgnoreNull(tkcttItemShowUnit.getPkid()).equals(esItemStlTkcttEngMea.getTkcttItemPkid())){
+                        bdTkcttContractUnitPrice=ToolUtil.getBdIgnoreNull(tkcttItemShowUnit.getContractUnitPrice());
                         bdTkcttStlCMeaQuantity=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getCurrentPeriodQty());
                         bdTkcttStlCMeaAmount=bdTkcttStlCMeaQuantity.multiply(bdTkcttContractUnitPrice);
                         bdTkcttStlBToCMeaQuantity=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
                         bdTkcttStlBToCMeaAmount=bdTkcttStlBToCMeaQuantity.multiply(bdTkcttContractUnitPrice);
                         // 当期计量数量和金额
-                        qryTkMeaCSStlQShowNew.setBdTkcttStl_CurrentPeriodMeaQuantity(bdTkcttStlCMeaQuantity);
-                        qryTkMeaCSStlQShowNew.setBdTkcttStl_CurrentPeriodMeaAmount(bdTkcttStlCMeaAmount);
+                        qryTkMeaCSStlQShowTemp.setBdTkcttStl_CurrentPeriodMeaQuantity(bdTkcttStlCMeaQuantity);
+                        qryTkMeaCSStlQShowTemp.setBdTkcttStl_CurrentPeriodMeaAmount(bdTkcttStlCMeaAmount);
                         // 开累计量数量和金额
-                        qryTkMeaCSStlQShowNew.setBdTkcttStl_BeginToCurrentPeriodMeaQuantity(bdTkcttStlBToCMeaQuantity);
-                        qryTkMeaCSStlQShowNew.setBdTkcttStl_BeginToCurrentPeriodMeaAmount(bdTkcttStlBToCMeaAmount);
+                        qryTkMeaCSStlQShowTemp.setBdTkcttStl_BeginToCurrentPeriodMeaQuantity(bdTkcttStlBToCMeaQuantity);
+                        qryTkMeaCSStlQShowTemp.setBdTkcttStl_BeginToCurrentPeriodMeaAmount(bdTkcttStlBToCMeaAmount);
                         break;
                     }
                 }
 
                 // 成本计划
-                String strItemOfEsItemHieRelapTkctt_Pkid=ToolUtil.getStrIgnoreNull(qryTkMeaCSStlQShowNew.getStrTkctt_Pkid());
-                String strItemOfEsItemHieRelapCstpl_CorrespondingPkid;
-                String strItemOfEsItemHieRelapCstpl_Pkid="";
-                for(CttItemShow cstplItemShowUnit : cstplItemListTemp){
-                    strItemOfEsItemHieRelapCstpl_CorrespondingPkid=ToolUtil.getStrIgnoreNull(cstplItemShowUnit.getCorrespondingPkid());
-                    if(strItemOfEsItemHieRelapTkctt_Pkid.equals(strItemOfEsItemHieRelapCstpl_CorrespondingPkid)) {
-                        strItemOfEsItemHieRelapCstpl_Pkid=ToolUtil.getStrIgnoreNull(cstplItemShowUnit.getPkid());
-                        qryTkMeaCSStlQShowNew.setStrCstpl_Pkid(strItemOfEsItemHieRelapCstpl_Pkid);
-                        qryTkMeaCSStlQShowNew.setBdCstpl_ContractUnitPrice(cstplItemShowUnit.getContractUnitPrice());
-                        qryTkMeaCSStlQShowNew.setBdCstpl_ContractQuantity(cstplItemShowUnit.getContractQuantity());
-                        if(cstplItemShowUnit.getContractUnitPrice()!=null&&
-                                cstplItemShowUnit.getContractQuantity()!=null) {
-                            qryTkMeaCSStlQShowNew.setBdCstpl_ContractAmount(
-                                    cstplItemShowUnit.getContractUnitPrice().multiply(cstplItemShowUnit.getContractQuantity()));
+                Integer intSameCorrespondingPkidNo=0;
+                for(CttItemShow cstplItemShowUnit : cstplItemShowListTemp){
+                    if(tkcttItemShowUnit.getPkid().equals(cstplItemShowUnit.getCorrespondingPkid())) {
+                        insertedFlag=true ;
+                        //总包合同
+                        if(strFrontNoAndName.equals(tkcttItemShowUnit.getStrNo()+tkcttItemShowUnit .getName())){
+                            QryTkMeaCSStlQShow qryTkMeaCSStlQShowTempRe =new QryTkMeaCSStlQShow();
+                            // 列表主键
+                            qryTkMeaCSStlQShowTempRe.setStrTkctt_Pkid(
+                                    qryTkMeaCSStlQShowList.size() +";"+tkcttItemShowUnit.getPkid());
+                            // 成本计划内容
+                            qryTkMeaCSStlQShowTempRe.setStrCstpl_No(cstplItemShowUnit.getStrNo());
+                            qryTkMeaCSStlQShowTempRe.setStrCstpl_Pkid(cstplItemShowUnit.getPkid());
+                            qryTkMeaCSStlQShowTempRe.setBdCstpl_ContractUnitPrice(cstplItemShowUnit.getContractUnitPrice());
+                            qryTkMeaCSStlQShowTempRe.setBdCstpl_ContractQuantity(cstplItemShowUnit.getContractQuantity());
+                            if(cstplItemShowUnit.getContractUnitPrice()!=null&&
+                                    cstplItemShowUnit.getContractQuantity()!=null) {
+                                qryTkMeaCSStlQShowTempRe.setBdCstpl_ContractAmount(
+                                        cstplItemShowUnit.getContractUnitPrice().multiply(cstplItemShowUnit.getContractQuantity()));
+                            }
+                            qryTkMeaCSStlQShowList.add(qryTkMeaCSStlQShowTempRe);
+                        }else{
+                            strFrontNoAndName=tkcttItemShowUnit.getStrNo()+tkcttItemShowUnit .getName();
+                            qryTkMeaCSStlQShowTemp.setStrCstpl_Pkid(cstplItemShowUnit.getPkid());
+                            qryTkMeaCSStlQShowTemp.setStrCstpl_No(cstplItemShowUnit.getStrNo());
+                            qryTkMeaCSStlQShowTemp.setBdCstpl_ContractUnitPrice(cstplItemShowUnit.getContractUnitPrice());
+                            qryTkMeaCSStlQShowTemp.setBdCstpl_ContractQuantity(cstplItemShowUnit.getContractQuantity());
+                            if(cstplItemShowUnit.getContractUnitPrice()!=null&&
+                                    cstplItemShowUnit.getContractQuantity()!=null) {
+                                qryTkMeaCSStlQShowTemp.setBdCstpl_ContractAmount(
+                                        cstplItemShowUnit.getContractUnitPrice().multiply(cstplItemShowUnit.getContractQuantity()));
+                            }
+                            qryTkMeaCSStlQShowList.add(qryTkMeaCSStlQShowTemp);
                         }
-                        break;
                     }
                 }
+                if (insertedFlag.equals(false)){
+                    qryTkMeaCSStlQShowList.add(qryTkMeaCSStlQShowTemp);
+                }
+            }
 
-                Integer intGroup=0;
-                Boolean isInThisCirculateHasSame=false;
-                BigDecimal bdSubcttContractQuantityTotal=new BigDecimal(0);
-                BigDecimal bdSubcttContractAmountTotal=new BigDecimal(0);
-                // 根据成本计划项插接分包合同项
+            // 4。分包结算
+            List<QryShow> subcttStlQBySignPartList=esQueryService.getCSStlQBySignPartList(esCstplInfo.getPkid(), strPeriodNo);
+
+            Integer intGroup=0;
+            Boolean isInThisCirculateHasSame=false;
+            BigDecimal bdSubcttContractQuantityTotal=new BigDecimal(0);
+            BigDecimal bdSubcttContractAmountTotal=new BigDecimal(0);
+
+            // 根据成本计划项插接分包合同项
+            List<QryTkMeaCSStlQShow> qryTkMeaCSStlQShowListTemp=new ArrayList<>();
+            qryTkMeaCSStlQShowListTemp.addAll(qryTkMeaCSStlQShowList);
+            /*for(QryTkMeaCSStlQShow cstplUnit:qryTkMeaCSStlQShowListTemp) {
                 for(int i=0;i<subcttStlQBySignPartList.size();i++) {
                     // 成本计划项遇到目标分包合同项
                     if(strItemOfEsItemHieRelapCstpl_Pkid.equals(subcttStlQBySignPartList.get(i).getStrCorrespondingPkid())) {
@@ -259,7 +291,7 @@ public class ItemQryByTkMeaCSubStlQAction {
                         // 最后一项之前的项
                         if(i<subcttStlQBySignPartList.size()-1){
                             // 下一项仍是目标分包合同项
-                            if(cttItemShowTkctt.getPkid().equals(subcttStlQBySignPartList.get(i+1).getStrCorrespondingPkid())){
+                            if(tkcttItemShowUnit.getPkid().equals(subcttStlQBySignPartList.get(i+1).getStrCorrespondingPkid())){
                                 // 成本计划再设定
                                 qryTkMeaCSStlQShowList.add(qryTkMeaCSStlQShowNewInsert);
                             }// 下一项不是目标分包合同项
@@ -283,6 +315,7 @@ public class ItemQryByTkMeaCSubStlQAction {
                     qryTkMeaCSStlQShowList.add(qryTkMeaCSStlQShowNew);
                 }
             }
+*/
             qryTkMeaCSStlQShowListForExcel =new ArrayList<QryTkMeaCSStlQShow>();
             for(QryTkMeaCSStlQShow itemOfEsItemHieRelapTkctt: qryTkMeaCSStlQShowList){
                 QryTkMeaCSStlQShow itemOfEsItemHieRelapTkcttTemp= (QryTkMeaCSStlQShow) BeanUtils.cloneBean(itemOfEsItemHieRelapTkctt);
@@ -308,8 +341,7 @@ public class ItemQryByTkMeaCSubStlQAction {
         // 根据父层级号获得该父层级下的子节点
         List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
         // 通过父层id查找它的孩子
-        subEsCttItemList =getEsItemHieRelapListByLevelParentPkid(strLevelParentId, esCttItemListPara);
-        EsCttItem esCttItem =null;
+        subEsCttItemList =getEsItemListByLevelParentPkid(strLevelParentId, esCttItemListPara);
         for(EsCttItem itemUnit: subEsCttItemList){
             CttItemShow cttItemShowTemp = null;
             String strCreatedByName= esCommon.getOperNameByOperId(itemUnit.getCreatedBy());
@@ -341,16 +373,12 @@ public class ItemQryByTkMeaCSubStlQAction {
                 "",
                 ""
             );
-            if(!ToolUtil.getStrIgnoreNull(cttItemShowTemp.getCorrespondingPkid()).equals("")) {
-                esCttItem = esCttItemService.getEsItemHieRelapByPkId(cttItemShowTemp.getCorrespondingPkid());
-                cttItemShowTemp.setStrCorrespondingItemPkid(esCttItem.getPkid());
-            }
             cttItemShowListPara.add(cttItemShowTemp) ;
             recursiveDataTable(cttItemShowTemp.getPkid(), esCttItemListPara, cttItemShowListPara);
         }
     }
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsItemHieRelapListByLevelParentPkid(String strLevelParentPkid,
+    private List<EsCttItem> getEsItemListByLevelParentPkid(String strLevelParentPkid,
              List<EsCttItem> esCttItemListPara) {
         List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
         /*避开重复链接数据库*/
@@ -363,7 +391,7 @@ public class ItemQryByTkMeaCSubStlQAction {
     }
 
     /*根据group和orderid临时编制编码strNo*/
-    private List<CttItemShow> getItemOfEsItemHieRelapList_DoFromatNo(
+    private List<CttItemShow> getItemList_DoFromatNo(
             List<CttItemShow> cttItemShowListPara){
         String strTemp="";
         Integer intBeforeGrade=-1;

@@ -34,16 +34,10 @@
                          rowKey="#{record.pkid}"
                          selection="#{itemSubcttAction.cttItemShowSelected}"
                          selectionMode="single"
-                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         rows="20"
-                         rowsPerPageTemplate="200,100,50,30,20,10"
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
                          rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}"
-                         scrollable="true">
+                         stickyHeader="#{itemSubcttAction.strStickyHeaderFlag}">
                 <p:column style="width:40px" headerText="序号">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
@@ -64,12 +58,12 @@
                 </p:column>
                 <p:column style="width:80px" headerText="分包单价">
                     <h:outputText value="#{record.contractUnitPrice}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="分包数量">
                     <h:outputText value="#{record.contractQuantity}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="分包金额">
@@ -79,7 +73,7 @@
                 </p:column>
                 <p:column style="width:100px" headerText="分包甲供材单价">
                     <h:outputText value="#{record.signPartAPrice}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:100px" headerText="分包备注">
@@ -108,14 +102,14 @@
                                      value="#{itemSubcttAction.cttItemShowSel.contractQuantity}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractUnitPriceItemInfo" value="综合单价："/>
                         <h:inputText id="contractUnitPriceItemInfo"
                                      value="#{itemSubcttAction.cttItemShowSel.contractUnitPrice}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                             <p:ajax event="blur" update="contractAmountItemInfo"
                                     listener="#{itemSubcttAction.blurCalculateAmountAction}"/>
                         </h:inputText>
@@ -131,7 +125,7 @@
                                      value="#{itemSubcttAction.cttItemShowSel.signPartAPrice}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="unitItemInfo" value="单位："/>
                         <h:inputText id="unitItemInfo" value="#{itemSubcttAction.cttItemShowSel.unit}"

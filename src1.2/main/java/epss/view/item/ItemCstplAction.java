@@ -72,6 +72,7 @@ public class ItemCstplAction {
     //显示的控制
     private StyleModel styleModelNo;
     private StyleModel styleModel;
+    private String strStickyHeaderFlag;
     /*控制控件在画面上的可用与现实End*/
     @PostConstruct
     public void init() {
@@ -92,6 +93,7 @@ public class ItemCstplAction {
     }
 
     public void resetAction(){
+        strStickyHeaderFlag="true";
         strSubmitType="Add";
         styleModelNo=new StyleModel();
         styleModelNo.setDisabled_Flag("false");
@@ -452,7 +454,7 @@ public class ItemCstplAction {
                 esCttItemService.getEsItemList(ESEnum.ITEMTYPE0.getCode(), strTkcttPkidInCstpl);
         List<CttItemShow> cttItemShowListTkctt =new ArrayList<>();
         recursiveDataTable("root", esCttItemListTkctt, cttItemShowListTkctt);
-        cttItemShowListTkctt =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowListTkctt);
+        cttItemShowListTkctt =getCstplItemList_DoFromatNo(cttItemShowListTkctt);
 
         /*成本计划列表*/
         List<EsCttItem> esCttItemListCstpl = esCttItemService.getEsItemList(
@@ -460,19 +462,17 @@ public class ItemCstplAction {
 
         List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();
         recursiveDataTable("root", esCttItemListCstpl, cttItemShowListCstpl);
-        cttItemShowListCstpl =getItemOfEsItemHieRelapList_DoFromatNo(
+        cttItemShowListCstpl =getCstplItemList_DoFromatNo(
                 cttItemShowListCstpl) ;
 
         /*拼装列表*/
         List<CstplItemShow> cstplItemShowList_ForSort =new ArrayList<>();
-        int i=0;
+
         for(CttItemShow itemTkctt: cttItemShowListTkctt){
-            i++;
             Boolean insertedFlag=false ;
             String strFrontNoAndName="";
-            CstplItemShow itemTkcttInsertItem;
             for(CttItemShow itemCstpl: cttItemShowListCstpl){
-                itemTkcttInsertItem=new CstplItemShow();
+                CstplItemShow itemTkcttInsertItem=new CstplItemShow();
                 if(itemTkctt.getPkid().equals(itemCstpl.getCorrespondingPkid())){
                     //总包合同
                     if(strFrontNoAndName.equals(itemTkctt.getStrNo()+itemTkctt .getName())){
@@ -541,7 +541,7 @@ public class ItemCstplAction {
                 }
             }
             if (insertedFlag.equals(false)){
-                itemTkcttInsertItem=new CstplItemShow();
+                CstplItemShow itemTkcttInsertItem=new CstplItemShow();
                 itemTkcttInsertItem=getItemOfTkcttAndCstplByItemOfEsItemHieRelap(itemTkctt,"Tkctt");
                 cstplItemShowList_ForSort.add(itemTkcttInsertItem);
             }
@@ -578,7 +578,8 @@ public class ItemCstplAction {
         }
 
         cstplItemShowList =new ArrayList<CstplItemShow>();
-        cstplItemShowList =getItemOfTkcttAndCstplListSorted(cstplItemShowList_ForSort,0);
+        cstplItemShowList.addAll(cstplItemShowList_ForSort);
+        //cstplItemShowList =getItemOfTkcttAndCstplListSorted(cstplItemShowList_ForSort,0);
         // 添加合计
         setItemOfTkcttAndCstplList_AddTotal();
     }
@@ -1033,7 +1034,7 @@ public class ItemCstplAction {
     }
 
     /*根据group和orderid临时编制编码strNo*/
-    private List<CttItemShow> getItemOfEsItemHieRelapList_DoFromatNo(
+    private List<CttItemShow> getCstplItemList_DoFromatNo(
             List<CttItemShow> cttItemShowListPara){
         String strTemp="";
         Integer intBeforeGrade=-1;
@@ -1069,6 +1070,15 @@ public class ItemCstplAction {
     }
 
     /*智能字段Start*/
+
+    public String getStrStickyHeaderFlag() {
+        return strStickyHeaderFlag;
+    }
+
+    public void setStrStickyHeaderFlag(String strStickyHeaderFlag) {
+        this.strStickyHeaderFlag = strStickyHeaderFlag;
+    }
+
     public EsCttItemService getEsCttItemService() {
         return esCttItemService;
     }

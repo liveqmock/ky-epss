@@ -88,32 +88,37 @@
                 </p:column>
                 <p:column style="width:80px" headerText="总包_数量">
                     <h:outputText value="#{record.bdTkctt_ContractQuantity}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="成本_数量">
                     <h:outputText value="#{record.bdCstpl_ContractQuantity}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:80px" headerText="成本_金额">
+                    <h:outputText value="#{record.bdCstpl_ContractAmount}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:100px" headerText="计量_本期数量">
                     <h:outputText value="#{record.bdTkcttStl_CurrentPeriodMeaQuantity}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:100px" headerText="计量_累计数量">
                     <h:outputText value="#{record.bdTkcttStl_BeginToCurrentPeriodMeaQuantity}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:120px" headerText="分包结算_本期数量">
                     <h:outputText value="#{record.bdSubcttStl_CurrentPeriodQQty}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:120px" headerText="分包结算_累计数量">
                     <h:outputText value="#{record.bdSubcttStl_BeginToCurrentPeriodQQty}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:250px" headerText="协作单位">
@@ -122,7 +127,7 @@
                 </p:column>
                 <p:column style="width:150px" headerText="计量分包结算比较＿数量">
                     <h:outputText value="#{record.bdMeaS_BeginToCurrentPeriodQQty}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="备注">

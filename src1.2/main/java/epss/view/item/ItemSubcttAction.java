@@ -80,6 +80,7 @@ public class ItemSubcttAction {
     private StyleModel styleModelCttQty;
     private StyleModel styleModelCttAmount;
     private String strPasteBtnRendered;
+    private String strStickyHeaderFlag;
     /*控制控件在画面上的可用与现实End*/
 
     @PostConstruct
@@ -229,6 +230,7 @@ public class ItemSubcttAction {
 
     /*重置*/
     public void resetAction(){
+        strStickyHeaderFlag="true";
         strSubmitType="Add";
         styleModelNo=new StyleModel();
         styleModelNo.setDisabled_Flag("false");
@@ -326,6 +328,7 @@ public class ItemSubcttAction {
                 styleModelCttQty.setDisabled_Flag("true");
                 styleModelCttAmount.setDisabled_Flag("true");
             }
+            strStickyHeaderFlag="false";
         } catch (Exception e) {
             logger.error("选择数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -871,6 +874,15 @@ public class ItemSubcttAction {
     }
 
     /*智能字段Start*/
+
+    public String getStrStickyHeaderFlag() {
+        return strStickyHeaderFlag;
+    }
+
+    public void setStrStickyHeaderFlag(String strStickyHeaderFlag) {
+        this.strStickyHeaderFlag = strStickyHeaderFlag;
+    }
+
     public EsCttItemService getEsCttItemService() {
         return esCttItemService;
     }

@@ -72,16 +72,10 @@
                      rowKey="#{record.pkid}"
                      selection="#{itemSubcttAction.cttItemShowSelected}"
                      selectionMode="single"
-                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     paginator="true"
-                     paginatorPosition="bottom"
-                     rows="15"
-                     rowsPerPageTemplate="500,200,100,45,30,15"
                      rowIndexVar="row"
                      emptyMessage="数据记录为空..."
                      rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}"
-                     scrollable="true">
+                     stickyHeader="#{itemSubcttAction.strStickyHeaderFlag}">
                 <p:column style="width:30px" headerText="序号">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
@@ -102,12 +96,12 @@
                 </p:column>
                 <p:column style="width:80px" headerText="分包单价">
                     <h:outputText value="#{record.contractUnitPrice}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="分包数量">
                     <h:outputText value="#{record.contractQuantity}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="分包金额">
@@ -117,7 +111,7 @@
                 </p:column>
                 <p:column style="width:100px" headerText="分包甲供材单价">
                     <h:outputText value="#{record.signPartAPrice}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:100px" headerText="分包备注">
@@ -154,12 +148,12 @@
                     </p:column>
                     <p:column headerText="单价">
                         <h:outputText value="#{recordCstpl.contractUnitPrice}" style="float: right" >
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="合同数量">
                         <h:outputText value="#{recordCstpl.contractQuantity}" style="float: right">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="合同金额">
@@ -223,7 +217,7 @@
                         <h:inputText id="contractQuantityForAdd"
                                      value="#{itemSubcttAction.cttItemShowAdd.contractQuantity}"
                                      style="text-align:right;">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                             <p:ajax event="blur" update="contractAmountForAdd"
                                     listener="#{itemSubcttAction.blurCalculateAmountAction}"/>
                         </h:inputText>
@@ -231,7 +225,7 @@
                         <h:inputText id="contractUnitPriceForAdd"
                                      value="#{itemSubcttAction.cttItemShowAdd.contractUnitPrice}"
                                      style="text-align:right;">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                             <p:ajax event="blur" update="contractAmountForAdd"
                                     listener="#{itemSubcttAction.blurCalculateAmountAction}"/>
                         </h:inputText>
@@ -244,7 +238,7 @@
                         <h:inputText id="signPartAPriceForAdd"
                                      value="#{itemSubcttAction.cttItemShowAdd.signPartAPrice}"
                                      style="text-align:right;">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="noteForAdd" value="备注内容：" />
                         <h:inputText id="noteForAdd"
@@ -318,7 +312,7 @@
                         <h:inputText id="contractQuantityForUpd"
                                      value="#{itemSubcttAction.cttItemShowUpd.contractQuantity}"
                                      style="text-align:right;">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                             <p:ajax event="blur" update="contractAmountForUpd"
                                     listener="#{itemSubcttAction.blurCalculateAmountAction}"/>
                         </h:inputText>
@@ -326,7 +320,7 @@
                         <h:inputText id="contractUnitPriceForUpd"
                                      value="#{itemSubcttAction.cttItemShowUpd.contractUnitPrice}"
                                      style="text-align:right;">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                             <p:ajax event="blur" update="contractAmountForUpd"
                                     listener="#{itemSubcttAction.blurCalculateAmountAction}"/>
                         </h:inputText>
@@ -341,7 +335,7 @@
                         <h:inputText id="signPartAPriceForUpd"
                                      value="#{itemSubcttAction.cttItemShowUpd.signPartAPrice}"
                                      style="text-align:right;">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="noteForUpd" value="备注内容：" />
                         <h:inputText id="noteForUpd"
@@ -446,14 +440,14 @@
                                      value="#{itemSubcttAction.cttItemShowDel.contractQuantity}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractUnitPriceForDel" value="综合单价："/>
                         <h:inputText id="contractUnitPriceForDel"
                                      value="#{itemSubcttAction.cttItemShowDel.contractUnitPrice}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractAmountForDel" value="合同金额："/>
                         <h:inputText id="contractAmountForDel"
@@ -467,7 +461,7 @@
                                      value="#{itemSubcttAction.cttItemShowDel.signPartAPrice}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="noteForDel" value="备注内容：" />
                         <h:inputText id="noteForDel"

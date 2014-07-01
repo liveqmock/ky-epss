@@ -34,17 +34,11 @@
                          rowKey="#{record.pkid}"
                          selection="#{itemCstplAction.cstplItemShowSelected}"
                          selectionMode="single"
-                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         rows="20"
-                         rowsPerPageTemplate="200,100,50,40,30,20,15"
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
                          rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.nameContrast eq '合计'? 'rowDoneStyle':
                                              record.name eq '总合计'? 'rowDoneStyle':record.nameContrast eq '总合计'? 'rowDoneStyle':null}"
-                         scrollable="true">
+                         stickyHeader="#{itemCstplAction.strStickyHeaderFlag}">
                 <p:column style="width:30px" id="rowid" headerText="序号">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
@@ -54,17 +48,17 @@
                 <p:column style="width:250px" headerText="总包名称">
                     <h:outputText value="#{record.name}" />
                 </p:column>
-                <p:column style="width:60px" headerText="总包单位">
+                <p:column style="width:80px" headerText="总包单位">
                     <h:outputText value="#{record.unit}" style="text-align:right"/>
                 </p:column>
                 <p:column style="width:80px" headerText="总包单价">
                     <h:outputText value="#{record.contractUnitPrice}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="总包数量">
                     <h:outputText value="#{record.contractQuantity}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:100px" headerText="总包金额">
@@ -79,17 +73,17 @@
                 <p:column style="width:250px" headerText="成本名称">
                     <h:outputText value="#{record.nameContrast}" />
                 </p:column>
-                <p:column style="width:60px" headerText="成本单位">
+                <p:column style="width:80px" headerText="成本单位">
                     <h:outputText value="#{record.unitContrast}" style="text-align:right"/>
                 </p:column>
                 <p:column style="width:80px" headerText="成本单价">
                     <h:outputText value="#{record.contractUnitPriceContrast}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="成本数量">
                     <h:outputText value="#{record.contractQuantityContrast}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:100px" headerText="成本金额">
@@ -129,14 +123,14 @@
                                      value="#{itemCstplAction.cttItemShowSel.contractUnitPrice}"
                                      style="background-color:gainsboro;;text-align:right;float:left"
                                      readonly="true" >
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractQuantityItemInfo" value="合同数量："/>
                         <h:inputText id="contractQuantityItemInfo"
                                      value="#{itemCstplAction.cttItemShowSel.contractQuantity}"
                                      style="background-color:gainsboro;;text-align:right;float:left"
                                      readonly="true">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractAmountItemInfo" value="合同金额："/>
                         <h:inputText id="contractAmountItemInfo"
