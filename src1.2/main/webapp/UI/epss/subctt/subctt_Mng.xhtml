@@ -142,6 +142,9 @@
                 <p:column headerText="原因" style="width:66px;text-align:center">
                     <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.preStatusFlag)}"/>
                 </p:column>
+                <p:column headerText="甲供材情况" style="width:66px;text-align:center">
+                    <h:outputText value="#{record.type}"/>
+                </p:column>
                 <p:column headerText="开始时间" style="width:66px;text-align:center">
                     <h:outputText value="#{record.cttStartDate}"/>
                 </p:column>
@@ -159,19 +162,27 @@
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">
                 <h:panelGrid id="pgViewForAdd">
-                    <h:panelGrid columns="3">
-                        <p:outputLabel value="合同编号：" for="idForAdd"/>
-                        <p:inputText id="idForAdd" value="#{subCttInfoAction.cttInfoShowAdd.id}"/>
-                        <p:commandButton id="autoSetIdBtnForAdd" icon="ui-icon-plus"
-                                         action="#{subCttInfoAction.setMaxNoPlusOne()}"
-                                         update="idForAdd"
-                                         style="height:20px">
-                        </p:commandButton>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="合同名称：" for="cttNameForAdd"/>
-                        <p:inputText id="cttNameForAdd" value="#{subCttInfoAction.cttInfoShowAdd.name}"
-                                     style="width:328px;"/>
+        <h:panelGrid columns="6">
+            <p:outputLabel value="合同编号：" for="idForAdd"/>
+            <p:inputText id="idForAdd" value="#{subCttInfoAction.cttInfoShowAdd.id}">
+                <p:ajax event="keyup" update="warnForId" listener="#{subCttInfoAction.validSubCttId()}"/>
+            </p:inputText>
+            <p:commandButton id="autoSetIdBtnForAdd" icon="ui-icon-plus"
+                             action="#{subCttInfoAction.setMaxNoPlusOne()}"
+                             update="idForAdd"
+                             style="height:20px">
+            </p:commandButton>
+            <!--<h:message for="idForAdd" showSummary="true" showDetail="true"/>-->
+            <h:outputText id="warnForId" value="#{subCttInfoAction.strWarnMsg}" style="color: red"/>
+        </h:panelGrid>
+        <h:panelGrid columns="5">
+            <p:outputLabel value="合同名称：" for="cttNameForAdd"/>
+            <p:inputText id="cttNameForAdd" value="#{subCttInfoAction.cttInfoShowAdd.name}"
+                         style="width:328px;">
+                <p:ajax event="keyup" update="warnForName"
+                        listener="#{subCttInfoAction.validSubCttName()}"/>
+            </p:inputText>
+            <h:outputText id="warnForName" value="#{subCttInfoAction.strWarnMsg}" style="color: red"/>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel value="备注内容：" for="noteForAdd"/>

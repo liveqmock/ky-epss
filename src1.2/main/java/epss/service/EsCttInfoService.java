@@ -5,6 +5,7 @@ import epss.repository.dao.EsCttInfoMapper;
 import epss.repository.dao.common.CttInfoMapper;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.dao.common.CommonMapper;
+import epss.repository.dao.common.FlowMapper;
 import epss.repository.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -118,6 +119,19 @@ public class EsCttInfoService {
                 .andNameEqualTo(cttInfoShowPara.getName());
         return esCttInfoMapper.countByExample(example) >= 1;
     }
+    //验证合同编号和名称是否已存在
+    public boolean IdisExistInDb(CttInfoShow cttInfoShowPara) {
+        EsCttInfoExample example = new EsCttInfoExample();
+        EsCttInfoExample.Criteria criteria = example.createCriteria();
+        criteria.andIdEqualTo(cttInfoShowPara.getId());
+        return esCttInfoMapper.countByExample(example) >= 1;
+    }
+    public boolean NameisExistInDb(CttInfoShow cttInfoShowPara) {
+        EsCttInfoExample example = new EsCttInfoExample();
+        EsCttInfoExample.Criteria criteria = example.createCriteria();
+        criteria.andNameEqualTo(cttInfoShowPara.getName());
+        return esCttInfoMapper.countByExample(example) >= 1;
+    }
 
     public void insertRecord(CttInfoShow cttInfoShowPara) {
         cttInfoShowPara.setDeletedFlag("0");
@@ -174,8 +188,15 @@ public class EsCttInfoService {
         esCttInfoTemp.setLastUpdBy(cttInfoShowPara.getLastUpdBy());
         esCttInfoTemp.setLastUpdDate(cttInfoShowPara.getLastUpdDate());
         esCttInfoTemp.setModificationNum(cttInfoShowPara.getModificationNum());
+        esCttInfoTemp.setType(cttInfoShowPara.getType());
         return esCttInfoTemp;
     }
+    //更新甲供材情况
+    public int  updateByPKid(CttInfoShow cttInfoShowPara){
+
+       return esCttInfoMapper.updateByPrimaryKey(fromConstructToModel(cttInfoShowPara));
+    }
+
 
     /*public List<AllTabColumns>  getColumnNameByTableName(String strTableName){
         *//*return commonMapper.getColumnNameByTableName(strTableName) ;*//*

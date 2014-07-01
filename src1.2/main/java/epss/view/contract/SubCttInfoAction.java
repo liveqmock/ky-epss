@@ -6,9 +6,13 @@ import epss.common.enums.ESEnumStatusFlag;
 import epss.common.utils.MessageUtil;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
+import epss.repository.model.EsCttInfo;
+import epss.repository.model.EsCttItem;
 import epss.repository.model.EsInitStl;
 import epss.repository.model.model_show.CttInfoShow;
+import epss.repository.model.model_show.CttItemShow;
 import epss.service.EsCttInfoService;
+import epss.service.EsCttItemService;
 import epss.service.EsInitPowerService;
 import epss.service.common.EsFlowService;
 import epss.view.common.EsCommon;
@@ -19,13 +23,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.math.BigDecimal;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,6 +44,8 @@ public class SubCttInfoAction {
     private static final Logger logger = LoggerFactory.getLogger(SubCttInfoAction.class);
     @ManagedProperty(value = "#{esCttInfoService}")
     private EsCttInfoService esCttInfoService;
+    @ManagedProperty(value = "#{esCttItemService}")
+    private EsCttItemService esCttItemService;
     @ManagedProperty(value = "#{esInitPowerService}")
     private EsInitPowerService esInitPowerService;
     @ManagedProperty(value = "#{esFlowService}")
@@ -65,6 +71,11 @@ public class SubCttInfoAction {
 
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
+    //实现甲供材情况
+    private CttItemShow cttItemShow;
+    //验证分包合同编号和名称是否重复的提示信息
+    String strWarnMsg;
+
 
     @PostConstruct
     public void init() {
@@ -77,6 +88,7 @@ public class SubCttInfoAction {
         }
         initData();
     }
+
     public void initData() {
         this.cttInfoShowList = new ArrayList<CttInfoShow>();
         cttInfoShowQry = new CttInfoShow();
@@ -93,6 +105,31 @@ public class SubCttInfoAction {
         strSubmitType = "Add";
         esFlowControl.setStatusFlagListByPower("Qry");
         rowSelectedFlag = "false";
+    }
+
+    //分包合同录入时，验证分包合同编号是否合法重复
+    public void validSubCttId() {
+        strWarnMsg = "";
+        String subCttIdFromPage = cttInfoShowAdd.getId();
+        if (!(subCttIdFromPage.matches("^[a-zA-Z0-9]+$"))) {
+            strWarnMsg = "合同编号应以字母数字开头，请重新输入。";
+        } else {
+            if (esCttInfoService.IdisExistInDb(cttInfoShowAdd)) {
+                strWarnMsg = "该合同编号已存在，请重新输入。";
+
+            }
+        }
+    }
+
+    //分包合同录入时，验证分包合同编号是否合法重复
+    public void validSubCttName() {
+        strWarnMsg = "";
+
+        if (esCttInfoService.NameisExistInDb(cttInfoShowAdd)) {
+            strWarnMsg = "该合同编号已存在，请重新输入。";
+
+        }
+
     }
 
     public void setMaxNoPlusOne() {
@@ -167,6 +204,7 @@ public class SubCttInfoAction {
         cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE2.getCode());
         cttInfoShowAdd.setParentPkid(strBelongToPkid);
         rowSelectedFlag = "false";
+        strWarnMsg = "";
     }
 
     public void selectRecordAction(String strPowerTypePara,
@@ -246,12 +284,39 @@ public class SubCttInfoAction {
         try {
             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
+                    List<EsCttItem> esCttItemList = esCttItemService.getEsItemList(cttInfoShowSel.getCttType(), cttInfoShowSel.getPkid());
+                    if (esCttItemList.isEmpty()) {
+                        MessageUtil.addInfo("无详细内容！");
+                        rowSelectedFlag = "false";
+                        return;
+                    }
+                    int checkPriceZero = 0;
+                    for (EsCttItem esCttItemTemp : esCttItemList) {
+                        if (!(esCttItemTemp.getSignPartAPrice() == null)) {
+                            if (!(esCttItemTemp.getSignPartAPrice().equals(new BigDecimal(0)))) {
+                                checkPriceZero += 1;
+                                break;
+                            }
+                        }
+                    }
+                    if (checkPriceZero == 0) {
+                        cttInfoShowSel.setType("0");
+                        cttInfoShowSel.setPkid(cttInfoShowSel.getPkid());
+                        esCttInfoService.updateByPKid(cttInfoShowSel);
+                    } else {
+                        cttInfoShowSel.setType("2");
+                        cttInfoShowSel.setPkid(cttInfoShowSel.getPkid());
+                        esCttInfoService.updateByPKid(cttInfoShowSel);
+                    }
                     esFlowControl.mngFinishAction(
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
+                    cttInfoShowSel.setType("");
+                    cttInfoShowSel.setPkid(cttInfoShowSel.getPkid());
+                    esCttInfoService.updateByPKid(cttInfoShowSel);
                     esFlowControl.mngNotFinishAction(
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
@@ -522,4 +587,36 @@ public class SubCttInfoAction {
     }
 
     /*智能字段 End*/
+
+    public EsCttItemService getEsCttItemService() {
+        return esCttItemService;
+    }
+
+    public void setEsCttItemService(EsCttItemService esCttItemService) {
+        this.esCttItemService = esCttItemService;
+    }
+
+    public String getStrBelongToPkid() {
+        return strBelongToPkid;
+    }
+
+    public void setStrBelongToPkid(String strBelongToPkid) {
+        this.strBelongToPkid = strBelongToPkid;
+    }
+
+    public CttItemShow getCttItemShow() {
+        return cttItemShow;
+    }
+
+    public void setCttItemShow(CttItemShow cttItemShow) {
+        this.cttItemShow = cttItemShow;
+    }
+
+    public String getStrWarnMsg() {
+        return strWarnMsg;
+    }
+
+    public void setStrWarnMsg(String strWarnMsg) {
+        this.strWarnMsg = strWarnMsg;
+    }
 }
