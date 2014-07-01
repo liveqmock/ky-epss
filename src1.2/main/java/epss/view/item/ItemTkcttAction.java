@@ -79,12 +79,9 @@ public class ItemTkcttAction {
     //显示的控制
     private String strPasteBtnRendered;
     private String strMngNotFinishFlag;
-<<<<<<< HEAD
     private String strStickyHeaderFlag;
-=======
     private String strNotPassToStatus;
     private String strFlowType;
->>>>>>> b4495827798bbe5e9938f79146edc0b1507d52a4
     /*控制控件在画面上的可用与现实End*/
 
     @PostConstruct

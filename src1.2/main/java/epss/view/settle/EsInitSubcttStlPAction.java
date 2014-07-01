@@ -230,19 +230,19 @@ public class EsInitSubcttStlPAction {
         try {
             progInfoShowList.clear();
             if(strQryFlag.equals("Approve")){
-                // 分包数量结算和分包材料结算都复核了
+               /* // 分包数量结算和分包材料结算都复核了
                 List<ProgInfoShow> progInfoShowFormingListTemp =
                         esFlowService.selectFormingEsInitSubcttStlP(
                                 strCstplPkid,
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getStlPkid()),
-                                ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo()));
+                                ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo()));*/
                 // 已经批准了的分包价格结算
                 List<ProgInfoShow> progInfoShowApprovedListTemp =
                         esFlowService.selectFormedEsInitSubcttStlP(
                                 strCstplPkid,
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getStlPkid()),
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo()));
-                ProgInfoShow progInfoShowTemp =new ProgInfoShow();
+               /* ProgInfoShow progInfoShowTemp =new ProgInfoShow();
                 for(int i=0;i< progInfoShowFormingListTemp.size();i++){
                     progInfoShowTemp = progInfoShowFormingListTemp.get(i);
                     Boolean isHasSame=false;
@@ -256,10 +256,10 @@ public class EsInitSubcttStlPAction {
                     if(isHasSame.equals(false)){
                         progInfoShowList.add(progInfoShowTemp);
                     }
-                }
+                }*/
                 // 已经生成结算单并批准了的
                 for(int i=0;i< progInfoShowApprovedListTemp.size();i++){
-                    if(progInfoShowApprovedListTemp.get(i).getStatusFlag().equals(ESEnumStatusFlag.STATUS_FLAG3.getCode())){
+                    if(progInfoShowApprovedListTemp.get(i).getStatusFlag().equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())||progInfoShowApprovedListTemp.get(i).getStatusFlag().equals(ESEnumStatusFlag.STATUS_FLAG3.getCode())){
                         progInfoShowList.add(progInfoShowApprovedListTemp.get(i));
                     }
                 }

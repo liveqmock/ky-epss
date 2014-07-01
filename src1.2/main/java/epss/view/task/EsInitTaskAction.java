@@ -74,9 +74,7 @@ public class EsInitTaskAction {
                 strType= ESEnum.ITEMTYPE2.getCode();
             }
             strStatusFlag="";
-            if(itemUnit.getMenuaction().contains("cstpl_SubcttEngStlPApprove")) {
-                strStatusFlag= ESEnumStatusFlag.STATUS_FLAG0.getCode();
-            }else
+            
             if(itemUnit.getMenuaction().contains("Mng")) {
                 strStatusFlag= ESEnumStatusFlag.STATUS_FLAG0.getCode();
             }else if(itemUnit.getMenuaction().contains("DoubleCheck")) {
