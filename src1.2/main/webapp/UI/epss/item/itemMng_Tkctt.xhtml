@@ -32,7 +32,7 @@
                 <p:commandButton id="endInputBtn" value="录入完成"
                                  action="#{itemTkcttAction.onClickForPowerAction('Pass')}"
                                  rendered='#{itemTkcttAction.strMngNotFinishFlag}'
-                                 update="msgs,pgCondition">
+                                 update="msgs,pgCondition,ptt">
                 </p:commandButton>
                 <p:commandButton id="startInputBtn" value="录入未完"
                                  action="#{itemTkcttAction.onClickForPowerAction('Fail')}"
