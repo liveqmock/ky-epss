@@ -766,6 +766,16 @@ public class ItemTkcttAction {
 
             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
+                    int Orderid=esCttItemService.getMaxOrderidInEsItemHieRelapList(strBelongToType,strBelongToPkid, "root",1);
+                    EsCttItem esCttItemTemp=new EsCttItem();
+                    esCttItemTemp.setBelongToType(strBelongToType);
+                    esCttItemTemp.setBelongToPkid(strBelongToPkid);
+                    esCttItemTemp.setParentPkid("root");
+                    esCttItemTemp.setGrade(1);
+                    esCttItemTemp.setOrderid(Orderid+1);
+                    esCttItemTemp.setName("(ÆäËü)");
+                    esCttItemService.insertRecord(esCttItemTemp);
+                    initData();
                     esFlowControl.mngFinishAction(
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),

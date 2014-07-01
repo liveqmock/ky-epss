@@ -186,4 +186,13 @@ public class EsCttItemService {
     public EsCttItem getEsItemHieRelapByPkId(String strPkId){
         return esCttItemMapper.selectByPrimaryKey(strPkId) ;
     }
+
+    public void insertRecord(EsCttItem esCttItemPara){
+        esCttItemPara.setDeletedFlag("0");
+        esCttItemPara.setOriginFlag("0");
+        esCttItemPara.setCreatedBy(platformService.getStrLastUpdBy());
+        esCttItemPara.setCreatedDate(platformService.getStrLastUpdDate());
+        esCttItemMapper.insert(esCttItemPara);
+    }
+
 }
