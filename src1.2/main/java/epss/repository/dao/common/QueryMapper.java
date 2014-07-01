@@ -218,6 +218,7 @@ public interface QueryMapper {
             "      sum(eissep.THIS_STAGE_QTY) as bdCurrentPeriodQuantity," +
             "      sum(eissep.ADD_UP_QTY) as bdBeginToCurrentPeriodQuantity" +
             " from " +
+                    // 某一个成本计划下对应的批准了的分包合同的详细内容
             "      ( " +
             "           select" +
             "                aprdsubctt.PKID as INFO_PKID," +
@@ -226,10 +227,18 @@ public interface QueryMapper {
             "                ecitem.PKID as ITEM_PKID," +
             "                ecitem.CORRESPONDING_PKID" +
             "           from " +
+                               // 某一个成本计划下对应的批准了的分包合同 并把它们产生的最近一期批准了的价格结算的期号记录下来
             "               (" +
             "                   select  " +
             "                          ecinfo.PKID, " +
-            "                          eicust.NAME AS SIGN_PART_B_NAME," +
+            "                          (" +
+            "                              select " +
+            "                                   eicust.NAME " +
+            "                              from " +
+            "                                   ES_INIT_CUST eicust " +
+            "                              where " +
+            "                                   eicust.PKID = ecinfo.SIGN_PART_B " +
+            "                          )as SIGN_PART_B_NAME," +
             "                          (" +
             "                              select " +
             "                                     max(PERIOD_NO)" +
@@ -256,22 +265,20 @@ public interface QueryMapper {
             "                          eip.PERIOD_NO='NULL' " +
             "                   and " +
             "                          eip.STATUS_FLAG='3' " +
-            "                   left outer join " +
-            "                          ES_INIT_CUST eicust " +
-            "                   on " +
-            "                          eicust.PKID=ecinfo.SIGN_PART_B " +
             "                   where                       " +
             "                          ecinfo.CTT_TYPE = '2' " +
             "                   and" +
             "                          ecinfo.PARENT_PKID = #{strCstplInfoPkid}" +
-            "                   ) aprdsubctt" +
+            "               ) aprdsubctt" +
+                               // 某一个成本计划下对应的批准了的分包合同 并把它们产生的最近一期批准了的价格结算的期号记录下来
             "          inner join" +
-            "                 ES_CTT_ITEM ecitem" +
+            "               ES_CTT_ITEM ecitem" +
             "          on" +
             "             ecitem.belong_to_type='2'" +
             "          and" +
             "             ecitem.belong_to_pkid=aprdsubctt.pkid " +
             "      )subPerEd " +
+                    // 某一个成本计划下对应的批准了的分包合同的详细内容
             " inner join" +
             "      ES_ITEM_STL_SUBCTT_ENG_P eissep" +
             " on" +
@@ -286,35 +293,4 @@ public interface QueryMapper {
             " order by subPerEd.CORRESPONDING_PKID,subPerEd.SIGN_PART_B_NAME")
     List<QryShow> getCSStlQBySignPartList(@Param("strCstplInfoPkid") String strCstplInfoPkid,
                                           @Param("strPeriodNo") String strPeriodNo);
-
-    @Select("select " +
-            "    ecitem.pkid as pkid," +
-            "    ecitem.corresponding_pkid as correspondingPkid," +
-            "    ecitem.contract_unit_price as contractUnitPrice," +
-            "    ecitem.contract_quantity as contractQuantity," +
-            "    ecitem.contract_amount as contractAmount" +
-            " from" +
-            "    ES_CTT_INFO ecinfo" +
-            " inner join " +                    //已经批准了的分包合同
-            "    ES_INIT_POWER eip" +
-            " on " +
-            "    eip.power_type=ecinfo.ctt_type" +
-            " and " +
-            "    eip.power_pkid=ecinfo.pkid" +
-            " and " +
-            "    eip.period_no= 'NULL'" +
-            " and " +
-            "    eip.status_flag='3' " +
-            " inner join " +
-            "    ES_CTT_ITEM ecitem" +
-            " on" +
-            "    ecitem.belong_to_pkid=ecinfo.pkid" +
-            " and " +
-            "    ecitem.belong_to_type=ecinfo.ctt_type" +
-            " where" +                       //根据成本计划号得到分包合同列表
-            "    ecinfo.CTT_TYPE = '1'" +
-            " and " +
-            "    ecinfo.PARENT_PKID = #{strTkcttInfoPkid}"
-         )
-    public List<CttItemShow> getEsCstplItemList(@Param("strTkcttInfoPkid") String strTkcttInfoPkid);
 }
