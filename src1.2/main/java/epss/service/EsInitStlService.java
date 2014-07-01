@@ -65,6 +65,15 @@ public class EsInitStlService {
     public EsInitStl selectRecordsByPrimaryKey(String strPkId){
         return esInitStlMapper.selectByPrimaryKey(strPkId);
     }
+    public List<EsInitStl> selectRecordsByRecord(EsInitStl esInitStlPara){
+        EsInitStlExample esInitStlExample=new EsInitStlExample();
+        EsInitStlExample.Criteria criteria = esInitStlExample.createCriteria();
+        criteria.andStlTypeEqualTo(esInitStlPara.getStlType()).
+                andStlPkidEqualTo(esInitStlPara.getStlPkid()).
+                andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
+        return esInitStlMapper.selectByExample(esInitStlExample);
+    }
+
     public void insertRecord(ProgInfoShow progInfoShowPara){
         progInfoShowPara.setCreatedBy(platformService.getStrLastUpdBy());
         progInfoShowPara.setCreatedDate(platformService.getStrLastUpdDate());

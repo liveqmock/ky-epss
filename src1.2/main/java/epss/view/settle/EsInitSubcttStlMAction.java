@@ -1,6 +1,7 @@
 package epss.view.settle;
 
 import epss.common.enums.*;
+import epss.repository.model.EsInitPower;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import epss.common.utils.StyleModel;
@@ -324,8 +325,50 @@ public class EsInitSubcttStlMAction {
                     // 原因：复核通过
                     progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
                     esInitPowerService.updateRecordByStl(progInfoShowSel);
+
+                    //todo
+                    String SubcttStlQStatus = ToolUtil.getStrIgnoreNull(
+                            esFlowService.getStatusFlag(ESEnum.ITEMTYPE3.getCode(), progInfoShowSel.getStlPkid(), progInfoShowSel.getPeriodNo()));
+                    if (!("".equals(SubcttStlQStatus)) && ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlQStatus) <= 0) {
+                        EsInitStl esInitStlTemp = new EsInitStl();
+                        esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
+                        esInitStlTemp.setStlPkid(progInfoShowSel.getStlPkid());
+                        esInitStlTemp.setPeriodNo(progInfoShowSel.getPeriodNo());
+                        esInitStlTemp.setNote("");
+                        // 结算登记表登记
+                        esInitStlService.insertRecord(esInitStlTemp);
+                        //流程控制表登记
+                        EsInitPower esInitPowerTemp=new EsInitPower();
+                        esInitPowerTemp.setPowerType(ESEnum.ITEMTYPE5.getCode());
+                        esInitPowerTemp.setPowerPkid(progInfoShowSel.getPowerPkid());
+                        esInitPowerTemp.setPeriodNo(progInfoShowSel.getPeriodNo());
+                        esInitPowerTemp.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+                        esInitPowerTemp.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+                        esInitPowerService.insertRecordByStl(esInitPowerTemp);
+                    }
                     MessageUtil.addInfo("数据复核通过！");
                 }else if(strPowerType.equals("DoubleCheckFail")){
+                    String SubcttStlPStatus = ToolUtil.getStrIgnoreNull(
+                            esFlowService.getStatusFlag(ESEnum.ITEMTYPE5.getCode(), progInfoShowSel.getStlPkid(), progInfoShowSel.getPeriodNo()));
+                    String SubcttStlQStatus = ToolUtil.getStrIgnoreNull(
+                            esFlowService.getStatusFlag(ESEnum.ITEMTYPE3.getCode(), progInfoShowSel.getStlPkid(), progInfoShowSel.getPeriodNo()));
+                    if (!("".equals(SubcttStlPStatus))) {
+                        MessageUtil.addInfo("该数据已被分包价格结算批准，您无权进行操作！");
+                        return;
+                    } else{
+                        if (!("".equals(SubcttStlQStatus)) && ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlQStatus) <= 0){
+                            try {
+                                ProgInfoShow progInfoShowTemp= (ProgInfoShow) BeanUtils.cloneBean(progInfoShowSel);
+                                progInfoShowTemp.setPowerType(ESEnum.ITEMTYPE5.getCode());
+                                esInitStlService.deleteRecord(progInfoShowTemp);
+                                esInitPowerService.deleteRecordByStl(progInfoShowTemp);
+                            }catch (Exception e) {
+                                logger.error("删除数据失败,复核未过操作失败。", e);
+                                MessageUtil.addError(e.getMessage());
+                                return;
+                            }
+                        }
+                    }
                     // 这样写可以实现越级退回
                     progInfoShowSel.setStatusFlag(strNotPassToStatus);
                     // 原因：复核未过
