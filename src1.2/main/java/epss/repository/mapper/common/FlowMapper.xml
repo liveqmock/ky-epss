@@ -31,6 +31,7 @@
         <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
         <result column="LAST_UPD_DATE" jdbcType="VARCHAR" property="lastUpdDate" />
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
+        <result column="MODIFICATION_NUM" jdbcType="DECIMAL" property="modificationNum" />
         <result column="TYPE" jdbcType="CHAR" property="type" />
     </resultMap>
     <select id="selectCttByStatusFlagBegin_End" parameterType="epss.repository.model.model_show.CttInfoShow"
@@ -57,6 +58,7 @@
                 eic.CREATED_DATE,
                 eic.LAST_UPD_BY,
                 eic.LAST_UPD_DATE,
+                eic.MODIFICATION_NUM,
 
                 eip.POWER_TYPE,
                 eip.POWER_PKID,
