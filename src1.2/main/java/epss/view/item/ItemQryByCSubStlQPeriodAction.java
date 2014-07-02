@@ -37,6 +37,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,9 +108,10 @@ public class ItemQryByCSubStlQPeriodAction {
         }
 
         List<CttInfoShow> cttInfoShowList =
-                esCttInfoService.getCttInfoListByCttType_Status(
+                esCttInfoService.getCttInfoListByCttType_ParentPkid_Status(
                         ESEnum.ITEMTYPE2.getCode()
-                       ,ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                        , strCstplPkid
+                        , ESEnumStatusFlag.STATUS_FLAG3.getCode());
         subcttList=new ArrayList<SelectItem>();
         if(cttInfoShowList.size()>0){
             SelectItem selectItem=new SelectItem("","");
@@ -122,6 +124,7 @@ public class ItemQryByCSubStlQPeriodAction {
             }
         }
         strStartPeriodNo=ToolUtil.getStrThisMonth();
+        strStartPeriodNo=(new BigDecimal(strStartPeriodNo.substring(0,4)).subtract(new BigDecimal("2"))).toString()+strStartPeriodNo.substring(4);
         strEndPeriodNo=ToolUtil.getStrThisMonth();
     }
 
