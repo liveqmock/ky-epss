@@ -33,19 +33,19 @@
                 <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
                     <h:panelGrid columns="8">
                             <p:outputLabel value="结算编号：" for="id" />
-                            <p:inputText id="id" value="#{esInitTkcttStlMeaAction.progInfoShowQry.id}"/>
+                            <p:inputText id="id" value="#{tkcttStlMeaInfoAction.progInfoShowQry.id}"/>
                             <p:outputLabel value="总包合同：" for="tkcttPkid" />
                             <p:selectOneMenu id="tkcttPkid"
-                                             value="#{esInitTkcttStlMeaAction.progInfoShowQry.stlPkid}">
-                                <f:selectItems value="#{esInitTkcttStlMeaAction.tkcttList}"/>
+                                             value="#{tkcttStlMeaInfoAction.progInfoShowQry.stlPkid}">
+                                <f:selectItems value="#{tkcttStlMeaInfoAction.tkcttList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="期数编码：" for="periodNo"/>
-                            <p:inputText id="periodNo" value="#{esInitTkcttStlMeaAction.progInfoShowQry.periodNo}"
+                            <p:inputText id="periodNo" value="#{tkcttStlMeaInfoAction.progInfoShowQry.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"/>                           
                     </h:panelGrid>
                     <h:panelGrid columns='1'>
                         <p:commandButton id="qryBtn" value="查询"
-                                             action="#{esInitTkcttStlMeaAction.onQueryAction('Print','true')}"
+                                             action="#{tkcttStlMeaInfoAction.onQueryAction('Print','true')}"
                                              update="pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
@@ -70,10 +70,10 @@
                 </p:menuitem>
             </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{esInitTkcttStlMeaAction.progInfoShowList}"
+                         value="#{tkcttStlMeaInfoAction.progInfoShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{esInitTkcttStlMeaAction.progInfoShowSelected}"
+                         selection="#{tkcttStlMeaInfoAction.progInfoShowSelected}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

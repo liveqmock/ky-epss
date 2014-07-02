@@ -23,16 +23,16 @@
             <p:growl id="msgs" showDetail="false"/>
             <p:contextMenu for="pdt" id="pcm">
                 <p:menuitem value="浏览" icon="ui-icon-pencil"
-                            actionListener="#{itemSubcttAction.selectRecordAction('Sel')}"
+                            actionListener="#{subcttItemAction.selectRecordAction('Sel')}"
                             update="pgView,pdt,msgs"
                             oncomplete="PF('wVDlgView').show()">
                 </p:menuitem>
             </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{itemSubcttAction.cttItemShowList}"
+                         value="#{subcttItemAction.cttItemShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{itemSubcttAction.cttItemShowSelected}"
+                         selection="#{subcttItemAction.cttItemShowSelected}"
                          selectionMode="single"
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
@@ -86,85 +86,85 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel for="noItemHieRelap" value="项目编号：" />
                         <h:inputText id="noItemHieRelap"
-                                     value="#{itemSubcttAction.cttItemShowSel.strNo}"
+                                     value="#{subcttItemAction.cttItemShowSel.strNo}"
                                      readonly="true"
                                      style="background-color:gainsboro;">
                         </h:inputText>
                         <p:outputLabel for="name" value="项目名称：" />
-                        <h:inputText id="name" value="#{itemSubcttAction.cttItemShowSel.name}"
+                        <h:inputText id="name" value="#{subcttItemAction.cttItemShowSel.name}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel for="contractQuantityItemInfo" value="合同数量："/>
                         <h:inputText id="contractQuantityItemInfo"
-                                     value="#{itemSubcttAction.cttItemShowSel.contractQuantity}"
+                                     value="#{subcttItemAction.cttItemShowSel.contractQuantity}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractUnitPriceItemInfo" value="综合单价："/>
                         <h:inputText id="contractUnitPriceItemInfo"
-                                     value="#{itemSubcttAction.cttItemShowSel.contractUnitPrice}"
+                                     value="#{subcttItemAction.cttItemShowSel.contractUnitPrice}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                             <p:ajax event="blur" update="contractAmountItemInfo"
-                                    listener="#{itemSubcttAction.blurCalculateAmountAction}"/>
+                                    listener="#{subcttItemAction.blurCalculateAmountAction}"/>
                         </h:inputText>
                         <p:outputLabel for="contractAmountItemInfo" value="合同金额："/>
                         <h:inputText id="contractAmountItemInfo"
-                                     value="#{itemSubcttAction.cttItemShowSel.contractAmount}"
+                                     value="#{subcttItemAction.cttItemShowSel.contractAmount}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="signPartAPriceItemInfo" value="甲供材价："/>
                         <h:inputText id="signPartAPriceItemInfo"
-                                     value="#{itemSubcttAction.cttItemShowSel.signPartAPrice}"
+                                     value="#{subcttItemAction.cttItemShowSel.signPartAPrice}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="unitItemInfo" value="单位："/>
-                        <h:inputText id="unitItemInfo" value="#{itemSubcttAction.cttItemShowSel.unit}"
+                        <h:inputText id="unitItemInfo" value="#{subcttItemAction.cttItemShowSel.unit}"
                                      style="background-color:gainsboro;"
                                      readonly="true"/>
                         <p:outputLabel for="note" value="备注内容：" />
-                        <h:inputText id="note" value="#{itemSubcttAction.cttItemShowSel.note}"
+                        <h:inputText id="note" value="#{subcttItemAction.cttItemShowSel.note}"
                                      style="background-color:gainsboro;"
                                      readonly="true"/>
                         <p:outputLabel for="originFlagItemInfo" value="数据来源：" />
                         <h:inputText id="originFlagItemInfo"
                                      value="#{esCommon.originFlagListValueOfAlias(
-                                                 itemSubcttAction.cttItemShowSel.originFlag)}"
+                                                 subcttItemAction.cttItemShowSel.originFlag)}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdByItemInfo" value="创建人：" />
-                        <h:inputText id="createdByItemInfo" value="#{itemSubcttAction.cttItemShowSel.createdByName}"
+                        <h:inputText id="createdByItemInfo" value="#{subcttItemAction.cttItemShowSel.createdByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdDateItemInfo" value="创建时间：" />
-                        <h:inputText id="createdDateItemInfo" value="#{itemSubcttAction.cttItemShowSel.createdDate}"
+                        <h:inputText id="createdDateItemInfo" value="#{subcttItemAction.cttItemShowSel.createdDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdByItemInfo" value="修改人：" />
-                        <h:inputText id="lastUpdByItemInfo" value="#{itemSubcttAction.cttItemShowSel.lastUpdByName}"
+                        <h:inputText id="lastUpdByItemInfo" value="#{subcttItemAction.cttItemShowSel.lastUpdByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdDateItemInfo" value="修改时间：" />
-                        <h:inputText id="lastUpdDateItemInfo" value="#{itemSubcttAction.cttItemShowSel.lastUpdDate}"
+                        <h:inputText id="lastUpdDateItemInfo" value="#{subcttItemAction.cttItemShowSel.lastUpdDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="modificationNumItemInfo" value="修改次数：" />
-                        <h:inputText id="modificationNumItemInfo" value="#{itemSubcttAction.cttItemShowSel.modificationNum}"
+                        <h:inputText id="modificationNumItemInfo" value="#{subcttItemAction.cttItemShowSel.modificationNum}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                         </h:inputText>
                         <p:outputLabel for="strCorrespondingItemNo" value="对应编号：" />
                         <h:inputText id="strCorrespondingItemNo"
-                                     value="#{itemSubcttAction.cttItemShowSel.strCorrespondingItemNo}"
+                                     value="#{subcttItemAction.cttItemShowSel.strCorrespondingItemNo}"
                                      style="background-color:gainsboro"
                                      readonly="true">
                         </h:inputText>

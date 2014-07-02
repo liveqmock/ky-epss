@@ -1,4 +1,4 @@
-package epss.view.item;
+package epss.view.contract;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +21,6 @@ import epss.view.common.EsCommon;
 import epss.view.common.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import epss.common.utils.MessageUtil;
@@ -31,14 +30,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import java.math.BigDecimal;
 import java.util.*;
 
 @ManagedBean
 @ViewScoped
-public class ItemTkcttAction {
-    private static final Logger logger = LoggerFactory.getLogger(ItemTkcttAction.class);
+public class TkcttItemAction {
+    private static final Logger logger = LoggerFactory.getLogger(TkcttItemAction.class);
     @ManagedProperty(value = "#{esCttItemService}")
     private EsCttItemService esCttItemService;
     @ManagedProperty(value = "#{esInitPowerService}")
@@ -377,7 +375,7 @@ public class ItemTkcttAction {
 
         //该编码已经存在
         if(!strSubmitType.equals("Upd")){
-            if(getItemOfEsItemHieRelapByStrNo(strIgnoreSpaceOfStr, cttItemShowList)!=null){
+            if(getEsCttItemByStrNo(strIgnoreSpaceOfStr, cttItemShowList)!=null){
             }
             else{ //该编码不存在
             }
@@ -406,7 +404,7 @@ public class ItemTkcttAction {
         }else{
             String strParentNo=strIgnoreSpaceOfStr.substring(0,intLastIndexof);
             CttItemShow cttItemShowTemp1 =new CttItemShow();
-            cttItemShowTemp1 =getItemOfEsItemHieRelapByStrNo(strParentNo, cttItemShowList);
+            cttItemShowTemp1 =getEsCttItemByStrNo(strParentNo, cttItemShowList);
             if(cttItemShowTemp1 ==null|| cttItemShowTemp1.getPkid()==null){
                 MessageUtil.addError("请确认输入的编码！父层" + strParentNo + "不存在！");
                 return strNoBlurFalse();
@@ -448,10 +446,6 @@ public class ItemTkcttAction {
                 }
                 delThisRecordAction(cttItemShowDel);
             }else{
-                if(ToolUtil.getStrIgnoreNull(cttItemShowUpd.getStrNo()).length()==0){
-                    MessageUtil.addError("请确认选择的行，合计行不可编辑！");
-                    return;
-                }
                 if(!subMitActionPreCheck()){
                     return ;
                 }
@@ -460,6 +454,10 @@ public class ItemTkcttAction {
                     return ;
                 }
                 if(strSubmitType .equals("Upd")) {
+                    if(ToolUtil.getStrIgnoreNull(cttItemShowUpd.getStrNo()).length()==0){
+                        MessageUtil.addError("请确认选择的行，合计行不可编辑！");
+                        return;
+                    }
                     esCttItemService.updateRecord(cttItemShowUpd) ;
                 }
                 else if(strSubmitType .equals("Add")) {
@@ -502,7 +500,7 @@ public class ItemTkcttAction {
         return tempEsCttItemList;
     }
     /*在总包合同列表中根据编号找到项*/
-    private CttItemShow getItemOfEsItemHieRelapByStrNo(
+    private CttItemShow getEsCttItemByStrNo(
              String strNo,
              List<CttItemShow> cttItemShowListPara){
         CttItemShow cttItemShowTemp =null;
@@ -543,19 +541,20 @@ public class ItemTkcttAction {
 
             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
-                    int Orderid=esCttItemService.getMaxOrderidInEsCttItemList(strBelongToType,strBelongToPkid, "root",1);
+                   /* int Orderid=esCttItemService.getMaxOrderidInEsCttItemList(strBelongToType,strBelongToPkid, "root",1);
                     EsCttItem esCttItemTemp=new EsCttItem();
                     esCttItemTemp.setBelongToType(strBelongToType);
                     esCttItemTemp.setBelongToPkid(strBelongToPkid);
                     esCttItemTemp.setParentPkid("root");
                     esCttItemTemp.setGrade(1);
                     esCttItemTemp.setName("(其它)");
-                    esCttItemTemp.setSpareField("留作成本计划对应总包合同空头项");
+                    esCttItemTemp.setSpareField("ForCstplItemNullCorresponding");
                     if(!esCttItemService.isExistSameNameNodeInDb(esCttItemTemp)){
                         esCttItemTemp.setOrderid(Orderid+1);
                         esCttItemService.insertRecord(esCttItemTemp);
-                    }
-                    initData();
+                        initData();
+                    }*/
+
                     esFlowControl.mngFinishAction(
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),

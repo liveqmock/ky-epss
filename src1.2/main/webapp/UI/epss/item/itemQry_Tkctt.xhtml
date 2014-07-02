@@ -22,29 +22,29 @@
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
             <h:panelGrid id="pgCondition" columns="2"
-                    rendered="#{itemTkcttAction.strFlowType eq 'Qry'? 'false':'true'}">
-                <p:commandButton id="endInputBtn" value="#{itemTkcttAction.strFlowType eq 'Check'? '审核通过':
-                     itemTkcttAction.strFlowType eq 'DoubleCheck'? '复核通过':
-                     itemTkcttAction.strFlowType eq 'Approve'? '批准通过':null}"
-                                 action="#{itemTkcttAction.onClickForPowerAction('Pass')}"
-                                 rendered='#{!itemTkcttAction.strMngNotFinishFlag}'
+                    rendered="#{tkcttItemAction.strFlowType eq 'Qry'? 'false':'true'}">
+                <p:commandButton id="endInputBtn" value="#{tkcttItemAction.strFlowType eq 'Check'? '审核通过':
+                     tkcttItemAction.strFlowType eq 'DoubleCheck'? '复核通过':
+                     tkcttItemAction.strFlowType eq 'Approve'? '批准通过':null}"
+                                 action="#{tkcttItemAction.onClickForPowerAction('Pass')}"
+                                 rendered='#{!tkcttItemAction.strMngNotFinishFlag}'
                                  update="msgs,pgCondition">
                 </p:commandButton>
-                <p:commandButton id="startInputBtn" value="#{itemTkcttAction.strFlowType eq 'Check'? '审核未过':
-                     itemTkcttAction.strFlowType eq 'DoubleCheck'? '复核未过至状态:':
-                     itemTkcttAction.strFlowType eq 'Approve'? '批准未过至状态:':null}"
-                                 action="#{itemTkcttAction.onClickForPowerAction('Fail')}"
-                                 rendered='#{itemTkcttAction.strMngNotFinishFlag}'
+                <p:commandButton id="startInputBtn" value="#{tkcttItemAction.strFlowType eq 'Check'? '审核未过':
+                     tkcttItemAction.strFlowType eq 'DoubleCheck'? '复核未过至状态:':
+                     tkcttItemAction.strFlowType eq 'Approve'? '批准未过至状态:':null}"
+                                 action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
+                                 rendered='#{tkcttItemAction.strMngNotFinishFlag}'
                                  update="msgs,pgCondition">
                 </p:commandButton>
-                <p:selectOneMenu id="statusFlag" value="#{itemTkcttAction.strNotPassToStatus}"
-                                 rendered="#{itemTkcttAction.strFlowType eq 'Check'?'false':
-                                 itemTkcttAction.strMngNotFinishFlag eq 'true'?'true':'false'}">
+                <p:selectOneMenu id="statusFlag" value="#{tkcttItemAction.strNotPassToStatus}"
+                                 rendered="#{tkcttItemAction.strFlowType eq 'Check'?'false':
+                                 tkcttItemAction.strMngNotFinishFlag eq 'true'?'true':'false'}">
                     <f:selectItems value="#{esFlowControl.statusFlagList}"/>
                 </p:selectOneMenu>
             </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{itemTkcttAction.cttItemShowList}"
+                         value="#{tkcttItemAction.cttItemShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
                          selectionMode="single"
@@ -53,7 +53,7 @@
                          rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle':record.name eq '总合计'? 'rowDoneStyle':null}">
                 <p:column headerText="操作" style="width:30px">
                     <p:commandButton  icon="ui-icon-search"
-                                      action="#{itemTkcttAction.selectRecordAction('Sel',record)}"
+                                      action="#{tkcttItemAction.selectRecordAction('Sel',record)}"
                                       update="pdt,:form:pgView,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
                     </p:commandButton>
@@ -96,39 +96,39 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel for="noItemHieRelap" value="编号:" />
                         <h:inputText id="noItemHieRelap"
-                                     value="#{itemTkcttAction.cttItemShowSel.strNo}"
+                                     value="#{tkcttItemAction.cttItemShowSel.strNo}"
                                      style="background-color:gainsboro;"
                                      readonly="true">
                         </h:inputText>
                         <p:outputLabel for="name" value="名称:" />
-                        <h:inputText id="name" value="#{itemTkcttAction.cttItemShowSel.name}"
+                        <h:inputText id="name" value="#{tkcttItemAction.cttItemShowSel.name}"
                                      style="background-color:gainsboro;"
                                      readonly="true"/>
                         <p:outputLabel for="note" value="备注内容:" />
-                        <h:inputText id="note" value="#{itemTkcttAction.cttItemShowSel.note}"
+                        <h:inputText id="note" value="#{tkcttItemAction.cttItemShowSel.note}"
                                      style="background-color:gainsboro;"
                                      readonly="true"/>
                         <p:outputLabel for="unitItemInfo" value="单位:"/>
-                        <h:inputText id="unitItemInfo" value="#{itemTkcttAction.cttItemShowSel.unit}"
+                        <h:inputText id="unitItemInfo" value="#{tkcttItemAction.cttItemShowSel.unit}"
                                      style="background-color:gainsboro;"
                                      readonly="true"/>
                         <p:outputLabel for="contractUnitPriceItemInfo" value="合同单价:"/>
                         <h:inputText id="contractUnitPriceItemInfo"
-                                     value="#{itemTkcttAction.cttItemShowSel.contractUnitPrice}"
+                                     value="#{tkcttItemAction.cttItemShowSel.contractUnitPrice}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true" >
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractQuantityItemInfo" value="合同数量:"/>
                         <h:inputText id="contractQuantityItemInfo"
-                                     value="#{itemTkcttAction.cttItemShowSel.contractQuantity}"
+                                     value="#{tkcttItemAction.cttItemShowSel.contractQuantity}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractAmountItemInfo" value="合同金额:"/>
                         <h:inputText id="contractAmountItemInfo"
-                                     value="#{itemTkcttAction.cttItemShowSel.contractAmount}"
+                                     value="#{tkcttItemAction.cttItemShowSel.contractAmount}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
@@ -136,27 +136,27 @@
                         <p:outputLabel for="originFlagItemInfo" value="数据来源:" />
                         <h:inputText id="originFlagItemInfo"
                                      value="#{esCommon.originFlagListValueOfAlias(
-	                                             itemTkcttAction.cttItemShowSel.originFlag)}"
+	                                             tkcttItemAction.cttItemShowSel.originFlag)}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdByItemInfo" value="创建人:" />
-                        <h:inputText id="createdByItemInfo" value="#{itemTkcttAction.cttItemShowSel.createdByName}"
+                        <h:inputText id="createdByItemInfo" value="#{tkcttItemAction.cttItemShowSel.createdByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdDateItemInfo" value="创建时间:" />
-                        <h:inputText id="createdDateItemInfo" value="#{itemTkcttAction.cttItemShowSel.createdDate}"
+                        <h:inputText id="createdDateItemInfo" value="#{tkcttItemAction.cttItemShowSel.createdDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdByItemInfo" value="修改人:" />
-                        <h:inputText id="lastUpdByItemInfo" value="#{itemTkcttAction.cttItemShowSel.lastUpdByName}"
+                        <h:inputText id="lastUpdByItemInfo" value="#{tkcttItemAction.cttItemShowSel.lastUpdByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdDateItemInfo" value="修改时间:" />
-                        <h:inputText id="lastUpdDateItemInfo" value="#{itemTkcttAction.cttItemShowSel.lastUpdDate}"
+                        <h:inputText id="lastUpdDateItemInfo" value="#{tkcttItemAction.cttItemShowSel.lastUpdDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="modificationNumItemInfo" value="修改次数:" />
-                        <h:inputText id="modificationNumItemInfo" value="#{itemTkcttAction.cttItemShowSel.modificationNum}"
+                        <h:inputText id="modificationNumItemInfo" value="#{tkcttItemAction.cttItemShowSel.modificationNum}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>

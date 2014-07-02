@@ -1,8 +1,7 @@
-package epss.view.item;
+package epss.view.settle;
 
 import epss.common.enums.*;
 import epss.repository.model.model_show.ProgWorkqtyItemShow;
-import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.*;
 import epss.service.*;
@@ -10,7 +9,6 @@ import epss.service.common.EsFlowService;
 import epss.view.common.EsCommon;
 import epss.view.common.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
-import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import epss.common.utils.MessageUtil;
@@ -32,8 +30,8 @@ import java.util.*;
  */
 @ManagedBean
 @ViewScoped
-public class ItemSubcttEngQStlAction {
-    private static final Logger logger = LoggerFactory.getLogger(ItemSubcttEngQStlAction.class);
+public class SubcttStlQItemAction {
+    private static final Logger logger = LoggerFactory.getLogger(SubcttStlQItemAction.class);
     @ManagedProperty(value = "#{esCttInfoService}")
     private EsCttInfoService esCttInfoService;
     @ManagedProperty(value = "#{esCttItemService}")

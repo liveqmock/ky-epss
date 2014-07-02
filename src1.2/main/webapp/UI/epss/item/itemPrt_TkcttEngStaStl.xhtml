@@ -23,9 +23,9 @@
             <p:growl id="msgs" showDetail="false"/>
             <h:panelGrid columns="2">
                 <p:commandButton value="导出到EXCEL"
-                                 action="#{itemTkcttEngStaStlAction.onExportExcel}"
+                                 action="#{tkcttStlStaItemAction.onExportExcel}"
                                  ajax="false"
-                                 rendered="#{itemTkcttEngStaStlAction.strExportToExcelRendered}">
+                                 rendered="#{tkcttStlStaItemAction.strExportToExcelRendered}">
                 </p:commandButton>
                 <p:ajaxStatus style="width:16px;height:16px;">
                     <f:facet name="start">
@@ -38,16 +38,16 @@
             </h:panelGrid>
             <p:contextMenu for="ptt" id="pcm">
                 <p:menuitem value="浏览" icon="ui-icon-pencil"
-                            actionListener="#{itemTkcttEngStaStlAction.selectRecordAction('Sel')}"
+                            actionListener="#{tkcttStlStaItemAction.selectRecordAction('Sel')}"
                             update="pgView,ptt,msgs"
                             onclick="PF('wVDlgView').show()">
                 </p:menuitem>
             </p:contextMenu>
             <p:dataTable id="ptt" style="width:100%;"
-                         value="#{itemTkcttEngStaStlAction.progEstMeaItemShowList}"
+                         value="#{tkcttStlStaItemAction.progEstMeaItemShowList}"
                          var="record"
                          rowKey="#{record.tkctt_Pkid}"
-                         selection="#{itemTkcttEngStaStlAction.progEstMeaItemShowSelected}"
+                         selection="#{tkcttStlStaItemAction.progEstMeaItemShowSelected}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -108,74 +108,74 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel for="noItemHieRelap" value="编号:"/>
                         <h:inputText id="noItemHieRelap"
-                                     value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.tkctt_StrNo}"
+                                     value="#{tkcttStlStaItemAction.progEstMeaItemShow.tkctt_StrNo}"
                                      style="background-color:gainsboro"
                                      readonly="true">
                         </h:inputText>
                         <p:outputLabel for="name" value="名称:"/>
-                        <h:inputText id="name" value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.tkctt_Name}"
+                        <h:inputText id="name" value="#{tkcttStlStaItemAction.progEstMeaItemShow.tkctt_Name}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="note" value="备注内容:"/>
-                        <h:inputText id="note" value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.tkctt_Note}"
+                        <h:inputText id="note" value="#{tkcttStlStaItemAction.progEstMeaItemShow.tkctt_Note}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="unitItemInfo" value="单位:"/>
                         <h:inputText id="unitItemInfo"
-                                     value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.tkctt_Unit}"
+                                     value="#{tkcttStlStaItemAction.progEstMeaItemShow.tkctt_Unit}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="contractUnitPriceItemInfo" value="合同单价:"/>
                         <h:inputText id="contractUnitPriceItemInfo"
-                                     value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.tkctt_ContractUnitPrice}"
+                                     value="#{tkcttStlStaItemAction.progEstMeaItemShow.tkctt_ContractUnitPrice}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="contractQuantityItemInfo" value="合同数量:"/>
                         <h:inputText id="contractQuantityItemInfo"
-                                     value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.tkctt_ContractQuantity}"
+                                     value="#{tkcttStlStaItemAction.progEstMeaItemShow.tkctt_ContractQuantity}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="eng_BeginToCurrentPeriodEQty" value="开累工程量:"/>
                         <h:inputText id="eng_BeginToCurrentPeriodEQty"
-                                     value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.eng_BeginToCurrentPeriodEQty}"
+                                     value="#{tkcttStlStaItemAction.progEstMeaItemShow.eng_BeginToCurrentPeriodEQty}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="eng_CurrentPeriodEQty" value="本期工程量:"/>
                         <h:inputText id="eng_CurrentPeriodEQty"
-                                     value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.eng_CurrentPeriodEQty}"
+                                     value="#{tkcttStlStaItemAction.progEstMeaItemShow.eng_CurrentPeriodEQty}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="createdByItemInfo" value="创建人:"/>
                         <h:inputText id="createdByItemInfo"
-                                     value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.eng_CreatedByName}"
+                                     value="#{tkcttStlStaItemAction.progEstMeaItemShow.eng_CreatedByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdDateItemInfo" value="创建时间:"/>
                         <h:inputText id="createdDateItemInfo"
-                                     value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.eng_CreatedDate}"
+                                     value="#{tkcttStlStaItemAction.progEstMeaItemShow.eng_CreatedDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdByItemInfo" value="修改人:"/>
                         <h:inputText id="lastUpdByItemInfo"
-                                     value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.eng_LastUpdByName}"
+                                     value="#{tkcttStlStaItemAction.progEstMeaItemShow.eng_LastUpdByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdDateItemInfo" value="修改时间:"/>
                         <h:inputText id="lastUpdDateItemInfo"
-                                     value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.eng_LastUpdDate}"
+                                     value="#{tkcttStlStaItemAction.progEstMeaItemShow.eng_LastUpdDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="modificationNumItemInfo" value="修改次数:"/>
                         <h:inputText id="modificationNumItemInfo"
-                                     value="#{itemTkcttEngStaStlAction.progEstMeaItemShow.eng_ModificationNum}"
+                                     value="#{tkcttStlStaItemAction.progEstMeaItemShow.eng_ModificationNum}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
@@ -183,7 +183,7 @@
                         <p:outputLabel for="originFlagItemInfo" value="数据来源:"/>
                         <h:inputText id="originFlagItemInfo"
                                      value="#{esCommon.originFlagListValueOfAlias(
-	                                             itemTkcttEngStaStlAction.progEstMeaItemShow.eng_OriginFlag)}"
+	                                             tkcttStlStaItemAction.progEstMeaItemShow.eng_OriginFlag)}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                     </h:panelGrid>

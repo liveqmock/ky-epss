@@ -25,16 +25,16 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel value="总包合同：" for="tkcttPkid" />
                         <p:selectOneMenu id="tkcttPkid"
-                                         value="#{itemQryByTkMeaCSubStlQAction.strTkcttPkid}">
-                            <f:selectItems value="#{itemQryByTkMeaCSubStlQAction.tkcttList}"/>
+                                         value="#{tkMeaCSubStlQItemAction.strTkcttPkid}">
+                            <f:selectItems value="#{tkMeaCSubStlQItemAction.tkcttList}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="期数编码：" for="periodNo"/>
-                        <p:inputText id="periodNo" value="#{itemQryByTkMeaCSubStlQAction.strPeriodNo}"
+                        <p:inputText id="periodNo" value="#{tkMeaCSubStlQItemAction.strPeriodNo}"
                                      onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                     </h:panelGrid>
                     <h:panelGrid columns="3">
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{itemQryByTkMeaCSubStlQAction.onQueryAction()}"
+                                         action="#{tkMeaCSubStlQItemAction.onQueryAction()}"
                                          update="pdt,msgs,pgCondition,exportToExcel">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
@@ -55,13 +55,13 @@
             <h:panelGrid id="exportToExcel">
                 <p:commandButton
                                  value="导出到EXCEL"
-                                 action="#{itemQryByTkMeaCSubStlQAction.onExportExcel}"
+                                 action="#{tkMeaCSubStlQItemAction.onExportExcel}"
                                  ajax="false"
-                                 rendered="#{itemQryByTkMeaCSubStlQAction.strExportToExcelRendered}">
+                                 rendered="#{tkMeaCSubStlQItemAction.strExportToExcelRendered}">
                 </p:commandButton>
             </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{itemQryByTkMeaCSubStlQAction.qryTkMeaCSStlQShowList}"
+                         value="#{tkMeaCSubStlQItemAction.qryTkMeaCSStlQShowList}"
                          var="record"
                          rowKey="#{record.strTkctt_Pkid}"
                          selectionMode="single"

@@ -25,13 +25,13 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel value="成本计划：" for="cstplPkid" />
                         <p:selectOneMenu id="cstplPkid"
-                                         value="#{itemQryByCSubAction.esCttItem.belongToPkid}">
-                            <f:selectItems value="#{itemQryByCSubAction.cstplList}"/>
+                                         value="#{CSubItemAction.esCttItem.belongToPkid}">
+                            <f:selectItems value="#{CSubItemAction.cstplList}"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
                     <h:panelGrid columns="3">
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{itemQryByCSubAction.onQueryAction()}"
+                                         action="#{CSubItemAction.onQueryAction()}"
                                          update="pgCondition,pdt,msgs,exportToExcel">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
@@ -51,13 +51,13 @@
             </p:panel>
             <h:panelGrid id="exportToExcel">
                 <p:commandButton value="导出到EXCEL"
-                                 action="#{itemQryByCSubAction.onExportExcel}"
+                                 action="#{CSubItemAction.onExportExcel}"
                                  ajax="false"
-                                 rendered="#{itemQryByCSubAction.strExportToExcelRendered}">
+                                 rendered="#{CSubItemAction.strExportToExcelRendered}">
                 </p:commandButton>
             </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{itemQryByCSubAction.qryCSShowList}"
+                         value="#{CSubItemAction.qryCSShowList}"
                          var="record"
                          rowKey="#{record.strCstpl_Pkid}"
                          selectionMode="single"

@@ -34,20 +34,20 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel value="分包合同：" for="id" />
                         <p:selectOneMenu id="id"
-                                         value="#{esInitSubcttStlPAction.progInfoShow.stlPkid}"
-                                         disabled="#{esInitSubcttStlPAction.styleModel.disabled_Flag}"
-                                         style="#{esInitSubcttStlPAction.styleModel.disabled_Style};">
-                            <f:selectItems value="#{esInitSubcttStlPAction.subcttList}"/>
+                                         value="#{subcttStlPInfoAction.progInfoShow.stlPkid}"
+                                         disabled="#{subcttStlPInfoAction.styleModel.disabled_Flag}"
+                                         style="#{subcttStlPInfoAction.styleModel.disabled_Style};">
+                            <f:selectItems value="#{subcttStlPInfoAction.subcttList}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="期数编码：" for="periodNo"/>
-                        <p:inputText id="periodNo" value="#{esInitSubcttStlPAction.progInfoShow.periodNo}"
+                        <p:inputText id="periodNo" value="#{subcttStlPInfoAction.progInfoShow.periodNo}"
                                      onclick="WdatePicker({dateFmt:'yyyyMM'})"
-                                     disabled="#{esInitSubcttStlPAction.styleModel.disabled_Flag}"
-                                     style="#{esInitSubcttStlPAction.styleModel.disabled_Style};"/>
+                                     disabled="#{subcttStlPInfoAction.styleModel.disabled_Flag}"
+                                     style="#{subcttStlPInfoAction.styleModel.disabled_Style};"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{esInitSubcttStlPAction.onQueryFormedAction('Qry','true')}"
+                                         action="#{subcttStlPInfoAction.onQueryFormedAction('Qry','true')}"
                                          update="pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
@@ -64,10 +64,10 @@
                 </p:menuitem>
             </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{esInitSubcttStlPAction.progInfoShowList}"
+                         value="#{subcttStlPInfoAction.progInfoShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{esInitSubcttStlPAction.progInfoShowSelected}"
+                         selection="#{subcttStlPInfoAction.progInfoShowSelected}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"

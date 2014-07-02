@@ -23,19 +23,19 @@
             <p:growl id="msgs" showDetail="false"/>
             <p:commandButton id="addBtn"
                              value="增加" icon="ui-icon-plus"
-                             rendered='#{itemSubcttAction.strMngNotFinishFlag}'
-                             action="#{itemSubcttAction.resetActionForAdd()}"
+                             rendered='#{subcttItemAction.strMngNotFinishFlag}'
+                             action="#{subcttItemAction.resetActionForAdd()}"
                              update="pgViewForAdd,pdt,msgs"
                              onclick="PF('wVDlgViewForAdd').show()">
             </p:commandButton>
-            <p:contextMenu for="pdt" id="pcm" rendered='#{itemSubcttAction.strMngNotFinishFlag}'>
+            <p:contextMenu for="pdt" id="pcm" rendered='#{subcttItemAction.strMngNotFinishFlag}'>
                 <p:menuitem value="更新" icon="ui-icon-pencil"
-                            actionListener="#{itemSubcttAction.selectRecordAction('Upd')}"
+                            actionListener="#{subcttItemAction.selectRecordAction('Upd')}"
                             update="pgViewForUpd,pdt,msgs"
                             onclick="PF('wVDlgViewForUpd').show()">
                 </p:menuitem>
                 <p:menuitem value="删除" icon="ui-icon-trash"
-                            actionListener="#{itemSubcttAction.selectRecordAction('Del')}"
+                            actionListener="#{subcttItemAction.selectRecordAction('Del')}"
                             update="pgViewForDel,pdt,msgs"
                             onclick="PF('wVDlgViewForDel').show()">
                 </p:menuitem>
@@ -44,10 +44,10 @@
                 </p:menuitem>
             </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
-                     value="#{itemSubcttAction.cttItemShowList}"
+                     value="#{subcttItemAction.cttItemShowList}"
                      var="record"
                      rowKey="#{record.pkid}"
-                     selection="#{itemSubcttAction.cttItemShowSelected}"
+                     selection="#{subcttItemAction.cttItemShowSelected}"
                      selectionMode="single"
                      rowIndexVar="row"
                      emptyMessage="数据记录为空..."
@@ -98,12 +98,12 @@
                       esizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">
                 <p:dataTable id="pdtCstpl"
-                               value="#{(itemSubcttAction.cttItemShowList_Cstpl)}"
+                               value="#{(subcttItemAction.cttItemShowList_Cstpl)}"
                                var="recordCstpl"
                                dynamic="true"
                                selectionMode="single"
                                rowKey="#{recordCstpl.pkid}"
-                               selection="#{itemSubcttAction.cttItemShowSelected_Cstpl}"
+                               selection="#{subcttItemAction.cttItemShowSelected_Cstpl}"
                                paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                                {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                paginator="true"
@@ -142,7 +142,7 @@
                     </p:column>
                     <f:facet name="footer">
                         <p:commandButton id="cstplSelSubmitBtn" value="提交"
-                                         action="#{itemSubcttAction.submitAction_Cstpl()}"
+                                         action="#{subcttItemAction.submitAction_Cstpl()}"
                                          update=":form:pdt" oncomplete="wvCstplDetail.hide()"/>
                     </f:facet>
                 </p:dataTable>
@@ -154,77 +154,77 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel for="noItemHieRelapForAdd" value="项目编号：" />
                         <h:inputText id="noItemHieRelapForAdd"
-                                     value="#{itemSubcttAction.cttItemShowAdd.strNo}">
+                                     value="#{subcttItemAction.cttItemShowAdd.strNo}">
                             <p:ajax event="blur" update="msgs,pgOperBtnForAdd,strCorrespondingItemNoForAdd"
-                                    listener="#{itemSubcttAction.blurStrNoToGradeAndOrderid()}"/>
+                                    listener="#{subcttItemAction.blurStrNoToGradeAndOrderid()}"/>
                         </h:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="3">
                         <p:outputLabel for="nameForAdd" value="项目名称：" />
                         <p:selectOneMenu id="nameForAdd"
-                                         value="#{itemSubcttAction.cttItemShowAdd.name}"
+                                         value="#{subcttItemAction.cttItemShowAdd.name}"
                                          editable="true">
                             <f:selectItems value="#{esCommon.subcttItemNamelist}" />
                             <p:ajax update="msgs,contractQuantityForAdd,contractUnitPriceForAdd,contractAmountForAdd"
-                                    listener="#{itemSubcttAction.blurStrName()}"/>
+                                    listener="#{subcttItemAction.blurStrName()}"/>
                         </p:selectOneMenu>
                         <p:outputLabel  value="*固定项输入时,选择左面下拉框中的项目*" />
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:outputLabel for="strCorrespondingItemNoForAdd" value="计划项号：" />
                         <h:inputText id="strCorrespondingItemNoForAdd"
-                                     value="#{itemSubcttAction.cttItemShowAdd.strCorrespondingItemNo}">
+                                     value="#{subcttItemAction.cttItemShowAdd.strCorrespondingItemNo}">
                             <p:ajax event="blur" update="msgs,correspondingItemNameForAdd"
-                                    listener="#{itemSubcttAction.blurCorrespondingPkid}"/>
+                                    listener="#{subcttItemAction.blurCorrespondingPkid}"/>
                         </h:inputText>
                         <p:outputLabel for="correspondingItemNameForAdd" value="计划项名：" />
                         <h:inputText id="correspondingItemNameForAdd"
                                      readonly="true"
-                                     value="#{itemSubcttAction.cttItemShowAdd.strCorrespondingItemName}"
+                                     value="#{subcttItemAction.cttItemShowAdd.strCorrespondingItemName}"
                                      style="background-color:gainsboro;width:328px;">
                         </h:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel for="unitForAdd" value="单位："/>
                         <h:inputText id="unitForAdd"
-                                     value="#{itemSubcttAction.cttItemShowAdd.unit}"
+                                     value="#{subcttItemAction.cttItemShowAdd.unit}"
                                      style="text-align:right;"/>
                         <p:outputLabel for="contractQuantityForAdd" value="合同数量："/>
                         <h:inputText id="contractQuantityForAdd"
-                                     value="#{itemSubcttAction.cttItemShowAdd.contractQuantity}"
+                                     value="#{subcttItemAction.cttItemShowAdd.contractQuantity}"
                                      style="text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                             <p:ajax event="blur" update="contractAmountForAdd"
-                                    listener="#{itemSubcttAction.blurCalculateAmountAction}"/>
+                                    listener="#{subcttItemAction.blurCalculateAmountAction}"/>
                         </h:inputText>
                         <p:outputLabel for="contractUnitPriceForAdd" value="综合单价："/>
                         <h:inputText id="contractUnitPriceForAdd"
-                                     value="#{itemSubcttAction.cttItemShowAdd.contractUnitPrice}"
+                                     value="#{subcttItemAction.cttItemShowAdd.contractUnitPrice}"
                                      style="text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                             <p:ajax event="blur" update="contractAmountForAdd"
-                                    listener="#{itemSubcttAction.blurCalculateAmountAction}"/>
+                                    listener="#{subcttItemAction.blurCalculateAmountAction}"/>
                         </h:inputText>
                         <p:outputLabel for="contractAmountForAdd" value="合同金额："/>
                         <h:inputText id="contractAmountForAdd"
-                                     value="#{itemSubcttAction.cttItemShowAdd.contractAmount}">
+                                     value="#{subcttItemAction.cttItemShowAdd.contractAmount}">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="signPartAPriceForAdd" value="甲供材价："/>
                         <h:inputText id="signPartAPriceForAdd"
-                                     value="#{itemSubcttAction.cttItemShowAdd.signPartAPrice}"
+                                     value="#{subcttItemAction.cttItemShowAdd.signPartAPrice}"
                                      style="text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="noteForAdd" value="备注内容：" />
                         <h:inputText id="noteForAdd"
-                                     value="#{itemSubcttAction.cttItemShowAdd.note}"
+                                     value="#{subcttItemAction.cttItemShowAdd.note}"
                                      style="text-align:left;"/>
                     </h:panelGrid>
-                    <h:panelGrid id="pgOperBtnForAdd" columns="4" rendered='#{itemSubcttAction.strMngNotFinishFlag}'>
+                    <h:panelGrid id="pgOperBtnForAdd" columns="4" rendered='#{subcttItemAction.strMngNotFinishFlag}'>
                         <p:commandButton id="submitBtnForAdd"
                                          value="提交（增加）"
-                                         action="#{itemSubcttAction.submitThisRecordAction}"
+                                         action="#{subcttItemAction.submitThisRecordAction}"
                                          update="pgOperBtnForAdd,pdt,msgs,pcm,pgViewForAdd">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForAdd" value="重置"
@@ -251,109 +251,109 @@
                         <h:inputText id="noItemHieRelapForUpd"
                                      readonly="true"
                                      style="background-color:gainsboro"
-                                     value="#{itemSubcttAction.cttItemShowUpd.strNo}">
+                                     value="#{subcttItemAction.cttItemShowUpd.strNo}">
                         </h:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="3">
                         <p:outputLabel for="nameForUpd" value="项目名称：" />
                         <p:selectOneMenu id="nameForUpd"
-                                         value="#{itemSubcttAction.cttItemShowUpd.name}"
+                                         value="#{subcttItemAction.cttItemShowUpd.name}"
                                          editable="true">
                             <f:selectItems value="#{esCommon.subcttItemNamelist}" />
                             <p:ajax update="msgs,contractQuantityForUpd,contractUnitPriceForUpd,contractAmountForUpd"
-                                    listener="#{itemSubcttAction.blurStrName()}"/>
+                                    listener="#{subcttItemAction.blurStrName()}"/>
                         </p:selectOneMenu>
                         <p:outputLabel  value="*固定项输入时,选择左面下拉框中的项目*" />
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:outputLabel for="strCorrespondingItemNoForUpd" value="计划项号：" />
                         <h:inputText id="strCorrespondingItemNoForUpd"
-                                     value="#{itemSubcttAction.cttItemShowUpd.strCorrespondingItemNo}">
+                                     value="#{subcttItemAction.cttItemShowUpd.strCorrespondingItemNo}">
                             <p:ajax event="blur" update="msgs,correspondingItemNameForUpd"
-                                    listener="#{itemSubcttAction.blurCorrespondingPkid}"/>
+                                    listener="#{subcttItemAction.blurCorrespondingPkid}"/>
                         </h:inputText>
                         <p:outputLabel for="correspondingItemNameForUpd" value="计划项名：" />
                         <h:inputText id="correspondingItemNameForUpd"
                                      readonly="true"
-                                     value="#{itemSubcttAction.cttItemShowUpd.strCorrespondingItemName}"
+                                     value="#{subcttItemAction.cttItemShowUpd.strCorrespondingItemName}"
                                      style="background-color:gainsboro;width:328px;">
                         </h:inputText>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel for="unitForUpd" value="单位："/>
                         <h:inputText id="unitForUpd"
-                                     value="#{itemSubcttAction.cttItemShowUpd.unit}"
+                                     value="#{subcttItemAction.cttItemShowUpd.unit}"
                                      style="text-align:right;"/>
                         <p:outputLabel for="contractQuantityForUpd" value="合同数量："/>
                         <h:inputText id="contractQuantityForUpd"
-                                     value="#{itemSubcttAction.cttItemShowUpd.contractQuantity}"
+                                     value="#{subcttItemAction.cttItemShowUpd.contractQuantity}"
                                      style="text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                             <p:ajax event="blur" update="contractAmountForUpd"
-                                    listener="#{itemSubcttAction.blurCalculateAmountAction}"/>
+                                    listener="#{subcttItemAction.blurCalculateAmountAction}"/>
                         </h:inputText>
                         <p:outputLabel for="contractUnitPriceForUpd" value="综合单价："/>
                         <h:inputText id="contractUnitPriceForUpd"
-                                     value="#{itemSubcttAction.cttItemShowUpd.contractUnitPrice}"
+                                     value="#{subcttItemAction.cttItemShowUpd.contractUnitPrice}"
                                      style="text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                             <p:ajax event="blur" update="contractAmountForUpd"
-                                    listener="#{itemSubcttAction.blurCalculateAmountAction}"/>
+                                    listener="#{subcttItemAction.blurCalculateAmountAction}"/>
                         </h:inputText>
                         <p:outputLabel for="contractAmountForUpd" value="合同金额："/>
                         <h:inputText id="contractAmountForUpd"
                                      readonly="true"
-                                     value="#{itemSubcttAction.cttItemShowUpd.contractAmount}"
+                                     value="#{subcttItemAction.cttItemShowUpd.contractAmount}"
                                      style="background-color:gainsboro;text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="signPartAPriceForUpd" value="甲供材价："/>
                         <h:inputText id="signPartAPriceForUpd"
-                                     value="#{itemSubcttAction.cttItemShowUpd.signPartAPrice}"
+                                     value="#{subcttItemAction.cttItemShowUpd.signPartAPrice}"
                                      style="text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="noteForUpd" value="备注内容：" />
                         <h:inputText id="noteForUpd"
-                                     value="#{itemSubcttAction.cttItemShowUpd.note}"
+                                     value="#{subcttItemAction.cttItemShowUpd.note}"
                                      style="text-align:left;"/>
                         <p:outputLabel for="originFlagForUpd" value="数据来源：" />
                         <h:inputText id="originFlagForUpd"
                                      value="#{esCommon.originFlagListValueOfAlias(
-                                 itemSubcttAction.cttItemShowUpd.originFlag)}"
+                                 subcttItemAction.cttItemShowUpd.originFlag)}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="modificationNumForUpd" value="修改次数：" />
                         <h:inputText id="modificationNumForUpd"
-                                     value="#{itemSubcttAction.cttItemShowUpd.modificationNum}"
+                                     value="#{subcttItemAction.cttItemShowUpd.modificationNum}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                         </h:inputText>
                         <p:outputLabel for="createdByForUpd" value="创建人：" />
                         <h:inputText id="createdByForUpd"
-                                     value="#{itemSubcttAction.cttItemShowUpd.createdByName}"
+                                     value="#{subcttItemAction.cttItemShowUpd.createdByName}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel for="createdDateForUpd" value="创建时间：" />
                         <h:inputText id="createdDateForUpd"
-                                     value="#{itemSubcttAction.cttItemShowUpd.createdDate}"
+                                     value="#{subcttItemAction.cttItemShowUpd.createdDate}"
                                      readonly="true"
                                      style="background-color:gainsboro"/>
                         <p:outputLabel for="lastUpdByForUpd" value="修改人：" />
                         <h:inputText id="lastUpdByForUpd"
-                                     value="#{itemSubcttAction.cttItemShowUpd.lastUpdByName}"
+                                     value="#{subcttItemAction.cttItemShowUpd.lastUpdByName}"
                                      readonly="true"
                                      style="background-color:gainsboro"/>
                         <p:outputLabel for="lastUpdDateForUpd" value="修改时间：" />
                         <h:inputText id="lastUpdDateForUpd"
-                                     value="#{itemSubcttAction.cttItemShowUpd.lastUpdDate}"
+                                     value="#{subcttItemAction.cttItemShowUpd.lastUpdDate}"
                                      readonly="true"
                                      style="background-color:gainsboro"/>
                     </h:panelGrid>
-                    <h:panelGrid id="pgOperBtnForUpd" columns="4" rendered='#{itemSubcttAction.strMngNotFinishFlag}'>
+                    <h:panelGrid id="pgOperBtnForUpd" columns="4" rendered='#{subcttItemAction.strMngNotFinishFlag}'>
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
-                                         action="#{itemSubcttAction.submitThisRecordAction}"
+                                         action="#{subcttItemAction.submitThisRecordAction}"
                                          update="pgOperBtnForUpd,pdt,msgs,pcm,pgViewForUpd">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForUpd" value="重置"
@@ -378,7 +378,7 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel for="noItemHieRelapForDel" value="项目编号：" />
                         <h:inputText id="noItemHieRelapForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.strNo}"
+                                     value="#{subcttItemAction.cttItemShowDel.strNo}"
                                      readonly="true"
                                      style="background-color:gainsboro">
                         </h:inputText>
@@ -386,7 +386,7 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel for="nameForDel" value="项目名称：" />
                         <h:inputText id="nameForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.name}"
+                                     value="#{subcttItemAction.cttItemShowDel.name}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;">
                         </h:inputText>
@@ -394,13 +394,13 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel for="strCorrespondingItemNoForDel" value="计划项号：" />
                         <h:inputText id="strCorrespondingItemNoForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.strCorrespondingItemNo}"
+                                     value="#{subcttItemAction.cttItemShowDel.strCorrespondingItemNo}"
                                      readonly="true"
                                      style="background-color:gainsboro">
                         </h:inputText>
                         <p:outputLabel for="correspondingItemNameForDel" value="计划项名：" />
                         <h:inputText id="correspondingItemNameForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.strCorrespondingItemName}"
+                                     value="#{subcttItemAction.cttItemShowDel.strCorrespondingItemName}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;">
                         </h:inputText>
@@ -408,79 +408,79 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel for="unitForDel" value="单位："/>
                         <h:inputText id="unitForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.unit}"
+                                     value="#{subcttItemAction.cttItemShowDel.unit}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;"/>
                         <p:outputLabel for="contractQuantityForDel" value="合同数量："/>
                         <h:inputText id="contractQuantityForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.contractQuantity}"
+                                     value="#{subcttItemAction.cttItemShowDel.contractQuantity}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractUnitPriceForDel" value="综合单价："/>
                         <h:inputText id="contractUnitPriceForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.contractUnitPrice}"
+                                     value="#{subcttItemAction.cttItemShowDel.contractUnitPrice}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="contractAmountForDel" value="合同金额："/>
                         <h:inputText id="contractAmountForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.contractAmount}"
+                                     value="#{subcttItemAction.cttItemShowDel.contractAmount}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="signPartAPriceForDel" value="甲供材价："/>
                         <h:inputText id="signPartAPriceForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.signPartAPrice}"
+                                     value="#{subcttItemAction.cttItemShowDel.signPartAPrice}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:inputText>
                         <p:outputLabel for="noteForDel" value="备注内容：" />
                         <h:inputText id="noteForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.note}"
+                                     value="#{subcttItemAction.cttItemShowDel.note}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:left;"/>
                         <p:outputLabel for="originFlagForDel" value="数据来源：" />
                         <h:inputText id="originFlagForDel"
                                      value="#{esCommon.originFlagListValueOfAlias(
-                                 itemSubcttAction.cttItemShowDel.originFlag)}"
+                                 subcttItemAction.cttItemShowDel.originFlag)}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="modificationNumForDel" value="修改次数：" />
                         <h:inputText id="modificationNumForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.modificationNum}"
+                                     value="#{subcttItemAction.cttItemShowDel.modificationNum}"
                                      readonly="true"
                                      style="background-color:gainsboro;text-align:right;">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                         </h:inputText>
                         <p:outputLabel for="createdByForDel" value="创建人：" />
                         <h:inputText id="createdByForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.createdByName}"
+                                     value="#{subcttItemAction.cttItemShowDel.createdByName}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel for="createdDateForDel" value="创建时间：" />
                         <h:inputText id="createdDateForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.createdDate}"
+                                     value="#{subcttItemAction.cttItemShowDel.createdDate}"
                                      readonly="true"
                                      style="background-color:gainsboro"/>
                         <p:outputLabel for="lastUpdByForDel" value="修改人：" />
                         <h:inputText id="lastUpdByForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.lastUpdByName}"
+                                     value="#{subcttItemAction.cttItemShowDel.lastUpdByName}"
                                      readonly="true"
                                      style="background-color:gainsboro"/>
                         <p:outputLabel for="lastUpdDateForDel" value="修改时间：" />
                         <h:inputText id="lastUpdDateForDel"
-                                     value="#{itemSubcttAction.cttItemShowDel.lastUpdDate}"
+                                     value="#{subcttItemAction.cttItemShowDel.lastUpdDate}"
                                      readonly="true"
                                      style="background-color:gainsboro"/>
                     </h:panelGrid>
                     <h:panelGrid id="pgOperBtnForDel" columns="4">
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
-                                         action="#{itemSubcttAction.submitThisRecordAction}"
+                                         action="#{subcttItemAction.submitThisRecordAction}"
                                          update="pgOperBtnForDel,pdt,msgs,pcm,pgViewForDel">
                         </p:commandButton>
                         <p:ajaxStatus style="width:16px;height:16px;">

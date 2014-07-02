@@ -25,16 +25,16 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel value="成本计划：" for="cstplPkid" />
                         <p:selectOneMenu id="cstplPkid"
-                                         value="#{itemQryByHieRelapCSubStlMAction.strCstplPkid}">
-                            <f:selectItems value="#{itemQryByHieRelapCSubStlMAction.cstplList}"/>
+                                         value="#{CSubStlMItemAction.strCstplPkid}">
+                            <f:selectItems value="#{CSubStlMItemAction.cstplList}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="期数编码：" for="periodNo"/>
-                        <p:inputText id="periodNo" value="#{itemQryByHieRelapCSubStlMAction.strPeriodNo}"
+                        <p:inputText id="periodNo" value="#{CSubStlMItemAction.strPeriodNo}"
                                      onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{itemQryByHieRelapCSubStlMAction.onQueryAction()}"
+                                         action="#{CSubStlMItemAction.onQueryAction()}"
                                          update="pgCondition,msgs,pdt,exportToExcel">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
@@ -55,13 +55,13 @@
             <h:panelGrid id="exportToExcel">
                 <p:commandButton
                                  value="导出到EXCEL"
-                                 action="#{itemQryByHieRelapCSubStlMAction.onExportExcel}"
+                                 action="#{CSubStlMItemAction.onExportExcel}"
                                  ajax="false"
-                                 rendered="#{itemQryByHieRelapCSubStlMAction.strExportToExcelRendered}">
+                                 rendered="#{CSubStlMItemAction.strExportToExcelRendered}">
                 </p:commandButton>
             </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{itemQryByHieRelapCSubStlMAction.qryCSStlMShowList}"
+                         value="#{CSubStlMItemAction.qryCSStlMShowList}"
                          var="record"
                          rowKey="#{record.strPkid}"
                          selectionMode="single"

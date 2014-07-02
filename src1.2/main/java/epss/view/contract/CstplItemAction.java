@@ -1,4 +1,4 @@
-package epss.view.item;
+package epss.view.contract;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +21,6 @@ import epss.view.common.EsCommon;
 import epss.view.common.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import epss.common.utils.MessageUtil;
@@ -36,8 +35,8 @@ import java.util.*;
 
 @ManagedBean
 @ViewScoped
-public class ItemCstplAction {
-    private static final Logger logger = LoggerFactory.getLogger(ItemCstplAction.class);
+public class CstplItemAction {
+    private static final Logger logger = LoggerFactory.getLogger(CstplItemAction.class);
     @ManagedProperty(value = "#{esCttItemService}")
     private EsCttItemService esCttItemService;
     @ManagedProperty(value = "#{esInitPowerService}")

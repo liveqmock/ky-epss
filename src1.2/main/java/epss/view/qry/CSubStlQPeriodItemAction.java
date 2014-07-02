@@ -1,4 +1,4 @@
-package epss.view.item;
+package epss.view.qry;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +20,6 @@ import epss.service.common.EsFlowService;
 import epss.service.common.EsQueryService;
 import epss.view.common.EsCommon;
 import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,8 +44,8 @@ import java.util.Map;
 
 @ManagedBean
 @ViewScoped
-public class ItemQryByCSubStlQPeriodAction {
-    private static final Logger logger = LoggerFactory.getLogger(ItemQryByCSubStlQPeriodAction.class);
+public class CSubStlQPeriodItemAction {
+    private static final Logger logger = LoggerFactory.getLogger(CSubStlQPeriodItemAction.class);
     @ManagedProperty(value = "#{esCttItemService}")
     private EsCttItemService esCttItemService;
     @ManagedProperty(value = "#{esCommon}")

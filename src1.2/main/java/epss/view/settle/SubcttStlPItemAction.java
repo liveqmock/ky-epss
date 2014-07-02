@@ -1,4 +1,4 @@
-package epss.view.item;
+package epss.view.settle;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
@@ -38,8 +38,8 @@ import java.util.*;
  */
 @ManagedBean
 @ViewScoped
-public class ItemSubcttEngPStlAction {
-    private static final Logger logger = LoggerFactory.getLogger(ItemSubcttEngPStlAction.class);
+public class SubcttStlPItemAction {
+    private static final Logger logger = LoggerFactory.getLogger(SubcttStlPItemAction.class);
     @ManagedProperty(value = "#{esCttInfoService}")
     private EsCttInfoService esCttInfoService;
     @ManagedProperty(value = "#{esCttItemService}")

@@ -34,19 +34,18 @@ import java.util.List;
  */
 @ManagedBean
 @ViewScoped
-public class EsInitTkcttStlStaAction {
-    private static final Logger logger = LoggerFactory.getLogger(EsInitTkcttStlStaAction.class);
+public class TkcttStlMeaInfoAction {
+    private static final Logger logger = LoggerFactory.getLogger(TkcttStlMeaInfoAction.class);
     @ManagedProperty(value = "#{esInitStlService}")
     private EsInitStlService esInitStlService;
-    @ManagedProperty(value = "#{esItemStlTkcttEngStaService}")
-    private EsItemStlTkcttEngStaService esItemStlTkcttEngStaService;
+    @ManagedProperty(value = "#{esItemStlTkcttEngMeaService}")
+    private EsItemStlTkcttEngMeaService esItemStlTkcttEngMeaService;
     @ManagedProperty(value = "#{esCttInfoService}")
     private EsCttInfoService esCttInfoService;
     @ManagedProperty(value = "#{esInitPowerService}")
     private EsInitPowerService esInitPowerService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
-
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{esCommon}")
@@ -61,7 +60,6 @@ public class EsInitTkcttStlStaAction {
     private ProgInfoShow progInfoShowDel;
 
     private List<ProgInfoShow> progInfoShowList;
-
     private List<SelectItem> tkcttList;
 
     private String strSubmitType;
@@ -78,7 +76,7 @@ public class EsInitTkcttStlStaAction {
     @PostConstruct
     public void init() {
         this.progInfoShowList = new ArrayList<ProgInfoShow>();
-        strStlType=ESEnum.ITEMTYPE6.getCode();
+        strStlType=ESEnum.ITEMTYPE7.getCode();
         resetAction();
 
         List<CttInfoShow> cttInfoShowList =
@@ -99,11 +97,11 @@ public class EsInitTkcttStlStaAction {
     }
 
     public void resetAction(){
-        progInfoShowQry = new ProgInfoShow();
-        progInfoShowSel = new ProgInfoShow();
-        progInfoShowAdd = new ProgInfoShow();
-        progInfoShowUpd = new ProgInfoShow();
-        progInfoShowDel = new ProgInfoShow();
+        progInfoShowQry =new ProgInfoShow();
+        progInfoShowSel =new ProgInfoShow();
+        progInfoShowAdd =new ProgInfoShow();
+        progInfoShowUpd =new ProgInfoShow();
+        progInfoShowDel =new ProgInfoShow();
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType="Add";
@@ -122,7 +120,7 @@ public class EsInitTkcttStlStaAction {
             Integer intTemp;
             String strMaxId= esInitStlService.getStrMaxStlId(strStlType);
             if(StringUtils .isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))){
-                strMaxId="STLSta"+ esCommon.getStrToday()+"001";
+                strMaxId="STLMea"+ esCommon.getStrToday()+"001";
             }
             else{
                 if(strMaxId .length()>3){
@@ -181,7 +179,7 @@ public class EsInitTkcttStlStaAction {
                     MessageUtil.addWarn("没有查询到数据。");
                 }
             }
-            rowSelectedFlag="false";
+            resetAction();
         } catch (Exception e) {
             logger.error("总包合同信息查询失败", e);
             MessageUtil.addError("总包合同信息查询失败");
@@ -276,107 +274,111 @@ public class EsInitTkcttStlStaAction {
      */
     public void onClickForPowerAction(String strPowerType){
         try {
-            // 查询操作结果用
-            String strStatusFlagBegin="";
-            String strStatusFlagEnd="";
-            if(strPowerType.contains("Mng")){
-                if(strPowerType.equals("MngPass")){
-                    esFlowControl.mngFinishAction(
-                            progInfoShowSel.getStlType(),
-                            progInfoShowSel.getStlPkid(),
-                            progInfoShowSel.getPeriodNo());
-                    MessageUtil.addInfo("数据录入完成！");
-                }else if(strPowerType.equals("MngFail")){
-                    esFlowControl.mngNotFinishAction(
-                            progInfoShowSel.getStlType(),
-                            progInfoShowSel.getStlPkid(),
-                            progInfoShowSel.getPeriodNo());
-                    MessageUtil.addInfo("数据录入未完！");
-                }
-                // 初始
-                strStatusFlagBegin=null;
-                // 审核
-                strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG0.getCode();
-            }else if(strPowerType.contains("Check")&&!strPowerType.contains("DoubleCheck")){// 审核
-                if(strPowerType.equals("CheckPass")){
-                    // 状态标志：审核
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                    // 原因：审核通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    esInitPowerService.updateRecordByStl(progInfoShowSel);
-                    MessageUtil.addInfo("数据审核通过！");
-                }else if(strPowerType.equals("CheckFail")){
-                    // 状态标志：初始
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-                    // 原因：审核未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    esInitPowerService.updateRecordByStl(progInfoShowSel);
-                    MessageUtil.addInfo("数据审核未过！");
-                }
-                // 初始
-                strStatusFlagBegin=ESEnumStatusFlag.STATUS_FLAG0.getCode();
-                // 审核
-                strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG1.getCode();
-            }else if(strPowerType.contains("DoubleCheck")){// 复核
-                if(strPowerType.equals("DoubleCheckPass")){
-                    // 状态标志：复核
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
-                    // 原因：复核通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    esInitPowerService.updateRecordByStl(progInfoShowSel);
-                    MessageUtil.addInfo("数据复核通过！");
-                }else if(strPowerType.equals("DoubleCheckFail")){
-                    // 这样写可以实现越级退回
-                    progInfoShowSel.setStatusFlag(strNotPassToStatus);
-                    // 原因：复核未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    esInitPowerService.updateRecordByStl(progInfoShowSel);
-                    MessageUtil.addInfo("数据复核未过！");
-                }
-                // 审核
-                strStatusFlagBegin=ESEnumStatusFlag.STATUS_FLAG1.getCode();
-                // 复核
-                strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG2.getCode();
-            } else if(strPowerType.contains("Approve")){// 批准
-                if(strPowerType.equals("ApprovePass")){
-                    // 状态标志：批准
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                    // 原因：批准通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    esInitPowerService.updateRecordByStl(progInfoShowSel);
-                    MessageUtil.addInfo("数据批准通过！");
-                }else if(strPowerType.equals("ApproveFail")){
-                    // 这样写可以实现越级退回
-                    progInfoShowSel.setStatusFlag(strNotPassToStatus);
-                    // 原因：批准未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-                    esInitPowerService.updateRecordByStl(progInfoShowSel);
+            if(progInfoShowSel == null || progInfoShowSel.getPkid()==null){
+                MessageUtil.addInfo("请从列表中选择数据！");
+            }else if(progInfoShowSel !=null&& progInfoShowSel.getPkid()!=null){
+                // 查询操作结果用
+                String strStatusFlagBegin="";
+                String strStatusFlagEnd="";
+                if(strPowerType.contains("Mng")){
+                    if(strPowerType.equals("MngPass")){
+                        esFlowControl.mngFinishAction(
+                                progInfoShowSel.getStlType(),
+                                progInfoShowSel.getStlPkid(),
+                                progInfoShowSel.getPeriodNo());
+                        MessageUtil.addInfo("数据录入完成！");
+                    }else if(strPowerType.equals("MngFail")){
+                        esFlowControl.mngNotFinishAction(
+                                progInfoShowSel.getStlType(),
+                                progInfoShowSel.getStlPkid(),
+                                progInfoShowSel.getPeriodNo());
+                        MessageUtil.addInfo("数据录入未完！");
+                    }
+                    // 初始
+                    strStatusFlagBegin=null;
+                    // 审核
+                    strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG0.getCode();
+                }else if(strPowerType.contains("Check")&&!strPowerType.contains("DoubleCheck")){// 审核
+                    if(strPowerType.equals("CheckPass")){
+                        // 状态标志：审核
+                        progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+                        // 原因：审核通过
+                        progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
+                        esInitPowerService.updateRecordByStl(progInfoShowSel);
+                        MessageUtil.addInfo("数据审核通过！");
+                    }else if(strPowerType.equals("CheckFail")){
+                        // 状态标志：初始
+                        progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                        // 原因：审核未过
+                        progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
+                        esInitPowerService.updateRecordByStl(progInfoShowSel);
+                        MessageUtil.addInfo("数据审核未过！");
+                    }
+                    // 初始
+                    strStatusFlagBegin=ESEnumStatusFlag.STATUS_FLAG0.getCode();
+                    // 审核
+                    strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG1.getCode();
+                }else if(strPowerType.contains("DoubleCheck")){// 复核
+                    if(strPowerType.equals("DoubleCheckPass")){
+                        // 状态标志：复核
+                        progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+                        // 原因：复核通过
+                        progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+                        esInitPowerService.updateRecordByStl(progInfoShowSel);
+                        MessageUtil.addInfo("数据复核通过！");
+                    }else if(strPowerType.equals("DoubleCheckFail")){
+                        // 这样写可以实现越级退回
+                        progInfoShowSel.setStatusFlag(strNotPassToStatus);
+                        // 原因：复核未过
+                        progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
+                        esInitPowerService.updateRecordByStl(progInfoShowSel);
+                        MessageUtil.addInfo("数据复核未过！");
+                    }
+                    // 审核
+                    strStatusFlagBegin=ESEnumStatusFlag.STATUS_FLAG1.getCode();
+                    // 复核
+                    strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG2.getCode();
+                } else if(strPowerType.contains("Approve")){// 批准
+                    if(strPowerType.equals("ApprovePass")){
+                        // 状态标志：批准
+                        progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                        // 原因：批准通过
+                        progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
+                        esInitPowerService.updateRecordByStl(progInfoShowSel);
+                        MessageUtil.addInfo("数据批准通过！");
+                    }else if(strPowerType.equals("ApproveFail")){
+                        // 这样写可以实现越级退回
+                        progInfoShowSel.setStatusFlag(strNotPassToStatus);
+                        // 原因：批准未过
+                        progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
+                        esInitPowerService.updateRecordByStl(progInfoShowSel);
 
-                    MessageUtil.addInfo("数据批准未过！");
+                        MessageUtil.addInfo("数据批准未过！");
+                    }
+                    // 复核
+                    strStatusFlagBegin=ESEnumStatusFlag.STATUS_FLAG2.getCode();
+                    // 批准
+                    strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG3.getCode();
                 }
-                // 复核
-                strStatusFlagBegin=ESEnumStatusFlag.STATUS_FLAG2.getCode();
-                // 批准
-                strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG3.getCode();
-            }
-            // 重新查询，已操作的结果
-            ProgInfoShow progInfoShowTemp =new ProgInfoShow();
-            progInfoShowTemp.setStlType(strStlType);
-            progInfoShowTemp.setStrStatusFlagBegin(strStatusFlagBegin);
-            progInfoShowTemp.setStrStatusFlagEnd(strStatusFlagEnd);
+                // 重新查询，已操作的结果
+                ProgInfoShow progInfoShowTemp =new ProgInfoShow();
+                progInfoShowTemp.setStlType(strStlType);
+                progInfoShowTemp.setStrStatusFlagBegin(strStatusFlagBegin);
+                progInfoShowTemp.setStrStatusFlagEnd(strStatusFlagEnd);
 
-            this.progInfoShowList.clear();
-            List<ProgInfoShow> progInfoShowConstructsTemp =
-                    esFlowService.selectTkcttStlSMByStatusFlagBegin_End(progInfoShowTemp);
+                this.progInfoShowList.clear();
+                List<ProgInfoShow> progInfoShowConstructsTemp =
+                        esFlowService.selectTkcttStlSMByStatusFlagBegin_End(progInfoShowTemp);
 
-            for(ProgInfoShow esISSOMPCUnit: progInfoShowConstructsTemp){
-                for(SelectItem itemUnit:tkcttList){
-                    if(itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())){
-                        progInfoShowList.add(esISSOMPCUnit);
+                for(ProgInfoShow esISSOMPCUnit: progInfoShowConstructsTemp){
+                    for(SelectItem itemUnit:tkcttList){
+                        if(itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())){
+                            progInfoShowList.add(esISSOMPCUnit);
+                        }
                     }
                 }
+                rowSelectedFlag="false";
             }
-            rowSelectedFlag="false";
         } catch (Exception e) {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -398,7 +400,7 @@ public class EsInitTkcttStlStaAction {
                 return;
             }
             String strTemp=esFlowService.subCttStlCheckForMng(
-                    ESEnum.ITEMTYPE6.getCode(),
+                    ESEnum.ITEMTYPE7.getCode(),
                     progInfoShowAdd.getStlPkid(),
                     progInfoShowAdd.getPeriodNo());
             if(!"".equals(strTemp)){
@@ -430,7 +432,7 @@ public class EsInitTkcttStlStaAction {
         try {
             esInitStlService.insertRecord(progInfoShowPara) ;
             // 从批准了的上一阶段的数据拿到这一阶段中，作为开始累计数
-            esItemStlTkcttEngStaService.setFromLastStageApproveDataToThisStageBeginData(progInfoShowPara);
+            esItemStlTkcttEngMeaService.setFromLastStageApproveDataToThisStageBeginData(progInfoShowPara);
             MessageUtil.addInfo("新增数据完成。");
         } catch (Exception e) {
             logger.error("新增数据失败，", e);
@@ -449,11 +451,11 @@ public class EsInitTkcttStlStaAction {
     private void delRecordAction(ProgInfoShow progInfoShowPara){
         try {
             // 删除详细数据
-            int deleteItemsByInitStlTkcttEngNum=esItemStlTkcttEngStaService.deleteItemsByInitStlTkcttEng(
+            int deleteItemsByInitStlTkcttEngNum= esItemStlTkcttEngMeaService.deleteItemsByInitStlTkcttEng(
                     progInfoShowPara.getStlPkid(),
                     progInfoShowPara.getPeriodNo());
             // 删除登记数据
-            int deleteRecordOfRegistNum=esInitStlService.deleteRecord(progInfoShowPara.getPkid()) ;
+            int deleteRecordOfRegistNum=esInitStlService.deleteRecord(progInfoShowDel.getPkid()) ;
             // 删除权限数据
             int deleteRecordOfPowerNum=esInitPowerService.deleteRecord(
                     progInfoShowPara.getStlType(),
@@ -487,12 +489,12 @@ public class EsInitTkcttStlStaAction {
         this.esInitStlService = esInitStlService;
     }
 
-    public EsItemStlTkcttEngStaService getEsItemStlTkcttEngStaService() {
-        return esItemStlTkcttEngStaService;
+    public EsItemStlTkcttEngMeaService getEsItemStlTkcttEngMeaService() {
+        return esItemStlTkcttEngMeaService;
     }
 
-    public void setEsItemStlTkcttEngStaService(EsItemStlTkcttEngStaService esItemStlTkcttEngStaService) {
-        this.esItemStlTkcttEngStaService = esItemStlTkcttEngStaService;
+    public void setEsItemStlTkcttEngMeaService(EsItemStlTkcttEngMeaService esItemStlTkcttEngMeaService) {
+        this.esItemStlTkcttEngMeaService = esItemStlTkcttEngMeaService;
     }
 
     public EsCttInfoService getEsCttInfoService() {

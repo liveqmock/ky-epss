@@ -1,4 +1,4 @@
-package epss.view.item;
+package epss.view.contract;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +19,6 @@ import epss.view.common.EsCommon;
 import epss.view.common.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import epss.common.utils.MessageUtil;
@@ -34,8 +33,8 @@ import java.util.*;
 
 @ManagedBean
 @ViewScoped
-public class ItemSubcttAction {
-    private static final Logger logger = LoggerFactory.getLogger(ItemSubcttAction.class);
+public class SubcttItemAction {
+    private static final Logger logger = LoggerFactory.getLogger(SubcttItemAction.class);
     @ManagedProperty(value = "#{esCttItemService}")
     private EsCttItemService esCttItemService;
     @ManagedProperty(value = "#{esInitPowerService}")
@@ -377,7 +376,7 @@ public class ItemSubcttAction {
         }else{
             String strParentNo=strIgnoreSpaceOfStr.substring(0,intLastIndexof);
             CttItemShow cttItemShowTemp1 =new CttItemShow();
-            cttItemShowTemp1 =getItemOfEsItemHieRelapByStrNo(
+            cttItemShowTemp1 =getEsCttItemByStrNo(
                     strParentNo,
                     cttItemShowList);
             if(cttItemShowTemp1 ==null|| cttItemShowTemp1.getPkid()==null){
@@ -426,7 +425,7 @@ public class ItemSubcttAction {
             return true;
         }
         CttItemShow cttItemShowTemp1 =
-                getItemOfEsItemHieRelapByStrNo(
+                getEsCttItemByStrNo(
                         cttItemShowTemp.getStrCorrespondingItemNo(),
                         cttItemShowList_Cstpl);
         if(cttItemShowTemp1 !=null && cttItemShowTemp1.getStrNo() !=null){
@@ -605,7 +604,7 @@ public class ItemSubcttAction {
         return tempEsCttItemList;
     }
     /*在总包合同列表中根据编号找到项*/
-    private CttItemShow getItemOfEsItemHieRelapByStrNo(
+    private CttItemShow getEsCttItemByStrNo(
              String strNo,
              List<CttItemShow> cttItemShowListPara){
         CttItemShow cttItemShowTemp =null;

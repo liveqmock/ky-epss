@@ -1,10 +1,9 @@
-package epss.view.item;
+package epss.view.settle;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.model_show.CommStlSubcttEngH;
-import epss.repository.model.model_show.ProgEstMeaItemShow;
-import epss.common.utils.StyleModel;
+import epss.repository.model.model_show.ProgEstStaItemShow;
 import epss.common.utils.MessageUtil;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.*;
@@ -13,7 +12,6 @@ import epss.service.common.EsFlowService;
 import epss.view.common.EsCommon;
 import epss.view.common.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
-import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
@@ -23,7 +21,10 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.math.BigDecimal;
 import java.util.*;
-
+import epss.common.utils.JxlsManager;
+import java.text.SimpleDateFormat;
+import java.io.IOException;
+import jxl.write.WriteException;
 /**
  * Created with IntelliJ IDEA.
  * User: Think
@@ -33,8 +34,8 @@ import java.util.*;
  */
 @ManagedBean
 @ViewScoped
-public class ItemTkcttEngMeaStlAction {
-    private static final Logger logger = LoggerFactory.getLogger(ItemTkcttEngMeaStlAction.class);
+public class TkcttStlStaItemAction {
+    private static final Logger logger = LoggerFactory.getLogger(TkcttStlStaItemAction.class);
     @ManagedProperty(value = "#{esCttInfoService}")
     private EsCttInfoService esCttInfoService;
     @ManagedProperty(value = "#{esCttItemService}")
@@ -47,18 +48,18 @@ public class ItemTkcttEngMeaStlAction {
     private EsInitCustService esInitCustService;
     @ManagedProperty(value = "#{esInitStlService}")
     private EsInitStlService esInitStlService;
-    @ManagedProperty(value = "#{esItemStlTkcttEngMeaService}")
-    private EsItemStlTkcttEngMeaService esItemStlTkcttEngMeaService;
+    @ManagedProperty(value = "#{esItemStlTkcttEngStaService}")
+    private EsItemStlTkcttEngStaService esItemStlTkcttEngStaService;
     @ManagedProperty(value = "#{esInitPowerService}")
     private EsInitPowerService esInitPowerService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
 
-    private List<ProgEstMeaItemShow> progEstMeaItemShowList;
-    private ProgEstMeaItemShow progEstMeaItemShow;
-    private ProgEstMeaItemShow progEstMeaItemShowUpd;
-    private ProgEstMeaItemShow progEstMeaItemShowDel;
-    private ProgEstMeaItemShow progEstMeaItemShowSelected;
+    private List<ProgEstStaItemShow> progEstStaItemShowList;
+    private ProgEstStaItemShow progEstStaItemShow;
+    private ProgEstStaItemShow progEstStaItemShowUpd;
+    private ProgEstStaItemShow progEstStaItemShowDel;
+    private ProgEstStaItemShow progEstStaItemShowSelected;
 
     private BigDecimal bDEng_BeginToCurrentPeriodEQtyInDB;
     private BigDecimal bDEng_CurrentPeriodEQtyInDB;
@@ -77,7 +78,7 @@ public class ItemTkcttEngMeaStlAction {
     private Map beansMap;
     // 画面上控件的显示控制
     private String strExportToExcelRendered;
-    private List<ProgEstMeaItemShow> progMeaItemShowListForExcel;
+    private List<ProgEstStaItemShow> progEstItemShowListForExcel;
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
@@ -90,7 +91,7 @@ public class ItemTkcttEngMeaStlAction {
         }
 
         strLatestApprovedPeriodNo=ToolUtil.getStrIgnoreNull(
-                esFlowService.getLatestApprovedPeriodNo(ESEnum.ITEMTYPE7.getCode(),strTkcttPkid));
+                esFlowService.getLatestApprovedPeriodNo(ESEnum.ITEMTYPE6.getCode(),strTkcttPkid));
 
         List<EsInitPower> esInitPowerList=
                 esInitPowerService.selectListByModel(esInitStl.getStlType(),esInitStl.getStlPkid(),esInitStl.getPeriodNo());
@@ -122,9 +123,9 @@ public class ItemTkcttEngMeaStlAction {
     }
     /*重置*/
     public void resetAction(){
-        progEstMeaItemShow =new ProgEstMeaItemShow();
-        progEstMeaItemShowUpd =new ProgEstMeaItemShow();
-        progEstMeaItemShowDel =new ProgEstMeaItemShow();
+        progEstStaItemShow =new ProgEstStaItemShow();
+        progEstStaItemShowUpd =new ProgEstStaItemShow();
+        progEstStaItemShowDel =new ProgEstStaItemShow();
         strSubmitType="Add";
     }
 
@@ -134,26 +135,26 @@ public class ItemTkcttEngMeaStlAction {
                 if(!blurEng_CurrentPeriodEQty("submit")){
                     return;
                 }
-                progEstMeaItemShowUpd.setEng_PeriodNo(esInitStl.getPeriodNo());
-                List<EsItemStlTkcttEngMea> esItemStlTkcttEngMeaListTemp =
-                        esItemStlTkcttEngMeaService.isExistInDb(progEstMeaItemShowUpd);
-                if (esItemStlTkcttEngMeaListTemp.size() > 1) {
+                progEstStaItemShowUpd.setEng_PeriodNo(esInitStl.getPeriodNo());
+                List<EsItemStlTkcttEngSta> esItemStlTkcttEngStaListTemp =
+                        esItemStlTkcttEngStaService.isExistInDb(progEstStaItemShowUpd);
+                if (esItemStlTkcttEngStaListTemp.size() > 1) {
                     MessageUtil.addInfo("数据有误，数据库中存在多条记录。");
                     return;
                 }
-                if (esItemStlTkcttEngMeaListTemp.size() == 1) {
-                    progEstMeaItemShowUpd.setEng_Pkid(esItemStlTkcttEngMeaListTemp.get(0).getPkid());
-                    esItemStlTkcttEngMeaService.updateRecord(progEstMeaItemShowUpd);
+                if (esItemStlTkcttEngStaListTemp.size() == 1) {
+                    progEstStaItemShowUpd.setEng_Pkid(esItemStlTkcttEngStaListTemp.get(0).getPkid());
+                    esItemStlTkcttEngStaService.updateRecord(progEstStaItemShowUpd);
                 }
-                if (esItemStlTkcttEngMeaListTemp.size()==0){
-                    progEstMeaItemShowUpd.setEng_TkcttPkid(strTkcttPkid);
-                    progEstMeaItemShowUpd.setEng_TkcttItemPkid(progEstMeaItemShowUpd.getTkctt_Pkid());
-                    esItemStlTkcttEngMeaService.insertRecord(progEstMeaItemShowUpd);
+                if (esItemStlTkcttEngStaListTemp.size()==0){
+				    progEstStaItemShowUpd.setEng_TkcttPkid(strTkcttPkid);
+                    progEstStaItemShowUpd.setEng_TkcttItemPkid(progEstStaItemShowUpd.getTkctt_Pkid());
+                    esItemStlTkcttEngStaService.insertRecord(progEstStaItemShowUpd);
                 }
                 MessageUtil.addInfo("更新数据完成。");
             }
             else if(strSubmitType.equals("Del")){
-                delRecordAction(progEstMeaItemShowDel);
+                delRecordAction(progEstStaItemShowDel);
             }
             initData();
         }
@@ -164,26 +165,26 @@ public class ItemTkcttEngMeaStlAction {
     }
 
     public boolean blurEng_CurrentPeriodEQty(String strBlurOrSubmitFlag){
-        if(ToolUtil.getBdIgnoreNull(progEstMeaItemShowUpd.getTkctt_ContractQuantity()).equals( new BigDecimal(0))){
+        if(ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getTkctt_ContractQuantity()).equals( new BigDecimal(0))){
             return true;
         }
         else{
-            String strTemp= progEstMeaItemShowUpd.getEng_CurrentPeriodEQty().toString();
+            String strTemp= progEstStaItemShowUpd.getEng_CurrentPeriodEQty().toString();
             //String strRegex = "[0-9]+\\.?[0-9]*";
             String strRegex = "[-]?[0-9]+\\.?[0-9]*";
-            if (!progEstMeaItemShowUpd.getEng_CurrentPeriodEQty().toString().matches(strRegex) ){
+            if (!progEstStaItemShowUpd.getEng_CurrentPeriodEQty().toString().matches(strRegex) ){
                 MessageUtil.addError("请确认输入的数据，" + strTemp + "不是正确的数据格式！");
                 return false;
             }
 
             BigDecimal bDEng_CurrentPeriodEQtyTemp=
-                    ToolUtil.getBdIgnoreNull(progEstMeaItemShowUpd.getEng_CurrentPeriodEQty());
+                    ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getEng_CurrentPeriodEQty());
 
             BigDecimal bigDecimalTemp=
                     bDEng_BeginToCurrentPeriodEQtyInDB.add(bDEng_CurrentPeriodEQtyTemp).subtract(bDEng_CurrentPeriodEQtyInDB);
 
             BigDecimal bDTkctt_ContractQuantity=
-                    ToolUtil.getBdIgnoreNull(progEstMeaItemShowUpd.getTkctt_ContractQuantity());
+                    ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getTkctt_ContractQuantity());
 
             if(strBlurOrSubmitFlag.equals("blur")) {
                 if(bigDecimalTemp.compareTo(bDTkctt_ContractQuantity)>0){
@@ -191,14 +192,14 @@ public class ItemTkcttEngMeaStlAction {
                             + bDEng_CurrentPeriodEQtyTemp.toString() + "）！");
                     return false;
                 }
-                progEstMeaItemShowUpd.setEng_BeginToCurrentPeriodEQty(bigDecimalTemp);
+                progEstStaItemShowUpd.setEng_BeginToCurrentPeriodEQty(bigDecimalTemp);
             }else if (strBlurOrSubmitFlag.equals("submit")) {
                 BigDecimal bDEngQMng_BeginToCurrentPeriodEQtyTemp=
-                        ToolUtil.getBdIgnoreNull(progEstMeaItemShowUpd.getEng_BeginToCurrentPeriodEQty());
+                        ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getEng_BeginToCurrentPeriodEQty());
 
                 if(bDEngQMng_BeginToCurrentPeriodEQtyTemp.compareTo(bDEng_BeginToCurrentPeriodEQtyInDB)==0){
                     if(bigDecimalTemp.compareTo(bDTkctt_ContractQuantity)>0){
-                        MessageUtil.addError("上期开累工程数量+本期工程数量>合同数量，请确认您输入的本期工程数量（"
+                        MessageUtil.addError("上期材料累计供应数量+本期材料供应数量>合同数量，请确认您输入的本期材料供应数量（"
                                 + bDEng_CurrentPeriodEQtyTemp.toString() + "）！");
                         return false;
                     }
@@ -210,13 +211,13 @@ public class ItemTkcttEngMeaStlAction {
         return true;
     }
 
-    private void delRecordAction(ProgEstMeaItemShow progEstMeaItemShowPara){
+    private void delRecordAction(ProgEstStaItemShow progEstStaItemShowPara){
         try {
-            if(progEstMeaItemShowPara.getEng_Pkid()==null||
-                    progEstMeaItemShowPara.getEng_Pkid().equals("")){
+            if(progEstStaItemShowPara.getEng_Pkid()==null||
+                    progEstStaItemShowPara.getEng_Pkid().equals("")){
                 MessageUtil.addError("无可删除的数据！") ;
             }else{
-                int deleteRecordNum=esItemStlTkcttEngMeaService.deleteRecord(progEstMeaItemShowPara.getEng_Pkid()) ;
+                int deleteRecordNum=esItemStlTkcttEngStaService.deleteRecord(progEstStaItemShowPara.getEng_Pkid()) ;
                 if (deleteRecordNum<=0){
                     MessageUtil.addInfo("该记录已删除。");
                 }else {
@@ -233,11 +234,11 @@ public class ItemTkcttEngMeaStlAction {
     public void selectRecordAction(String strSubmitTypePara){
         try {
             strSubmitType=strSubmitTypePara;
-            if (strSubmitTypePara.equals("Sel")){
-                progEstMeaItemShow =(ProgEstMeaItemShow)BeanUtils.cloneBean(progEstMeaItemShowSelected) ;
-                progEstMeaItemShow.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstMeaItemShow.getTkctt_StrNo()));
-            }
-            String strTkctt_Unit= progEstMeaItemShowSelected.getTkctt_Unit();
+            if (strSubmitTypePara.equals("Sel")){                
+                progEstStaItemShow =(ProgEstStaItemShow)BeanUtils.cloneBean(progEstStaItemShowSelected) ;
+                progEstStaItemShow.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstStaItemShow.getTkctt_StrNo()));
+            }            
+            String strTkctt_Unit= progEstStaItemShowSelected.getTkctt_Unit();
             if(strTkctt_Unit==null) {
                 if(strSubmitTypePara.equals("Upd")){
                     MessageUtil.addInfo("该数据不是项数据，无法更新");
@@ -249,15 +250,15 @@ public class ItemTkcttEngMeaStlAction {
                 return;
             }
             if(strSubmitTypePara.equals("Upd")){
-                progEstMeaItemShowUpd =(ProgEstMeaItemShow) BeanUtils.cloneBean(progEstMeaItemShowSelected) ;
-                progEstMeaItemShowUpd.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstMeaItemShowUpd.getTkctt_StrNo()));
-                bDEng_CurrentPeriodEQtyInDB=ToolUtil.getBdIgnoreNull(progEstMeaItemShowUpd.getEng_CurrentPeriodEQty());
+                progEstStaItemShowUpd =(ProgEstStaItemShow) BeanUtils.cloneBean(progEstStaItemShowSelected) ;
+                progEstStaItemShowUpd.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstStaItemShowUpd.getTkctt_StrNo()));
+                bDEng_CurrentPeriodEQtyInDB=ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getEng_CurrentPeriodEQty());
                 bDEng_BeginToCurrentPeriodEQtyInDB=
-                        ToolUtil.getBdIgnoreNull(progEstMeaItemShowUpd.getEng_BeginToCurrentPeriodEQty());
-               }
+                        ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getEng_BeginToCurrentPeriodEQty());
+            }
             else if(strSubmitTypePara.equals("Del")){
-                progEstMeaItemShowDel =(ProgEstMeaItemShow) BeanUtils.cloneBean(progEstMeaItemShowSelected) ;
-                progEstMeaItemShowDel.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstMeaItemShowDel.getTkctt_StrNo()));
+                progEstStaItemShowDel =(ProgEstStaItemShow) BeanUtils.cloneBean(progEstStaItemShowSelected) ;
+                progEstStaItemShowDel.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstStaItemShowDel.getTkctt_StrNo()));
             }
         } catch (Exception e) {
             logger.error("", e);
@@ -268,19 +269,19 @@ public class ItemTkcttEngMeaStlAction {
     private void initData() {
         /*分包合同*/
         List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
-        progMeaItemShowListForExcel=new ArrayList<ProgEstMeaItemShow>();
+        progEstItemShowListForExcel=new ArrayList<ProgEstStaItemShow>();
         esCttItemList = esCttItemService.getEsItemList(
                 ESEnum.ITEMTYPE0.getCode(), strTkcttPkid);
         if(esCttItemList.size()<=0){
             return;
         }
-        progEstMeaItemShowList =new ArrayList<ProgEstMeaItemShow>();
-        recursiveDataTable("root", esCttItemList, progEstMeaItemShowList);
-        progEstMeaItemShowList =getItemStlTkcttEngSMList_DoFromatNo(progEstMeaItemShowList);
+        progEstStaItemShowList =new ArrayList<ProgEstStaItemShow>();
+        recursiveDataTable("root", esCttItemList, progEstStaItemShowList);
+        progEstStaItemShowList =getItemStlTkcttEngSMList_DoFromatNo(progEstStaItemShowList);
         setItemOfEsItemHieRelapList_AddTotal();
-        beansMap.put("progMeaItemShowListForExcel", progMeaItemShowListForExcel);
+        beansMap.put("progEstItemShowListForExcel", progEstItemShowListForExcel);
         // 表内容设定
-        if(progEstMeaItemShowList.size()>0){
+        if(progEstStaItemShowList.size()>0){
             strExportToExcelRendered="true";
         }else{
             strExportToExcelRendered="false";
@@ -289,7 +290,7 @@ public class ItemTkcttEngMeaStlAction {
     /*根据数据库中层级关系数据列表得到总包合同*/
     private void recursiveDataTable(String strLevelParentId,
                                       List<EsCttItem> esCttItemListPara,
-                                      List<ProgEstMeaItemShow> sProgEstMeaItemShowListPara){
+                                      List<ProgEstStaItemShow> sprogEstStaItemShowListPara){
         // 根据父层级号获得该父层级下的子节点
         List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
         // 通过父层id查找它的孩子
@@ -298,65 +299,65 @@ public class ItemTkcttEngMeaStlAction {
         BigDecimal bdCurrentPeriodQty=new BigDecimal(0);
         BigDecimal bdBeginToCurrentPeriodQty=new BigDecimal(0);
         for(EsCttItem itemUnit: subEsCttItemList){
-            ProgEstMeaItemShow progEstMeaItemShowTemp = new ProgEstMeaItemShow();
-            progEstMeaItemShowTemp.setTkctt_Pkid(itemUnit.getPkid());
-            progEstMeaItemShowTemp.setTkctt_BelongToType(itemUnit.getBelongToType());
-            progEstMeaItemShowTemp.setTkctt_BelongToPkid(itemUnit.getBelongToPkid());
-            progEstMeaItemShowTemp.setTkctt_ParentPkid(itemUnit.getParentPkid());
-            progEstMeaItemShowTemp.setTkctt_Grade(itemUnit.getGrade());
-            progEstMeaItemShowTemp.setTkctt_Orderid(itemUnit.getOrderid());
-            progEstMeaItemShowTemp.setTkctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
-            progEstMeaItemShowTemp.setTkctt_Name(itemUnit.getName());
-            progEstMeaItemShowTemp.setTkctt_Note(itemUnit.getNote());
-            progEstMeaItemShowTemp.setTkctt_Unit(itemUnit.getUnit());
-            progEstMeaItemShowTemp.setTkctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
+            ProgEstStaItemShow progEstStaItemShowTemp = new ProgEstStaItemShow();
+            progEstStaItemShowTemp.setTkctt_Pkid(itemUnit.getPkid());
+            progEstStaItemShowTemp.setTkctt_BelongToType(itemUnit.getBelongToType());
+            progEstStaItemShowTemp.setTkctt_BelongToPkid(itemUnit.getBelongToPkid());
+            progEstStaItemShowTemp.setTkctt_ParentPkid(itemUnit.getParentPkid());
+            progEstStaItemShowTemp.setTkctt_Grade(itemUnit.getGrade());
+            progEstStaItemShowTemp.setTkctt_Orderid(itemUnit.getOrderid());
+            progEstStaItemShowTemp.setTkctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
+            progEstStaItemShowTemp.setTkctt_Name(itemUnit.getName());
+            progEstStaItemShowTemp.setTkctt_Note(itemUnit.getNote());
+            progEstStaItemShowTemp.setTkctt_Unit(itemUnit.getUnit());
+            progEstStaItemShowTemp.setTkctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             bdContractUnitPrice=ToolUtil.getBdIgnoreNull(itemUnit.getContractUnitPrice());
-            progEstMeaItemShowTemp.setTkctt_ContractQuantity(itemUnit.getContractQuantity());
-            progEstMeaItemShowTemp.setTkctt_ContractAmount(itemUnit.getContractAmount());
+            progEstStaItemShowTemp.setTkctt_ContractQuantity(itemUnit.getContractQuantity());
+            progEstStaItemShowTemp.setTkctt_ContractAmount(itemUnit.getContractAmount());
 
-            EsItemStlTkcttEngMea esItemStlTkcttEngMea=new EsItemStlTkcttEngMea();
-            esItemStlTkcttEngMea.setTkcttPkid(strTkcttPkid);
-            esItemStlTkcttEngMea.setTkcttItemPkid(progEstMeaItemShowTemp.getTkctt_Pkid());
-            esItemStlTkcttEngMea.setPeriodNo(esInitStl.getPeriodNo());
-            List<EsItemStlTkcttEngMea> esItemStlTkcttEngMeaList =
-                    esItemStlTkcttEngMeaService.selectRecordsByKeyExample(esItemStlTkcttEngMea);
-            if(esItemStlTkcttEngMeaList.size()>0){
-                esItemStlTkcttEngMea= esItemStlTkcttEngMeaList.get(0);
-                String strCreatedByName= esCommon.getOperNameByOperId(esItemStlTkcttEngMea.getCreatedBy());
-                String strLastUpdByName= esCommon.getOperNameByOperId(esItemStlTkcttEngMea.getLastUpdBy());
-                progEstMeaItemShowTemp.setEng_Pkid(esItemStlTkcttEngMea.getPkid());
-                progEstMeaItemShowTemp.setEng_PeriodNo(esItemStlTkcttEngMea.getPeriodNo());
-                progEstMeaItemShowTemp.setEng_TkcttPkid(esItemStlTkcttEngMea.getTkcttPkid());
-                progEstMeaItemShowTemp.setEng_TkcttItemPkid (esItemStlTkcttEngMea.getTkcttItemPkid());
-                progEstMeaItemShowTemp.setEng_CurrentPeriodEQty(esItemStlTkcttEngMea.getCurrentPeriodQty());
-                bdCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getCurrentPeriodQty());
-                progEstMeaItemShowTemp.setEng_CurrentPeriodEAmount(
+            EsItemStlTkcttEngSta esItemStlTkcttEngSta=new EsItemStlTkcttEngSta();
+            esItemStlTkcttEngSta.setTkcttPkid(strTkcttPkid);
+            esItemStlTkcttEngSta.setTkcttItemPkid(progEstStaItemShowTemp.getTkctt_Pkid());
+            esItemStlTkcttEngSta.setPeriodNo(esInitStl.getPeriodNo());
+            List<EsItemStlTkcttEngSta> esItemStlTkcttEngStaList =
+                    esItemStlTkcttEngStaService.selectRecordsByExample(esItemStlTkcttEngSta);
+            if(esItemStlTkcttEngStaList.size()>0){
+                esItemStlTkcttEngSta= esItemStlTkcttEngStaList.get(0);
+                String strCreatedByName= esCommon.getOperNameByOperId(esItemStlTkcttEngSta.getCreatedBy());
+                String strLastUpdByName= esCommon.getOperNameByOperId(esItemStlTkcttEngSta.getLastUpdBy());
+                progEstStaItemShowTemp.setEng_Pkid(esItemStlTkcttEngSta.getPkid());
+                progEstStaItemShowTemp.setEng_PeriodNo(esItemStlTkcttEngSta.getPeriodNo());
+                progEstStaItemShowTemp.setEng_TkcttPkid(esItemStlTkcttEngSta.getTkcttPkid());
+                progEstStaItemShowTemp.setEng_TkcttItemPkid(esItemStlTkcttEngSta.getTkcttItemPkid());
+                progEstStaItemShowTemp.setEng_CurrentPeriodEQty(esItemStlTkcttEngSta.getCurrentPeriodQty());
+                bdCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngSta.getCurrentPeriodQty());
+                progEstStaItemShowTemp.setEng_CurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdCurrentPeriodQty)));
 
-                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEQty(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
-                bdBeginToCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
-                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
+                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEQty(esItemStlTkcttEngSta.getBeginToCurrentPeriodQty());
+                bdBeginToCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngSta.getBeginToCurrentPeriodQty());
+                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdBeginToCurrentPeriodQty)));
 
-                progEstMeaItemShowTemp.setEng_DeletedFlag(esItemStlTkcttEngMea.getDeleteFlag());
-                progEstMeaItemShowTemp.setEng_CreatedBy(esItemStlTkcttEngMea.getCreatedBy());
-                progEstMeaItemShowTemp.setEng_CreatedByName(strCreatedByName);
-                progEstMeaItemShowTemp.setEng_CreatedDate(esItemStlTkcttEngMea.getCreatedDate());
-                progEstMeaItemShowTemp.setEng_LastUpdBy(esItemStlTkcttEngMea.getLastUpdBy());
-                progEstMeaItemShowTemp.setEng_LastUpdByName(strLastUpdByName);
-                progEstMeaItemShowTemp.setEng_LastUpdDate(esItemStlTkcttEngMea.getLastUpdDate());
-                progEstMeaItemShowTemp.setEng_ModificationNum(esItemStlTkcttEngMea.getModificationNum());
+                progEstStaItemShowTemp.setEng_DeletedFlag(esItemStlTkcttEngSta.getDeleteFlag());
+                progEstStaItemShowTemp.setEng_CreatedBy(esItemStlTkcttEngSta.getCreatedBy());
+                progEstStaItemShowTemp.setEng_CreatedByName(strCreatedByName);
+                progEstStaItemShowTemp.setEng_CreatedDate(esItemStlTkcttEngSta.getCreatedDate());
+                progEstStaItemShowTemp.setEng_LastUpdBy(esItemStlTkcttEngSta.getLastUpdBy());
+                progEstStaItemShowTemp.setEng_LastUpdByName(strLastUpdByName);
+                progEstStaItemShowTemp.setEng_LastUpdDate(esItemStlTkcttEngSta.getLastUpdDate());
+                progEstStaItemShowTemp.setEng_ModificationNum(esItemStlTkcttEngSta.getModificationNum());
             }
-            sProgEstMeaItemShowListPara.add(progEstMeaItemShowTemp) ;
-            recursiveDataTable(progEstMeaItemShowTemp.getTkctt_Pkid(), esCttItemListPara, sProgEstMeaItemShowListPara);
+            sprogEstStaItemShowListPara.add(progEstStaItemShowTemp) ;
+            recursiveDataTable(progEstStaItemShowTemp.getTkctt_Pkid(), esCttItemListPara, sprogEstStaItemShowListPara);
         }
     }
 
     private void setItemOfEsItemHieRelapList_AddTotal(){
-        List<ProgEstMeaItemShow> progEstMeaItemShowListTemp =new ArrayList<ProgEstMeaItemShow>();
-        progEstMeaItemShowListTemp.addAll(progEstMeaItemShowList);
+        List<ProgEstStaItemShow> progEstStaItemShowListTemp =new ArrayList<ProgEstStaItemShow>();
+        progEstStaItemShowListTemp.addAll(progEstStaItemShowList);
 
-        progEstMeaItemShowList.clear();
+        progEstStaItemShowList.clear();
         // 合同数量小计
         BigDecimal bdQuantityTotal=new BigDecimal(0);
         // 合同数量大计
@@ -384,11 +385,11 @@ public class ItemTkcttEngMeaStlAction {
         // 当期金额大计
         BigDecimal bdCurrentPeriodEAmountAllTotal=new BigDecimal(0);
 
-        ProgEstMeaItemShow itemUnit=new ProgEstMeaItemShow();
-        ProgEstMeaItemShow itemUnitNext=new ProgEstMeaItemShow();
+        ProgEstStaItemShow itemUnit=new ProgEstStaItemShow();
+        ProgEstStaItemShow itemUnitNext=new ProgEstStaItemShow();
 
-        for(int i=0;i< progEstMeaItemShowListTemp.size();i++){
-            itemUnit = progEstMeaItemShowListTemp.get(i);
+        for(int i=0;i< progEstStaItemShowListTemp.size();i++){
+            itemUnit = progEstStaItemShowListTemp.get(i);
             bdQuantityTotal=bdQuantityTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getTkctt_ContractQuantity()));
             bdQuantityAllTotal=bdQuantityAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getTkctt_ContractQuantity()));
             bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getTkctt_ContractAmount()));
@@ -412,12 +413,12 @@ public class ItemTkcttEngMeaStlAction {
             bdCurrentPeriodEAmountAllTotal=
                     bdCurrentPeriodEAmountAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEng_CurrentPeriodEAmount()));
 
-            progEstMeaItemShowList.add(itemUnit);
+            progEstStaItemShowList.add(itemUnit);
 
-            if(i+1< progEstMeaItemShowListTemp.size()){
-                itemUnitNext = progEstMeaItemShowListTemp.get(i+1);
+            if(i+1< progEstStaItemShowListTemp.size()){
+                itemUnitNext = progEstStaItemShowListTemp.get(i+1);
                 if(itemUnitNext.getTkctt_ParentPkid().equals("root")){
-                    ProgEstMeaItemShow itemOfEsItemHieRelapTemp=new ProgEstMeaItemShow();
+                    ProgEstStaItemShow itemOfEsItemHieRelapTemp=new ProgEstStaItemShow();
                     itemOfEsItemHieRelapTemp.setTkctt_Name("合计");
                     itemOfEsItemHieRelapTemp.setTkctt_Pkid("total"+i);
                     itemOfEsItemHieRelapTemp.setTkctt_ContractQuantity(
@@ -432,7 +433,7 @@ public class ItemTkcttEngMeaStlAction {
                             ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEAmountTotal));
                     itemOfEsItemHieRelapTemp.setEng_CurrentPeriodEAmount(
                             ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEAmountTotal));
-                    progEstMeaItemShowList.add(itemOfEsItemHieRelapTemp);
+                    progEstStaItemShowList.add(itemOfEsItemHieRelapTemp);
                     bdQuantityTotal=new BigDecimal(0);
                     bdAmountTotal=new BigDecimal(0);
                     bdBeginToCurrentPeriodEQtyTotal=new BigDecimal(0);
@@ -440,24 +441,24 @@ public class ItemTkcttEngMeaStlAction {
                     bdBeginToCurrentPeriodEAmountTotal=new BigDecimal(0);
                     bdCurrentPeriodEAmountTotal=new BigDecimal(0);
                 }
-            } else if(i+1== progEstMeaItemShowListTemp.size()){
-                itemUnitNext = progEstMeaItemShowListTemp.get(i);
-                ProgEstMeaItemShow progEstMeaItemShowTemp =new ProgEstMeaItemShow();
-                progEstMeaItemShowTemp.setTkctt_Name("合计");
-                progEstMeaItemShowTemp.setTkctt_Pkid("total"+i);
-                progEstMeaItemShowTemp.setTkctt_ContractQuantity(
+            } else if(i+1== progEstStaItemShowListTemp.size()){
+                itemUnitNext = progEstStaItemShowListTemp.get(i);
+                ProgEstStaItemShow progEstStaItemShowTemp =new ProgEstStaItemShow();
+                progEstStaItemShowTemp.setTkctt_Name("合计");
+                progEstStaItemShowTemp.setTkctt_Pkid("total"+i);
+                progEstStaItemShowTemp.setTkctt_ContractQuantity(
                         ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
-                progEstMeaItemShowTemp.setTkctt_ContractAmount(
+                progEstStaItemShowTemp.setTkctt_ContractAmount(
                         ToolUtil.getBdFrom0ToNull(bdAmountTotal));
-                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEQty(
+                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyTotal));
-                progEstMeaItemShowTemp.setEng_CurrentPeriodEQty(
+                progEstStaItemShowTemp.setEng_CurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal));
-                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
+                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEAmountTotal));
-                progEstMeaItemShowTemp.setEng_CurrentPeriodEAmount(
+                progEstStaItemShowTemp.setEng_CurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEAmountTotal));
-                progEstMeaItemShowList.add(progEstMeaItemShowTemp);
+                progEstStaItemShowList.add(progEstStaItemShowTemp);
                 bdQuantityTotal=new BigDecimal(0);
                 bdAmountTotal=new BigDecimal(0);
                 bdBeginToCurrentPeriodEQtyTotal=new BigDecimal(0);
@@ -466,34 +467,34 @@ public class ItemTkcttEngMeaStlAction {
                 bdCurrentPeriodEAmountTotal=new BigDecimal(0);
 
                 // 总合计
-                progEstMeaItemShowTemp =new ProgEstMeaItemShow();
-                progEstMeaItemShowTemp.setTkctt_Name("总合计");
-                progEstMeaItemShowTemp.setTkctt_Pkid("total_all"+i);
-                progEstMeaItemShowTemp.setTkctt_ContractQuantity(
+                progEstStaItemShowTemp =new ProgEstStaItemShow();
+                progEstStaItemShowTemp.setTkctt_Name("总合计");
+                progEstStaItemShowTemp.setTkctt_Pkid("total_all"+i);
+                progEstStaItemShowTemp.setTkctt_ContractQuantity(
                         ToolUtil.getBdFrom0ToNull(bdQuantityAllTotal));
-                progEstMeaItemShowTemp.setTkctt_ContractAmount(
+                progEstStaItemShowTemp.setTkctt_ContractAmount(
                         ToolUtil.getBdFrom0ToNull(bdAmountAllTotal));
 
-                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEQty(
+                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyAllTotal));
-                progEstMeaItemShowTemp.setEng_CurrentPeriodEQty(
+                progEstStaItemShowTemp.setEng_CurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyAllTotal));
-                progEstMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
+                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEAmountAllTotal));
-                progEstMeaItemShowTemp.setEng_CurrentPeriodEAmount(
+                progEstStaItemShowTemp.setEng_CurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEAmountAllTotal));
-                progEstMeaItemShowList.add(progEstMeaItemShowTemp);
+                progEstStaItemShowList.add(progEstStaItemShowTemp);
             }
         }
     }
 
     /*根据group和orderid临时编制编码strNo*/
-    private List<ProgEstMeaItemShow> getItemStlTkcttEngSMList_DoFromatNo(
-            List<ProgEstMeaItemShow> progEstMeaItemShowListPara){
+    private List<ProgEstStaItemShow> getItemStlTkcttEngSMList_DoFromatNo(
+            List<ProgEstStaItemShow> progEstStaItemShowListPara){
         try{
             String strTemp="";
             Integer intBeforeGrade=-1;
-            for(ProgEstMeaItemShow itemUnit: progEstMeaItemShowListPara){
+            for(ProgEstStaItemShow itemUnit: progEstStaItemShowListPara){
                 if(itemUnit.getTkctt_Grade().equals(intBeforeGrade)){
                     if(strTemp.lastIndexOf(".")<0) {
                         strTemp=itemUnit.getTkctt_Orderid().toString();
@@ -521,15 +522,30 @@ public class ItemTkcttEngMeaStlAction {
                 intBeforeGrade=itemUnit.getTkctt_Grade() ;
                 itemUnit.setTkctt_StrNo(ToolUtil.padLeft_DoLevel(itemUnit.getTkctt_Grade(), strTemp)) ;
 
-                ProgEstMeaItemShow itemUnitTemp= (ProgEstMeaItemShow) BeanUtils.cloneBean(itemUnit);
+                ProgEstStaItemShow itemUnitTemp= (ProgEstStaItemShow) BeanUtils.cloneBean(itemUnit);
                 itemUnitTemp.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getTkctt_StrNo()));
-                progMeaItemShowListForExcel.add(itemUnitTemp);
+                progEstItemShowListForExcel.add(itemUnitTemp);
             }
         }
         catch (Exception e) {
+            logger.error("", e);
             MessageUtil.addError(e.getMessage());
         }
-        return progEstMeaItemShowListPara;
+        return progEstStaItemShowListPara;
+    }
+
+
+    public String onExportExcel()throws IOException, WriteException {
+        if (this.progEstStaItemShowList.size() == 0) {
+            MessageUtil.addWarn("记录为空...");
+            return null;
+        } else {
+            String excelFilename = "分包工程统计数量-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+            JxlsManager jxls = new JxlsManager();
+            jxls.exportList(excelFilename, beansMap,"stlTkcttEngSta.xls");
+            // 其他状态的票据需要添加时再修改导出文件名
+        }
+        return null;
     }
 
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
@@ -568,38 +584,14 @@ public class ItemTkcttEngMeaStlAction {
 
     public void setEsCttItemService(EsCttItemService esCttItemService) {
         this.esCttItemService = esCttItemService;
+    }    
+
+    public EsItemStlTkcttEngStaService getEsItemStlTkcttEngStaService() {
+        return esItemStlTkcttEngStaService;
     }
 
-    public ProgEstMeaItemShow getProgEstMeaItemShow() {
-        return progEstMeaItemShow;
-    }
-
-    public void setProgEstMeaItemShow(ProgEstMeaItemShow progEstMeaItemShow) {
-        this.progEstMeaItemShow = progEstMeaItemShow;
-    }
-
-    public ProgEstMeaItemShow getProgEstMeaItemShowSelected() {
-        return progEstMeaItemShowSelected;
-    }
-
-    public void setProgEstMeaItemShowSelected(ProgEstMeaItemShow progEstMeaItemShowSelected) {
-        this.progEstMeaItemShowSelected = progEstMeaItemShowSelected;
-    }
-
-    public List<ProgEstMeaItemShow> getProgEstMeaItemShowList() {
-        return progEstMeaItemShowList;
-    }
-
-    public void setProgEstMeaItemShowList(List<ProgEstMeaItemShow> progEstMeaItemShowList) {
-        this.progEstMeaItemShowList = progEstMeaItemShowList;
-    }
-
-    public EsItemStlTkcttEngMeaService getEsItemStlTkcttEngMeaService() {
-        return esItemStlTkcttEngMeaService;
-    }
-
-    public void setEsItemStlTkcttEngMeaService(EsItemStlTkcttEngMeaService EsItemStlTkcttEngMeaService) {
-        this.esItemStlTkcttEngMeaService = EsItemStlTkcttEngMeaService;
+    public void setEsItemStlTkcttEngStaService(EsItemStlTkcttEngStaService EsItemStlTkcttEngStaService) {
+        this.esItemStlTkcttEngStaService = EsItemStlTkcttEngStaService;
     }
 
     public EsInitPowerService getEsInitPowerService() {
@@ -672,20 +664,61 @@ public class ItemTkcttEngMeaStlAction {
         return strMngNotFinishFlag;
     }
 
-    public ProgEstMeaItemShow getProgEstMeaItemShowDel() {
-        return progEstMeaItemShowDel;
+    public BigDecimal getbDEng_BeginToCurrentPeriodEQtyInDB() {
+        return bDEng_BeginToCurrentPeriodEQtyInDB;
     }
 
-    public void setProgEstMeaItemShowDel(ProgEstMeaItemShow progEstMeaItemShowDel) {
-        this.progEstMeaItemShowDel = progEstMeaItemShowDel;
+    public void setbDEng_BeginToCurrentPeriodEQtyInDB(BigDecimal bDEng_BeginToCurrentPeriodEQtyInDB) {
+        this.bDEng_BeginToCurrentPeriodEQtyInDB = bDEng_BeginToCurrentPeriodEQtyInDB;
     }
 
-    public ProgEstMeaItemShow getProgEstMeaItemShowUpd() {
-        return progEstMeaItemShowUpd;
+    public ProgEstStaItemShow getProgEstStaItemShow() {
+        return progEstStaItemShow;
     }
 
-    public void setProgEstMeaItemShowUpd(ProgEstMeaItemShow progEstMeaItemShowUpd) {
-        this.progEstMeaItemShowUpd = progEstMeaItemShowUpd;
+    public void setProgEstStaItemShow(ProgEstStaItemShow progEstStaItemShow) {
+        this.progEstStaItemShow = progEstStaItemShow;
     }
+
+    public ProgEstStaItemShow getProgEstStaItemShowDel() {
+        return progEstStaItemShowDel;
+    }
+
+    public void setProgEstStaItemShowDel(ProgEstStaItemShow progEstStaItemShowDel) {
+        this.progEstStaItemShowDel = progEstStaItemShowDel;
+    }
+
+    public ProgEstStaItemShow getProgEstStaItemShowSelected() {
+        return progEstStaItemShowSelected;
+    }
+
+    public void setProgEstStaItemShowSelected(ProgEstStaItemShow progEstStaItemShowSelected) {
+        this.progEstStaItemShowSelected = progEstStaItemShowSelected;
+    }
+
+    public ProgEstStaItemShow getProgEstStaItemShowUpd() {
+        return progEstStaItemShowUpd;
+    }
+
+    public void setProgEstStaItemShowUpd(ProgEstStaItemShow progEstStaItemShowUpd) {
+        this.progEstStaItemShowUpd = progEstStaItemShowUpd;
+    }
+
+    public List<ProgEstStaItemShow> getProgEstStaItemShowList() {
+        return progEstStaItemShowList;
+    }
+
+    public void setProgEstStaItemShowList(List<ProgEstStaItemShow> progEstStaItemShowList) {
+        this.progEstStaItemShowList = progEstStaItemShowList;
+    }
+
+    public List<ProgEstStaItemShow> getProgEstItemShowListForExcel() {
+        return progEstItemShowListForExcel;
+    }
+
+    public void setProgEstItemShowListForExcel(List<ProgEstStaItemShow> progEstItemShowListForExcel) {
+        this.progEstItemShowListForExcel = progEstItemShowListForExcel;
+    }
+
     /*智能字段End*/
 }

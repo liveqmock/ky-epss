@@ -17,7 +17,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import epss.common.utils.MessageUtil;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -38,8 +37,8 @@ import java.util.Map;
  */
 @ManagedBean
 @ViewScoped
-public class EsInitSubcttStlPAction {
-    private static final Logger logger = LoggerFactory.getLogger(EsInitSubcttStlPAction.class);
+public class SubcttStlPInfoAction {
+    private static final Logger logger = LoggerFactory.getLogger(SubcttStlPInfoAction.class);
     @ManagedProperty(value = "#{esInitStlService}")
     private EsInitStlService esInitStlService;
     @ManagedProperty(value = "#{esItemStlSubcttEngQService}")
