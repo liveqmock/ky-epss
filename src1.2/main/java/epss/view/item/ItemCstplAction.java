@@ -363,7 +363,7 @@ public class ItemCstplAction {
                     }
                 }
             }
-            esCttItemService.setAfterThisOrderidSubOneByTypeAndIdAndParentPkidAndGrade(
+            esCttItemService.setAfterThisOrderidSubOneByNode(
                     cstplItemShowSelected.getBelongToTypeContrast(),
                     cstplItemShowSelected.getBelongToPkidContrast(),
                     cstplItemShowSelected.getParentPkidContrast(),
@@ -402,12 +402,12 @@ public class ItemCstplAction {
                 esCttItemService.updateRecord(cttItemShowUpd) ;
             }
             else if(strSubmitType .equals("Add")) {
-                EsCttItem esCttItemTemp=esCttItemService.fromConstructToModel(cttItemShowAdd);
+                EsCttItem esCttItemTemp=esCttItemService.fromModelShowToModel(cttItemShowAdd);
                 if (esCttItemService.isExistSameRecordInDb(esCttItemTemp)){
                     MessageUtil.addInfo("该编号对应记录已存在，请重新录入。");
                     return;
                 }
-                esCttItemService.setAfterThisOrderidPlusOneByTypeAndIdAndParentPkidAndGrade(
+                esCttItemService.setAfterThisOrderidPlusOneByNode(
                         cttItemShowAdd.getBelongToType(),
                         cttItemShowAdd.getBelongToPkid(),
                         cttItemShowAdd.getParentPkid(),

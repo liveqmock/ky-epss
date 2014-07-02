@@ -316,10 +316,6 @@ public class ItemTkcttAction {
             if(strSubmitTypePara.equals("Add")) {
                 return;
             }
-            if(cttItemShowPara.getStrNo()==null){
-                MessageUtil.addError("请确认选择的行，合计行不可编辑！");
-                return;
-            }
             strSubmitType=strSubmitTypePara;
             if(strSubmitTypePara.equals("Sel")){
                 cttItemShowSel = (CttItemShow) BeanUtils.cloneBean(cttItemShowPara);
@@ -340,19 +336,19 @@ public class ItemTkcttAction {
         }
     }
     /*删除*/
-    public void delThisRecordAction(){
+    public void delThisRecordAction(CttItemShow cttItemShowPara){
         try {
-            int deleteRecordNum=esCttItemService.deleteRecord(cttItemShowDel.getPkid()) ;
+            int deleteRecordNum=esCttItemService.deleteRecord(cttItemShowPara.getPkid()) ;
             if (deleteRecordNum<=0){
                 MessageUtil.addInfo("该记录已删除。");
                 return;
             }
-            esCttItemService.setAfterThisOrderidSubOneByTypeAndIdAndParentPkidAndGrade(
-                    cttItemShowDel.getBelongToType(),
-                    cttItemShowDel.getBelongToPkid(),
-                    cttItemShowDel.getParentPkid(),
-                    cttItemShowDel.getGrade(),
-                    cttItemShowDel.getOrderid());
+            esCttItemService.setAfterThisOrderidSubOneByNode(
+                    cttItemShowPara.getBelongToType(),
+                    cttItemShowPara.getBelongToPkid(),
+                    cttItemShowPara.getParentPkid(),
+                    cttItemShowPara.getGrade(),
+                    cttItemShowPara.getOrderid());
             MessageUtil.addInfo("删除数据完成。");
             initData();
         } catch (Exception e) {
@@ -446,8 +442,16 @@ public class ItemTkcttAction {
         try{
             /*提交前的检查*/
             if(strSubmitType .equals("Del")) {
-                delThisRecordAction();
+                if(ToolUtil.getStrIgnoreNull(cttItemShowDel.getStrNo()).length()==0){
+                    MessageUtil.addError("请确认选择的行，合计行不可编辑！");
+                    return;
+                }
+                delThisRecordAction(cttItemShowDel);
             }else{
+                if(ToolUtil.getStrIgnoreNull(cttItemShowUpd.getStrNo()).length()==0){
+                    MessageUtil.addError("请确认选择的行，合计行不可编辑！");
+                    return;
+                }
                 if(!subMitActionPreCheck()){
                     return ;
                 }
@@ -459,12 +463,16 @@ public class ItemTkcttAction {
                     esCttItemService.updateRecord(cttItemShowUpd) ;
                 }
                 else if(strSubmitType .equals("Add")) {
-                    EsCttItem esCttItemTemp=esCttItemService.fromConstructToModel(cttItemShowAdd);
+                    if(ToolUtil.getStrIgnoreNull(cttItemShowAdd.getStrNo()).length()==0){
+                        MessageUtil.addError("请确认选择的行，合计行不可编辑！");
+                        return;
+                    }
+                    EsCttItem esCttItemTemp=esCttItemService.fromModelShowToModel(cttItemShowAdd);
                     if (esCttItemService.isExistSameRecordInDb(esCttItemTemp)){
                         MessageUtil.addInfo("该编号对应记录已存在，请重新录入。");
                         return;
                     }
-                    esCttItemService.setAfterThisOrderidPlusOneByTypeAndIdAndParentPkidAndGrade(
+                    esCttItemService.setAfterThisOrderidPlusOneByNode(
                             cttItemShowAdd.getBelongToType(),
                             cttItemShowAdd.getBelongToPkid(),
                             cttItemShowAdd.getParentPkid(),
@@ -541,10 +549,10 @@ public class ItemTkcttAction {
                     esCttItemTemp.setBelongToPkid(strBelongToPkid);
                     esCttItemTemp.setParentPkid("root");
                     esCttItemTemp.setGrade(1);
-                    esCttItemTemp.setOrderid(Orderid+1);
                     esCttItemTemp.setName("(其它)");
                     esCttItemTemp.setSpareField("留作成本计划对应总包合同空头项");
-                    if(!esCttItemService.isExistSameRecordInDb(esCttItemTemp)){
+                    if(!esCttItemService.isExistSameNameNodeInDb(esCttItemTemp)){
+                        esCttItemTemp.setOrderid(Orderid+1);
                         esCttItemService.insertRecord(esCttItemTemp);
                     }
                     initData();

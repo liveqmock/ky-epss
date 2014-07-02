@@ -43,7 +43,7 @@ public class EsInitStlService {
         return esInitStlMapper.selectByExample(example);
     }
 
-    private EsInitStl fromConstructToModel(ProgInfoShow progInfoShowPara){
+    private EsInitStl fromModelShowToModel(ProgInfoShow progInfoShowPara){
         EsInitStl esInitStlTemp =new EsInitStl();
         esInitStlTemp.setPkid(progInfoShowPara.getPkid());
         esInitStlTemp.setStlType(progInfoShowPara.getStlType());
@@ -80,7 +80,7 @@ public class EsInitStlService {
         progInfoShowPara.setDeletedFlag("0");
         progInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
         progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
-        esInitStlMapper.insert(fromConstructToModel(progInfoShowPara)) ;
+        esInitStlMapper.insert(fromModelShowToModel(progInfoShowPara)) ;
     }
     public void insertRecord(EsInitStl esInitStlPara){
         esInitStlPara.setCreatedBy(platformService.getStrLastUpdBy());
@@ -96,7 +96,7 @@ public class EsInitStlService {
         progInfoShowPara.setDeletedFlag("0");
         progInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
         progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
-        esInitStlMapper.updateByPrimaryKey(fromConstructToModel(progInfoShowPara)) ;
+        esInitStlMapper.updateByPrimaryKey(fromModelShowToModel(progInfoShowPara)) ;
     }
     public void updateRecord(EsInitStl esInitStlPara){
         esInitStlPara.setModificationNum(

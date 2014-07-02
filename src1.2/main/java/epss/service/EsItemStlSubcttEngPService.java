@@ -66,10 +66,10 @@ public class EsItemStlSubcttEngPService {
         progSubstlItemShowPara.setEngPMng_LastUpdBy(platformService.getStrLastUpdBy());
         progSubstlItemShowPara.setEngPMng_LastUpdByName(esCommonService.getOperNameByOperId(platformService.getStrLastUpdBy()));
         progSubstlItemShowPara.setEngPMng_LastUpdDate(platformService.getStrLastUpdDate());
-        esItemStlSubcttEngPMapper.insert(fromConstructToModel(progSubstlItemShowPara));
+        esItemStlSubcttEngPMapper.insert(fromModelShowToModel(progSubstlItemShowPara));
     }
 
-    private EsItemStlSubcttEngP fromConstructToModel
+    private EsItemStlSubcttEngP fromModelShowToModel
             (ProgSubstlItemShow progSubstlItemShowPara){
         EsItemStlSubcttEngP esItemStlSubcttEngP=new EsItemStlSubcttEngP();
         esItemStlSubcttEngP.setSubstlType(progSubstlItemShowPara.getEngPMng_SubStlType());

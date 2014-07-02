@@ -67,7 +67,7 @@ public class EsItemStlTkcttEngMeaService{
     }
 
     public void updateRecord(ProgEstMeaItemShow progEstMeaItemShowPara){
-        EsItemStlTkcttEngMea esStlTkcttEngMeaTemp=fromConstructToModel(progEstMeaItemShowPara);
+        EsItemStlTkcttEngMea esStlTkcttEngMeaTemp=fromModelShowToModel(progEstMeaItemShowPara);
         esStlTkcttEngMeaTemp.setModificationNum(
                 ToolUtil.getIntIgnoreNull(esStlTkcttEngMeaTemp.getModificationNum())+1);
         esStlTkcttEngMeaTemp.setDeleteFlag("0");
@@ -77,7 +77,7 @@ public class EsItemStlTkcttEngMeaService{
     }
 
     public void insertRecord(ProgEstMeaItemShow progEstMeaItemShowPara){
-        EsItemStlTkcttEngMea esStlTkcttEngMeaTemp=fromConstructToModel(progEstMeaItemShowPara);
+        EsItemStlTkcttEngMea esStlTkcttEngMeaTemp=fromModelShowToModel(progEstMeaItemShowPara);
         esStlTkcttEngMeaTemp.setCreatedBy(platformService.getStrLastUpdBy());
         esStlTkcttEngMeaTemp.setCreatedDate(platformService.getStrLastUpdDate());
         esStlTkcttEngMeaTemp.setDeleteFlag("0");
@@ -87,7 +87,7 @@ public class EsItemStlTkcttEngMeaService{
     }
 
 
-    private EsItemStlTkcttEngMea fromConstructToModel
+    private EsItemStlTkcttEngMea fromModelShowToModel
             (ProgEstMeaItemShow progEstMeaItemShowPara){
         EsItemStlTkcttEngMea esItemStlTkcttEngMeaTemp=new EsItemStlTkcttEngMea();
         esItemStlTkcttEngMeaTemp.setPkid(progEstMeaItemShowPara.getEng_Pkid());

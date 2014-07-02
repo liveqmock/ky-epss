@@ -492,7 +492,7 @@ public class ItemSubcttAction {
         }
     }
     private void addRecordAction(CttItemShow cttItemShowPara){
-        esCttItemService.setAfterThisOrderidPlusOneByTypeAndIdAndParentPkidAndGrade(
+        esCttItemService.setAfterThisOrderidPlusOneByNode(
                 cttItemShowPara.getBelongToType(),
                 cttItemShowPara.getBelongToPkid(),
                 cttItemShowPara.getParentPkid(),
@@ -505,7 +505,7 @@ public class ItemSubcttAction {
     }
     private int delRecordAction(CttItemShow cttItemShowPara) {
         int deleteRecordNum=esCttItemService.deleteRecord(cttItemShowPara.getPkid()) ;
-        esCttItemService.setAfterThisOrderidSubOneByTypeAndIdAndParentPkidAndGrade(
+        esCttItemService.setAfterThisOrderidSubOneByNode(
                 cttItemShowPara.getBelongToType(),
                 cttItemShowPara.getBelongToPkid(),
                 cttItemShowPara.getParentPkid(),

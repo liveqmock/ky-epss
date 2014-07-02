@@ -11,6 +11,7 @@ import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.EsInitStl;
 import epss.service.EsCttInfoService;
+import epss.service.EsCttItemService;
 import epss.service.EsInitPowerService;
 import epss.service.common.EsFlowService;
 import epss.view.common.EsCommon;
@@ -49,6 +50,8 @@ public class TkCttInfoAction {
     private static final Logger logger = LoggerFactory.getLogger(TkCttInfoAction.class);
     @ManagedProperty(value = "#{esCttInfoService}")
     private EsCttInfoService esCttInfoService;
+    @ManagedProperty(value = "#{esCttItemService}")
+    private EsCttItemService esCttItemService;
     @ManagedProperty(value = "#{esInitPowerService}")
     private EsInitPowerService esInitPowerService;
     @ManagedProperty(value = "#{esFlowService}")
@@ -404,12 +407,13 @@ public class TkCttInfoAction {
     private void deleteRecordAction(CttInfoShow cttInfoShowPara) {
         try {
             cttInfoShowPara.setCttType(ESEnum.ITEMTYPE0.getCode());
+            int deleteRecordNumOfCttItem=esCttItemService.deleteRecord(cttInfoShowPara);
             int deleteRecordNumOfCtt= esCttInfoService.deleteRecord(cttInfoShowPara.getPkid());
             int deleteRecordNumOfPower=esInitPowerService.deleteRecord(
                     cttInfoShowPara.getCttType(),
                     cttInfoShowPara.getPkid(),
                     "NULL");
-            if (deleteRecordNumOfCtt<=0&&deleteRecordNumOfPower<=0){
+            if (deleteRecordNumOfCtt<=0&&deleteRecordNumOfPower<=0&&deleteRecordNumOfCttItem<=0){
                 MessageUtil.addInfo("该记录已删除。");
                 return;
             }
@@ -420,6 +424,14 @@ public class TkCttInfoAction {
     }
 
     /*智能字段 Start*/
+
+    public EsCttItemService getEsCttItemService() {
+        return esCttItemService;
+    }
+
+    public void setEsCttItemService(EsCttItemService esCttItemService) {
+        this.esCttItemService = esCttItemService;
+    }
 
     public List<AttachmentModel> getAttachmentList() {
         return attachmentList;

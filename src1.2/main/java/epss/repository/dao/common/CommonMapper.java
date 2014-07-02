@@ -79,18 +79,18 @@ public interface CommonMapper {
             " and BELONG_TO_PKID = #{strBelongToPkid}"+
             " and PARENT_PKID         = #{strParentPkid}"+
             " and GRADE               = #{intGrade}")
-    void setAfterThisOrderidPlusOneByTypeAndIdAndParentPkidAndGrade(@Param("strBelongToType") String strBelongToType,
-                                                                     @Param("strBelongToPkid") String strBelongToPkid,
-                                                                     @Param("strParentPkid") String strParentPkid,
-                                                                     @Param("intGrade") Integer intGrade,
-                                                                     @Param("intOrderid") Integer intOrderid);
+    void setAfterThisOrderidPlusOneByNode(@Param("strBelongToType") String strBelongToType,
+                                           @Param("strBelongToPkid") String strBelongToPkid,
+                                           @Param("strParentPkid") String strParentPkid,
+                                           @Param("intGrade") Integer intGrade,
+                                           @Param("intOrderid") Integer intOrderid);
 
     @Update("Update ES_CTT_ITEM set ORDERID=ORDERID-1 where ORDERID >= #{intOrderid}"+
             " and BELONG_TO_TYPE = #{strBelongToType}"+
             " and BELONG_TO_PKID = #{strBelongToPkid}"+
             " and PARENT_PKID         = #{strParentPkid}"+
             " and GRADE               = #{intGrade}")
-    void setAfterThisOrderidSubOneByTypeAndIdAndParentPkidAndGrade(@Param("strBelongToType") String strBelongToType,
+    void setAfterThisOrderidSubOneByNode(@Param("strBelongToType") String strBelongToType,
                                                                     @Param("strBelongToPkid") String strBelongToPkid,
                                                                     @Param("strParentPkid") String strParentPkid,
                                                                     @Param("intGrade") Integer intGrade,

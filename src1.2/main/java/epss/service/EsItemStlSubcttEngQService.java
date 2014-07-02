@@ -68,7 +68,7 @@ public class EsItemStlSubcttEngQService {
         return commonMapper.selectEsItemStlSubcttEngQPeriodsByPeriod(strSubcttPkid,strPeriodNoBegin,strPeriodNoEnd);
     }
 
-    private EsItemStlSubcttEngQ fromConstructToModel
+    private EsItemStlSubcttEngQ fromModelShowToModel
             (ProgWorkqtyItemShow progWorkqtyItemShowPara){
         EsItemStlSubcttEngQ esItemStlSubcttEngQTemp=new EsItemStlSubcttEngQ();
         esItemStlSubcttEngQTemp.setPkid(progWorkqtyItemShowPara.getEngQMng_Pkid());
@@ -91,7 +91,7 @@ public class EsItemStlSubcttEngQService {
     }
 
     public void updateRecord(ProgWorkqtyItemShow progWorkqtyItemShowPara){
-        EsItemStlSubcttEngQ esItemStlSubcttEngQTemp=fromConstructToModel(progWorkqtyItemShowPara);
+        EsItemStlSubcttEngQ esItemStlSubcttEngQTemp=fromModelShowToModel(progWorkqtyItemShowPara);
         esItemStlSubcttEngQTemp.setModificationNum(
                 ToolUtil.getIntIgnoreNull(esItemStlSubcttEngQTemp.getModificationNum())+1);
         esItemStlSubcttEngQTemp.setDeleteFlag("0");
@@ -101,7 +101,7 @@ public class EsItemStlSubcttEngQService {
     }
 
     public void insertRecord(ProgWorkqtyItemShow progWorkqtyItemShowPara){
-        EsItemStlSubcttEngQ esItemStlSubcttEngQTemp=fromConstructToModel(progWorkqtyItemShowPara);
+        EsItemStlSubcttEngQ esItemStlSubcttEngQTemp=fromModelShowToModel(progWorkqtyItemShowPara);
         esItemStlSubcttEngQTemp.setCreatedBy(platformService.getStrLastUpdBy());
         esItemStlSubcttEngQTemp.setCreatedDate(platformService.getStrLastUpdDate());
         esItemStlSubcttEngQTemp.setDeleteFlag("0");

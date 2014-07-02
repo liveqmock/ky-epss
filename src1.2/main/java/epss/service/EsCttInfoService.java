@@ -139,7 +139,7 @@ public class EsCttInfoService {
         cttInfoShowPara.setCreatedDate(platformService.getStrLastUpdDate());
         cttInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
         cttInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
-        esCttInfoMapper.insertSelective(fromConstructToModel(cttInfoShowPara));
+        esCttInfoMapper.insertSelective(fromModelShowToModel(cttInfoShowPara));
     }
 
     public void updateRecord(EsCttInfo esCttInfoPara){
@@ -156,7 +156,7 @@ public class EsCttInfoService {
         cttInfoShowPara.setDeletedFlag("0");
         cttInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
         cttInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
-        esCttInfoMapper.updateByPrimaryKey(fromConstructToModel(cttInfoShowPara));
+        esCttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
     }
 
     public int deleteRecord(String strPkId){
@@ -167,7 +167,7 @@ public class EsCttInfoService {
         return commonMapper.getStrMaxCttId(strCttType) ;
     }
 
-    private EsCttInfo fromConstructToModel(CttInfoShow cttInfoShowPara) {
+    private EsCttInfo fromModelShowToModel(CttInfoShow cttInfoShowPara) {
         EsCttInfo esCttInfoTemp = new EsCttInfo();
         esCttInfoTemp.setPkid(cttInfoShowPara.getPkid());
         esCttInfoTemp.setCttType(cttInfoShowPara.getCttType());
@@ -194,7 +194,7 @@ public class EsCttInfoService {
     //更新甲供材情况
     public int  updateByPKid(CttInfoShow cttInfoShowPara){
 
-       return esCttInfoMapper.updateByPrimaryKey(fromConstructToModel(cttInfoShowPara));
+       return esCttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
     }
 
 

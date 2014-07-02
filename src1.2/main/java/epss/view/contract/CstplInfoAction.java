@@ -9,6 +9,7 @@ import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.EsInitStl;
 import epss.service.EsCttInfoService;
+import epss.service.EsCttItemService;
 import epss.service.EsInitPowerService;
 import epss.service.common.EsFlowService;
 import epss.view.common.EsCommon;
@@ -41,6 +42,8 @@ public class CstplInfoAction {
     private static final Logger logger = LoggerFactory.getLogger(CstplInfoAction.class);
     @ManagedProperty(value = "#{esCttInfoService}")
     private EsCttInfoService esCttInfoService;
+    @ManagedProperty(value = "#{esCttItemService}")
+    private EsCttItemService esCttItemService;
     @ManagedProperty(value = "#{esInitPowerService}")
     private EsInitPowerService esInitPowerService;
     @ManagedProperty(value = "#{esFlowService}")
@@ -394,12 +397,14 @@ public class CstplInfoAction {
     }
     private void deleteRecordAction(CttInfoShow cttInfoShowPara) {
         try {
+            cttInfoShowPara.setCttType(ESEnum.ITEMTYPE1.getCode());
+            int deleteRecordNumOfCttItem=esCttItemService.deleteRecord(cttInfoShowPara);
             int deleteRecordNumOfCtt= esCttInfoService.deleteRecord(cttInfoShowPara.getPkid());
             int deleteRecordNumOfPower=esInitPowerService.deleteRecord(
                     cttInfoShowPara.getCttType(),
                     cttInfoShowPara.getPkid(),
                     "NULL");
-            if (deleteRecordNumOfCtt<=0&&deleteRecordNumOfPower<=0){
+            if (deleteRecordNumOfCtt<=0&&deleteRecordNumOfPower<=0&&deleteRecordNumOfCttItem<=0){
                 MessageUtil.addInfo("¸Ã¼ÇÂ¼ÒÑÉ¾³ý¡£");
                 return;
             }
@@ -417,6 +422,14 @@ public class CstplInfoAction {
 
     public void setEsCttInfoService(EsCttInfoService esCttInfoService) {
         this.esCttInfoService = esCttInfoService;
+    }
+
+    public EsCttItemService getEsCttItemService() {
+        return esCttItemService;
+    }
+
+    public void setEsCttItemService(EsCttItemService esCttItemService) {
+        this.esCttItemService = esCttItemService;
     }
 
     public EsInitPowerService getEsInitPowerService() {

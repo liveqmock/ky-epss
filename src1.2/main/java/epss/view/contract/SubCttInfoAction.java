@@ -457,12 +457,13 @@ public class SubCttInfoAction {
     private void deleteRecordAction(CttInfoShow cttInfoShowPara) {
         try {
             cttInfoShowPara.setCttType(ESEnum.ITEMTYPE2.getCode());
+            int deleteRecordNumOfCttItem=esCttItemService.deleteRecord(cttInfoShowPara);
             int deleteRecordNumOfCtt= esCttInfoService.deleteRecord(cttInfoShowPara.getPkid());
             int deleteRecordNumOfPower=esInitPowerService.deleteRecord(
                     cttInfoShowPara.getCttType(),
                     cttInfoShowPara.getPkid(),
                     "NULL");
-            if (deleteRecordNumOfCtt<=0&&deleteRecordNumOfPower<=0){
+            if (deleteRecordNumOfCtt<=0&&deleteRecordNumOfPower<=0&&deleteRecordNumOfCttItem<=0){
                 MessageUtil.addInfo("¸Ã¼ÇÂ¼ÒÑÉ¾³ý¡£");
                 return;
             }

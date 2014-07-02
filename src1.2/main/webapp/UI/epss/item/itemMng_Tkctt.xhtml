@@ -37,7 +37,7 @@
                 <p:commandButton id="startInputBtn" value="录入未完"
                                  action="#{itemTkcttAction.onClickForPowerAction('Fail')}"
                                  rendered='#{!itemTkcttAction.strMngNotFinishFlag}'
-                                 update="msgs,pgCondition">
+                                 update="msgs,pgCondition,ptt">
                 </p:commandButton>
                 <p:selectOneMenu id="statusFlag" value="#{itemTkcttAction.strNotPassToStatus}"
                         rendered="#{itemTkcttAction.strFlowType eq 'Mng'?'false':
@@ -142,8 +142,7 @@
                         <p:commandButton id="submitBtnForAdd"
                                          value="提交（增加）"
                                          action="#{itemTkcttAction.submitThisRecordAction}"
-                                         update="pgViewForAdd,ptt,msgs"
-                                         >
+                                         update="pgViewForAdd,ptt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForAdd" value="重置"
                                          type="reset"
