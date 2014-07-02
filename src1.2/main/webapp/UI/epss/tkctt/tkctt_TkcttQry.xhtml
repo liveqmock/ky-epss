@@ -30,7 +30,7 @@
                  var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                  var arg = new Object();
                  arg.doType = "select";
-                 var rtn = dialog("../item/itemQry_Tkctt.xhtml?strTkCttPkid=" + pkid + "", arg, sfeature);
+                 var rtn = dialog("../item/itemQry_Tkctt.xhtml?strFlowType=Qry&amp;strTkCttPkid=" + pkid + "", arg, sfeature);
             }
             /* function actSelect(obj, ind) {
                 // 寻找当前行的PKID思路：从此节点直到找到Table再找到相应的行和列

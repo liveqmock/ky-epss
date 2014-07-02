@@ -39,59 +39,34 @@
                                  rendered='#{!itemTkcttAction.strMngNotFinishFlag}'
                                  update="msgs,pgCondition">
                 </p:commandButton>
-                <p:selectOneMenu id="statusFlag" value="#{tkCttInfoAction.strNotPassToStatus}"
+                <p:selectOneMenu id="statusFlag" value="#{itemTkcttAction.strNotPassToStatus}"
                         rendered="#{itemTkcttAction.strFlowType eq 'Mng'?'false':
                         itemTkcttAction.strFlowType eq 'Check'?'false':'true'}">
                     <f:selectItems value="#{esFlowControl.statusFlagList}"/>
                 </p:selectOneMenu>
             </h:panelGrid>
-            <p:contextMenu id="pcm" for="ptt" rendered='#{itemTkcttAction.strMngNotFinishFlag}'>
-                <p:menuitem value="更新" icon="ui-icon-pencil"
-                            actionListener="#{itemTkcttAction.selectRecordAction('Upd')}"
-                            update="pgViewForUpd,msgs,ptt,pcm"
-                            onclick="PF('wVDlgViewForUpd').show()">
-                </p:menuitem>
-                <p:menuitem value="删除" icon="ui-icon-trash"
-                            actionListener="#{itemTkcttAction.selectRecordAction('Del')}"
-                            update="pgViewForDel,msgs,ptt,pcm"
-                            onclick="PF('wVDlgViewForDel').show()">
-                </p:menuitem>
-                <p:menuitem value="复制" icon="ui-icon-copy"
-                            actionListener="#{itemTkcttAction.selectRecordAction('Copy')}"
-                            update="msgs,ptt,pcm">
-                </p:menuitem>
-                <p:menuitem value="剪切" icon="ui-icon-scissors"
-                            actionListener="#{itemTkcttAction.selectRecordAction('Cut')}"
-                            update="msgs,ptt,pcm">
-                </p:menuitem>
-                <p:menuitem value="粘贴（同层_上）" icon="ui-icon-clipboard"
-                            actionListener="#{itemTkcttAction.selectRecordAction('Paste_brother_up')}"
-                            update="msgs,ptt,pcm"
-                            rendered="#{itemTkcttAction.strPasteBtnRendered}">
-                </p:menuitem>
-                <p:menuitem value="粘贴（同层_下）" icon="ui-icon-clipboard"
-                            actionListener="#{itemTkcttAction.selectRecordAction('Paste_brother_down')}"
-                            update="msgs,ptt,pcm"
-                            rendered="#{itemTkcttAction.strPasteBtnRendered}">
-                </p:menuitem>
-                <p:menuitem value="粘贴（子层）" icon="ui-icon-clipboard"
-                            actionListener="#{itemTkcttAction.selectRecordAction('Paste_children')}"
-                            update="msgs,ptt,pcm"
-                            rendered="#{itemTkcttAction.strPasteBtnRendered}">
-                </p:menuitem>
-            </p:contextMenu>
+
             <p:dataTable id="ptt"
                      value="#{itemTkcttAction.cttItemShowList}"
                      var="record"
                      rowKey="#{record.pkid}"
-                     selection="#{itemTkcttAction.cttItemShowSelected}"
-                     selectionMode="single"
                      rowIndexVar="row"
                      emptyMessage="数据记录为空..."
                      rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle':
-                     record.name eq '总合计'? 'rowDoneStyle':null}"
-                     stickyHeader="#{itemTkcttAction.strStickyHeaderFlag}">
-                <p:column style="width:30px" headerText="序号">
+                     record.name eq '总合计'? 'rowDoneStyle':null}">
+                <p:column headerText="操作" style="width:80px" rendered='#{itemTkcttAction.strMngNotFinishFlag}'>
+                    <p:commandButton icon="ui-icon-pencil"
+                                     action="#{itemTkcttAction.selectRecordAction('Upd',record)}"
+                                     update="ptt,:form:pgViewForUpd,:form:msgs"
+                                     onclick="PF('wVDlgViewForUpd').show()">
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-trash"
+                                     action="#{itemTkcttAction.selectRecordAction('Del',record)}"
+                                     update="ptt,:form:pgViewForDel,:form:msgs"
+                                     onclick="PF('wVDlgViewForDel').show()">
+                    </p:commandButton>
+                </p:column>
+                <p:column style="width:60px" headerText="序号">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
                 <p:column style="width:120px" headerText="编号">

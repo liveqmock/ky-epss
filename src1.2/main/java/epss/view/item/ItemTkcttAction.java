@@ -47,8 +47,6 @@ public class ItemTkcttAction {
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
-    @ManagedProperty(value = "#{esInitCustService}")
-    private EsInitCustService esInitCustService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
 
@@ -57,12 +55,7 @@ public class ItemTkcttAction {
     private CttItemShow cttItemShowUpd;
     private CttItemShow cttItemShowDel;
     private List<EsCttItem> esCttItemList;
-
-    private CttItemShow cttItemShowCopy;
-    private CttItemShow cttItemShowPaste;
     private List<CttItemShow> cttItemShowList;
-    /*列表中选择一行*/
-    private CttItemShow cttItemShowSelected;
 
     /*所属类型*/
     private String strBelongToType;
@@ -71,15 +64,12 @@ public class ItemTkcttAction {
 
     /*提交类型*/
     private String strSubmitType;
-    private String strPasteType;
 
     /*控制控件在画面上的可用与现实Start*/
     private StyleModel styleModelNo;
     private StyleModel styleModel;
     //显示的控制
-    private String strPasteBtnRendered;
     private String strMngNotFinishFlag;
-    private String strStickyHeaderFlag;
     private String strNotPassToStatus;
     private String strFlowType;
     /*控制控件在画面上的可用与现实End*/
@@ -89,7 +79,9 @@ public class ItemTkcttAction {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         strBelongToType=ESEnum.ITEMTYPE0.getCode();
         strBelongToPkid=parammap.get("strTkCttPkid").toString();
-        strFlowType=parammap.get("strFlowType").toString();
+        if(parammap.containsKey("strFlowType")){
+            strFlowType=parammap.get("strFlowType").toString();
+        }
 
         List<EsInitPower> esInitPowerList=
                 esInitPowerService.selectListByModel(strBelongToType, strBelongToPkid, "NULL");
@@ -133,7 +125,7 @@ public class ItemTkcttAction {
         // 根据父层级号获得该父层级下的子节点
         List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
         // 通过父层id查找它的孩子
-        subEsCttItemList =getEsItemHieRelapListByLevelParentPkid(strLevelParentId, esCttItemListPara);
+        subEsCttItemList =getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
         for(EsCttItem itemUnit: subEsCttItemList){
             CttItemShow cttItemShowTemp = null;
             String strCreatedByName= esCommon.getOperNameByOperId(itemUnit.getCreatedBy());
@@ -251,14 +243,11 @@ public class ItemTkcttAction {
     }
     /*重置*/
     public void resetAction(){
-        strStickyHeaderFlag="true";
         strSubmitType="Add";
         styleModelNo=new StyleModel();
         styleModelNo.setDisabled_Flag("false");
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
-        strPasteBtnRendered="false";
-        strPasteType="";
         cttItemShowSel =new CttItemShow(strBelongToType ,strBelongToPkid);
         cttItemShowAdd =new CttItemShow(strBelongToType ,strBelongToPkid);
         cttItemShowUpd =new CttItemShow(strBelongToType ,strBelongToPkid);
@@ -322,55 +311,29 @@ public class ItemTkcttAction {
     }
 
     /*右单击事件*/
-    public void selectRecordAction(String strSubmitTypePara){
+    public void selectRecordAction(String strSubmitTypePara,CttItemShow cttItemShowPara){
         try {
             if(strSubmitTypePara.equals("Add")) {
                 return;
             }
-            if(cttItemShowSelected.getStrNo()==null){
+            if(cttItemShowPara.getStrNo()==null){
                 MessageUtil.addError("请确认选择的行，合计行不可编辑！");
                 return;
             }
             strSubmitType=strSubmitTypePara;
             if(strSubmitTypePara.equals("Sel")){
-                cttItemShowSel = (CttItemShow) BeanUtils.cloneBean(cttItemShowSelected);
+                cttItemShowSel = (CttItemShow) BeanUtils.cloneBean(cttItemShowPara);
                 cttItemShowSel.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowSel.getStrNo())) ;
                 cttItemShowSel.setStrCorrespondingItemNo(
                         ToolUtil.getIgnoreSpaceOfStr(cttItemShowSel.getStrCorrespondingItemNo()));
             }
             if(strSubmitTypePara.equals("Upd")){
-                strPasteBtnRendered="false";
-                cttItemShowUpd =(CttItemShow) BeanUtils.cloneBean(cttItemShowSelected) ;
+                cttItemShowUpd =(CttItemShow) BeanUtils.cloneBean(cttItemShowPara) ;
                 cttItemShowUpd.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowUpd.getStrNo())) ;
-                cttItemShowCopy =null;
-                cttItemShowPaste =null;
             }else if(strSubmitTypePara.equals("Del")){
-                strPasteBtnRendered="false";
-                cttItemShowDel =(CttItemShow) BeanUtils.cloneBean(cttItemShowSelected) ;
+                cttItemShowDel =(CttItemShow) BeanUtils.cloneBean(cttItemShowPara) ;
                 cttItemShowDel.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowDel.getStrNo())) ;
-                cttItemShowCopy =null;
-                cttItemShowPaste =null;
-            }else if(strSubmitTypePara.equals("Copy")){
-                strPasteBtnRendered="true";
-                cttItemShowCopy =(CttItemShow) BeanUtils.cloneBean(cttItemShowSelected) ;
-                cttItemShowSel =(CttItemShow) BeanUtils.cloneBean(cttItemShowSelected) ;
-                cttItemShowSel.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowSel.getStrNo())) ;
-                strPasteType="Copy";
-                cttItemShowPaste =null;
-            }else if(strSubmitTypePara.equals("Cut")){
-                strPasteBtnRendered="true";
-                cttItemShowCopy =(CttItemShow) BeanUtils.cloneBean(cttItemShowSelected) ;
-                cttItemShowSel =(CttItemShow) BeanUtils.cloneBean(cttItemShowSelected) ;
-                cttItemShowSel.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowSel.getStrNo())) ;
-                strPasteType="Cut";
-                cttItemShowPaste =null;
-            }else if(strSubmitTypePara.contains("Paste")){
-                strPasteBtnRendered="false";
-                cttItemShowPaste = (CttItemShow) BeanUtils.cloneBean(cttItemShowSelected) ;
-                cttItemShowSel =new CttItemShow(strBelongToType ,strBelongToPkid);
-                pasteAction();
             }
-            strStickyHeaderFlag="false";
         } catch (Exception e) {
             logger.error("选择数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -427,7 +390,7 @@ public class ItemTkcttAction {
 
         if(intLastIndexof <0){
             List<EsCttItem> itemHieRelapListSubTemp=new ArrayList<>();
-            itemHieRelapListSubTemp=getEsItemHieRelapListByLevelParentPkid("root", esCttItemList);
+            itemHieRelapListSubTemp=getEsCttItemListByParentPkid("root", esCttItemList);
 
             if(itemHieRelapListSubTemp .size() ==0){
                 if(!strIgnoreSpaceOfStr.equals("1") ){
@@ -454,7 +417,7 @@ public class ItemTkcttAction {
             }
             else{
                 List<EsCttItem> itemHieRelapListSubTemp=new ArrayList<>();
-                itemHieRelapListSubTemp=getEsItemHieRelapListByLevelParentPkid(
+                itemHieRelapListSubTemp=getEsCttItemListByParentPkid(
                         cttItemShowTemp1.getPkid(),
                         esCttItemList);
                 if(itemHieRelapListSubTemp .size() ==0){
@@ -518,186 +481,8 @@ public class ItemTkcttAction {
         }
     }
 
-    /*粘贴*/
-    private void pasteAction(){
-        try{
-            CttItemShow cttItemShowCopyTemp =new CttItemShow() ;
-            if(strPasteType.equals("Copy")){
-                /*复制的对象*/
-                cttItemShowCopyTemp = (CttItemShow) BeanUtils.cloneBean(cttItemShowCopy);
-                /*复制的目标位置*/
-                Integer intCutPasteActionGrade=0;
-                Integer intCutPasteActionOrderid=0;
-                if(strSubmitType .equals("Paste_brother_up")){
-                    cttItemShowCopyTemp.setParentPkid(cttItemShowPaste.getParentPkid());
-                    intCutPasteActionGrade= cttItemShowPaste.getGrade();
-                    intCutPasteActionOrderid= cttItemShowPaste.getOrderid();
-                }else if(strSubmitType.equals("Paste_brother_down")){
-                    cttItemShowCopyTemp.setParentPkid(cttItemShowPaste.getParentPkid());
-                    intCutPasteActionGrade= cttItemShowPaste.getGrade();
-                    intCutPasteActionOrderid= cttItemShowPaste.getOrderid()+1;
-                }else if(strSubmitType.equals("Paste_children")){
-                    cttItemShowCopyTemp.setParentPkid(cttItemShowPaste.getPkid());
-                    intCutPasteActionGrade= cttItemShowPaste.getGrade()+1;
-                    intCutPasteActionOrderid= esCttItemService.
-                            getMaxOrderidInEsItemHieRelapList(
-                                    cttItemShowCopyTemp.getBelongToType(),
-                                    cttItemShowCopyTemp.getBelongToPkid(),
-                                    cttItemShowCopyTemp.getParentPkid(),
-                                    intCutPasteActionGrade)+1;
-                }
-
-                cttItemShowCopyTemp.setGrade(intCutPasteActionGrade);
-                cttItemShowCopyTemp.setOrderid(intCutPasteActionOrderid);
-
-                /*更新复制的目标位置以后的数据*/
-                esCttItemService.setAfterThisOrderidPlusOneByTypeAndIdAndParentPkidAndGrade(
-                        cttItemShowCopyTemp.getBelongToType(),
-                        cttItemShowCopyTemp.getBelongToPkid(),
-                        cttItemShowCopyTemp.getParentPkid(),
-                        cttItemShowCopyTemp.getGrade(),
-                        cttItemShowCopyTemp.getOrderid());
-                /*在复制的目标位置处插入复制的对象：esItemHieRelapTemp中的Pkid随机生成不同于以前的了*/
-                esCttItemService.insertRecord(cttItemShowCopyTemp);
-
-                /*剪切前后层级变化的数*/
-                Integer intGradeGap=null;
-                if(strSubmitType .equals("Paste_brother_up")||strSubmitType.equals("Paste_brother_down")){
-                    intGradeGap= cttItemShowPaste.getGrade() - cttItemShowCopy.getGrade() ;
-                }else if(strSubmitType .equals("Paste_children")){
-                    intGradeGap= (cttItemShowPaste.getGrade()+1) - cttItemShowCopy.getGrade() ;
-                }
-
-                /*遍历复制对象的子节点数据Start*/
-                 /*记录新插入的当前条，因为Pkid随着自动生成已经变化了*/
-                CttItemShow cttItemShowTemp =(CttItemShow) BeanUtils.cloneBean(cttItemShowCopy);
-                /*复制总包合同列表数据用*/
-                List<CttItemShow> cttItemShowListTemp =new ArrayList<>();
-                /*itemOfEsItemHieRelapListTemp为排好序的总包合同信息列表*/
-                cttItemShowListTemp.addAll(cttItemShowList);
-                /*记录之前节点用*/
-                CttItemShow cttItemShowBefore =new CttItemShow();
-                Boolean isBegin=false;
-                for(CttItemShow itemUnit: cttItemShowListTemp){
-                    CttItemShow cttItemShowNewInsert =(CttItemShow) BeanUtils.cloneBean(itemUnit);
-                     /*找到剪切对象后，寻找该对象其子节点（层级号大于该对象的层级号的数据）并进行复制*/
-                    if(isBegin.equals(true) &&
-                            ToolUtil.getIntIgnoreNull(cttItemShowNewInsert.getGrade())<= cttItemShowCopy.getGrade()){
-                        break;
-                    }
-                    else if(isBegin.equals(true)){
-                        /*同层的情况下*/
-                        if(cttItemShowNewInsert.getGrade().equals(cttItemShowBefore.getGrade())){
-                            /*设置本条数据的父亲节点号为刚才插入数据的父亲节点号*/
-                            cttItemShowNewInsert.setParentPkid(cttItemShowTemp.getParentPkid());
-                        }
-                        /*子层层的情况下*/
-                        else{
-                            /*设置本条数据的父亲节点号为刚才插入数据的节点号*/
-                            cttItemShowNewInsert.setParentPkid(cttItemShowTemp.getPkid());
-                        }
-                        /*设置本条数据的层级号为原先的层级号加变换前后的层级差*/
-                        cttItemShowNewInsert.setGrade(cttItemShowNewInsert.getGrade()+intGradeGap);
-                        /*插入新数据*/
-                        esCttItemService.insertRecord(cttItemShowNewInsert);
-                        /*记录新插入的当前条，因为Pkid随着自动生成已经变化了*/
-                        cttItemShowTemp =(CttItemShow) BeanUtils.cloneBean(cttItemShowNewInsert);
-                        /*记录当前条数据*/
-                        cttItemShowBefore =itemUnit;
-                    }
-                    /*找到复制对象*/
-                    if(cttItemShowCopy.equals(itemUnit)) {
-                        isBegin=true;
-                    }
-                }
-                /*遍历复制对象的子节点数据End*/
-            }
-            else if (strPasteType.equals("Cut")){
-                /*粘贴的操作*/
-                /*修改目标节点的父子关系及层级号和序号*/
-                cttItemShowCopyTemp = (CttItemShow) BeanUtils.cloneBean(cttItemShowCopy);
-
-                Integer intCutPasteActionGrade=0;
-                Integer intCutPasteActionOrderid=0;
-                if(strSubmitType .equals("Paste_brother_up")){
-                    cttItemShowCopyTemp.setParentPkid(cttItemShowPaste.getParentPkid());
-                    intCutPasteActionGrade= cttItemShowPaste.getGrade();
-                    intCutPasteActionOrderid= cttItemShowPaste.getOrderid();
-                }else if(strSubmitType.equals("Paste_brother_down")){
-                    cttItemShowCopyTemp.setParentPkid(cttItemShowPaste.getParentPkid());
-                    intCutPasteActionGrade= cttItemShowPaste.getGrade();
-                    intCutPasteActionOrderid= cttItemShowPaste.getOrderid()+1;
-                }else if(strSubmitType.equals("Paste_children")){
-                    cttItemShowCopyTemp.setParentPkid(cttItemShowPaste.getPkid());
-                    intCutPasteActionGrade= cttItemShowPaste.getGrade()+1;
-                    intCutPasteActionOrderid= esCttItemService.
-                            getMaxOrderidInEsItemHieRelapList(
-                                    cttItemShowCopyTemp.getBelongToType(),
-                                    cttItemShowCopyTemp.getBelongToPkid(),
-                                    cttItemShowCopyTemp.getParentPkid(),
-                                    intCutPasteActionGrade)+1;
-                }
-
-                cttItemShowCopyTemp.setGrade(intCutPasteActionGrade);
-                cttItemShowCopyTemp.setOrderid(intCutPasteActionOrderid);
-
-                /*1更新剪切的目标位置以后的数据*/
-                esCttItemService.setAfterThisOrderidPlusOneByTypeAndIdAndParentPkidAndGrade(
-                        cttItemShowCopyTemp.getBelongToType(),
-                        cttItemShowCopyTemp.getBelongToPkid(),
-                        cttItemShowCopyTemp.getParentPkid(),
-                        cttItemShowCopyTemp.getGrade(),
-                        cttItemShowCopyTemp.getOrderid());
-                /*2修改本条数据的ParentPkid，Grade,Orderid*/
-                esCttItemService.updateRecord(cttItemShowCopyTemp) ;
-                /*3修改子节点的层级关系*/
-                /*剪切前后层级变化的数*/
-                Integer intGradeGap=null;
-                if(strSubmitType .equals("Paste_brother_up")||strSubmitType.equals("Paste_brother_down")){
-                    intGradeGap= cttItemShowPaste.getGrade() - cttItemShowCopy.getGrade() ;
-                }else if(strSubmitType .equals("Paste_children")){
-                    intGradeGap= (cttItemShowPaste.getGrade()+1) - cttItemShowCopy.getGrade() ;
-                }
-
-                /*复制总包合同列表数据用*/
-                List<CttItemShow> cttItemShowListTemp =new ArrayList<>();
-                /*itemOfEsItemHieRelapListTemp为排好序的总包合同信息列表*/
-                cttItemShowListTemp.addAll(cttItemShowList);
-                Boolean isBegin=false;
-                for(CttItemShow itemUnit: cttItemShowListTemp){
-                    /*找到剪切对象后，寻找该对象其子节点（层级号大于该对象的层级号的数据）并进行复制*/
-                    if(isBegin.equals(true) && itemUnit.getGrade()<= cttItemShowCopy.getGrade()){
-                        break;
-                    }
-                    else if(isBegin.equals(true)){
-                        itemUnit.setGrade(itemUnit.getGrade()+intGradeGap);
-                        esCttItemService.updateRecord(itemUnit) ;
-                    }
-                    /*找到剪切对象*/
-                    if(cttItemShowCopy.equals(itemUnit)) {
-                        isBegin=true;
-                    }
-                }
-
-                /*剪切的操作*/
-                esCttItemService.setAfterThisOrderidSubOneByTypeAndIdAndParentPkidAndGrade(
-                        cttItemShowCopyTemp.getBelongToType(),
-                        cttItemShowCopyTemp.getBelongToPkid(),
-                        cttItemShowCopyTemp.getParentPkid(),
-                        cttItemShowCopyTemp.getGrade(),
-                        cttItemShowCopyTemp.getOrderid());
-            }
-            MessageUtil.addInfo("粘贴成功!");
-            initData();
-        }
-        catch (Exception e){
-            logger.error("粘贴数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsItemHieRelapListByLevelParentPkid(String strLevelParentPkid,
+    private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
              List<EsCttItem> esCttItemListPara) {
         List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
         /*避开重复链接数据库*/
@@ -707,22 +492,6 @@ public class ItemTkcttAction {
             }
         }
         return tempEsCttItemList;
-    }
-    /*层级关系列表中通过Pkid的该项*/
-    private CttItemShow getItemOfEsItemHieRelapByPkid(String strPkid,
-              List<CttItemShow> cttItemShowListPara){
-        CttItemShow cttItemShowTemp =new CttItemShow();
-        try{
-            for(CttItemShow itemUnit: cttItemShowListPara){
-                if(ToolUtil.getIgnoreSpaceOfStr(itemUnit.getPkid()).equals(strPkid)) {
-                    cttItemShowTemp =(CttItemShow)BeanUtils.cloneBean(itemUnit);
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            MessageUtil.addError(e.getMessage());
-        }
-        return cttItemShowTemp;
     }
     /*在总包合同列表中根据编号找到项*/
     private CttItemShow getItemOfEsItemHieRelapByStrNo(
@@ -766,7 +535,7 @@ public class ItemTkcttAction {
 
             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
-                    int Orderid=esCttItemService.getMaxOrderidInEsItemHieRelapList(strBelongToType,strBelongToPkid, "root",1);
+                    int Orderid=esCttItemService.getMaxOrderidInEsCttItemList(strBelongToType,strBelongToPkid, "root",1);
                     EsCttItem esCttItemTemp=new EsCttItem();
                     esCttItemTemp.setBelongToType(strBelongToType);
                     esCttItemTemp.setBelongToPkid(strBelongToPkid);
@@ -774,7 +543,10 @@ public class ItemTkcttAction {
                     esCttItemTemp.setGrade(1);
                     esCttItemTemp.setOrderid(Orderid+1);
                     esCttItemTemp.setName("(其它)");
-                    esCttItemService.insertRecord(esCttItemTemp);
+                    esCttItemTemp.setSpareField("留作成本计划对应总包合同空头项");
+                    if(!esCttItemService.isExistSameRecordInDb(esCttItemTemp)){
+                        esCttItemService.insertRecord(esCttItemTemp);
+                    }
                     initData();
                     esFlowControl.mngFinishAction(
                             cttInfoShowSel.getCttType(),
@@ -879,15 +651,6 @@ public class ItemTkcttAction {
     }
 
     /*智能字段Start*/
-
-    public String getStrStickyHeaderFlag() {
-        return strStickyHeaderFlag;
-    }
-
-    public void setStrStickyHeaderFlag(String strStickyHeaderFlag) {
-        this.strStickyHeaderFlag = strStickyHeaderFlag;
-    }
-
     public EsCttItemService getEsCttItemService() {
         return esCttItemService;
     }
@@ -899,14 +662,6 @@ public class ItemTkcttAction {
     }
     public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
         this.esInitPowerService = esInitPowerService;
-    }
-
-    public EsInitCustService getEsInitCustService() {
-        return esInitCustService;
-    }
-
-    public void setEsInitCustService(EsInitCustService esInitCustService) {
-        this.esInitCustService = esInitCustService;
     }
 
     public EsCommon getEsCommon() {
@@ -922,13 +677,6 @@ public class ItemTkcttAction {
 
     public void setCttItemShowSel(CttItemShow cttItemShowSel) {
         this.cttItemShowSel = cttItemShowSel;
-    }
-
-    public CttItemShow getCttItemShowSelected() {
-        return cttItemShowSelected;
-    }
-    public void setCttItemShowSelected(CttItemShow cttItemShowSelected) {
-        this.cttItemShowSelected = cttItemShowSelected;
     }
     public List<CttItemShow> getCttItemShowList() {
         return cttItemShowList;
@@ -951,9 +699,6 @@ public class ItemTkcttAction {
 
     public String getStrSubmitType() {
         return strSubmitType;
-    }
-    public String getStrPasteBtnRendered() {
-        return strPasteBtnRendered;
     }
     public StyleModel getStyleModelNo() {
         return styleModelNo;

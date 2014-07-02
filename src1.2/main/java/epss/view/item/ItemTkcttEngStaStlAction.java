@@ -296,7 +296,7 @@ public class ItemTkcttEngStaStlAction {
         // 根据父层级号获得该父层级下的子节点
         List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
         // 通过父层id查找它的孩子
-        subEsCttItemList =getEsItemHieRelapListByLevelParentPkid(strLevelParentId, esCttItemListPara);
+        subEsCttItemList =getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
         BigDecimal bdContractUnitPrice=new BigDecimal(0);
         BigDecimal bdCurrentPeriodQty=new BigDecimal(0);
         BigDecimal bdBeginToCurrentPeriodQty=new BigDecimal(0);
@@ -551,7 +551,7 @@ public class ItemTkcttEngStaStlAction {
     }
 
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsItemHieRelapListByLevelParentPkid(String strLevelParentPkid,
+    private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
              List<EsCttItem> esCttItemListPara) {
         List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
         /*避开重复链接数据库*/

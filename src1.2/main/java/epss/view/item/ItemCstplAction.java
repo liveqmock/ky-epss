@@ -72,7 +72,6 @@ public class ItemCstplAction {
     //显示的控制
     private StyleModel styleModelNo;
     private StyleModel styleModel;
-    private String strStickyHeaderFlag;
     /*控制控件在画面上的可用与现实End*/
     @PostConstruct
     public void init() {
@@ -93,7 +92,6 @@ public class ItemCstplAction {
     }
 
     public void resetAction(){
-        strStickyHeaderFlag="true";
         strSubmitType="Add";
         styleModelNo=new StyleModel();
         styleModelNo.setDisabled_Flag("false");
@@ -773,7 +771,7 @@ public class ItemCstplAction {
         // 根据父层级号获得该父层级下的子节点
         List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
         // 通过父层id查找它的孩子
-        subEsCttItemList =getEsItemHieRelapListByLevelParentPkid(strLevelParentId, esCttItemListPara);
+        subEsCttItemList =getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
         for(EsCttItem itemUnit: subEsCttItemList){
             CttItemShow cttItemShowTemp = null;
             String strCreatedByName= esCommon.getOperNameByOperId(itemUnit.getCreatedBy());
@@ -819,7 +817,7 @@ public class ItemCstplAction {
         return false;
     }
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsItemHieRelapListByLevelParentPkid(String strLevelParentPkid,
+    private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
                                                                    List<EsCttItem> esCttItemListPara) {
         List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
         /*避开重复链接数据库*/
@@ -1070,15 +1068,6 @@ public class ItemCstplAction {
     }
 
     /*智能字段Start*/
-
-    public String getStrStickyHeaderFlag() {
-        return strStickyHeaderFlag;
-    }
-
-    public void setStrStickyHeaderFlag(String strStickyHeaderFlag) {
-        this.strStickyHeaderFlag = strStickyHeaderFlag;
-    }
-
     public EsCttItemService getEsCttItemService() {
         return esCttItemService;
     }

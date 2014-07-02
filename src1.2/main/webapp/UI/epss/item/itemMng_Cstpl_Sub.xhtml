@@ -39,29 +39,6 @@
                             update="pgViewForDel,pdt,msgs"
                             onclick="PF('wVDlgViewForDel').show()">
                 </p:menuitem>
-                <!--<p:menuitem value="复制" icon="ui-icon-copy"
-                            actionListener="#{itemSubcttAction.selectRecordAction('Copy')}"
-                            update="msgs,pdt,pcm">
-                </p:menuitem>
-                <p:menuitem value="剪切" icon="ui-icon-scissors"
-                            actionListener="#{itemSubcttAction.selectRecordAction('Cut')}"
-                            update="msgs,pdt,pcm">
-                </p:menuitem>
-                <p:menuitem value="粘贴（同层_上）" icon="ui-icon-clipboard"
-                            rendered="#{itemSubcttAction.strPasteBtnRendered}"
-                            actionListener="#{itemSubcttAction.selectRecordAction('Paste_brother_up')}"
-                            update="msgs,pdt,pcm">
-                </p:menuitem>
-                <p:menuitem value="粘贴（同层_下）" icon="ui-icon-clipboard"
-                            rendered="#{itemSubcttAction.strPasteBtnRendered}"
-                            actionListener="#{itemSubcttAction.selectRecordAction('Paste_brother_down')}"
-                            update="msgs,pdt,pcm">
-                </p:menuitem>
-                <p:menuitem value="粘贴（子层）" icon="ui-icon-clipboard"
-                            rendered="#{itemSubcttAction.strPasteBtnRendered}"
-                            actionListener="#{itemSubcttAction.selectRecordAction('Paste_children')}"
-                            update="msgs,pdt,pcm">
-                </p:menuitem>-->
                 <p:menuitem value="成本计划详细内容" icon="ui-icon-search"
                              onclick ="wvCstplDetail.show()" >
                 </p:menuitem>
@@ -74,8 +51,7 @@
                      selectionMode="single"
                      rowIndexVar="row"
                      emptyMessage="数据记录为空..."
-                     rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}"
-                     stickyHeader="#{itemSubcttAction.strStickyHeaderFlag}">
+                     rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}">
                 <p:column style="width:30px" headerText="序号">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>

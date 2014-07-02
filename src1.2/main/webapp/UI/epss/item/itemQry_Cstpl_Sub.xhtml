@@ -36,8 +36,7 @@
                          selectionMode="single"
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
-                         rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}"
-                         stickyHeader="#{itemSubcttAction.strStickyHeaderFlag}">
+                         rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}">
                 <p:column style="width:40px" headerText="序号">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>

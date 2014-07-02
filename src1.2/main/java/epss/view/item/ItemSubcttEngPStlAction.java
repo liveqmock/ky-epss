@@ -432,7 +432,7 @@ public class ItemSubcttEngPStlAction {
         // 根据父层级号获得该父层级下的子节点
         List<EsCttItem> subEsCttItemList = new ArrayList<EsCttItem>();
         // 通过父层id查找它的孩子
-        subEsCttItemList = getEsItemHieRelapListByLevelParentPkid(strLevelParentId, esCttItemListPara);
+        subEsCttItemList = getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
         for (EsCttItem itemUnit : subEsCttItemList) {
             ProgSubstlItemShow progSubstlItemShowTemp = new ProgSubstlItemShow();
             progSubstlItemShowTemp.setSubctt_Pkid(itemUnit.getBelongToPkid());
@@ -504,7 +504,7 @@ public class ItemSubcttEngPStlAction {
     }
 
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsItemHieRelapListByLevelParentPkid(String strLevelParentPkid,
+    private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
                                                                    List<EsCttItem> esCttItemListPara) {
         List<EsCttItem> tempEsCttItemList = new ArrayList<EsCttItem>();
         /*避开重复链接数据库*/

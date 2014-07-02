@@ -21,7 +21,8 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
-            <h:panelGrid id="pgCondition" columns="2">
+            <h:panelGrid id="pgCondition" columns="2"
+                    rendered="#{itemTkcttAction.strFlowType eq 'Qry'? 'false':'true'}">
                 <p:commandButton id="endInputBtn" value="#{itemTkcttAction.strFlowType eq 'Check'? '审核通过':
                      itemTkcttAction.strFlowType eq 'DoubleCheck'? '复核通过':
                      itemTkcttAction.strFlowType eq 'Approve'? '批准通过':null}"
@@ -42,23 +43,21 @@
                     <f:selectItems value="#{esFlowControl.statusFlagList}"/>
                 </p:selectOneMenu>
             </h:panelGrid>
-            <p:contextMenu for="pdt" id="pcm">
-                <p:menuitem value="浏览" icon="ui-icon-pencil"
-                            actionListener="#{itemTkcttAction.selectRecordAction('Sel')}"
-                            update="pgView,pdt,msgs"
-                            onclick="PF('wVDlgView').show()">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{itemTkcttAction.cttItemShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{itemTkcttAction.cttItemShowSelected}"
                          selectionMode="single"
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
-                         rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle':record.name eq '总合计'? 'rowDoneStyle':null}"
-                         stickyHeader="#{itemTkcttAction.strStickyHeaderFlag}">
+                         rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle':record.name eq '总合计'? 'rowDoneStyle':null}">
+                <p:column headerText="操作" style="width:30px">
+                    <p:commandButton  icon="ui-icon-search"
+                                      action="#{itemTkcttAction.selectRecordAction('Sel',record)}"
+                                      update="pdt,:form:pgView,:form:msgs"
+                                      onclick="PF('wVDlgView').show()">
+                    </p:commandButton>
+                </p:column>
                 <p:column style="width:30px" headerText="序号">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>

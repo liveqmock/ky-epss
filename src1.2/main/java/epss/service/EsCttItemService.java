@@ -28,7 +28,7 @@ public class EsCttItemService {
     @Resource
     private PlatformService platformService;
 
-    public Integer getMaxOrderidInEsItemHieRelapList(String strBelongToType,
+    public Integer getMaxOrderidInEsCttItemList(String strBelongToType,
                                                       String strBelongToPkid,
                                                       String strParentPkid,
                                                       Integer intGrade){
@@ -112,6 +112,12 @@ public class EsCttItemService {
         }
         else{
             criteria.andNameEqualTo(esCttItem.getName());
+        }
+        if(esCttItem.getSpareField()==null){
+            criteria.andSpareFieldIsNull();
+        }
+        else{
+            criteria.andSpareFieldEqualTo(esCttItem.getSpareField());
         }
         return esCttItemMapper.countByExample(example) >= 1;
     }
