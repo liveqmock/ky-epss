@@ -209,8 +209,8 @@ public class EsInitPowerService {
         esInitPowerHis.setPeriodNo(esInitPowerPara.getPeriodNo());
         esInitPowerHis.setStatusFlag(esInitPowerPara.getStatusFlag());
         esInitPowerHis.setPreStatusFlag(esInitPowerPara.getPreStatusFlag());
-        esInitPowerHis.setCreatedDate(platformService.getStrLastUpdBy());
-        esInitPowerHis.setCreatedBy(platformService.getStrLastUpdDate());
+        esInitPowerHis.setCreatedDate(esInitPowerPara.getCreatedBy());
+        esInitPowerHis.setCreatedBy(esInitPowerPara.getCreatedDate());
         esInitPowerHis.setSpareField(strOperType);
         return esInitPowerHis;
     }
@@ -225,6 +225,8 @@ public class EsInitPowerService {
             esInitPowerKey.setPeriodNo(strPeriodNo);
             deleteNum=esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
+            esInitPower.setCreatedBy(platformService.getStrLastUpdBy());
+            esInitPower.setCreatedDate(platformService.getStrLastUpdDate());
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }
         return deleteNum;
@@ -241,6 +243,8 @@ public class EsInitPowerService {
             esInitPowerKey.setPeriodNo(cttInfoShowPara.getPeriodNo());
             esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
+            esInitPower.setCreatedBy(platformService.getStrLastUpdBy());
+            esInitPower.setCreatedDate(platformService.getStrLastUpdDate());
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }
     }
@@ -256,6 +260,8 @@ public class EsInitPowerService {
             esInitPowerKey.setPeriodNo(progInfoShowPara.getPeriodNo());
             esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
+            esInitPower.setCreatedBy(platformService.getStrLastUpdBy());
+            esInitPower.setCreatedDate(platformService.getStrLastUpdDate());
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }
     }
@@ -267,6 +273,8 @@ public class EsInitPowerService {
             esInitPowerKey.setPowerPkid(strPowerPkid);
             esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
+            esInitPower.setCreatedBy(platformService.getStrLastUpdBy());
+            esInitPower.setCreatedDate(platformService.getStrLastUpdDate());
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }
     }
