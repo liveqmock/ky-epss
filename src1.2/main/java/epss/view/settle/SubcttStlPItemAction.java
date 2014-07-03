@@ -120,7 +120,7 @@ public class SubcttStlPItemAction {
             strApprovedNotBtnRendered = "true";
         } else {
             strApproveBtnRendered = "true";
-            strApprovedNotBtnRendered = "false";
+            strApprovedNotBtnRendered = "true";
         }
         if (ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(esInitPower.getStatusFlag())) {
             strAccountBtnRendered = "false";
@@ -532,66 +532,23 @@ public class SubcttStlPItemAction {
                         esInitStlTemp.setPeriodNo(esInitStl.getPeriodNo());
                         List<EsInitStl> esInitStlList=esInitStlService.selectRecordsByRecord(esInitStlTemp);
                         if (esInitStlList.size()>0){
-                            // 结算登记表更新
+                            // 结算登记表和Power表更新,并将价格结算的完整数据插入至es_item_stl_subctt_eng_p表
                             esInitStlList.get(0).setId(getMaxIdPlusOne());
-                            esInitStlService.updateRecord(esInitStlList.get(0));
-                        }
-
-                        EsInitPower esInitPowerTemp = new EsInitPower();
-                        esInitPowerTemp.setPowerType(esInitStl.getStlType());
-                        esInitPowerTemp.setPowerPkid(esInitStl.getStlPkid());
-                        esInitPowerTemp.setPeriodNo(esInitStl.getPeriodNo());
-                        EsInitPower esInitPower = esInitPowerService.selectByPrimaryKey(esInitPowerTemp);
-                        if(esInitPower!=null&&ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(ToolUtil.getStrIgnoreNull(esInitPower.getStatusFlag()))){
-                            //Power表更新
-                            esInitPower.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                            esInitPower.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                            esInitPowerService.updateRecordByPower(esInitPower);
-                        }
-                        // 价格结算
-                        strApproveBtnRendered="false";
-                        strApprovedNotBtnRendered="true";
-                        //将价格结算的完整数据插入至es_item_stl_subctt_eng_p表
-                        for (ProgSubstlItemShow itemUnit:progSubstlItemShowListForApprove){
-                            esItemStlSubcttEngPService.insertRecordDetail(itemUnit);
+                            esInitStlService.updateRecordForSubCttPApprovePass(esInitStlList.get(0), (ArrayList<ProgSubstlItemShow>) progSubstlItemShowListForApprove);
+                            strApproveBtnRendered="false";
+                            strApprovedNotBtnRendered="true";
                         }
                     }else if(strPowerType.equals("ApproveFailToQ")){
-                        //删除es_item_stl_subctt_eng_p表中的相应记录
-                        esItemStlSubcttEngPService.deleteRecordByExample(esInitStl.getStlPkid(),esInitStl.getPeriodNo());
-                        // 结算登记表更新
                         EsInitStl esInitStlTemp= (EsInitStl) BeanUtils.cloneBean(esInitStl);
                         esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
-                        esInitStlService.deleteRecord(esInitStlTemp);
-                        // 这样写可以实现越级退回
-                        EsInitPower esInitPowerTemp = new EsInitPower();
-                        esInitPowerTemp.setPowerType(ESEnum.ITEMTYPE3.getCode());
-                        esInitPowerTemp.setPowerPkid(esInitStl.getStlPkid());
-                        esInitPowerTemp.setPeriodNo(esInitStl.getPeriodNo());
-                        EsInitPower esInitPower = esInitPowerService.selectByPrimaryKey(esInitPowerTemp);
-
-                        esInitPower.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                        esInitPower.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-                        esInitPowerService.updateRecordByPower(esInitPower);
+                        esInitStlService.deleteRecordForSubCttPApprovePass(esInitStlTemp, ESEnum.ITEMTYPE3.getCode());
                         strApproveBtnRendered="false";
                         strApprovedNotBtnRendered="false";
                     }
                     else if(strPowerType.equals("ApproveFailToM")){
-                        //删除es_item_stl_subctt_eng_p表中的相应记录
-                        esItemStlSubcttEngPService.deleteRecordByExample(esInitStl.getStlPkid(),esInitStl.getPeriodNo());
-                        // 结算登记表更新
                         EsInitStl esInitStlTemp= (EsInitStl) BeanUtils.cloneBean(esInitStl);
                         esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
-                        esInitStlService.deleteRecord(esInitStlTemp);
-                        // 这样写可以实现越级退回
-                        EsInitPower esInitPowerTemp = new EsInitPower();
-                        esInitPowerTemp.setPowerType(ESEnum.ITEMTYPE4.getCode());
-                        esInitPowerTemp.setPowerPkid(esInitStl.getStlPkid());
-                        esInitPowerTemp.setPeriodNo(esInitStl.getPeriodNo());
-                        EsInitPower esInitPower = esInitPowerService.selectByPrimaryKey(esInitPowerTemp);
-
-                        esInitPower.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                        esInitPower.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-                        esInitPowerService.updateRecordByPower(esInitPower);
+                        esInitStlService.deleteRecordForSubCttPApprovePass(esInitStlTemp, ESEnum.ITEMTYPE4.getCode());
                         strApproveBtnRendered="false";
                         strApprovedNotBtnRendered="false";
                     }

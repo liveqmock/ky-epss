@@ -329,22 +329,14 @@ public class SubcttStlMInfoAction {
                     //todo
                     String SubcttStlQStatus = ToolUtil.getStrIgnoreNull(
                             esFlowService.getStatusFlag(ESEnum.ITEMTYPE3.getCode(), progInfoShowSel.getStlPkid(), progInfoShowSel.getPeriodNo()));
-                    if (!("".equals(SubcttStlQStatus)) && ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlQStatus) <= 0) {
+                    if (!("".equals(SubcttStlQStatus)) && ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlQStatus) == 0) {
                         EsInitStl esInitStlTemp = new EsInitStl();
                         esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
                         esInitStlTemp.setStlPkid(progInfoShowSel.getStlPkid());
                         esInitStlTemp.setPeriodNo(progInfoShowSel.getPeriodNo());
                         esInitStlTemp.setNote("");
-                        // 结算登记表登记
-                        esInitStlService.insertRecord(esInitStlTemp);
-                        //流程控制表登记
-                        EsInitPower esInitPowerTemp=new EsInitPower();
-                        esInitPowerTemp.setPowerType(ESEnum.ITEMTYPE5.getCode());
-                        esInitPowerTemp.setPowerPkid(progInfoShowSel.getPowerPkid());
-                        esInitPowerTemp.setPeriodNo(progInfoShowSel.getPeriodNo());
-                        esInitPowerTemp.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
-                        esInitPowerTemp.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                        esInitPowerService.insertRecordByStl(esInitPowerTemp);
+                        // 结算登记表和流程控制表登记
+                        esInitStlService.insertStlAndPowerRecord(esInitStlTemp);
                     }
                     MessageUtil.addInfo("数据复核通过！");
                 }else if(strPowerType.equals("DoubleCheckFail")){
@@ -352,17 +344,16 @@ public class SubcttStlMInfoAction {
                             esFlowService.getStatusFlag(ESEnum.ITEMTYPE5.getCode(), progInfoShowSel.getStlPkid(), progInfoShowSel.getPeriodNo()));
                     String SubcttStlQStatus = ToolUtil.getStrIgnoreNull(
                             esFlowService.getStatusFlag(ESEnum.ITEMTYPE3.getCode(), progInfoShowSel.getStlPkid(), progInfoShowSel.getPeriodNo()));
-                    if (!("".equals(SubcttStlPStatus))) {
+                    if (!("".equals(SubcttStlPStatus))&&ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlPStatus) < 0) {
                         MessageUtil.addInfo("该数据已被分包价格结算批准，您无权进行操作！");
                         return;
-                    } else{
-                        if (!("".equals(SubcttStlQStatus)) && ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlQStatus) <= 0){
+                    } else {
+                        if (!("".equals(SubcttStlQStatus)) && ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlQStatus) == 0) {
                             try {
-                                ProgInfoShow progInfoShowTemp= (ProgInfoShow) BeanUtils.cloneBean(progInfoShowSel);
-                                progInfoShowTemp.setPowerType(ESEnum.ITEMTYPE5.getCode());
+                                ProgInfoShow progInfoShowTemp = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowSel);
+                                progInfoShowTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
                                 esInitStlService.deleteRecord(progInfoShowTemp);
-                                esInitPowerService.deleteRecordByStl(progInfoShowTemp);
-                            }catch (Exception e) {
+                            } catch (Exception e) {
                                 logger.error("删除数据失败,复核未过操作失败。", e);
                                 MessageUtil.addError(e.getMessage());
                                 return;

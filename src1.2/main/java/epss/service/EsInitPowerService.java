@@ -142,6 +142,17 @@ public class EsInitPowerService {
         esInitPowerMapper.updateByPrimaryKey(esInitPowerTemp);
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
     }
+    public void updateRecordByStl(EsInitPower esInitPowerPara){
+        EsInitPower esInitPower = selectByPrimaryKey(esInitPowerPara);
+        if (esInitPower!=null){
+            esInitPower.setStatusFlag(esInitPowerPara.getStatusFlag());
+            esInitPower.setPreStatusFlag(esInitPowerPara.getPreStatusFlag());
+            esInitPower.setLastUpdBy(platformService.getStrLastUpdBy());
+            esInitPower.setLastUpdDate(platformService.getStrLastUpdDate());
+            esInitPowerMapper.updateByPrimaryKey(esInitPower);
+            esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"update"));
+        }
+    }
     public void updateRecordByPower(EsInitPower esInitPowerPara){
         esInitPowerPara.setLastUpdBy(platformService.getStrLastUpdBy());
         esInitPowerPara.setLastUpdDate(platformService.getStrLastUpdDate());
@@ -198,62 +209,63 @@ public class EsInitPowerService {
         esInitPowerHis.setPeriodNo(esInitPowerPara.getPeriodNo());
         esInitPowerHis.setStatusFlag(esInitPowerPara.getStatusFlag());
         esInitPowerHis.setPreStatusFlag(esInitPowerPara.getPreStatusFlag());
-        esInitPowerHis.setCreatedDate(esInitPowerPara.getCreatedDate());
-        esInitPowerHis.setCreatedBy(esInitPowerPara.getCreatedBy());
+        esInitPowerHis.setCreatedDate(platformService.getStrLastUpdBy());
+        esInitPowerHis.setCreatedBy(platformService.getStrLastUpdDate());
         esInitPowerHis.setSpareField(strOperType);
         return esInitPowerHis;
     }
 
     public int deleteRecord(String strPowerType,String strPowerPkid,String strPeriodNo){
-        EsInitPowerKey  esInitPowerKey=new EsInitPowerKey();
-        esInitPowerKey.setPowerType(strPowerType);
-        esInitPowerKey.setPowerPkid(strPowerPkid);
-        esInitPowerKey.setPeriodNo(strPeriodNo);
-        int deleteNum=esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
+        int deleteNum=0;
         List<EsInitPower> esInitPowerListTemp=selectListByModel(strPowerType,strPowerPkid,strPeriodNo);
         if(esInitPowerListTemp.size()>0){
+            EsInitPowerKey  esInitPowerKey=new EsInitPowerKey();
+            esInitPowerKey.setPowerType(strPowerType);
+            esInitPowerKey.setPowerPkid(strPowerPkid);
+            esInitPowerKey.setPeriodNo(strPeriodNo);
+            deleteNum=esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }
         return deleteNum;
     }
     public void deleteRecordByCtt(CttInfoShow cttInfoShowPara){
-        EsInitPowerKey  esInitPowerKey=new EsInitPowerKey();
-        esInitPowerKey.setPowerType(cttInfoShowPara.getPowerType());
-        esInitPowerKey.setPowerPkid(cttInfoShowPara.getPowerPkid());
-        esInitPowerKey.setPeriodNo(cttInfoShowPara.getPeriodNo());
-        esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
         List<EsInitPower> esInitPowerListTemp=selectListByModel(
                 cttInfoShowPara.getPowerType(),
                 cttInfoShowPara.getPowerPkid(),
                 cttInfoShowPara.getPeriodNo());
         if(esInitPowerListTemp.size()>0){
+            EsInitPowerKey  esInitPowerKey=new EsInitPowerKey();
+            esInitPowerKey.setPowerType(cttInfoShowPara.getPowerType());
+            esInitPowerKey.setPowerPkid(cttInfoShowPara.getPowerPkid());
+            esInitPowerKey.setPeriodNo(cttInfoShowPara.getPeriodNo());
+            esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }
     }
     public void deleteRecordByStl(ProgInfoShow progInfoShowPara){
-        EsInitPowerKey  esInitPowerKey=new EsInitPowerKey();
-        esInitPowerKey.setPowerType(progInfoShowPara.getPowerType());
-        esInitPowerKey.setPowerPkid(progInfoShowPara.getPowerPkid());
-        esInitPowerKey.setPeriodNo(progInfoShowPara.getPeriodNo());
-        esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
         List<EsInitPower> esInitPowerListTemp=selectListByModel(
                 progInfoShowPara.getPowerType(),
                 progInfoShowPara.getPowerPkid(),
                 progInfoShowPara.getPeriodNo());
         if(esInitPowerListTemp.size()>0){
+            EsInitPowerKey  esInitPowerKey=new EsInitPowerKey();
+            esInitPowerKey.setPowerType(progInfoShowPara.getPowerType());
+            esInitPowerKey.setPowerPkid(progInfoShowPara.getPowerPkid());
+            esInitPowerKey.setPeriodNo(progInfoShowPara.getPeriodNo());
+            esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }
     }
     public void deleteRecord(String strPowerType,String strPowerPkid){
-        EsInitPowerKey  esInitPowerKey=new EsInitPowerKey();
-        esInitPowerKey.setPowerType(strPowerType);
-        esInitPowerKey.setPowerPkid(strPowerPkid);
-        esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
         List<EsInitPower> esInitPowerListTemp=selectListByModel(strPowerType,strPowerPkid);
         if(esInitPowerListTemp.size()>0){
+            EsInitPowerKey  esInitPowerKey=new EsInitPowerKey();
+            esInitPowerKey.setPowerType(strPowerType);
+            esInitPowerKey.setPowerPkid(strPowerPkid);
+            esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }

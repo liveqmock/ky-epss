@@ -1,14 +1,20 @@
 package epss.service;
 
+import epss.common.enums.ESEnum;
+import epss.common.enums.ESEnumPreStatusFlag;
+import epss.common.enums.ESEnumStatusFlag;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.model_show.ProgInfoShow;
 import epss.repository.dao.EsInitStlMapper;
 import epss.repository.dao.common.CommonMapper;
 import epss.repository.model.*;
+import epss.repository.model.model_show.ProgSubstlItemShow;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import platform.service.PlatformService;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,6 +34,8 @@ public class EsInitStlService {
     private EsInitPowerService esInitPowerService;
     @Resource
     private PlatformService platformService;
+    @Resource
+    private EsItemStlSubcttEngPService esItemStlSubcttEngPService;
 
     /**
      * 判断记录是否已存在
@@ -90,6 +98,44 @@ public class EsInitStlService {
         esInitStlPara.setLastUpdDate(platformService.getStrLastUpdDate());
         esInitStlMapper.insert(esInitStlPara) ;
     }
+    @Transactional
+    public void insertStlAndPowerRecord(EsInitStl esInitStlPara){
+        esInitStlPara.setCreatedBy(platformService.getStrLastUpdBy());
+        esInitStlPara.setCreatedDate(platformService.getStrLastUpdDate());
+        esInitStlPara.setDeletedFlag("0");
+        esInitStlPara.setLastUpdBy(platformService.getStrLastUpdBy());
+        esInitStlPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitStlMapper.insert(esInitStlPara) ;
+        EsInitPower esInitPowerTemp=new EsInitPower();
+        esInitPowerTemp.setPowerType(ESEnum.ITEMTYPE5.getCode());
+        esInitPowerTemp.setPowerPkid(esInitStlPara.getStlPkid());
+        esInitPowerTemp.setPeriodNo(esInitStlPara.getPeriodNo());
+        esInitPowerTemp.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+        esInitPowerTemp.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+        esInitPowerService.insertRecordByStl(esInitPowerTemp);
+    }
+    @Transactional
+    public void updateRecordForSubCttPApprovePass(EsInitStl esInitStlPara,ArrayList<ProgSubstlItemShow> progSubstlItemShowListForApprovePara){
+        //结算登记表更新
+        esInitStlPara.setModificationNum(
+                ToolUtil.getIntIgnoreNull(esInitStlPara.getModificationNum())+1);
+        esInitStlPara.setDeletedFlag("0");
+        esInitStlPara.setLastUpdBy(platformService.getStrLastUpdBy());
+        esInitStlPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitStlMapper.updateByPrimaryKey(esInitStlPara) ;
+        //Power表更新
+        EsInitPower esInitPowerTemp = new EsInitPower();
+        esInitPowerTemp.setPowerType(esInitStlPara.getStlType());
+        esInitPowerTemp.setPowerPkid(esInitStlPara.getStlPkid());
+        esInitPowerTemp.setPeriodNo(esInitStlPara.getPeriodNo());
+        esInitPowerTemp.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+        esInitPowerTemp.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
+        esInitPowerService.updateRecordByStl(esInitPowerTemp);
+        //将价格结算的完整数据插入至es_item_stl_subctt_eng_p表
+        for (ProgSubstlItemShow itemUnit:progSubstlItemShowListForApprovePara){
+            esItemStlSubcttEngPService.insertRecordDetail(itemUnit);
+        }
+    }
     public void updateRecord(ProgInfoShow progInfoShowPara){
         progInfoShowPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(progInfoShowPara.getModificationNum())+1);
@@ -106,6 +152,8 @@ public class EsInitStlService {
         esInitStlPara.setLastUpdDate(platformService.getStrLastUpdDate());
         esInitStlMapper.updateByPrimaryKey(esInitStlPara) ;
     }
+
+    @Transactional
     public void deleteRecord(ProgInfoShow progInfoShowPara){
         EsInitStlExample example = new EsInitStlExample();
         example.createCriteria().andStlTypeEqualTo(progInfoShowPara.getStlType())
@@ -131,6 +179,32 @@ public class EsInitStlService {
                 , esInitStlPara.getStlPkid()
                 , esInitStlPara.getPeriodNo());
 
+    }
+    @Transactional
+    public void deleteRecordForSubCttPApprovePass(EsInitStl esInitStlPara,String powerType){
+        //删除stl表中stl_type为5的记录
+        EsInitStlExample example = new EsInitStlExample();
+        example.createCriteria()
+                .andStlTypeEqualTo(esInitStlPara.getStlType())
+                .andStlPkidEqualTo(esInitStlPara.getStlPkid())
+                .andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
+        esInitStlMapper.deleteByExample(example);
+        //删除power表中power_type为5的记录
+        esInitPowerService.deleteRecord(
+                esInitStlPara.getStlType()
+                , esInitStlPara.getStlPkid()
+                , esInitStlPara.getPeriodNo());
+        //更新power表中power_type为3或者4的记录状态为审核状态
+        EsInitPower esInitPowerTemp = new EsInitPower();
+        esInitPowerTemp.setPowerType(powerType);
+        esInitPowerTemp.setPowerPkid(esInitStlPara.getStlPkid());
+        esInitPowerTemp.setPeriodNo(esInitStlPara.getPeriodNo());
+        EsInitPower esInitPower = esInitPowerService.selectByPrimaryKey(esInitPowerTemp);
+        esInitPower.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+        esInitPower.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
+        esInitPowerService.updateRecordByPower(esInitPower);
+        //删除es_item_stl_subctt_eng_p表中的相应记录
+        esItemStlSubcttEngPService.deleteRecordByExample(esInitStlPara.getStlPkid(),esInitStlPara.getPeriodNo());
     }
     public int deleteRecord(String strPkId){
         return esInitStlMapper.deleteByPrimaryKey(strPkId);
