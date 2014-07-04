@@ -209,8 +209,8 @@ public class EsInitPowerService {
         esInitPowerHis.setPeriodNo(esInitPowerPara.getPeriodNo());
         esInitPowerHis.setStatusFlag(esInitPowerPara.getStatusFlag());
         esInitPowerHis.setPreStatusFlag(esInitPowerPara.getPreStatusFlag());
-        esInitPowerHis.setCreatedDate(esInitPowerPara.getCreatedBy());
-        esInitPowerHis.setCreatedBy(esInitPowerPara.getCreatedDate());
+        esInitPowerHis.setCreatedDate(esInitPowerPara.getCreatedDate());
+        esInitPowerHis.setCreatedBy(esInitPowerPara.getCreatedBy());
         esInitPowerHis.setSpareField(strOperType);
         return esInitPowerHis;
     }

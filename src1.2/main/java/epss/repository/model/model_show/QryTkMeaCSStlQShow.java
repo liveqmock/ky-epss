@@ -13,245 +13,255 @@ import java.math.BigDecimal;
 
 public class QryTkMeaCSStlQShow implements Serializable {
     // 总包合同
-    private String strTkctt_Pkid;
-    private String strTkctt_ParentPkid;
-    private String strTkctt_No;
-    private String strTkctt_Name;
-    private String strTkctt_Unit;
-    private BigDecimal bdTkctt_ContractUnitPrice;
-    private BigDecimal bdTkctt_ContractQuantity;
-    private BigDecimal bdTkctt_ContractAmount;
+    private String tkctt_Pkid;
+    private String tkctt_ParentPkid;
+    private String tkctt_No;
+    private String tkctt_Name;
+    private String tkctt_Unit;
+    private BigDecimal tkctt_CttUnitPrice;
+    private BigDecimal tkctt_CttQty;
+    private BigDecimal tkctt_CttAmt;
 
     // 成本计划
-    private String strCstpl_Pkid;
-    private String strCstpl_No;
-    private BigDecimal bdCstpl_ContractUnitPrice;
-    private BigDecimal bdCstpl_ContractQuantity;
-    private BigDecimal bdCstpl_ContractAmount;
+    private String cstpl_Pkid;
+    private String cstpl_No;
+    private BigDecimal cstpl_CttUnitPrice;
+    private BigDecimal cstpl_CttQty;
+    private BigDecimal cstpl_CttAmt;
 
     // 当期计量结算工程数量
-    private BigDecimal bdTkcttStl_CurrentPeriodMeaQuantity;
+    private BigDecimal tkcttStl_ThisStageMeaQty;
     // 当期计量结算开累工程数量
-    private BigDecimal bdTkcttStl_BeginToCurrentPeriodMeaQuantity;
+    private BigDecimal tkcttStl_AddUpMeaQty;
     // 当期计量结算工程金额
-    private BigDecimal bdTkcttStl_CurrentPeriodMeaAmount;
+    private BigDecimal tkcttStl_ThisStageMeaAmt;
     // 当期计量结算开累工程金额
-    private BigDecimal bdTkcttStl_BeginToCurrentPeriodMeaAmount;
+    private BigDecimal tkcttStl_AddUpMeaAmt;
 
     // 当期分包结算工程数量
-    private BigDecimal bdSubcttStl_CurrentPeriodQQty;
+    private String subctt_CorrespondingPkid;
+
+    private BigDecimal subcttStl_ThisStageQty;
     // 当期分包结算开累工程数量
-    private BigDecimal bdSubcttStl_BeginToCurrentPeriodQQty;
+    private BigDecimal subcttStl_AddUpQty;
     // 当期分包结算工程金额
-    private BigDecimal bdSubcttStl_CurrentPeriodAmount;
+    private BigDecimal subcttStl_ThisStageAmt;
     // 当期分包结算开累工程金额
-    private BigDecimal bdSubcttStl_BeginToCurrentPeriodAmount;
+    private BigDecimal subcttStl_AddUpAmt;
 
-    private String strSubctt_SignPartName;
+    private String subctt_SignPartName;
     // 数量差
-    private BigDecimal bdMeaS_BeginToCurrentPeriodQQty;
+    private BigDecimal meaS_AddUpQty;
     // 金额差
-    private BigDecimal bdMeaS_BeginToCurrentPeriodAmount;
+    private BigDecimal meaS_AddUpAmt;
 
-    private String strNote;
+    private String note;
 
-    public String getStrTkctt_Pkid() {
-        return strTkctt_Pkid;
+    public String getTkctt_Pkid() {
+        return tkctt_Pkid;
     }
 
-    public void setStrTkctt_Pkid(String strTkctt_Pkid) {
-        this.strTkctt_Pkid = strTkctt_Pkid;
+    public void setTkctt_Pkid(String tkctt_Pkid) {
+        this.tkctt_Pkid = tkctt_Pkid;
     }
 
-    public String getStrTkctt_ParentPkid() {
-        return strTkctt_ParentPkid;
+    public String getTkctt_ParentPkid() {
+        return tkctt_ParentPkid;
     }
 
-    public void setStrTkctt_ParentPkid(String strTkctt_ParentPkid) {
-        this.strTkctt_ParentPkid = strTkctt_ParentPkid;
+    public void setTkctt_ParentPkid(String tkctt_ParentPkid) {
+        this.tkctt_ParentPkid = tkctt_ParentPkid;
     }
 
-    public String getStrTkctt_No() {
-        return strTkctt_No;
+    public String getTkctt_No() {
+        return tkctt_No;
     }
 
-    public void setStrTkctt_No(String strTkctt_No) {
-        this.strTkctt_No = strTkctt_No;
+    public void setTkctt_No(String tkctt_No) {
+        this.tkctt_No = tkctt_No;
     }
 
-    public String getStrTkctt_Name() {
-        return strTkctt_Name;
+    public String getTkctt_Name() {
+        return tkctt_Name;
     }
 
-    public void setStrTkctt_Name(String strTkctt_Name) {
-        this.strTkctt_Name = strTkctt_Name;
+    public void setTkctt_Name(String tkctt_Name) {
+        this.tkctt_Name = tkctt_Name;
     }
 
-    public String getStrTkctt_Unit() {
-        return strTkctt_Unit;
+    public String getTkctt_Unit() {
+        return tkctt_Unit;
     }
 
-    public void setStrTkctt_Unit(String strTkctt_Unit) {
-        this.strTkctt_Unit = strTkctt_Unit;
+    public void setTkctt_Unit(String tkctt_Unit) {
+        this.tkctt_Unit = tkctt_Unit;
     }
 
-    public BigDecimal getBdTkctt_ContractQuantity() {
-        return bdTkctt_ContractQuantity;
+    public BigDecimal getTkctt_CttUnitPrice() {
+        return tkctt_CttUnitPrice;
     }
 
-    public void setBdTkctt_ContractQuantity(BigDecimal bdTkctt_ContractQuantity) {
-        this.bdTkctt_ContractQuantity = bdTkctt_ContractQuantity;
+    public void setTkctt_CttUnitPrice(BigDecimal tkctt_CttUnitPrice) {
+        this.tkctt_CttUnitPrice = tkctt_CttUnitPrice;
     }
 
-    public String getStrCstpl_Pkid() {
-        return strCstpl_Pkid;
+    public BigDecimal getTkctt_CttQty() {
+        return tkctt_CttQty;
     }
 
-    public void setStrCstpl_Pkid(String strCstpl_Pkid) {
-        this.strCstpl_Pkid = strCstpl_Pkid;
+    public void setTkctt_CttQty(BigDecimal tkctt_CttQty) {
+        this.tkctt_CttQty = tkctt_CttQty;
     }
 
-    public String getStrCstpl_No() {
-        return strCstpl_No;
+    public BigDecimal getTkctt_CttAmt() {
+        return tkctt_CttAmt;
     }
 
-    public void setStrCstpl_No(String strCstpl_No) {
-        this.strCstpl_No = strCstpl_No;
+    public void setTkctt_CttAmt(BigDecimal tkctt_CttAmt) {
+        this.tkctt_CttAmt = tkctt_CttAmt;
     }
 
-    public BigDecimal getBdCstpl_ContractQuantity() {
-        return bdCstpl_ContractQuantity;
+    public String getCstpl_Pkid() {
+        return cstpl_Pkid;
     }
 
-    public void setBdCstpl_ContractQuantity(BigDecimal bdCstpl_ContractQuantity) {
-        this.bdCstpl_ContractQuantity = bdCstpl_ContractQuantity;
+    public void setCstpl_Pkid(String cstpl_Pkid) {
+        this.cstpl_Pkid = cstpl_Pkid;
     }
 
-    public BigDecimal getBdTkcttStl_CurrentPeriodMeaQuantity() {
-        return bdTkcttStl_CurrentPeriodMeaQuantity;
+    public String getCstpl_No() {
+        return cstpl_No;
     }
 
-    public void setBdTkcttStl_CurrentPeriodMeaQuantity(BigDecimal bdTkcttStl_CurrentPeriodMeaQuantity) {
-        this.bdTkcttStl_CurrentPeriodMeaQuantity = bdTkcttStl_CurrentPeriodMeaQuantity;
+    public void setCstpl_No(String cstpl_No) {
+        this.cstpl_No = cstpl_No;
     }
 
-    public BigDecimal getBdTkcttStl_BeginToCurrentPeriodMeaQuantity() {
-        return bdTkcttStl_BeginToCurrentPeriodMeaQuantity;
+    public BigDecimal getCstpl_CttUnitPrice() {
+        return cstpl_CttUnitPrice;
     }
 
-    public void setBdTkcttStl_BeginToCurrentPeriodMeaQuantity(BigDecimal bdTkcttStl_BeginToCurrentPeriodMeaQuantity) {
-        this.bdTkcttStl_BeginToCurrentPeriodMeaQuantity = bdTkcttStl_BeginToCurrentPeriodMeaQuantity;
+    public void setCstpl_CttUnitPrice(BigDecimal cstpl_CttUnitPrice) {
+        this.cstpl_CttUnitPrice = cstpl_CttUnitPrice;
     }
 
-    public BigDecimal getBdSubcttStl_CurrentPeriodQQty() {
-        return bdSubcttStl_CurrentPeriodQQty;
+    public BigDecimal getCstpl_CttQty() {
+        return cstpl_CttQty;
     }
 
-    public void setBdSubcttStl_CurrentPeriodQQty(BigDecimal bdSubcttStl_CurrentPeriodQQty) {
-        this.bdSubcttStl_CurrentPeriodQQty = bdSubcttStl_CurrentPeriodQQty;
+    public void setCstpl_CttQty(BigDecimal cstpl_CttQty) {
+        this.cstpl_CttQty = cstpl_CttQty;
     }
 
-    public BigDecimal getBdSubcttStl_BeginToCurrentPeriodQQty() {
-        return bdSubcttStl_BeginToCurrentPeriodQQty;
+    public BigDecimal getCstpl_CttAmt() {
+        return cstpl_CttAmt;
     }
 
-    public void setBdSubcttStl_BeginToCurrentPeriodQQty(BigDecimal bdSubcttStl_BeginToCurrentPeriodQQty) {
-        this.bdSubcttStl_BeginToCurrentPeriodQQty = bdSubcttStl_BeginToCurrentPeriodQQty;
+    public void setCstpl_CttAmt(BigDecimal cstpl_CttAmt) {
+        this.cstpl_CttAmt = cstpl_CttAmt;
     }
 
-    public String getStrSubctt_SignPartName() {
-        return strSubctt_SignPartName;
+    public BigDecimal getTkcttStl_ThisStageMeaQty() {
+        return tkcttStl_ThisStageMeaQty;
     }
 
-    public void setStrSubctt_SignPartName(String strSubctt_SignPartName) {
-        this.strSubctt_SignPartName = strSubctt_SignPartName;
+    public void setTkcttStl_ThisStageMeaQty(BigDecimal tkcttStl_ThisStageMeaQty) {
+        this.tkcttStl_ThisStageMeaQty = tkcttStl_ThisStageMeaQty;
     }
 
-    public BigDecimal getBdMeaS_BeginToCurrentPeriodQQty() {
-        return bdMeaS_BeginToCurrentPeriodQQty;
+    public BigDecimal getTkcttStl_AddUpMeaQty() {
+        return tkcttStl_AddUpMeaQty;
     }
 
-    public void setBdMeaS_BeginToCurrentPeriodQQty(BigDecimal bdMeaS_BeginToCurrentPeriodQQty) {
-        this.bdMeaS_BeginToCurrentPeriodQQty = bdMeaS_BeginToCurrentPeriodQQty;
+    public void setTkcttStl_AddUpMeaQty(BigDecimal tkcttStl_AddUpMeaQty) {
+        this.tkcttStl_AddUpMeaQty = tkcttStl_AddUpMeaQty;
     }
 
-    public String getStrNote() {
-        return strNote;
+    public BigDecimal getTkcttStl_ThisStageMeaAmt() {
+        return tkcttStl_ThisStageMeaAmt;
     }
 
-    public void setStrNote(String strNote) {
-        this.strNote = strNote;
+    public void setTkcttStl_ThisStageMeaAmt(BigDecimal tkcttStl_ThisStageMeaAmt) {
+        this.tkcttStl_ThisStageMeaAmt = tkcttStl_ThisStageMeaAmt;
     }
 
-    public BigDecimal getBdTkctt_ContractUnitPrice() {
-        return bdTkctt_ContractUnitPrice;
+    public BigDecimal getTkcttStl_AddUpMeaAmt() {
+        return tkcttStl_AddUpMeaAmt;
     }
 
-    public void setBdTkctt_ContractUnitPrice(BigDecimal bdTkctt_ContractUnitPrice) {
-        this.bdTkctt_ContractUnitPrice = bdTkctt_ContractUnitPrice;
+    public void setTkcttStl_AddUpMeaAmt(BigDecimal tkcttStl_AddUpMeaAmt) {
+        this.tkcttStl_AddUpMeaAmt = tkcttStl_AddUpMeaAmt;
     }
 
-    public BigDecimal getBdTkctt_ContractAmount() {
-        return bdTkctt_ContractAmount;
+    public String getSubctt_CorrespondingPkid() {
+        return subctt_CorrespondingPkid;
     }
 
-    public void setBdTkctt_ContractAmount(BigDecimal bdTkctt_ContractAmount) {
-        this.bdTkctt_ContractAmount = bdTkctt_ContractAmount;
+    public void setSubctt_CorrespondingPkid(String subctt_CorrespondingPkid) {
+        this.subctt_CorrespondingPkid = subctt_CorrespondingPkid;
     }
 
-    public BigDecimal getBdCstpl_ContractUnitPrice() {
-        return bdCstpl_ContractUnitPrice;
+    public BigDecimal getSubcttStl_ThisStageQty() {
+        return subcttStl_ThisStageQty;
     }
 
-    public void setBdCstpl_ContractUnitPrice(BigDecimal bdCstpl_ContractUnitPrice) {
-        this.bdCstpl_ContractUnitPrice = bdCstpl_ContractUnitPrice;
+    public void setSubcttStl_ThisStageQty(BigDecimal subcttStl_ThisStageQty) {
+        this.subcttStl_ThisStageQty = subcttStl_ThisStageQty;
     }
 
-    public BigDecimal getBdCstpl_ContractAmount() {
-        return bdCstpl_ContractAmount;
+    public BigDecimal getSubcttStl_AddUpQty() {
+        return subcttStl_AddUpQty;
     }
 
-    public void setBdCstpl_ContractAmount(BigDecimal bdCstpl_ContractAmount) {
-        this.bdCstpl_ContractAmount = bdCstpl_ContractAmount;
+    public void setSubcttStl_AddUpQty(BigDecimal subcttStl_AddUpQty) {
+        this.subcttStl_AddUpQty = subcttStl_AddUpQty;
     }
 
-    public BigDecimal getBdTkcttStl_CurrentPeriodMeaAmount() {
-        return bdTkcttStl_CurrentPeriodMeaAmount;
+    public BigDecimal getSubcttStl_ThisStageAmt() {
+        return subcttStl_ThisStageAmt;
     }
 
-    public void setBdTkcttStl_CurrentPeriodMeaAmount(BigDecimal bdTkcttStl_CurrentPeriodMeaAmount) {
-        this.bdTkcttStl_CurrentPeriodMeaAmount = bdTkcttStl_CurrentPeriodMeaAmount;
+    public void setSubcttStl_ThisStageAmt(BigDecimal subcttStl_ThisStageAmt) {
+        this.subcttStl_ThisStageAmt = subcttStl_ThisStageAmt;
     }
 
-    public BigDecimal getBdTkcttStl_BeginToCurrentPeriodMeaAmount() {
-        return bdTkcttStl_BeginToCurrentPeriodMeaAmount;
+    public BigDecimal getSubcttStl_AddUpAmt() {
+        return subcttStl_AddUpAmt;
     }
 
-    public void setBdTkcttStl_BeginToCurrentPeriodMeaAmount(BigDecimal bdTkcttStl_BeginToCurrentPeriodMeaAmount) {
-        this.bdTkcttStl_BeginToCurrentPeriodMeaAmount = bdTkcttStl_BeginToCurrentPeriodMeaAmount;
+    public void setSubcttStl_AddUpAmt(BigDecimal subcttStl_AddUpAmt) {
+        this.subcttStl_AddUpAmt = subcttStl_AddUpAmt;
     }
 
-    public BigDecimal getBdSubcttStl_CurrentPeriodAmount() {
-        return bdSubcttStl_CurrentPeriodAmount;
+    public String getSubctt_SignPartName() {
+        return subctt_SignPartName;
     }
 
-    public void setBdSubcttStl_CurrentPeriodAmount(BigDecimal bdSubcttStl_CurrentPeriodAmount) {
-        this.bdSubcttStl_CurrentPeriodAmount = bdSubcttStl_CurrentPeriodAmount;
+    public void setSubctt_SignPartName(String subctt_SignPartName) {
+        this.subctt_SignPartName = subctt_SignPartName;
     }
 
-    public BigDecimal getBdSubcttStl_BeginToCurrentPeriodAmount() {
-        return bdSubcttStl_BeginToCurrentPeriodAmount;
+    public BigDecimal getMeaS_AddUpQty() {
+        return meaS_AddUpQty;
     }
 
-    public void setBdSubcttStl_BeginToCurrentPeriodAmount(BigDecimal bdSubcttStl_BeginToCurrentPeriodAmount) {
-        this.bdSubcttStl_BeginToCurrentPeriodAmount = bdSubcttStl_BeginToCurrentPeriodAmount;
+    public void setMeaS_AddUpQty(BigDecimal meaS_AddUpQty) {
+        this.meaS_AddUpQty = meaS_AddUpQty;
     }
 
-    public BigDecimal getBdMeaS_BeginToCurrentPeriodAmount() {
-        return bdMeaS_BeginToCurrentPeriodAmount;
+    public BigDecimal getMeaS_AddUpAmt() {
+        return meaS_AddUpAmt;
     }
 
-    public void setBdMeaS_BeginToCurrentPeriodAmount(BigDecimal bdMeaS_BeginToCurrentPeriodAmount) {
-        this.bdMeaS_BeginToCurrentPeriodAmount = bdMeaS_BeginToCurrentPeriodAmount;
+    public void setMeaS_AddUpAmt(BigDecimal meaS_AddUpAmt) {
+        this.meaS_AddUpAmt = meaS_AddUpAmt;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

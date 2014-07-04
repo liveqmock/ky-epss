@@ -212,85 +212,95 @@ public interface QueryMapper {
                                      @Param("strPeriodNo") String strPeriodNo);
 
     @Select(" select " +
-            "      subPerEd.CORRESPONDING_PKID as strCorrespondingPkid," +
-            "      subPerEd.SIGN_PART_B_NAME as strName," +
-            "      max(eissep.UNIT_PRICE) as bdUnitPrice," +
-            "      sum(eissep.THIS_STAGE_QTY) as bdCurrentPeriodQuantity," +
-            "      sum(eissep.ADD_UP_QTY) as bdBeginToCurrentPeriodQuantity" +
+            "    strCorrespondingPkid," +
+            "    strName," +
+            "    bdUnitPrice," +
+            "    bdCurrentPeriodQuantity," +
+            "    bdBeginToCurrentPeriodQuantity" +
             " from " +
-                    // 某一个成本计划下对应的批准了的分包合同的详细内容
-            "      ( " +
-            "           select" +
-            "                aprdsubctt.PKID as INFO_PKID," +
-            "                aprdsubctt.SIGN_PART_B_NAME," +
-            "                aprdsubctt.MAX_PERIOD_NO_INP," +
-            "                ecitem.PKID as ITEM_PKID," +
-            "                ecitem.CORRESPONDING_PKID" +
-            "           from " +
-                               // 某一个成本计划下对应的批准了的分包合同 并把它们产生的最近一期批准了的价格结算的期号记录下来
-            "               (" +
-            "                   select  " +
-            "                          ecinfo.PKID, " +
-            "                          (" +
-            "                              select " +
-            "                                   eicust.NAME " +
-            "                              from " +
-            "                                   ES_INIT_CUST eicust " +
-            "                              where " +
-            "                                   eicust.PKID = ecinfo.SIGN_PART_B " +
-            "                          )as SIGN_PART_B_NAME," +
-            "                          (" +
-            "                              select " +
-            "                                     max(PERIOD_NO)" +
-            "                              from " +
-            "                                 ES_INIT_POWER eip " +
-            "                              where " +
-            "                                 eip.POWER_TYPE='5'" +
-            "                              and " +
-            "                                 eip.POWER_PKID=ecinfo.PKID " +
-            "                              and " +
-            "                                 eip.STATUS_FLAG>='3'" +
-            "                              and" +
-            "                                 eip.PERIOD_NO<=#{strPeriodNo}" +
-            "                          ) as MAX_PERIOD_NO_INP" +
-            "                   from " +
-            "                          ES_CTT_INFO ecinfo " +
-            "                   inner join " +
-            "                          ES_INIT_POWER eip " +
-            "                   on " +
-            "                          eip.POWER_TYPE=ecinfo.CTT_TYPE " +
-            "                   and " +
-            "                          eip.POWER_PKID=ecinfo.PKID " +
-            "                   and " +
-            "                          eip.PERIOD_NO='NULL' " +
-            "                   and " +
-            "                          eip.STATUS_FLAG='3' " +
-            "                   where                       " +
-            "                          ecinfo.CTT_TYPE = '2' " +
-            "                   and" +
-            "                          ecinfo.PARENT_PKID = #{strCstplInfoPkid}" +
-            "               ) aprdsubctt" +
-                               // 某一个成本计划下对应的批准了的分包合同 并把它们产生的最近一期批准了的价格结算的期号记录下来
-            "          inner join" +
-            "               ES_CTT_ITEM ecitem" +
-            "          on" +
-            "             ecitem.belong_to_type='2'" +
-            "          and" +
-            "             ecitem.belong_to_pkid=aprdsubctt.pkid " +
-            "      )subPerEd " +
-                    // 某一个成本计划下对应的批准了的分包合同的详细内容
-            " inner join" +
-            "      ES_ITEM_STL_SUBCTT_ENG_P eissep" +
-            " on" +
-            "      eissep.SUBSTL_TYPE='3'" +
-            " and" +
-            "      eissep.SUBCTT_PKID=subPerEd.INFO_PKID" +
-            " and " +
-            "      eissep.PERIOD_NO=subPerEd.MAX_PERIOD_NO_INP" +
-            " and" +
-            "      eissep.SUBCTT_ITEM_PKID=subPerEd.ITEM_PKID" +
-            " group by subPerEd.CORRESPONDING_PKID,subPerEd.SIGN_PART_B_NAME " +
-            " order by subPerEd.CORRESPONDING_PKID,subPerEd.SIGN_PART_B_NAME")
+            "    (" +
+            "       select " +
+            "            subPerEd.CORRESPONDING_PKID as strCorrespondingPkid," +
+            "            subPerEd.SIGN_PART_B_NAME as strName," +
+            "            max(eissep.UNIT_PRICE) as bdUnitPrice," +
+            "            sum(eissep.THIS_STAGE_QTY) as bdCurrentPeriodQuantity," +
+            "            sum(eissep.ADD_UP_QTY) as bdBeginToCurrentPeriodQuantity" +
+            "       from " +
+                          // 某一个成本计划下对应的批准了的分包合同的详细内容
+            "            ( " +
+            "                 select" +
+            "                      aprdsubctt.PKID as INFO_PKID," +
+            "                      aprdsubctt.SIGN_PART_B_NAME," +
+            "                      aprdsubctt.MAX_PERIOD_NO_INP," +
+            "                      ecitem.PKID as ITEM_PKID," +
+            "                      ecitem.CORRESPONDING_PKID" +
+            "                 from " +
+                                     // 某一个成本计划下对应的批准了的分包合同 并把它们产生的最近一期批准了的价格结算的期号记录下来
+            "                     (" +
+            "                         select  " +
+            "                                ecinfo.PKID, " +
+            "                                (" +
+            "                                    select " +
+            "                                         eicust.NAME " +
+            "                                    from " +
+            "                                         ES_INIT_CUST eicust " +
+            "                                    where " +
+            "                                         eicust.PKID = ecinfo.SIGN_PART_B " +
+            "                                )as SIGN_PART_B_NAME," +
+            "                                (" +
+            "                                    select " +
+            "                                           max(PERIOD_NO)" +
+            "                                    from " +
+            "                                       ES_INIT_POWER eip " +
+            "                                    where " +
+            "                                       eip.POWER_TYPE='5'" +
+            "                                    and " +
+            "                                       eip.POWER_PKID=ecinfo.PKID " +
+            "                                    and " +
+            "                                       eip.STATUS_FLAG>='3'" +
+            "                                    and" +
+            "                                       eip.PERIOD_NO<=#{strPeriodNo}" +
+            "                                ) as MAX_PERIOD_NO_INP" +
+            "                         from " +
+            "                                ES_CTT_INFO ecinfo " +
+            "                         inner join " +
+            "                                ES_INIT_POWER eip " +
+            "                         on " +
+            "                                eip.POWER_TYPE=ecinfo.CTT_TYPE " +
+            "                         and " +
+            "                                eip.POWER_PKID=ecinfo.PKID " +
+            "                         and " +
+            "                                eip.PERIOD_NO='NULL' " +
+            "                         and " +
+            "                                eip.STATUS_FLAG='3' " +
+            "                         where                       " +
+            "                                ecinfo.CTT_TYPE = '2' " +
+            "                         and" +
+            "                                ecinfo.PARENT_PKID = #{strCstplInfoPkid}" +
+            "                     ) aprdsubctt" +
+                                     // 某一个成本计划下对应的批准了的分包合同 并把它们产生的最近一期批准了的价格结算的期号记录下来
+            "                inner join" +
+            "                     ES_CTT_ITEM ecitem" +
+            "                on" +
+            "                   ecitem.belong_to_type='2'" +
+            "                and" +
+            "                   ecitem.belong_to_pkid=aprdsubctt.pkid " +
+            "            )subPerEd " +
+                          // 某一个成本计划下对应的批准了的分包合同的详细内容
+            "       inner join" +
+            "            ES_ITEM_STL_SUBCTT_ENG_P eissep" +
+            "       on" +
+            "            eissep.SUBSTL_TYPE='3'" +
+            "       and" +
+            "            eissep.SUBCTT_PKID=subPerEd.INFO_PKID" +
+            "       and " +
+            "            eissep.PERIOD_NO=subPerEd.MAX_PERIOD_NO_INP" +
+            "       and" +
+            "            eissep.SUBCTT_ITEM_PKID=subPerEd.ITEM_PKID" +
+            "       group by subPerEd.CORRESPONDING_PKID,subPerEd.SIGN_PART_B_NAME " +
+        "       ) t" +
+            " where " +
+            " t.bdBeginToCurrentPeriodQuantity is not null")
     List<QryShow> getCSStlQBySignPartList(@Param("strCstplInfoPkid") String strCstplInfoPkid,
                                           @Param("strPeriodNo") String strPeriodNo);
 }
