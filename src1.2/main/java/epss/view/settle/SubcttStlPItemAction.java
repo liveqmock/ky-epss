@@ -158,7 +158,6 @@ public class SubcttStlPItemAction {
             progSubstlItemShowListForAccountAndQry= esItemStlSubcttEngPService.selectRecordsByDetailExampleForAccount(esItemStlSubcttEngPTemp);
             return;
         }
-        //批准
         //已批准
         if ("Approve".equals(strSubmitType)&&ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPower.getStatusFlag())){
             List<EsItemStlSubcttEngP> progSubstlItemShowListForApprove=esItemStlSubcttEngPService.selectRecordsByDetailExampleForAccount(esItemStlSubcttEngPTemp);
