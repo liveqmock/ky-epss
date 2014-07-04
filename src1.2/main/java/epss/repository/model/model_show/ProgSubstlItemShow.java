@@ -51,7 +51,7 @@ public class ProgSubstlItemShow implements Serializable {
     private String engPMng_LastUpdByName;
     private String engPMng_LastUpdDate;
     private Integer engPMng_ModificationNum;
-    private String engPMng_RowNo;
+    private Integer engPMng_RowNo;
 
     public ProgSubstlItemShow() {
 
@@ -361,11 +361,11 @@ public class ProgSubstlItemShow implements Serializable {
         this.engPMng_SubStlType = engPMng_SubStlType;
     }
 
-    public String getEngPMng_RowNo() {
+    public Integer getEngPMng_RowNo() {
         return engPMng_RowNo;
     }
 
-    public void setEngPMng_RowNo(String engPMng_RowNo) {
+    public void setEngPMng_RowNo(Integer engPMng_RowNo) {
         this.engPMng_RowNo = engPMng_RowNo;
     }
 }

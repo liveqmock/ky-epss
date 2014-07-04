@@ -134,7 +134,7 @@ public class EsInitStlService {
         //将价格结算的完整数据插入至es_item_stl_subctt_eng_p表
         for (int i=0;i<progSubstlItemShowListForApprovePara.size();i++){
             ProgSubstlItemShow itemUnit=progSubstlItemShowListForApprovePara.get(i);
-            itemUnit.setEngPMng_RowNo(i+"");
+            itemUnit.setEngPMng_RowNo(i);
             esItemStlSubcttEngPService.insertRecordDetail(itemUnit);
         }
     }
