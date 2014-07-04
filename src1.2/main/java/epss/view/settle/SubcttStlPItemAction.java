@@ -66,6 +66,7 @@ public class SubcttStlPItemAction {
 
     private Map beansMap;
     private EsInitStl esInitStl;
+    private EsInitPower esInitPower;
 
     /*所属号*/
     private String strEsInitStlPkid;
@@ -114,7 +115,7 @@ public class SubcttStlPItemAction {
         esInitPowerTemp.setPowerType(esInitStl.getStlType());
         esInitPowerTemp.setPowerPkid(esInitStl.getStlPkid());
         esInitPowerTemp.setPeriodNo(esInitStl.getPeriodNo());
-        EsInitPower esInitPower = esInitPowerService.selectByPrimaryKey(esInitPowerTemp);
+        esInitPower = esInitPowerService.selectByPrimaryKey(esInitPowerTemp);
         if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPower.getStatusFlag())) {
             strApproveBtnRendered = "false";
             strApprovedNotBtnRendered = "true";
@@ -149,15 +150,25 @@ public class SubcttStlPItemAction {
         commStlSubcttEngH.setStrTkcttName(esCttInfo_Tkctt.getName());
 
         // 表内容设定
+        EsItemStlSubcttEngP esItemStlSubcttEngPTemp=new EsItemStlSubcttEngP();
+        esItemStlSubcttEngPTemp.setSubcttPkid(commStlSubcttEngH.getStrSubcttPkid());
+        esItemStlSubcttEngPTemp.setPeriodNo(esInitStl.getPeriodNo());
         //记账
         if ("Account".equals(strSubmitType)||"Qry".equals(strSubmitType)){
-            EsItemStlSubcttEngP esItemStlSubcttEngPTemp=new EsItemStlSubcttEngP();
-            esItemStlSubcttEngPTemp.setSubcttPkid(commStlSubcttEngH.getStrSubcttPkid());
-            esItemStlSubcttEngPTemp.setPeriodNo(esInitStl.getPeriodNo());
             progSubstlItemShowListForAccountAndQry= esItemStlSubcttEngPService.selectRecordsByDetailExampleForAccount(esItemStlSubcttEngPTemp);
             return;
         }
         //批准
+        //已批准
+        if ("Approve".equals(strSubmitType)&&ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPower.getStatusFlag())){
+            List<EsItemStlSubcttEngP> progSubstlItemShowListForApprove=esItemStlSubcttEngPService.selectRecordsByDetailExampleForAccount(esItemStlSubcttEngPTemp);
+            for (EsItemStlSubcttEngP esItemStlSubcttEngP:progSubstlItemShowListForApprove){
+                ProgSubstlItemShow progSubstlItemShowTemp=esItemStlSubcttEngPService.fromModelToShow(esItemStlSubcttEngP);
+                progSubstlItemShowList.add(progSubstlItemShowTemp);
+            }
+            return;
+        }
+        //未批准
         esCttItemList = esCttItemService.getEsItemList(
                 ESEnum.ITEMTYPE2.getCode(), commStlSubcttEngH.getStrSubcttPkid());
         if (esCttItemList.size() > 0) {
@@ -171,7 +182,6 @@ public class SubcttStlPItemAction {
             strExportToExcelRendered = "false";
         }
     }
-
     /**
      * 根据权限进行审核
      */
@@ -525,19 +535,13 @@ public class SubcttStlPItemAction {
         try {
                 // 批准
                 if(strPowerType.contains("Approve")){
-                    if(strPowerType.equals("ApprovePass")){
-                        EsInitStl esInitStlTemp= new EsInitStl();
-                        esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
-                        esInitStlTemp.setStlPkid(esInitStl.getStlPkid());
-                        esInitStlTemp.setPeriodNo(esInitStl.getPeriodNo());
-                        List<EsInitStl> esInitStlList=esInitStlService.selectRecordsByRecord(esInitStlTemp);
-                        if (esInitStlList.size()>0){
-                            // 结算登记表和Power表更新,并将价格结算的完整数据插入至es_item_stl_subctt_eng_p表
-                            esInitStlList.get(0).setId(getMaxIdPlusOne());
-                            esInitStlService.updateRecordForSubCttPApprovePass(esInitStlList.get(0), (ArrayList<ProgSubstlItemShow>) progSubstlItemShowListForApprove);
-                            strApproveBtnRendered="false";
-                            strApprovedNotBtnRendered="true";
-                        }
+                    if (strPowerType.equals("ApprovePass")) {
+                        EsInitStl esInitStlTemp = (EsInitStl) BeanUtils.cloneBean(esInitStl);
+                        // 结算登记表和Power表更新,并将价格结算的完整数据插入至es_item_stl_subctt_eng_p表
+                        esInitStlTemp.setId(getMaxIdPlusOne());
+                        esInitStlService.updateRecordForSubCttPApprovePass(esInitStlTemp, (ArrayList<ProgSubstlItemShow>) progSubstlItemShowListForApprove);
+                        strApproveBtnRendered = "false";
+                        strApprovedNotBtnRendered = "true";
                     }else if(strPowerType.equals("ApproveFailToQ")){
                         EsInitStl esInitStlTemp= (EsInitStl) BeanUtils.cloneBean(esInitStl);
                         esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());

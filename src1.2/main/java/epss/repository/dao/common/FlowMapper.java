@@ -339,6 +339,7 @@ public interface FlowMapper {
                 " where eis.STL_PKID like CONCAT('%',CONCAT(trim(#{strStlPkid}),'%'))" +
                 " and eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{strPeriodNo}),'%'))" +
                 " and eis.STL_TYPE='5'" +
+                " and eip.STATUS_FLAG>='3'"+
                 " )eispower" +
             " on ecinfo.PKID=eispower.STL_PKID" +
             " left outer join ES_INIT_CUST eicust" +

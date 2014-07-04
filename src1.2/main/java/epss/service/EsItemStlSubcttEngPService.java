@@ -43,6 +43,7 @@ public class EsItemStlSubcttEngPService {
         EsItemStlSubcttEngPExample example = new EsItemStlSubcttEngPExample();
         example.createCriteria().andSubcttPkidEqualTo(esItemStlSubcttEngPPara.getSubcttPkid())
                 .andPeriodNoEqualTo(esItemStlSubcttEngPPara.getPeriodNo());
+        example.setOrderByClause("ROW_NO ASC") ;
         return esItemStlSubcttEngPMapper.selectByExample(example);
     }
 
@@ -97,6 +98,7 @@ public class EsItemStlSubcttEngPService {
         esItemStlSubcttEngP.setContractQuantity(progSubstlItemShowPara.getSubctt_ContractQuantity());
         esItemStlSubcttEngP.setContractAmount(progSubstlItemShowPara.getSubctt_ContractAmount());
         esItemStlSubcttEngP.setStrno(progSubstlItemShowPara.getSubctt_StrNo());
+        esItemStlSubcttEngP.setRowNo(progSubstlItemShowPara.getEngPMng_RowNo());
         return esItemStlSubcttEngP;
     }
 
@@ -106,5 +108,22 @@ public class EsItemStlSubcttEngPService {
                 .andSubcttPkidEqualTo(strSubcttInfoPkidPara)
                 .andPeriodNoEqualTo(strPeriodNoPara);
         esItemStlSubcttEngPMapper.deleteByExample(example);
+    }
+
+    public ProgSubstlItemShow fromModelToShow(EsItemStlSubcttEngP esItemStlSubcttEngPPara) {
+        ProgSubstlItemShow progSubstlItemShowTemp = new ProgSubstlItemShow();
+        progSubstlItemShowTemp.setSubctt_ItemPkid(esItemStlSubcttEngPPara.getSubcttItemPkid());
+        progSubstlItemShowTemp.setSubctt_StrNo(esItemStlSubcttEngPPara.getStrno());
+        progSubstlItemShowTemp.setSubctt_ItemName(esItemStlSubcttEngPPara.getSubcttItemName());
+        progSubstlItemShowTemp.setSubctt_Unit(esItemStlSubcttEngPPara.getUnit());
+        progSubstlItemShowTemp.setSubctt_ContractUnitPrice(esItemStlSubcttEngPPara.getUnitPrice());
+        progSubstlItemShowTemp.setSubctt_ContractQuantity(esItemStlSubcttEngPPara.getContractQuantity());
+        progSubstlItemShowTemp.setSubctt_ContractAmount(esItemStlSubcttEngPPara.getContractAmount());
+        progSubstlItemShowTemp.setEngPMng_CurrentPeriodEQty(esItemStlSubcttEngPPara.getThisStageQty());
+        progSubstlItemShowTemp.setEngPMng_CurrentPeriodAmt(esItemStlSubcttEngPPara.getThisStageAmt());
+        progSubstlItemShowTemp.setEngPMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngPPara.getAddUpQty());
+        progSubstlItemShowTemp.setEngPMng_BeginToCurrentPeriodAmt(esItemStlSubcttEngPPara.getAddUpAmt());
+        progSubstlItemShowTemp.setSubctt_Note(esItemStlSubcttEngPPara.getRemark());
+        return progSubstlItemShowTemp;
     }
 }
