@@ -220,6 +220,7 @@ public class SubcttStlPItemAction {
             stl1.setSubctt_ItemPkid("stl1");
             stl1.setSubctt_ItemName("造价计算");
             stl1.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl1.setEngPMng_SubStlType(ESEnum.ITEMTYPE3.getCode());
             stl1.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
             progSubstlItemShowList.add(stl1);
             progSubstlItemShowListForApprove.add(stl1);
@@ -285,9 +286,10 @@ public class SubcttStlPItemAction {
 
             //1小计
             ProgSubstlItemShow stl2 = new ProgSubstlItemShow();
+            stl2.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl2.setSubctt_ItemPkid("stl2");
             stl2.setSubctt_ItemName("小计");
-            stl2.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl2.setEngPMng_SubStlType(ESEnum.ITEMTYPE3.getCode());
             stl2.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
             stl2.setEngPMng_CurrentPeriodAmt(bdCurrentPeriodTotalAmtTemp);
             stl2.setEngPMng_BeginToCurrentPeriodAmt(bdBeginToCurrentPeriodTotalAmtTemp);
@@ -299,6 +301,7 @@ public class SubcttStlPItemAction {
             stl3.setSubctt_ItemPkid("stl3");
             stl3.setSubctt_ItemName("扣款(材料)");
             stl3.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl3.setEngPMng_SubStlType(ESEnum.ITEMTYPE4.getCode());
             stl3.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
             progSubstlItemShowList.add(stl3);
             progSubstlItemShowListForApprove.add(stl3);
@@ -353,9 +356,10 @@ public class SubcttStlPItemAction {
             beansMap.put("records1", records1);
 
             ProgSubstlItemShow stl4 = new ProgSubstlItemShow();
+            stl4.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl4.setSubctt_ItemPkid("stl4");
             stl4.setSubctt_ItemName("扣款(税)");
-            stl4.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl4.setEngPMng_SubStlType(ESEnum.ITEMTYPE4.getCode());
             stl4.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
             stl4.setSubctt_ContractUnitPrice(bdRates[0]);
             stl4.setEngPMng_CurrentPeriodAmt(stl2.getEngPMng_CurrentPeriodAmt().multiply(bdRates[0]));
@@ -364,9 +368,10 @@ public class SubcttStlPItemAction {
             progSubstlItemShowListForApprove.add(stl4);
 
             ProgSubstlItemShow stl5 = new ProgSubstlItemShow();
+            stl5.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl5.setSubctt_ItemPkid("stl5");
             stl5.setSubctt_ItemName("小计");
-            stl5.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl5.setEngPMng_SubStlType(ESEnum.ITEMTYPE4.getCode());
             stl5.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
             stl5.setEngPMng_CurrentPeriodAmt(bdTotalAmt.add(stl4.getEngPMng_CurrentPeriodAmt()));
             stl5.setEngPMng_BeginToCurrentPeriodAmt(bdTotalAllAmt.add(stl4.getEngPMng_BeginToCurrentPeriodAmt()));
@@ -374,9 +379,9 @@ public class SubcttStlPItemAction {
             progSubstlItemShowListForApprove.add(stl5);
 
             ProgSubstlItemShow stl6 = new ProgSubstlItemShow();
+            stl6.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl6.setSubctt_ItemPkid("stl6");
             stl6.setSubctt_ItemName("本期净结算额");
-            stl6.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl6.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
             stl6.setEngPMng_CurrentPeriodAmt(
                     stl2.getEngPMng_CurrentPeriodAmt().subtract(stl5.getEngPMng_CurrentPeriodAmt()));
@@ -386,9 +391,9 @@ public class SubcttStlPItemAction {
             progSubstlItemShowListForApprove.add(stl6);
 
             ProgSubstlItemShow stl7 = new ProgSubstlItemShow();
+            stl7.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl7.setSubctt_ItemPkid("stl7");
             stl7.setSubctt_ItemName("其它(质保金)");
-            stl7.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl7.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
             stl7.setSubctt_ContractUnitPrice(bdRates[1]);
             stl7.setEngPMng_CurrentPeriodAmt(bdCurrentPeriodTotalAmtTemp.multiply(bdRates[1]));
@@ -397,9 +402,9 @@ public class SubcttStlPItemAction {
             progSubstlItemShowListForApprove.add(stl7);
 
             ProgSubstlItemShow stl8 = new ProgSubstlItemShow();
+            stl8.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl8.setSubctt_ItemPkid("stl8");
             stl8.setSubctt_ItemName("小计");
-            stl8.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl8.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
             stl8.setEngPMng_CurrentPeriodAmt(stl7.getEngPMng_CurrentPeriodAmt());
             stl8.setEngPMng_BeginToCurrentPeriodAmt(stl7.getEngPMng_BeginToCurrentPeriodAmt());
@@ -407,9 +412,9 @@ public class SubcttStlPItemAction {
             progSubstlItemShowListForApprove.add(stl8);
 
             ProgSubstlItemShow stl9 = new ProgSubstlItemShow();
+            stl9.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl9.setSubctt_ItemPkid("stl9");
             stl9.setSubctt_ItemName("合计(扣除其它栏款项后本期结算价值)");
-            stl9.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl9.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
             stl9.setEngPMng_CurrentPeriodAmt(
                     stl6.getEngPMng_CurrentPeriodAmt().subtract(stl8.getEngPMng_CurrentPeriodAmt()));
