@@ -543,7 +543,8 @@ public class SubcttStlPItemAction {
                         EsInitStl esInitStlTemp = (EsInitStl) BeanUtils.cloneBean(esInitStl);
                         // 结算登记表和Power表更新,并将价格结算的完整数据插入至es_item_stl_subctt_eng_p表
                         esInitStlTemp.setId(getMaxIdPlusOne());
-                        esInitStlService.updateRecordForSubCttPApprovePass(esInitStlTemp, (ArrayList<ProgSubstlItemShow>) progSubstlItemShowListForApprove);
+                        esInitStlService.updateRecordForSubCttPApprovePass(esInitStlTemp,
+                                progSubstlItemShowListForApprove);
                         strApproveBtnRendered = "false";
                         strApprovedNotBtnRendered = "true";
                     }else if(strPowerType.equals("ApproveFailToQ")){

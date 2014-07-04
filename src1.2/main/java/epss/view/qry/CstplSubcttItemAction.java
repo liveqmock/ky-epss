@@ -37,8 +37,8 @@ import java.util.*;
 
 @ManagedBean
 @ViewScoped
-public class CSubItemAction {
-    private static final Logger logger = LoggerFactory.getLogger(CSubItemAction.class);
+public class CstplSubcttItemAction {
+    private static final Logger logger = LoggerFactory.getLogger(CstplSubcttItemAction.class);
     @ManagedProperty(value = "#{esCttInfoService}")
     private EsCttInfoService esCttInfoService;
     @ManagedProperty(value = "#{esCttItemService}")

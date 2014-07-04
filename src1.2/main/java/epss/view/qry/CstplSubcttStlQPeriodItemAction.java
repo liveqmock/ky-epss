@@ -44,8 +44,8 @@ import java.util.Map;
 
 @ManagedBean
 @ViewScoped
-public class CSubStlQPeriodItemAction {
-    private static final Logger logger = LoggerFactory.getLogger(CSubStlQPeriodItemAction.class);
+public class CstplSubcttStlQPeriodItemAction {
+    private static final Logger logger = LoggerFactory.getLogger(CstplSubcttStlQPeriodItemAction.class);
     @ManagedProperty(value = "#{esCttItemService}")
     private EsCttItemService esCttItemService;
     @ManagedProperty(value = "#{esCommon}")
@@ -366,7 +366,7 @@ public class CSubStlQPeriodItemAction {
             MessageUtil.addError("开始期(" + strStartPeriodNo + "）大于结束期（" + strEndPeriodNo + ")，请确认输入的期码！");
             return false;
         }
-        if(ToolUtil.getDateByStr(strStartPeriodNo,strEndPeriodNo)>12){
+        if(ToolUtil.getDateByStr(strStartPeriodNo,strEndPeriodNo)>24){
             MessageUtil.addError("一次查询只可在12个月("+strStartPeriodNo+"-"+strEndPeriodNo+")范围内!");
             return false;
         }

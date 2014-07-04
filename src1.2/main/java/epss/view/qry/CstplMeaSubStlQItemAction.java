@@ -38,8 +38,8 @@ import java.util.Map;
 
 @ManagedBean
 @ViewScoped
-public class CMeaSubStlQItemAction {
-    private static final Logger logger = LoggerFactory.getLogger(CMeaSubStlQItemAction.class);
+public class CstplMeaSubStlQItemAction {
+    private static final Logger logger = LoggerFactory.getLogger(CstplMeaSubStlQItemAction.class);
     @ManagedProperty(value = "#{esCttInfoService}")
     private EsCttInfoService esCttInfoService;
     @ManagedProperty(value = "#{esCttItemService}")

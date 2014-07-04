@@ -115,7 +115,7 @@ public class EsInitStlService {
         esInitPowerService.insertRecordByStl(esInitPowerTemp);
     }
     @Transactional
-    public void updateRecordForSubCttPApprovePass(EsInitStl esInitStlPara,ArrayList<ProgSubstlItemShow> progSubstlItemShowListForApprovePara){
+    public void updateRecordForSubCttPApprovePass(EsInitStl esInitStlPara,List<ProgSubstlItemShow> progSubstlItemShowListForApprovePara){
         //结算登记表更新
         esInitStlPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(esInitStlPara.getModificationNum())+1);

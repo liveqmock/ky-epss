@@ -298,9 +298,10 @@ public interface QueryMapper {
             "       and" +
             "            eissep.SUBCTT_ITEM_PKID=subPerEd.ITEM_PKID" +
             "       group by subPerEd.CORRESPONDING_PKID,subPerEd.SIGN_PART_B_NAME " +
-        "       ) t" +
+            "    ) t" +
             " where " +
-            " t.bdBeginToCurrentPeriodQuantity is not null")
+            "    t.bdBeginToCurrentPeriodQuantity is not null" +
+            " order by t.strCorrespondingPkid")
     List<QryShow> getCSStlQBySignPartList(@Param("strCstplInfoPkid") String strCstplInfoPkid,
                                           @Param("strPeriodNo") String strPeriodNo);
 }

@@ -25,16 +25,16 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel value="成本计划：" for="cstplPkid" />
                         <p:selectOneMenu id="cstplPkid"
-                                         value="#{CMeaSubStlQItemAction.strCstplPkid}">
-                            <f:selectItems value="#{CMeaSubStlQItemAction.cstplList}"/>
+                                         value="#{cstplMeaSubStlQItemAction.strCstplPkid}">
+                            <f:selectItems value="#{cstplMeaSubStlQItemAction.cstplList}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="期数编码：" for="periodNo"/>
-                        <p:inputText id="periodNo" value="#{CMeaSubStlQItemAction.strPeriodNo}"
+                        <p:inputText id="periodNo" value="#{cstplMeaSubStlQItemAction.strPeriodNo}"
                                      onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                     </h:panelGrid>
                     <h:panelGrid columns="3">
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{CMeaSubStlQItemAction.onQueryAction()}"
+                                         action="#{cstplMeaSubStlQItemAction.onQueryAction()}"
                                          update="pgCondition,msgs,pdt,exportToExcel">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
@@ -54,13 +54,13 @@
             </p:panel>
             <h:panelGrid id="exportToExcel" columns="1">
                 <p:commandButton value="导出到EXCEL"
-                                 action="#{CMeaSubStlQItemAction.onExportExcel}"
+                                 action="#{cstplMeaSubStlQItemAction.onExportExcel}"
                                  ajax="false"
-                                 rendered="#{CMeaSubStlQItemAction.strExportToExcelRendered}">
+                                 rendered="#{cstplMeaSubStlQItemAction.strExportToExcelRendered}">
                 </p:commandButton>
             </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{CMeaSubStlQItemAction.qryCSMeaSubQShowList}"
+                         value="#{cstplMeaSubStlQItemAction.qryCSMeaSubQShowList}"
                          var="record"
                          rowKey="#{record.strCstpl_Pkid}"
                          selectionMode="single"
