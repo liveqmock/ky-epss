@@ -297,9 +297,9 @@ public class SubcttStlPItemAction {
 
             //3¿Û¿î
             ProgSubstlItemShow stl3 = new ProgSubstlItemShow();
+			stl3.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl3.setSubctt_ItemPkid("stl3");
             stl3.setSubctt_ItemName("¿Û¿î(²ÄÁÏ)");
-            stl3.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl3.setEngPMng_SubStlType(ESEnum.ITEMTYPE4.getCode());
             stl3.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
             progSubstlItemShowList.add(stl3);
