@@ -33,7 +33,7 @@
 
 
         <!--业务类例子 -->
-        <table schema="epss" tableName="es_ctt_info">
+        <!--<table schema="epss" tableName="es_ctt_info">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
@@ -48,19 +48,19 @@
         <table schema="epss" tableName="es_item_stl_subctt_eng_q">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
+        </table>-->
         <table schema="epss" tableName="es_item_stl_subctt_eng_p">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <table schema="epss" tableName="es_item_stl_tkctt_eng_sta">
+       <!-- <table schema="epss" tableName="es_item_stl_tkctt_eng_sta">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
         <table schema="epss" tableName="es_item_stl_tkctt_eng_mea">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
+        </table>-->
         <!--<table schema="epss" tableName="ES_CTT_INFO">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
