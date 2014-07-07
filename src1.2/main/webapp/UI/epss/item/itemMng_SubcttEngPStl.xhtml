@@ -73,11 +73,6 @@
                                          rendered="#{subcttStlPItemAction.strApprovedNotBtnRendered}">
                         </p:commandButton>
                     </h:panelGrid>
-                    <p:commandButton value="导出到EXCEL"
-                                     action="#{subcttStlPItemAction.onExportExcel}"
-                                     ajax="false"
-                                     rendered="#{subcttStlPItemAction.strExportToExcelRendered}">
-                    </p:commandButton>
                     <p:ajaxStatus style="width:16px;height:16px;">
                         <f:facet name="start">
                             <h:graphicImage value="/images/ajaxloading.gif"/>
@@ -86,6 +81,11 @@
                             <h:outputText value=""/>
                         </f:facet>
                     </p:ajaxStatus>
+                    <p:commandButton value="导出到EXCEL"
+                                     action="#{subcttStlPItemAction.onExportExcel}"
+                                     ajax="false"
+                                     rendered="#{subcttStlPItemAction.strExportToExcelRendered}">
+                    </p:commandButton>
                     <p:commandButton value="分包合同附件" oncomplete="actSelect()">
                     </p:commandButton>
                 </h:panelGrid>

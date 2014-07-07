@@ -2,6 +2,7 @@ package epss.service;
 
 import epss.common.utils.ToolUtil;
 import epss.repository.dao.EsItemStlSubcttEngPMapper;
+import epss.repository.dao.common.QueryMapper;
 import epss.repository.model.EsItemStlSubcttEngM;
 import epss.repository.model.EsItemStlSubcttEngP;
 import epss.repository.model.EsItemStlSubcttEngPExample;
@@ -29,6 +30,8 @@ public class EsItemStlSubcttEngPService {
     private PlatformService platformService;
     @Resource
     private EsCommonService esCommonService;
+    @Resource
+    private QueryMapper queryMapper;
 
     public EsItemStlSubcttEngP selectRecordsByDetailPrimaryKey(String strPkId){
         return esItemStlSubcttEngPMapper.selectByPrimaryKey(strPkId);
@@ -42,9 +45,14 @@ public class EsItemStlSubcttEngPService {
     public List<EsItemStlSubcttEngP> selectRecordsByDetailExampleForAccount(EsItemStlSubcttEngP esItemStlSubcttEngPPara){
         EsItemStlSubcttEngPExample example = new EsItemStlSubcttEngPExample();
         example.createCriteria().andSubcttPkidEqualTo(esItemStlSubcttEngPPara.getSubcttPkid())
-                .andPeriodNoEqualTo(esItemStlSubcttEngPPara.getPeriodNo());
+                .andPeriodNoEqualTo(esItemStlSubcttEngPPara.getPeriodNo())
+                .andAddUpAmtIsNotNull()
+                .andSubcttItemPkidLike("stl");
         example.setOrderByClause("ROW_NO ASC") ;
         return esItemStlSubcttEngPMapper.selectByExample(example);
+    }
+    public List<EsItemStlSubcttEngP> selectRecordsForAccount(String strSubcttPkidPara,String strPeriodNoPara){
+        return queryMapper.selectRecordsForAccount(strSubcttPkidPara,strPeriodNoPara);
     }
 
     public void deleteRecordDetail(String strPkId){
@@ -124,6 +132,7 @@ public class EsItemStlSubcttEngPService {
         progSubstlItemShowTemp.setEngPMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngPPara.getAddUpQty());
         progSubstlItemShowTemp.setEngPMng_BeginToCurrentPeriodAmt(esItemStlSubcttEngPPara.getAddUpAmt());
         progSubstlItemShowTemp.setSubctt_Note(esItemStlSubcttEngPPara.getRemark());
+        progSubstlItemShowTemp.setEngPMng_SubStlType(esItemStlSubcttEngPPara.getSubstlType());
         return progSubstlItemShowTemp;
     }
 }

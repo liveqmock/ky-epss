@@ -97,38 +97,81 @@ public class SubcttStlPItemAction {
 
     /*初始化操作*/
     private void initData() {
-        // 表头设定
-        commStlSubcttEngH.setStrDate(PlatformService.dateFormat(nowDate, "yyyy-MM-dd"));
-        /*分包合同数据*/
-        List<EsCttItem> esCttItemList = new ArrayList<EsCttItem>();
-        if ("Account".equals(strSubmitType)||"Qry".equals(strSubmitType)){
-            progSubstlItemShowListForAccountAndQry = new ArrayList<EsItemStlSubcttEngP>();
-        }
-        if ("Approve".equals(strSubmitType)){
-            progSubstlItemShowList = new ArrayList<ProgSubstlItemShow>();
-            progSubstlItemShowListForApprove = new ArrayList<ProgSubstlItemShow>();
-        }
         // From StlPkid To SubcttPkid
         esInitStl = esInitStlService.selectRecordsByPrimaryKey(strEsInitStlPkid);
-        // 如果该分包合同价格结算已经记账，则在记账页面上不显示记账按钮
+        initHeadMsg();
         EsInitPower esInitPowerTemp = new EsInitPower();
         esInitPowerTemp.setPowerType(esInitStl.getStlType());
         esInitPowerTemp.setPowerPkid(esInitStl.getStlPkid());
         esInitPowerTemp.setPeriodNo(esInitStl.getPeriodNo());
         esInitPower = esInitPowerService.selectByPrimaryKey(esInitPowerTemp);
-        if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPower.getStatusFlag())) {
-            strApproveBtnRendered = "false";
-            strApprovedNotBtnRendered = "true";
-        } else {
-            strApproveBtnRendered = "true";
-            strApprovedNotBtnRendered = "true";
+        if ("Account".equals(strSubmitType) || "Qry".equals(strSubmitType)) {
+            progSubstlItemShowListForAccountAndQry = new ArrayList<EsItemStlSubcttEngP>();
+            if (ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(esInitPower.getStatusFlag())) {
+                strAccountBtnRendered = "false";
+            } else {
+                strAccountBtnRendered = "true";
+            }
+            /*表内容设定,查询和记账*/
+            progSubstlItemShowListForAccountAndQry = esItemStlSubcttEngPService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
+            return;
         }
-        if (ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(esInitPower.getStatusFlag())) {
-            strAccountBtnRendered = "false";
-        } else {
-            strAccountBtnRendered = "true";
+        if ("Approve".equals(strSubmitType)) {
+            strExportToExcelRendered = "true";
+            progSubstlItemShowList = new ArrayList<ProgSubstlItemShow>();
+            progSubstlItemShowListForApprove = new ArrayList<ProgSubstlItemShow>();
+            if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPower.getStatusFlag())) {
+                strApproveBtnRendered = "false";
+                strApprovedNotBtnRendered = "true";
+            } else {
+                strApproveBtnRendered = "true";
+                strApprovedNotBtnRendered = "true";
+            }
+            /*表内容设定,批准*/
+            if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPower.getStatusFlag())) {
+                List<ProgSubstlItemShow> records0 = new ArrayList<ProgSubstlItemShow>();
+                List<ProgSubstlItemShow> records1 = new ArrayList<ProgSubstlItemShow>();
+                List<EsItemStlSubcttEngP> progSubstlItemShowListForApprove = esItemStlSubcttEngPService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
+                for (EsItemStlSubcttEngP esItemStlSubcttEngP : progSubstlItemShowListForApprove) {
+                    ProgSubstlItemShow progSubstlItemShowTemp = esItemStlSubcttEngPService.fromModelToShow(esItemStlSubcttEngP);
+                    if (ESEnum.ITEMTYPE3.getCode().equals(progSubstlItemShowTemp.getEngPMng_SubStlType())){
+                        if (progSubstlItemShowTemp.getSubctt_ItemPkid().contains("stl")){
+                            beansMap.put(progSubstlItemShowTemp.getSubctt_ItemPkid(),progSubstlItemShowTemp);
+                        }else {
+                            records0.add(progSubstlItemShowTemp);
+                        }
+                    }
+                    if (ESEnum.ITEMTYPE4.getCode().equals(progSubstlItemShowTemp.getEngPMng_SubStlType())){
+                        if (progSubstlItemShowTemp.getSubctt_ItemPkid().contains("stl")){
+                            beansMap.put(progSubstlItemShowTemp.getSubctt_ItemPkid(),progSubstlItemShowTemp);
+                        }else {
+                            records1.add(progSubstlItemShowTemp);
+                        }
+                    }
+                    progSubstlItemShowList.add(progSubstlItemShowTemp);
+                }
+                beansMap.put("records0",records0);
+                beansMap.put("records1",records1);
+                return;
+            } else {
+                /*表内容设定,复核*/
+                List<EsCttItem> esCttItemList = esCttItemService.getEsItemList(
+                        ESEnum.ITEMTYPE2.getCode(), esInitStl.getStlPkid());
+                if (esCttItemList.size() > 0) {
+                    recursiveDataTable("root", esCttItemList, progSubstlItemShowList);
+                    progSubstlItemShowList = getStlSubCttEngPMngConstructList_DoFromatNo(progSubstlItemShowList);
+                    /*价格结算数据添加*/
+                    setStlSubCttEngPMngConstructList_AddSettle();
+                } else {
+                    strExportToExcelRendered = "false";
+                }
+            }
         }
+    }
+
+    private void initHeadMsg() {
         // Excel中的头信息
+        commStlSubcttEngH.setStrDate(PlatformService.dateFormat(nowDate, "yyyy-MM-dd"));
         commStlSubcttEngH.setStrSubcttPkid(esInitStl.getStlPkid());
         commStlSubcttEngH.setStrStlId(esInitStl.getId());
         // From SubcttPkid To CstplPkid
@@ -148,39 +191,8 @@ public class SubcttStlPItemAction {
         EsCttInfo esCttInfo_Tkctt = esCttInfoService.getCttInfoByPkId(commStlSubcttEngH.getStrTkcttPkid());
         commStlSubcttEngH.setStrTkcttId(esCttInfo_Tkctt.getId());
         commStlSubcttEngH.setStrTkcttName(esCttInfo_Tkctt.getName());
-
-        // 表内容设定
-        EsItemStlSubcttEngP esItemStlSubcttEngPTemp=new EsItemStlSubcttEngP();
-        esItemStlSubcttEngPTemp.setSubcttPkid(commStlSubcttEngH.getStrSubcttPkid());
-        esItemStlSubcttEngPTemp.setPeriodNo(esInitStl.getPeriodNo());
-        //记账
-        if ("Account".equals(strSubmitType)||"Qry".equals(strSubmitType)){
-            progSubstlItemShowListForAccountAndQry= esItemStlSubcttEngPService.selectRecordsByDetailExampleForAccount(esItemStlSubcttEngPTemp);
-            return;
-        }
-        //已批准
-        if ("Approve".equals(strSubmitType)&&ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPower.getStatusFlag())){
-            List<EsItemStlSubcttEngP> progSubstlItemShowListForApprove=esItemStlSubcttEngPService.selectRecordsByDetailExampleForAccount(esItemStlSubcttEngPTemp);
-            for (EsItemStlSubcttEngP esItemStlSubcttEngP:progSubstlItemShowListForApprove){
-                ProgSubstlItemShow progSubstlItemShowTemp=esItemStlSubcttEngPService.fromModelToShow(esItemStlSubcttEngP);
-                progSubstlItemShowList.add(progSubstlItemShowTemp);
-            }
-            return;
-        }
-        //未批准
-        esCttItemList = esCttItemService.getEsItemList(
-                ESEnum.ITEMTYPE2.getCode(), commStlSubcttEngH.getStrSubcttPkid());
-        if (esCttItemList.size() > 0) {
-            strExportToExcelRendered = "true";
-            recursiveDataTable("root", esCttItemList, progSubstlItemShowList);
-            progSubstlItemShowList = getStlSubCttEngPMngConstructList_DoFromatNo(progSubstlItemShowList);
-
-            /*价格结算数据添加*/
-            setStlSubCttEngPMngConstructList_AddSettle();
-        } else {
-            strExportToExcelRendered = "false";
-        }
     }
+
     /**
      * 根据权限进行审核
      */
@@ -188,7 +200,7 @@ public class SubcttStlPItemAction {
     public void accountAction() {
         try {
             esInitPowerService.accountAction(esInitStl);
-            strAccountBtnRendered="false";
+            strAccountBtnRendered = "false";
             MessageUtil.addInfo("结算数据记账成功！");
         } catch (Exception e) {
             logger.error("结算数据记账失败，", e);
@@ -216,9 +228,9 @@ public class SubcttStlPItemAction {
             }
             progSubstlItemShowList.clear();
             ProgSubstlItemShow stl1 = new ProgSubstlItemShow();
+            stl1.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl1.setSubctt_ItemPkid("stl1");
             stl1.setSubctt_ItemName("造价计算");
-            stl1.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl1.setEngPMng_SubStlType(ESEnum.ITEMTYPE3.getCode());
             stl1.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
             progSubstlItemShowList.add(stl1);
@@ -235,7 +247,7 @@ public class SubcttStlPItemAction {
                 itemUnit.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
                 itemUnit.setEngPMng_SubStlType(ESEnum.ITEMTYPE3.getCode());
                 if (esItemStlSubcttEngQList.size() <= 0) {
-                    if (itemUnit.getSubctt_SpareField() != null){
+                    if (itemUnit.getSubctt_SpareField() != null) {
                         //税金率
                         if (ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_SpareField()).equals("0")) {
                             bdRates[0] = ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount());
@@ -251,6 +263,7 @@ public class SubcttStlPItemAction {
                     }
                 } else {
                     esItemStlSubcttEngQTemp = esItemStlSubcttEngQList.get(0);
+                    itemUnit.setSubctt_ItemPkid(esItemStlSubcttEngQTemp.getPkid());
                     itemUnit.setEngPMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngQTemp.getBeginToCurrentPeriodEQty());
                     itemUnit.setEngPMng_CurrentPeriodEQty(esItemStlSubcttEngQTemp.getCurrentPeriodEQty());
 
@@ -297,7 +310,7 @@ public class SubcttStlPItemAction {
 
             //3扣款
             ProgSubstlItemShow stl3 = new ProgSubstlItemShow();
-			stl3.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl3.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
             stl3.setSubctt_ItemPkid("stl3");
             stl3.setSubctt_ItemName("扣款(材料)");
             stl3.setEngPMng_SubStlType(ESEnum.ITEMTYPE4.getCode());
@@ -325,6 +338,7 @@ public class SubcttStlPItemAction {
                     }
                 } else {
                     esItemStlSubcttEngM = esItemStlSubcttEngMList.get(0);
+                    itemUnit.setSubctt_ItemPkid(esItemStlSubcttEngM.getPkid());
                     itemUnit.setSubctt_ContractUnitPrice(itemUnit.getSubctt_SignPartAPrice());
                     itemUnit.setEngPMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngM.getBeginToCurrentPeriodMQty());
                     itemUnit.setEngPMng_CurrentPeriodEQty(esItemStlSubcttEngM.getCurrentPeriodMQty());
@@ -519,7 +533,7 @@ public class SubcttStlPItemAction {
 
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
     private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
-                                                                   List<EsCttItem> esCttItemListPara) {
+                                                         List<EsCttItem> esCttItemListPara) {
         List<EsCttItem> tempEsCttItemList = new ArrayList<EsCttItem>();
         /*避开重复链接数据库*/
         for (EsCttItem itemUnit : esCttItemListPara) {
@@ -532,62 +546,61 @@ public class SubcttStlPItemAction {
 
     /**
      * 根据权限进行审核
+     *
      * @param strPowerType
      */
     @Transactional
-    public void onClickForPowerAction(String strPowerType){
+    public void onClickForPowerAction(String strPowerType) {
         try {
-                // 批准
-                if(strPowerType.contains("Approve")){
-                    if (strPowerType.equals("ApprovePass")) {
-                        EsInitStl esInitStlTemp = (EsInitStl) BeanUtils.cloneBean(esInitStl);
-                        // 结算登记表和Power表更新,并将价格结算的完整数据插入至es_item_stl_subctt_eng_p表
-                        esInitStlTemp.setId(getMaxIdPlusOne());
-                        esInitStlService.updateRecordForSubCttPApprovePass(esInitStlTemp,
-                                progSubstlItemShowListForApprove);
-                        strApproveBtnRendered = "false";
-                        strApprovedNotBtnRendered = "true";
-                    }else if(strPowerType.equals("ApproveFailToQ")){
-                        EsInitStl esInitStlTemp= (EsInitStl) BeanUtils.cloneBean(esInitStl);
-                        esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
-                        esInitStlService.deleteRecordForSubCttPApprovePass(esInitStlTemp, ESEnum.ITEMTYPE3.getCode());
-                        strApproveBtnRendered="false";
-                        strApprovedNotBtnRendered="false";
-                    }
-                    else if(strPowerType.equals("ApproveFailToM")){
-                        EsInitStl esInitStlTemp= (EsInitStl) BeanUtils.cloneBean(esInitStl);
-                        esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
-                        esInitStlService.deleteRecordForSubCttPApprovePass(esInitStlTemp, ESEnum.ITEMTYPE4.getCode());
-                        strApproveBtnRendered="false";
-                        strApprovedNotBtnRendered="false";
-                    }
-                    MessageUtil.addInfo("批准数据完成。");
+            // 批准
+            if (strPowerType.contains("Approve")) {
+                if (strPowerType.equals("ApprovePass")) {
+                    EsInitStl esInitStlTemp = (EsInitStl) BeanUtils.cloneBean(esInitStl);
+                    // 结算登记表和Power表更新,并将价格结算的完整数据插入至es_item_stl_subctt_eng_p表
+                    esInitStlTemp.setId(getMaxIdPlusOne());
+                    esInitStlService.updateRecordForSubCttPApprovePass(esInitStlTemp, progSubstlItemShowListForApprove);
+                    strApproveBtnRendered = "false";
+                    strApprovedNotBtnRendered = "true";
+                } else if (strPowerType.equals("ApproveFailToQ")) {
+                    EsInitStl esInitStlTemp = (EsInitStl) BeanUtils.cloneBean(esInitStl);
+                    esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
+                    esInitStlService.deleteRecordForSubCttPApprovePass(esInitStlTemp, ESEnum.ITEMTYPE3.getCode());
+                    strApproveBtnRendered = "false";
+                    strApprovedNotBtnRendered = "false";
+                } else if (strPowerType.equals("ApproveFailToM")) {
+                    EsInitStl esInitStlTemp = (EsInitStl) BeanUtils.cloneBean(esInitStl);
+                    esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
+                    esInitStlService.deleteRecordForSubCttPApprovePass(esInitStlTemp, ESEnum.ITEMTYPE4.getCode());
+                    strApproveBtnRendered = "false";
+                    strApprovedNotBtnRendered = "false";
+                }
+                MessageUtil.addInfo("批准数据完成。");
             }
         } catch (Exception e) {
             logger.error("批准数据失败，", e);
             MessageUtil.addError(e.getMessage());
         }
     }
-    private String getMaxIdPlusOne(){
+
+    private String getMaxIdPlusOne() {
         try {
             Integer intTemp;
-            String strMaxTkStlId= esInitStlService.getStrMaxStlId(esInitStl.getStlType());
-            if(StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxTkStlId))){
-                strMaxTkStlId="STLP"+ esCommon.getStrToday()+"001";
-            }
-            else{
-                if(strMaxTkStlId .length()>3){
-                    String strTemp=strMaxTkStlId.substring(strMaxTkStlId .length() -3).replaceFirst("^0+","");
-                    if(ToolUtil.strIsDigit(strTemp)){
-                        intTemp=Integer.parseInt(strTemp) ;
-                        intTemp=intTemp+1;
-                        strMaxTkStlId=strMaxTkStlId.substring(0,strMaxTkStlId.length()-3)+StringUtils.leftPad(intTemp.toString(),3,"0");
-                    }else{
-                        strMaxTkStlId+="001";
+            String strMaxTkStlId = esInitStlService.getStrMaxStlId(esInitStl.getStlType());
+            if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxTkStlId))) {
+                strMaxTkStlId = "STLP" + esCommon.getStrToday() + "001";
+            } else {
+                if (strMaxTkStlId.length() > 3) {
+                    String strTemp = strMaxTkStlId.substring(strMaxTkStlId.length() - 3).replaceFirst("^0+", "");
+                    if (ToolUtil.strIsDigit(strTemp)) {
+                        intTemp = Integer.parseInt(strTemp);
+                        intTemp = intTemp + 1;
+                        strMaxTkStlId = strMaxTkStlId.substring(0, strMaxTkStlId.length() - 3) + StringUtils.leftPad(intTemp.toString(), 3, "0");
+                    } else {
+                        strMaxTkStlId += "001";
                     }
                 }
             }
-            return strMaxTkStlId ;
+            return strMaxTkStlId;
         } catch (Exception e) {
             logger.error("结算信息查询失败", e);
             MessageUtil.addError("结算信息查询失败");
@@ -708,6 +721,7 @@ public class SubcttStlPItemAction {
     public void setStrSubmitType(String strSubmitType) {
         this.strSubmitType = strSubmitType;
     }
+
     public String getStrApproveBtnRendered() {
         return strApproveBtnRendered;
     }
