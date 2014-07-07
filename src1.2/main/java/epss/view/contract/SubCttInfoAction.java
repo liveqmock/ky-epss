@@ -9,6 +9,7 @@ import epss.common.utils.ToolUtil;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsCttItem;
 import epss.repository.model.EsInitStl;
+import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
 import epss.service.EsCttInfoService;
@@ -19,15 +20,22 @@ import epss.view.common.EsCommon;
 import epss.view.common.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -75,6 +83,13 @@ public class SubCttInfoAction {
     private CttItemShow cttItemShow;
     //验证分包合同编号和名称是否重复的提示信息
     String strWarnMsg;
+    //附件
+    private CttInfoShow cttInfoShowAttachment;
+    private List<AttachmentModel> attachmentList;
+    private HtmlGraphicImage image;
+    //上传下载文件
+    private StreamedContent downloadFile;
+    private UploadedFile uploadedFile;
 
 
     @PostConstruct
@@ -91,6 +106,7 @@ public class SubCttInfoAction {
 
     public void initData() {
         this.cttInfoShowList = new ArrayList<CttInfoShow>();
+        this.attachmentList=new ArrayList<AttachmentModel>();
         cttInfoShowQry = new CttInfoShow();
         cttInfoShowQry.setCttType(ESEnum.ITEMTYPE2.getCode());
         cttInfoShowQry.setParentPkid(strBelongToPkid);

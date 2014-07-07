@@ -84,8 +84,7 @@ public class CstplInfoAction {
     //上传下载文件
     private StreamedContent downloadFile;
     private UploadedFile uploadedFile;
-    //更新、删除立刻关闭
-    private boolean checkForUpd;
+
 
     @PostConstruct
     public void init() {
@@ -119,7 +118,6 @@ public class CstplInfoAction {
         strSubmitType = "Add";
         esFlowControl.setStatusFlagListByPower("Qry");
         rowSelectedFlag = "false";
-        checkForUpd=true;
     }
 
     public void setMaxNoPlusOne() {
@@ -383,12 +381,10 @@ public class CstplInfoAction {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             } else {
                 addRecordAction(cttInfoShowAdd);
-                resetActionForAdd();
             }
         } else if (strSubmitType.equals("Upd")) {
             cttInfoShowUpd.setCttType(ESEnum.ITEMTYPE1.getCode());
             updRecordAction(cttInfoShowUpd);
-            checkForUpd=true;
         } else if (strSubmitType.equals("Del")) {
             cttInfoShowDel.setCttType(ESEnum.ITEMTYPE1.getCode());
             deleteRecordAction(cttInfoShowDel);
@@ -723,14 +719,6 @@ public class CstplInfoAction {
 
     public void setUploadedFile(UploadedFile uploadedFile) {
         this.uploadedFile = uploadedFile;
-    }
-
-    public boolean isCheckForUpd() {
-        return checkForUpd;
-    }
-
-    public void setCheckForUpd(boolean checkForUpd) {
-        this.checkForUpd = checkForUpd;
     }
     /*智能字段 End*/
 }

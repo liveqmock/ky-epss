@@ -136,6 +136,7 @@ public class EsInitCustAction {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             }else {
                 addRecordAction(signPartShowAdd);
+                resetActionForAdd();
             }
         }
         else if(strSubmitType.equals("Upd")){

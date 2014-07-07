@@ -216,7 +216,8 @@
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
                                          action="#{esInitCustAction.submitThisRecordAction}"
-                                         update="pdt,msgs,pgViewForUpd">
+                                         update="pdt,msgs,pgViewForUpd"
+                                         oncomplete="wVDlgViewForUpd.hide()">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForUpd" value="重置"
                                          type="reset"
@@ -298,7 +299,8 @@
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
                                          action="#{esInitCustAction.submitThisRecordAction}"
-                                         update="pdt,msgs,pgViewForDel">
+                                         update="pdt,msgs,pgViewForDel"
+                                oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                     </h:panelGrid>
                 </h:panelGrid>

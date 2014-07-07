@@ -92,25 +92,6 @@
                                          rendered="#{subcttStlQInfoAction.rowSelectedFlag}">
                         </p:commandButton>
             </h:panelGrid>
-            <p:contextMenu for="pdt">
-                <p:menuitem value="选择" icon="ui-icon-plus"
-                            actionListener="#{subcttStlQInfoAction.selectRecordAction('Mng','Sel')}"
-                            update="pdt,msgs,pgCondition">
-                </p:menuitem>
-                <p:menuitem value="更新" icon="ui-icon-pencil"
-                            actionListener="#{subcttStlQInfoAction.selectRecordAction('Mng','Upd')}"
-                            update="pgViewForUpd,pdt,msgs,pgCondition"
-                            onclick="PF('wVDlgViewForUpd').show()">
-                </p:menuitem>
-                <p:menuitem value="删除" icon="ui-icon-trash"
-                            actionListener="#{subcttStlQInfoAction.selectRecordAction('Mng','Del')}"
-                            update="pgViewForDel,pdt,msgs,pgCondition"
-                            onclick="PF('wVDlgViewForDel').show()">
-                </p:menuitem>
-                <p:menuitem value="详细内容" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitSubcttList.selection)" >
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{subcttStlQInfoAction.progInfoShowList}"
                          var="record"
@@ -128,6 +109,25 @@
                          widgetVar="DtInitSubcttList"
                          rowStyleClass="#{record.statusFlag eq null? null:'rowDoneStyle'}"
                          scrollable="true">
+                <p:column headerText="操作" style="width:61px">
+                    <p:commandButton  icon="ui-icon-plus"
+                                      actionListener="#{subcttStlQInfoAction.selectRecordAction('Mng','Sel',record)}"
+                                      update=":form:pdt,:form:pgCondition,:form:msgs">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-pencil"
+                                      actionListener="#{subcttStlQInfoAction.selectRecordAction('Mng','Upd',record)}"
+                                      update=":form:pdt,:form:pgViewForUpd,:form:msgs"
+                                      onclick="PF('wVDlgViewForUpd').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-trash"
+                                      actionListener="#{subcttStlQInfoAction.selectRecordAction('Mng','Del',record)}"
+                                      update=":form:pdt,:form:pgViewForDel,:form:msgs"
+                                      onclick="PF('wVDlgViewForDel').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-search"
+                                      onclick ="actSelect('#{record.pkid}')" >
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
@@ -244,7 +244,8 @@
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
                                          action="#{subcttStlQInfoAction.onClickForMngAction()}"
-                                         update="pdt,msgs,pgViewForUpd">
+                                         update="pdt,msgs,pgViewForUpd"
+                                         oncomplete="wVDlgViewForUpd.hide()">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForUpd" value="重置"
                                          type="reset"
@@ -307,7 +308,8 @@
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
                                          action="#{subcttStlQInfoAction.onClickForMngAction()}"
-                                         update="pdt,msgs,pgViewForDel">
+                                         update="pdt,msgs,pgViewForDel"
+                                         oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                     </h:panelGrid>
                 </h:panelGrid>

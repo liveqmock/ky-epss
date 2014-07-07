@@ -309,7 +309,7 @@ public class SubcttStlQItemAction {
         }
     }
     /*ÓÒµ¥»÷ÊÂ¼þ*/
-    public void selectRecordAction(String strSubmitTypePara){
+    public void selectRecordAction(String strSubmitTypePara,ProgWorkqtyItemShow progWorkqtyItemShowSelected){
         try {
             strSubmitType=strSubmitTypePara;
             if(strSubmitTypePara.equals("Sel")){

@@ -21,13 +21,7 @@
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                if (pageName == "Sub_Detail") {
-                    var rtn = dialog("../item/itemQry_Sub.xhtml?strType=2&amp;strSubCttPkid=" + pkid + "", arg, sfeature);
-                } else if (pageName == "Attachment") {
-                    var rtn = window.open("/epss/servlet/ShowServlet?operType=Qry&amp;strType=0&amp;strPkid=" + pkid + "",
-                            'popupwindow',
-                            'height = 300,width = 450,location = no,resizable = no,scrollbars = no,status = no,toolbar = no,top = 100');
-                }
+                var rtn = dialog("../item/itemQry_Sub.xhtml?strType=2&amp;strSubCttPkid=" + pkid + "", arg, sfeature);
             }
         </script>
     </ui:define>
@@ -83,19 +77,6 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <p:contextMenu for="pdt">
-                <p:menuitem value="浏览" icon="ui-icon-search"
-                            actionListener="#{subCttInfoAction.selectRecordAction('Qry','')}"
-                            update="pgView,pdt,msgs"
-                            onclick="PF('wVDlgView').show()">
-                </p:menuitem>
-                <p:menuitem value="详细内容" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitSubcttList.selection,'Sub_Detail')">
-                </p:menuitem>
-                <p:menuitem value="附件" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitSubcttList.selection,'Attachment')">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{subCttInfoAction.cttInfoShowList}"
                          var="record"
@@ -112,6 +93,20 @@
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitSubcttList"
                          scrollable="true">
+                <p:column headerText="操作" style="width:61px">
+                <p:commandButton  icon="ui-icon-plus"
+                                  actionListener="#{subCttInfoAction.selectRecordAction('Qry','',record)}"
+                                  update="pdt,:form:msgs,:form:pgView"
+                                  onclick="PF('wVDlgView').show()">
+                </p:commandButton>
+                <p:commandButton icon="ui-icon-triangle-1-e"
+                                 oncomplete="actSelect('#{record.pkid}','Sub_Detail')">
+                </p:commandButton>
+                <p:commandButton  icon="ui-icon-document"
+                                  update="pdt,:form:pgAttachmentView,:form:msgs"
+                                  onclick="PF('wvAttachmentList').show()">
+                </p:commandButton>
+                </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
@@ -143,7 +138,67 @@
                     <h:outputText value="#{record.signDate}"/>
                 </p:column>
             </p:dataTable>
-            <p:dialog id="dlgView" header="分包合同维护" widgetVar="wVDlgView"
+            <!--附件列表维护-->
+            <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
+                      showEffect="clip" hideEffect="fold" header="附件列表">
+                <p:growl id="messages" showDetail="true"/>
+                <h:panelGrid id="pgAttachmentView">
+                    <p:fileUpload id="attachmentName" fileUploadListener="#{subCttInfoAction.upload}"
+                                  mode="advanced"
+                                  sizeLimit="1000000"
+                                  multiple="true"
+                                  label="选择" showButtons="true"
+                                  cancelLabel="全部取消" uploadLabel="全部上传" process="@this"
+                                  allowTypes="/(\.|\/)(gif|jpe?g|png|xls|xlsx|doc|docx)$/"
+                                  update="pdtAttachmentList,attachmentName">
+                    </p:fileUpload>
+                    <p:dataTable id="pdtAttachmentList" style="width:100%;"
+                                 value="#{subCttInfoAction.attachmentList}"
+                                 var="recordAttachment"
+                                 rowKey="#{recordAttachment.COLUMN_NAME}"
+                                 selectionMode="single"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 paginator="true"
+                                 paginatorPosition="bottom"
+                                 rows="5"
+                                 rowsPerPageTemplate="100,50,30,15,5"
+                                 emptyMessage="数据记录为空..."
+                                 widgetVar="WvPdtAttachmentList">
+                        <p:column headerText="附件ID" style="text-align:left">
+                            <h:outputText value="#{recordAttachment.COLUMN_ID}"/>
+                        </p:column>
+                        <p:column headerText="附件名" style="text-align:left">
+                            <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
+                        </p:column>
+                        <p:column headerText="缩略图" style="text-align:center" rendered="false">
+                            <h:graphicImage value="/upload/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
+                        </p:column>
+                        <p:column headerText="预览">
+                            <p:commandButton id="selectButton" update=":form:imageShow"
+                                             action="#{subCttInfoAction.onViewAttachment(recordAttachment)}"
+                                             oncomplete="dlgWvView.show()"
+                                             icon="ui-icon-search" title="View">
+                            </p:commandButton>
+                        </p:column>
+                        <p:column headerText="操作" style="width:62px">
+                            <p:commandButton icon="ui-icon-arrowrefresh-1-w"
+                                             ajax="false"
+                                             actionListener="#{subCttInfoAction.download(recordAttachment.COLUMN_PATH)}">
+                                <p:fileDownload value="#{subCttInfoAction.downloadFile}"/>
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-trash"
+                                             action="#{subCttInfoAction.delAttachmentRecordAction(recordAttachment)}"
+                                             update=":form:pgAttachmentView,:form:msgs">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
+                        <h:graphicImage binding="#{subCttInfoAction.image}"/>
+                    </p:dialog>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog id="dlgView" header="分包合同查询" widgetVar="wVDlgView"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">
                 <h:panelGrid id="pgView">
