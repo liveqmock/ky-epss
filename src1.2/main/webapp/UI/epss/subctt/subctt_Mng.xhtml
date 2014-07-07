@@ -95,23 +95,28 @@
                          scrollable="true">
                 <p:column headerText="操作" style="width:61px">
                     <p:commandButton  icon="ui-icon-plus"
+                                      style="height:20px;width:20px"
                                       actionListener="#{subCttInfoAction.selectRecordAction('Mng','Sel',record)}"
                                       update="pdt,:form:msgs,:form:pgCondition">
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-pencil"
-                                actionListener="#{subCttInfoAction.selectRecordAction('Mng','Upd',record)}"
-                                update="pdt,:form:pgViewForUpd,:form:msgs"
-                                onclick="PF('wVDlgViewForUpd').show()">
+                                     style="height:20px;width:20px"
+                                    actionListener="#{subCttInfoAction.selectRecordAction('Mng','Upd',record)}"
+                                    update="pdt,:form:pgViewForUpd,:form:msgs"
+                                    onclick="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
                     <p:commandButton  icon="ui-icon-trash"
-                                actionListener="#{subCttInfoAction.selectRecordAction('Mng','Del',record)}"
-                                update="pdt,:form:pgViewForDel,:form:msgs"
-                                onclick="PF('wVDlgViewForDel').show()">
+                                    style="height:20px;width:20px"
+                                    actionListener="#{subCttInfoAction.selectRecordAction('Mng','Del',record)}"
+                                    update="pdt,:form:pgViewForDel,:form:msgs"
+                                    onclick="PF('wVDlgViewForDel').show()">
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-triangle-1-e"
+                                     style="height:20px;width:20px"
                                      oncomplete="actSelect('#{record.pkid}','Sub_Detail')">
                     </p:commandButton>
                     <p:commandButton  icon="ui-icon-document"
+                                      style="height:20px;width:20px"
                                       update="pdt,:form:pgAttachmentView,:form:msgs"
                                       onclick="PF('wvAttachmentList').show()">
                     </p:commandButton>
@@ -198,11 +203,13 @@
                         </p:column>
                         <p:column headerText="操作" style="width:62px">
                             <p:commandButton icon="ui-icon-arrowrefresh-1-w"
+                                             style="height:20px;width:20px"
                                              ajax="false"
                                              actionListener="#{subCttInfoAction.download(recordAttachment.COLUMN_PATH)}">
                                 <p:fileDownload value="#{subCttInfoAction.downloadFile}"/>
                             </p:commandButton>
                             <p:commandButton icon="ui-icon-trash"
+                                             style="height:20px;width:20px"
                                              action="#{subCttInfoAction.delAttachmentRecordAction(recordAttachment)}"
                                              update=":form:pgAttachmentView,:form:msgs">
                             </p:commandButton>

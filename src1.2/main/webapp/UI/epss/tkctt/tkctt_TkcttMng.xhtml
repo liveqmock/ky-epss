@@ -179,19 +179,23 @@
                             <h:graphicImage value="/upload/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
                         </p:column>
                         <p:column headerText="预览">
-                            <p:commandButton id="selectButton" update=":form:imageShow"
+                            <p:commandButton icon="ui-icon-search"
+                                             id="selectButton" update=":form:imageShow"
+                                             style="height:20px;width:20px"
                                              action="#{tkCttInfoAction.onViewAttachment(recordAttachment)}"
                                              oncomplete="dlgWvView.show()"
-                                             icon="ui-icon-search" title="View">
+                                             title="View">
                             </p:commandButton>
                         </p:column>
                         <p:column headerText="操作" style="width:62px">
                             <p:commandButton icon="ui-icon-arrowrefresh-1-w"
+                                             style="height:20px;width:20px"
                                              ajax="false"
                                              actionListener="#{tkCttInfoAction.download(recordAttachment.COLUMN_PATH)}">
                                 <p:fileDownload value="#{tkCttInfoAction.downloadFile}"/>
                             </p:commandButton>
                             <p:commandButton icon="ui-icon-trash"
+                                             style="height:20px;width:20px"
                                              action="#{tkCttInfoAction.delAttachmentRecordAction(recordAttachment)}"
                                              update=":form:pgAttachmentView,:form:msgs">
                             </p:commandButton>
