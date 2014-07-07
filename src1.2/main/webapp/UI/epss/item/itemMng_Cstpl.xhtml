@@ -25,35 +25,43 @@
                              value="增加" icon="ui-icon-plus"
                              rendered='#{cstplItemAction.strMngNotFinishFlag}'
                              action="#{cstplItemAction.resetActionForAdd()}"
-                             update="pgViewForAdd,ptt,msgs,pcm"
+                             update="pgViewForAdd,ptt,msgs"
                              onclick="PF('wVDlgViewForAdd').show()">
             </p:commandButton>
-            <p:contextMenu id="pcm" for="ptt" rendered='#{cstplItemAction.strMngNotFinishFlag}'>
-                <p:menuitem value="更新" icon="ui-icon-pencil"
-                            actionListener="#{cstplItemAction.selectRecordAction('Upd')}"
-                            update="pgViewForUpd,msgs,ptt,pcm"
-                            oncomplete="PF('wVDlgViewForUpd').show()">
-                </p:menuitem>
-                <p:menuitem value="删除" icon="ui-icon-trash"
-                            actionListener="#{cstplItemAction.selectRecordAction('Del')}"
-                            update="pgViewForDel,msgs,ptt,pcm"
-                            oncomplete="PF('wVDlgViewForDel').show()">
-                </p:menuitem>
-                <p:menuitem value="FROM总包TO成本" icon="ui-icon-copy"
-                            actionListener="#{cstplItemAction.selectRecordAction('From_tkctt_to_cstpl')}"
-                            update="msgs,ptt,pcm">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="ptt" style="width:100%;"
                          value="#{cstplItemAction.cstplItemShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{cstplItemAction.cstplItemShowSelected}"
-                         selectionMode="single"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="10"
+                         rowsPerPageTemplate="500,200,100,50,30,20,10"
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
                          rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.nameContrast eq '合计'? 'rowDoneStyle':
-                                             record.name eq '总合计'? 'rowDoneStyle':record.nameContrast eq '总合计'? 'rowDoneStyle':null}">
+                                             record.name eq '总合计'? 'rowDoneStyle':record.nameContrast eq '总合计'? 'rowDoneStyle':null}"
+                         scrollable="true">
+                <p:column headerText="操作" style="width:91px" rendered='#{cstplItemAction.strMngNotFinishFlag}'>
+                    <p:commandButton  icon="ui-icon-pencil"
+                                style="height:20px;width:20px"
+                                actionListener="#{cstplItemAction.selectRecordAction('Upd',record)}"
+                                update="ptt,:form:pgViewForUpd"
+                                oncomplete="PF('wVDlgViewForUpd').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-trash"
+                                style="height:20px;width:20px"
+                                actionListener="#{cstplItemAction.selectRecordAction('Del',record)}"
+                                update="ptt,:form:pgViewForDel"
+                                oncomplete="PF('wVDlgViewForDel').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-copy"
+                                style="height:20px;width:20px"
+                                actionListener="#{cstplItemAction.selectRecordAction('From_tkctt_to_cstpl',record)}"
+                                update="ptt,:form:pgViewForUpd">
+                    </p:commandButton>
+                </p:column>
                 <p:column style="width:30px" headerText="序号">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
@@ -163,14 +171,14 @@
                         <p:outputLabel for="strCorrespondingItemNoForAdd" value="对应编号:" />
                         <h:inputText id="strCorrespondingItemNoForAdd"
                                      value="#{cstplItemAction.cttItemShowAdd.strCorrespondingItemNo}">
-                            <p:ajax event="blur" update="msgs"
+                            <p:ajax event="blur" update="msgs,noItemHieRelapForAdd"
                                     listener="#{cstplItemAction.blurCorrespondingPkid}"/>
                         </h:inputText>
                     </h:panelGrid>
                     <h:panelGrid id="pgOperBtnForAdd" columns="2">
                         <p:commandButton id="submitBtnForAdd"
                                          value="提交（增加）"
-                                         action="#{cstplItemAction.submitThisRecordAction}"
+                                         action="#{cstplItemAction.submitThisRecordAction()}"
                                          update="pgViewForAdd,ptt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForAdd" value="重置"
@@ -268,8 +276,9 @@
                     <h:panelGrid id="pgOperBtnForUpd" columns="2">
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
-                                         action="#{cstplItemAction.submitThisRecordAction}"
-                                         update="pgViewForUpd,ptt,msgs">
+                                         action="#{cstplItemAction.submitThisRecordAction()}"
+                                         update="pgViewForUpd,ptt,msgs"
+                                         onclick="wVDlgViewForUpd.hide()">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForUpd" value="重置"
                                          type="reset"
@@ -335,7 +344,7 @@
                                      value="#{cstplItemAction.cttItemShowDel.strCorrespondingItemNo}"
                                      readonly="true"
                                      style="background-color:gainsboro">
-                            <p:ajax event="blur" update="msgs"
+                            <p:ajax event="blur" update="msgs,strCorrespondingItemNoForDel"
                                     listener="#{cstplItemAction.blurCorrespondingPkid}"/>
                         </h:inputText>
                         <p:outputLabel for="originFlagItemInfoForDel" value="数据来源:" />
@@ -369,8 +378,9 @@
                     <h:panelGrid id="pgOperBtnForDel">
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
-                                         action="#{cstplItemAction.submitThisRecordAction}"
-                                         update="pgViewForDel,ptt,msgs">
+                                         action="#{cstplItemAction.submitThisRecordAction()}"
+                                         update="pgViewForDel,ptt,msgs"
+                                         oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                     </h:panelGrid>
                 </h:panelGrid>

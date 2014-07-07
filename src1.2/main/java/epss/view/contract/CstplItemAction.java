@@ -53,8 +53,6 @@ public class CstplItemAction {
     private CttItemShow cttItemShowAdd;
     private CttItemShow cttItemShowUpd;
     private CttItemShow cttItemShowDel;
-    /*列表中选择一行*/
-    private CstplItemShow cstplItemShowSelected;
     /*列表显示用*/
     private List<CstplItemShow> cstplItemShowList;
 
@@ -131,45 +129,43 @@ public class CstplItemAction {
         }
         return true;
     }
-    public void selectRecordAction(String strSubmitTypePara){
+
+    public void selectRecordAction(String strSubmitTypePara,
+                                   CstplItemShow cstplItemShowPara) {
         try {
             String  strSubmitTypeBefore= strSubmitType;
             strSubmitType=strSubmitTypePara;
             if(strSubmitTypePara.equals("Sel")){
-                CstplItemShow esInitSubcttTemp= cstplItemShowSelected;
-                if(esInitSubcttTemp.getBelongToTypeContrast()==null) {
+                if(cstplItemShowPara.getBelongToTypeContrast()==null) {
                     cttItemShowSel =new CttItemShow(strBelongToType ,strBelongToPkid);
-                }
-                else{
-                    cttItemShowSel =getItemOfEsItemHieRelapByItem(esInitSubcttTemp,"Cstpl");
+                }else{
+                    cttItemShowSel =getItemOfEsItemHieRelapByItem(cstplItemShowPara,"Cstpl");
                 }
                 cttItemShowSel.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowSel.getStrNo())) ;
                 cttItemShowSel.setStrCorrespondingItemNo(
                         ToolUtil.getIgnoreSpaceOfStr(cttItemShowSel.getStrCorrespondingItemNo()));
             }
             if(strSubmitTypePara.equals("Upd")){
-                cttItemShowUpd = getItemOfEsItemHieRelapByItem(cstplItemShowSelected, "Cstpl");
-
+                cttItemShowUpd = getItemOfEsItemHieRelapByItem(cstplItemShowPara, "Cstpl");
                 cttItemShowUpd.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowUpd.getStrNo()));
                 cttItemShowUpd.setStrCorrespondingItemNo(
                         ToolUtil.getIgnoreSpaceOfStr(cttItemShowUpd.getStrCorrespondingItemNo()));
-                Integer intIndex = esCommon.getIndexOfCstplItemNamelist(cttItemShowUpd.getName());
             }
             else if(strSubmitTypePara.equals("Del")){
-                if(cstplItemShowSelected.getStrNoContrast()==null) {
+                if(cstplItemShowPara.getStrNoContrast()==null) {
                     MessageUtil.addInfo("没有可删除的数据！");
                     cttItemShowDel =new CttItemShow(strBelongToType ,strBelongToPkid);
                     return;
                 }
                 else{
-                    cttItemShowDel =getItemOfEsItemHieRelapByItem(cstplItemShowSelected,"Cstpl");
+                    cttItemShowDel =getItemOfEsItemHieRelapByItem(cstplItemShowPara,"Cstpl");
                 }
                 cttItemShowDel.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowDel.getStrNo())) ;
                 cttItemShowDel.setStrCorrespondingItemNo(
                         ToolUtil.getIgnoreSpaceOfStr(cttItemShowDel.getStrCorrespondingItemNo()));
             }
             else if(strSubmitTypePara.equals("From_tkctt_to_cstpl")){
-                if(!fromTkcttToCstplAction()){
+                if(!fromTkcttToCstplAction(cstplItemShowPara)){
                     strSubmitType=strSubmitTypeBefore;
                 }
             }
@@ -336,7 +332,7 @@ public class CstplItemAction {
         }
         return true ;
     }
-    public void delThisRecordAction() {
+    public void delThisRecordAction(CttItemShow cttItemShowPara) {
         try {
             Integer intItemUnitConstructSelectedGrade=-1;
             List<CstplItemShow> cstplItemShowListTemp =new ArrayList<>();
@@ -352,7 +348,7 @@ public class CstplItemAction {
                     }
                 }
                 if(intItemUnitConstructSelectedGrade==-1){
-                    if(itemUnitConstructItem.equals(cstplItemShowSelected) ){
+                    if(itemUnitConstructItem.equals(cttItemShowPara) ){
                         intItemUnitConstructSelectedGrade=itemUnitConstructItem.getGradeContrast();
                         int deleteRecordNumOfSelf=esCttItemService.deleteRecord(itemUnitConstructItem.getPkidContrast()) ;
                         if (deleteRecordNumOfSelf<=0){
@@ -363,11 +359,11 @@ public class CstplItemAction {
                 }
             }
             esCttItemService.setAfterThisOrderidSubOneByNode(
-                    cstplItemShowSelected.getBelongToTypeContrast(),
-                    cstplItemShowSelected.getBelongToPkidContrast(),
-                    cstplItemShowSelected.getParentPkidContrast(),
-                    cstplItemShowSelected.getGradeContrast(),
-                    cstplItemShowSelected.getOrderidContrast());
+                    cttItemShowPara.getBelongToType(),
+                    cttItemShowPara.getBelongToPkid(),
+                    cttItemShowPara.getParentPkid(),
+                    cttItemShowPara.getGrade(),
+                    cttItemShowPara.getOrderid());
             initData();
             MessageUtil.addInfo("删除数据完成。");
         } catch (Exception e) {
@@ -379,45 +375,45 @@ public class CstplItemAction {
     public void submitThisRecordAction(){
         try{
             /*提交前的检查*/
-            if(strSubmitType .equals("Del")) {
-                delThisRecordAction();
-                return;
-            }
-            if(!subMitActionPreCheck()){
-                return ;
-            }
-            /*编码验证*/
-            if(!blurStrNoToGradeAndOrderid("false")){
-                return ;
-            }
-            /*对应编码验证*/
-            if(!blurCorrespondingPkid()){
-                return ;
-            }
-            if(strSubmitType .equals("Upd")) {
-                Integer intModificationNum=
-                        cttItemShowUpd.getModificationNum()==null?0: cttItemShowUpd.getModificationNum();
-                cttItemShowUpd.setModificationNum(intModificationNum+1);
-                esCttItemService.updateRecord(cttItemShowUpd) ;
-            }
-            else if(strSubmitType .equals("Add")) {
-                EsCttItem esCttItemTemp=esCttItemService.fromModelShowToModel(cttItemShowAdd);
-                if (esCttItemService.isExistSameRecordInDb(esCttItemTemp)){
-                    MessageUtil.addInfo("该编号对应记录已存在，请重新录入。");
+            if (strSubmitType.equals("Del")) {
+                if (ToolUtil.getStrIgnoreNull(cttItemShowDel.getStrNo()).length() == 0) {
+                    MessageUtil.addError("请确认选择的行，合计行不可编辑！");
                     return;
                 }
-                esCttItemService.setAfterThisOrderidPlusOneByNode(
-                        cttItemShowAdd.getBelongToType(),
-                        cttItemShowAdd.getBelongToPkid(),
-                        cttItemShowAdd.getParentPkid(),
-                        cttItemShowAdd.getGrade(),
-                        cttItemShowAdd.getOrderid());
-                esCttItemService.insertRecord(cttItemShowAdd);
+                delThisRecordAction(cttItemShowDel);
+                return;
+            } else {
+                if (!subMitActionPreCheck()) {
+                    return;
+                }
+            /*编码验证*/
+                if (!blurStrNoToGradeAndOrderid("false")) {
+                    return;
+                }
+            /*对应编码验证*/
+                if (!blurCorrespondingPkid()) {
+                    return;
+                }
+                if (strSubmitType.equals("Upd")) {
+                    esCttItemService.updateRecord(cttItemShowUpd);
+                } else if (strSubmitType.equals("Add")) {
+                    EsCttItem esCttItemTemp = esCttItemService.fromModelShowToModel(cttItemShowAdd);
+                    if (esCttItemService.isExistSameRecordInDb(esCttItemTemp)) {
+                        MessageUtil.addInfo("该编号对应记录已存在，请重新录入。");
+                        return;
+                    }
+                    esCttItemService.setAfterThisOrderidPlusOneByNode(
+                            cttItemShowAdd.getBelongToType(),
+                            cttItemShowAdd.getBelongToPkid(),
+                            cttItemShowAdd.getParentPkid(),
+                            cttItemShowAdd.getGrade(),
+                            cttItemShowAdd.getOrderid());
+                    esCttItemService.insertRecord(cttItemShowAdd);
+                }
+                MessageUtil.addInfo("提交数据完成。");
+                initData();
             }
-            MessageUtil.addInfo("提交数据完成。");
-            initData();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             MessageUtil.addError("提交数据失败，" + e.getMessage());
         }
     }
@@ -538,8 +534,7 @@ public class CstplItemAction {
                 }
             }
             if (insertedFlag.equals(false)){
-                CstplItemShow itemTkcttInsertItem=new CstplItemShow();
-                itemTkcttInsertItem=getItemOfTkcttAndCstplByItemOfEsItemHieRelap(itemTkctt,"Tkctt");
+                CstplItemShow itemTkcttInsertItem=getCstplItem(itemTkctt,"Tkctt");
                 cstplItemShowList_ForSort.add(itemTkcttInsertItem);
             }
         }
@@ -553,8 +548,8 @@ public class CstplItemAction {
                 }
             }
             if(insertedFlag.equals(false)){
-                CstplItemShow itemTkcttInsertItem=getItemOfTkcttAndCstplByItemOfEsItemHieRelap(itemCstpl,"Cstpl");
-                if (itemTkcttInsertItem.getPkid() ==null||itemTkcttInsertItem.getPkid().equals("")){
+                CstplItemShow itemTkcttInsertItem=getCstplItem(itemCstpl,"Cstpl");
+                if (itemTkcttInsertItem.getPkid() == null||itemTkcttInsertItem.getPkid().equals("")){
                     itemTkcttInsertItem.setPkid(cstplItemShowList_ForSort.size() +"");
                 }
                 cstplItemShowList_ForSort.add(itemTkcttInsertItem);
@@ -578,9 +573,10 @@ public class CstplItemAction {
         cstplItemShowList.addAll(cstplItemShowList_ForSort);
         //cstplItemShowList =getItemOfTkcttAndCstplListSorted(cstplItemShowList_ForSort,0);
         // 添加合计
-        setItemOfTkcttAndCstplList_AddTotal();
+        setCstplItemList_AddTotal();
+        resetActionForAdd();
     }
-    private void setItemOfTkcttAndCstplList_AddTotal(){
+    private void setCstplItemList_AddTotal(){
         List<CstplItemShow> cstplItemShowListTemp =new ArrayList<CstplItemShow>();
         cstplItemShowListTemp.addAll(cstplItemShowList);
 
@@ -656,18 +652,18 @@ public class CstplItemAction {
             }
         }
     }
-    private boolean fromTkcttToCstplAction(){
+    private boolean fromTkcttToCstplAction(CstplItemShow cstplItemShowPara){
         try{
-            if(cstplItemShowSelected.getStrNo() ==null||
-                    cstplItemShowSelected.getStrNo().equals("")) {
+            if(cstplItemShowPara.getStrNo() ==null||
+                    cstplItemShowPara.getStrNo().equals("")) {
                 MessageUtil.addInfo("无可复制！");
                 return false;
             }
-            if(!ToolUtil.getStrIgnoreNull(cstplItemShowSelected.getStrNoContrast()).equals("")) {
+            if(!ToolUtil.getStrIgnoreNull(cstplItemShowPara.getStrNoContrast()).equals("")) {
                 MessageUtil.addInfo("成本计划项不为空，总包合同到成本计划的项无法复制，如需复制，请先删除该成本计划项！");
                 return false;
             }
-            String strIgnoreSpaceOfStr=ToolUtil.getIgnoreSpaceOfStr(cstplItemShowSelected.getStrNo());
+            String strIgnoreSpaceOfStr=ToolUtil.getIgnoreSpaceOfStr(cstplItemShowPara.getStrNo());
             String strNoSplited[]  = strIgnoreSpaceOfStr.split("\\.") ;
             String strTemp="";
             for(int i=0;i<strNoSplited.length-1 ;i++) {
@@ -684,7 +680,7 @@ public class CstplItemAction {
                     return false;
                 }
             }
-            cttItemShowAdd = getItemOfEsItemHieRelapByItem(cstplItemShowSelected,"Tkctt");
+            cttItemShowAdd = getItemOfEsItemHieRelapByItem(cstplItemShowPara,"Tkctt");
             cttItemShowAdd.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowAdd.getStrNo())) ;
             cttItemShowAdd.setBelongToType(strBelongToType) ;
             cttItemShowAdd.setBelongToPkid(strBelongToPkid) ;
@@ -974,7 +970,7 @@ public class CstplItemAction {
         return cttItemShowTemp;
     }
     /*总包合同到成本计划*/
-    private CstplItemShow getItemOfTkcttAndCstplByItemOfEsItemHieRelap(
+    private CstplItemShow getCstplItem(
             CttItemShow cttItemShowPara,String strTkcttOrCstpl){
         CstplItemShow cstplItemShowTemp =new CstplItemShow() ;
         if(strTkcttOrCstpl .equals("Tkctt")){
@@ -1097,14 +1093,6 @@ public class CstplItemAction {
 
     public void setCstplItemShowList(List<CstplItemShow> cstplItemShowList) {
         this.cstplItemShowList = cstplItemShowList;
-    }
-
-    public CstplItemShow getCstplItemShowSelected() {
-        return cstplItemShowSelected;
-    }
-
-    public void setCstplItemShowSelected(CstplItemShow cstplItemShowSelected) {
-        this.cstplItemShowSelected = cstplItemShowSelected;
     }
 
     public String getStrBelongToPkid() {

@@ -84,22 +84,26 @@
                          scrollable="true">
                 <p:column headerText="操作" style="width:62px">
                     <p:commandButton icon="ui-icon-pencil"
+                                     style="height:20px;width:20px"
                                      action="#{tkCttInfoAction.selectRecordAction('Mng','Upd',record)}"
                                      update="pdt,:form:pgViewForUpd,:form:msgs"
                                      onclick="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-trash"
+                                     style="height:20px;width:20px"
                                      action="#{tkCttInfoAction.selectRecordAction('Mng','Del',record)}"
                                      update="pdt,:form:pgViewForDel,:form:msgs"
                                      onclick="PF('wVDlgViewForDel').show()">
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-document"
+                                     style="height:20px;width:20px"
                                      action="#{tkCttInfoAction.attachmentStrToList()}"
                                      update="pdt,:form:pgAttachmentView,:form:msgs"
                                      onclick="PF('wvAttachmentList').show()">
                         <f:setPropertyActionListener value="#{record}" target="#{tkCttInfoAction.cttInfoShowAttachment}"/>
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-triangle-1-e"
+                                     style="height:20px;width:20px"
                                      onclick="actSelect('#{record.pkid}')">
                     </p:commandButton>
                 </p:column>
@@ -325,7 +329,8 @@
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
                                          action="#{tkCttInfoAction.onClickForMngAction()}"
-                                         update="pdt,msgs,pgViewForUpd">
+                                         update="pdt,msgs,pgViewForUpd"
+                                         oncomplete="if(#{tkCttInfoAction.checkForUpd})wVDlgViewForUpd.hide()">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForUpd" value="重置"
                                          type="reset"
@@ -406,7 +411,8 @@
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
                                          action="#{tkCttInfoAction.onClickForMngAction()}"
-                                         update="pdt,msgs,pgViewForDel">
+                                         update="pdt,msgs,pgViewForDel"
+                                         oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                     </h:panelGrid>
                 </h:panelGrid>

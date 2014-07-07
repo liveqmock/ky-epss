@@ -29,7 +29,8 @@
                             <f:selectItems value="#{tkMeaCSubStlQItemAction.tkcttList}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="期数编码：" for="periodNo"/>
-                        <p:inputText id="periodNo" value="#{tkMeaCSubStlQItemAction.strPeriodNo}"
+                        <p:inputText id="periodNo"
+                                     value="#{tkMeaCSubStlQItemAction.strPeriodNo}"
                                      onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                     </h:panelGrid>
                     <h:panelGrid columns="3">
@@ -63,7 +64,7 @@
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{tkMeaCSubStlQItemAction.qryTkMeaCSStlQShowList}"
                          var="record"
-                         rowKey="#{record.tkctt_Pkid}"
+                         rowKey="#{record.tkcttItem_Pkid}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -78,69 +79,69 @@
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
                 <p:column style="width:100px" headerText="总包_PKID" rendered="false">
-                    <h:outputText value="#{record.tkctt_Pkid}"/>
+                    <h:outputText value="#{record.tkcttItem_Pkid}"/>
                 </p:column>
                 <p:column style="width:100px" headerText="总包_编号">
-                    <h:outputText value="#{record.tkctt_No}" escape="false"/>
+                    <h:outputText value="#{record.tkcttItem_No}" escape="false"/>
                 </p:column>
                 <p:column style="width:200px" headerText="总包_项目名称">
-                    <h:outputText value="#{record.tkctt_Name}"/>
+                    <h:outputText value="#{record.tkcttItem_Name}"/>
                 </p:column>
                 <p:column style="width:60px" headerText="总包_单位">
-                    <h:outputText value="#{record.tkctt_Unit}"/>
+                    <h:outputText value="#{record.tkcttItem_Unit}"/>
                 </p:column>
                 <p:column style="width:80px" headerText="总包_数量">
-                    <h:outputText value="#{record.tkctt_CttQty}" style="float: right" >
+                    <h:outputText value="#{record.tkcttItem_CttQty}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:100px" headerText="成本_PKID" rendered="false">
-                    <h:outputText value="#{record.cstpl_Pkid}"/>
+                    <h:outputText value="#{record.cstplItem_Pkid}"/>
                 </p:column>
                 <p:column style="width:80px" headerText="成本_数量">
-                    <h:outputText value="#{record.cstpl_CttQty}" style="float: right" >
+                    <h:outputText value="#{record.cstplItem_Qty}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="成本_金额">
-                    <h:outputText value="#{record.cstpl_CttAmt}" style="float: right" >
+                    <h:outputText value="#{record.cstplItem_Amt}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:100px" headerText="计量_本期数量">
-                    <h:outputText value="#{record.tkcttStl_ThisStageMeaQty}" style="float: right" >
+                    <h:outputText value="#{record.tkcttStlItem_ThisStageQty}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:100px" headerText="计量_累计数量">
-                    <h:outputText value="#{record.tkcttStl_AddUpMeaQty}" style="float: right" >
+                    <h:outputText value="#{record.tkcttStlItem_AddUpQty}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:100px" headerText="分包对应_PKID" rendered="false">
-                    <h:outputText value="#{record.subctt_CorrespondingPkid}"/>
+                    <h:outputText value="#{record.subcttItem_CorrPkid}"/>
                 </p:column>
                 <p:column style="width:120px" headerText="分包结算_本期数量">
-                    <h:outputText value="#{record.subcttStl_ThisStageQty}" style="float: right" >
+                    <h:outputText value="#{record.subcttStlItem_ThisStageQty}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:120px" headerText="分包结算_累计数量">
-                    <h:outputText value="#{record.subcttStl_AddUpQty}" style="float: right" >
+                    <h:outputText value="#{record.subcttStlItem_AddUpQty}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:250px" headerText="协作单位">
-                    <h:outputText value="#{record.subctt_SignPartName}" style="text-align:left">
+                    <h:outputText value="#{record.subcttItem_SignPartName}" style="text-align:left">
                     </h:outputText>
                 </p:column>
                 <p:column style="width:150px" headerText="计量分包结算比较＿数量">
-                    <h:outputText value="#{record.meaS_AddUpQty}" style="float: right" >
+                    <h:outputText value="#{record.meaSItem_AddUpQty}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
                 <p:column style="width:80px" headerText="备注">
-                    <h:outputText value="#{record.note}" style="text-align:left">
+                    <h:outputText value="#{record.itemNote}" style="text-align:left">
                     </h:outputText>
                 </p:column>
             </p:dataTable>

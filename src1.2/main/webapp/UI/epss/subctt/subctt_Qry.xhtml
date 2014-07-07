@@ -22,7 +22,7 @@
                 var arg = new Object();
                 arg.doType = "select";
                 if (pageName == "Sub_Detail") {
-                    var rtn = dialog("../item/itemQry_Cstpl_Sub.xhtml?strType=2&amp;strSubCttPkid=" + pkid + "", arg, sfeature);
+                    var rtn = dialog("../item/itemQry_Sub.xhtml?strType=2&amp;strSubCttPkid=" + pkid + "", arg, sfeature);
                 } else if (pageName == "Attachment") {
                     var rtn = window.open("/epss/servlet/ShowServlet?operType=Qry&amp;strType=0&amp;strPkid=" + pkid + "",
                             'popupwindow',

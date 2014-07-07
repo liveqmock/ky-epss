@@ -83,7 +83,6 @@ public class SubcttItemAction {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         strBelongToType=ESEnum.ITEMTYPE2.getCode();
         strBelongToPkid=parammap.get("strSubCttPkid").toString();
-
 		List<EsInitPower> esInitPowerList=
                 esInitPowerService.selectListByModel(strBelongToType,strBelongToPkid,"NULL");
         strMngNotFinishFlag="true";
@@ -245,7 +244,7 @@ public class SubcttItemAction {
         cttItemShowAdd =new CttItemShow(strBelongToType ,strBelongToPkid);
     }
     /*右单击事件*/
-    public void selectRecordAction(String strSubmitTypePara){
+    public void selectRecordAction(String strSubmitTypePara,CttItemShow cttItemShowSelected){
         try {
             strSubmitType=strSubmitTypePara;
             if(!strSubmitTypePara.equals("Add")){
@@ -473,6 +472,7 @@ public class SubcttItemAction {
 
                 if(strSubmitType.equals("Add")){
                     addRecordAction(cttItemShowAdd);
+                    resetActionForAdd();
                 }else if(strSubmitType.equals("Upd")){
                     Integer intModificationNum= cttItemShowUpd.getModificationNum()==null?0: cttItemShowUpd.getModificationNum();
                     cttItemShowUpd.setModificationNum(intModificationNum+1);
@@ -481,7 +481,9 @@ public class SubcttItemAction {
             }
             switch (strSubmitType){
                 case "Add" : MessageUtil.addInfo("提交数据完成。");
+                    break;
                 case "Upd" : MessageUtil.addInfo("更新数据完成。");
+                    break;
                 case "Del" : MessageUtil.addInfo("删除数据完成。");
             }
             initData();

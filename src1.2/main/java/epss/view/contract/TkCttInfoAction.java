@@ -77,6 +77,8 @@ public class TkCttInfoAction {
     private String strSubmitType;
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
+    //更新时检验用，符合立刻关闭，不符合进行提升
+    private boolean checkForUpd;
 
     @PostConstruct
     public void init() {
@@ -99,6 +101,7 @@ public class TkCttInfoAction {
         styleModel.setDisabled_Flag("false");
         strSubmitType = "Add";
         esFlowControl.setStatusFlagListByPower("Qry");
+        checkForUpd=true;
     }
 
     public void setMaxNoPlusOne() {
@@ -375,6 +378,7 @@ public class TkCttInfoAction {
             }
         } else if (strSubmitType.equals("Upd")) {
             updRecordAction(cttInfoShowUpd);
+            checkForUpd=true;
             MessageUtil.addInfo("更新数据完成。");
         } else if (strSubmitType.equals("Del")) {
             deleteRecordAction(cttInfoShowDel);
@@ -563,6 +567,14 @@ public class TkCttInfoAction {
 
     public void setCttInfoShowAttachment(CttInfoShow cttInfoShowAttachment) {
         this.cttInfoShowAttachment = cttInfoShowAttachment;
+    }
+
+    public boolean isCheckForUpd() {
+        return checkForUpd;
+    }
+
+    public void setCheckForUpd(boolean checkForUpd) {
+        this.checkForUpd = checkForUpd;
     }
 /*智能字段 End*/
 }

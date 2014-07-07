@@ -16,18 +16,12 @@
                         event.srcElement.click();
                 }
             }
-            function actSelect(obj, pageName) {
+            function actSelect(obj) {
                 var pkid = obj;
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:yes;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                if (pageName == "Cstpl_Detail") {
-                    var rtn = dialog("../item/itemQry_Tk_Cstpl.xhtml?strType=1&amp;strCstplPkid=" + pkid + "", arg, sfeature);
-                } else if (pageName == "Attachment") {
-                    var rtn = window.open("/epss/servlet/ShowServlet?operType=Qry&amp;strType=0&amp;strPkid=" + pkid + "",
-                            'popupwindow',
-                            'height = 300,width = 450,location = no,resizable = no,scrollbars = no,status = no,toolbar = no,top = 100');
-                }
+                var rtn = dialog("../item/itemQry_Cstpl.xhtml?strType=1&amp;strCstplPkid=" + pkid + "", arg, sfeature);
             }
         </script>
     </ui:define>
@@ -48,7 +42,7 @@
                     <h:panelGrid columns="3">
                         <p:commandButton id="qryBtn" value="查询"
                                          action="#{cstplInfoAction.onQueryAction('Check','true')}"
-                                         update="pdt,msgs,pgCondition">
+                                         update="pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
                                          type="reset"
@@ -65,39 +59,6 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid id="pgCondition" columns="3">
-                <p:commandButton id="checkPassBtn" value="审核通过"
-                                 action="#{cstplInfoAction.onClickForPowerAction('CheckPass')}"
-                                 update="pgCondition,pdt,msgs"
-                                 rendered="#{cstplInfoAction.rowSelectedFlag}">
-                </p:commandButton>
-                <p:commandButton id="checkFailBtn" value="审核未过至状态:"
-                                 action="#{cstplInfoAction.onClickForPowerAction('CheckFail')}"
-                                 update="pgCondition,pdt,msgs"
-                                 rendered="#{cstplInfoAction.rowSelectedFlag}">
-                </p:commandButton>
-                <p:selectOneMenu id="statusFlag" value="#{cstplInfoAction.strNotPassToStatus}"
-                                 rendered="#{cstplInfoAction.rowSelectedFlag}">
-                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
-                </p:selectOneMenu>
-            </h:panelGrid>
-            <p:contextMenu for="pdt">
-                <p:menuitem value="浏览" icon="ui-icon-search"
-                            actionListener="#{cstplInfoAction.selectRecordAction('Qry','')}"
-                            update="pgView,pdt,msgs"
-                            onclick="PF('wVDlgView').show()">
-                </p:menuitem>
-                <p:menuitem value="选择" icon="ui-icon-plus"
-                            actionListener="#{cstplInfoAction.selectRecordAction('Check','')}"
-                            update="pdt,msgs,pgCondition">
-                </p:menuitem>
-                <p:menuitem value="详细内容" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitCstplList.selection,'Cstpl_Detail')">
-                </p:menuitem>
-                <p:menuitem value="附件" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitCstplList.selection,'Attachment')">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{cstplInfoAction.cttInfoShowList}"
                          var="record"
@@ -114,6 +75,22 @@
                          widgetVar="DtInitCstplList"
                          rowStyleClass="#{record.statusFlag eq '0' ? null : 'rowDoneStyle'}"
                          scrollable="true">
+                <p:column headerText="操作" style="width:91px">
+                    <p:commandButton icon="ui-icon-search"
+                                     action="#{cstplInfoAction.selectRecordAction('Qry','',record)}"
+                                     update="pdt,:form:pgView,:form:msgs"
+                                     onclick="PF('wVDlgView').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-document"
+                                      action="#{cstplInfoAction.attachmentStrToList()}"
+                                      update="pdt,:form:pgAttachmentView,:form:msgs"
+                                      onclick="PF('wvAttachmentList').show()">
+                        <f:setPropertyActionListener value="#{record}" target="#{cstplInfoAction.cttInfoShowAttachment}"/>
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-triangle-1-e"
+                                     oncomplete="actSelect('#{record.pkid}')">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="成本计划号" style="width:140px;text-align:center">
                     <h:outputText value="#{record.id}"/>
                 </p:column>

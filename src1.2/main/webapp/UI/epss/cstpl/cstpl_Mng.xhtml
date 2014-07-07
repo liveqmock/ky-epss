@@ -17,18 +17,13 @@
                         event.srcElement.click();
                 }
             }
-            function actSelect(obj, pageName) {
+            function actSelect(obj) {
                 var pkid = obj;
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:yes;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                if (pageName == "Cstpl_Detail") {
-                    var rtn = dialog("../item/itemMng_Tk_Cstpl.xhtml?strType=1&amp;strCstplPkid=" + pkid + "", arg, sfeature);
-                } else if (pageName == "Attachment") {
-                    var rtn = window.open("/epss/servlet/ShowServlet?operType=Mng&amp;strType=0&amp;strPkid=" + pkid + "",
-                            'popupwindow',
-                            'height = 300,width = 450,location = no,resizable = no,scrollbars = no,status = no,toolbar = no,top = 100');
-                }
+                var rtn = dialog("../item/itemMng_Cstpl.xhtml?strType=1&amp;strCstplPkid=" + pkid + "", arg, sfeature);
+                document.getElementById("form:qryBtn").click();
             }
         </script>
     </ui:define>
@@ -49,7 +44,7 @@
                     <h:panelGrid columns="3">
                         <p:commandButton id="qryBtn" value="查询"
                                          action="#{cstplInfoAction.onQueryAction('Mng','true')}"
-                                         update="pdt,msgs,pgCondition">
+                                         update="pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
                                          type="reset"
@@ -66,46 +61,12 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid id="pgCondition" columns="4">
-                <p:commandButton id="addBtn"
-                                 value="增加" icon="ui-icon-plus"
-                                 action="#{cstplInfoAction.resetActionForAdd()}"
-                                 update="pgCondition,pgViewForAdd"
-                                 onclick="PF('wVDlgViewForAdd').show()">
-                </p:commandButton>
-                <p:commandButton id="endInputBtn" value="录入完成"
-                                 action="#{cstplInfoAction.onClickForPowerAction('MngPass')}"
-                                 update="pgCondition,pdt,msgs"
-                                 rendered="#{cstplInfoAction.rowSelectedFlag}">
-                </p:commandButton>
-                <p:commandButton id="startInputBtn" value="录入未完"
-                                 action="#{cstplInfoAction.onClickForPowerAction('MngFail')}"
-                                 update="pgCondition,pdt,msgs"
-                                 rendered="#{cstplInfoAction.rowSelectedFlag}">
-                </p:commandButton>
-            </h:panelGrid>
-            <p:contextMenu for="pdt">
-                <p:menuitem value="选择" icon="ui-icon-plus"
-                            actionListener="#{cstplInfoAction.selectRecordAction('Mng','Sel')}"
-                            update="pdt,msgs,pgCondition">
-                </p:menuitem>
-                <p:menuitem value="更新" icon="ui-icon-pencil"
-                            actionListener="#{cstplInfoAction.selectRecordAction('Mng','Upd')}"
-                            update="pdt,msgs,pgViewForUpd,pgCondition"
-                            onclick="PF('wVDlgViewForUpd').show()">
-                </p:menuitem>
-                <p:menuitem value="删除" icon="ui-icon-trash"
-                            actionListener="#{cstplInfoAction.selectRecordAction('Mng','Del')}"
-                            update="pdt,msgs,pgViewForDel,pgCondition"
-                            onclick="PF('wVDlgViewForDel').show()">
-                </p:menuitem>
-                <p:menuitem value="详细内容" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitCstplList.selection,'Cstpl_Detail')">
-                </p:menuitem>
-                <p:menuitem value="附件" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitCstplList.selection,'Attachment')">
-                </p:menuitem>
-            </p:contextMenu>
+            <p:commandButton id="addBtn"
+                             value="增加" icon="ui-icon-plus"
+                             action="#{cstplInfoAction.resetActionForAdd()}"
+                             update="pgViewForAdd"
+                             onclick="PF('wVDlgViewForAdd').show()">
+            </p:commandButton>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{cstplInfoAction.cttInfoShowList}"
                          var="record"
@@ -122,6 +83,27 @@
                          widgetVar="DtInitCstplList"
                          rowStyleClass="#{record.statusFlag eq null? null:'rowDoneStyle'}"
                          scrollable="true">
+                <p:column headerText="操作" style="width:62px">
+                    <p:commandButton icon="ui-icon-pencil"
+                                     action="#{cstplInfoAction.selectRecordAction('Mng','Upd',record)}"
+                                     update="pdt,:form:pgViewForUpd,:form:msgs"
+                                     onclick="PF('wVDlgViewForUpd').show()">
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-trash"
+                                     action="#{cstplInfoAction.selectRecordAction('Mng','Del',record)}"
+                                     update="pdt,:form:pgViewForDel,:form:msgs"
+                                     onclick="PF('wVDlgViewForDel').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-document"
+                                      action="#{cstplInfoAction.attachmentStrToList()}"
+                                      update="pdt,:form:pgAttachmentView,:form:msgs"
+                                      onclick="PF('wvAttachmentList').show()">
+                        <f:setPropertyActionListener value="#{record}" target="#{cstplInfoAction.cttInfoShowAttachment}"/>
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-triangle-1-e"
+                                     oncomplete="actSelect('#{record.pkid}')">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="成本计划号" style="width:140px;text-align:center">
                     <h:outputText value="#{record.id}"/>
                 </p:column>
@@ -141,6 +123,66 @@
                     <h:outputText value="#{record.note}"/>
                 </p:column>
             </p:dataTable>
+            <!--附件列表维护-->
+            <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
+                      showEffect="clip" hideEffect="fold" header="附件列表">
+                <p:growl id="messages" showDetail="true"/>
+                <h:panelGrid id="pgAttachmentView">
+                    <p:fileUpload id="attachmentName" fileUploadListener="#{cstplInfoAction.upload}"
+                                  mode="advanced"
+                                  sizeLimit="1000000"
+                                  multiple="true"
+                                  label="选择" showButtons="true"
+                                  cancelLabel="全部取消" uploadLabel="全部上传" process="@this"
+                                  allowTypes="/(\.|\/)(gif|jpe?g|png|xls|xlsx|doc|docx)$/"
+                                  update="pdtAttachmentList,attachmentName">
+                    </p:fileUpload>
+                    <p:dataTable id="pdtAttachmentList" style="width:100%;"
+                                 value="#{cstplInfoAction.attachmentList}"
+                                 var="recordAttachment"
+                                 rowKey="#{recordAttachment.COLUMN_NAME}"
+                                 selectionMode="single"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 paginator="true"
+                                 paginatorPosition="bottom"
+                                 rows="5"
+                                 rowsPerPageTemplate="100,50,30,15,5"
+                                 emptyMessage="数据记录为空..."
+                                 widgetVar="WvPdtAttachmentList">
+                        <p:column headerText="附件ID" style="text-align:left">
+                            <h:outputText value="#{recordAttachment.COLUMN_ID}"/>
+                        </p:column>
+                        <p:column headerText="附件名" style="text-align:left">
+                            <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
+                        </p:column>
+                        <p:column headerText="缩略图" style="text-align:center" rendered="false">
+                            <h:graphicImage value="/upload/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
+                        </p:column>
+                        <p:column headerText="预览">
+                            <p:commandButton id="selectButton" update=":form:imageShow"
+                                             action="#{cstplInfoAction.onViewAttachment(recordAttachment)}"
+                                             oncomplete="dlgWvView.show()"
+                                             icon="ui-icon-search" title="View">
+                            </p:commandButton>
+                        </p:column>
+                        <p:column headerText="操作" style="width:62px">
+                            <p:commandButton icon="ui-icon-arrowrefresh-1-w"
+                                             ajax="false"
+                                             actionListener="#{cstplInfoAction.download(recordAttachment.COLUMN_PATH)}">
+                                <p:fileDownload value="#{cstplInfoAction.downloadFile}"/>
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-trash"
+                                             action="#{cstplInfoAction.delAttachmentRecordAction(recordAttachment)}"
+                                             update=":form:pgAttachmentView,:form:msgs">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
+                        <h:graphicImage binding="#{cstplInfoAction.image}"/>
+                    </p:dialog>
+                </h:panelGrid>
+            </p:dialog>
             <p:dialog id="dlgViewForAdd" header="成本计划增加信息" widgetVar="wVDlgViewForAdd"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">
@@ -231,7 +273,8 @@
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
                                          action="#{cstplInfoAction.onClickForMngAction()}"
-                                         update="pdt,msgs,pgViewForUpd">
+                                         update="pdt,msgs,pgViewForUpd"
+                                         oncomplete="if(#{cstplInfoAction.checkForUpd})wVDlgViewForUpd.hide()">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForUpd" value="重置"
                                          type="reset"
@@ -294,7 +337,8 @@
                         <p:commandButton id="submitBtn"
                                          value="提交（删除）"
                                          action="#{cstplInfoAction.onClickForMngAction()}"
-                                         update="pdt,msgs,pgViewForDel">
+                                         update="pdt,msgs,pgViewForDel"
+                                         oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                     </h:panelGrid>
                 </h:panelGrid>

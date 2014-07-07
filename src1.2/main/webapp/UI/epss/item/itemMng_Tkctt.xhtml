@@ -224,8 +224,9 @@
                     <h:panelGrid id="pgOperBtnForUpd" columns="2">
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
-                                         action="#{tkcttItemAction.submitThisRecordAction}"
-                                         update="pgViewForUpd,ptt,msgs">
+                             action="#{tkcttItemAction.submitThisRecordAction()}"
+                             update="pgViewForUpd,ptt,msgs"
+                             oncomplete="if(#{tkcttItemAction.checkForUpd})wVDlgViewForUpd.hide()">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForUpd" value="重置"
                                          type="reset"
@@ -309,8 +310,9 @@
                     <h:panelGrid id="pgOperBtnForDel">
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
-                                         action="#{tkcttItemAction.submitThisRecordAction}"
-                                         update="pgViewForDel,ptt,msgs">
+                             action="#{tkcttItemAction.submitThisRecordAction()}"
+                             update="pgViewForDel,ptt,msgs"
+                             oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                     </h:panelGrid>
                 </h:panelGrid>

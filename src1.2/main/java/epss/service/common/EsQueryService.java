@@ -31,7 +31,7 @@ public class EsQueryService {
         return queryMapper.getCSStlQList(strBelongToPkid,strPeriodNo) ;
     }
 
-    public List<QryShow> getCSStlQBySignPartList(String strCstplInfoPkidPara,String strPeriodNo){
+    public List<QryTkMeaCSStlQShow> getCSStlQBySignPartList(String strCstplInfoPkidPara,String strPeriodNo){
         return queryMapper.getCSStlQBySignPartList(strCstplInfoPkidPara,strPeriodNo) ;
     }
 }

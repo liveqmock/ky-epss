@@ -213,19 +213,21 @@ public interface QueryMapper {
                                      @Param("strPeriodNo") String strPeriodNo);
 
     @Select(" select " +
-            "    strCorrespondingPkid," +
-            "    strName," +
-            "    bdUnitPrice," +
-            "    bdCurrentPeriodQuantity," +
-            "    bdBeginToCurrentPeriodQuantity" +
+            "    CORRESPONDING_PKID as subcttItem_CorrPkid," +
+            "    SIGN_PART_B_NAME as subcttItem_SignPartName," +
+            "    SUBCTT_ITEM_NAME as subcttItem_Name," +
+            "    UNIT_PRICE as subcttItem_UnitPrice," +
+            "    THIS_STAGE_QTY as subcttStlItem_ThisStageQty," +
+            "    ADD_UP_QTY as subcttStlItem_AddUpQty" +
             " from " +
             "    (" +
             "       select " +
-            "            subPerEd.CORRESPONDING_PKID as strCorrespondingPkid," +
-            "            subPerEd.SIGN_PART_B_NAME as strName," +
-            "            max(eissep.UNIT_PRICE) as bdUnitPrice," +
-            "            sum(eissep.THIS_STAGE_QTY) as bdCurrentPeriodQuantity," +
-            "            sum(eissep.ADD_UP_QTY) as bdBeginToCurrentPeriodQuantity" +
+            "            subPerEd.CORRESPONDING_PKID ," +
+            "            subPerEd.SIGN_PART_B_NAME ," +
+            "            eissep.SUBCTT_ITEM_NAME ," +
+            "            max(eissep.UNIT_PRICE) as UNIT_PRICE," +
+            "            sum(eissep.THIS_STAGE_QTY) as THIS_STAGE_QTY," +
+            "            sum(eissep.ADD_UP_QTY) as ADD_UP_QTY" +
             "       from " +
                           // 某一个成本计划下对应的批准了的分包合同的详细内容
             "            ( " +
@@ -298,12 +300,14 @@ public interface QueryMapper {
             "            eissep.PERIOD_NO=subPerEd.MAX_PERIOD_NO_INP" +
             "       and" +
             "            eissep.SUBCTT_ITEM_PKID=subPerEd.ITEM_PKID" +
-            "       group by subPerEd.CORRESPONDING_PKID,subPerEd.SIGN_PART_B_NAME " +
-        "       ) t" +
+            "       group by subPerEd.CORRESPONDING_PKID,subPerEd.SIGN_PART_B_NAME,eissep.SUBCTT_ITEM_NAME" +
+            "    ) t" +
             " where " +
-            " t.bdBeginToCurrentPeriodQuantity is not null")
-    List<QryShow> getCSStlQBySignPartList(@Param("strCstplInfoPkid") String strCstplInfoPkid,
-                                          @Param("strPeriodNo") String strPeriodNo);
+            "    t.ADD_UP_QTY is not null" +
+            " order by t.CORRESPONDING_PKID")
+    List<QryTkMeaCSStlQShow> getCSStlQBySignPartList(@Param("strCstplInfoPkid") String strCstplInfoPkid,
+                                                     @Param("strPeriodNo") String strPeriodNo);
+
     @Select("select PKID as pkid, "+
             " SUBSTL_TYPE as substlType,"+
             " ID as id,"+

@@ -4,6 +4,7 @@ import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.EsCttInfo;
+import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
@@ -16,15 +17,22 @@ import epss.view.common.EsCommon;
 import epss.view.common.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import epss.common.utils.MessageUtil;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -69,6 +77,15 @@ public class CstplInfoAction {
 
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
+    //附件
+    private CttInfoShow cttInfoShowAttachment;
+    private List<AttachmentModel> attachmentList;
+    private HtmlGraphicImage image;
+    //上传下载文件
+    private StreamedContent downloadFile;
+    private UploadedFile uploadedFile;
+    //更新、删除立刻关闭
+    private boolean checkForUpd;
 
     @PostConstruct
     public void init() {
@@ -80,6 +97,7 @@ public class CstplInfoAction {
         initData();
     }
     public void initData() {
+        this.attachmentList=new ArrayList<AttachmentModel>();
         this.cttInfoShowList = new ArrayList<CttInfoShow>();
         cttInfoShowQry = new CttInfoShow();
         cttInfoShowQry.setCttType(ESEnum.ITEMTYPE1.getCode());
@@ -101,6 +119,7 @@ public class CstplInfoAction {
         strSubmitType = "Add";
         esFlowControl.setStatusFlagListByPower("Qry");
         rowSelectedFlag = "false";
+        checkForUpd=true;
     }
 
     public void setMaxNoPlusOne() {
@@ -182,7 +201,8 @@ public class CstplInfoAction {
     }
 
     public void selectRecordAction(String strPowerTypePara,
-                                   String strSubmitTypePara) {
+                                   String strSubmitTypePara,
+                                   CttInfoShow cttInfoShowSelected) {
         try {
             strSubmitType = strSubmitTypePara;
             esFlowControl.setStatusFlagListByPower(strPowerTypePara);
@@ -363,10 +383,12 @@ public class CstplInfoAction {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             } else {
                 addRecordAction(cttInfoShowAdd);
+                resetActionForAdd();
             }
         } else if (strSubmitType.equals("Upd")) {
             cttInfoShowUpd.setCttType(ESEnum.ITEMTYPE1.getCode());
             updRecordAction(cttInfoShowUpd);
+            checkForUpd=true;
         } else if (strSubmitType.equals("Del")) {
             cttInfoShowDel.setCttType(ESEnum.ITEMTYPE1.getCode());
             deleteRecordAction(cttInfoShowDel);
@@ -412,6 +434,125 @@ public class CstplInfoAction {
         } catch (Exception e) {
             logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
+        }
+    }
+    //附件相关方法
+    public void attachmentStrToList(){
+
+        String strAttachmentTemp=cttInfoShowAttachment.getAttachment();
+        if(strAttachmentTemp!=null){
+            attachmentList.clear();
+            if (!StringUtils.isEmpty(strAttachmentTemp)) {
+                String strTemps[] = strAttachmentTemp.split(";");
+                for (int i = 0; i < strTemps.length; i++) {
+                    AttachmentModel attachmentModelTemp = new AttachmentModel(i + "", strTemps[i], strTemps[i]);
+                    attachmentList.add(attachmentModelTemp);
+                }
+            }
+        }else{
+            attachmentList.clear();
+        }
+    }
+
+    public void onViewAttachment(AttachmentModel attachmentModelPara) {
+        image.setValue("/upload/" + attachmentModelPara.getCOLUMN_NAME());
+    }
+
+    public void delAttachmentRecordAction(AttachmentModel attachmentModelPara){
+        try {
+            File deletingFile = new File(attachmentModelPara.getCOLUMN_PATH());
+            deletingFile.delete();
+            attachmentList.remove(attachmentModelPara) ;
+            StringBuffer sbTemp = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sbTemp.append(item.getCOLUMN_PATH() + ";");
+            }
+            cttInfoShowAttachment.setAttachment(sbTemp.toString());
+            updRecordAction(cttInfoShowAttachment);
+        } catch (Exception e) {
+            logger.error("删除数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+
+    public void download(String strAttachment){
+        try{
+            if(StringUtils .isEmpty(strAttachment) ){
+                MessageUtil.addError("路径为空，无法下载！");
+                logger.error("路径为空，无法下载！");
+            }
+            else {
+                String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload")+"/"+strAttachment;
+                File file = new File(fileName);
+                InputStream stream = new FileInputStream(fileName);
+                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), new String(strAttachment.getBytes("gbk"),"iso8859-1"));
+            }
+        } catch (Exception e) {
+            logger.error("下载文件失败", e);
+            MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
+        }
+    }
+
+    public void upload(FileUploadEvent event) {
+        BufferedInputStream inStream = null;
+        FileOutputStream fileOutputStream = null;
+        UploadedFile uploadedFile = event.getFile();
+        AttachmentModel attachmentModel = new AttachmentModel();
+        if (uploadedFile != null) {
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload");
+            File superFile = new File(path);
+            if (!superFile.exists()) {
+                superFile.mkdirs();
+            }
+            File descFile = new File(superFile, uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_ID(ToolUtil.getIntIgnoreNull(attachmentList.size()) + "");
+            attachmentModel.setCOLUMN_NAME(uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_PATH(descFile.getAbsolutePath());
+            for (AttachmentModel item : attachmentList){
+                if (item.getCOLUMN_NAME().equals(attachmentModel.getCOLUMN_NAME())) {
+                    MessageUtil.addError("附件已存在！");
+                    return;
+                }
+            }
+
+            attachmentList.add(attachmentModel);
+
+            StringBuffer sb = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sb.append(item.getCOLUMN_NAME() + ";");
+            }
+            if(sb.length()>4000){
+                MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
+                return;
+            }
+            cttInfoShowAttachment.setAttachment(sb.toString());
+            updRecordAction(cttInfoShowAttachment);
+            try {
+                inStream = new BufferedInputStream(uploadedFile.getInputstream());
+                fileOutputStream = new FileOutputStream(descFile);
+                byte[] buf = new byte[1024];
+                int num;
+                while ((num = inStream.read(buf)) != -1) {
+                    fileOutputStream.write(buf, 0, num);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (inStream != null) {
+                    try {
+                        inStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
         }
     }
 
@@ -534,6 +675,62 @@ public class CstplInfoAction {
 
     public void setCttInfoShowSel(CttInfoShow cttInfoShowSel) {
         this.cttInfoShowSel = cttInfoShowSel;
+    }
+
+    public String getStrBelongToPkid() {
+        return strBelongToPkid;
+    }
+
+    public void setStrBelongToPkid(String strBelongToPkid) {
+        this.strBelongToPkid = strBelongToPkid;
+    }
+
+    public CttInfoShow getCttInfoShowAttachment() {
+        return cttInfoShowAttachment;
+    }
+
+    public void setCttInfoShowAttachment(CttInfoShow cttInfoShowAttachment) {
+        this.cttInfoShowAttachment = cttInfoShowAttachment;
+    }
+
+    public List<AttachmentModel> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public void setAttachmentList(List<AttachmentModel> attachmentList) {
+        this.attachmentList = attachmentList;
+    }
+
+    public HtmlGraphicImage getImage() {
+        return image;
+    }
+
+    public void setImage(HtmlGraphicImage image) {
+        this.image = image;
+    }
+
+    public StreamedContent getDownloadFile() {
+        return downloadFile;
+    }
+
+    public void setDownloadFile(StreamedContent downloadFile) {
+        this.downloadFile = downloadFile;
+    }
+
+    public UploadedFile getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(UploadedFile uploadedFile) {
+        this.uploadedFile = uploadedFile;
+    }
+
+    public boolean isCheckForUpd() {
+        return checkForUpd;
+    }
+
+    public void setCheckForUpd(boolean checkForUpd) {
+        this.checkForUpd = checkForUpd;
     }
     /*智能字段 End*/
 }

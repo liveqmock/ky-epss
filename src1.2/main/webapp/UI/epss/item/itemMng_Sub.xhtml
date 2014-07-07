@@ -28,21 +28,6 @@
                              update="pgViewForAdd,pdt,msgs"
                              onclick="PF('wVDlgViewForAdd').show()">
             </p:commandButton>
-            <p:contextMenu for="pdt" id="pcm" rendered='#{subcttItemAction.strMngNotFinishFlag}'>
-                <p:menuitem value="更新" icon="ui-icon-pencil"
-                            actionListener="#{subcttItemAction.selectRecordAction('Upd')}"
-                            update="pgViewForUpd,pdt,msgs"
-                            onclick="PF('wVDlgViewForUpd').show()">
-                </p:menuitem>
-                <p:menuitem value="删除" icon="ui-icon-trash"
-                            actionListener="#{subcttItemAction.selectRecordAction('Del')}"
-                            update="pgViewForDel,pdt,msgs"
-                            onclick="PF('wVDlgViewForDel').show()">
-                </p:menuitem>
-                <p:menuitem value="成本计划详细内容" icon="ui-icon-search"
-                             onclick ="wvCstplDetail.show()" >
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                      value="#{subcttItemAction.cttItemShowList}"
                      var="record"
@@ -51,7 +36,23 @@
                      selectionMode="single"
                      rowIndexVar="row"
                      emptyMessage="数据记录为空..."
-                     rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}">
+                     rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}"
+                    scrollable="true">
+                <p:column headerText="操作" style="width:61px">
+                    <p:commandButton  icon="ui-icon-pencil"
+                                     actionListener="#{subcttItemAction.selectRecordAction('Upd',record)}"
+                                     update=":form:pdt,:form:pgViewForUpd,:form:msgs"
+                                     onclick="PF('wVDlgViewForUpd').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-trash"
+                                     actionListener="#{subcttItemAction.selectRecordAction('Del',record)}"
+                                     update=":form:pdt,:form:pgViewForDel,:form:msgs"
+                                     onclick="PF('wVDlgViewForDel').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-search"
+                                      onclick ="wvCstplDetail.show()" >
+                    </p:commandButton>
+                </p:column>
                 <p:column style="width:30px" headerText="序号">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
@@ -225,11 +226,11 @@
                         <p:commandButton id="submitBtnForAdd"
                                          value="提交（增加）"
                                          action="#{subcttItemAction.submitThisRecordAction}"
-                                         update="pgOperBtnForAdd,pdt,msgs,pcm,pgViewForAdd">
+                                         update="pgOperBtnForAdd,pdt,msgs,pgViewForAdd">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForAdd" value="重置"
                                          type="reset"
-                                         update="pgViewForAdd,pcm">
+                                         update="pgViewForAdd">
                         </p:commandButton>
                         <p:ajaxStatus style="width:16px;height:16px;">
                             <f:facet name="start">
@@ -354,11 +355,12 @@
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
                                          action="#{subcttItemAction.submitThisRecordAction}"
-                                         update="pgOperBtnForUpd,pdt,msgs,pcm,pgViewForUpd">
+                                         update="pgOperBtnForUpd,pdt,msgs,pgViewForUpd"
+                                         oncomplete="wVDlgViewForUpd.hide()">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForUpd" value="重置"
                                          type="reset"
-                                         update="pgViewForUpd,pcm">
+                                         update="pgViewForUpd">
                         </p:commandButton>
                         <p:ajaxStatus style="width:16px;height:16px;">
                             <f:facet name="start">
@@ -481,7 +483,8 @@
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
                                          action="#{subcttItemAction.submitThisRecordAction}"
-                                         update="pgOperBtnForDel,pdt,msgs,pcm,pgViewForDel">
+                                         update="pgOperBtnForDel,pdt,msgs,pgViewForDel"
+                                         oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                         <p:ajaxStatus style="width:16px;height:16px;">
                             <f:facet name="start">

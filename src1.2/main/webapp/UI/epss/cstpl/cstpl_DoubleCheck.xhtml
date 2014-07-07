@@ -16,18 +16,13 @@
                         event.srcElement.click();
                 }
             }
-            function actSelect(obj, pageName) {
+            function actSelect(obj) {
                 var pkid = obj;
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:yes;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                if (pageName == "Cstpl_Detail") {
-                    var rtn = dialog("../item/itemQry_Tk_Cstpl.xhtml?strType=1&amp;strCstplPkid=" + pkid + "", arg, sfeature);
-                } else if (pageName == "Attachment") {
-                    var rtn = window.open("/epss/servlet/ShowServlet?operType=Qry&amp;strType=0&amp;strPkid=" + pkid + "",
-                            'popupwindow',
-                            'height = 300,width = 450,location = no,resizable = no,scrollbars = no,status = no,toolbar = no,top = 100');
-                }
+                var rtn = dialog("../item/itemQry_Cstpl.xhtml?strType=1&amp;strCstplPkid=" + pkid + "", arg, sfeature);
+                document.getElementById("form:qryBtn").click();
             }
         </script>
     </ui:define>
@@ -48,7 +43,7 @@
                     <h:panelGrid columns="3">
                         <p:commandButton id="qryBtn" value="查询"
                                          action="#{cstplInfoAction.onQueryAction('DoubleCheck','true')}"
-                                         update="pdt,msgs,pgCondition">
+                                         update="pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
                                          type="reset"
@@ -65,39 +60,6 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid id="pgCondition" columns="3">
-                <p:commandButton id="checkPassBtn" value="复核通过"
-                                 action="#{cstplInfoAction.onClickForPowerAction('DoubleCheckPass')}"
-                                 update="pgCondition,pdt,msgs"
-                                 rendered="#{cstplInfoAction.rowSelectedFlag}">
-                </p:commandButton>
-                <p:commandButton id="checkFailBtn" value="复核未过"
-                                 action="#{cstplInfoAction.onClickForPowerAction('DoubleCheckFail')}"
-                                 update="pgCondition,pdt,msgs"
-                                 rendered="#{cstplInfoAction.rowSelectedFlag}">
-                </p:commandButton>
-                <p:selectOneMenu id="statusFlag" value="#{cstplInfoAction.strNotPassToStatus}"
-                                 rendered="#{cstplInfoAction.rowSelectedFlag}">
-                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
-                </p:selectOneMenu>
-            </h:panelGrid>
-            <p:contextMenu for="pdt">
-                <p:menuitem value="浏览" icon="ui-icon-search"
-                            actionListener="#{cstplInfoAction.selectRecordAction('Qry','')}"
-                            update="pgView,pdt,msgs"
-                            onclick="PF('wVDlgView').show()">
-                </p:menuitem>
-                <p:menuitem value="选择" icon="ui-icon-plus"
-                            actionListener="#{cstplInfoAction.selectRecordAction('DoubleCheck','')}"
-                            update="pdt,msgs,pgCondition">
-                </p:menuitem>
-                <p:menuitem value="详细内容" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitCstplList.selection,'Cstpl_Detail')">
-                </p:menuitem>
-                <p:menuitem value="附件" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitCstplList.selection,'Attachment')">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{cstplInfoAction.cttInfoShowList}"
                          var="record"
@@ -114,6 +76,22 @@
                          widgetVar="DtInitCstplList"
                          rowStyleClass="#{record.statusFlag eq '1' ? null : 'rowDoneStyle'}"
                          scrollable="true">
+                <p:column headerText="操作" style="width:91px">
+                    <p:commandButton icon="ui-icon-search"
+                                     action="#{cstplInfoAction.selectRecordAction('Qry','',record)}"
+                                     update="pdt,:form:pgView,:form:msgs"
+                                     onclick="PF('wVDlgView').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-document"
+                                      action="#{cstplInfoAction.attachmentStrToList()}"
+                                      update="pdt,:form:pgAttachmentView,:form:msgs"
+                                      onclick="PF('wvAttachmentList').show()">
+                        <f:setPropertyActionListener value="#{record}" target="#{cstplInfoAction.cttInfoShowAttachment}"/>
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-triangle-1-e"
+                                     oncomplete="actSelect('#{record.pkid}')">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="成本计划号" style="width:140px;text-align:center">
                     <h:outputText value="#{record.id}"/>
                 </p:column>
@@ -133,6 +111,66 @@
                     <h:outputText value="#{record.note}"/>
                 </p:column>
             </p:dataTable>
+            <!--附件列表维护-->
+            <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
+                      showEffect="clip" hideEffect="fold" header="附件列表">
+                <p:growl id="messages" showDetail="true"/>
+                <h:panelGrid id="pgAttachmentView">
+                    <p:fileUpload id="attachmentName" fileUploadListener="#{cstplInfoAction.upload}"
+                                  mode="advanced"
+                                  sizeLimit="1000000"
+                                  multiple="true"
+                                  label="选择" showButtons="true"
+                                  cancelLabel="全部取消" uploadLabel="全部上传" process="@this"
+                                  allowTypes="/(\.|\/)(gif|jpe?g|png|xls|xlsx|doc|docx)$/"
+                                  update="pdtAttachmentList,attachmentName">
+                    </p:fileUpload>
+                    <p:dataTable id="pdtAttachmentList" style="width:100%;"
+                                 value="#{cstplInfoAction.attachmentList}"
+                                 var="recordAttachment"
+                                 rowKey="#{recordAttachment.COLUMN_NAME}"
+                                 selectionMode="single"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 paginator="true"
+                                 paginatorPosition="bottom"
+                                 rows="5"
+                                 rowsPerPageTemplate="100,50,30,15,5"
+                                 emptyMessage="数据记录为空..."
+                                 widgetVar="WvPdtAttachmentList">
+                        <p:column headerText="附件ID" style="text-align:left">
+                            <h:outputText value="#{recordAttachment.COLUMN_ID}"/>
+                        </p:column>
+                        <p:column headerText="附件名" style="text-align:left">
+                            <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
+                        </p:column>
+                        <p:column headerText="缩略图" style="text-align:center" rendered="false">
+                            <h:graphicImage value="/upload/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
+                        </p:column>
+                        <p:column headerText="预览">
+                            <p:commandButton id="selectButton" update=":form:imageShow"
+                                             action="#{cstplInfoAction.onViewAttachment(recordAttachment)}"
+                                             oncomplete="dlgWvView.show()"
+                                             icon="ui-icon-search" title="View">
+                            </p:commandButton>
+                        </p:column>
+                        <p:column headerText="操作" style="width:62px">
+                            <p:commandButton icon="ui-icon-arrowrefresh-1-w"
+                                             ajax="false"
+                                             actionListener="#{cstplInfoAction.download(recordAttachment.COLUMN_PATH)}">
+                                <p:fileDownload value="#{cstplInfoAction.downloadFile}"/>
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-trash"
+                                             action="#{cstplInfoAction.delAttachmentRecordAction(recordAttachment)}"
+                                             update=":form:pgAttachmentView,:form:msgs">
+                            </p:commandButton>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
+                        <h:graphicImage binding="#{cstplInfoAction.image}"/>
+                    </p:dialog>
+                </h:panelGrid>
+            </p:dialog>
             <p:dialog id="dlgView" header="成本计划信息" widgetVar="wVDlgView"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">

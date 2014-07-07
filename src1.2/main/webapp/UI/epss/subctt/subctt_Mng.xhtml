@@ -22,7 +22,7 @@
                 var arg = new Object();
                 arg.doType = "select";
                 if (pageName == "Sub_Detail") {
-                    var rtn = dialog("../item/itemMng_Cstpl_Sub.xhtml?strType=2&amp;strSubCttPkid=" + pkid + "", arg, sfeature);
+                    var rtn = dialog("../item/itemMng_Sub.xhtml?strType=2&amp;strSubCttPkid=" + pkid + "", arg, sfeature);
                 } else if (pageName == "Attachment") {
                     var rtn = window.open("../attachment/attachment_Mng.jsp?strType=1&amp;strPkid=" + pkid + "",
                             'popupwindow',
