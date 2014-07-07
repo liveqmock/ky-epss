@@ -57,8 +57,6 @@ public class SubcttStlPInfoAction {
 
     private ProgInfoShow progInfoShow;
     private List<ProgInfoShow> progInfoShowList;
-    private ProgInfoShow progInfoShowSelected;
-
     private ProgInfoShow progInfoShowNotForm;
     private List<ProgInfoShow> progInfoShowNotFormList;
     private ProgInfoShow progInfoShowNotFormSelected;
@@ -268,18 +266,18 @@ public class SubcttStlPInfoAction {
         }
     }
 
-    public void selectRecordAction(String strPowerTypePara,String strSubmitTypePara){
+    public void selectRecordAction(String strPowerTypePara,String strSubmitTypePara,ProgInfoShow progInfoShowPara){
         try {
             strSubmitType=strSubmitTypePara;
             strApprovedFlag="true";
-            String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowSelected.getStatusFlag());
-            String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowSelected.getStatusFlag());
+            String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowPara.getStatusFlag());
+            String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getStatusFlag());
             if(strPowerTypePara.equals("Approve")){
                 if(strStatusFlagCode.equals(ESEnumStatusFlag .STATUS_FLAG4.getCode())){
                     MessageUtil.addInfo("本期数据已经"+strStatusFlagName+"，您不能再进行编辑操作！");
                     return;
                 }
-                progInfoShow =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
+                progInfoShow =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                 //编辑画面，设置只读项
                 styleModel.setDisabled_Flag("true");
                 if(ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(progInfoShow.getStatusFlag())){
@@ -294,7 +292,7 @@ public class SubcttStlPInfoAction {
                 }
                 //编辑画面，设置只读项
                 styleModel.setDisabled_Flag("true");
-                progInfoShow =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
+                progInfoShow =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
@@ -365,14 +363,6 @@ public class SubcttStlPInfoAction {
 
     public void setProgInfoShow(ProgInfoShow progInfoShow) {
         this.progInfoShow = progInfoShow;
-    }
-
-    public ProgInfoShow getProgInfoShowSelected() {
-        return progInfoShowSelected;
-    }
-
-    public void setProgInfoShowSelected(ProgInfoShow progInfoShowSelected) {
-        this.progInfoShowSelected = progInfoShowSelected;
     }
 
     public ProgInfoShow getProgInfoShowNotForm() {

@@ -309,40 +309,43 @@ public interface QueryMapper {
                                                      @Param("strPeriodNo") String strPeriodNo);
 
     @Select("select PKID as pkid, "+
-            " SUBSTL_TYPE as substlType,"+
-            " ID as id,"+
-            " SUBCTT_PKID as subcttPkid,"+
-            " SUBCTT_NAME as subcttName,"+
-            " PERIOD_NO as periodNo,"+
-            " SUBCTT_ITEM_PKID as subcttItemPkid,"+
-            " SUBCTT_ITEM_NAME as subcttItemName,"+
-            " UNIT as unit,"+
-            " UNIT_PRICE as unitPrice,"+
-            " THIS_STAGE_QTY as thisStageQty,"+
-            " THIS_STAGE_AMT as thisStageAmt,"+
-            " ADD_UP_QTY as addUpQty,"+
-            " ADD_UP_AMT as addUpAmt,"+
-            " ARCHIVED_FLAG as archivedFlag,"+
-            " ORIGIN_FLAG as originFlag,"+
-            " CREATED_BY as createdBy,"+
-            " CREATED_BY_NAME as createdByName,"+
-            " CREATED_DATE as createdDate,"+
-            " LAST_UPD_BY as lastUpdBy,"+
-            " LAST_UPD_BY_NAME as lastUpdByName,"+
-            " LAST_UPD_DATE as lastUpdDate,"+
-            " REC_VERSION as recVersion,"+
-            " REMARK as remark,"+
-            " CONTRACT_QUANTITY as contractQuantity,"+
-            " CONTRACT_AMOUNT as contractAmount,"+
-            " STRNO as strno,"+
-            " ROW_NO as rowNo"+
-            " from ES_ITEM_STL_SUBCTT_ENG_P" +
-            " where add_up_amt is not null or subctt_item_pkid like '%stl%'" +
-            " and subctt_pkid=#{strSubcttPkid}"+
-            " and period_no=#{strPeriodNo}"+
+            "      SUBSTL_TYPE as substlType,"+
+            "      ID as id,"+
+            "      SUBCTT_PKID as subcttPkid,"+
+            "      SUBCTT_NAME as subcttName,"+
+            "      PERIOD_NO as periodNo,"+
+            "      SUBCTT_ITEM_PKID as subcttItemPkid,"+
+            "      SUBCTT_ITEM_NAME as subcttItemName,"+
+            "      UNIT as unit,"+
+            "      UNIT_PRICE as unitPrice,"+
+            "      THIS_STAGE_QTY as thisStageQty,"+
+            "      THIS_STAGE_AMT as thisStageAmt,"+
+            "      ADD_UP_QTY as addUpQty,"+
+            "      ADD_UP_AMT as addUpAmt,"+
+            "      ARCHIVED_FLAG as archivedFlag,"+
+            "      ORIGIN_FLAG as originFlag,"+
+            "      CREATED_BY as createdBy,"+
+            "      CREATED_BY_NAME as createdByName,"+
+            "      CREATED_DATE as createdDate,"+
+            "      LAST_UPD_BY as lastUpdBy,"+
+            "      LAST_UPD_BY_NAME as lastUpdByName,"+
+            "      LAST_UPD_DATE as lastUpdDate,"+
+            "      REC_VERSION as recVersion,"+
+            "      REMARK as remark,"+
+            "      CONTRACT_QUANTITY as contractQuantity,"+
+            "      CONTRACT_AMOUNT as contractAmount,"+
+            "      STRNO as strno,"+
+            "      ROW_NO as rowNo"+
+            " from " +
+            "      ES_ITEM_STL_SUBCTT_ENG_P" +
+            " where " +
+            "      (add_up_amt is not null or subctt_item_pkid like '%stl%')" +
+            " and " +
+            "      subctt_pkid=#{strSubcttPkid}"+
+            " and " +
+            "      period_no=#{strPeriodNo}"+
             " order by row_no")
     List<EsItemStlSubcttEngP> selectRecordsForAccount(@Param("strSubcttPkid") String strSubcttPkid,
-                            @Param("strPeriodNo") String strPeriodNo);
-
+                                                      @Param("strPeriodNo") String strPeriodNo);
 
 }

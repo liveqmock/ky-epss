@@ -113,7 +113,8 @@ public class SubcttStlPItemAction {
                 strAccountBtnRendered = "true";
             }
             /*表内容设定,查询和记账*/
-            progSubstlItemShowListForAccountAndQry = esItemStlSubcttEngPService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
+            progSubstlItemShowListForAccountAndQry =
+                    esItemStlSubcttEngPService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
             return;
         }
         if ("Approve".equals(strSubmitType)) {
@@ -131,7 +132,8 @@ public class SubcttStlPItemAction {
             if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPower.getStatusFlag())) {
                 List<ProgSubstlItemShow> records0 = new ArrayList<ProgSubstlItemShow>();
                 List<ProgSubstlItemShow> records1 = new ArrayList<ProgSubstlItemShow>();
-                List<EsItemStlSubcttEngP> progSubstlItemShowListForApprove = esItemStlSubcttEngPService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
+                List<EsItemStlSubcttEngP> progSubstlItemShowListForApprove =
+                        esItemStlSubcttEngPService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
                 for (EsItemStlSubcttEngP esItemStlSubcttEngP : progSubstlItemShowListForApprove) {
                     ProgSubstlItemShow progSubstlItemShowTemp = esItemStlSubcttEngPService.fromModelToShow(esItemStlSubcttEngP);
                     if (ESEnum.ITEMTYPE3.getCode().equals(progSubstlItemShowTemp.getEngPMng_SubStlType())){
