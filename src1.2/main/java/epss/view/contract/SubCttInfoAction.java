@@ -69,7 +69,6 @@ public class SubCttInfoAction {
     private CttInfoShow cttInfoShowUpd;
     private CttInfoShow cttInfoShowDel;
     private List<CttInfoShow> cttInfoShowList;
-    private CttInfoShow cttInfoShowSelected;
 
     private String strSubmitType;
     private String rowSelectedFlag;
@@ -224,18 +223,19 @@ public class SubCttInfoAction {
     }
 
     public void selectRecordAction(String strPowerTypePara,
-                                   String strSubmitTypePara) {
+                                     String strSubmitTypePara,
+                                     CttInfoShow cttInfoShowPara) {
         try {
             strSubmitType = strSubmitTypePara;
             esFlowControl.setStatusFlagListByPower(strPowerTypePara);
-            cttInfoShowSelected.setCreatedByName(esCommon.getOperNameByOperId(cttInfoShowSelected.getCreatedBy()));
-            cttInfoShowSelected.setLastUpdByName(esCommon.getOperNameByOperId(cttInfoShowSelected.getLastUpdBy()));
+            cttInfoShowPara.setCreatedByName(esCommon.getOperNameByOperId(cttInfoShowPara.getCreatedBy()));
+            cttInfoShowPara.setLastUpdByName(esCommon.getOperNameByOperId(cttInfoShowPara.getLastUpdBy()));
             // 查询
             if (strPowerTypePara.equals("Qry")) {
-                cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
+                cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
             } else if (strPowerTypePara.equals("Mng")) { // 维护
                 if (strSubmitTypePara.equals("Sel")) {
-                    cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
+                    cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                     rowSelectedFlag = "true";
                 } else if (strSubmitTypePara.equals("Add")) {
                     cttInfoShowAdd = new CttInfoShow();
@@ -243,15 +243,15 @@ public class SubCttInfoAction {
                     rowSelectedFlag = "false";
                 } else {
                     if (strSubmitTypePara.equals("Upd")) {
-                        cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
+                        cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                         rowSelectedFlag = "false";
                     } else if (strSubmitTypePara.equals("Del")) {
-                        cttInfoShowDel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
+                        cttInfoShowDel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                         rowSelectedFlag = "false";
                     }
                 }
             } else {
-                cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
+                cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                 rowSelectedFlag = "true";
                 //根据流程环节,显示不同的退回的状态
                 esFlowControl.setStatusFlagListByPower(strPowerTypePara);
@@ -438,6 +438,7 @@ public class SubCttInfoAction {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             } else {
                 addRecordAction(cttInfoShowAdd);
+                resetActionForAdd();
             }
         } else if (strSubmitType.equals("Upd")) {
             updRecordAction(cttInfoShowUpd);
@@ -489,6 +490,125 @@ public class SubCttInfoAction {
             MessageUtil.addError(e.getMessage());
         }
     }
+    //附件相关方法
+    public void attachmentStrToList(){
+
+        String strAttachmentTemp=cttInfoShowAttachment.getAttachment();
+        if(strAttachmentTemp!=null){
+            attachmentList.clear();
+            if (!StringUtils.isEmpty(strAttachmentTemp)) {
+                String strTemps[] = strAttachmentTemp.split(";");
+                for (int i = 0; i < strTemps.length; i++) {
+                    AttachmentModel attachmentModelTemp = new AttachmentModel(i + "", strTemps[i], strTemps[i]);
+                    attachmentList.add(attachmentModelTemp);
+                }
+            }
+        }else{
+            attachmentList.clear();
+        }
+    }
+
+    public void onViewAttachment(AttachmentModel attachmentModelPara) {
+        image.setValue("/upload/" + attachmentModelPara.getCOLUMN_NAME());
+    }
+
+    public void delAttachmentRecordAction(AttachmentModel attachmentModelPara){
+        try {
+            File deletingFile = new File(attachmentModelPara.getCOLUMN_PATH());
+            deletingFile.delete();
+            attachmentList.remove(attachmentModelPara) ;
+            StringBuffer sbTemp = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sbTemp.append(item.getCOLUMN_PATH() + ";");
+            }
+            cttInfoShowAttachment.setAttachment(sbTemp.toString());
+            updRecordAction(cttInfoShowAttachment);
+        } catch (Exception e) {
+            logger.error("删除数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+
+    public void download(String strAttachment){
+        try{
+            if(StringUtils .isEmpty(strAttachment) ){
+                MessageUtil.addError("路径为空，无法下载！");
+                logger.error("路径为空，无法下载！");
+            }
+            else {
+                String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload")+"/"+strAttachment;
+                File file = new File(fileName);
+                InputStream stream = new FileInputStream(fileName);
+                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), new String(strAttachment.getBytes("gbk"),"iso8859-1"));
+            }
+        } catch (Exception e) {
+            logger.error("下载文件失败", e);
+            MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
+        }
+    }
+
+    public void upload(FileUploadEvent event) {
+        BufferedInputStream inStream = null;
+        FileOutputStream fileOutputStream = null;
+        UploadedFile uploadedFile = event.getFile();
+        AttachmentModel attachmentModel = new AttachmentModel();
+        if (uploadedFile != null) {
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload");
+            File superFile = new File(path);
+            if (!superFile.exists()) {
+                superFile.mkdirs();
+            }
+            File descFile = new File(superFile, uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_ID(ToolUtil.getIntIgnoreNull(attachmentList.size()) + "");
+            attachmentModel.setCOLUMN_NAME(uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_PATH(descFile.getAbsolutePath());
+            for (AttachmentModel item : attachmentList){
+                if (item.getCOLUMN_NAME().equals(attachmentModel.getCOLUMN_NAME())) {
+                    MessageUtil.addError("附件已存在！");
+                    return;
+                }
+            }
+
+            attachmentList.add(attachmentModel);
+
+            StringBuffer sb = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sb.append(item.getCOLUMN_NAME() + ";");
+            }
+            if(sb.length()>4000){
+                MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
+                return;
+            }
+            cttInfoShowAttachment.setAttachment(sb.toString());
+            updRecordAction(cttInfoShowAttachment);
+            try {
+                inStream = new BufferedInputStream(uploadedFile.getInputstream());
+                fileOutputStream = new FileOutputStream(descFile);
+                byte[] buf = new byte[1024];
+                int num;
+                while ((num = inStream.read(buf)) != -1) {
+                    fileOutputStream.write(buf, 0, num);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (inStream != null) {
+                    try {
+                        inStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
 
     /*智能字段 Start*/
     public EsCttInfoService getEsCttInfoService() {
@@ -529,14 +649,6 @@ public class SubCttInfoAction {
 
     public void setEsFlowControl(EsFlowControl esFlowControl) {
         this.esFlowControl = esFlowControl;
-    }
-
-    public CttInfoShow getCttInfoShowSelected() {
-        return cttInfoShowSelected;
-    }
-
-    public void setCttInfoShowSelected(CttInfoShow cttInfoShowSelected) {
-        this.cttInfoShowSelected = cttInfoShowSelected;
     }
 
     public String getStrNotPassToStatus() {
@@ -635,5 +747,29 @@ public class SubCttInfoAction {
 
     public void setStrWarnMsg(String strWarnMsg) {
         this.strWarnMsg = strWarnMsg;
+    }
+
+    public CttInfoShow getCttInfoShowAttachment() {
+        return cttInfoShowAttachment;
+    }
+
+    public List<AttachmentModel> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public HtmlGraphicImage getImage() {
+        return image;
+    }
+
+    public StreamedContent getDownloadFile() {
+        return downloadFile;
+    }
+
+    public UploadedFile getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setImage(HtmlGraphicImage image) {
+        this.image = image;
     }
 }

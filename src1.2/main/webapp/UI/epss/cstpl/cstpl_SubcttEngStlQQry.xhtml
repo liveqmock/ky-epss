@@ -60,16 +60,6 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <p:contextMenu for="pdt">
-                <p:menuitem value="浏览" icon="ui-icon-search"
-                            actionListener="#{cstplInfoAction.selectRecordAction('Qry','')}"
-                            update="pgView,pdt,msgs"
-                            onclick="PF('wVDlgView').show()">
-                </p:menuitem>
-                <p:menuitem value="工程数量结算" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitCstplList.selection)">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{cstplInfoAction.cttInfoShowList}"
                          var="record"
@@ -86,6 +76,18 @@
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitCstplList"
                          scrollable="true">
+                <p:column headerText="操作" style="width:45px" >
+                    <p:commandButton   icon="ui-icon-search"
+                                       style="height:20px;width:20px"
+                                       actionListener="#{cstplInfoAction.selectRecordAction('Qry','',record)}"
+                                       update=":form:pdt,:form:pgView,:form:msgs"
+                                       onclick="PF('wVDlgView').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-triangle-1-e"
+                                      style="height:20px;width:20px"
+                                      oncomplete="actSelect('#{record.pkid}')">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>

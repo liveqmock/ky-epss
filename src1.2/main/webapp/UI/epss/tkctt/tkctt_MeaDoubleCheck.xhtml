@@ -79,21 +79,6 @@
                     <f:selectItems value="#{esFlowControl.statusFlagList}"/>
                 </p:selectOneMenu>
             </h:panelGrid>
-            <!--列表维护-->
-            <p:contextMenu for="pdt">
-                <p:menuitem value="浏览" icon="ui-icon-search"
-                            actionListener="#{tkcttStlMeaInfoAction.selectRecordAction('Qry','')}"
-                            update="pgView,pdt,msgs,pgCondition"
-                            onclick="PF('wVDlgView').show()">
-                </p:menuitem>
-                <p:menuitem value="选择" icon="ui-icon-plus"
-                            actionListener="#{tkcttStlMeaInfoAction.selectRecordAction('DoubleCheck','')}"
-                            update="pdt,msgs,pgCondition">
-                </p:menuitem>
-                <p:menuitem value="详细内容" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitSubcttList.selection)">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{tkcttStlMeaInfoAction.progInfoShowList}"
                          var="record"
@@ -111,6 +96,18 @@
                          widgetVar="DtInitSubcttList"
                          rowStyleClass="#{record.statusFlag eq '1'? null :'rowDoneStyle'}"
                          scrollable="true">
+                <p:column headerText="操作" style="width:61px">
+                    <p:commandButton  icon="ui-icon-search"
+                                      style="height:20px;width:20px"
+                                      action="#{tkCttInfoAction.selectRecordAction('Qry','',record)}"
+                                      update="pdt,:form:pgView,:form:msgs"
+                                      onclick="PF('wVDlgView').show()">
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-triangle-1-e"
+                                     style="height:20px;width:20px"
+                                     onclick="actSelect('#{record.pkid}')">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>

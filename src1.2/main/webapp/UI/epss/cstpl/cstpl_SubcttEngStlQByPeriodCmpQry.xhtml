@@ -57,11 +57,6 @@
                     </h:panelGrid>
                  </h:panelGrid>
             </p:panel>
-            <p:contextMenu for="pdt">
-                <p:menuitem value="分包阶段工程量_查询" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitCstplList.selection)">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{cstplInfoAction.cttInfoShowList}"
                          var="record"
@@ -77,6 +72,12 @@
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitCstplList"
                          scrollable="true">
+                <p:column headerText="操作" style="width:45px" >
+                    <p:commandButton  icon="ui-icon-triangle-1-e"
+                                      style="height:20px;width:20px"
+                                      oncomplete="actSelect('#{record.pkid}')">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="Pkid" rendered="false">
                     <h:outputText id="tetid" value="#{record.pkid}"/>
                 </p:column>
