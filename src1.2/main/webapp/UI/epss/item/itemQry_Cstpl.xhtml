@@ -21,6 +21,22 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
+            <h:panelGrid id="pgCondition" columns="4"
+                         rendered="#{cstplItemAction.strFlowType eq 'Qry'? 'false':'true'}">
+                <p:commandButton id="endInputBtn" value="通过"
+                                 action="#{cstplItemAction.onClickForPowerAction('Pass')}"
+                                 rendered='#{cstplItemAction.strMngNotFinishFlag}'
+                                 update="msgs,pgCondition">
+                </p:commandButton>
+                <p:outputLabel value="未过至状态:"/>
+                <p:selectOneMenu id="statusFlag" value="#{cstplItemAction.strNotPassToStatus}">
+                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
+                </p:selectOneMenu>
+                <p:commandButton id="startInputBtn" value="未过"
+                                 action="#{cstplItemAction.onClickForPowerAction('Fail')}"
+                                 update="msgs,pgCondition">
+                </p:commandButton>
+            </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{cstplItemAction.cstplItemShowList}"
                          var="record"

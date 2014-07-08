@@ -21,13 +21,25 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
-            <p:commandButton id="addBtn"
-                             value="增加" icon="ui-icon-plus"
-                             rendered='#{cstplItemAction.strMngNotFinishFlag}'
-                             action="#{cstplItemAction.resetActionForAdd()}"
-                             update="pgViewForAdd,pdt,msgs"
-                             onclick="PF('wVDlgViewForAdd').show()">
-            </p:commandButton>
+            <h:panelGrid id="pgCondition" columns="3">
+                <p:commandButton id="addBtn"
+                                 value="增加" icon="ui-icon-plus"
+                                 rendered='#{cstplItemAction.strMngNotFinishFlag}'
+                                 action="#{cstplItemAction.resetActionForAdd()}"
+                                 update="pgViewForAdd,pdt,msgs"
+                                 onclick="PF('wVDlgViewForAdd').show()">
+                </p:commandButton>
+                <p:commandButton id="endInputBtn" value="录入完成"
+                                 action="#{cstplItemAction.onClickForPowerAction('Pass')}"
+                                 rendered='#{cstplItemAction.strMngNotFinishFlag}'
+                                 update="msgs,pgCondition,pdt">
+                </p:commandButton>
+                <p:commandButton id="startInputBtn" value="录入未完"
+                                 action="#{cstplItemAction.onClickForPowerAction('Fail')}"
+                                 rendered='#{!cstplItemAction.strMngNotFinishFlag}'
+                                 update="msgs,pgCondition,pdt">
+                </p:commandButton>
+            </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{cstplItemAction.cstplItemShowList}"
                          var="record"

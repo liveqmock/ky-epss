@@ -533,9 +533,9 @@ public class TkcttItemAction {
         try {
             strPowerTypePara=strFlowType+strPowerTypePara;
             CttInfoShow cttInfoShowSel = new CttInfoShow();
-            cttInfoShowSel.setCttType(ESEnum.ITEMTYPE0.getCode());
+            cttInfoShowSel.setCttType(strBelongToType);
             cttInfoShowSel.setPkid(strBelongToPkid);
-            cttInfoShowSel.setPowerType(ESEnum.ITEMTYPE0.getCode());
+            cttInfoShowSel.setPowerType(strBelongToType);
             cttInfoShowSel.setPowerPkid(strBelongToPkid);
             cttInfoShowSel.setPeriodNo("NULL");
 
