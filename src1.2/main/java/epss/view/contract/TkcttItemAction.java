@@ -464,11 +464,7 @@ public class TkcttItemAction {
                     checkForUpd = true;
                 }
                 else if(strSubmitType .equals("Add")) {
-                    if(ToolUtil.getStrIgnoreNull(cttItemShowAdd.getStrNo()).length()==0){
-                        MessageUtil.addError("请确认选择的行，合计行不可编辑！");
-                        return;
-                    }
-                    EsCttItem esCttItemTemp=esCttItemService.fromModelShowToModel(cttItemShowAdd);
+                     EsCttItem esCttItemTemp=esCttItemService.fromModelShowToModel(cttItemShowAdd);
                     if (esCttItemService.isExistSameRecordInDb(esCttItemTemp)){
                         MessageUtil.addInfo("该编号对应记录已存在，请重新录入。");
                         return;

@@ -51,14 +51,11 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid id="pgCondition" columns="1">
-                <p:commandButton id="addBtn"
-                                 value="增加" icon="ui-icon-plus"
-                                 action="#{esInitCustAction.resetActionForAdd()}"
-                                 update="pdt,msgs,pgCondition,pgViewForAdd"
-                                 onclick="PF('wVDlgViewForAdd').show()"/>
-            </h:panelGrid>
-
+            <p:commandButton id="addBtn"
+                             value="增加" icon="ui-icon-plus"
+                             action="#{esInitCustAction.resetActionForAdd()}"
+                             update="pdt,msgs,pgViewForAdd"
+                             onclick="PF('wVDlgViewForAdd').show()"/>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{esInitCustAction.signPartShowList}"
                          var="record"
@@ -75,14 +72,16 @@
                          scrollable="true">
                 <p:column headerText="操作" style="width:62px">
                     <p:commandButton  icon="ui-icon-pencil"
-                                action="#{esInitCustAction.selectRecordAction('Upd',record)}"
-                                update="pdt,:form:pgViewForUpd,:form:msgs"
-                                onclick="PF('wVDlgViewForUpd').show()">
+                                      style="height:20px;width:20px"
+                                      action="#{esInitCustAction.selectRecordAction('Upd',record)}"
+                                      update="pdt,:form:pgViewForUpd,:form:msgs"
+                                      onclick="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
                     <p:commandButton  icon="ui-icon-trash"
-                                action="#{esInitCustAction.selectRecordAction('Del',record)}"
-                                update="pdt,:form:pgViewForDel,:form:msgs"
-                                onclick="PF('wVDlgViewForDel').show()">
+                                      style="height:20px;width:20px"
+                                      action="#{esInitCustAction.selectRecordAction('Del',record)}"
+                                      update="pdt,:form:pgViewForDel,:form:msgs"
+                                      onclick="PF('wVDlgViewForDel').show()">
                     </p:commandButton>
                 </p:column>
                 <p:column headerText="序号" style="width:30px">
