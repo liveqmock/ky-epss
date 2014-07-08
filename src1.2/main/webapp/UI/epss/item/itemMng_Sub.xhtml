@@ -21,13 +21,27 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
-            <p:commandButton id="addBtn"
-                             value="增加" icon="ui-icon-plus"
-                             rendered='#{subcttItemAction.strMngNotFinishFlag}'
-                             action="#{subcttItemAction.resetActionForAdd()}"
-                             update="pgViewForAdd,pdt,msgs"
-                             onclick="PF('wVDlgViewForAdd').show()">
-            </p:commandButton>
+            <h:panelGrid id="pgCondition" columns="3">
+                <p:commandButton id="addBtn"
+                                 value="增加" icon="ui-icon-plus"
+                                 rendered='#{subcttItemAction.strPassFlag}'
+                                 action="#{subcttItemAction.resetActionForAdd()}"
+                                 update="pgViewForAdd,pdt,msgs"
+                                 onclick="PF('wVDlgViewForAdd').show()">
+                </p:commandButton>
+                <p:commandButton id="endInputBtn" value="录入完成"
+                                 action="#{subcttItemAction.onClickForPowerAction('Pass')}"
+                                 update="pgCondition,pdt,msgs"
+                                 rendered="#{subcttItemAction.strPassFlag}"
+                                 oncomplete="window.close()">
+                </p:commandButton>
+                <p:commandButton id="startInputBtn" value="录入未完"
+                                 action="#{subcttItemAction.onClickForPowerAction('Fail')}"
+                                 update="pgCondition,pdt,msgs"
+                                 rendered="#{!subcttItemAction.strPassFlag}"
+                                 oncomplete="window.close()">
+                </p:commandButton>
+            </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
                      value="#{subcttItemAction.cttItemShowList}"
                      var="record"
@@ -43,7 +57,7 @@
                      emptyMessage="数据记录为空..."
                      rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}"
                      scrollable="true">
-                <p:column headerText="操作" style="width:61px">
+                <p:column headerText="操作" style="width:91px">
                     <p:commandButton  icon="ui-icon-pencil"
                                      actionListener="#{subcttItemAction.selectRecordAction('Upd',record)}"
                                      update=":form:pdt,:form:pgViewForUpd,:form:msgs"
@@ -227,7 +241,7 @@
                                      value="#{subcttItemAction.cttItemShowAdd.note}"
                                      style="text-align:left;"/>
                     </h:panelGrid>
-                    <h:panelGrid id="pgOperBtnForAdd" columns="4" rendered='#{subcttItemAction.strMngNotFinishFlag}'>
+                    <h:panelGrid id="pgOperBtnForAdd" columns="4">
                         <p:commandButton id="submitBtnForAdd"
                                          value="提交（增加）"
                                          action="#{subcttItemAction.submitThisRecordAction}"
@@ -356,7 +370,7 @@
                                      readonly="true"
                                      style="background-color:gainsboro"/>
                     </h:panelGrid>
-                    <h:panelGrid id="pgOperBtnForUpd" columns="4" rendered='#{subcttItemAction.strMngNotFinishFlag}'>
+                    <h:panelGrid id="pgOperBtnForUpd" columns="4">
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
                                          action="#{subcttItemAction.submitThisRecordAction}"

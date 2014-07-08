@@ -85,7 +85,7 @@
                     <p:commandButton  icon="ui-icon-document"
                                       style="height:20px;width:20px"
                                       action="#{cstplInfoAction.attachmentStrToList()}"
-                                      update="pdt,:form:pgAttachmentView,:form:msgs"
+                                      update="pdt,:form:msgs"
                                       onclick="PF('wvAttachmentList').show()">
                         <f:setPropertyActionListener value="#{record}" target="#{cstplInfoAction.cttInfoShowAttachment}"/>
                     </p:commandButton>

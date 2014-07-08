@@ -68,7 +68,7 @@ public class TkcttItemAction {
     private StyleModel styleModelNo;
     private StyleModel styleModel;
     //显示的控制
-    private String strMngNotFinishFlag;
+    private String strPassFlag;
     private String strNotPassToStatus;
     private String strFlowType;
     /*控制控件在画面上的可用与现实End*/
@@ -82,23 +82,13 @@ public class TkcttItemAction {
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
         }
-        if (!("Qry".equals(strFlowType))) {
-            List<EsInitPower> esInitPowerList =
-                    esInitPowerService.selectListByModel(strBelongToType, strBelongToPkid, "NULL");
-            strMngNotFinishFlag = "true";
-            if (esInitPowerList.size() > 0) {
-                if ("Mng".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
-                    strMngNotFinishFlag = "false";
-                }
-                if ("Check".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
-                    strMngNotFinishFlag = "false";
-                }
-                if ("DoubleCheck".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
-                    strMngNotFinishFlag = "false";
-                }
-                if ("Approve".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
-                    strMngNotFinishFlag = "false";
-                }
+
+        List<EsInitPower> esInitPowerList =
+                esInitPowerService.selectListByModel(strBelongToType, strBelongToPkid, "NULL");
+        strPassFlag = "true";
+        if (esInitPowerList.size() > 0) {
+            if ("Mng".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
+                strPassFlag = "false";
             }
         }
         resetAction();
@@ -559,14 +549,12 @@ public class TkcttItemAction {
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
-                    strMngNotFinishFlag="false";
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
                     esFlowControl.mngNotFinishAction(
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
-                    strMngNotFinishFlag="true";
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }// 审核
@@ -577,7 +565,6 @@ public class TkcttItemAction {
                     // 原因：审核通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
                     esInitPowerService.updateRecordByCtt(cttInfoShowSel);
-                    strMngNotFinishFlag="true";
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
                     // 状态标志：初始
@@ -585,7 +572,6 @@ public class TkcttItemAction {
                     // 原因：审核未过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
                     esInitPowerService.updateRecordByCtt(cttInfoShowSel);
-                    strMngNotFinishFlag="false";
                     MessageUtil.addInfo("数据审核未过！");
                 }
             } // 复核
@@ -596,7 +582,6 @@ public class TkcttItemAction {
                     // 原因：复核通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
                     esInitPowerService.updateRecordByCtt(cttInfoShowSel);
-                    strMngNotFinishFlag="true";
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
@@ -604,7 +589,6 @@ public class TkcttItemAction {
                     // 原因：复核未过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
                     esInitPowerService.updateRecordByCtt(cttInfoShowSel);
-                    strMngNotFinishFlag="false";
                     MessageUtil.addInfo("数据复核未过！");
                 }
             }// 批准
@@ -615,7 +599,6 @@ public class TkcttItemAction {
                     // 原因：批准通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
                     esInitPowerService.updateRecordByCtt(cttInfoShowSel);
-                    strMngNotFinishFlag="true";
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerTypePara.equals("ApproveFail")) {
                     // 检查是否被使用
@@ -648,7 +631,6 @@ public class TkcttItemAction {
                             MessageUtil.addInfo("数据批准未过！");
                         }
                     }
-                    strMngNotFinishFlag="false";
                 }
             }
         } catch (Exception e) {
@@ -713,8 +695,9 @@ public class TkcttItemAction {
     public StyleModel getStyleModel() {
         return styleModel;
     }
-    public String getStrMngNotFinishFlag() {
-        return strMngNotFinishFlag;
+
+    public String getStrPassFlag() {
+        return strPassFlag;
     }
 
     public CttItemShow getCttItemShowAdd() {

@@ -24,8 +24,8 @@
             <h:panelGrid id="pgCondition" columns="4">
                 <p:commandButton id="endInputBtn" value="通过"
                                  action="#{tkcttItemAction.onClickForPowerAction('Pass')}"
-                                 rendered='#{tkcttItemAction.strMngNotFinishFlag}'
-                                 update="msgs,pgCondition">
+                                 update="msgs,pgCondition"
+                                 oncomplete="window.close()">
                 </p:commandButton>
                 <p:outputLabel value="未过至状态:"/>
                 <p:selectOneMenu id="statusFlag" value="#{tkcttItemAction.strNotPassToStatus}">
@@ -33,7 +33,8 @@
                 </p:selectOneMenu>
                 <p:commandButton id="startInputBtn" value="未过"
                                  action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
-                                 update="msgs,pgCondition">
+                                 update="msgs,pgCondition"
+                                 oncomplete="window.close()">
                 </p:commandButton>
             </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"

@@ -24,20 +24,22 @@
             <h:panelGrid id="pgCondition" columns="3">
                 <p:commandButton id="addBtn"
                                  value="增加" icon="ui-icon-plus"
-                                 rendered='#{tkcttItemAction.strMngNotFinishFlag}'
+                                 rendered='#{tkcttItemAction.strPassFlag}'
                                  action="#{tkcttItemAction.resetActionForAdd()}"
                                  update="pgViewForAdd,pdt,msgs"
                                  onclick="PF('wVDlgViewForAdd').show()">
                 </p:commandButton>
                 <p:commandButton id="endInputBtn" value="录入完成"
                                  action="#{tkcttItemAction.onClickForPowerAction('Pass')}"
-                                 rendered='#{tkcttItemAction.strMngNotFinishFlag}'
-                                 update="msgs,pgCondition,pdt">
+                                 rendered='#{tkcttItemAction.strPassFlag}'
+                                 update="msgs,pgCondition,pdt"
+                                 oncomplete="window.close()">
                 </p:commandButton>
                 <p:commandButton id="startInputBtn" value="录入未完"
                                  action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
-                                 rendered='#{!tkcttItemAction.strMngNotFinishFlag}'
-                                 update="msgs,pgCondition,pdt">
+                                 rendered='#{!tkcttItemAction.strPassFlag}'
+                                 update="msgs,pgCondition,pdt"
+                                 oncomplete="window.close()">
                 </p:commandButton>
             </h:panelGrid>
             <p:dataTable id="pdt"
