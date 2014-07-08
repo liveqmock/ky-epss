@@ -32,12 +32,17 @@
                      value="#{subcttItemAction.cttItemShowList}"
                      var="record"
                      rowKey="#{record.pkid}"
-                     selection="#{subcttItemAction.cttItemShowSelected}"
                      selectionMode="single"
+                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     paginator="true"
+                     paginatorPosition="bottom"
+                     rows="20"
+                     rowsPerPageTemplate="500,200,100,50,30,20,10"
                      rowIndexVar="row"
                      emptyMessage="数据记录为空..."
                      rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}"
-                    scrollable="true">
+                     scrollable="true">
                 <p:column headerText="操作" style="width:61px">
                     <p:commandButton  icon="ui-icon-pencil"
                                      actionListener="#{subcttItemAction.selectRecordAction('Upd',record)}"

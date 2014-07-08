@@ -26,18 +26,18 @@
                                  value="增加" icon="ui-icon-plus"
                                  rendered='#{tkcttItemAction.strMngNotFinishFlag}'
                                  action="#{tkcttItemAction.resetActionForAdd()}"
-                                 update="pgViewForAdd,ptt,msgs"
+                                 update="pgViewForAdd,pdt,msgs"
                                  onclick="PF('wVDlgViewForAdd').show()">
                 </p:commandButton>
                 <p:commandButton id="endInputBtn" value="录入完成"
                                  action="#{tkcttItemAction.onClickForPowerAction('Pass')}"
                                  rendered='#{tkcttItemAction.strMngNotFinishFlag}'
-                                 update="msgs,pgCondition,ptt">
+                                 update="msgs,pgCondition,pdt">
                 </p:commandButton>
                 <p:commandButton id="startInputBtn" value="录入未完"
                                  action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
                                  rendered='#{!tkcttItemAction.strMngNotFinishFlag}'
-                                 update="msgs,pgCondition,ptt">
+                                 update="msgs,pgCondition,pdt">
                 </p:commandButton>
                 <p:selectOneMenu id="statusFlag" value="#{tkcttItemAction.strNotPassToStatus}"
                         rendered="#{tkcttItemAction.strFlowType eq 'Mng'?'false':
@@ -45,11 +45,17 @@
                     <f:selectItems value="#{esFlowControl.statusFlagList}"/>
                 </p:selectOneMenu>
             </h:panelGrid>
-
-            <p:dataTable id="ptt"
+            <p:dataTable id="pdt"
                      value="#{tkcttItemAction.cttItemShowList}"
                      var="record"
                      rowKey="#{record.pkid}"
+                     selectionMode="single"
+                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     paginator="true"
+                     paginatorPosition="bottom"
+                     rows="20"
+                     rowsPerPageTemplate="500,200,100,50,30,20,10"
                      rowIndexVar="row"
                      emptyMessage="数据记录为空..."
                      rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle':
@@ -58,13 +64,13 @@
                     <p:commandButton icon="ui-icon-pencil"
                                      style="height:20px;width:20px"
                                      action="#{tkcttItemAction.selectRecordAction('Upd',record)}"
-                                     update="ptt,:form:pgViewForUpd,:form:msgs"
+                                     update="pdt,:form:pgViewForUpd,:form:msgs"
                                      onclick="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-trash"
                                      style="height:20px;width:20px"
                                      action="#{tkcttItemAction.selectRecordAction('Del',record)}"
-                                     update="ptt,:form:pgViewForDel,:form:msgs"
+                                     update="pdt,:form:pgViewForDel,:form:msgs"
                                      onclick="PF('wVDlgViewForDel').show()">
                     </p:commandButton>
                 </p:column>
@@ -144,7 +150,7 @@
                         <p:commandButton id="submitBtnForAdd"
                                          value="提交（增加）"
                                          action="#{tkcttItemAction.submitThisRecordAction}"
-                                         update="pgViewForAdd,ptt,msgs">
+                                         update="pgViewForAdd,pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForAdd" value="重置"
                                          type="reset"
@@ -227,7 +233,7 @@
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
                              action="#{tkcttItemAction.submitThisRecordAction()}"
-                             update="pgViewForUpd,ptt,msgs"
+                             update="pgViewForUpd,pdt,msgs"
                              oncomplete="if(#{tkcttItemAction.checkForUpd})wVDlgViewForUpd.hide()">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForUpd" value="重置"
@@ -313,7 +319,7 @@
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
                              action="#{tkcttItemAction.submitThisRecordAction()}"
-                             update="pgViewForDel,ptt,msgs"
+                             update="pgViewForDel,pdt,msgs"
                              oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                     </h:panelGrid>

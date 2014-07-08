@@ -25,10 +25,10 @@
                              value="增加" icon="ui-icon-plus"
                              rendered='#{cstplItemAction.strMngNotFinishFlag}'
                              action="#{cstplItemAction.resetActionForAdd()}"
-                             update="pgViewForAdd,ptt,msgs"
+                             update="pgViewForAdd,pdt,msgs"
                              onclick="PF('wVDlgViewForAdd').show()">
             </p:commandButton>
-            <p:dataTable id="ptt" style="width:100%;"
+            <p:dataTable id="pdt" style="width:100%;"
                          value="#{cstplItemAction.cstplItemShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
@@ -47,19 +47,19 @@
                     <p:commandButton  icon="ui-icon-pencil"
                                 style="height:20px;width:20px"
                                 actionListener="#{cstplItemAction.selectRecordAction('Upd',record)}"
-                                update="ptt,:form:pgViewForUpd"
+                                update="pdt,:form:pgViewForUpd"
                                 oncomplete="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
                     <p:commandButton  icon="ui-icon-trash"
                                 style="height:20px;width:20px"
                                 actionListener="#{cstplItemAction.selectRecordAction('Del',record)}"
-                                update="ptt,:form:pgViewForDel"
+                                update="pdt,:form:pgViewForDel"
                                 oncomplete="PF('wVDlgViewForDel').show()">
                     </p:commandButton>
                     <p:commandButton  icon="ui-icon-copy"
                                 style="height:20px;width:20px"
                                 actionListener="#{cstplItemAction.selectRecordAction('From_tkctt_to_cstpl',record)}"
-                                update="ptt,:form:pgViewForUpd">
+                                update="pdt,:form:pgViewForUpd">
                     </p:commandButton>
                 </p:column>
                 <p:column style="width:30px" headerText="序号">
@@ -179,7 +179,7 @@
                         <p:commandButton id="submitBtnForAdd"
                                          value="提交（增加）"
                                          action="#{cstplItemAction.submitThisRecordAction()}"
-                                         update="pgViewForAdd,ptt,msgs">
+                                         update="pgViewForAdd,pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForAdd" value="重置"
                                          type="reset"
@@ -277,7 +277,7 @@
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
                                          action="#{cstplItemAction.submitThisRecordAction()}"
-                                         update="pgViewForUpd,ptt,msgs"
+                                         update="pgViewForUpd,pdt,msgs"
                                          onclick="wVDlgViewForUpd.hide()">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForUpd" value="重置"
@@ -379,7 +379,7 @@
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
                                          action="#{cstplItemAction.submitThisRecordAction()}"
-                                         update="pgViewForDel,ptt,msgs"
+                                         update="pgViewForDel,pdt,msgs"
                                          oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                     </h:panelGrid>

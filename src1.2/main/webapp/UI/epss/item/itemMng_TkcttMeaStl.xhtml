@@ -21,23 +21,10 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
-            <p:contextMenu id="pcm" for="ptt" rendered='#{tkcttStlMeaItemAction.strMngNotFinishFlag}'>
-                <p:menuitem value="更新" icon="ui-icon-pencil"
-                            actionListener="#{tkcttStlMeaItemAction.selectRecordAction('Upd')}"
-                            update="pgViewForUpd,msgs,ptt,pgOperBtnForUpd"
-			     onclick="PF('wVDlgViewForUpd').show()">
-                </p:menuitem>
-                <p:menuitem value="删除" icon="ui-icon-trash"
-                            actionListener="#{tkcttStlMeaItemAction.selectRecordAction('Del')}"
-                            update="pgViewForDel,msgs,ptt,pgOperBtnForDel"
-			     onclick="PF('wVDlgViewForDel').show()">
-                </p:menuitem>
-            </p:contextMenu>
-            <p:dataTable id="ptt" style="width:100%;"
+            <p:dataTable id="pdt" style="width:100%;"
                      value="#{tkcttStlMeaItemAction.progEstMeaItemShowList}"
                      var="record"
                      rowKey="#{record.tkctt_Pkid}"
-                     selection="#{tkcttStlMeaItemAction.progEstMeaItemShowSelected}"
                      selectionMode="single"
                      paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                      {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -49,6 +36,20 @@
                      emptyMessage="数据记录为空..."
                      rowStyleClass="#{record.tkctt_Unit eq null? 'rowDoneStyle':null}"
                      scrollable="true">
+            <p:column headerText="操作" style="width:91px" rendered='#{tkcttStlMeaItemAction.strMngNotFinishFlag}'>
+                <p:commandButton  icon="ui-icon-pencil"
+                                  style="height:20px;width:20px"
+                                  actionListener="#{tkcttStlMeaItemAction.selectRecordAction('Upd',record)}"
+                                  update="pdt,:form:pgViewForUpd"
+                                  oncomplete="PF('wVDlgViewForUpd').show()">
+                </p:commandButton>
+                <p:commandButton  icon="ui-icon-trash"
+                                  style="height:20px;width:20px"
+                                  actionListener="#{tkcttStlMeaItemAction.selectRecordAction('Del',record)}"
+                                  update="pdt,:form:pgViewForDel"
+                                  oncomplete="PF('wVDlgViewForDel').show()">
+                </p:commandButton>
+            </p:column>
             <p:column headerText="序号" style="width:30px">
                 <h:outputText value="#{row + 1}"/>
             </p:column>
@@ -190,7 +191,7 @@
                     <p:commandButton id="submitBtnForUpd"
                                      value="提交（更新）"
                                      action="#{tkcttStlMeaItemAction.submitThisRecordAction}"
-                                     update="pgViewForUpd,ptt,msgs">
+                                     update="pgViewForUpd,pdt,msgs">
                     </p:commandButton>
                     <p:commandButton id="resetBtnForUpd" value="重置"
                                      type="reset"
@@ -291,7 +292,7 @@
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
                                          action="#{tkcttStlMeaItemAction.submitThisRecordAction}"
-                                         update="pgViewForDel,ptt,msgs">
+                                         update="pgViewForDel,pdt,msgs">
                         </p:commandButton>
                     </h:panelGrid>
                 </h:panelGrid>

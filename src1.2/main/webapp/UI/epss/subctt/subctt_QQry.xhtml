@@ -21,7 +21,7 @@
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                var rtn =dialog("../item/itemQry_SubcttEngMStl.xhtml?strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
+                var rtn =dialog("../item/itemQry_SubcttQStl.xhtml?strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
             }
         </script>
     </ui:define>
@@ -33,21 +33,21 @@
                 <h:panelGrid id="pdQry" columns="2" style="width: 100%">
                     <h:panelGrid columns="6">
                         <p:outputLabel value="结算编号：" for="id" />
-                        <p:inputText id="id" value="#{subcttStlMInfoAction.progInfoShowQry.id}"/>
+                        <p:inputText id="id" value="#{subcttStlQInfoAction.progInfoShowQry.id}"/>
                         <p:outputLabel value="分包合同：" for="stlPkid" />
                         <p:selectOneMenu id="stlPkid"
-                                         value="#{subcttStlMInfoAction.progInfoShowQry.stlPkid}">
-                            <f:selectItems value="#{subcttStlMInfoAction.subcttList}"/>
+                                         value="#{subcttStlQInfoAction.progInfoShowQry.stlPkid}">
+                            <f:selectItems value="#{subcttStlQInfoAction.subcttList}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="期数编码：" for="periodNo"/>
                         <p:inputText id="periodNo" 
-			                        value="#{subcttStlMInfoAction.progInfoShowQry.periodNo}"
+			                        value="#{subcttStlQInfoAction.progInfoShowQry.periodNo}"
                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                     </h:panelGrid>
                     <h:panelGrid columns="3">
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{subcttStlMInfoAction.onQueryAction('DoubleCheck','true')}"
-                                         update="pdt,msgs,pgCondition">
+                                             action="#{subcttStlQInfoAction.onQueryAction('Qry','true')}"
+                                             update="pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
                                          type="reset"
@@ -64,42 +64,10 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid id="pgCondition" columns="3">
-                        <p:commandButton id="checkPassBtn" value="复核通过"
-                                         action="#{subcttStlMInfoAction.onClickForPowerAction('DoubleCheckPass')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{subcttStlMInfoAction.rowSelectedFlag}">
-                        </p:commandButton>
-                        <p:commandButton id="checkFailBtn" value="复核未过至状态"
-                                         action="#{subcttStlMInfoAction.onClickForPowerAction('DoubleCheckFail')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{subcttStlMInfoAction.rowSelectedFlag}">
-                        </p:commandButton>
-                <p:selectOneMenu id="statusFlag"
-                                 value="#{subcttStlMInfoAction.strNotPassToStatus}"
-                                 rendered="#{subcttStlMInfoAction.rowSelectedFlag}">
-                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
-                </p:selectOneMenu>
-            </h:panelGrid>
-            <p:contextMenu for="pdt">
-                <p:menuitem value="浏览" icon="ui-icon-search"
-                            actionListener="#{subcttStlMInfoAction.selectRecordAction('Qry','')}"
-                            update="pgView,pdt,msgs"
-                            onclick="PF('wVDlgView').show()">
-                </p:menuitem>
-                <p:menuitem value="选择" icon="ui-icon-plus"
-                            actionListener="#{subcttStlMInfoAction.selectRecordAction('DoubleCheck','')}"
-                            update="pdt,msgs,pgCondition">
-                </p:menuitem>
-                <p:menuitem value="详细内容" icon="ui-icon-search"
-                            oncomplete="actSelect(DtInitSubcttList.selection)">
-                </p:menuitem>
-            </p:contextMenu>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{subcttStlMInfoAction.progInfoShowList}"
+                         value="#{subcttStlQInfoAction.progInfoShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{subcttStlMInfoAction.progInfoShowSelected}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -110,8 +78,19 @@
                          rowsPerPageTemplate="500,200,100,45,30,15"
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitSubcttList"
-                         rowStyleClass="#{record.statusFlag eq '1'? null :'rowDoneStyle'}"
                          scrollable="true">
+                <p:column headerText="操作" style="width:61px">
+                    <p:commandButton  icon="ui-icon-plus"
+                                      style="height:20px;width:20px"
+                                      actionListener="#{subcttStlQInfoAction.selectRecordAction('Qry','',record)}"
+                                      update="pdt,:form:msgs,:form:pgView"
+                                      onclick="PF('wVDlgView').show()">
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-triangle-1-e"
+                                     style="height:20px;width:20px"
+                                     oncomplete="actSelect('#{record.pkid}')">
+                    </p:commandButton>
+                </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
@@ -141,49 +120,49 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel value="结算编号：" for="idForDlg"/>
                         <p:inputText id="idForDlg"
-                                     value="#{subcttStlMInfoAction.progInfoShowSel.id}"
+                                     value="#{subcttStlQInfoAction.progInfoShowSel.id}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:outputLabel value="分包合同：" for="cttNameForDlg"/>
                         <p:inputText id="cttNameForDlg"
-                                     value="#{subcttStlMInfoAction.progInfoShowSel.signPartBName}"
+                                     value="#{subcttStlQInfoAction.progInfoShowSel.signPartBName}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel value="协作单位：" for="noteForDlg"/>
                         <p:inputText id="noteForDlg"
-                                     value="#{subcttStlMInfoAction.progInfoShowSel.note}"
+                                     value="#{subcttStlQInfoAction.progInfoShowSel.note}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel value="期数编码：" for="signDateForDlg"/>
                         <p:inputText id="signDateForDlg"
-                                     value="#{subcttStlMInfoAction.progInfoShowSel.periodNo}"
+                                     value="#{subcttStlQInfoAction.progInfoShowSel.periodNo}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel for="createdByNameSel" value="创建人：" />
                         <h:inputText id="createdByNameSel"
-                                     value="#{subcttStlMInfoAction.progInfoShowSel.createdByName}"
+                                     value="#{subcttStlQInfoAction.progInfoShowSel.createdByName}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="createdDateSel" value="创建时间：" />
                         <h:inputText id="createdDateSel"
-                                     value="#{subcttStlMInfoAction.progInfoShowSel.createdDate}"
+                                     value="#{subcttStlQInfoAction.progInfoShowSel.createdDate}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="lastUpdByNameSel" value="修改人：" />
                         <h:inputText id="lastUpdByNameSel"
-                                     value="#{subcttStlMInfoAction.progInfoShowSel.lastUpdByName}"
+                                     value="#{subcttStlQInfoAction.progInfoShowSel.lastUpdByName}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="lastUpdDateSel" value="修改时间：" />
                         <h:inputText id="lastUpdDateSel"
-                                     value="#{subcttStlMInfoAction.progInfoShowSel.lastUpdDate}"
+                                     value="#{subcttStlQInfoAction.progInfoShowSel.lastUpdDate}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="modificationNumSel" value="修改次数：" />
                         <h:inputText id="modificationNumSel"
-                                     value="#{subcttStlMInfoAction.progInfoShowSel.modificationNum}"
+                                     value="#{subcttStlQInfoAction.progInfoShowSel.modificationNum}"
                                      style="background-color:gainsboro;text-align:right;" readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                         </h:inputText>

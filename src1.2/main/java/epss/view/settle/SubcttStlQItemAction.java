@@ -54,13 +54,11 @@ public class SubcttStlQItemAction {
     private ProgWorkqtyItemShow progWorkqtyItemShow;
     private ProgWorkqtyItemShow progWorkqtyItemShowUpd;
     private ProgWorkqtyItemShow progWorkqtyItemShowDel;
-    private ProgWorkqtyItemShow progWorkqtyItemShowSelected;
     private BigDecimal bDEngQMng_BeginToCurrentPeriodEQtyInDB;
     private BigDecimal bDEngQMng_CurrentPeriodEQtyInDB;
 
     private String strSubmitType;
     private String strSubcttPkid;
-    private String strLatestApprovedPeriodNo;
     private EsInitStl esInitStl;
 
     /*控制维护画面层级部分的显示*/
@@ -74,9 +72,6 @@ public class SubcttStlQItemAction {
             esInitStl = esInitStlService.selectRecordsByPrimaryKey(strEsInitStlSubcttEngTemp);
             strSubcttPkid= esInitStl.getStlPkid();
         }
-
-        strLatestApprovedPeriodNo=ToolUtil.getStrIgnoreNull(
-                esFlowService.getLatestApprovedPeriodNo(ESEnum.ITEMTYPE3.getCode(),strSubcttPkid));
 
         List<EsInitPower> esInitPowerList=
                 esInitPowerService.selectListByModel(esInitStl.getStlType(),esInitStl.getStlPkid(),esInitStl.getPeriodNo());
@@ -234,7 +229,6 @@ public class SubcttStlQItemAction {
                     esItemStlSubcttEngQService.updateRecord(progWorkqtyItemShowUpd);
                 }
                 if (esItemStlSubcttEngQListTemp.size()==0){
-                    progWorkqtyItemShowUpd.setEngQMng_SubcttItemPkid(progWorkqtyItemShowSelected.getSubctt_Pkid());
                     progWorkqtyItemShowUpd.setEngQMng_SubcttPkid(strSubcttPkid);
                     esItemStlSubcttEngQService.insertRecord(progWorkqtyItemShowUpd);
                 }
@@ -309,22 +303,22 @@ public class SubcttStlQItemAction {
         }
     }
     /*右单击事件*/
-    public void selectRecordAction(String strSubmitTypePara,ProgWorkqtyItemShow progWorkqtyItemShowSelected){
+    public void selectRecordAction(String strSubmitTypePara,ProgWorkqtyItemShow progWorkqtyItemShowPara){
         try {
             strSubmitType=strSubmitTypePara;
             if(strSubmitTypePara.equals("Sel")){
-                progWorkqtyItemShow =(ProgWorkqtyItemShow) BeanUtils.cloneBean(progWorkqtyItemShowSelected) ;
+                progWorkqtyItemShow =(ProgWorkqtyItemShow) BeanUtils.cloneBean(progWorkqtyItemShowPara) ;
                 progWorkqtyItemShow.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progWorkqtyItemShow.getSubctt_StrNo()));
             }
             else if(strSubmitTypePara.equals("Upd")){
-                progWorkqtyItemShowUpd =(ProgWorkqtyItemShow) BeanUtils.cloneBean(progWorkqtyItemShowSelected) ;
+                progWorkqtyItemShowUpd =(ProgWorkqtyItemShow) BeanUtils.cloneBean(progWorkqtyItemShowPara) ;
                 progWorkqtyItemShowUpd.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progWorkqtyItemShowUpd.getSubctt_StrNo()));
                 bDEngQMng_CurrentPeriodEQtyInDB=ToolUtil.getBdIgnoreNull(progWorkqtyItemShowUpd.getEngQMng_CurrentPeriodEQty());
                 bDEngQMng_BeginToCurrentPeriodEQtyInDB=
                         ToolUtil.getBdIgnoreNull(progWorkqtyItemShowUpd.getEngQMng_BeginToCurrentPeriodEQty());
             }
             else if(strSubmitTypePara.equals("Del")){
-                progWorkqtyItemShowDel =(ProgWorkqtyItemShow) BeanUtils.cloneBean(progWorkqtyItemShowSelected) ;
+                progWorkqtyItemShowDel =(ProgWorkqtyItemShow) BeanUtils.cloneBean(progWorkqtyItemShowPara) ;
                 progWorkqtyItemShowDel.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progWorkqtyItemShowDel.getSubctt_StrNo()));
             }
         } catch (Exception e) {
@@ -365,13 +359,6 @@ public class SubcttStlQItemAction {
         this.progWorkqtyItemShow = progWorkqtyItemShow;
     }
 
-    public ProgWorkqtyItemShow getProgWorkqtyItemShowSelected() {
-        return progWorkqtyItemShowSelected;
-    }
-
-    public void setProgWorkqtyItemShowSelected(ProgWorkqtyItemShow progWorkqtyItemShowSelected) {
-        this.progWorkqtyItemShowSelected = progWorkqtyItemShowSelected;
-    }
 
     public List<ProgWorkqtyItemShow> getProgWorkqtyItemShowList() {
         return progWorkqtyItemShowList;

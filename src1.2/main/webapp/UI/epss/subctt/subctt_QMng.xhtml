@@ -21,7 +21,7 @@
                 var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                var rtn =dialog("../item/itemMng_SubcttEngQStl.xhtml?strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
+                var rtn =dialog("../item/itemMng_SubcttQStl.xhtml?strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
             }
         </script>
     </ui:define>
@@ -96,7 +96,6 @@
                          value="#{subcttStlQInfoAction.progInfoShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
-                         selection="#{subcttStlQInfoAction.progInfoShowSelected}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -110,11 +109,7 @@
                          rowStyleClass="#{record.statusFlag eq null? null:'rowDoneStyle'}"
                          scrollable="true">
                 <p:column headerText="操作" style="width:61px">
-                    <p:commandButton  icon="ui-icon-plus"
-                                      actionListener="#{subcttStlQInfoAction.selectRecordAction('Mng','Sel',record)}"
-                                      update=":form:pdt,:form:pgCondition,:form:msgs">
-                    </p:commandButton>
-                    <p:commandButton  icon="ui-icon-pencil"
+                      <p:commandButton  icon="ui-icon-pencil"
                                       actionListener="#{subcttStlQInfoAction.selectRecordAction('Mng','Upd',record)}"
                                       update=":form:pdt,:form:pgViewForUpd,:form:msgs"
                                       onclick="PF('wVDlgViewForUpd').show()">

@@ -59,7 +59,6 @@ public class TkcttStlStaItemAction {
     private ProgEstStaItemShow progEstStaItemShow;
     private ProgEstStaItemShow progEstStaItemShowUpd;
     private ProgEstStaItemShow progEstStaItemShowDel;
-    private ProgEstStaItemShow progEstStaItemShowSelected;
 
     private BigDecimal bDEng_BeginToCurrentPeriodEQtyInDB;
     private BigDecimal bDEng_CurrentPeriodEQtyInDB;
@@ -69,7 +68,6 @@ public class TkcttStlStaItemAction {
     /*所属号*/
     private String strEsInitStlSubcttEng;
     private String strTkcttPkid;
-    private String strLatestApprovedPeriodNo;
     private EsInitStl esInitStl;
 
     private String strSubmitType;
@@ -89,9 +87,6 @@ public class TkcttStlStaItemAction {
             this.esInitStl = esInitStlService.selectRecordsByPrimaryKey(strEsInitStlSubcttEng);
             strTkcttPkid= this.esInitStl.getStlPkid();
         }
-
-        strLatestApprovedPeriodNo=ToolUtil.getStrIgnoreNull(
-                esFlowService.getLatestApprovedPeriodNo(ESEnum.ITEMTYPE6.getCode(),strTkcttPkid));
 
         List<EsInitPower> esInitPowerList=
                 esInitPowerService.selectListByModel(esInitStl.getStlType(),esInitStl.getStlPkid(),esInitStl.getPeriodNo());
@@ -231,14 +226,14 @@ public class TkcttStlStaItemAction {
     }
 
     /*右单击事件*/
-    public void selectRecordAction(String strSubmitTypePara){
+    public void selectRecordAction(String strSubmitTypePara,ProgEstStaItemShow progEstStaItemShowPara){
         try {
             strSubmitType=strSubmitTypePara;
             if (strSubmitTypePara.equals("Sel")){                
-                progEstStaItemShow =(ProgEstStaItemShow)BeanUtils.cloneBean(progEstStaItemShowSelected) ;
+                progEstStaItemShow =(ProgEstStaItemShow)BeanUtils.cloneBean(progEstStaItemShowPara) ;
                 progEstStaItemShow.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstStaItemShow.getTkctt_StrNo()));
             }            
-            String strTkctt_Unit= progEstStaItemShowSelected.getTkctt_Unit();
+            String strTkctt_Unit= progEstStaItemShowPara.getTkctt_Unit();
             if(strTkctt_Unit==null) {
                 if(strSubmitTypePara.equals("Upd")){
                     MessageUtil.addInfo("该数据不是项数据，无法更新");
@@ -250,14 +245,14 @@ public class TkcttStlStaItemAction {
                 return;
             }
             if(strSubmitTypePara.equals("Upd")){
-                progEstStaItemShowUpd =(ProgEstStaItemShow) BeanUtils.cloneBean(progEstStaItemShowSelected) ;
+                progEstStaItemShowUpd =(ProgEstStaItemShow) BeanUtils.cloneBean(progEstStaItemShowPara) ;
                 progEstStaItemShowUpd.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstStaItemShowUpd.getTkctt_StrNo()));
                 bDEng_CurrentPeriodEQtyInDB=ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getEng_CurrentPeriodEQty());
                 bDEng_BeginToCurrentPeriodEQtyInDB=
                         ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getEng_BeginToCurrentPeriodEQty());
             }
             else if(strSubmitTypePara.equals("Del")){
-                progEstStaItemShowDel =(ProgEstStaItemShow) BeanUtils.cloneBean(progEstStaItemShowSelected) ;
+                progEstStaItemShowDel =(ProgEstStaItemShow) BeanUtils.cloneBean(progEstStaItemShowPara) ;
                 progEstStaItemShowDel.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstStaItemShowDel.getTkctt_StrNo()));
             }
         } catch (Exception e) {
@@ -686,14 +681,6 @@ public class TkcttStlStaItemAction {
 
     public void setProgEstStaItemShowDel(ProgEstStaItemShow progEstStaItemShowDel) {
         this.progEstStaItemShowDel = progEstStaItemShowDel;
-    }
-
-    public ProgEstStaItemShow getProgEstStaItemShowSelected() {
-        return progEstStaItemShowSelected;
-    }
-
-    public void setProgEstStaItemShowSelected(ProgEstStaItemShow progEstStaItemShowSelected) {
-        this.progEstStaItemShowSelected = progEstStaItemShowSelected;
     }
 
     public ProgEstStaItemShow getProgEstStaItemShowUpd() {

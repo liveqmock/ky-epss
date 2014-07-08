@@ -54,13 +54,11 @@ public class SubcttStlMItemAction {
     private ProgMatQtyItemShow progMatQtyItemShow;
     private ProgMatQtyItemShow progMatQtyItemShowUpd;
     private ProgMatQtyItemShow progMatQtyItemShowDel;
-    private ProgMatQtyItemShow progMatQtyItemShowSelected;
     private BigDecimal bDEngMMng_BeginToCurrentPeriodMQtyInDB;
     private BigDecimal bDEngMMng_CurrentPeriodMQtyInDB;
 
     private String strSubmitType;
     private String strSubcttPkid;
-    private String strLatestApprovedPeriodNo;
     private EsInitStl esInitStl;
 
     /*控制维护画面层级部分的显示*/
@@ -75,9 +73,6 @@ public class SubcttStlMItemAction {
             strSubcttPkid= esInitStl.getStlPkid();
         }
 
-        strLatestApprovedPeriodNo=ToolUtil.getStrIgnoreNull(
-                esFlowService.getLatestApprovedPeriodNo(ESEnum.ITEMTYPE4.getCode(),strSubcttPkid));
-        
         List<EsInitPower> esInitPowerList=
                 esInitPowerService.selectListByModel(esInitStl.getStlType(),esInitStl.getStlPkid(),esInitStl.getPeriodNo());
         strMngNotFinishFlag="true";
@@ -332,15 +327,15 @@ public class SubcttStlMItemAction {
         }
     }
     /*右单击事件*/
-    public void selectRecordAction(String strSubmitTypePara){
+    public void selectRecordAction(String strSubmitTypePara,ProgMatQtyItemShow progMatQtyItemShowPara){
         try {
             strSubmitType=strSubmitTypePara;
             BigDecimal bdSubctt_SignPartAPrice= ToolUtil.getBdIgnoreNull(
-                    progMatQtyItemShowSelected.getSubctt_SignPartAPrice());
+                    progMatQtyItemShowPara.getSubctt_SignPartAPrice());
             BigDecimal bdSubctt_ContractQuantity= ToolUtil.getBdIgnoreNull(
-                    progMatQtyItemShowSelected.getSubctt_ContractQuantity());
+                    progMatQtyItemShowPara.getSubctt_ContractQuantity());
             if(strSubmitTypePara.equals("Sel")){
-                progMatQtyItemShow =(ProgMatQtyItemShow)BeanUtils.cloneBean(progMatQtyItemShowSelected) ;
+                progMatQtyItemShow =(ProgMatQtyItemShow)BeanUtils.cloneBean(progMatQtyItemShowPara) ;
                 progMatQtyItemShow.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progMatQtyItemShow.getSubctt_StrNo()));
             }else
             if(strSubmitTypePara.equals("Upd")){
@@ -349,7 +344,7 @@ public class SubcttStlMItemAction {
                     MessageUtil.addInfo("该数据不是工程材料数据，无法更新");
                     return;
                 }
-                progMatQtyItemShowUpd =(ProgMatQtyItemShow) BeanUtils.cloneBean(progMatQtyItemShowSelected) ;
+                progMatQtyItemShowUpd =(ProgMatQtyItemShow) BeanUtils.cloneBean(progMatQtyItemShowPara) ;
                 progMatQtyItemShowUpd.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progMatQtyItemShowUpd.getSubctt_StrNo()));
 
                 bDEngMMng_CurrentPeriodMQtyInDB=ToolUtil.getBdIgnoreNull(progMatQtyItemShowUpd.getEngMMng_CurrentPeriodMQty());
@@ -362,7 +357,7 @@ public class SubcttStlMItemAction {
                     MessageUtil.addInfo("该数据不是工程材料数据，无法删除");
                     return;
                 }
-                progMatQtyItemShowDel =(ProgMatQtyItemShow) BeanUtils.cloneBean(progMatQtyItemShowSelected) ;
+                progMatQtyItemShowDel =(ProgMatQtyItemShow) BeanUtils.cloneBean(progMatQtyItemShowPara) ;
                 progMatQtyItemShowDel.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progMatQtyItemShowDel.getSubctt_StrNo()));
             }
         } catch (Exception e) {
@@ -401,14 +396,6 @@ public class SubcttStlMItemAction {
 
     public void setProgMatQtyItemShow(ProgMatQtyItemShow progMatQtyItemShow) {
         this.progMatQtyItemShow = progMatQtyItemShow;
-    }
-
-    public ProgMatQtyItemShow getProgMatQtyItemShowSelected() {
-        return progMatQtyItemShowSelected;
-    }
-
-    public void setProgMatQtyItemShowSelected(ProgMatQtyItemShow progMatQtyItemShowSelected) {
-        this.progMatQtyItemShowSelected = progMatQtyItemShowSelected;
     }
 
     public List<ProgMatQtyItemShow> getProgMatQtyItemShowList() {

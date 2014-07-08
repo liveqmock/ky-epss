@@ -55,7 +55,6 @@ public class SubcttStlQInfoAction {
 
     private ProgInfoShow progInfoShowQry;
     private String strNotPassToStatus;
-    private ProgInfoShow progInfoShowSelected;
     private ProgInfoShow progInfoShowSel;
     private ProgInfoShow progInfoShowAdd;
     private ProgInfoShow progInfoShowUpd;
@@ -191,20 +190,21 @@ public class SubcttStlQInfoAction {
     }
 
     public void selectRecordAction(String strPowerTypePara,
-                                   String strSubmitTypePara) {
+                                   String strSubmitTypePara,
+                                   ProgInfoShow progInfoShowPara) {
         try {
             strSubmitType = strSubmitTypePara;
-            String strStatusFlagCode = ToolUtil.getStrIgnoreNull(progInfoShowSelected.getStatusFlag());
-            String strStatusFlagName = esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowSelected.getStatusFlag());
-            progInfoShowSelected.setCreatedByName(esCommon.getOperNameByOperId(progInfoShowSelected.getCreatedBy()));
-            progInfoShowSelected.setLastUpdByName(esCommon.getOperNameByOperId(progInfoShowSelected.getLastUpdBy()));
+            String strStatusFlagCode = ToolUtil.getStrIgnoreNull(progInfoShowPara.getStatusFlag());
+            String strStatusFlagName = esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getStatusFlag());
+            progInfoShowPara.setCreatedByName(esCommon.getOperNameByOperId(progInfoShowPara.getCreatedBy()));
+            progInfoShowPara.setLastUpdByName(esCommon.getOperNameByOperId(progInfoShowPara.getLastUpdBy()));
             // 查询
             // 查询
             if (strPowerTypePara.equals("Qry")) {
-                progInfoShowSel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
+                progInfoShowSel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
             } else if (strPowerTypePara.equals("Mng")) {// 维护
                 if (strSubmitTypePara.equals("Sel")) {
-                    progInfoShowSel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
+                    progInfoShowSel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                     rowSelectedFlag = "true";
                 } else if (strSubmitTypePara.equals("Add")) {
                 } else {
@@ -215,17 +215,17 @@ public class SubcttStlQInfoAction {
                     }
                     if (strSubmitTypePara.equals("Upd")) {
                         rowSelectedFlag = "false";
-                        progInfoShowUpd = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
+                        progInfoShowUpd = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                     } else if (strSubmitTypePara.equals("Del")) {
                         rowSelectedFlag = "false";
-                        progInfoShowDel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
+                        progInfoShowDel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                     }
                 }
             } else {// 权限控制
                 rowSelectedFlag = "true";
                 //根据流程环节,显示不同的退回的状态
                 esFlowControl.setStatusFlagListByPower(strPowerTypePara);
-                progInfoShowSel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
+                progInfoShowSel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                 if (strPowerTypePara.equals("Check")) {
                     if (strStatusFlagCode.equals("")) {
                         MessageUtil.addInfo("本期数据还未录入完毕，您暂时不能进行审核操作！");
@@ -571,14 +571,6 @@ public class SubcttStlQInfoAction {
 
     public void setEsFlowControl(EsFlowControl esFlowControl) {
         this.esFlowControl = esFlowControl;
-    }
-
-    public ProgInfoShow getProgInfoShowSelected() {
-        return progInfoShowSelected;
-    }
-
-    public void setProgInfoShowSelected(ProgInfoShow progInfoShowSelected) {
-        this.progInfoShowSelected = progInfoShowSelected;
     }
 
     public EsCommon getEsCommon() {
