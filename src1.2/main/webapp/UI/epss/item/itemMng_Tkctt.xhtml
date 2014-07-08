@@ -39,11 +39,6 @@
                                  rendered='#{!tkcttItemAction.strMngNotFinishFlag}'
                                  update="msgs,pgCondition,pdt">
                 </p:commandButton>
-                <p:selectOneMenu id="statusFlag" value="#{tkcttItemAction.strNotPassToStatus}"
-                        rendered="#{tkcttItemAction.strFlowType eq 'Mng'?'false':
-                        tkcttItemAction.strFlowType eq 'Check'?'false':'true'}">
-                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
-                </p:selectOneMenu>
             </h:panelGrid>
             <p:dataTable id="pdt"
                      value="#{tkcttItemAction.cttItemShowList}"

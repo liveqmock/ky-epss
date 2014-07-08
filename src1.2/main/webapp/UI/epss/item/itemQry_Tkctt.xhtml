@@ -21,27 +21,21 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
-            <h:panelGrid id="pgCondition" columns="2"
+            <h:panelGrid id="pgCondition" columns="4"
                     rendered="#{tkcttItemAction.strFlowType eq 'Qry'? 'false':'true'}">
-                <p:commandButton id="endInputBtn" value="#{tkcttItemAction.strFlowType eq 'Check'? '审核通过':
-                     tkcttItemAction.strFlowType eq 'DoubleCheck'? '复核通过':
-                     tkcttItemAction.strFlowType eq 'Approve'? '批准通过':null}"
+                <p:commandButton id="endInputBtn" value="通过"
                                  action="#{tkcttItemAction.onClickForPowerAction('Pass')}"
-                                 rendered='#{!tkcttItemAction.strMngNotFinishFlag}'
-                                 update="msgs,pgCondition">
-                </p:commandButton>
-                <p:commandButton id="startInputBtn" value="#{tkcttItemAction.strFlowType eq 'Check'? '审核未过':
-                     tkcttItemAction.strFlowType eq 'DoubleCheck'? '复核未过至状态:':
-                     tkcttItemAction.strFlowType eq 'Approve'? '批准未过至状态:':null}"
-                                 action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
                                  rendered='#{tkcttItemAction.strMngNotFinishFlag}'
                                  update="msgs,pgCondition">
                 </p:commandButton>
-                <p:selectOneMenu id="statusFlag" value="#{tkcttItemAction.strNotPassToStatus}"
-                                 rendered="#{tkcttItemAction.strFlowType eq 'Check'?'false':
-                                 tkcttItemAction.strMngNotFinishFlag eq 'true'?'true':'false'}">
+                <p:outputLabel value="未过至状态:"/>
+                <p:selectOneMenu id="statusFlag" value="#{tkcttItemAction.strNotPassToStatus}">
                     <f:selectItems value="#{esFlowControl.statusFlagList}"/>
                 </p:selectOneMenu>
+                <p:commandButton id="startInputBtn" value="未过"
+                                 action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
+                                 update="msgs,pgCondition">
+                </p:commandButton>
             </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{tkcttItemAction.cttItemShowList}"

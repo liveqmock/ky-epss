@@ -82,24 +82,23 @@ public class TkcttItemAction {
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
         }
-
-        List<EsInitPower> esInitPowerList =
-                esInitPowerService.selectListByModel(strBelongToType, strBelongToPkid, "NULL");
-        if ("Mng".equals(strFlowType)) {
+        if (!("Qry".equals(strFlowType))) {
+            List<EsInitPower> esInitPowerList =
+                    esInitPowerService.selectListByModel(strBelongToType, strBelongToPkid, "NULL");
             strMngNotFinishFlag = "true";
-        }
-        if (esInitPowerList.size() > 0) {
-            if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag()) && "Mng".equals(strFlowType)) {
-                strMngNotFinishFlag = "false";
-            }
-            if (ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(esInitPowerList.get(0).getStatusFlag()) && "Check".equals(strFlowType)) {
-                strMngNotFinishFlag = "true";
-            }
-            if (ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(esInitPowerList.get(0).getStatusFlag()) && "DoubleCheck".equals(strFlowType)) {
-                strMngNotFinishFlag = "true";
-            }
-            if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPowerList.get(0).getStatusFlag()) && "Approve".equals(strFlowType)) {
-                strMngNotFinishFlag = "true";
+            if (esInitPowerList.size() > 0) {
+                if ("Mng".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
+                    strMngNotFinishFlag = "false";
+                }
+                if ("Check".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
+                    strMngNotFinishFlag = "false";
+                }
+                if ("DoubleCheck".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
+                    strMngNotFinishFlag = "false";
+                }
+                if ("Approve".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
+                    strMngNotFinishFlag = "false";
+                }
             }
         }
         resetAction();
