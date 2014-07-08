@@ -17,18 +17,12 @@
                     event.srcElement.click();
             }
         }
-        function actSelect(obj, pageName) {
+        function actSelect(obj) {
             var pkid = obj;
             var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
             var arg = new Object();
             arg.doType = "select";
-            if (pageName == "Sub_Detail") {
-                var rtn = dialog("../item/itemQry_Sub.xhtml?strType=2&amp;strSubCttPkid=" + pkid + "", arg, sfeature);
-            } else if (pageName == "Attachment") {
-                var rtn = window.open("/epss/servlet/ShowServlet?operType=Qry&amp;strType=0&amp;strPkid=" + pkid + "",
-                        'popupwindow',
-                        'height = 300,width = 450,location = no,resizable = no,scrollbars = no,status = no,toolbar = no,top = 100');
-            }
+            var rtn = dialog("../item/itemFlw_Sub.xhtml?strType=2&amp;strSubCttPkid=" + pkid + "", arg, sfeature);
         }
     </script>
 </ui:define>
