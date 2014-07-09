@@ -42,6 +42,14 @@
                                  oncomplete="window.close()">
                 </p:commandButton>
             </h:panelGrid>
+            <h:panelGrid columns="4">
+                <p:outputLabel value="分包合同编号：" for="id"/>
+                <p:inputText id="id" value="#{subcttItemAction.subcttInfo.id}"
+                             readonly="true" style="background-color:gainsboro;"/>
+                <p:outputLabel value="分包合同名称：" for="cttName"/>
+                <p:inputText id="cttName" value="#{subcttItemAction.subcttInfo.name}"
+                             readonly="true" style="width:400px;background-color:gainsboro;"/>
+            </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
                      value="#{subcttItemAction.cttItemShowList}"
                      var="record"
@@ -51,12 +59,13 @@
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                      paginator="true"
                      paginatorPosition="bottom"
-                     rows="20"
-                     rowsPerPageTemplate="500,200,100,50,30,20,10"
+                     rows="15"
+                     rowsPerPageTemplate="500,200,100,45,30,15"
                      rowIndexVar="row"
                      emptyMessage="数据记录为空..."
                      rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}"
-                     scrollable="true">
+                     scrollable="true"
+                     scrollHeight="450">
                 <p:column headerText="操作" style="width:91px">
                     <p:commandButton  icon="ui-icon-pencil"
                                      actionListener="#{subcttItemAction.selectRecordAction('Upd',record)}"

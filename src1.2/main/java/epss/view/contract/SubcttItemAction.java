@@ -54,6 +54,7 @@ public class SubcttItemAction {
     private List<CttItemShow> cttItemShowList_Cstpl;
     private CttItemShow cttItemShowSelected_Cstpl;
 
+    private EsCttInfo subcttInfo;
     private CttItemShow cttItemShowSel;
     private CttItemShow cttItemShowAdd;
     private CttItemShow cttItemShowUpd;
@@ -67,7 +68,7 @@ public class SubcttItemAction {
     /*所属类型*/
     private String strBelongToType;
     /*所属号*/
-    private String strBelongToPkid;
+    private String strSubcttInfoPkid;
 
     /*提交类型*/
     private String strSubmitType;
@@ -88,10 +89,10 @@ public class SubcttItemAction {
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         strBelongToType=ESEnum.ITEMTYPE2.getCode();
-        strBelongToPkid=parammap.get("strSubCttPkid").toString();
+        strSubcttInfoPkid=parammap.get("strSubcttInfoPkid").toString();
         strFlowType=parammap.get("strFlowType").toString();
 		List<EsInitPower> esInitPowerList=
-                esInitPowerService.selectListByModel(strBelongToType,strBelongToPkid,"NULL");
+                esInitPowerService.selectListByModel(strBelongToType,strSubcttInfoPkid,"NULL");
         strPassFlag="true";
         if(esInitPowerList.size()>0){
             if("Mng".equals(strFlowType)&&ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
@@ -106,10 +107,12 @@ public class SubcttItemAction {
     private void initData() {
         /*初始化流程状态列表*/
         esFlowControl.setStatusFlagListByPower(strFlowType);
-        /*成本计划*/
+        /*分包合同*/
         cttItemShowList_Cstpl =new ArrayList<CttItemShow>();
-        EsCttInfo esCttInfo = esCttInfoService.getCttInfoByPkId(strBelongToPkid);
-        String strCstplPkidInInitCtt= esCttInfo.getParentPkid() ;
+        subcttInfo = esCttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
+
+        /*成本计划*/
+        String strCstplPkidInInitCtt= subcttInfo.getParentPkid() ;
         esCttItemList = esCttItemService.getEsItemList(
                 ESEnum.ITEMTYPE1.getCode(), strCstplPkidInInitCtt);
         recursiveDataTable("root", esCttItemList, cttItemShowList_Cstpl);
@@ -118,7 +121,7 @@ public class SubcttItemAction {
         esCttItemList =new ArrayList<EsCttItem>();
         cttItemShowList =new ArrayList<CttItemShow>();
         esCttItemList = esCttItemService.getEsItemList(
-                strBelongToType, strBelongToPkid);
+                strBelongToType, strSubcttInfoPkid);
         cttItemShowList.clear();
         recursiveDataTable("root", esCttItemList, cttItemShowList);
         cttItemShowList =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList);
@@ -242,14 +245,14 @@ public class SubcttItemAction {
         styleModelCttQty.setDisabled_Flag("false");
         styleModelCttAmount=new StyleModel();
         styleModelCttAmount.setDisabled_Flag("true");
-        cttItemShowSel =new CttItemShow(strBelongToType ,strBelongToPkid);
-        cttItemShowAdd =new CttItemShow(strBelongToType ,strBelongToPkid);
-        cttItemShowUpd =new CttItemShow(strBelongToType ,strBelongToPkid);
-        cttItemShowDel =new CttItemShow(strBelongToType ,strBelongToPkid);
+        cttItemShowSel =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
+        cttItemShowAdd =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
+        cttItemShowUpd =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
+        cttItemShowDel =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
     }
     public void resetActionForAdd(){
         strSubmitType="Add";
-        cttItemShowAdd =new CttItemShow(strBelongToType ,strBelongToPkid);
+        cttItemShowAdd =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
     }
     /*右单击事件*/
     public void selectRecordAction(String strSubmitTypePara,CttItemShow cttItemShowSelected){
@@ -319,7 +322,7 @@ public class SubcttItemAction {
     }
     public void blurCalculateAmountAction(){
         BigDecimal bigDecimal;
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strBelongToPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
         if (strSubmitType.equals("Add")){
             if(cttItemShowAdd.getContractUnitPrice()==null|| cttItemShowAdd.getContractQuantity()==null){
                 bigDecimal=null;
@@ -341,7 +344,7 @@ public class SubcttItemAction {
 
     }
     public Boolean blurStrNoToGradeAndOrderid(){
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strBelongToPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
         if (strSubmitType.equals("Add")){
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -418,7 +421,7 @@ public class SubcttItemAction {
         return true ;
     }
     public Boolean blurCorrespondingPkid(){
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strBelongToPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
         if (strSubmitType.equals("Add")){
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -525,7 +528,7 @@ public class SubcttItemAction {
 
     /*提交前的检查：必须项的输入*/
 	private Boolean subMitActionPreCheck(){
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strBelongToPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
         if (strSubmitType.equals("Add")){
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -640,9 +643,9 @@ public class SubcttItemAction {
             strPowerTypePara=strFlowType+strPowerTypePara;
             CttInfoShow cttInfoShowSel = new CttInfoShow();
             cttInfoShowSel.setCttType(strBelongToType);
-            cttInfoShowSel.setPkid(strBelongToPkid);
+            cttInfoShowSel.setPkid(strSubcttInfoPkid);
             cttInfoShowSel.setPowerType(strBelongToType);
-            cttInfoShowSel.setPowerPkid(strBelongToPkid);
+            cttInfoShowSel.setPowerPkid(strSubcttInfoPkid);
             cttInfoShowSel.setPeriodNo("NULL");
 
             if (strPowerTypePara.contains("Mng")) {
@@ -814,14 +817,6 @@ public class SubcttItemAction {
         this.cttItemShowList = cttItemShowList;
     }
 
-    public String getStrBelongToPkid() {
-        return strBelongToPkid;
-    }
-
-    public void setStrBelongToPkid(String strBelongToPkid) {
-        this.strBelongToPkid = strBelongToPkid;
-    }
-
     public String getStrSubmitType() {
         return strSubmitType;
     }
@@ -906,7 +901,6 @@ public class SubcttItemAction {
         this.cttItemShowUpd = cttItemShowUpd;
     }
 
-
     public CttItemShow getCttItemShowDel() {
         return cttItemShowDel;
     }
@@ -939,5 +933,13 @@ public class SubcttItemAction {
         this.esFlowService = esFlowService;
     }
 
-/*智能字段End*/
+    public EsCttInfo getSubcttInfo() {
+        return subcttInfo;
+    }
+
+    public void setSubcttInfo(EsCttInfo subcttInfo) {
+        this.subcttInfo = subcttInfo;
+    }
+
+    /*智能字段End*/
 }
