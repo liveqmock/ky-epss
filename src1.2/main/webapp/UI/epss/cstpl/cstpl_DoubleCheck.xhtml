@@ -18,10 +18,10 @@
             }
             function actSelect(obj) {
                 var pkid = obj;
-                var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:yes;scroll:yes;status:no";
+                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;resizable:yes;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=DoubleCheck&amp;strCstplPkid=" + pkid + "", arg, sfeature);
+                var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=DoubleCheck&amp;strCstplInfoPkid=" + pkid + "", arg, sfeature);
                 document.getElementById("form:qryBtn").click();
             }
         </script>

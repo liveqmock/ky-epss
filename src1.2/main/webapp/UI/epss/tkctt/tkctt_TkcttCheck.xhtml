@@ -20,10 +20,10 @@
             function actSelect(obj,pageName) {
                 // 寻找当前行的PKID思路：参数传递
                 var pkid=obj;
-                var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
+                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;resizable:yes;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Check&amp;strTkCttPkid=" + pkid + "", arg, sfeature);
+                var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Check&amp;strTkcttInfoPkid=" + pkid + "", arg, sfeature);
                 document.getElementById("form:qryBtn").click();
             }
         </script>

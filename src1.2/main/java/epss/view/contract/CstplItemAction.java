@@ -53,7 +53,7 @@ public class CstplItemAction {
     @ManagedProperty(value = "#{esCttInfoService}")
     private EsCttInfoService esCttInfoService;
 
-    /*查询，提交用*/
+    private EsCttInfo cstplInfo;
     private CttItemShow cttItemShowSel;
     private CttItemShow cttItemShowAdd;
     private CttItemShow cttItemShowUpd;
@@ -64,7 +64,7 @@ public class CstplItemAction {
     /*所属类型*/
     private String strBelongToType;
     /*所属号*/
-    private String strBelongToPkid;
+    private String strCstplInfoPkid;
 
     /*提交类型*/
     private String strSubmitType;
@@ -80,13 +80,13 @@ public class CstplItemAction {
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         strBelongToType=ESEnum.ITEMTYPE1.getCode();
-        strBelongToPkid=parammap.get("strCstplPkid").toString();
+        strCstplInfoPkid=parammap.get("strCstplInfoPkid").toString();
 
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
         }
         List<EsInitPower> esInitPowerList =
-                esInitPowerService.selectListByModel(strBelongToType, strBelongToPkid, "NULL");
+                esInitPowerService.selectListByModel(strBelongToType, strCstplInfoPkid, "NULL");
         strPassFlag = "true";
         if (esInitPowerList.size() > 0) {
             if ("Mng".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
@@ -108,9 +108,9 @@ public class CstplItemAction {
             strPowerTypePara=strFlowType+strPowerTypePara;
             CttInfoShow cttInfoShowSel = new CttInfoShow();
             cttInfoShowSel.setCttType(strBelongToType);
-            cttInfoShowSel.setPkid(strBelongToPkid);
+            cttInfoShowSel.setPkid(strCstplInfoPkid);
             cttInfoShowSel.setPowerType(strBelongToType);
-            cttInfoShowSel.setPowerPkid(strBelongToPkid);
+            cttInfoShowSel.setPowerPkid(strCstplInfoPkid);
             cttInfoShowSel.setPeriodNo("NULL");
 
             if (strPowerTypePara.contains("Mng")) {
@@ -215,15 +215,15 @@ public class CstplItemAction {
         styleModelNo.setDisabled_Flag("false");
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
-        cttItemShowSel =new CttItemShow(strBelongToType ,strBelongToPkid);
-        cttItemShowAdd =new CttItemShow(strBelongToType ,strBelongToPkid);
-        cttItemShowUpd =new CttItemShow(strBelongToType ,strBelongToPkid);
-        cttItemShowDel =new CttItemShow(strBelongToType ,strBelongToPkid);
+        cttItemShowSel =new CttItemShow(strBelongToType ,strCstplInfoPkid);
+        cttItemShowAdd =new CttItemShow(strBelongToType ,strCstplInfoPkid);
+        cttItemShowUpd =new CttItemShow(strBelongToType ,strCstplInfoPkid);
+        cttItemShowDel =new CttItemShow(strBelongToType ,strCstplInfoPkid);
     }
 
     public void resetActionForAdd(){
         strSubmitType="Add";
-        cttItemShowAdd =new CttItemShow(strBelongToType ,strBelongToPkid);
+        cttItemShowAdd =new CttItemShow(strBelongToType ,strCstplInfoPkid);
     }
 
     public Boolean blurStrName(){
@@ -258,7 +258,7 @@ public class CstplItemAction {
             strSubmitType=strSubmitTypePara;
             if(strSubmitTypePara.equals("Sel")){
                 if(cstplItemShowPara.getBelongToTypeContrast()==null) {
-                    cttItemShowSel =new CttItemShow(strBelongToType ,strBelongToPkid);
+                    cttItemShowSel =new CttItemShow(strBelongToType ,strCstplInfoPkid);
                 }else{
                     cttItemShowSel =getItemOfEsItemHieRelapByItem(cstplItemShowPara,"Cstpl");
                 }
@@ -275,7 +275,7 @@ public class CstplItemAction {
             else if(strSubmitTypePara.equals("Del")){
                 if(cstplItemShowPara.getStrNoContrast()==null) {
                     MessageUtil.addInfo("没有可删除的数据！");
-                    cttItemShowDel =new CttItemShow(strBelongToType ,strBelongToPkid);
+                    cttItemShowDel =new CttItemShow(strBelongToType ,strCstplInfoPkid);
                     return;
                 }
                 else{
@@ -315,7 +315,7 @@ public class CstplItemAction {
         }
     }
     public Boolean blurStrNoToGradeAndOrderid(String strIsBlur){
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strBelongToPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCstplInfoPkid);
         if (strSubmitType.equals("Add")){
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -419,7 +419,7 @@ public class CstplItemAction {
     }
 
     public Boolean blurCorrespondingPkid(){
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strBelongToPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCstplInfoPkid);
         if (strSubmitType.equals("Add")){
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -540,7 +540,7 @@ public class CstplItemAction {
     }
     /*提交前的检查：必须项的输入*/
     private Boolean subMitActionPreCheck(){
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strBelongToPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCstplInfoPkid);
         if (strSubmitType.equals("Add")){
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -564,8 +564,8 @@ public class CstplItemAction {
         esFlowControl.setStatusFlagListByPower(strFlowType);
         /*总包合同列表*/
         List<EsCttItem> esCttItemListTkctt =new ArrayList<EsCttItem>();
-        EsCttInfo esCttInfo = esCttInfoService.getCttInfoByPkId(strBelongToPkid);
-        String strTkcttPkidInCstpl= esCttInfo.getParentPkid();
+        cstplInfo = esCttInfoService.getCttInfoByPkId(strCstplInfoPkid);
+        String strTkcttPkidInCstpl= cstplInfo.getParentPkid();
         esCttItemListTkctt =
                 esCttItemService.getEsItemList(ESEnum.ITEMTYPE0.getCode(), strTkcttPkidInCstpl);
         List<CttItemShow> cttItemShowListTkctt =new ArrayList<>();
@@ -574,7 +574,7 @@ public class CstplItemAction {
 
         /*成本计划列表*/
         List<EsCttItem> esCttItemListCstpl = esCttItemService.getEsItemList(
-                strBelongToType, strBelongToPkid);
+                strBelongToType, strCstplInfoPkid);
 
         List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();
         recursiveDataTable("root", esCttItemListCstpl, cttItemShowListCstpl);
@@ -806,7 +806,7 @@ public class CstplItemAction {
             cttItemShowAdd = getItemOfEsItemHieRelapByItem(cstplItemShowPara,"Tkctt");
             cttItemShowAdd.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowAdd.getStrNo())) ;
             cttItemShowAdd.setBelongToType(strBelongToType) ;
-            cttItemShowAdd.setBelongToPkid(strBelongToPkid) ;
+            cttItemShowAdd.setBelongToPkid(strCstplInfoPkid) ;
             Integer intLastIndexof=strIgnoreSpaceOfStr.lastIndexOf(".");
             if(intLastIndexof>0){
                 String strParentNo=strIgnoreSpaceOfStr.substring(0,intLastIndexof);
@@ -1186,6 +1186,10 @@ public class CstplItemAction {
     }
 
     /*智能字段Start*/
+    public EsCttInfo getCstplInfo() {
+        return cstplInfo;
+    }
+
     public EsCttItemService getEsCttItemService() {
         return esCttItemService;
     }
@@ -1216,14 +1220,6 @@ public class CstplItemAction {
 
     public void setCstplItemShowList(List<CstplItemShow> cstplItemShowList) {
         this.cstplItemShowList = cstplItemShowList;
-    }
-
-    public String getStrBelongToPkid() {
-        return strBelongToPkid;
-    }
-
-    public void setStrBelongToPkid(String strBelongToPkid) {
-        this.strBelongToPkid = strBelongToPkid;
     }
 
     public EsInitPowerService getEsInitPowerService() {

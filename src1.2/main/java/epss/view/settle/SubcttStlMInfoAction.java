@@ -72,10 +72,10 @@ public class SubcttStlMInfoAction {
     @PostConstruct
     public void init() {
         this.progInfoShowList = new ArrayList<ProgInfoShow>();
-        String strCstplPkid="";
+        String strCstplInfoPkid="";
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (parammap.containsKey("strCstplPkid")){
-            strCstplPkid=parammap.get("strCstplPkid").toString();
+        if (parammap.containsKey("strCstplInfoPkid")){
+            strCstplInfoPkid=parammap.get("strCstplInfoPkid").toString();
         }
         strStlType =ESEnum.ITEMTYPE4.getCode();
 
@@ -84,7 +84,7 @@ public class SubcttStlMInfoAction {
         List<CttInfoShow> cttInfoShowList =
                 esCttInfoService.getCttInfoListByCttType_ParentPkid_Status(
                          ESEnum.ITEMTYPE2.getCode()
-                        ,strCstplPkid
+                        ,strCstplInfoPkid
                         ,ESEnumStatusFlag.STATUS_FLAG3.getCode());
         subcttList=new ArrayList<SelectItem>();
         if(cttInfoShowList.size()>0){

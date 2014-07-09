@@ -11,6 +11,7 @@ package epss.view.contract;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.common.enums.*;
+import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsCttItem;
 import epss.repository.model.EsInitStl;
 import epss.repository.model.model_show.CttInfoShow;
@@ -38,6 +39,8 @@ import java.util.*;
 @ViewScoped
 public class TkcttItemAction {
     private static final Logger logger = LoggerFactory.getLogger(TkcttItemAction.class);
+    @ManagedProperty(value = "#{esCttInfoService}")
+    private EsCttInfoService esCttInfoService;
     @ManagedProperty(value = "#{esCttItemService}")
     private EsCttItemService esCttItemService;
     @ManagedProperty(value = "#{esInitPowerService}")
@@ -49,6 +52,7 @@ public class TkcttItemAction {
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
 
+    private EsCttInfo tkcttInfo;
     private CttItemShow cttItemShowSel;
     private CttItemShow cttItemShowAdd;
     private CttItemShow cttItemShowUpd;
@@ -59,7 +63,7 @@ public class TkcttItemAction {
     /*所属类型*/
     private String strBelongToType;
     /*所属号*/
-    private String strBelongToPkid;
+    private String strTkcttInfoPkid;
 
     /*提交类型*/
     private String strSubmitType;
@@ -71,20 +75,21 @@ public class TkcttItemAction {
     private String strPassFlag;
     private String strNotPassToStatus;
     private String strFlowType;
-    /*控制控件在画面上的可用与现实End*/
-    private boolean checkForUpd;
+    private Boolean checkForUpd;
 
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         strBelongToType = ESEnum.ITEMTYPE0.getCode();
-        strBelongToPkid = parammap.get("strTkCttPkid").toString();
+        if (parammap.containsKey("strTkcttInfoPkid")) {
+            strTkcttInfoPkid = parammap.get("strTkcttInfoPkid").toString();
+        }
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
         }
 
         List<EsInitPower> esInitPowerList =
-                esInitPowerService.selectListByModel(strBelongToType, strBelongToPkid, "NULL");
+                esInitPowerService.selectListByModel(strBelongToType, strTkcttInfoPkid, "NULL");
         strPassFlag = "true";
         if (esInitPowerList.size() > 0) {
             if ("Mng".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
@@ -102,13 +107,12 @@ public class TkcttItemAction {
         cttItemShowList =new ArrayList<CttItemShow>();
         /*初始化流程状态列表*/
         esFlowControl.setStatusFlagListByPower(strFlowType);
-
+        tkcttInfo = esCttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
         esCttItemList = esCttItemService.getEsItemList(
-                strBelongToType, strBelongToPkid);
+                strBelongToType, strTkcttInfoPkid);
         recursiveDataTable("root", esCttItemList);
-        cttItemShowList = getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList);
-        setItemOfEsItemHieRelapList_AddTotal();
-        checkForUpd=true;
+        cttItemShowList = getTkcttItemList_DoFromatNo(cttItemShowList);
+        setTkcttItemList_AddTotal();
     }
 
     /*根据数据库中层级关系数据列表得到总包合同*/
@@ -155,7 +159,7 @@ public class TkcttItemAction {
     }
 
     /*根据group和orderid临时编制编号strNo*/
-    private List<CttItemShow> getItemOfEsItemHieRelapList_DoFromatNo(
+    private List<CttItemShow> getTkcttItemList_DoFromatNo(
             List<CttItemShow> cttItemShowListPara) {
         String strTemp = "";
         Integer intBeforeGrade = -1;
@@ -187,7 +191,7 @@ public class TkcttItemAction {
         return cttItemShowListPara;
     }
 
-    private void setItemOfEsItemHieRelapList_AddTotal() {
+    private void setTkcttItemList_AddTotal() {
         List<CttItemShow> cttItemShowListTemp = new ArrayList<CttItemShow>();
         cttItemShowListTemp.addAll(cttItemShowList);
 
@@ -239,20 +243,20 @@ public class TkcttItemAction {
         styleModelNo.setDisabled_Flag("false");
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
-        cttItemShowSel = new CttItemShow(strBelongToType, strBelongToPkid);
-        cttItemShowAdd = new CttItemShow(strBelongToType, strBelongToPkid);
-        cttItemShowUpd = new CttItemShow(strBelongToType, strBelongToPkid);
-        cttItemShowDel = new CttItemShow(strBelongToType, strBelongToPkid);
+        cttItemShowSel = new CttItemShow(strBelongToType, strTkcttInfoPkid);
+        cttItemShowAdd = new CttItemShow(strBelongToType, strTkcttInfoPkid);
+        cttItemShowUpd = new CttItemShow(strBelongToType, strTkcttInfoPkid);
+        cttItemShowDel = new CttItemShow(strBelongToType, strTkcttInfoPkid);
     }
 
     public void resetActionForAdd() {
         strSubmitType = "Add";
-        cttItemShowAdd = new CttItemShow(strBelongToType, strBelongToPkid);
+        cttItemShowAdd = new CttItemShow(strBelongToType, strTkcttInfoPkid);
     }
 
     /*提交前的检查：必须项的输入*/
     private Boolean subMitActionPreCheck() {
-        CttItemShow cttItemShowTemp = new CttItemShow(strBelongToType, strBelongToPkid);
+        CttItemShow cttItemShowTemp = new CttItemShow(strBelongToType, strTkcttInfoPkid);
         if (strSubmitType.equals("Add")) {
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -350,7 +354,7 @@ public class TkcttItemAction {
     }
 
     public Boolean blurStrNoToGradeAndOrderidAction() {
-        CttItemShow cttItemShowTemp = new CttItemShow(strBelongToType, strBelongToPkid);
+        CttItemShow cttItemShowTemp = new CttItemShow(strBelongToType, strTkcttInfoPkid);
         if (strSubmitType.equals("Add")) {
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -524,17 +528,17 @@ public class TkcttItemAction {
             strPowerTypePara=strFlowType+strPowerTypePara;
             CttInfoShow cttInfoShowSel = new CttInfoShow();
             cttInfoShowSel.setCttType(strBelongToType);
-            cttInfoShowSel.setPkid(strBelongToPkid);
+            cttInfoShowSel.setPkid(strTkcttInfoPkid);
             cttInfoShowSel.setPowerType(strBelongToType);
-            cttInfoShowSel.setPowerPkid(strBelongToPkid);
+            cttInfoShowSel.setPowerPkid(strTkcttInfoPkid);
             cttInfoShowSel.setPeriodNo("NULL");
 
             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
-                   /* int Orderid=esCttItemService.getMaxOrderidInEsCttItemList(strBelongToType,strBelongToPkid, "root",1);
+                   /* int Orderid=esCttItemService.getMaxOrderidInEsCttItemList(strBelongToType,strTkcttInfoPkid, "root",1);
                     EsCttItem esCttItemTemp=new EsCttItem();
                     esCttItemTemp.setBelongToType(strBelongToType);
-                    esCttItemTemp.setBelongToPkid(strBelongToPkid);
+                    esCttItemTemp.setBelongToPkid(strTkcttInfoPkid);
                     esCttItemTemp.setParentPkid("root");
                     esCttItemTemp.setGrade(1);
                     esCttItemTemp.setName("(其它)");
@@ -674,10 +678,10 @@ public class TkcttItemAction {
         this.cttItemShowList = cttItemShowList;
     }
     public String getStrBelongToPkid() {
-        return strBelongToPkid;
+        return strTkcttInfoPkid;
     }
-    public void setStrBelongToPkid(String strBelongToPkid) {
-        this.strBelongToPkid = strBelongToPkid;
+    public void setStrBelongToPkid(String strTkcttInfoPkid) {
+        this.strTkcttInfoPkid = strTkcttInfoPkid;
     }
     public EsFlowControl getEsFlowControl() {
         return esFlowControl;
@@ -748,12 +752,20 @@ public class TkcttItemAction {
         this.strFlowType = strFlowType;
     }
 
-    public boolean isCheckForUpd() {
-        return checkForUpd;
+    public EsCttInfo getTkcttInfo() {
+        return tkcttInfo;
     }
 
-    public void setCheckForUpd(boolean checkForUpd) {
-        this.checkForUpd = checkForUpd;
+    public EsCttInfoService getEsCttInfoService() {
+        return esCttInfoService;
+    }
+
+    public void setEsCttInfoService(EsCttInfoService esCttInfoService) {
+        this.esCttInfoService = esCttInfoService;
+    }
+
+    public Boolean getCheckForUpd() {
+        return checkForUpd;
     }
 /*智能字段End*/
 }

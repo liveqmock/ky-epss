@@ -18,13 +18,13 @@
             }
             function actSelect(obj) {
                 var pkid=obj;
-                var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
+                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;resizable:yes;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
                 // 分包合同
                 var strCallPageNameFlag="SubcttStlEngQApprove";
                 var rtn =dialog("../subctt/subctt_QApprove.xhtml?strCallPageNameFlag="+strCallPageNameFlag+
-                        "&amp;strCstplPkid="+pkid,arg,sfeature);
+                        "&amp;strCstplInfoPkid="+pkid,arg,sfeature);
             }
         </script>
     </ui:define>
