@@ -269,7 +269,7 @@ public class TkMeaCSubStlQItemAction {
                 BigDecimal bdSubcttCttAmtTotal=new BigDecimal(0);
                 // 开累计量
                 BigDecimal bdTkcttStlBToCMeaQty=ToolUtil.getBdIgnoreNull(tkMeaCstplUnit.getTkcttStlItem_AddUpQty());
-                BigDecimal bdTkcttStlBToCMeaAmount=ToolUtil.getBdIgnoreNull(tkMeaCstplUnit.getTkcttStlItem_AddUpAmt());
+                BigDecimal bdTkcttStlBToCMeaAmt=ToolUtil.getBdIgnoreNull(tkMeaCstplUnit.getTkcttStlItem_AddUpAmt());
                 Boolean hasSameCorrespondingPkid=false;
                 for(int i=0;i<subcttStlQBySignPartList.size();i++) {
                     QryTkMeaCSStlQShow tkMeaCstplUnitTemp= (QryTkMeaCSStlQShow) BeanUtils.cloneBean(tkMeaCstplUnit);
@@ -331,7 +331,7 @@ public class TkMeaCSubStlQItemAction {
                                 tkMeaCstplUnitTemp.setMeaSItem_AddUpQty(
                                         ToolUtil.getBdIgnoreNull(bdTkcttStlBToCMeaQty).subtract(bdSubcttCttQtyTotal));
                                 tkMeaCstplUnitTemp.setMeaSItem_AddUpAmt(
-                                        ToolUtil.getBdIgnoreNull(bdTkcttStlBToCMeaAmount).subtract(bdSubcttCttAmtTotal));
+                                        ToolUtil.getBdIgnoreNull(bdTkcttStlBToCMeaAmt).subtract(bdSubcttCttAmtTotal));
                                 qryTkMeaCSStlQShowList.add(tkMeaCstplUnitTemp);
                                 break;
                             }
@@ -340,11 +340,15 @@ public class TkMeaCSubStlQItemAction {
                             // 总包计量与分包结算值差
                             tkMeaCstplUnitTemp.setMeaSItem_AddUpQty(
                                     bdTkcttStlBToCMeaQty.subtract(bdSubcttCttQtyTotal));
+                            tkMeaCstplUnitTemp.setMeaSItem_AddUpAmt(
+                                    bdTkcttStlBToCMeaAmt.subtract(bdSubcttCttAmtTotal));
                             qryTkMeaCSStlQShowList.add(tkMeaCstplUnitTemp);
                         }
                     }
                 }
                 if(insertedFlag.equals(false)){
+                    tkMeaCstplUnit.setMeaSItem_AddUpQty(tkMeaCstplUnit.getTkcttStlItem_AddUpQty());
+                    tkMeaCstplUnit.setMeaSItem_AddUpAmt(tkMeaCstplUnit.getTkcttStlItem_AddUpAmt());
                     qryTkMeaCSStlQShowList.add(tkMeaCstplUnit);
                 }
             }
