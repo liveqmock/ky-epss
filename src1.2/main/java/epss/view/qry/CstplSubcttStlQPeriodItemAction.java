@@ -16,9 +16,9 @@ import epss.common.utils.MessageUtil;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.*;
 import epss.service.*;
-import epss.service.common.EsFlowService;
-import epss.service.common.EsQueryService;
-import epss.view.common.EsCommon;
+import epss.service.EsFlowService;
+import epss.service.EsQueryService;
+import epss.view.flow.EsCommon;
 import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -46,24 +46,24 @@ import java.util.Map;
 @ViewScoped
 public class CstplSubcttStlQPeriodItemAction {
     private static final Logger logger = LoggerFactory.getLogger(CstplSubcttStlQPeriodItemAction.class);
-    @ManagedProperty(value = "#{esCttItemService}")
-    private EsCttItemService esCttItemService;
+    @ManagedProperty(value = "#{cttItemService}")
+    private CttItemService cttItemService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
-    @ManagedProperty(value = "#{esCttInfoService}")
-    private EsCttInfoService esCttInfoService;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+    @ManagedProperty(value = "#{cttInfoService}")
+    private CttInfoService cttInfoService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esQueryService}")
     private EsQueryService esQueryService;
-    @ManagedProperty(value = "#{esInitStlService}")
-    private EsInitStlService esInitStlService;
-    @ManagedProperty(value = "#{esItemStlSubcttEngQService}")
-    private EsItemStlSubcttEngQService esItemStlSubcttEngQService;
-    @ManagedProperty(value = "#{esInitCustService}")
-    private EsInitCustService esInitCustService;
+    @ManagedProperty(value = "#{progStlInfoService}")
+    private ProgStlInfoService progStlInfoService;
+    @ManagedProperty(value = "#{progWorkqtyItemService}")
+    private ProgWorkqtyItemService progWorkqtyItemService;
+    @ManagedProperty(value = "#{signPartService}")
+    private SignPartService signPartService;
 
     private List<EsCttItem> esCttItemList;
 
@@ -107,7 +107,7 @@ public class CstplSubcttStlQPeriodItemAction {
         }
 
         List<CttInfoShow> cttInfoShowList =
-                esCttInfoService.getCttInfoListByCttType_ParentPkid_Status(
+                cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
                         ESEnum.ITEMTYPE2.getCode()
                         , strCstplPkid
                         , ESEnumStatusFlag.STATUS_FLAG3.getCode());
@@ -140,12 +140,12 @@ public class CstplSubcttStlQPeriodItemAction {
         return null;
     }
     private void initData(String strBelongToPkid) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
-        EsCttInfo esCttInfo_Subctt=esCttInfoService.getCttInfoByPkId(strBelongToPkid);
+        EsCttInfo esCttInfo_Subctt= cttInfoService.getCttInfoByPkId(strBelongToPkid);
         commStlSubcttEngH.setStrCstplPkid(esCttInfo_Subctt.getParentPkid());
         commStlSubcttEngH.setStrSubcttId(esCttInfo_Subctt.getId());
         commStlSubcttEngH.setStrSubcttName(esCttInfo_Subctt.getName());
         commStlSubcttEngH.setStrSignPartPkid(esCttInfo_Subctt.getSignPartB());
-        commStlSubcttEngH.setStrSignPartName(esInitCustService.getEsInitCustByPkid(
+        commStlSubcttEngH.setStrSignPartName(signPartService.getEsInitCustByPkid(
                 commStlSubcttEngH.getStrSignPartPkid()).getName());
         beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
 
@@ -158,7 +158,7 @@ public class CstplSubcttStlQPeriodItemAction {
         /*分包合同*/
         esCttItemList =new ArrayList<EsCttItem>();
 
-        esCttItemList = esCttItemService.getEsItemList(
+        esCttItemList = cttItemService.getEsItemList(
                 ESEnum.ITEMTYPE2.getCode(), strSubcttPkid);
         if(esCttItemList.size()<=0){
             return;
@@ -167,7 +167,7 @@ public class CstplSubcttStlQPeriodItemAction {
         recursiveDataTable("root", esCttItemList, progWorkqtyItemShowList);
         progWorkqtyItemShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progWorkqtyItemShowList);
 
-        List<String> periodList =esItemStlSubcttEngQService.selectEsItemStlSubcttEngQPeriodsByPeriod(
+        List<String> periodList = progWorkqtyItemService.selectEsItemStlSubcttEngQPeriodsByPeriod(
                                  strSubcttPkid,
                                  strStartPeriodNo,
                                  strEndPeriodNo);
@@ -184,7 +184,7 @@ public class CstplSubcttStlQPeriodItemAction {
         }
 
         List<EsItemStlSubcttEngQ> esItemStlSubcttEngQList =
-                esItemStlSubcttEngQService.selectEsItemStlSubcttEngQListByPeriod(
+                progWorkqtyItemService.selectEsItemStlSubcttEngQListByPeriod(
                         strSubcttPkid,
                         strStartPeriodNo,
                         strEndPeriodNo);
@@ -275,7 +275,7 @@ public class CstplSubcttStlQPeriodItemAction {
                 esItemStlSubcttEngQ.setSubcttItemPkid(itemUnit.getPkid());
                 esItemStlSubcttEngQ.setPeriodNo(strLatestApprovedPeriodNo);
                 List<EsItemStlSubcttEngQ> esItemStlSubcttEngQList =
-                        esItemStlSubcttEngQService.selectRecordsByExample(esItemStlSubcttEngQ);
+                        progWorkqtyItemService.selectRecordsByExample(esItemStlSubcttEngQ);
                 if(esItemStlSubcttEngQList.size()>0){
                     esItemStlSubcttEngQ= esItemStlSubcttEngQList.get(0);
                     progWorkqtyItemShowTemp.setEngQMng_Pkid(esItemStlSubcttEngQ.getPkid());
@@ -375,12 +375,12 @@ public class CstplSubcttStlQPeriodItemAction {
 
     /*智能字段Start*/
 
-    public EsCttItemService getEsCttItemService() {
-        return esCttItemService;
+    public CttItemService getCttItemService() {
+        return cttItemService;
     }
 
-    public void setEsCttItemService(EsCttItemService esCttItemService) {
-        this.esCttItemService = esCttItemService;
+    public void setCttItemService(CttItemService cttItemService) {
+        this.cttItemService = cttItemService;
     }
 
     public EsCommon getEsCommon() {
@@ -391,20 +391,20 @@ public class CstplSubcttStlQPeriodItemAction {
         this.esCommon = esCommon;
     }
 
-    public EsCttInfoService getEsCttInfoService() {
-        return esCttInfoService;
+    public CttInfoService getCttInfoService() {
+        return cttInfoService;
     }
 
-    public void setEsCttInfoService(EsCttInfoService esCttInfoService) {
-        this.esCttInfoService = esCttInfoService;
+    public void setCttInfoService(CttInfoService cttInfoService) {
+        this.cttInfoService = cttInfoService;
     }
 
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
 
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowService getEsFlowService() {
@@ -423,28 +423,28 @@ public class CstplSubcttStlQPeriodItemAction {
         this.esQueryService = esQueryService;
     }
 
-    public EsInitStlService getEsInitStlService() {
-        return esInitStlService;
+    public ProgStlInfoService getProgStlInfoService() {
+        return progStlInfoService;
     }
 
-    public void setEsInitStlService(EsInitStlService esInitStlService) {
-        this.esInitStlService = esInitStlService;
+    public void setProgStlInfoService(ProgStlInfoService progStlInfoService) {
+        this.progStlInfoService = progStlInfoService;
     }
 
-    public EsItemStlSubcttEngQService getEsItemStlSubcttEngQService() {
-        return esItemStlSubcttEngQService;
+    public ProgWorkqtyItemService getProgWorkqtyItemService() {
+        return progWorkqtyItemService;
     }
 
-    public void setEsItemStlSubcttEngQService(EsItemStlSubcttEngQService esItemStlSubcttEngQService) {
-        this.esItemStlSubcttEngQService = esItemStlSubcttEngQService;
+    public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
+        this.progWorkqtyItemService = progWorkqtyItemService;
     }
 
-    public EsInitCustService getEsInitCustService() {
-        return esInitCustService;
+    public SignPartService getSignPartService() {
+        return signPartService;
     }
 
-    public void setEsInitCustService(EsInitCustService esInitCustService) {
-        this.esInitCustService = esInitCustService;
+    public void setSignPartService(SignPartService signPartService) {
+        this.signPartService = signPartService;
     }
 
     public List<EsCttItem> getEsCttItemList() {

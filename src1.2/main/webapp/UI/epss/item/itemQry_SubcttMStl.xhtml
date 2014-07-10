@@ -22,7 +22,7 @@
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{subcttStlMItemAction.progMatQtyItemShowList}"
+                         value="#{progMatqtyItemAction.progMatQtyItemShowList}"
                          var="record"
                          rowKey="#{record.subctt_Pkid}"
                          selectionMode="single"
@@ -40,7 +40,7 @@
                 <p:column headerText="操作" style="width:30px">
                     <p:commandButton  icon="ui-icon-search"
                                       style="height:20px;width:20px"
-                                      action="#{subcttStlMItemAction.selectRecordAction('Sel',record)}"
+                                      action="#{progMatqtyItemAction.selectRecordAction('Sel',record)}"
                                       update="pdt,:form:pgView,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
                     </p:commandButton>
@@ -98,40 +98,40 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel for="noItemHieRelap" value="项目编号:"/>
                         <h:inputText id="noItemHieRelap"
-                                     value="#{subcttStlMItemAction.progMatQtyItemShow.subctt_StrNo}"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShow.subctt_StrNo}"
                                      style="background-color:gainsboro"
                                      readonly="true">
                         </h:inputText>
                         <p:outputLabel for="name" value="项目名称:"/>
-                        <h:inputText id="name" value="#{subcttStlMItemAction.progMatQtyItemShow.subctt_Name}"
+                        <h:inputText id="name" value="#{progMatqtyItemAction.progMatQtyItemShow.subctt_Name}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="note" value="备注内容:"/>
-                        <h:inputText id="note" value="#{subcttStlMItemAction.progMatQtyItemShow.subctt_Note}"
+                        <h:inputText id="note" value="#{progMatqtyItemAction.progMatQtyItemShow.subctt_Note}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="unitItemInfo" value="单位:"/>
                         <h:inputText id="unitItemInfo"
-                                     value="#{subcttStlMItemAction.progMatQtyItemShow.subctt_Unit}"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShow.subctt_Unit}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="contractQuantityItemInfo" value="合同数量:"/>
                         <h:inputText id="contractQuantityItemInfo"
-                                     value="#{subcttStlMItemAction.progMatQtyItemShow.subctt_ContractQuantity}"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShow.subctt_ContractQuantity}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="engMMng_BeginToCurrentPeriodMQty" value="开累数量:"/>
                         <h:inputText id="engMMng_BeginToCurrentPeriodMQty"
-                                     value="#{subcttStlMItemAction.progMatQtyItemShow.engMMng_BeginToCurrentPeriodMQty}"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShow.engMMng_BeginToCurrentPeriodMQty}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="engMMng_CurrentPeriodMQty" value="本期数量:"/>
                         <h:inputText id="engMMng_CurrentPeriodMQty"
-                                     value="#{subcttStlMItemAction.progMatQtyItemShow.engMMng_CurrentPeriodMQty}"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShow.engMMng_CurrentPeriodMQty}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
 
@@ -140,32 +140,32 @@
                         <p:outputLabel for="originFlagItemInfo" value="数据来源:"/>
                         <h:inputText id="originFlagItemInfo"
                                      value="#{esCommon.originFlagListValueOfAlias(
-	                                             subcttStlMItemAction.progMatQtyItemShow.engMMng_OriginFlag)}"
+	                                             progMatqtyItemAction.progMatQtyItemShow.engMMng_OriginFlag)}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdByItemInfo" value="创建人:"/>
                         <h:inputText id="createdByItemInfo"
-                                     value="#{subcttStlMItemAction.progMatQtyItemShow.engMMng_CreatedByName}"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShow.engMMng_CreatedByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdDateItemInfo" value="创建时间:"/>
                         <h:inputText id="createdDateItemInfo"
-                                     value="#{subcttStlMItemAction.progMatQtyItemShow.engMMng_CreatedDate}"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShow.engMMng_CreatedDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdByItemInfo" value="修改人:"/>
                         <h:inputText id="lastUpdByItemInfo"
-                                     value="#{subcttStlMItemAction.progMatQtyItemShow.engMMng_LastUpdByName}"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShow.engMMng_LastUpdByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdDateItemInfo" value="修改时间:"/>
                         <h:inputText id="lastUpdDateItemInfo"
-                                     value="#{subcttStlMItemAction.progMatQtyItemShow.engMMng_LastUpdDate}"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShow.engMMng_LastUpdDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="modificationNumItemInfo" value="修改次数:"/>
                         <h:inputText id="modificationNumItemInfo"
-                                     value="#{subcttStlMItemAction.progMatQtyItemShow.engMMng_ModificationNum}"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShow.engMMng_ModificationNum}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>

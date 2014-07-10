@@ -3,12 +3,11 @@ package epss.view.task;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.model_show.TaskShow;
-import epss.service.common.EsCommonService;
-import epss.service.EsInitPowerService;
-import org.primefaces.event.SelectEvent;
+import epss.service.EsCommonService;
+import epss.service.FlowCtrlService;
 import platform.repository.model.Ptmenu;
 import platform.service.PlatformService;
-import epss.view.common.EsFlowControl;
+import epss.view.flow.EsFlowControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +35,8 @@ public class EsInitTaskAction {
     private PlatformService platformService;
     @ManagedProperty(value = "#{esCommonService}")
     private EsCommonService esCommonService;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
 
     private List<TaskShow> taskShowList;
 
@@ -251,11 +250,11 @@ public class EsInitTaskAction {
         this.esCommonService = esCommonService;
     }
 
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
 
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 }

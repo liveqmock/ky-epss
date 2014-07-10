@@ -17,9 +17,9 @@ import epss.common.utils.MessageUtil;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.EsCttInfo;
 import epss.service.*;
-import epss.service.common.EsFlowService;
-import epss.service.common.EsQueryService;
-import epss.view.common.EsCommon;
+import epss.service.EsFlowService;
+import epss.service.EsQueryService;
+import epss.view.flow.EsCommon;
 import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -39,14 +39,14 @@ import java.util.*;
 @ViewScoped
 public class CstplSubcttItemAction {
     private static final Logger logger = LoggerFactory.getLogger(CstplSubcttItemAction.class);
-    @ManagedProperty(value = "#{esCttInfoService}")
-    private EsCttInfoService esCttInfoService;
-    @ManagedProperty(value = "#{esCttItemService}")
-    private EsCttItemService esCttItemService;
+    @ManagedProperty(value = "#{cttInfoService}")
+    private CttInfoService cttInfoService;
+    @ManagedProperty(value = "#{cttItemService}")
+    private CttItemService cttItemService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esQueryService}")
@@ -68,7 +68,7 @@ public class CstplSubcttItemAction {
         beansMap = new HashMap();
         commStlSubcttEngH =new CommStlSubcttEngH();
         List<CttInfoShow> cttInfoShowList =
-                esCttInfoService.getCttInfoListByCttType_Status(
+                cttInfoService.getCttInfoListByCttType_Status(
                         ESEnum.ITEMTYPE1.getCode()
                        ,ESEnumStatusFlag.STATUS_FLAG3.getCode());
         cstplList=new ArrayList<SelectItem>();
@@ -98,13 +98,13 @@ public class CstplSubcttItemAction {
         return null;
     }
     private void initData(String strBelongToPkid) {
-        EsCttInfo esCttInfo= esCttInfoService.getCttInfoByPkId(strBelongToPkid);
+        EsCttInfo esCttInfo= cttInfoService.getCttInfoByPkId(strBelongToPkid);
         commStlSubcttEngH.setStrCstplId(esCttInfo.getId());
         commStlSubcttEngH.setStrCstplName(esCttInfo.getName());
         beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
         /*成本计划列表*/
         List<EsCttItem> esCttItemListCstpl =new ArrayList<EsCttItem>();
-        esCttItemListCstpl = esCttItemService.getEsItemList(
+        esCttItemListCstpl = cttItemService.getEsItemList(
                 ESEnum.ITEMTYPE1.getCode(),
                 esCttItem.getBelongToPkid());
         List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();
@@ -417,20 +417,20 @@ public class CstplSubcttItemAction {
     }
 
     /*智能字段Start*/
-    public EsCttItemService getEsCttItemService() {
-        return esCttItemService;
+    public CttItemService getCttItemService() {
+        return cttItemService;
     }
 
-    public void setEsCttItemService(EsCttItemService esCttItemService) {
-        this.esCttItemService = esCttItemService;
+    public void setCttItemService(CttItemService cttItemService) {
+        this.cttItemService = cttItemService;
     }
 
-    public EsCttInfoService getEsCttInfoService() {
-        return esCttInfoService;
+    public CttInfoService getCttInfoService() {
+        return cttInfoService;
     }
 
-    public void setEsCttInfoService(EsCttInfoService esCttInfoService) {
-        this.esCttInfoService = esCttInfoService;
+    public void setCttInfoService(CttInfoService cttInfoService) {
+        this.cttInfoService = cttInfoService;
     }
 
     public EsCommon getEsCommon() {
@@ -481,12 +481,12 @@ public class CstplSubcttItemAction {
         this.esCttItem = esCttItem;
     }
 
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
 
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 
     public List<SelectItem> getCstplList() {

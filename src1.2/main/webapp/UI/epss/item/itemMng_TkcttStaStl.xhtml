@@ -22,7 +22,7 @@
     <h:form id="form">
         <p:growl id="msgs" showDetail="false"/>
         <p:dataTable id="pdt" style="width:100%;"
-                     value="#{tkcttStlStaItemAction.progEstStaItemShowList}"
+                     value="#{progEstItemAction.progEstStaItemShowList}"
                      var="record"
                      rowKey="#{record.tkctt_Pkid}"
                      selectionMode="single"
@@ -36,16 +36,16 @@
                      emptyMessage="数据记录为空..."
                      rowStyleClass="#{record.tkctt_Unit eq null? 'rowDoneStyle':null}"
                      scrollable="true">
-            <p:column headerText="操作" style="width:91px" rendered='#{tkcttStlStaItemAction.strMngNotFinishFlag}'>
+            <p:column headerText="操作" style="width:91px" rendered='#{progEstItemAction.strMngNotFinishFlag}'>
                 <p:commandButton  icon="ui-icon-pencil"
                                   style="height:20px;width:20px"
-                                  actionListener="#{tkcttStlStaItemAction.selectRecordAction('Upd',record)}"
+                                  actionListener="#{progEstItemAction.selectRecordAction('Upd',record)}"
                                   update="pdt,:form:pgViewForUpd"
                                   oncomplete="PF('wVDlgViewForUpd').show()">
                 </p:commandButton>
                 <p:commandButton  icon="ui-icon-trash"
                                   style="height:20px;width:20px"
-                                  actionListener="#{tkcttStlStaItemAction.selectRecordAction('Del',record)}"
+                                  actionListener="#{progEstItemAction.selectRecordAction('Del',record)}"
                                   update="pdt,:form:pgViewForDel"
                                   oncomplete="PF('wVDlgViewForDel').show()">
                 </p:commandButton>
@@ -105,83 +105,83 @@
                 <h:panelGrid columns="4">
                     <p:outputLabel for="noItemHieRelapForUpd" value="编号:"/>
                     <h:inputText id="noItemHieRelapForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.tkctt_StrNo}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.tkctt_StrNo}"
                                  style="background-color:gainsboro"
                                  readonly="true">
                     </h:inputText>
                     <p:outputLabel for="nameForUpd" value="名称:"/>
                     <h:inputText id="nameForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.tkctt_Name}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.tkctt_Name}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="noteForUpd" value="备注内容:"/>
                     <h:inputText id="noteForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.tkctt_Note}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.tkctt_Note}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="unitItemInfoForUpd" value="单位:"/>
                     <h:inputText id="unitItemInfoForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.tkctt_Unit}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.tkctt_Unit}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="contractUnitPriceItemInfoForUpd" value="合同单价:"/>
                     <h:inputText id="contractUnitPriceItemInfoForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.tkctt_ContractUnitPrice}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.tkctt_ContractUnitPrice}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:inputText>
                     <p:outputLabel for="contractQuantityItemInfoForUpd" value="合同数量:"/>
                     <h:inputText id="contractQuantityItemInfoForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.tkctt_ContractQuantity}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.tkctt_ContractQuantity}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:inputText>
                     <p:outputLabel for="eng_BeginToCurrentPeriodEQtyForUpd" value="开累工程量:"/>
                     <h:inputText id="eng_BeginToCurrentPeriodEQtyForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.eng_BeginToCurrentPeriodEQty}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.eng_BeginToCurrentPeriodEQty}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:inputText>
                     <p:outputLabel for="eng_CurrentPeriodEQtyForUpd" value="本期工程量:"/>
                     <h:inputText id="eng_CurrentPeriodEQtyForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.eng_CurrentPeriodEQty}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.eng_CurrentPeriodEQty}"
                                  style="text-align:right;">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         <p:ajax event="blur" update="msgs,eng_BeginToCurrentPeriodEQtyForUpd"
-                                listener="#{tkcttStlStaItemAction.blurEng_CurrentPeriodEQty('blur')}"/>
+                                listener="#{progEstItemAction.blurEng_CurrentPeriodEQty('blur')}"/>
                     </h:inputText>
                     <p:outputLabel for="originFlagItemInfoForUpd" value="数据来源:"/>
                     <h:inputText id="originFlagItemInfoForUpd"
                                  value="#{esCommon.originFlagListValueOfAlias(
-	                                             tkcttStlStaItemAction.progEstStaItemShowUpd.eng_OriginFlag)}"
+	                                             progEstItemAction.progEstStaItemShowUpd.eng_OriginFlag)}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="createdByItemInfoForUpd" value="创建人:"/>
                     <h:inputText id="createdByItemInfoForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.eng_CreatedByName}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.eng_CreatedByName}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="createdDateItemInfoForUpd" value="创建时间:"/>
                     <h:inputText id="createdDateItemInfoForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.eng_CreatedDate}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.eng_CreatedDate}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="lastUpdByItemInfoForUpd" value="修改人:"/>
                     <h:inputText id="lastUpdByItemInfoForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.eng_LastUpdByName}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.eng_LastUpdByName}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="lastUpdDateItemInfoForUpd" value="修改时间:"/>
                     <h:inputText id="lastUpdDateItemInfoForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.eng_LastUpdDate}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.eng_LastUpdDate}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="modificationNumItemInfoForUpd" value="修改次数:"/>
                     <h:inputText id="modificationNumItemInfoForUpd"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowUpd.eng_ModificationNum}"
+                                 value="#{progEstItemAction.progEstStaItemShowUpd.eng_ModificationNum}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
@@ -190,7 +190,7 @@
                 <h:panelGrid id="pgOperBtnForUpd" columns="2">
                     <p:commandButton id="submitBtnForUpd"
                                      value="提交（更新）"
-                                     action="#{tkcttStlStaItemAction.submitThisRecordAction}"
+                                     action="#{progEstItemAction.submitThisRecordAction}"
                                      update="pgViewForUpd,pdt,msgs">
                     </p:commandButton>
                     <p:commandButton id="resetBtnForUpd" value="重置"
@@ -207,49 +207,49 @@
                 <h:panelGrid columns="4">
                     <p:outputLabel for="noItemHieRelapForDel" value="编号:"/>
                     <h:inputText id="noItemHieRelapForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.tkctt_StrNo}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.tkctt_StrNo}"
                                  style="background-color:gainsboro"
                                  readonly="true">
                     </h:inputText>
                     <p:outputLabel for="nameForDel" value="名称:"/>
                     <h:inputText id="nameForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.tkctt_Name}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.tkctt_Name}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="noteForDel" value="备注内容:"/>
                     <h:inputText id="noteForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.tkctt_Note}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.tkctt_Note}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="unitItemInfoForDel" value="单位:"/>
                     <h:inputText id="unitItemInfoForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.tkctt_Unit}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.tkctt_Unit}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="contractUnitPriceItemInfoForDel" value="合同单价:"/>
                     <h:inputText id="contractUnitPriceItemInfoForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.tkctt_ContractUnitPrice}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.tkctt_ContractUnitPrice}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:inputText>
                     <p:outputLabel for="contractQuantityItemInfoForDel" value="合同数量:"/>
                     <h:inputText id="contractQuantityItemInfoForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.tkctt_ContractQuantity}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.tkctt_ContractQuantity}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:inputText>
                     <p:outputLabel for="eng_BeginToCurrentPeriodEQtyForDel" value="开累工程量:"/>
                     <h:inputText id="eng_BeginToCurrentPeriodEQtyForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.eng_BeginToCurrentPeriodEQty}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.eng_BeginToCurrentPeriodEQty}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:inputText>
                     <p:outputLabel for="eng_CurrentPeriodEQtyForDel" value="本期工程量:"/>
                     <h:inputText id="eng_CurrentPeriodEQtyForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.eng_CurrentPeriodEQty}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.eng_CurrentPeriodEQty}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
@@ -257,32 +257,32 @@
                     <p:outputLabel for="originFlagItemInfoForDel" value="数据来源:"/>
                     <h:inputText id="originFlagItemInfoForDel"
                                  value="#{esCommon.originFlagListValueOfAlias(
-	                                             tkcttStlStaItemAction.progEstStaItemShowDel.eng_OriginFlag)}"
+	                                             progEstItemAction.progEstStaItemShowDel.eng_OriginFlag)}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="createdByItemInfoForDel" value="创建人:"/>
                     <h:inputText id="createdByItemInfoForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.eng_CreatedByName}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.eng_CreatedByName}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="createdDateItemInfoForDel" value="创建时间:"/>
                     <h:inputText id="createdDateItemInfoForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.eng_CreatedDate}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.eng_CreatedDate}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="lastUpdByItemInfoForDel" value="修改人:"/>
                     <h:inputText id="lastUpdByItemInfoForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.eng_LastUpdByName}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.eng_LastUpdByName}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="lastUpdDateItemInfoForDel" value="修改时间:"/>
                     <h:inputText id="lastUpdDateItemInfoForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.eng_LastUpdDate}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.eng_LastUpdDate}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
                     <p:outputLabel for="modificationNumItemInfoForDel" value="修改次数:"/>
                     <h:inputText id="modificationNumItemInfoForDel"
-                                 value="#{tkcttStlStaItemAction.progEstStaItemShowDel.eng_ModificationNum}"
+                                 value="#{progEstItemAction.progEstStaItemShowDel.eng_ModificationNum}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
@@ -291,7 +291,7 @@
                 <h:panelGrid id="pgOperBtnForDel" >
                     <p:commandButton id="submitBtnForDel"
                                      value="提交（删除）"
-                                     action="#{tkcttStlStaItemAction.submitThisRecordAction}"
+                                     action="#{progEstItemAction.submitThisRecordAction}"
                                      update="pgViewForDel,pdt,msgs">
                     </p:commandButton>
                 </h:panelGrid>

@@ -35,16 +35,16 @@
                     <h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="合同编号：" for="id"/>
-                            <p:inputText id="id" value="#{tkCttInfoAction.cttInfoShowQry.id}"
+                            <p:inputText id="id" value="#{tkcttInfoAction.cttInfoShowQry.id}"
                                          style="width: 175px"/>
                             <p:outputLabel value="合同名称：" for="cttName"/>
-                            <p:inputText id="cttName" value="#{tkCttInfoAction.cttInfoShowQry.name}"
+                            <p:inputText id="cttName" value="#{tkcttInfoAction.cttInfoShowQry.name}"
                                          style="width: 300px"/>
                         </h:panelGrid>
                     </h:panelGrid>
                     <h:panelGrid columns="3">
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{tkCttInfoAction.onQueryAction('ApprovedQry','true')}"
+                                         action="#{tkcttInfoAction.onQueryAction('ApprovedQry','true')}"
                                          update="pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
@@ -63,7 +63,7 @@
                 </h:panelGrid>
             </p:panel>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{tkCttInfoAction.cttInfoShowList}"
+                         value="#{tkcttInfoAction.cttInfoShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
@@ -79,7 +79,7 @@
                 <p:column headerText="操作" style="width:40px">
                     <p:commandButton  icon="ui-icon-search"
                                       style="height:20px;width:20px"
-                                      action="#{tkCttInfoAction.selectRecordAction('Qry','',record)}"
+                                      action="#{tkcttInfoAction.selectRecordAction('Qry','',record)}"
                                       update="pdt,:form:pgView,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
                     </p:commandButton>
@@ -120,47 +120,47 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel value="合同编号：" for="idForDlg"/>
                         <p:inputText id="idForDlg"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.id}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.id}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel value="合同名称：" for="cttNameForDlg"/>
                         <p:inputText id="cttNameForDlg"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.name}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.name}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel value="备注内容：" for="noteForDlg"/>
                         <p:inputText id="noteForDlg"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.note}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.note}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel value="签订日期：" for="signDateForDlg"/>
                         <p:inputText id="signDateForDlg"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.signDate}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.signDate}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel value="开始时间：" for="cttStartDateForDlg"/>
                         <p:inputText id="cttStartDateForDlg"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.cttStartDate}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.cttStartDate}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel value="截止时间：" for="cttEndDateForDlg"/>
                         <p:inputText id="cttEndDateForDlg"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.cttEndDate}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.cttEndDate}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:outputLabel value="签订甲方：" for="signPartAForDlg"/>
                         <p:inputText id="signPartAForDlg"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.signPartAName}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.signPartAName}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;">
                         </p:inputText>
                         <p:outputLabel value="签订乙方：" for="signPartBForDlg"/>
                         <p:inputText id="signPartBForDlg"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.signPartBName}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.signPartBName}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;">
                         </p:inputText>
@@ -168,23 +168,23 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel for="createdByNameSel" value="创建人：" />
                         <h:inputText id="createdByNameSel"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.createdByName}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.createdByName}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="createdDateSel" value="创建时间：" />
                         <h:inputText id="createdDateSel"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.createdDate}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.createdDate}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="lastUpdByNameSel" value="修改人：" />
                         <h:inputText id="lastUpdByNameSel"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.lastUpdByName}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.lastUpdByName}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="lastUpdDateSel" value="修改时间：" />
                         <h:inputText id="lastUpdDateSel"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.lastUpdDate}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.lastUpdDate}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="modificationNumSel" value="修改次数：" />
                         <h:inputText id="modificationNumSel"
-                                     value="#{tkCttInfoAction.cttInfoShowSel.modificationNum}"
+                                     value="#{tkcttInfoAction.cttInfoShowSel.modificationNum}"
                                      style="background-color:gainsboro;text-align:right;" readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                         </h:inputText>

@@ -24,35 +24,35 @@
             <h:panelGrid id="pgCondition">
                 <h:panelGrid columns="4">
                     <p:outputLabel value="工程名称：" for="id"/>
-                    <p:inputText id="id" value="#{subcttStlPItemAction.commStlSubcttEngH.strTkcttName}"
+                    <p:inputText id="id" value="#{progSubstlItemAction.commStlSubcttEngH.strTkcttName}"
                                  readonly="true"
                                  style="background-color:gainsboro;width:500px;"/>
                     <p:outputLabel value="结算单编号：" for="strStlId"/>
-                    <p:inputText id="strStlId" value="#{subcttStlPItemAction.commStlSubcttEngH.strStlId}"
+                    <p:inputText id="strStlId" value="#{progSubstlItemAction.commStlSubcttEngH.strStlId}"
                                  readonly="true"
                                  style="background-color:gainsboro;width:200px;"/>
                     <p:outputLabel value="工程项目：" for="strSubcttName"/>
-                    <p:inputText id="strSubcttName" value="#{subcttStlPItemAction.commStlSubcttEngH.strSubcttName}"
+                    <p:inputText id="strSubcttName" value="#{progSubstlItemAction.commStlSubcttEngH.strSubcttName}"
                                  readonly="true"
                                  style="background-color:gainsboro;width:500px;"/>
                     <p:outputLabel value="协作合同编号：" for="strSubcttId"/>
-                    <p:inputText id="strSubcttId" value="#{subcttStlPItemAction.commStlSubcttEngH.strSubcttId}"
+                    <p:inputText id="strSubcttId" value="#{progSubstlItemAction.commStlSubcttEngH.strSubcttId}"
                                  readonly="true"
                                  style="background-color:gainsboro;width:200px;"/>
                     <p:outputLabel value="协作队伍：" for="strSignPartName"/>
-                    <p:inputText id="strSignPartName" value="#{subcttStlPItemAction.commStlSubcttEngH.strSignPartName}"
+                    <p:inputText id="strSignPartName" value="#{progSubstlItemAction.commStlSubcttEngH.strSignPartName}"
                                  readonly="true"
                                  style="background-color:gainsboro;width:500px;"/>
                     <p:outputLabel value="日期：" for="strDate"/>
-                    <p:inputText id="strDate" value="#{subcttStlPItemAction.commStlSubcttEngH.strDate}"
+                    <p:inputText id="strDate" value="#{progSubstlItemAction.commStlSubcttEngH.strDate}"
                                  readonly="true"
                                  style="background-color:gainsboro;width:200px;"/>
                 </h:panelGrid>
                 <h:panelGrid columns="2">
                     <p:commandButton value="导出到EXCEL"
-                                     action="#{subcttStlPItemAction.onExportExcel}"
+                                     action="#{progSubstlItemAction.onExportExcel}"
                                      ajax="false"
-                                     rendered="#{subcttStlPItemAction.strExportToExcelRendered}">
+                                     rendered="#{progSubstlItemAction.strExportToExcelRendered}">
                     </p:commandButton>
                     <p:ajaxStatus style="width:16px;height:16px;">
                         <f:facet name="start">
@@ -65,7 +65,7 @@
                 </h:panelGrid>
             </h:panelGrid>
             <p:dataTable id="pdt" style="heiht:100%;width:100%;"
-                     value="#{subcttStlPItemAction.progSubstlItemShowList}"
+                     value="#{progSubstlItemAction.progSubstlItemShowList}"
                      var="record"
                      rowKey="#{record.subctt_Pkid}"
                      selectionMode="single"

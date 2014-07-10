@@ -2,7 +2,7 @@ package epss.view.attachment;
 
 import epss.common.utils.ApplicationContextUtil;
 import epss.repository.model.EsCttInfo;
-import epss.service.EsCttInfoService;
+import epss.service.CttInfoService;
 import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletException;
@@ -18,11 +18,11 @@ import java.util.List;
 public class DeleteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private EsCttInfoService esCttInfoService;
+    private CttInfoService cttInfoService;
     @Override
     public void init() throws ServletException {
         ApplicationContext ac = ApplicationContextUtil.getApplicationContext();
-        esCttInfoService = (EsCttInfoService) ac.getBean("esCttInfoService");
+        cttInfoService = (CttInfoService) ac.getBean("cttInfoService");
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -32,7 +32,7 @@ public class DeleteServlet extends HttpServlet {
 
         File file = new File(this.getServletContext().getRealPath("/upload") + "/" + strFileName);
         file.delete();
-        String attachment =  esCttInfoService.getCttInfoByPkId(request.getParameter("strPkid")).getAttachment();
+        String attachment =  cttInfoService.getCttInfoByPkId(request.getParameter("strPkid")).getAttachment();
         List<String> fileNames =  new ArrayList<>();
         if (attachment != null){
             List<String> fileNamesTemp = Arrays.asList(attachment.split(";"));
@@ -50,9 +50,9 @@ public class DeleteServlet extends HttpServlet {
         }
 
         String strPkid= request.getParameter("strPkid");
-        EsCttInfo esCttInfo = esCttInfoService.getCttInfoByPkId(strPkid);
+        EsCttInfo esCttInfo = cttInfoService.getCttInfoByPkId(strPkid);
         esCttInfo.setAttachment(sb.toString());
-        esCttInfoService.updateRecord(esCttInfo);
+        cttInfoService.updateRecord(esCttInfo);
 
         request.setAttribute("fileNames", fileNames);
         request.getRequestDispatcher("/UI/epss/attachment/attachment_Mng.jsp").forward(request, response);

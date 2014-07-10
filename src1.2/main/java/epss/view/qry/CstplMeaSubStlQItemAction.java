@@ -17,9 +17,9 @@ import epss.common.utils.MessageUtil;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.EsItemStlTkcttEngMea;
 import epss.service.*;
-import epss.service.common.EsFlowService;
-import epss.service.common.EsQueryService;
-import epss.view.common.EsCommon;
+import epss.service.EsFlowService;
+import epss.service.EsQueryService;
+import epss.view.flow.EsCommon;
 import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -40,20 +40,20 @@ import java.util.Map;
 @ViewScoped
 public class CstplMeaSubStlQItemAction {
     private static final Logger logger = LoggerFactory.getLogger(CstplMeaSubStlQItemAction.class);
-    @ManagedProperty(value = "#{esCttInfoService}")
-    private EsCttInfoService esCttInfoService;
-    @ManagedProperty(value = "#{esCttItemService}")
-    private EsCttItemService esCttItemService;
+    @ManagedProperty(value = "#{cttInfoService}")
+    private CttInfoService cttInfoService;
+    @ManagedProperty(value = "#{cttItemService}")
+    private CttItemService cttItemService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esQueryService}")
     private EsQueryService esQueryService;
-    @ManagedProperty(value = "#{esItemStlTkcttEngMeaService}")
-    private EsItemStlTkcttEngMeaService esItemStlTkcttEngMeaService;
+    @ManagedProperty(value = "#{progMeaItemService}")
+    private ProgMeaItemService progMeaItemService;
 
     /*列表显示用*/
     private List<QryCSStlQShow> qryCSMeaSubQShowList;
@@ -74,7 +74,7 @@ public class CstplMeaSubStlQItemAction {
         beansMap = new HashMap();
         commStlSubcttEngH =new CommStlSubcttEngH();
         List<CttInfoShow> cttInfoShowList =
-                esCttInfoService.getCttInfoListByCttType_Status(
+                cttInfoService.getCttInfoListByCttType_Status(
                         ESEnum.ITEMTYPE1.getCode()
                        ,ESEnumStatusFlag.STATUS_FLAG3.getCode());
         cstplList=new ArrayList<SelectItem>();
@@ -107,13 +107,13 @@ public class CstplMeaSubStlQItemAction {
         List<EsItemStlTkcttEngMea> esItemStlTkcttEngMeaList=new ArrayList<EsItemStlTkcttEngMea>();
 
         beansMap.put("strThisMonth", ToolUtil.getStrThisMonth());
-        EsCttInfo esInitCttCstpl= esCttInfoService.getCttInfoByPkId(strBelongToPkid);
+        EsCttInfo esInitCttCstpl= cttInfoService.getCttInfoByPkId(strBelongToPkid);
         commStlSubcttEngH.setStrCstplId(esInitCttCstpl.getId());
         commStlSubcttEngH.setStrCstplName(esInitCttCstpl.getName());
         beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
         /*成本计划列表*/
         List<EsCttItem> esCttItemListCstpl =new ArrayList<EsCttItem>();
-        esCttItemListCstpl = esCttItemService.getEsItemList(
+        esCttItemListCstpl = cttItemService.getEsItemList(
                 ESEnum.ITEMTYPE1.getCode(),
                 strCstplPkid);
         List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();
@@ -130,7 +130,7 @@ public class CstplMeaSubStlQItemAction {
             EsItemStlTkcttEngMea esItemStlTkcttEngMea=new EsItemStlTkcttEngMea();
             esItemStlTkcttEngMea.setTkcttPkid(esInitCttCstpl.getParentPkid());
             esItemStlTkcttEngMea.setPeriodNo(strMeaLatestApprovedPeriodNo);
-            esItemStlTkcttEngMeaList=esItemStlTkcttEngMeaService.selectRecordsByPkidPeriodNoExample(esItemStlTkcttEngMea);
+            esItemStlTkcttEngMeaList= progMeaItemService.selectRecordsByPkidPeriodNoExample(esItemStlTkcttEngMea);
         }
 
         List<QryShow> qryShowList =esQueryService.getCSStlQList(strBelongToPkid, strPeriodNo);
@@ -377,20 +377,20 @@ public class CstplMeaSubStlQItemAction {
 
     /*智能字段Start*/
 
-    public EsCttInfoService getEsCttInfoService() {
-        return esCttInfoService;
+    public CttInfoService getCttInfoService() {
+        return cttInfoService;
     }
 
-    public void setEsCttInfoService(EsCttInfoService esCttInfoService) {
-        this.esCttInfoService = esCttInfoService;
+    public void setCttInfoService(CttInfoService cttInfoService) {
+        this.cttInfoService = cttInfoService;
     }
 
-    public EsCttItemService getEsCttItemService() {
-        return esCttItemService;
+    public CttItemService getCttItemService() {
+        return cttItemService;
     }
 
-    public void setEsCttItemService(EsCttItemService esCttItemService) {
-        this.esCttItemService = esCttItemService;
+    public void setCttItemService(CttItemService cttItemService) {
+        this.cttItemService = cttItemService;
     }
 
     public EsCommon getEsCommon() {
@@ -433,12 +433,12 @@ public class CstplMeaSubStlQItemAction {
         this.strPeriodNo = strPeriodNo;
     }
 
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
 
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 
     public List<SelectItem> getCstplList() {
@@ -481,12 +481,12 @@ public class CstplMeaSubStlQItemAction {
         this.beansMap = beansMap;
     }
 
-    public EsItemStlTkcttEngMeaService getEsItemStlTkcttEngMeaService() {
-        return esItemStlTkcttEngMeaService;
+    public ProgMeaItemService getProgMeaItemService() {
+        return progMeaItemService;
     }
 
-    public void setEsItemStlTkcttEngMeaService(EsItemStlTkcttEngMeaService esItemStlTkcttEngMeaService) {
-        this.esItemStlTkcttEngMeaService = esItemStlTkcttEngMeaService;
+    public void setProgMeaItemService(ProgMeaItemService progMeaItemService) {
+        this.progMeaItemService = progMeaItemService;
     }
 
     public EsFlowService getEsFlowService() {

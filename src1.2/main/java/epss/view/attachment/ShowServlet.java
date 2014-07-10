@@ -1,7 +1,7 @@
 package epss.view.attachment;
 
 import epss.common.utils.ApplicationContextUtil;
-import epss.service.EsCttInfoService;
+import epss.service.CttInfoService;
 import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletException;
@@ -21,12 +21,12 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class ShowServlet extends HttpServlet {
-    private EsCttInfoService esCttInfoService;
+    private CttInfoService cttInfoService;
 
     @Override
     public void init() throws ServletException {
         ApplicationContext ac = ApplicationContextUtil.getApplicationContext();
-        esCttInfoService = (EsCttInfoService) ac.getBean("esCttInfoService");
+        cttInfoService = (CttInfoService) ac.getBean("cttInfoService");
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -35,7 +35,7 @@ public class ShowServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<String> fileNames = new ArrayList<>();
-        String attachment = esCttInfoService.getCttInfoByPkId(request.getParameter("strPkid")).getAttachment();
+        String attachment = cttInfoService.getCttInfoByPkId(request.getParameter("strPkid")).getAttachment();
         if (attachment != null) {
             List<String> fileNamesTemp = Arrays.asList(attachment.split(";"));
             if (fileNamesTemp.size() > 0) {

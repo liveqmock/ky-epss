@@ -17,9 +17,9 @@ import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
 import epss.repository.model.EsInitPower;
 import epss.service.*;
-import epss.service.common.EsFlowService;
-import epss.view.common.EsCommon;
-import epss.view.common.EsFlowControl;
+import epss.service.EsFlowService;
+import epss.view.flow.EsCommon;
+import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -38,16 +38,16 @@ import java.util.*;
 @ViewScoped
 public class SubcttItemAction {
     private static final Logger logger = LoggerFactory.getLogger(SubcttItemAction.class);
-    @ManagedProperty(value = "#{esCttItemService}")
-    private EsCttItemService esCttItemService;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+    @ManagedProperty(value = "#{cttItemService}")
+    private CttItemService cttItemService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
-    @ManagedProperty(value = "#{esCttInfoService}")
-    private EsCttInfoService esCttInfoService;
+    @ManagedProperty(value = "#{cttInfoService}")
+    private CttInfoService cttInfoService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     /*打开的成本计划页面用*/
@@ -92,7 +92,7 @@ public class SubcttItemAction {
         strSubcttInfoPkid=parammap.get("strSubcttInfoPkid").toString();
         strFlowType=parammap.get("strFlowType").toString();
 		List<EsInitPower> esInitPowerList=
-                esInitPowerService.selectListByModel(strBelongToType,strSubcttInfoPkid,"NULL");
+                flowCtrlService.selectListByModel(strBelongToType,strSubcttInfoPkid,"NULL");
         strPassFlag="true";
         if(esInitPowerList.size()>0){
             if("Mng".equals(strFlowType)&&ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
@@ -106,21 +106,21 @@ public class SubcttItemAction {
     /*初始化操作*/
     private void initData() {
         /*初始化流程状态列表*/
-        esFlowControl.setStatusFlagListByPower(strFlowType);
+        esFlowControl.getBackToStatusFlagList(strFlowType);
         /*分包合同*/
         cttItemShowList_Cstpl =new ArrayList<CttItemShow>();
-        subcttInfo = esCttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
+        subcttInfo = cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
 
         /*成本计划*/
         String strCstplPkidInInitCtt= subcttInfo.getParentPkid() ;
-        esCttItemList = esCttItemService.getEsItemList(
+        esCttItemList = cttItemService.getEsItemList(
                 ESEnum.ITEMTYPE1.getCode(), strCstplPkidInInitCtt);
         recursiveDataTable("root", esCttItemList, cttItemShowList_Cstpl);
         cttItemShowList_Cstpl =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList_Cstpl);
         /*分包合同*/
         esCttItemList =new ArrayList<EsCttItem>();
         cttItemShowList =new ArrayList<CttItemShow>();
-        esCttItemList = esCttItemService.getEsItemList(
+        esCttItemList = cttItemService.getEsItemList(
                 strBelongToType, strSubcttInfoPkid);
         cttItemShowList.clear();
         recursiveDataTable("root", esCttItemList, cttItemShowList);
@@ -504,20 +504,20 @@ public class SubcttItemAction {
         }
     }
     private void addRecordAction(CttItemShow cttItemShowPara){
-        esCttItemService.setAfterThisOrderidPlusOneByNode(
+        cttItemService.setAfterThisOrderidPlusOneByNode(
                 cttItemShowPara.getBelongToType(),
                 cttItemShowPara.getBelongToPkid(),
                 cttItemShowPara.getParentPkid(),
                 cttItemShowPara.getGrade(),
                 cttItemShowPara.getOrderid());
-        esCttItemService.insertRecord(cttItemShowPara);
+        cttItemService.insertRecord(cttItemShowPara);
     }
     private void updRecordAction(CttItemShow cttItemShowPara){
-        esCttItemService.updateRecord(cttItemShowPara) ;
+        cttItemService.updateRecord(cttItemShowPara) ;
     }
     private int delRecordAction(CttItemShow cttItemShowPara) {
-        int deleteRecordNum=esCttItemService.deleteRecord(cttItemShowPara.getPkid()) ;
-        esCttItemService.setAfterThisOrderidSubOneByNode(
+        int deleteRecordNum= cttItemService.deleteRecord(cttItemShowPara.getPkid()) ;
+        cttItemService.setAfterThisOrderidSubOneByNode(
                 cttItemShowPara.getBelongToType(),
                 cttItemShowPara.getBelongToPkid(),
                 cttItemShowPara.getParentPkid(),
@@ -561,7 +561,7 @@ public class SubcttItemAction {
     public void submitAction_Cstpl(){
         try{
             cttItemShowSelected.setCorrespondingPkid(cttItemShowSelected_Cstpl.getPkid());
-            esCttItemService.updateRecord(cttItemShowSelected) ;
+            cttItemService.updateRecord(cttItemShowSelected) ;
             initData();
         } catch (Exception e) {
             e.printStackTrace();
@@ -695,14 +695,14 @@ public class SubcttItemAction {
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
                     // 原因：审核通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
                     // 状态标志：初始
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
                     // 原因：审核未过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据审核未过！");
                 }
             } // 复核
@@ -712,14 +712,14 @@ public class SubcttItemAction {
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
                     // 原因：复核通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
                     cttInfoShowSel.setStatusFlag(strNotPassToStatus);
                     // 原因：复核未过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据复核未过！");
                 }
             }// 批准
@@ -729,7 +729,7 @@ public class SubcttItemAction {
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
                     // 原因：批准通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据批准通过！");
 
                 } else if (strPowerTypePara.equals("ApproveFail")) {
@@ -745,7 +745,7 @@ public class SubcttItemAction {
                     // 原因：批准未过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
 
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
 
                     List<EsInitStl> esInitStlListTemp =
                             esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfoShowSel.getPkid());
@@ -770,11 +770,11 @@ public class SubcttItemAction {
         }
     }
     /*智能字段Start*/
-    public EsCttItemService getEsCttItemService() {
-        return esCttItemService;
+    public CttItemService getCttItemService() {
+        return cttItemService;
     }
-    public void setEsCttItemService(EsCttItemService esCttItemService) {
-        this.esCttItemService = esCttItemService;
+    public void setCttItemService(CttItemService cttItemService) {
+        this.cttItemService = cttItemService;
     }
 
     public EsCommon getEsCommon() {
@@ -825,12 +825,12 @@ public class SubcttItemAction {
         this.strSubmitType = strSubmitType;
     }
 
-    public EsCttInfoService getEsCttInfoService() {
-        return esCttInfoService;
+    public CttInfoService getCttInfoService() {
+        return cttInfoService;
     }
 
-    public void setEsCttInfoService(EsCttInfoService esCttInfoService) {
-        this.esCttInfoService = esCttInfoService;
+    public void setCttInfoService(CttInfoService cttInfoService) {
+        this.cttInfoService = cttInfoService;
     }
 
     public List<CttItemShow> getCttItemShowList_Cstpl() {
@@ -849,12 +849,12 @@ public class SubcttItemAction {
         this.cttItemShowSelected_Cstpl = cttItemShowSelected_Cstpl;
     }
 
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
 
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowControl getEsFlowControl() {

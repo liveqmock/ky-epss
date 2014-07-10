@@ -36,14 +36,14 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel value="合同编号：" for="id"/>
                         <p:inputText id="id"
-                                     value="#{subCttInfoAction.cttInfoShowQry.id}"/>
+                                     value="#{subcttInfoAction.cttInfoShowQry.id}"/>
                         <p:outputLabel value="合同名称：" for="cttName"/>
                         <p:inputText id="cttName"
-                                     value="#{subCttInfoAction.cttInfoShowQry.name}"/>
+                                     value="#{subcttInfoAction.cttInfoShowQry.name}"/>
                     </h:panelGrid>
                     <h:panelGrid columns="3">
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{subCttInfoAction.onQueryAction('Approve','true')}"
+                                         action="#{subcttInfoAction.onQueryAction('Approve','true')}"
                                          update="pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
@@ -62,7 +62,7 @@
                 </h:panelGrid>
             </p:panel>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{subCttInfoAction.cttInfoShowList}"
+                         value="#{subcttInfoAction.cttInfoShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
                          selectionMode="single"
@@ -79,7 +79,7 @@
                          scrollable="true">
                 <p:column headerText="操作" style="width:91px" >
                     <p:commandButton   icon="ui-icon-search"
-                                       actionListener="#{subCttInfoAction.selectRecordAction('Qry','',record)}"
+                                       actionListener="#{subcttInfoAction.selectRecordAction('Qry','',record)}"
                                        update=":form:pdt,:form:pgView,:form:msgs"
                                        onclick="PF('wVDlgView').show()">
                     </p:commandButton>
@@ -128,49 +128,49 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel value="合同编号：" for="idForDlg"/>
                         <p:inputText id="idForDlg"
-                                     value="#{subCttInfoAction.cttInfoShowSel.id}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.id}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:outputLabel value="合同名称：" for="cttNameForDlg"/>
                         <p:inputText id="cttNameForDlg"
-                                     value="#{subCttInfoAction.cttInfoShowSel.name}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.name}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel value="备注内容：" for="noteForDlg"/>
                         <p:inputText id="noteForDlg"
-                                     value="#{subCttInfoAction.cttInfoShowSel.note}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.note}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel value="签订日期：" for="signDateForDlg"/>
                         <p:inputText id="signDateForDlg"
-                                     value="#{subCttInfoAction.cttInfoShowSel.signDate}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.signDate}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel value="开始时间：" for="cttStartDateForDlg"/>
                         <p:inputText id="cttStartDateForDlg"
-                                     value="#{subCttInfoAction.cttInfoShowSel.cttStartDate}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.cttStartDate}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel value="截止时间：" for="cttEndDateForDlg"/>
                         <p:inputText id="cttEndDateForDlg"
-                                     value="#{subCttInfoAction.cttInfoShowSel.cttEndDate}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.cttEndDate}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:outputLabel value="签订甲方：" for="signPartAForDlg"/>
                         <p:inputText id="signPartAForDlg"
-                                     value="#{subCttInfoAction.cttInfoShowSel.signPartAName}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.signPartAName}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;">
                         </p:inputText>
                         <p:outputLabel value="签订乙方：" for="signPartBForDlg"/>
                         <p:inputText id="signPartBForDlg"
-                                     value="#{subCttInfoAction.cttInfoShowSel.signPartBName}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.signPartBName}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;">
                         </p:inputText>
@@ -178,23 +178,23 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel for="createdByNameSel" value="创建人：" />
                         <h:inputText id="createdByNameSel"
-                                     value="#{subCttInfoAction.cttInfoShowSel.createdByName}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.createdByName}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="createdDateSel" value="创建时间：" />
                         <h:inputText id="createdDateSel"
-                                     value="#{subCttInfoAction.cttInfoShowSel.createdDate}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.createdDate}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="lastUpdByNameSel" value="修改人：" />
                         <h:inputText id="lastUpdByNameSel"
-                                     value="#{subCttInfoAction.cttInfoShowSel.lastUpdByName}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.lastUpdByName}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="lastUpdDateSel" value="修改时间：" />
                         <h:inputText id="lastUpdDateSel"
-                                     value="#{subCttInfoAction.cttInfoShowSel.lastUpdDate}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.lastUpdDate}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="modificationNumSel" value="修改次数：" />
                         <h:inputText id="modificationNumSel"
-                                     value="#{subCttInfoAction.cttInfoShowSel.modificationNum}"
+                                     value="#{subcttInfoAction.cttInfoShowSel.modificationNum}"
                                      style="background-color:gainsboro;text-align:right;" readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                         </h:inputText>

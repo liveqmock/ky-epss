@@ -3,10 +3,9 @@ package epss.view.cust;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.model_show.SignPartShow;
-import epss.view.common.EsCommon;
-import epss.repository.model.EsInitCust;
-import epss.service.EsInitCustService;
-import epss.view.common.EsFlowControl;
+import epss.view.flow.EsCommon;
+import epss.service.SignPartService;
+import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -31,8 +30,8 @@ import java.util.List;
 @ViewScoped
 public class EsInitCustAction {
     private static final Logger logger = LoggerFactory.getLogger(EsInitCustAction.class);
-    @ManagedProperty(value = "#{esInitCustService}")
-    private EsInitCustService esInitCustService;
+    @ManagedProperty(value = "#{signPartService}")
+    private SignPartService signPartService;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{esCommon}")
@@ -77,7 +76,7 @@ public class EsInitCustAction {
         try {
             String strMaxId;
             Integer intTemp;
-            strMaxId= esInitCustService.getMaxId();
+            strMaxId= signPartService.getMaxId();
             if(StringUtils .isEmpty(strMaxId)){
                 strMaxId="CUST"+ esCommon.getStrToday()+"001";
             }
@@ -103,7 +102,7 @@ public class EsInitCustAction {
 
     public void onQueryAction(String strQryMsgOutPara) {
         try {
-            this.signPartShowList = esInitCustService.selectListByModel(signPartShowQry);
+            this.signPartShowList = signPartService.selectListByModel(signPartShowQry);
             if(strQryMsgOutPara.equals("true")) {
                 if (signPartShowList.isEmpty()) {
                     MessageUtil.addWarn("没有查询到数据。");
@@ -132,7 +131,7 @@ public class EsInitCustAction {
 
     public void submitThisRecordAction(){
         if(strSubmitType.equals("Add")){
-            if(esInitCustService .isExistInDb(signPartShowAdd)) {
+            if(signPartService.isExistInDb(signPartShowAdd)) {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             }else {
                 addRecordAction(signPartShowAdd);
@@ -149,7 +148,7 @@ public class EsInitCustAction {
     public void addRecordAction(SignPartShow signPartShowPara){
         try {
             if(unableNullCheck(signPartShowPara)){
-                esInitCustService.insertRecord(signPartShowPara) ;
+                signPartService.insertRecord(signPartShowPara) ;
                 MessageUtil.addInfo("新增数据完成。");
 
             }
@@ -160,7 +159,7 @@ public class EsInitCustAction {
     }
     public void updRecordAction(SignPartShow signPartShowPara){
         try {
-            esInitCustService.updateRecord(signPartShowPara) ;
+            signPartService.updateRecord(signPartShowPara) ;
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
@@ -169,7 +168,7 @@ public class EsInitCustAction {
     }
     public void deleteRecordAction(SignPartShow esInitCustPara){
         try {
-            int deleteRecordNum=esInitCustService.deleteRecord(esInitCustPara.getPkid()) ;
+            int deleteRecordNum= signPartService.deleteRecord(esInitCustPara.getPkid()) ;
             if (deleteRecordNum<=0){
                 MessageUtil.addInfo("该记录已删除。");
                 return;
@@ -198,12 +197,12 @@ public class EsInitCustAction {
         }
     }
 
-    public EsInitCustService getEsInitCustService() {
-        return esInitCustService;
+    public SignPartService getSignPartService() {
+        return signPartService;
     }
 
-    public void setEsInitCustService(EsInitCustService esInitCustService) {
-        this.esInitCustService = esInitCustService;
+    public void setSignPartService(SignPartService signPartService) {
+        this.signPartService = signPartService;
     }
 
     public EsFlowControl getEsFlowControl() {

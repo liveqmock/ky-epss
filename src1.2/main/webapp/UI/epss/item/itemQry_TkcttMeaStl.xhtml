@@ -22,7 +22,7 @@
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
             <p:dataTable id="pdt" style="width:100%;"
-                     value="#{tkcttStlMeaItemAction.progEstMeaItemShowList}"
+                     value="#{progMeaItemAction.progEstMeaItemShowList}"
                      var="record"
                      rowKey="#{record.tkctt_Pkid}"
                      selectionMode="single"
@@ -38,7 +38,7 @@
                 <p:column headerText="操作" style="width:30px">
                     <p:commandButton  icon="ui-icon-search"
                                       style="height:20px;width:20px"
-                                      action="#{tkcttStlMeaItemAction.selectRecordAction('Sel',record)}"
+                                      action="#{progMeaItemAction.selectRecordAction('Sel',record)}"
                                       update="pdt,:form:pgView,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
                     </p:commandButton>
@@ -98,74 +98,74 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel for="noItemHieRelap" value="编号:"/>
                         <h:inputText id="noItemHieRelap"
-                                     value="#{tkcttStlMeaItemAction.progEstMeaItemShow.tkctt_StrNo}"
+                                     value="#{progMeaItemAction.progEstMeaItemShow.tkctt_StrNo}"
                                      style="background-color:gainsboro"
                                      readonly="true">
                         </h:inputText>
                         <p:outputLabel for="name" value="名称:"/>
-                        <h:inputText id="name" value="#{tkcttStlMeaItemAction.progEstMeaItemShow.tkctt_Name}"
+                        <h:inputText id="name" value="#{progMeaItemAction.progEstMeaItemShow.tkctt_Name}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="note" value="备注内容:"/>
-                        <h:inputText id="note" value="#{tkcttStlMeaItemAction.progEstMeaItemShow.tkctt_Note}"
+                        <h:inputText id="note" value="#{progMeaItemAction.progEstMeaItemShow.tkctt_Note}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="unitItemInfo" value="单位:"/>
                         <h:inputText id="unitItemInfo"
-                                     value="#{tkcttStlMeaItemAction.progEstMeaItemShow.tkctt_Unit}"
+                                     value="#{progMeaItemAction.progEstMeaItemShow.tkctt_Unit}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="contractUnitPriceItemInfo" value="合同单价:"/>
                         <h:inputText id="contractUnitPriceItemInfo"
-                                     value="#{tkcttStlMeaItemAction.progEstMeaItemShow.tkctt_ContractUnitPrice}"
+                                     value="#{progMeaItemAction.progEstMeaItemShow.tkctt_ContractUnitPrice}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="contractQuantityItemInfo" value="合同数量:"/>
                         <h:inputText id="contractQuantityItemInfo"
-                                     value="#{tkcttStlMeaItemAction.progEstMeaItemShow.tkctt_ContractQuantity}"
+                                     value="#{progMeaItemAction.progEstMeaItemShow.tkctt_ContractQuantity}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="eng_BeginToCurrentPeriodEQty" value="开累工程量:"/>
                         <h:inputText id="eng_BeginToCurrentPeriodEQty"
-                                     value="#{tkcttStlMeaItemAction.progEstMeaItemShow.eng_BeginToCurrentPeriodEQty}"
+                                     value="#{progMeaItemAction.progEstMeaItemShow.eng_BeginToCurrentPeriodEQty}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="eng_CurrentPeriodEQty" value="本期工程量:"/>
                         <h:inputText id="eng_CurrentPeriodEQty"
-                                     value="#{tkcttStlMeaItemAction.progEstMeaItemShow.eng_CurrentPeriodEQty}"
+                                     value="#{progMeaItemAction.progEstMeaItemShow.eng_CurrentPeriodEQty}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="createdByItemInfo" value="创建人:"/>
                         <h:inputText id="createdByItemInfo"
-                                     value="#{tkcttStlMeaItemAction.progEstMeaItemShow.eng_CreatedByName}"
+                                     value="#{progMeaItemAction.progEstMeaItemShow.eng_CreatedByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdDateItemInfo" value="创建时间:"/>
                         <h:inputText id="createdDateItemInfo"
-                                     value="#{tkcttStlMeaItemAction.progEstMeaItemShow.eng_CreatedDate}"
+                                     value="#{progMeaItemAction.progEstMeaItemShow.eng_CreatedDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdByItemInfo" value="修改人:"/>
                         <h:inputText id="lastUpdByItemInfo"
-                                     value="#{tkcttStlMeaItemAction.progEstMeaItemShow.eng_LastUpdByName}"
+                                     value="#{progMeaItemAction.progEstMeaItemShow.eng_LastUpdByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdDateItemInfo" value="修改时间:"/>
                         <h:inputText id="lastUpdDateItemInfo"
-                                     value="#{tkcttStlMeaItemAction.progEstMeaItemShow.eng_LastUpdDate}"
+                                     value="#{progMeaItemAction.progEstMeaItemShow.eng_LastUpdDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="modificationNumItemInfo" value="修改次数:"/>
                         <h:inputText id="modificationNumItemInfo"
-                                     value="#{tkcttStlMeaItemAction.progEstMeaItemShow.eng_ModificationNum}"
+                                     value="#{progMeaItemAction.progEstMeaItemShow.eng_ModificationNum}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
@@ -173,7 +173,7 @@
                         <p:outputLabel for="originFlagItemInfo" value="数据来源:"/>
                         <h:inputText id="originFlagItemInfo"
                                      value="#{esCommon.originFlagListValueOfAlias(
-	                                             tkcttStlMeaItemAction.progEstMeaItemShow.eng_OriginFlag)}"
+	                                             progMeaItemAction.progEstMeaItemShow.eng_OriginFlag)}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                     </h:panelGrid>

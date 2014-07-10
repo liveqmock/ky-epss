@@ -27,58 +27,58 @@
                     <h:panelGrid>
                         <h:panelGrid columns="6">
                             <p:outputLabel value="所属种类：" for="powerType"/>
-                            <p:selectOneMenu id="powerType" value="#{esInitPowerHisAction.esInitPowerHis.powerType}"
+                            <p:selectOneMenu id="powerType" value="#{flowCtrlHisAction.esInitPowerHis.powerType}"
                                              style="width:133px">
                                 <f:selectItems value="#{esCommon.itemTypeList}"/>
                                 <p:ajax update="msgs,pgCondition"
-                                        listener="#{esInitPowerHisAction.setEsInitPowerHisActionOfPowerPkidAction}"/>
+                                        listener="#{flowCtrlHisAction.setEsInitPowerHisActionOfPowerPkidAction}"/>
                             </p:selectOneMenu>
                             <p:outputLabel id="strLabel1"
-                                            value="#{esInitPowerHisAction.strLabel1}："
+                                            value="#{flowCtrlHisAction.strLabel1}："
                                             for="tkcttCstpl"
-                                            rendered="#{esInitPowerHisAction.strRendered1}"/>
+                                            rendered="#{flowCtrlHisAction.strRendered1}"/>
                             <p:selectOneMenu id="tkcttCstpl"
-                                             value="#{esInitPowerHisAction.strTkcttCstplSelected}"
-                                             rendered="#{esInitPowerHisAction.strRendered1}">
-                                <f:selectItems value="#{esInitPowerHisAction.esInitCtt1List}"/>
+                                             value="#{flowCtrlHisAction.strTkcttCstplSelected}"
+                                             rendered="#{flowCtrlHisAction.strRendered1}">
+                                <f:selectItems value="#{flowCtrlHisAction.esInitCtt1List}"/>
                                 <p:ajax update="msgs,pgCondition"
-                                        listener="#{esInitPowerHisAction.setFromTkAndCttToSStlAction}"/>
+                                        listener="#{flowCtrlHisAction.setFromTkAndCttToSStlAction}"/>
                             </p:selectOneMenu>
                             <p:outputLabel id="strLabel2"
-                                           value="#{esInitPowerHisAction.strLabel2}："
+                                           value="#{flowCtrlHisAction.strLabel2}："
                                            for="subcttStlTkcttMeaSta"
-                                           rendered="#{esInitPowerHisAction.strRendered2}"/>
+                                           rendered="#{flowCtrlHisAction.strRendered2}"/>
                             <p:selectOneMenu id="subcttStlTkcttMeaSta"
-                                             value="#{esInitPowerHisAction.esInitPowerHis.powerPkid}"
+                                             value="#{flowCtrlHisAction.esInitPowerHis.powerPkid}"
 
-                                             rendered="#{esInitPowerHisAction.strRendered2}">
-                                <f:selectItems value="#{esInitPowerHisAction.esInitCtt2List}"/>
+                                             rendered="#{flowCtrlHisAction.strRendered2}">
+                                <f:selectItems value="#{flowCtrlHisAction.esInitCtt2List}"/>
                             </p:selectOneMenu>
                         </h:panelGrid>
                         <h:panelGrid columns="6">
                             <p:outputLabel value="期数编码：" for="pno"/>
-                            <p:inputText id="pno" value="#{esInitPowerHisAction.esInitPowerHis.periodNo}"/>
+                            <p:inputText id="pno" value="#{flowCtrlHisAction.esInitPowerHis.periodNo}"/>
                             <p:outputLabel value="状态标志：" for="sf"/>
-                            <p:selectOneMenu id="sf" value="#{esInitPowerHisAction.esInitPowerHis.statusFlag}">
+                            <p:selectOneMenu id="sf" value="#{flowCtrlHisAction.esInitPowerHis.statusFlag}">
                                 <f:selectItems value="#{esCommon.statusFlagList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="状态原因：" for="preStatusFlag"/>
-                            <p:selectOneMenu id="preStatusFlag" value="#{esInitPowerHisAction.esInitPowerHis.preStatusFlag}">
+                            <p:selectOneMenu id="preStatusFlag" value="#{flowCtrlHisAction.esInitPowerHis.preStatusFlag}">
                                 <f:selectItems value="#{esCommon.preStatusFlagList}"/>
                             </p:selectOneMenu>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="创建人名：" for="createid"/>
-                            <p:inputText id="createid" value="#{esInitPowerHisAction.esInitPowerHis.createdBy}"/>
+                            <p:inputText id="createid" value="#{flowCtrlHisAction.esInitPowerHis.createdBy}"/>
                             <p:outputLabel value="创建时间：" for="createdate"/>
-                            <p:inputText id="createdate" value="#{esInitPowerHisAction.esInitPowerHis.createdDate}"
+                            <p:inputText id="createdate" value="#{flowCtrlHisAction.esInitPowerHis.createdDate}"
                                          onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
                         </h:panelGrid>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <h:panelGrid>
                             <p:commandButton id="qryBtn" value="查询"
-                                             action="#{esInitPowerHisAction.onQueryAction('true')}"
+                                             action="#{flowCtrlHisAction.onQueryAction('true')}"
                                              update="pdt,msgs">
                             </p:commandButton>
                             <p:commandButton id="resetBtn" value="重置"
@@ -99,7 +99,7 @@
             </p:panel>
             <!--列表维护-->
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{esInitPowerHisAction.esInitPowerHisList}"
+                         value="#{flowCtrlHisAction.esInitPowerHisList}"
                          var="record"
                          rowKey="#{record.powerPkid}"
                          selectionMode="single"
@@ -122,7 +122,7 @@
                     <h:outputText value="#{esCommon.getLabelByValueInItemTypeList(record.powerType)}"/>
                 </p:column>
                 <p:column headerText="对象" style="text-align:left">
-                    <h:outputText value="#{tkCttInfoAction.getCttInfoByPkId(record.powerPkid).name}"/>
+                    <h:outputText value="#{tkcttInfoAction.getCttInfoByPkId(record.powerPkid).name}"/>
                 </p:column>
                 <p:column headerText="期数编码" style="text-align:center">
                     <h:outputText value="#{record.periodNo}"/>

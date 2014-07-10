@@ -1,21 +1,18 @@
 package epss.view.contract;
 
 import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.model_show.AttachmentModel;
-import epss.repository.model.model_show.CommColModel;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
-import epss.repository.model.EsInitStl;
-import epss.service.EsCttInfoService;
-import epss.service.EsCttItemService;
-import epss.service.EsInitPowerService;
-import epss.service.common.EsFlowService;
-import epss.view.common.EsCommon;
-import epss.view.common.EsFlowControl;
+import epss.service.CttInfoService;
+import epss.service.CttItemService;
+import epss.service.FlowCtrlService;
+import epss.service.EsFlowService;
+import epss.view.flow.EsCommon;
+import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.FileUploadEvent;
@@ -46,14 +43,14 @@ import java.util.List;
  */
 @ManagedBean
 @ViewScoped
-public class TkCttInfoAction {
-    private static final Logger logger = LoggerFactory.getLogger(TkCttInfoAction.class);
-    @ManagedProperty(value = "#{esCttInfoService}")
-    private EsCttInfoService esCttInfoService;
-    @ManagedProperty(value = "#{esCttItemService}")
-    private EsCttItemService esCttItemService;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+public class TkcttInfoAction {
+    private static final Logger logger = LoggerFactory.getLogger(TkcttInfoAction.class);
+    @ManagedProperty(value = "#{cttInfoService}")
+    private CttInfoService cttInfoService;
+    @ManagedProperty(value = "#{cttItemService}")
+    private CttItemService cttItemService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esCommon}")
@@ -100,14 +97,14 @@ public class TkCttInfoAction {
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType = "Add";
-        esFlowControl.setStatusFlagListByPower("Qry");
+        esFlowControl.getBackToStatusFlagList("Qry");
         checkForUpd=true;
     }
 
     public void setMaxNoPlusOne() {
         try {
             Integer intTemp;
-            String strMaxId = esCttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE0.getCode());
+            String strMaxId = cttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE0.getCode());
             if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
                 strMaxId = "TKCTT" + esCommon.getStrToday() + "001";
             } else {
@@ -170,7 +167,7 @@ public class TkCttInfoAction {
     }
 
     public EsCttInfo getCttInfoByPkId(String strPkid) {
-        return esCttInfoService.getCttInfoByPkId(strPkid);
+        return cttInfoService.getCttInfoByPkId(strPkid);
     }
 
     public void resetActionForAdd(){
@@ -184,7 +181,6 @@ public class TkCttInfoAction {
                                    CttInfoShow cttInfoShowPara) {
         try {
             strSubmitType = strSubmitTypePara;
-            esFlowControl.setStatusFlagListByPower(strPowerTypePara);
             // 查询
             cttInfoShowPara.setCreatedByName(esCommon.getOperNameByOperId(cttInfoShowPara.getCreatedBy()));
             cttInfoShowPara.setLastUpdByName(esCommon.getOperNameByOperId(cttInfoShowPara.getLastUpdBy()));
@@ -204,8 +200,6 @@ public class TkCttInfoAction {
                 }
             } else {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
-                //根据流程环节,显示不同的退回的状态
-                esFlowControl.setStatusFlagListByPower(strPowerTypePara);
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
@@ -370,7 +364,7 @@ public class TkCttInfoAction {
             if (!submitPreCheck(cttInfoShowAdd)) {
                 return;
             }
-            if (esCttInfoService.isExistInDb(cttInfoShowAdd)) {
+            if (cttInfoService.isExistInDb(cttInfoShowAdd)) {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             } else {
                 addRecordAction(cttInfoShowAdd);
@@ -393,7 +387,7 @@ public class TkCttInfoAction {
             if (cttInfoShowPara.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
                 cttInfoShowPara.setParentPkid("ROOT");
             }
-            esCttInfoService.insertRecord(cttInfoShowPara);
+            cttInfoService.insertRecord(cttInfoShowPara);
         } catch (Exception e) {
             logger.error("新增数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -402,7 +396,7 @@ public class TkCttInfoAction {
     private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
             cttInfoShowPara.setCttType(ESEnum.ITEMTYPE0.getCode());
-            esCttInfoService.updateRecord(cttInfoShowPara);
+            cttInfoService.updateRecord(cttInfoShowPara);
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -411,9 +405,9 @@ public class TkCttInfoAction {
     private void deleteRecordAction(CttInfoShow cttInfoShowPara) {
         try {
             cttInfoShowPara.setCttType(ESEnum.ITEMTYPE0.getCode());
-            int deleteRecordNumOfCttItem=esCttItemService.deleteRecord(cttInfoShowPara);
-            int deleteRecordNumOfCtt= esCttInfoService.deleteRecord(cttInfoShowPara.getPkid());
-            int deleteRecordNumOfPower=esInitPowerService.deleteRecord(
+            int deleteRecordNumOfCttItem= cttItemService.deleteRecord(cttInfoShowPara);
+            int deleteRecordNumOfCtt= cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
+            int deleteRecordNumOfPower= flowCtrlService.deleteRecord(
                     cttInfoShowPara.getCttType(),
                     cttInfoShowPara.getPkid(),
                     "NULL");
@@ -429,12 +423,12 @@ public class TkCttInfoAction {
 
     /*智能字段 Start*/
 
-    public EsCttItemService getEsCttItemService() {
-        return esCttItemService;
+    public CttItemService getCttItemService() {
+        return cttItemService;
     }
 
-    public void setEsCttItemService(EsCttItemService esCttItemService) {
-        this.esCttItemService = esCttItemService;
+    public void setCttItemService(CttItemService cttItemService) {
+        this.cttItemService = cttItemService;
     }
 
     public List<AttachmentModel> getAttachmentList() {
@@ -469,20 +463,20 @@ public class TkCttInfoAction {
         this.uploadedFile = uploadedFile;
     }
 
-    public EsCttInfoService getEsCttInfoService() {
-        return esCttInfoService;
+    public CttInfoService getCttInfoService() {
+        return cttInfoService;
     }
 
-    public void setEsCttInfoService(EsCttInfoService esCttInfoService) {
-        this.esCttInfoService = esCttInfoService;
+    public void setCttInfoService(CttInfoService cttInfoService) {
+        this.cttInfoService = cttInfoService;
     }
 
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
 
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowService getEsFlowService() {

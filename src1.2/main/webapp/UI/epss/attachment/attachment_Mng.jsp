@@ -1,4 +1,4 @@
-<%@ page import="epss.service.EsCttInfoService" %>
+<%@ page import="epss.service.CttInfoService" %>
 <%@ page import="org.springframework.context.ApplicationContext" %>
 
 <%@ page import="java.util.ArrayList" %>

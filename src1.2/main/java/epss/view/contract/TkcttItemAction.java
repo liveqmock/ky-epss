@@ -18,9 +18,9 @@ import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
 import epss.repository.model.EsInitPower;
 import epss.service.*;
-import epss.service.common.EsFlowService;
-import epss.view.common.EsCommon;
-import epss.view.common.EsFlowControl;
+import epss.service.EsFlowService;
+import epss.view.flow.EsCommon;
+import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -39,12 +39,12 @@ import java.util.*;
 @ViewScoped
 public class TkcttItemAction {
     private static final Logger logger = LoggerFactory.getLogger(TkcttItemAction.class);
-    @ManagedProperty(value = "#{esCttInfoService}")
-    private EsCttInfoService esCttInfoService;
-    @ManagedProperty(value = "#{esCttItemService}")
-    private EsCttItemService esCttItemService;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+    @ManagedProperty(value = "#{cttInfoService}")
+    private CttInfoService cttInfoService;
+    @ManagedProperty(value = "#{cttItemService}")
+    private CttItemService cttItemService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
@@ -89,7 +89,7 @@ public class TkcttItemAction {
         }
 
         List<EsInitPower> esInitPowerList =
-                esInitPowerService.selectListByModel(strBelongToType, strTkcttInfoPkid, "NULL");
+                flowCtrlService.selectListByModel(strBelongToType, strTkcttInfoPkid, "NULL");
         strPassFlag = "true";
         if (esInitPowerList.size() > 0) {
             if ("Mng".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
@@ -106,9 +106,9 @@ public class TkcttItemAction {
         esCttItemList =new ArrayList<EsCttItem>();
         cttItemShowList =new ArrayList<CttItemShow>();
         /*初始化流程状态列表*/
-        esFlowControl.setStatusFlagListByPower(strFlowType);
-        tkcttInfo = esCttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
-        esCttItemList = esCttItemService.getEsItemList(
+        esFlowControl.getBackToStatusFlagList(strFlowType);
+        tkcttInfo = cttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
+        esCttItemList = cttItemService.getEsItemList(
                 strBelongToType, strTkcttInfoPkid);
         recursiveDataTable("root", esCttItemList);
         cttItemShowList = getTkcttItemList_DoFromatNo(cttItemShowList);
@@ -334,12 +334,12 @@ public class TkcttItemAction {
     /*删除*/
     public void delThisRecordAction(CttItemShow cttItemShowPara) {
         try {
-            int deleteRecordNum = esCttItemService.deleteRecord(cttItemShowPara.getPkid());
+            int deleteRecordNum = cttItemService.deleteRecord(cttItemShowPara.getPkid());
             if (deleteRecordNum <= 0) {
                 MessageUtil.addInfo("该记录已删除。");
                 return;
             }
-            esCttItemService.setAfterThisOrderidSubOneByNode(
+            cttItemService.setAfterThisOrderidSubOneByNode(
                     cttItemShowPara.getBelongToType(),
                     cttItemShowPara.getBelongToPkid(),
                     cttItemShowPara.getParentPkid(),
@@ -453,22 +453,22 @@ public class TkcttItemAction {
                         MessageUtil.addError("请确认选择的行，合计行不可编辑！");
                         return;
                     }
-                    esCttItemService.updateRecord(cttItemShowUpd) ;
+                    cttItemService.updateRecord(cttItemShowUpd) ;
                     checkForUpd = true;
                 }
                 else if(strSubmitType .equals("Add")) {
-                     EsCttItem esCttItemTemp=esCttItemService.fromModelShowToModel(cttItemShowAdd);
-                    if (esCttItemService.isExistSameRecordInDb(esCttItemTemp)){
+                     EsCttItem esCttItemTemp= cttItemService.fromModelShowToModel(cttItemShowAdd);
+                    if (cttItemService.isExistSameRecordInDb(esCttItemTemp)){
                         MessageUtil.addInfo("该编号对应记录已存在，请重新录入。");
                         return;
                     }
-                    esCttItemService.setAfterThisOrderidPlusOneByNode(
+                    cttItemService.setAfterThisOrderidPlusOneByNode(
                             cttItemShowAdd.getBelongToType(),
                             cttItemShowAdd.getBelongToPkid(),
                             cttItemShowAdd.getParentPkid(),
                             cttItemShowAdd.getGrade(),
                             cttItemShowAdd.getOrderid());
-                    esCttItemService.insertRecord(cttItemShowAdd);
+                    cttItemService.insertRecord(cttItemShowAdd);
                     resetAction();
                 }
                 MessageUtil.addInfo("提交数据完成。");
@@ -568,14 +568,14 @@ public class TkcttItemAction {
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
                     // 原因：审核通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
                     // 状态标志：初始
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
                     // 原因：审核未过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据审核未过！");
                 }
             } // 复核
@@ -585,14 +585,14 @@ public class TkcttItemAction {
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
                     // 原因：复核通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
                     cttInfoShowSel.setStatusFlag(strNotPassToStatus);
                     // 原因：复核未过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据复核未过！");
                 }
             }// 批准
@@ -602,7 +602,7 @@ public class TkcttItemAction {
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
                     // 原因：批准通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerTypePara.equals("ApproveFail")) {
                     // 检查是否被使用
@@ -618,7 +618,7 @@ public class TkcttItemAction {
                     // 原因：批准未过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
 
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
 
                     List<EsInitStl> esInitStlListTemp =
                             esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfoShowSel.getPkid());
@@ -644,17 +644,17 @@ public class TkcttItemAction {
     }
 
     /*智能字段Start*/
-    public EsCttItemService getEsCttItemService() {
-        return esCttItemService;
+    public CttItemService getCttItemService() {
+        return cttItemService;
     }
-    public void setEsCttItemService(EsCttItemService esCttItemService) {
-        this.esCttItemService = esCttItemService;
+    public void setCttItemService(CttItemService cttItemService) {
+        this.cttItemService = cttItemService;
     }
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 
     public EsCommon getEsCommon() {
@@ -756,12 +756,12 @@ public class TkcttItemAction {
         return tkcttInfo;
     }
 
-    public EsCttInfoService getEsCttInfoService() {
-        return esCttInfoService;
+    public CttInfoService getCttInfoService() {
+        return cttInfoService;
     }
 
-    public void setEsCttInfoService(EsCttInfoService esCttInfoService) {
-        this.esCttInfoService = esCttInfoService;
+    public void setCttInfoService(CttInfoService cttInfoService) {
+        this.cttInfoService = cttInfoService;
     }
 
     public Boolean getCheckForUpd() {

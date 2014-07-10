@@ -17,9 +17,9 @@ import epss.common.utils.ToolUtil;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsItemStlTkcttEngMea;
 import epss.service.*;
-import epss.service.common.EsFlowService;
-import epss.service.common.EsQueryService;
-import epss.view.common.EsCommon;
+import epss.service.EsFlowService;
+import epss.service.EsQueryService;
+import epss.view.flow.EsCommon;
 import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -41,20 +41,20 @@ import java.util.Map;
 @ViewScoped
 public class TkMeaCSubStlQItemAction {
     private static final Logger logger = LoggerFactory.getLogger(TkMeaCSubStlQItemAction.class);
-    @ManagedProperty(value = "#{esCttInfoService}")
-    private EsCttInfoService esCttInfoService;
-    @ManagedProperty(value = "#{esCttItemService}")
-    private EsCttItemService esCttItemService;
+    @ManagedProperty(value = "#{cttInfoService}")
+    private CttInfoService cttInfoService;
+    @ManagedProperty(value = "#{cttItemService}")
+    private CttItemService cttItemService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esQueryService}")
     private EsQueryService esQueryService;
-    @ManagedProperty(value = "#{esItemStlTkcttEngMeaService}")
-    private EsItemStlTkcttEngMeaService esItemStlTkcttEngMeaService;
+    @ManagedProperty(value = "#{progMeaItemService}")
+    private ProgMeaItemService progMeaItemService;
 
     /*列表显示用*/
     private List<QryTkMeaCSStlQShow> qryTkMeaCSStlQShowList;
@@ -76,7 +76,7 @@ public class TkMeaCSubStlQItemAction {
         commStlSubcttEngH =new CommStlSubcttEngH();
         // 获取已经批准了的总包合同列表
         List<CttInfoShow> cttInfoShowList =
-                esCttInfoService.getCttInfoListByCttType_Status(
+                cttInfoService.getCttInfoListByCttType_Status(
                         ESEnum.ITEMTYPE0.getCode()
                        ,ESEnumStatusFlag.STATUS_FLAG3.getCode());
         tkcttList=new ArrayList<SelectItem>();
@@ -109,13 +109,13 @@ public class TkMeaCSubStlQItemAction {
         beansMap.put("strThisMonth", ToolUtil.getStrThisMonth());
         // 1。总包合同信息
         // 1。1。取出总包合同信息
-        EsCttInfo esTkcttInfo= esCttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
+        EsCttInfo esTkcttInfo= cttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
         commStlSubcttEngH.setStrTkcttId(esTkcttInfo.getId());
         commStlSubcttEngH.setStrTkcttName(esTkcttInfo.getName());
         beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
         // 1。2。抽取相应总包合同的详细内容
         List<EsCttItem> esCttItemOfTkcttList =new ArrayList<EsCttItem>();
-        esCttItemOfTkcttList = esCttItemService.getEsItemList(
+        esCttItemOfTkcttList = cttItemService.getEsItemList(
                 ESEnum.ITEMTYPE0.getCode(),
                 strTkcttPkid);
         // 根据总包合同内容的信息，拼成合同原稿
@@ -124,14 +124,14 @@ public class TkMeaCSubStlQItemAction {
         tkcttItemShowList =getItemList_DoFromatNo(tkcttItemShowList);
 
         // 2。成本计划信息
-        List<EsCttInfo> esCstplInfoList=esCttInfoService.getEsInitCttByCttTypeAndBelongToPkId(
+        List<EsCttInfo> esCstplInfoList= cttInfoService.getEsInitCttByCttTypeAndBelongToPkId(
                 ESEnum.ITEMTYPE1.getCode(),esTkcttInfo.getPkid());
         if(esCstplInfoList.size()==0){
             return;
         }
         EsCttInfo esCstplInfo =esCstplInfoList.get(0);
         List<EsCttItem> cstplItemListTemp=
-                esCttItemService.getEsItemList(ESEnum.ITEMTYPE1.getCode(),esCstplInfo.getPkid());
+                cttItemService.getEsItemList(ESEnum.ITEMTYPE1.getCode(),esCstplInfo.getPkid());
         List<CttItemShow> cstplItemShowListTemp =new ArrayList<>();
         recursiveDataTable("root", cstplItemListTemp, cstplItemShowListTemp);
         // 成本计划排版
@@ -147,7 +147,7 @@ public class TkMeaCSubStlQItemAction {
             EsItemStlTkcttEngMea esItemStlTkcttEngMea=new EsItemStlTkcttEngMea();
             esItemStlTkcttEngMea.setTkcttPkid(strTkcttInfoPkid);
             esItemStlTkcttEngMea.setPeriodNo(strMeaLatestApprovedPeriodNo);
-            esItemStlTkcttEngMeaList=esItemStlTkcttEngMeaService.selectRecordsByPkidPeriodNoExample(esItemStlTkcttEngMea);
+            esItemStlTkcttEngMeaList= progMeaItemService.selectRecordsByPkidPeriodNoExample(esItemStlTkcttEngMea);
         }
 
         /*拼装列表*/
@@ -478,12 +478,12 @@ public class TkMeaCSubStlQItemAction {
     }
 
     /*智能字段Start*/
-    public EsCttItemService getEsCttItemService() {
-        return esCttItemService;
+    public CttItemService getCttItemService() {
+        return cttItemService;
     }
 
-    public void setEsCttItemService(EsCttItemService esCttItemService) {
-        this.esCttItemService = esCttItemService;
+    public void setCttItemService(CttItemService cttItemService) {
+        this.cttItemService = cttItemService;
     }
 
     public EsFlowService getEsFlowService() {
@@ -502,12 +502,12 @@ public class TkMeaCSubStlQItemAction {
         this.esCommon = esCommon;
     }
 
-    public EsCttInfoService getEsCttInfoService() {
-        return esCttInfoService;
+    public CttInfoService getCttInfoService() {
+        return cttInfoService;
     }
 
-    public void setEsCttInfoService(EsCttInfoService esCttInfoService) {
-        this.esCttInfoService = esCttInfoService;
+    public void setCttInfoService(CttInfoService cttInfoService) {
+        this.cttInfoService = cttInfoService;
     }
 
     public List<QryTkMeaCSStlQShow> getQryTkMeaCSStlQShowList() {
@@ -542,12 +542,12 @@ public class TkMeaCSubStlQItemAction {
         this.strPeriodNo = strPeriodNo;
     }
 
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
 
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 
     public List<SelectItem> getTkcttList() {
@@ -590,12 +590,12 @@ public class TkMeaCSubStlQItemAction {
         this.beansMap = beansMap;
     }
 
-    public EsItemStlTkcttEngMeaService getEsItemStlTkcttEngMeaService() {
-        return esItemStlTkcttEngMeaService;
+    public ProgMeaItemService getProgMeaItemService() {
+        return progMeaItemService;
     }
 
-    public void setEsItemStlTkcttEngMeaService(EsItemStlTkcttEngMeaService esItemStlTkcttEngMeaService) {
-        this.esItemStlTkcttEngMeaService = esItemStlTkcttEngMeaService;
+    public void setProgMeaItemService(ProgMeaItemService progMeaItemService) {
+        this.progMeaItemService = progMeaItemService;
     }
     /*智能字段End*/
 }

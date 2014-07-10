@@ -3,7 +3,7 @@ package epss.view.attachment;
 import com.jspsmart.upload.SmartUpload;
 import com.jspsmart.upload.SmartUploadException;
 import epss.common.utils.ApplicationContextUtil;
-import epss.service.EsCttInfoService;
+import epss.service.CttInfoService;
 import org.springframework.context.ApplicationContext;
 
 import javax.servlet.ServletException;
@@ -15,11 +15,11 @@ import java.io.IOException;
 public class DownloadServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    private EsCttInfoService esCttInfoService;
+    private CttInfoService cttInfoService;
     @Override
     public void init() throws ServletException {
         ApplicationContext ac = ApplicationContextUtil.getApplicationContext();
-        esCttInfoService = (EsCttInfoService) ac.getBean("esCttInfoService");
+        cttInfoService = (CttInfoService) ac.getBean("cttInfoService");
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response)

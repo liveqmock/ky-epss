@@ -1,23 +1,19 @@
 package epss.view.contract;
 
 import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.common.utils.MessageUtil;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
-import epss.repository.model.EsCttInfo;
-import epss.repository.model.EsCttItem;
-import epss.repository.model.EsInitStl;
 import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
-import epss.service.EsCttInfoService;
-import epss.service.EsCttItemService;
-import epss.service.EsInitPowerService;
-import epss.service.common.EsFlowService;
-import epss.view.common.EsCommon;
-import epss.view.common.EsFlowControl;
+import epss.service.CttInfoService;
+import epss.service.CttItemService;
+import epss.service.FlowCtrlService;
+import epss.service.EsFlowService;
+import epss.view.flow.EsCommon;
+import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.FileUploadEvent;
@@ -29,14 +25,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
 import java.io.*;
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -48,14 +42,14 @@ import java.util.*;
  */
 @ManagedBean
 @ViewScoped
-public class SubCttInfoAction {
-    private static final Logger logger = LoggerFactory.getLogger(SubCttInfoAction.class);
-    @ManagedProperty(value = "#{esCttInfoService}")
-    private EsCttInfoService esCttInfoService;
-    @ManagedProperty(value = "#{esCttItemService}")
-    private EsCttItemService esCttItemService;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+public class SubcttInfoAction {
+    private static final Logger logger = LoggerFactory.getLogger(SubcttInfoAction.class);
+    @ManagedProperty(value = "#{cttInfoService}")
+    private CttInfoService cttInfoService;
+    @ManagedProperty(value = "#{cttItemService}")
+    private CttItemService cttItemService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esCommon}")
@@ -90,7 +84,6 @@ public class SubCttInfoAction {
     private StreamedContent downloadFile;
     private UploadedFile uploadedFile;
 
-
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -118,7 +111,7 @@ public class SubCttInfoAction {
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType = "Add";
-        esFlowControl.setStatusFlagListByPower("Qry");
+        esFlowControl.getBackToStatusFlagList("Qry");
         rowSelectedFlag = "false";
     }
 
@@ -129,7 +122,7 @@ public class SubCttInfoAction {
         if (!(subCttIdFromPage.matches("^[a-zA-Z0-9]+$"))) {
             strWarnMsg = "合同编号应以字母数字开头，请重新输入。";
         } else {
-            if (esCttInfoService.IdisExistInDb(cttInfoShowAdd)) {
+            if (cttInfoService.IdisExistInDb(cttInfoShowAdd)) {
                 strWarnMsg = "该合同编号已存在，请重新输入。";
 
             }
@@ -140,7 +133,7 @@ public class SubCttInfoAction {
     public void validSubCttName() {
         strWarnMsg = "";
 
-        if (esCttInfoService.NameisExistInDb(cttInfoShowAdd)) {
+        if (cttInfoService.NameisExistInDb(cttInfoShowAdd)) {
             strWarnMsg = "该合同编号已存在，请重新输入。";
 
         }
@@ -150,7 +143,7 @@ public class SubCttInfoAction {
     public void setMaxNoPlusOne() {
         try {
             Integer intTemp;
-            String strMaxId = esCttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE2.getCode());
+            String strMaxId = cttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE2.getCode());
             if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
                 strMaxId = "SUBCTT" + esCommon.getStrToday() + "001";
             } else {
@@ -227,7 +220,6 @@ public class SubCttInfoAction {
                                      CttInfoShow cttInfoShowPara) {
         try {
             strSubmitType = strSubmitTypePara;
-            esFlowControl.setStatusFlagListByPower(strPowerTypePara);
             cttInfoShowPara.setCreatedByName(esCommon.getOperNameByOperId(cttInfoShowPara.getCreatedBy()));
             cttInfoShowPara.setLastUpdByName(esCommon.getOperNameByOperId(cttInfoShowPara.getLastUpdBy()));
             // 查询
@@ -253,8 +245,6 @@ public class SubCttInfoAction {
             } else {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                 rowSelectedFlag = "true";
-                //根据流程环节,显示不同的退回的状态
-                esFlowControl.setStatusFlagListByPower(strPowerTypePara);
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
@@ -303,7 +293,7 @@ public class SubCttInfoAction {
             if (!submitPreCheck(cttInfoShowAdd)) {
                 return;
             }
-            if (esCttInfoService.isExistInDb(cttInfoShowAdd)) {
+            if (cttInfoService.isExistInDb(cttInfoShowAdd)) {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             } else {
                 addRecordAction(cttInfoShowAdd);
@@ -323,7 +313,7 @@ public class SubCttInfoAction {
             if (cttInfoShowPara.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
                 cttInfoShowPara.setParentPkid("ROOT");
             }
-            esCttInfoService.insertRecord(cttInfoShowPara);
+            cttInfoService.insertRecord(cttInfoShowPara);
             MessageUtil.addInfo("新增数据完成。");
         } catch (Exception e) {
             logger.error("新增数据失败，", e);
@@ -333,7 +323,7 @@ public class SubCttInfoAction {
     private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
             cttInfoShowPara.setCttType(ESEnum.ITEMTYPE2.getCode());
-            esCttInfoService.updateRecord(cttInfoShowPara);
+            cttInfoService.updateRecord(cttInfoShowPara);
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
@@ -343,9 +333,9 @@ public class SubCttInfoAction {
     private void deleteRecordAction(CttInfoShow cttInfoShowPara) {
         try {
             cttInfoShowPara.setCttType(ESEnum.ITEMTYPE2.getCode());
-            int deleteRecordNumOfCttItem=esCttItemService.deleteRecord(cttInfoShowPara);
-            int deleteRecordNumOfCtt= esCttInfoService.deleteRecord(cttInfoShowPara.getPkid());
-            int deleteRecordNumOfPower=esInitPowerService.deleteRecord(
+            int deleteRecordNumOfCttItem= cttItemService.deleteRecord(cttInfoShowPara);
+            int deleteRecordNumOfCtt= cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
+            int deleteRecordNumOfPower= flowCtrlService.deleteRecord(
                     cttInfoShowPara.getCttType(),
                     cttInfoShowPara.getPkid(),
                     "NULL");
@@ -480,20 +470,20 @@ public class SubCttInfoAction {
     }
 
     /*智能字段 Start*/
-    public EsCttInfoService getEsCttInfoService() {
-        return esCttInfoService;
+    public CttInfoService getCttInfoService() {
+        return cttInfoService;
     }
 
-    public void setEsCttInfoService(EsCttInfoService esCttInfoService) {
-        this.esCttInfoService = esCttInfoService;
+    public void setCttInfoService(CttInfoService cttInfoService) {
+        this.cttInfoService = cttInfoService;
     }
 
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
 
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowService getEsFlowService() {
@@ -586,12 +576,12 @@ public class SubCttInfoAction {
 
     /*智能字段 End*/
 
-    public EsCttItemService getEsCttItemService() {
-        return esCttItemService;
+    public CttItemService getCttItemService() {
+        return cttItemService;
     }
 
-    public void setEsCttItemService(EsCttItemService esCttItemService) {
-        this.esCttItemService = esCttItemService;
+    public void setCttItemService(CttItemService cttItemService) {
+        this.cttItemService = cttItemService;
     }
 
     public String getStrBelongToPkid() {

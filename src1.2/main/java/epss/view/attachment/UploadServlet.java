@@ -16,17 +16,17 @@ import com.jspsmart.upload.SmartUpload;
 import com.jspsmart.upload.SmartUploadException;
 import epss.common.utils.ApplicationContextUtil;
 import epss.repository.model.EsCttInfo;
-import epss.service.EsCttInfoService;
+import epss.service.CttInfoService;
 import org.springframework.context.ApplicationContext;
 
 public class UploadServlet extends HttpServlet {
 
-    private EsCttInfoService esCttInfoService;
+    private CttInfoService cttInfoService;
 
     @Override
     public void init() throws ServletException {
         ApplicationContext ac = ApplicationContextUtil.getApplicationContext();
-        esCttInfoService = (EsCttInfoService) ac.getBean("esCttInfoService");
+        cttInfoService = (CttInfoService) ac.getBean("cttInfoService");
     }
 
     private static final long serialVersionUID = 1L;
@@ -60,7 +60,7 @@ public class UploadServlet extends HttpServlet {
 
             /*连接数据库获取sqlSession*/
             String strPkid= request.getParameter("strPkid");
-            EsCttInfo esCttInfo = esCttInfoService.getCttInfoByPkId(strPkid);
+            EsCttInfo esCttInfo = cttInfoService.getCttInfoByPkId(strPkid);
             String strAttachment = esCttInfo.getAttachment();
 
             StringBuffer sb = null;
@@ -87,7 +87,7 @@ public class UploadServlet extends HttpServlet {
             }
 
             esCttInfo.setAttachment(sb.toString());
-            esCttInfoService.updateRecord(esCttInfo);
+            cttInfoService.updateRecord(esCttInfo);
 
             request.setAttribute("fileNames", fileNames);
             request.getRequestDispatcher("/UI/epss/attachment/attachment_Mng.jsp").forward(request, response);

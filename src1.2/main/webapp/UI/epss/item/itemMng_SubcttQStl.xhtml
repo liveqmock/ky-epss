@@ -23,20 +23,20 @@
             <p:growl id="msgs" showDetail="false"/>
             <h:panelGrid id="pgCondition" columns="2">
                 <p:commandButton id="endInputBtn" value="录入完成"
-                                 action="#{subcttStlQItemAction.onClickForPowerAction('Pass')}"
+                                 action="#{progWorkqtyItemAction.onClickForPowerAction('Pass')}"
                                  update="pgCondition,pdt,msgs"
-                                 rendered="#{subcttStlQItemAction.strPassFlag}"
+                                 rendered="#{progWorkqtyItemAction.strPassFlag}"
                                  oncomplete="window.close()">
                 </p:commandButton>
                 <p:commandButton id="startInputBtn" value="录入未完"
-                                 action="#{subcttStlQItemAction.onClickForPowerAction('Fail')}"
+                                 action="#{progWorkqtyItemAction.onClickForPowerAction('Fail')}"
                                  update="pgCondition,pdt,msgs"
-                                 rendered="#{!subcttStlQItemAction.strPassFlag}"
+                                 rendered="#{!progWorkqtyItemAction.strPassFlag}"
                                  oncomplete="window.close()">
                 </p:commandButton>
             </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{subcttStlQItemAction.progWorkqtyItemShowList}"
+                         value="#{progWorkqtyItemAction.progWorkqtyItemShowList}"
                          var="record"
                          rowKey="#{record.subctt_Pkid}"
                          selectionMode="single"
@@ -49,16 +49,16 @@
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
                          scrollable="true">
-                <p:column headerText="操作" style="width:91px" rendered='#{subcttStlQItemAction.strPassFlag}'>
+                <p:column headerText="操作" style="width:91px" rendered='#{progWorkqtyItemAction.strPassFlag}'>
                     <p:commandButton  icon="ui-icon-pencil"
                                       style="height:20px;width:20px"
-                                      actionListener="#{subcttStlQItemAction.selectRecordAction('Upd',record)}"
+                                      actionListener="#{progWorkqtyItemAction.selectRecordAction('Upd',record)}"
                                       update="pdt,:form:pgViewForUpd"
                                       oncomplete="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
                     <p:commandButton  icon="ui-icon-trash"
                                       style="height:20px;width:20px"
-                                      actionListener="#{subcttStlQItemAction.selectRecordAction('Del',record)}"
+                                      actionListener="#{progWorkqtyItemAction.selectRecordAction('Del',record)}"
                                       update="pdt,:form:pgViewForDel"
                                       oncomplete="PF('wVDlgViewForDel').show()">
                     </p:commandButton>
@@ -116,48 +116,48 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel for="noItemHieRelapForUpd" value="编号:" />
                         <h:inputText id="noItemHieRelapForUpd"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.subctt_StrNo}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.subctt_StrNo}"
                                      style="background-color:gainsboro"
                                      readonly="true">
                         </h:inputText>
                         <p:outputLabel for="nameForUpd" value="名称:" />
-                        <h:inputText id="nameForUpd" value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.subctt_Name}"
+                        <h:inputText id="nameForUpd" value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.subctt_Name}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="noteForUpd" value="备注内容:" />
-                        <h:inputText id="noteForUpd" value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.subctt_Note}"
+                        <h:inputText id="noteForUpd" value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.subctt_Note}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="unitItemInfoForUpd" value="单位:"/>
                         <h:inputText id="unitItemInfoForUpd"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.subctt_Unit}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.subctt_Unit}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="contractQuantityItemInfoForUpd" value="合同数量:"/>
                         <h:inputText id="contractQuantityItemInfoForUpd"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.subctt_ContractQuantity}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.subctt_ContractQuantity}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="engQMng_BeginToCurrentPeriodEQtyForUpd" value="开累工程量:"/>
                         <h:inputText id="engQMng_BeginToCurrentPeriodEQtyForUpd"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.engQMng_BeginToCurrentPeriodEQty}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.engQMng_BeginToCurrentPeriodEQty}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="engQMng_CurrentPeriodEQtyForUpd" value="本期工程量:"/>
                         <h:inputText id="engQMng_CurrentPeriodEQtyForUpd"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.engQMng_CurrentPeriodEQty}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.engQMng_CurrentPeriodEQty}"
                                      style="text-align:right;float:left">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                             <p:ajax event="blur" update="msgs,engQMng_BeginToCurrentPeriodEQtyForUpd"
-                                    listener="#{subcttStlQItemAction.blurEngQMng_CurrentPeriodMQty('blur')}"/>
+                                    listener="#{progWorkqtyItemAction.blurEngQMng_CurrentPeriodMQty('blur')}"/>
                         </h:inputText>
                         <p:outputLabel for="contractAmountItemInfoForUpd" value="合同金额:" rendered="false"/>
                         <h:inputText id="contractAmountItemInfoForUpd"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.subctt_ContractAmount}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.subctt_ContractAmount}"
                                      style="background-color:gainsboro;"
                                      rendered="false">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
@@ -165,32 +165,32 @@
                         <p:outputLabel for="originFlagItemInfoForUpd" value="数据来源:" />
                         <h:inputText id="originFlagItemInfoForUpd"
                                      value="#{esCommon.originFlagListValueOfAlias(
-	                                             subcttStlQItemAction.progWorkqtyItemShowUpd.engQMng_OriginFlag)}"
+	                                             progWorkqtyItemAction.progWorkqtyItemShowUpd.engQMng_OriginFlag)}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdByItemInfoForUpd" value="创建人:" />
                         <h:inputText id="createdByItemInfoForUpd"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.engQMng_CreatedByName}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.engQMng_CreatedByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdDateItemInfoForUpd" value="创建时间:" />
                         <h:inputText id="createdDateItemInfoForUpd"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.engQMng_CreatedDate}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.engQMng_CreatedDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdByItemInfoForUpd" value="修改人:" />
                         <h:inputText id="lastUpdByItemInfoForUpd"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.engQMng_LastUpdByName}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.engQMng_LastUpdByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdDateItemInfoForUpd" value="修改时间:" />
                         <h:inputText id="lastUpdDateItemInfoForUpd"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.engQMng_LastUpdDate}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.engQMng_LastUpdDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="modificationNumItemInfoForUpd" value="修改次数:" />
                         <h:inputText id="modificationNumItemInfoForUpd"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowUpd.engQMng_ModificationNum}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowUpd.engQMng_ModificationNum}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
@@ -199,7 +199,7 @@
                     <h:panelGrid columns="1">
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
-                                         action="#{subcttStlQItemAction.submitThisRecordAction}"
+                                         action="#{progWorkqtyItemAction.submitThisRecordAction}"
                                          update="pdt,msgs">
                         </p:commandButton>
                     </h:panelGrid>
@@ -212,47 +212,47 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel for="noItemHieRelapForDel" value="编号:" />
                         <h:inputText id="noItemHieRelapForDel"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowDel.subctt_StrNo}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.subctt_StrNo}"
                                      style="background-color:gainsboro"
                                      readonly="true">
                         </h:inputText>
                         <p:outputLabel for="nameForDel" value="名称:" />
-                        <h:inputText id="nameForDel" value="#{subcttStlQItemAction.progWorkqtyItemShowDel.subctt_Name}"
+                        <h:inputText id="nameForDel" value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.subctt_Name}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="noteForDel" value="备注内容:" />
-                        <h:inputText id="noteForDel" value="#{subcttStlQItemAction.progWorkqtyItemShowDel.subctt_Note}"
+                        <h:inputText id="noteForDel" value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.subctt_Note}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="unitItemInfoForDel" value="单位:"/>
                         <h:inputText id="unitItemInfoForDel"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowDel.subctt_Unit}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.subctt_Unit}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="contractQuantityItemInfoForDel" value="合同数量:"/>
                         <h:inputText id="contractQuantityItemInfoForDel"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowDel.subctt_ContractQuantity}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.subctt_ContractQuantity}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="engQMng_BeginToCurrentPeriodEQtyForDel" value="开累工程量:"/>
                         <h:inputText id="engQMng_BeginToCurrentPeriodEQtyForDel"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowDel.engQMng_BeginToCurrentPeriodEQty}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.engQMng_BeginToCurrentPeriodEQty}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="engQMng_CurrentPeriodEQtyForDel" value="本期工程量:"/>
                         <h:inputText id="engQMng_CurrentPeriodEQtyForDel"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowDel.engQMng_CurrentPeriodEQty}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.engQMng_CurrentPeriodEQty}"
                                      style="background-color:gainsboro;text-align:right;float:left"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:inputText>
                         <p:outputLabel for="contractAmountItemInfoForDel" value="合同金额:" rendered="false"/>
                         <h:inputText id="contractAmountItemInfoForDel"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowDel.subctt_ContractAmount}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.subctt_ContractAmount}"
                                      style="background-color:gainsboro;"
                                      rendered="false">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
@@ -260,32 +260,32 @@
                         <p:outputLabel for="originFlagItemInfoForDel" value="数据来源:" />
                         <h:inputText id="originFlagItemInfoForDel"
                                      value="#{esCommon.originFlagListValueOfAlias(
-	                                             subcttStlQItemAction.progWorkqtyItemShowDel.engQMng_OriginFlag)}"
+	                                             progWorkqtyItemAction.progWorkqtyItemShowDel.engQMng_OriginFlag)}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdByItemInfoForDel" value="创建人:" />
                         <h:inputText id="createdByItemInfoForDel"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowDel.engQMng_CreatedByName}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.engQMng_CreatedByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="createdDateItemInfoForDel" value="创建时间:" />
                         <h:inputText id="createdDateItemInfoForDel"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowDel.engQMng_CreatedDate}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.engQMng_CreatedDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdByItemInfoForDel" value="修改人:" />
                         <h:inputText id="lastUpdByItemInfoForDel"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowDel.engQMng_LastUpdByName}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.engQMng_LastUpdByName}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="lastUpdDateItemInfoForDel" value="修改时间:" />
                         <h:inputText id="lastUpdDateItemInfoForDel"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowDel.engQMng_LastUpdDate}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.engQMng_LastUpdDate}"
                                      style="background-color:gainsboro"
                                      readonly="true"/>
                         <p:outputLabel for="modificationNumItemInfoForDel" value="修改次数:" />
                         <h:inputText id="modificationNumItemInfoForDel"
-                                     value="#{subcttStlQItemAction.progWorkqtyItemShowDel.engQMng_ModificationNum}"
+                                     value="#{progWorkqtyItemAction.progWorkqtyItemShowDel.engQMng_ModificationNum}"
                                      style="background-color:gainsboro;text-align:right;"
                                      readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
@@ -294,7 +294,7 @@
                     <h:panelGrid columns="1">
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
-                                         action="#{subcttStlQItemAction.submitThisRecordAction}"
+                                         action="#{progWorkqtyItemAction.submitThisRecordAction}"
                                          update="pdt,msgs">
                         </p:commandButton>
                     </h:panelGrid>

@@ -35,20 +35,20 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel value="分包合同：" for="id" />
                         <p:selectOneMenu id="id"
-                                         value="#{subcttStlPInfoAction.progInfoShow.stlPkid}"
-                                         disabled="#{subcttStlPInfoAction.styleModel.disabled_Flag}"
-                                         style="#{subcttStlPInfoAction.styleModel.disabled_Style};">
-                            <f:selectItems value="#{subcttStlPInfoAction.subcttList}"/>
+                                         value="#{progSubstlInfoAction.progInfoShow.stlPkid}"
+                                         disabled="#{progSubstlInfoAction.styleModel.disabled_Flag}"
+                                         style="#{progSubstlInfoAction.styleModel.disabled_Style};">
+                            <f:selectItems value="#{progSubstlInfoAction.subcttList}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="期数编码：" for="periodNo"/>
-                        <p:inputText id="periodNo" value="#{subcttStlPInfoAction.progInfoShow.periodNo}"
+                        <p:inputText id="periodNo" value="#{progSubstlInfoAction.progInfoShow.periodNo}"
                                      onclick="WdatePicker({dateFmt:'yyyyMM'})"
-                                     disabled="#{subcttStlPInfoAction.styleModel.disabled_Flag}"
-                                     style="#{subcttStlPInfoAction.styleModel.disabled_Style};"/>
+                                     disabled="#{progSubstlInfoAction.styleModel.disabled_Flag}"
+                                     style="#{progSubstlInfoAction.styleModel.disabled_Style};"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{subcttStlPInfoAction.onQueryFormedAction('Qry','true')}"
+                                         action="#{progSubstlInfoAction.onQueryFormedAction('Qry','true')}"
                                          update="pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
@@ -60,7 +60,7 @@
             </p:panel>
             <!--列表维护-->
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{subcttStlPInfoAction.progInfoShowList}"
+                         value="#{progSubstlInfoAction.progInfoShowList}"
                          var="record"
                          rowKey="#{record.pkid}"
                          selectionMode="single"

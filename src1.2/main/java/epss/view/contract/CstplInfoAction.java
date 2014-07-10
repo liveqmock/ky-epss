@@ -9,12 +9,12 @@ import epss.repository.model.model_show.CttInfoShow;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.EsInitStl;
-import epss.service.EsCttInfoService;
-import epss.service.EsCttItemService;
-import epss.service.EsInitPowerService;
-import epss.service.common.EsFlowService;
-import epss.view.common.EsCommon;
-import epss.view.common.EsFlowControl;
+import epss.service.CttInfoService;
+import epss.service.CttItemService;
+import epss.service.FlowCtrlService;
+import epss.service.EsFlowService;
+import epss.view.flow.EsCommon;
+import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.FileUploadEvent;
@@ -48,12 +48,12 @@ import java.util.Map;
 @ViewScoped
 public class CstplInfoAction {
     private static final Logger logger = LoggerFactory.getLogger(CstplInfoAction.class);
-    @ManagedProperty(value = "#{esCttInfoService}")
-    private EsCttInfoService esCttInfoService;
-    @ManagedProperty(value = "#{esCttItemService}")
-    private EsCttItemService esCttItemService;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+    @ManagedProperty(value = "#{cttInfoService}")
+    private CttInfoService cttInfoService;
+    @ManagedProperty(value = "#{cttItemService}")
+    private CttItemService cttItemService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esCommon}")
@@ -116,14 +116,14 @@ public class CstplInfoAction {
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType = "Add";
-        esFlowControl.setStatusFlagListByPower("Qry");
+        esFlowControl.getBackToStatusFlagList("Qry");
         rowSelectedFlag = "false";
     }
 
     public void setMaxNoPlusOne() {
         try {
             Integer intTemp;
-            String strMaxId = esCttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE1.getCode());
+            String strMaxId = cttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE1.getCode());
             if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
                 strMaxId = "CSTPL" + esCommon.getStrToday() + "001";
             } else {
@@ -187,7 +187,7 @@ public class CstplInfoAction {
     }
 
     public EsCttInfo getCttInfoByPkId(String strPkid) {
-        return esCttInfoService.getCttInfoByPkId(strPkid);
+        return cttInfoService.getCttInfoByPkId(strPkid);
     }
 
     public void resetActionForAdd(){
@@ -203,7 +203,6 @@ public class CstplInfoAction {
                                    CttInfoShow cttInfoShowSelected) {
         try {
             strSubmitType = strSubmitTypePara;
-            esFlowControl.setStatusFlagListByPower(strPowerTypePara);
             cttInfoShowSelected.setCreatedByName(esCommon.getOperNameByOperId(cttInfoShowSelected.getCreatedBy()));
             cttInfoShowSelected.setLastUpdByName(esCommon.getOperNameByOperId(cttInfoShowSelected.getLastUpdBy()));
             // 查询
@@ -230,8 +229,6 @@ public class CstplInfoAction {
             } else {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                 rowSelectedFlag = "true";
-                //根据流程环节,显示不同的退回的状态
-                esFlowControl.setStatusFlagListByPower(strPowerTypePara);
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
@@ -284,14 +281,14 @@ public class CstplInfoAction {
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
                     // 原因：审核通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
                     // 状态标志：初始
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
                     // 原因：审核未过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据审核未过！");
                 }
                 strPowerTypeTemp="Check";
@@ -302,14 +299,14 @@ public class CstplInfoAction {
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
                     // 原因：复核通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
                     cttInfoShowSel.setStatusFlag(strNotPassToStatus);
                     // 原因：复核未过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据复核未过！");
                 }
                 strPowerTypeTemp="DoubleCheck";
@@ -320,7 +317,7 @@ public class CstplInfoAction {
                     cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
                     // 原因：批准通过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
                     MessageUtil.addInfo("数据批准通过！");
 
                 } else if (strPowerTypePara.equals("ApproveFail")) {
@@ -337,7 +334,7 @@ public class CstplInfoAction {
                     // 原因：批准未过
                     cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
 
-                    esInitPowerService.updateRecordByCtt(cttInfoShowSel);
+                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
 
                     List<EsInitStl> esInitStlListTemp =
                             esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfoShowSel.getPkid());
@@ -377,7 +374,7 @@ public class CstplInfoAction {
             if (!submitPreCheck(cttInfoShowAdd)) {
                 return;
             }
-            if (esCttInfoService.isExistInDb(cttInfoShowAdd)) {
+            if (cttInfoService.isExistInDb(cttInfoShowAdd)) {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             } else {
                 addRecordAction(cttInfoShowAdd);
@@ -397,7 +394,7 @@ public class CstplInfoAction {
             if (cttInfoShowPara.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
                 cttInfoShowPara.setParentPkid("ROOT");
             }
-            esCttInfoService.insertRecord(cttInfoShowPara);
+            cttInfoService.insertRecord(cttInfoShowPara);
             MessageUtil.addInfo("新增数据完成。");
         } catch (Exception e) {
             logger.error("新增数据失败，", e);
@@ -406,7 +403,7 @@ public class CstplInfoAction {
     }
     private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
-            esCttInfoService.updateRecord(cttInfoShowPara);
+            cttInfoService.updateRecord(cttInfoShowPara);
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
@@ -416,9 +413,9 @@ public class CstplInfoAction {
     private void deleteRecordAction(CttInfoShow cttInfoShowPara) {
         try {
             cttInfoShowPara.setCttType(ESEnum.ITEMTYPE1.getCode());
-            int deleteRecordNumOfCttItem=esCttItemService.deleteRecord(cttInfoShowPara);
-            int deleteRecordNumOfCtt= esCttInfoService.deleteRecord(cttInfoShowPara.getPkid());
-            int deleteRecordNumOfPower=esInitPowerService.deleteRecord(
+            int deleteRecordNumOfCttItem= cttItemService.deleteRecord(cttInfoShowPara);
+            int deleteRecordNumOfCtt= cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
+            int deleteRecordNumOfPower= flowCtrlService.deleteRecord(
                     cttInfoShowPara.getCttType(),
                     cttInfoShowPara.getPkid(),
                     "NULL");
@@ -553,28 +550,28 @@ public class CstplInfoAction {
     }
 
     /*智能字段 Start*/
-    public EsCttInfoService getEsCttInfoService() {
-        return esCttInfoService;
+    public CttInfoService getCttInfoService() {
+        return cttInfoService;
     }
 
-    public void setEsCttInfoService(EsCttInfoService esCttInfoService) {
-        this.esCttInfoService = esCttInfoService;
+    public void setCttInfoService(CttInfoService cttInfoService) {
+        this.cttInfoService = cttInfoService;
     }
 
-    public EsCttItemService getEsCttItemService() {
-        return esCttItemService;
+    public CttItemService getCttItemService() {
+        return cttItemService;
     }
 
-    public void setEsCttItemService(EsCttItemService esCttItemService) {
-        this.esCttItemService = esCttItemService;
+    public void setCttItemService(CttItemService cttItemService) {
+        this.cttItemService = cttItemService;
     }
 
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
 
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowService getEsFlowService() {
