@@ -236,6 +236,7 @@ public class ProgWorkqtyItemAction {
                 }
                 if (esItemStlSubcttEngQListTemp.size()==0){
                     progWorkqtyItemShowUpd.setEngQMng_SubcttPkid(strSubcttPkid);
+                    progWorkqtyItemShowUpd.setEngQMng_SubcttItemPkid(progWorkqtyItemShowUpd.getSubctt_Pkid());
                     progWorkqtyItemService.insertRecord(progWorkqtyItemShowUpd);
                 }
                 MessageUtil.addInfo("更新数据完成。");
