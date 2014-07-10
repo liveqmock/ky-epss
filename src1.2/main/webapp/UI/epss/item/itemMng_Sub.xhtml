@@ -66,18 +66,24 @@
                      rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}"
                      scrollable="true"
                      scrollHeight="450">
-                <p:column headerText="操作" style="width:91px">
+                <p:column headerText="操作" style="width:66px">
                     <p:commandButton  icon="ui-icon-pencil"
-                                     actionListener="#{subcttItemAction.selectRecordAction('Upd',record)}"
-                                     update=":form:pdt,:form:pgViewForUpd,:form:msgs"
-                                     onclick="PF('wVDlgViewForUpd').show()">
+                                      style="height:20px;width:20px"
+                                      rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
+                                      actionListener="#{subcttItemAction.selectRecordAction('Upd',record)}"
+                                      update=":form:pdt,:form:pgViewForUpd,:form:msgs"
+                                      onclick="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
                     <p:commandButton  icon="ui-icon-trash"
-                                     actionListener="#{subcttItemAction.selectRecordAction('Del',record)}"
-                                     update=":form:pdt,:form:pgViewForDel,:form:msgs"
-                                     onclick="PF('wVDlgViewForDel').show()">
+                                      style="height:20px;width:20px"
+                                      rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
+                                      actionListener="#{subcttItemAction.selectRecordAction('Del',record)}"
+                                      update=":form:pdt,:form:pgViewForDel,:form:msgs"
+                                      onclick="PF('wVDlgViewForDel').show()">
                     </p:commandButton>
                     <p:commandButton  icon="ui-icon-search"
+                                      style="height:20px;width:20px"
+                                      rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
                                       onclick ="wvCstplDetail.show()" >
                     </p:commandButton>
                 </p:column>
@@ -87,13 +93,13 @@
                 <p:column style="width:100px" headerText="成本项号">
                     <h:outputText value="#{record.strCorrespondingItemNo}" escape="false"/>
                 </p:column>
-                <p:column style="width:200px" headerText="成本项名">
+                <p:column style="width:300px" headerText="成本项名">
                     <h:outputText value="#{record.strCorrespondingItemName}"/>
                 </p:column>
                 <p:column style="width:100px" headerText="分包编号">
                     <h:outputText value="#{record.strNo}" escape="false"/>
                 </p:column>
-                <p:column style="width:200px" headerText="分包名称">
+                <p:column style="width:300px" headerText="分包名称">
                     <h:outputText value="#{record.name}" />
                 </p:column>
                 <p:column style="width:60px" headerText="分包单位">

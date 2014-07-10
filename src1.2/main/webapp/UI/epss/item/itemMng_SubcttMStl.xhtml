@@ -54,12 +54,16 @@
             <p:column headerText="操作" style="width:91px" rendered='#{progMatqtyItemAction.strPassFlag}'>
                 <p:commandButton  icon="ui-icon-pencil"
                                   style="height:20px;width:20px"
+                                  rendered="#{record.subctt_SignPartAPrice eq 0? 'false':
+                                                record.subctt_SignPartAPrice eq null? 'false':'true'}"
                                   actionListener="#{progMatqtyItemAction.selectRecordAction('Upd',record)}"
                                   update="pdt,:form:pgViewForUpd"
                                   oncomplete="PF('wVDlgViewForUpd').show()">
                 </p:commandButton>
                 <p:commandButton  icon="ui-icon-trash"
                                   style="height:20px;width:20px"
+                                  rendered="#{record.subctt_SignPartAPrice eq 0? 'false':
+                                                record.subctt_SignPartAPrice eq null? 'false':'true'}"
                                   actionListener="#{progMatqtyItemAction.selectRecordAction('Del',record)}"
                                   update="pdt,:form:pgViewForDel"
                                   oncomplete="PF('wVDlgViewForDel').show()">

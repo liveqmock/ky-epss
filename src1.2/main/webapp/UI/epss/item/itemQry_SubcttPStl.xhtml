@@ -91,9 +91,14 @@
                 <p:column headerText="操作" style="width:30px">
                     <p:commandButton  icon="ui-icon-search"
                                       style="height:20px;width:20px"
-                                      action="#{progSubstlItemAction.selectRecordAction('Sel',record)}"
+                                      rendered="#{record.subcttItemName eq '小计'? 'false':
+                                         record.subcttItemName eq '本期净结算额'? 'false':
+                                         record.subcttItemName eq '合计(扣除其它栏款项后本期结算价值)'?'false':
+                                         record.subcttItemName eq '其中:安全施工措施费'?'false':
+                                         record.subcttItemName eq '质保金'? 'false':'true'}"
                                       update="pdt,:form:pgView,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
+                        <!--action="#{progSubstlItemAction.selectRecordAction('Sel',record)}"-->
                     </p:commandButton>
                 </p:column>
                 <p:column headerText="序号" style="width:30px">
