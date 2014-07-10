@@ -23,7 +23,8 @@
                 var arg = new Object();
                 arg.doType = "select";
 
-                var rtn =dialog("../item/itemMng_SubcttMStl.xhtml?strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
+                var rtn =dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
+                document.getElementById("form:qryBtn").click();
             }
         </script>
     </ui:define>
@@ -76,22 +77,12 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid id="pgCondition" columns="3">
+            <h:panelGrid id="pgCondition">
                 <p:commandButton id="addBtn"
                                  value="增加" icon="ui-icon-plus"
                                  action="#{subcttStlMInfoAction.resetActionForAdd()}"
                                  update="pgViewForAdd,pgCondition"
                                  onclick="PF('wVDlgViewForAdd').show()">
-                        </p:commandButton>
-                        <p:commandButton id="endInputBtn" value="录入完成"
-                                         action="#{subcttStlMInfoAction.onClickForPowerAction('MngPass')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{subcttStlMInfoAction.rowSelectedFlag}">
-                        </p:commandButton>
-                        <p:commandButton id="startInputBtn" value="录入未完"
-                                         action="#{subcttStlMInfoAction.onClickForPowerAction('MngFail')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{subcttStlMInfoAction.rowSelectedFlag}">
                         </p:commandButton>
             </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
@@ -126,11 +117,6 @@
                     <p:commandButton icon="ui-icon-triangle-1-e"
                                      style="height:20px;width:20px"
                                      oncomplete="actSelect('#{record.pkid}')">
-                    </p:commandButton>
-                    <p:commandButton  icon="ui-icon-document"
-                                      style="height:20px;width:20px"
-                                      update="pdt,:form:pgAttachmentView,:form:msgs"
-                                      onclick="PF('wvAttachmentList').show()">
                     </p:commandButton>
                 </p:column>
                 <p:column headerText="序号" style="width:30px">

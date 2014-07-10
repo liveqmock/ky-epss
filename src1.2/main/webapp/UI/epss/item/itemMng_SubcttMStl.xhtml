@@ -21,14 +21,20 @@
 <ui:define name="content">
     <h:form id="form">
         <p:growl id="msgs" showDetail="false"/>
-        <p:ajaxStatus style="width:16px;height:16px;">
-            <f:facet name="start">
-                <h:graphicImage value="/images/ajaxloading.gif"/>
-            </f:facet>
-            <f:facet name="complete">
-                <h:outputText value=""/>
-            </f:facet>
-        </p:ajaxStatus>
+        <h:panelGrid id="pgCondition" columns="2">
+            <p:commandButton id="endInputBtn" value="录入完成"
+                             action="#{subcttStlMItemAction.onClickForPowerAction('Pass')}"
+                             update="pgCondition,pdt,msgs"
+                             rendered="#{subcttStlMItemAction.strPassFlag}"
+                             oncomplete="window.close()">
+            </p:commandButton>
+            <p:commandButton id="startInputBtn" value="录入未完"
+                             action="#{subcttStlMItemAction.onClickForPowerAction('Fail')}"
+                             update="pgCondition,pdt,msgs"
+                             rendered="#{!subcttStlMItemAction.strPassFlag}"
+                             oncomplete="window.close()">
+            </p:commandButton>
+        </h:panelGrid>
         <p:dataTable id="pdt" style="width:100%;"
                      value="#{subcttStlMItemAction.progMatQtyItemShowList}"
                      var="record"
@@ -45,7 +51,7 @@
                      rowStyleClass="#{record.subctt_SignPartAPrice eq 0? 'rowDoneStyle':
                      record.subctt_SignPartAPrice eq null? 'rowDoneStyle':null}"
                      scrollable="true">
-            <p:column headerText="操作" style="width:91px" rendered='#{subcttStlMItemAction.strMngNotFinishFlag}'>
+            <p:column headerText="操作" style="width:91px" rendered='#{subcttStlMItemAction.strPassFlag}'>
                 <p:commandButton  icon="ui-icon-pencil"
                                   style="height:20px;width:20px"
                                   actionListener="#{subcttStlMItemAction.selectRecordAction('Upd',record)}"
