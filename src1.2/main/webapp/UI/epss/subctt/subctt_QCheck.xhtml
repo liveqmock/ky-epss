@@ -22,7 +22,8 @@
                         "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
-                var rtn =dialog("../item/itemQry_SubcttQStl.xhtml?strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
+                var rtn =dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=Check&amp;strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
+                document.getElementById("form:qryBtn").click();
             }
         </script>
     </ui:define>
@@ -48,7 +49,7 @@
                     <h:panelGrid columns="3">
                         <p:commandButton id="qryBtn" value="查询"
                                          action="#{subcttStlQInfoAction.onQueryAction('Check','true')}"
-                                         update="pdt,msgs,pgCondition">
+                                         update="pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
                                          type="reset"
@@ -65,23 +66,6 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid id="pgCondition" columns="3">
-                        <p:commandButton id="checkPassBtn" value="审核通过"
-                                         action="#{subcttStlQInfoAction.onClickForPowerAction('CheckPass')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{subcttStlQInfoAction.rowSelectedFlag}">
-                        </p:commandButton>
-                        <p:commandButton id="checkFailBtn" value="审核未过"
-                                         action="#{subcttStlQInfoAction.onClickForPowerAction('CheckFail')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{subcttStlQInfoAction.rowSelectedFlag}">
-                        </p:commandButton>
-                <p:selectOneMenu id="statusFlag"
-                                 value="#{subcttStlQInfoAction.strNotPassToStatus}"
-                                 rendered="#{subcttStlQInfoAction.rowSelectedFlag}">
-                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
-                </p:selectOneMenu>
-            </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{subcttStlQInfoAction.progInfoShowList}"
                          var="record"
@@ -99,7 +83,7 @@
                          rowStyleClass="#{record.statusFlag eq '0'? null : 'rowDoneStyle'}"
                          scrollable="true">
                 <p:column headerText="操作" style="width:61px">
-                    <p:commandButton  icon="ui-icon-plus"
+                    <p:commandButton  icon="ui-icon-search"
                                       style="height:20px;width:20px"
                                       actionListener="#{subcttStlQInfoAction.selectRecordAction('Qry','',record)}"
                                       update="pdt,:form:msgs,:form:pgView"

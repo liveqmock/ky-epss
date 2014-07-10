@@ -44,7 +44,7 @@
                     <h:panelGrid columns="3">
                         <p:commandButton id="qryBtn" value="查询"
                                          action="#{subCttInfoAction.onQueryAction('Approve','true')}"
-                                         update="pdt,msgs,pgCondition">
+                                         update="pdt,msgs">
                         </p:commandButton>
                         <p:commandButton id="resetBtn" value="重置"
                                          type="reset"
@@ -61,22 +61,6 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid id="pgCondition"  columns="3">
-                <p:commandButton id="checkPassBtn" value="批准通过"
-                                 action="#{subCttInfoAction.onClickForPowerAction('ApprovePass')}"
-                                 update="pgCondition,pdt,msgs"
-                                 rendered="#{subCttInfoAction.rowSelectedFlag}">
-                </p:commandButton>
-                <p:commandButton id="checkFailBtn" value="批准未过至状态:"
-                                 action="#{subCttInfoAction.onClickForPowerAction('ApproveFail')}"
-                                 update="pgCondition,pdt,msgs"
-                                 rendered="#{subCttInfoAction.rowSelectedFlag}">
-                </p:commandButton>
-                <p:selectOneMenu id="statusFlag" value="#{subCttInfoAction.strNotPassToStatus}"
-                                 rendered="#{subCttInfoAction.rowSelectedFlag}">
-                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
-                </p:selectOneMenu>
-            </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{subCttInfoAction.cttInfoShowList}"
                          var="record"
@@ -93,15 +77,11 @@
                          widgetVar="DtInitSubcttList"
                          rowStyleClass="#{record.statusFlag eq '2' ? null: 'rowDoneStyle'}"
                          scrollable="true">
-                <p:column headerText="操作" style="width:61px" >
+                <p:column headerText="操作" style="width:91px" >
                     <p:commandButton   icon="ui-icon-search"
                                        actionListener="#{subCttInfoAction.selectRecordAction('Qry','',record)}"
                                        update=":form:pdt,:form:pgView,:form:msgs"
                                        onclick="PF('wVDlgView').show()">
-                    </p:commandButton>
-                    <p:commandButton  icon="ui-icon-plus"
-                                      actionListener="#{subCttInfoAction.selectRecordAction('Approve','',record)}"
-                                      update=":form:pdt,:form:msgs,:form:pgCondition">
                     </p:commandButton>
                     <p:commandButton  icon="ui-icon-triangle-1-e"
                                       oncomplete="actSelect('#{record.pkid}','Sub_Detail')">

@@ -21,6 +21,20 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="false"/>
+            <h:panelGrid id="pgCondition" columns="2">
+                <p:commandButton id="endInputBtn" value="录入完成"
+                                 action="#{subcttStlQItemAction.onClickForPowerAction('Pass')}"
+                                 update="pgCondition,pdt,msgs"
+                                 rendered="#{subcttStlQItemAction.strPassFlag}"
+                                 oncomplete="window.close()">
+                </p:commandButton>
+                <p:commandButton id="startInputBtn" value="录入未完"
+                                 action="#{subcttStlQItemAction.onClickForPowerAction('Fail')}"
+                                 update="pgCondition,pdt,msgs"
+                                 rendered="#{!subcttStlQItemAction.strPassFlag}"
+                                 oncomplete="window.close()">
+                </p:commandButton>
+            </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{subcttStlQItemAction.progWorkqtyItemShowList}"
                          var="record"
@@ -35,7 +49,7 @@
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
                          scrollable="true">
-                <p:column headerText="操作" style="width:91px" rendered='#{subcttStlQItemAction.strMngNotFinishFlag}'>
+                <p:column headerText="操作" style="width:91px" rendered='#{subcttStlQItemAction.strPassFlag}'>
                     <p:commandButton  icon="ui-icon-pencil"
                                       style="height:20px;width:20px"
                                       actionListener="#{subcttStlQItemAction.selectRecordAction('Upd',record)}"

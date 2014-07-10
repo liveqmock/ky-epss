@@ -29,7 +29,7 @@
                 </p:commandButton>
                 <p:outputLabel value="未过至状态:"/>
                 <p:selectOneMenu id="statusFlag" value="#{subcttItemAction.strNotPassToStatus}">
-                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
+                    <f:selectItems value="#{esFlowControl.setStatusFlagListByPower(subcttItemAction.strFlowType)}"/>
                 </p:selectOneMenu>
                 <p:commandButton id="startInputBtn" value="未过"
                                  action="#{subcttItemAction.onClickForPowerAction('Fail')}"

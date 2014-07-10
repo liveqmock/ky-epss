@@ -129,7 +129,7 @@ public class EsFlowControl implements Serializable {
         return "";
     }
 
-    public void setStatusFlagListByPower(String strPageName){
+    public List<SelectItem> setStatusFlagListByPower(String strPageName){
         List<SelectItem> selectItemsTemp=new ArrayList<SelectItem>();
         selectItemsTemp.addAll(statusFlagFromDBList);
 
@@ -167,6 +167,7 @@ public class EsFlowControl implements Serializable {
                 }
             }
         }
+        return statusFlagList;
     }
     public void setDeleteFlagListByPower(String strPageName){
         deleteFlagList=new ArrayList<SelectItem>();
@@ -324,4 +325,5 @@ public class EsFlowControl implements Serializable {
     public void setEsCommon(EsCommon esCommon) {
         this.esCommon = esCommon;
     }
+
 }

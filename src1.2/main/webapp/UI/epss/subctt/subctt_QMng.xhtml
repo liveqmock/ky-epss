@@ -22,7 +22,8 @@
                         "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
-                var rtn =dialog("../item/itemMng_SubcttQStl.xhtml?strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
+                var rtn =dialog("../item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
+                document.getElementById("form:qryBtn").click();
             }
         </script>
     </ui:define>
@@ -75,23 +76,13 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid id="pgCondition" columns="3">
+            <h:panelGrid id="pgCondition" columns="1">
                 <p:commandButton id="addBtn"
                                  value="增加" icon="ui-icon-plus"
                                  action="#{subcttStlQInfoAction.resetActionForAdd()}"
                                  update="pgViewForAdd,pgCondition"
                                  onclick="PF('wVDlgViewForAdd').show()">
-                        </p:commandButton>
-                        <p:commandButton id="endInputBtn" value="录入完成"
-                                         action="#{subcttStlQInfoAction.onClickForPowerAction('MngPass')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{subcttStlQInfoAction.rowSelectedFlag}">
-                        </p:commandButton>
-                        <p:commandButton id="startInputBtn" value="录入未完"
-                                         action="#{subcttStlQInfoAction.onClickForPowerAction('MngFail')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{subcttStlQInfoAction.rowSelectedFlag}">
-                        </p:commandButton>
+                </p:commandButton>
             </h:panelGrid>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{subcttStlQInfoAction.progInfoShowList}"
@@ -109,7 +100,7 @@
                          widgetVar="DtInitSubcttList"
                          rowStyleClass="#{record.statusFlag eq null? null:'rowDoneStyle'}"
                          scrollable="true">
-                <p:column headerText="操作" style="width:61px">
+                <p:column headerText="操作" style="width:91px">
                       <p:commandButton  icon="ui-icon-pencil"
                                       actionListener="#{subcttStlQInfoAction.selectRecordAction('Mng','Upd',record)}"
                                       update=":form:pdt,:form:pgViewForUpd,:form:msgs"
@@ -120,7 +111,7 @@
                                       update=":form:pdt,:form:pgViewForDel,:form:msgs"
                                       onclick="PF('wVDlgViewForDel').show()">
                     </p:commandButton>
-                    <p:commandButton  icon="ui-icon-search"
+                    <p:commandButton  icon="ui-icon-triangle-1-e"
                                       onclick ="actSelect('#{record.pkid}')" >
                     </p:commandButton>
                 </p:column>
