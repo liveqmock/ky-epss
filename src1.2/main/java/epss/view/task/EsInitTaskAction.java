@@ -201,7 +201,7 @@ public class EsInitTaskAction {
                         }
                     }
 
-                    if(isHasTask==true){
+                    if(isHasTask.equals(true)){
                         taskShow =new TaskShow();
                         taskShow.setPower_Pkid(itemUnitEP.getPower_Pkid());
                         taskShow.setId(itemUnitEP.getId());
@@ -236,10 +236,6 @@ public class EsInitTaskAction {
 
     public List<TaskShow> getTaskShowList() {
         return taskShowList;
-    }
-
-    public void setTaskShowList(List<TaskShow> taskShowList) {
-        this.taskShowList = taskShowList;
     }
 
     public EsCommonService getEsCommonService() {
