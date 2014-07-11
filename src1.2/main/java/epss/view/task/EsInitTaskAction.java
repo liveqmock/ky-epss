@@ -18,7 +18,6 @@ import javax.faces.bean.ViewScoped;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * Created with IntelliJ IDEA.
  * User: Think
@@ -36,8 +35,8 @@ public class EsInitTaskAction {
     private PlatformService platformService;
     @ManagedProperty(value = "#{esCommonService}")
     private EsCommonService esCommonService;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
 
     private List<TaskShow> taskShowList;
 
@@ -105,7 +104,6 @@ public class EsInitTaskAction {
             Integer intGroupCounts=0;
             //创建并初始化判断合同是否是特定类型和状态的布尔变量
             Boolean isHasTask=false;
-            //TODO
             //创建并初始化存放一定状态合同的集合
             List<TaskShow> taskShowListOfStatusFlag =null;
             //当合同状态为录入时
@@ -356,7 +354,7 @@ public class EsInitTaskAction {
                         }
                     }
                     //如果其是待处理任务，在显示列表上添加隐藏列和任务列的具体信息
-                    if(isHasTask==true){
+                    if(isHasTask.equals(true)){
                         if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())&&
                                 itemUnitEP.getStatus_Flag().equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())){
                             if (strType.equals(ESEnum.ITEMTYPE0.getCode())){
@@ -493,11 +491,11 @@ public class EsInitTaskAction {
         this.esCommonService = esCommonService;
     }
 
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
 
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 }

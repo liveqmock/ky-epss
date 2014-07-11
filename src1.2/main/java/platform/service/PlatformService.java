@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import platform.repository.dao.*;
-import platform.repository.dao.common.PtCommonMapper;
+import platform.repository.dao.not_mybatis.PtCommonMapper;
 import platform.repository.model.*;
 import platform.view.build.form.config.SystemAttributeNames;
 import platform.view.build.security.OperatorManager;
@@ -60,7 +60,6 @@ public class PlatformService {
     }
 
     public List<Ptmenu> getPtmenuList(){
-        List<CommColModel> commColModelList =new ArrayList<CommColModel>();
         OperatorManager om=getOperatorManager();
         return ptCommonMapper.getPtmenuList(om.getOperatorId());
     }

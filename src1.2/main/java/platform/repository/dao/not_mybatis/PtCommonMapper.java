@@ -1,4 +1,4 @@
-package platform.repository.dao.common;
+package platform.repository.dao.not_mybatis;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
