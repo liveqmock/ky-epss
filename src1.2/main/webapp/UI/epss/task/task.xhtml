@@ -2,21 +2,111 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
                 template="/templates/ui.xhtml">
 
     <ui:define name="head">
         <link type="text/css" href="#{request.contextPath}/UI/epss/epss.css" rel="stylesheet"/>
         <script type="text/javascript" src="#{request.contextPath}/UI/support/pub.js"/>
         <script type="text/javascript" language="javascript">
-            function actSelect(obj) {
-                // 寻找当前行的PKID思路：参数传递
-                alert(obj);
-                var pkid=obj;
-                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
-                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+
+            function actSelect(type) {
+                var type = type;
+                var sfeature = "dialogwidth:1100px;dialogheight:600px;center:yes;location:no;help:no;resizable:no;scroll:yes;status:no";
                 var arg = new Object();
                 arg.doType = "select";
-                //var rtn = dialog("../item/itemQry_Tkctt.xhtml?strFlowType=Qry&amp;strTkcttInfoPkid=" + pkid + "", arg, sfeature);
+                if (type == '总包合同录入') {
+                    var rtn = dialog("../tkctt/tkctt_TkcttMng.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '成本计划录入') {
+                    var rtn = dialog("../tkctt/tkctt_CstplMng.xhtml?strCstplPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包合同录入') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttMng.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包数量结算录入') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttEngStlQMng.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包材料结算录入') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttEngStlMMng.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '总包数量统计录入') {
+                    var rtn = dialog("../tkctt/tkctt_StaMng.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '总包数量计量录入') {
+                    var rtn = dialog("../tkctt/tkctt_MeaMng.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '总包合同审核') {
+                    var rtn = dialog("#{request.contextPath}/UI/epss/tkctt/tkctt_TkcttCheck.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '成本计划审核') {
+                    var rtn = dialog("../tkctt/tkctt_CstplCheck.xhtml?strCstplPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包合同审核') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttCheck.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包数量结算审核') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttEngStlQCheck.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包材料结算审核') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttEngStlMCheck.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '总包数量统计审核') {
+                    var rtn = dialog("../tkctt/tkctt_StaCheck.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '总包数量计量审核') {
+                    var rtn = dialog("../tkctt/tkctt_MeaCheck.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '总包合同复核') {
+                    var rtn = dialog("../tkctt/tkctt_TkcttDoubleCheck.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '成本计划复核') {
+                    var rtn = dialog("../tkctt/tkctt_CstplDoubleCheck.xhtml?strCstplPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包合同复核') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttDoubleCheck.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包数量结算复核') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttEngStlQDoubleCheck.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包材料结算复核') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttEngStlMDoubleCheck.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '总包数量统计复核') {
+                    var rtn = dialog("../tkctt/tkctt_StaDoubleCheck.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '总包数量计量复核') {
+                    var rtn = dialog("../tkctt/tkctt_MeaDoubleCheck.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '总包合同批准') {
+                    var rtn = dialog("../tkctt/tkctt_TkcttApprove.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '成本计划批准') {
+                    var rtn = dialog("../tkctt/tkctt_CstplApprove.xhtml?strCstplPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包合同批准') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttApprove.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包数量结算批准') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttEngStlQApprove.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '分包材料结算批准') {
+                    var rtn = dialog("../cstpl/cstpl_SubcttEngStlMApprove.xhtml?strSubcttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '总包数量统计批准') {
+                    var rtn = dialog("../tkctt/tkctt_StaApprove.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
+                else if (type == '总包数量计量批准') {
+                    var rtn = dialog("../tkctt/tkctt_MeaApprove.xhtml?strTkCttPkid=" + "", arg, sfeature);
+                }
             }
         </script>
     </ui:define>
@@ -31,7 +121,7 @@
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                          paginator="true"
+                         paginator="true"
                          paginatorPosition="bottom"
                          rows="20"
                          rowsPerPageTemplate="500,200,100,45,30,20"
@@ -42,8 +132,7 @@
                 <p:column headerText="操作" style="width:30px">
                     <p:commandButton icon="ui-icon-triangle-1-e"
                                      style="height:20px;width:20px"
-                                     rendered="#{record.name eq null?'false':'true'}"
-                                     onclick="actSelect('#{record.power_Pkid}')">
+                                     onclick="actSelect('#{record.cttType}')">
                     </p:commandButton>
                 </p:column>
                 <p:column headerText="序号" style="width:30px">
@@ -55,8 +144,8 @@
                 <p:column headerText="待处理任务" style="text-align:left;">
                     <h:outputText value="#{record.name}"/>
                 </p:column>
-                <p:column headerText="期数" style="width:60px;text-align:left;">
-                    <h:outputText value="#{record.period_No}"/>
+                <p:column rendered="false">
+                    <h:outputText value="#{record.cttType}"/>
                 </p:column>
                 <p:column headerText="状态标志" style="width:60px;text-align:center;">
                     <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.status_Flag)}"/>
