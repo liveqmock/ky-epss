@@ -10,7 +10,6 @@ import platform.service.PlatformService;
 import epss.view.flow.EsFlowControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -477,10 +476,6 @@ public class EsInitTaskAction {
 
     public List<TaskShow> getTaskShowList() {
         return taskShowList;
-    }
-
-    public void setTaskShowList(List<TaskShow> taskShowList) {
-        this.taskShowList = taskShowList;
     }
 
     public EsCommonService getEsCommonService() {
