@@ -52,7 +52,7 @@ public class ProgWorkqtyItemAction {
     private EsFlowService esFlowService;
 
     private List<ProgWorkqtyItemShow> progWorkqtyItemShowList;
-    private ProgWorkqtyItemShow progWorkqtyItemShow;
+    private ProgWorkqtyItemShow progWorkqtyItemShowSel;
     private ProgWorkqtyItemShow progWorkqtyItemShowUpd;
     private ProgWorkqtyItemShow progWorkqtyItemShowDel;
     private BigDecimal bDEngQMng_BeginToCurrentPeriodEQtyInDB;
@@ -60,7 +60,8 @@ public class ProgWorkqtyItemAction {
 
     private String strSubmitType;
     private String strSubcttPkid;
-    private EsInitStl esInitStl;
+    private EsInitStl progWorkqtyInfo;
+    private ProgInfoShow progWorkqtyInfoShowH;
 
     /*控制维护画面层级部分的显示*/
     private String strPassFlag;
@@ -75,12 +76,12 @@ public class ProgWorkqtyItemAction {
         }
         if(parammap.containsKey("strEsInitStlSubcttEng")){
             String strEsInitStlSubcttEngTemp=parammap.get("strEsInitStlSubcttEng").toString();
-            esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strEsInitStlSubcttEngTemp);
-            strSubcttPkid= esInitStl.getStlPkid();
+            progWorkqtyInfo = progStlInfoService.selectRecordsByPrimaryKey(strEsInitStlSubcttEngTemp);
+            strSubcttPkid= progWorkqtyInfo.getStlPkid();
         }
 
         List<EsInitPower> esInitPowerList=
-                flowCtrlService.selectListByModel(esInitStl.getStlType(),esInitStl.getStlPkid(),esInitStl.getPeriodNo());
+                flowCtrlService.selectListByModel(progWorkqtyInfo.getStlType(),progWorkqtyInfo.getStlPkid(),progWorkqtyInfo.getPeriodNo());
         strPassFlag="true";
         if(esInitPowerList.size()>0){
             if("Mng".equals(strFlowType)&&ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
@@ -93,6 +94,11 @@ public class ProgWorkqtyItemAction {
 
     /*初始化操作*/
     private void initData() {
+        // 详细页头
+        progWorkqtyInfoShowH.setId(progWorkqtyInfo.getId());
+        progWorkqtyInfoShowH.setStlName(cttInfoService.getCttInfoByPkId(progWorkqtyInfo.getStlPkid()).getName());
+        progWorkqtyInfoShowH.setPeriodNo(progWorkqtyInfo.getPeriodNo());
+
         /*分包合同*/
         List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
         esCttItemList = cttItemService.getEsItemList(
@@ -136,7 +142,7 @@ public class ProgWorkqtyItemAction {
             EsItemStlSubcttEngQ esItemStlSubcttEngQ=new EsItemStlSubcttEngQ();
             esItemStlSubcttEngQ.setSubcttPkid(strSubcttPkid);
             esItemStlSubcttEngQ.setSubcttItemPkid(itemUnit.getPkid());
-            esItemStlSubcttEngQ.setPeriodNo(esInitStl.getPeriodNo());
+            esItemStlSubcttEngQ.setPeriodNo(progWorkqtyInfo.getPeriodNo());
             List<EsItemStlSubcttEngQ> esItemStlSubcttEngQList =
                     progWorkqtyItemService.selectRecordsByExample(esItemStlSubcttEngQ);
             if(esItemStlSubcttEngQList.size()>0){
@@ -211,7 +217,8 @@ public class ProgWorkqtyItemAction {
 
     /*重置*/
     public void resetAction(){
-        progWorkqtyItemShow =new ProgWorkqtyItemShow();
+        progWorkqtyInfoShowH=new ProgInfoShow();
+        progWorkqtyItemShowSel =new ProgWorkqtyItemShow();
         progWorkqtyItemShowUpd =new ProgWorkqtyItemShow();
         progWorkqtyItemShowDel =new ProgWorkqtyItemShow();
         strSubmitType="";
@@ -223,7 +230,7 @@ public class ProgWorkqtyItemAction {
                 if(!blurEngQMng_CurrentPeriodMQty("submit")){
                     return;
                 }
-                progWorkqtyItemShowUpd.setEngQMng_PeriodNo(esInitStl.getPeriodNo());
+                progWorkqtyItemShowUpd.setEngQMng_PeriodNo(progWorkqtyInfo.getPeriodNo());
                 List<EsItemStlSubcttEngQ> esItemStlSubcttEngQListTemp =
                         progWorkqtyItemService.isExistInDb(progWorkqtyItemShowUpd);
                 if (esItemStlSubcttEngQListTemp.size() > 1) {
@@ -314,8 +321,8 @@ public class ProgWorkqtyItemAction {
         try {
             strSubmitType=strSubmitTypePara;
             if(strSubmitTypePara.equals("Sel")){
-                progWorkqtyItemShow =(ProgWorkqtyItemShow) BeanUtils.cloneBean(progWorkqtyItemShowPara) ;
-                progWorkqtyItemShow.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progWorkqtyItemShow.getSubctt_StrNo()));
+                progWorkqtyItemShowSel =(ProgWorkqtyItemShow) BeanUtils.cloneBean(progWorkqtyItemShowPara) ;
+                progWorkqtyItemShowSel.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progWorkqtyItemShowSel.getSubctt_StrNo()));
             }
             else if(strSubmitTypePara.equals("Upd")){
                 progWorkqtyItemShowUpd =(ProgWorkqtyItemShow) BeanUtils.cloneBean(progWorkqtyItemShowPara) ;
@@ -341,12 +348,12 @@ public class ProgWorkqtyItemAction {
         try {
             strPowerType=strFlowType+strPowerType;
             ProgInfoShow progInfoShowSel=new ProgInfoShow();
-            progInfoShowSel.setStlType(esInitStl.getStlType());
-            progInfoShowSel.setStlPkid(esInitStl.getStlPkid());
-            progInfoShowSel.setPeriodNo(esInitStl.getPeriodNo());
-            progInfoShowSel.setPowerType(esInitStl.getStlType());
-            progInfoShowSel.setPowerPkid(esInitStl.getStlPkid());
-            progInfoShowSel.setPeriodNo(esInitStl.getPeriodNo());
+            progInfoShowSel.setStlType(progWorkqtyInfo.getStlType());
+            progInfoShowSel.setStlPkid(progWorkqtyInfo.getStlPkid());
+            progInfoShowSel.setPeriodNo(progWorkqtyInfo.getPeriodNo());
+            progInfoShowSel.setPowerType(progWorkqtyInfo.getStlType());
+            progInfoShowSel.setPowerPkid(progWorkqtyInfo.getStlPkid());
+            progInfoShowSel.setPeriodNo(progWorkqtyInfo.getPeriodNo());
 
             if (strPowerType.contains("Mng")) {
                 if (strPowerType.equals("MngPass")) {
@@ -477,14 +484,17 @@ public class ProgWorkqtyItemAction {
         this.cttItemService = cttItemService;
     }
 
-    public ProgWorkqtyItemShow getProgWorkqtyItemShow() {
-        return progWorkqtyItemShow;
+    public ProgInfoShow getProgWorkqtyInfoShowH() {
+        return progWorkqtyInfoShowH;
     }
 
-    public void setProgWorkqtyItemShow(ProgWorkqtyItemShow progWorkqtyItemShow) {
-        this.progWorkqtyItemShow = progWorkqtyItemShow;
+    public ProgWorkqtyItemShow getProgWorkqtyItemShowSel() {
+        return progWorkqtyItemShowSel;
     }
 
+    public void setProgWorkqtyItemShowSel(ProgWorkqtyItemShow progWorkqtyItemShowSel) {
+        this.progWorkqtyItemShowSel = progWorkqtyItemShowSel;
+    }
 
     public List<ProgWorkqtyItemShow> getProgWorkqtyItemShowList() {
         return progWorkqtyItemShowList;

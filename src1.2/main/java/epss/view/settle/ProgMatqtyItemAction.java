@@ -52,7 +52,7 @@ public class ProgMatqtyItemAction {
     private EsFlowService esFlowService;
 
     private List<ProgMatQtyItemShow> progMatQtyItemShowList;
-    private ProgMatQtyItemShow progMatQtyItemShow;
+    private ProgMatQtyItemShow progMatQtyItemShowSel;
     private ProgMatQtyItemShow progMatQtyItemShowUpd;
     private ProgMatQtyItemShow progMatQtyItemShowDel;
     private BigDecimal bDEngMMng_BeginToCurrentPeriodMQtyInDB;
@@ -211,7 +211,7 @@ public class ProgMatqtyItemAction {
 
     /*ÖØÖÃ*/
     public void resetAction(){
-        progMatQtyItemShow =new ProgMatQtyItemShow();
+        progMatQtyItemShowSel =new ProgMatQtyItemShow();
         progMatQtyItemShowUpd =new ProgMatQtyItemShow();
         progMatQtyItemShowDel =new ProgMatQtyItemShow();
         strSubmitType="";
@@ -341,8 +341,8 @@ public class ProgMatqtyItemAction {
             BigDecimal bdSubctt_ContractQuantity= ToolUtil.getBdIgnoreNull(
                     progMatQtyItemShowPara.getSubctt_ContractQuantity());
             if(strSubmitTypePara.equals("Sel")){
-                progMatQtyItemShow =(ProgMatQtyItemShow)BeanUtils.cloneBean(progMatQtyItemShowPara) ;
-                progMatQtyItemShow.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progMatQtyItemShow.getSubctt_StrNo()));
+                progMatQtyItemShowSel =(ProgMatQtyItemShow)BeanUtils.cloneBean(progMatQtyItemShowPara) ;
+                progMatQtyItemShowSel.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progMatQtyItemShowSel.getSubctt_StrNo()));
             }else
             if(strSubmitTypePara.equals("Upd")){
                 if(bdSubctt_SignPartAPrice.compareTo(ToolUtil.bigDecimal0)==0||
@@ -514,12 +514,12 @@ public class ProgMatqtyItemAction {
         this.cttItemService = cttItemService;
     }
 
-    public ProgMatQtyItemShow getProgMatQtyItemShow() {
-        return progMatQtyItemShow;
+    public ProgMatQtyItemShow getProgMatQtyItemShowSel() {
+        return progMatQtyItemShowSel;
     }
 
-    public void setProgMatQtyItemShow(ProgMatQtyItemShow progMatQtyItemShow) {
-        this.progMatQtyItemShow = progMatQtyItemShow;
+    public void setProgMatQtyItemShowSel(ProgMatQtyItemShow progMatQtyItemShowSel) {
+        this.progMatQtyItemShowSel = progMatQtyItemShowSel;
     }
 
     public List<ProgMatQtyItemShow> getProgMatQtyItemShowList() {

@@ -191,17 +191,17 @@ public class CstplSubcttStlQPeriodItemAction {
 
         qryCSStlQPeriodShowList =new ArrayList<QryCSStlQPeriodShow>();
 
-        for(ProgWorkqtyItemShow progWorkqtyItemShow : progWorkqtyItemShowList){
+        for(ProgWorkqtyItemShow itemUnit : progWorkqtyItemShowList){
             QryCSStlQPeriodShow qryCSStlQPeriodShow =new QryCSStlQPeriodShow();
-            qryCSStlQPeriodShow.setStrPkid(progWorkqtyItemShow.getSubctt_Pkid());
-            qryCSStlQPeriodShow.setStrNo(progWorkqtyItemShow.getSubctt_StrNo());
-            qryCSStlQPeriodShow.setStrName(progWorkqtyItemShow.getSubctt_Name());
-            qryCSStlQPeriodShow.setStrUnit(progWorkqtyItemShow.getSubctt_Unit());
-            qryCSStlQPeriodShow.setBdBeginToCurrentPeriodEQty(progWorkqtyItemShow.getEngQMng_BeginToCurrentPeriodEQty());
-            qryCSStlQPeriodShow.setBdContractQuantity(progWorkqtyItemShow.getSubctt_ContractQuantity());
-            qryCSStlQPeriodShow.setBdSignPartAPrice(progWorkqtyItemShow.getSubctt_SignPartAPrice());
+            qryCSStlQPeriodShow.setStrPkid(itemUnit.getSubctt_Pkid());
+            qryCSStlQPeriodShow.setStrNo(itemUnit.getSubctt_StrNo());
+            qryCSStlQPeriodShow.setStrName(itemUnit.getSubctt_Name());
+            qryCSStlQPeriodShow.setStrUnit(itemUnit.getSubctt_Unit());
+            qryCSStlQPeriodShow.setBdBeginToCurrentPeriodEQty(itemUnit.getEngQMng_BeginToCurrentPeriodEQty());
+            qryCSStlQPeriodShow.setBdContractQuantity(itemUnit.getSubctt_ContractQuantity());
+            qryCSStlQPeriodShow.setBdSignPartAPrice(itemUnit.getSubctt_SignPartAPrice());
 
-            String strItemPkid=ToolUtil.getStrIgnoreNull(progWorkqtyItemShow.getSubctt_Pkid());
+            String strItemPkid=ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_Pkid());
 
             BeanInfo beanInfo = Introspector.getBeanInfo(QryCSStlQPeriodShow.class, Object.class);
             PropertyDescriptor[] pDescriptors = beanInfo.getPropertyDescriptors();
