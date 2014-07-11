@@ -74,9 +74,9 @@ public class EsInitTaskAction {
                 strType= ESEnum.ITEMTYPE4.getCode();
             }else if(itemUnit.getMenuaction().contains("cstpl_SubcttEngStlP")) {
                 strType= ESEnum.ITEMTYPE5.getCode();
-            }else if(itemUnit.getMenuaction().contains("cstpl_SubcttEngSta")) {
+            }else if(itemUnit.getMenuaction().contains("tkctt_Sta")) {
                 strType= ESEnum.ITEMTYPE6.getCode();
-            }else if(itemUnit.getMenuaction().contains("cstpl_SubcttEngMea")) {
+            }else if(itemUnit.getMenuaction().contains("tkctt_Mea")) {
                 strType= ESEnum.ITEMTYPE7.getCode();
             }else if(itemUnit.getMenuaction().contains("cstpl_Subctt")) {
                 strType= ESEnum.ITEMTYPE2.getCode();

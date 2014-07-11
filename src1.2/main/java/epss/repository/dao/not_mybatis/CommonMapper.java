@@ -64,7 +64,7 @@ public interface CommonMapper {
             " left join (select PKID,NAME from ES_CTT_INFO)eicName2" +
             " on eicName2.pkid=eicName1.PARENT_PKID" +
             " where s.stl_type=#{strCttType}" +
-            " and s.stl_pkid not in (select p.power_pkid  from es_init_power p where p.power_type=#{strCttType}"+
+            " and s.stl_pkid||s.period_no not in (select p.power_pkid||p.period_no  from es_init_power p where p.power_type=#{strCttType}"+
             " )" )
     List<TaskShow> getTaskModelListOfStl(@Param("strCttType") String strCttType);
 
