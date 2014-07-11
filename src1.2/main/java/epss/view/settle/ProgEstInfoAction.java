@@ -53,7 +53,6 @@ public class ProgEstInfoAction {
     private EsCommon esCommon;
 
     private ProgInfoShow progInfoShowQry;
-    private String strNotPassToStatus;
     private ProgInfoShow progInfoShowSelected;
     private ProgInfoShow progInfoShowSel;
     private ProgInfoShow progInfoShowAdd;
@@ -65,7 +64,6 @@ public class ProgEstInfoAction {
     private List<SelectItem> tkcttList;
 
     private String strSubmitType;
-    private String rowSelectedFlag;
     private String strStlType;
     private String strCstplPkid;
     /*控制维护画面层级部分的显示*/
@@ -108,13 +106,11 @@ public class ProgEstInfoAction {
         styleModel.setDisabled_Flag("false");
         strSubmitType="Add";
         esFlowControl.getBackToStatusFlagList("Qry");
-        rowSelectedFlag="false";
     }
 
     public void resetActionForAdd(){
         progInfoShowAdd =new ProgInfoShow();
         strSubmitType="Add";
-        rowSelectedFlag="false";
     }
 
     public void setMaxNoPlusOne(){
@@ -181,7 +177,6 @@ public class ProgEstInfoAction {
                     MessageUtil.addWarn("没有查询到数据。");
                 }
             }
-            rowSelectedFlag="false";
         } catch (Exception e) {
             logger.error("总包合同信息查询失败", e);
             MessageUtil.addError("总包合同信息查询失败");
@@ -189,20 +184,20 @@ public class ProgEstInfoAction {
     }
 
     public void selectRecordAction(String strPowerTypePara,
-                                   String strSubmitTypePara){
+                                   String strSubmitTypePara,
+                                   ProgInfoShow progInfoShowPara){
         try {
             strSubmitType=strSubmitTypePara;
-            String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowSelected.getStatusFlag());
-            String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowSelected.getStatusFlag());
-            progInfoShowSelected.setCreatedByName(esCommon.getOperNameByOperId(progInfoShowSelected.getCreatedBy()));
-            progInfoShowSelected.setLastUpdByName(esCommon.getOperNameByOperId(progInfoShowSelected.getLastUpdBy()));
+            String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowPara.getStatusFlag());
+            String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getStatusFlag());
+            progInfoShowPara.setCreatedByName(esCommon.getOperNameByOperId(progInfoShowPara.getCreatedBy()));
+            progInfoShowPara.setLastUpdByName(esCommon.getOperNameByOperId(progInfoShowPara.getLastUpdBy()));
             // 查询
             if(strPowerTypePara.equals("Qry")){
-                progInfoShowSel =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
+                progInfoShowSel =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
             }else if(strPowerTypePara.equals("Mng")){// 维护
                 if(strSubmitTypePara.equals("Sel")){
-                    progInfoShowSel =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
-                    rowSelectedFlag="true";
+                    progInfoShowSel =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                 }else if(strSubmitTypePara.equals("Add")){
                 }else{
                     if(!strStatusFlagCode.equals("")&&
@@ -211,18 +206,15 @@ public class ProgEstInfoAction {
                         return;
                     }
                     if(strSubmitTypePara.equals("Upd")){
-                        rowSelectedFlag="false";
-                        progInfoShowUpd =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
+                        progInfoShowUpd =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                     }else if(strSubmitTypePara.equals("Del")){
-                        rowSelectedFlag="false";
-                        progInfoShowDel =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
+                        progInfoShowDel =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                     }
                 }
             }else{// 权限控制
-                rowSelectedFlag="true";
                 //根据流程环节,显示不同的退回的状态
                 esFlowControl.getBackToStatusFlagList(strPowerTypePara) ;
-                progInfoShowSel =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowSelected);
+                progInfoShowSel =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                 if(strPowerTypePara.equals("Check")){
                     if(strStatusFlagCode.equals("")){
                         MessageUtil.addInfo("本期数据还未录入完毕，您暂时不能进行审核操作！");
@@ -270,118 +262,6 @@ public class ProgEstInfoAction {
         return true ;
     }
 
-    /**
-     * 根据权限进行审核
-     * @param strPowerType
-     */
-    public void onClickForPowerAction(String strPowerType){
-        try {
-            // 查询操作结果用
-            String strStatusFlagBegin="";
-            String strStatusFlagEnd="";
-            if(strPowerType.contains("Mng")){
-                if(strPowerType.equals("MngPass")){
-                    esFlowControl.mngFinishAction(
-                            progInfoShowSel.getStlType(),
-                            progInfoShowSel.getStlPkid(),
-                            progInfoShowSel.getPeriodNo());
-                    MessageUtil.addInfo("数据录入完成！");
-                }else if(strPowerType.equals("MngFail")){
-                    esFlowControl.mngNotFinishAction(
-                            progInfoShowSel.getStlType(),
-                            progInfoShowSel.getStlPkid(),
-                            progInfoShowSel.getPeriodNo());
-                    MessageUtil.addInfo("数据录入未完！");
-                }
-                // 初始
-                strStatusFlagBegin=null;
-                // 审核
-                strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG0.getCode();
-            }else if(strPowerType.contains("Check")&&!strPowerType.contains("DoubleCheck")){// 审核
-                if(strPowerType.equals("CheckPass")){
-                    // 状态标志：审核
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                    // 原因：审核通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
-                    MessageUtil.addInfo("数据审核通过！");
-                }else if(strPowerType.equals("CheckFail")){
-                    // 状态标志：初始
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-                    // 原因：审核未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
-                    MessageUtil.addInfo("数据审核未过！");
-                }
-                // 初始
-                strStatusFlagBegin=ESEnumStatusFlag.STATUS_FLAG0.getCode();
-                // 审核
-                strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG1.getCode();
-            }else if(strPowerType.contains("DoubleCheck")){// 复核
-                if(strPowerType.equals("DoubleCheckPass")){
-                    // 状态标志：复核
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
-                    // 原因：复核通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
-                    MessageUtil.addInfo("数据复核通过！");
-                }else if(strPowerType.equals("DoubleCheckFail")){
-                    // 这样写可以实现越级退回
-                    progInfoShowSel.setStatusFlag(strNotPassToStatus);
-                    // 原因：复核未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
-                    MessageUtil.addInfo("数据复核未过！");
-                }
-                // 审核
-                strStatusFlagBegin=ESEnumStatusFlag.STATUS_FLAG1.getCode();
-                // 复核
-                strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG2.getCode();
-            } else if(strPowerType.contains("Approve")){// 批准
-                if(strPowerType.equals("ApprovePass")){
-                    // 状态标志：批准
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                    // 原因：批准通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
-                    MessageUtil.addInfo("数据批准通过！");
-                }else if(strPowerType.equals("ApproveFail")){
-                    // 这样写可以实现越级退回
-                    progInfoShowSel.setStatusFlag(strNotPassToStatus);
-                    // 原因：批准未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
-
-                    MessageUtil.addInfo("数据批准未过！");
-                }
-                // 复核
-                strStatusFlagBegin=ESEnumStatusFlag.STATUS_FLAG2.getCode();
-                // 批准
-                strStatusFlagEnd=ESEnumStatusFlag.STATUS_FLAG3.getCode();
-            }
-            // 重新查询，已操作的结果
-            ProgInfoShow progInfoShowTemp =new ProgInfoShow();
-            progInfoShowTemp.setStlType(strStlType);
-            progInfoShowTemp.setStrStatusFlagBegin(strStatusFlagBegin);
-            progInfoShowTemp.setStrStatusFlagEnd(strStatusFlagEnd);
-
-            this.progInfoShowList.clear();
-            List<ProgInfoShow> progInfoShowConstructsTemp =
-                    esFlowService.selectTkcttStlSMByStatusFlagBegin_End(progInfoShowTemp);
-
-            for(ProgInfoShow esISSOMPCUnit: progInfoShowConstructsTemp){
-                for(SelectItem itemUnit:tkcttList){
-                    if(itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())){
-                        progInfoShowList.add(esISSOMPCUnit);
-                    }
-                }
-            }
-            rowSelectedFlag="false";
-        } catch (Exception e) {
-            logger.error("数据流程化失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
     /**
      * 提交维护权限
      */
@@ -567,14 +447,6 @@ public class ProgEstInfoAction {
         this.strSubmitType = strSubmitType;
     }
 
-    public String getRowSelectedFlag() {
-        return rowSelectedFlag;
-    }
-
-    public void setRowSelectedFlag(String rowSelectedFlag) {
-        this.rowSelectedFlag = rowSelectedFlag;
-    }
-
     public String getStrStlType() {
         return strStlType;
     }
@@ -637,14 +509,6 @@ public class ProgEstInfoAction {
 
     public void setProgInfoShowDel(ProgInfoShow progInfoShowDel) {
         this.progInfoShowDel = progInfoShowDel;
-    }
-
-    public String getStrNotPassToStatus() {
-        return strNotPassToStatus;
-    }
-
-    public void setStrNotPassToStatus(String strNotPassToStatus) {
-        this.strNotPassToStatus = strNotPassToStatus;
     }
 
     public ProgInfoShow getProgInfoShowUpd() {

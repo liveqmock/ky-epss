@@ -1,12 +1,14 @@
 package epss.view.settle;
 
 import epss.common.enums.ESEnum;
+import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.model_show.CommStlSubcttEngH;
 import epss.repository.model.model_show.ProgEstStaItemShow;
 import epss.common.utils.MessageUtil;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.*;
+import epss.repository.model.model_show.ProgInfoShow;
 import epss.service.*;
 import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
@@ -19,6 +21,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import java.math.BigDecimal;
 import java.util.*;
 import epss.common.utils.JxlsManager;
@@ -71,7 +74,9 @@ public class ProgEstItemAction {
     private EsInitStl esInitStl;
 
     private String strSubmitType;
-    private String strMngNotFinishFlag;
+    private String strPassFlag;
+    private String strFlowType;
+    private String strNotPassToStatus;
 
     private Map beansMap;
     // 画面上控件的显示控制
@@ -82,6 +87,9 @@ public class ProgEstItemAction {
         beansMap = new HashMap();
         commStlSubcttEngH =new CommStlSubcttEngH();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        if(parammap.containsKey("strFlowType")){
+            strFlowType=parammap.get("strFlowType").toString();
+        }
         if(parammap.containsKey("strEsInitStlSubcttEng")){
             strEsInitStlSubcttEng=parammap.get("strEsInitStlSubcttEng").toString();
             this.esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strEsInitStlSubcttEng);
@@ -90,10 +98,10 @@ public class ProgEstItemAction {
 
         List<EsInitPower> esInitPowerList=
                 flowCtrlService.selectListByModel(esInitStl.getStlType(),esInitStl.getStlPkid(),esInitStl.getPeriodNo());
-        strMngNotFinishFlag="true";
+        strPassFlag="true";
         if(esInitPowerList.size()>0){
-            if(esInitPowerList.get(0).getStatusFlag().equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
-                strMngNotFinishFlag="false";
+            if("Mng".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
+                strPassFlag="false";
             }
         }
 
@@ -555,7 +563,92 @@ public class ProgEstItemAction {
         }
         return tempEsCttItemList;
     }
+    /**
+     * 根据权限进行审核
+     * @param strPowerType
+     */
+    public void onClickForPowerAction(String strPowerType){
+        try {
+            strPowerType=strFlowType+strPowerType;
+            ProgInfoShow progInfoShowSel=new ProgInfoShow();
+            progInfoShowSel.setStlType(esInitStl.getStlType());
+            progInfoShowSel.setStlPkid(esInitStl.getStlPkid());
+            progInfoShowSel.setPeriodNo(esInitStl.getPeriodNo());
+            progInfoShowSel.setPowerType(esInitStl.getStlType());
+            progInfoShowSel.setPowerPkid(esInitStl.getStlPkid());
+            progInfoShowSel.setPeriodNo(esInitStl.getPeriodNo());
 
+            if(strPowerType.contains("Mng")){
+                if(strPowerType.equals("MngPass")){
+                    esFlowControl.mngFinishAction(
+                            progInfoShowSel.getStlType(),
+                            progInfoShowSel.getStlPkid(),
+                            progInfoShowSel.getPeriodNo());
+                    MessageUtil.addInfo("数据录入完成！");
+                    strPassFlag="false";
+                }else if(strPowerType.equals("MngFail")){
+                    esFlowControl.mngNotFinishAction(
+                            progInfoShowSel.getStlType(),
+                            progInfoShowSel.getStlPkid(),
+                            progInfoShowSel.getPeriodNo());
+                    strPassFlag="true";
+                    MessageUtil.addInfo("数据录入未完！");
+                }
+            }else if(strPowerType.contains("Check")&&!strPowerType.contains("DoubleCheck")){// 审核
+                if(strPowerType.equals("CheckPass")){
+                    // 状态标志：审核
+                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+                    // 原因：审核通过
+                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
+                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    MessageUtil.addInfo("数据审核通过！");
+                }else if(strPowerType.equals("CheckFail")){
+                    // 状态标志：初始
+                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    // 原因：审核未过
+                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
+                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    MessageUtil.addInfo("数据审核未过！");
+                }
+            }else if(strPowerType.contains("DoubleCheck")){// 复核
+                if(strPowerType.equals("DoubleCheckPass")){
+                    // 状态标志：复核
+                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+                    // 原因：复核通过
+                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    MessageUtil.addInfo("数据复核通过！");
+                }else if(strPowerType.equals("DoubleCheckFail")){
+                    // 这样写可以实现越级退回
+                    progInfoShowSel.setStatusFlag(strNotPassToStatus);
+                    // 原因：复核未过
+                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
+                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    MessageUtil.addInfo("数据复核未过！");
+                }
+            } else if(strPowerType.contains("Approve")){// 批准
+                if(strPowerType.equals("ApprovePass")){
+                    // 状态标志：批准
+                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                    // 原因：批准通过
+                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
+                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    MessageUtil.addInfo("数据批准通过！");
+                }else if(strPowerType.equals("ApproveFail")){
+                    // 这样写可以实现越级退回
+                    progInfoShowSel.setStatusFlag(strNotPassToStatus);
+                    // 原因：批准未过
+                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
+                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+
+                    MessageUtil.addInfo("数据批准未过！");
+                }
+            }
+        } catch (Exception e) {
+            logger.error("数据流程化失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
     /* 智能字段Start*/
     public CttInfoService getCttInfoService() {
         return cttInfoService;
@@ -656,7 +749,7 @@ public class ProgEstItemAction {
         return strSubmitType;
     }
     public String getStrMngNotFinishFlag() {
-        return strMngNotFinishFlag;
+        return strPassFlag;
     }
 
     public BigDecimal getbDEng_BeginToCurrentPeriodEQtyInDB() {
@@ -707,5 +800,28 @@ public class ProgEstItemAction {
         this.progEstItemShowListForExcel = progEstItemShowListForExcel;
     }
 
-    /*智能字段End*/
+    public String getStrPassFlag() {
+        return strPassFlag;
+    }
+
+    public void setStrPassFlag(String strPassFlag) {
+        this.strPassFlag = strPassFlag;
+    }
+
+    public String getStrFlowType() {
+        return strFlowType;
+    }
+
+    public void setStrFlowType(String strFlowType) {
+        this.strFlowType = strFlowType;
+    }
+
+    public String getStrNotPassToStatus() {
+        return strNotPassToStatus;
+    }
+
+    public void setStrNotPassToStatus(String strNotPassToStatus) {
+        this.strNotPassToStatus = strNotPassToStatus;
+    }
+/*智能字段End*/
 }

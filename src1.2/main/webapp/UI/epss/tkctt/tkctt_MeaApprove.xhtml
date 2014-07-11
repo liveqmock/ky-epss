@@ -23,7 +23,8 @@
                         "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
-                var rtn =dialog("../item/itemQry_TkcttMeaStl.xhtml?strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
+                var rtn =dialog("../item/itemFlw_TkcttMeaStl.xhtml?strFlowType=Approve&amp;strEsInitStlSubcttEng="+pkid+"",arg,sfeature);
+                document.getElementById("form:qryBtn").click();
             }
         </script>
     </ui:define>
@@ -64,23 +65,6 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid id="pgCondition" columns="3">
-                <p:commandButton id="checkPassBtn" value="批准通过"
-                                 action="#{progMeaInfoAction.onClickForPowerAction('ApprovePass')}"
-                                 update="pgCondition,pdt,msgs"
-                                 rendered="#{progMeaInfoAction.rowSelectedFlag}">
-                </p:commandButton>
-                <p:commandButton id="checkFailBtn" value="批准未过至状态:"
-                                 action="#{progMeaInfoAction.onClickForPowerAction('ApproveFail')}"
-                                 update="pgCondition,pdt,msgs"
-                                 rendered="#{progMeaInfoAction.rowSelectedFlag}">
-                </p:commandButton>
-                <p:selectOneMenu id="statusFlag" value="#{progMeaInfoAction.strNotPassToStatus}"
-                                 rendered="#{progMeaInfoAction.rowSelectedFlag}">
-                    <f:selectItems value="#{esFlowControl.statusFlagList}"/>
-                </p:selectOneMenu>
-            </h:panelGrid>
-            <!--列表维护-->
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{progMeaInfoAction.progInfoShowList}"
                          var="record"
@@ -101,7 +85,7 @@
                 <p:column headerText="操作" style="width:61px">
                     <p:commandButton  icon="ui-icon-search"
                                       style="height:20px;width:20px"
-                                      action="#{tkcttInfoAction.selectRecordAction('Qry','',record)}"
+                                      action="#{progMeaInfoAction.selectRecordAction('Qry','',record)}"
                                       update="pdt,:form:pgView,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
                     </p:commandButton>
