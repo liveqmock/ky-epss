@@ -13,6 +13,7 @@ public class TaskShow {
     private String name;
     private String belong_To_Pkid;
     private String parentName;
+    private String cttType;
 
     public String getPower_Type() {
         return power_Type;
@@ -108,5 +109,13 @@ public class TaskShow {
 
     public void setStatus_Flag_Name(String status_Flag_Name) {
         this.status_Flag_Name = status_Flag_Name;
+    }
+
+    public String getCttType() {
+        return cttType;
+    }
+
+    public void setCttType(String cttType) {
+        this.cttType = cttType;
     }
 }

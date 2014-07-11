@@ -10,7 +10,6 @@ import platform.service.PlatformService;
 import epss.view.flow.EsFlowControl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -36,8 +35,8 @@ public class EsInitTaskAction {
     private PlatformService platformService;
     @ManagedProperty(value = "#{esCommonService}")
     private EsCommonService esCommonService;
-    @ManagedProperty(value = "#{esInitPowerService}")
-    private EsInitPowerService esInitPowerService;
+    @ManagedProperty(value = "#{flowCtrlService}")
+    private FlowCtrlService flowCtrlService;
 
     private List<TaskShow> taskShowList;
 
@@ -481,10 +480,6 @@ public class EsInitTaskAction {
         return taskShowList;
     }
 
-    public void setTaskShowList(List<TaskShow> taskShowList) {
-        this.taskShowList = taskShowList;
-    }
-
     public EsCommonService getEsCommonService() {
         return esCommonService;
     }
@@ -493,11 +488,11 @@ public class EsInitTaskAction {
         this.esCommonService = esCommonService;
     }
 
-    public EsInitPowerService getEsInitPowerService() {
-        return esInitPowerService;
+    public FlowCtrlService getFlowCtrlService() {
+        return flowCtrlService;
     }
 
-    public void setEsInitPowerService(EsInitPowerService esInitPowerService) {
-        this.esInitPowerService = esInitPowerService;
+    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
+        this.flowCtrlService = flowCtrlService;
     }
 }
