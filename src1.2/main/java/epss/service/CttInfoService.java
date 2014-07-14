@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import platform.service.PlatformService;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -191,11 +192,10 @@ public class CttInfoService {
         return esCttInfoTemp;
     }
     //更新甲供材情况
-    public int  updateByPKid(CttInfoShow cttInfoShowPara){
-
-       return esCttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
+    public int  updateByPKid(EsCttInfo esCttInfoPara){
+      // return esCttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
+        return esCttInfoMapper.updateByPrimaryKey(esCttInfoPara);
     }
-
 
     /*public List<AllTabColumns>  getColumnNameByTableName(String strTableName){
         *//*return commonMapper.getColumnNameByTableName(strTableName) ;*//*
