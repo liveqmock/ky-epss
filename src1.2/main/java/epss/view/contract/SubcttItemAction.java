@@ -647,41 +647,80 @@ public class SubcttItemAction {
             cttInfoShowSel.setPowerType(strBelongToType);
             cttInfoShowSel.setPowerPkid(strSubcttInfoPkid);
             cttInfoShowSel.setPeriodNo("NULL");
-
             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
-                    /*List<EsCttItem> esCttItemList = esCttItemService.getEsItemList(cttInfoShowSel.getCttType(), cttInfoShowSel.getPkid());
+                    List<EsCttItem> esCttItemList = cttItemService.getEsItemList(cttInfoShowSel.getCttType(), cttInfoShowSel.getPkid());
                     if (esCttItemList.isEmpty()) {
                         MessageUtil.addInfo("无详细内容！");
                         return;
                     }
                     int checkPriceZero = 0;
+                    int checkQuantiyZero=0;
+                    int checkSecurityZero=0;
                     for (EsCttItem esCttItemTemp : esCttItemList) {
-                        if (!(esCttItemTemp.getSignPartAPrice() == null)) {
-                            if (!(esCttItemTemp.getSignPartAPrice().equals(new BigDecimal(0)))) {
-                                checkPriceZero += 1;
-                                break;
+                        //甲供材、数量、安全措施费非零非空时等于1，否则等于0
+                        if (!(esCttItemTemp.getSignPartAPrice() == null)){
+                            if (!(esCttItemTemp.getSignPartAPrice().equals(new BigDecimal(0)))){
+                                checkPriceZero=1;
                             }
+                        }else{
+                                checkPriceZero=0;
+                        }
+                        if (!(esCttItemTemp.getContractQuantity() == null)){
+                            if (!(esCttItemTemp.getContractQuantity().equals(new BigDecimal(0)))){
+                                checkQuantiyZero=1;
+                            }
+                        }else{
+                            checkQuantiyZero=0;
+                        }
+                        if (("安全施工措施费率").equals(esCttItemTemp.getName())){
+                            if (!(esCttItemTemp.getContractAmount()==null)){
+                                if (!(esCttItemTemp.getContractAmount().equals(new BigDecimal(0)))){
+                                    checkSecurityZero=1;
+                                }
+                            }
+                        }else{
+                            checkSecurityZero=0;
                         }
                     }
-                    if (checkPriceZero == 0) {
-                        cttInfoShowSel.setType("0");
-                        cttInfoShowSel.setPkid(cttInfoShowSel.getPkid());
-                        esCttInfoService.updateByPKid(cttInfoShowSel);
-                    } else {
-                        cttInfoShowSel.setType("2");
-                        cttInfoShowSel.setPkid(cttInfoShowSel.getPkid());
-                        esCttInfoService.updateByPKid(cttInfoShowSel);
-                    }*/
+                    if (checkQuantiyZero==1&&checkPriceZero == 0&&checkSecurityZero==0) {
+                        subcttInfo.setType("0");
+                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
+                        cttInfoService.updateByPKid(subcttInfo);
+                    } else if (checkQuantiyZero==0&&checkPriceZero == 1&&checkSecurityZero==0){
+                        subcttInfo.setType("1");
+                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
+                        cttInfoService.updateByPKid(subcttInfo);
+                    } else if (checkQuantiyZero==0&&checkPriceZero == 0&&checkSecurityZero==1){
+                        subcttInfo.setType("2");
+                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
+                        cttInfoService.updateByPKid(subcttInfo);
+                    }else if (checkQuantiyZero==1&&checkPriceZero == 1&&checkSecurityZero==0){
+                        subcttInfo.setType("4");
+                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
+                        cttInfoService.updateByPKid(subcttInfo);
+                    }else if (checkQuantiyZero==1&&checkPriceZero == 0&&checkSecurityZero==1){
+                        subcttInfo.setType("5");
+                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
+                        cttInfoService.updateByPKid(subcttInfo);
+                    }else if (checkQuantiyZero==0&&checkPriceZero == 1&&checkSecurityZero==1){
+                        subcttInfo.setType("6");
+                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
+                        cttInfoService.updateByPKid(subcttInfo);
+                    }else if (checkQuantiyZero==1&&checkPriceZero == 1&&checkSecurityZero==1){
+                        subcttInfo.setType("7");
+                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
+                        cttInfoService.updateByPKid(subcttInfo);
+                    }
                     esFlowControl.mngFinishAction(
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
-                    /*cttInfoShowSel.setType("");
-                    cttInfoShowSel.setPkid(cttInfoShowSel.getPkid());
-                    esCttInfoService.updateByPKid(cttInfoShowSel);*/
+                    subcttInfo.setType("");
+                    subcttInfo.setPkid(cttInfoShowSel.getPkid());
+                    cttInfoService.updateByPKid(subcttInfo);
                     esFlowControl.mngNotFinishAction(
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
