@@ -9,78 +9,78 @@
         <link type="text/css" href="#{request.contextPath}/UI/epss/epss.css" rel="stylesheet"/>
         <script type="text/javascript" src="#{request.contextPath}/UI/support/pub.js"/>
         <script type="text/javascript" language="javascript">
-            function actSelect(type,statusflag,pkid) {
+            function actSelect(type,statusflag,preStatusFlag,pkid) {
                 var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
                         "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
                 if (type == '0') {// 总包合同
-                    if(statusflag=="" || statusflag=='0') { // 录入
+                    if(statusflag=="") { // 录入
                         var rtn = dialog("../item/itemMng_Tkctt.xhtml?strFlowType=Mng&amp;strTkcttInfoPkid=" +pkid, arg, sfeature);
                     }else
-                    if(statusflag=='1') { // 审核
+                    if(statusflag=='0') { // 审核
                         var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Check&amp;strTkcttInfoPkid=" + pkid, arg, sfeature);
                     }else
-                    if(statusflag=='2') { // 复核
+                    if(statusflag=='1') { // 复核
                         var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=DoubleCheck&amp;strTkcttInfoPkid=" + pkid, arg, sfeature);
                     }else
-                    if(statusflag=='3') { // 批准
+                    if(statusflag=='2') { // 批准
                         var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Approve&amp;strTkcttInfoPkid=" + pkid, arg, sfeature);
                     }
                 }else
                 if (type == '1') {// 成本计划
-                    if(statusflag=="" || statusflag=='0') { // 录入
+                    if(statusflag=="") { // 录入
                         var rtn = dialog("../item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCstplInfoPkid=" +pkid, arg, sfeature);
                     }else
-                    if(statusflag=='1') { // 审核
+                    if(statusflag=='0') { // 审核
                         var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=Check&amp;strCstplInfoPkid=" + pkid, arg, sfeature);
                     }else
-                    if(statusflag=='2') { // 复核
+                    if(statusflag=='1') { // 复核
                         var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=DoubleCheck&amp;strCstplInfoPkid=" + pkid, arg, sfeature);
                     }else
-                    if(statusflag=='3') { // 批准
+                    if(statusflag=='2') { // 批准
                         var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=Approve&amp;strCstplInfoPkid=" + pkid, arg, sfeature);
                     }
                 }else
                 if (type == '2') {// 分包合同
-                    if(statusflag=="" || statusflag=='0') { // 录入
+                    if(statusflag=="") { // 录入
                         var rtn = dialog("../item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strSubcttInfoPkid=" +pkid, arg, sfeature);
                     }else
-                    if(statusflag=='1') { // 审核
+                    if(statusflag=='0') { // 审核
                         var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=Check&amp;strSubcttInfoPkid=" + pkid, arg, sfeature);
                     }else
-                    if(statusflag=='2') { // 复核
+                    if(statusflag=='1') { // 复核
                         var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=DoubleCheck&amp;strSubcttInfoPkid=" + pkid, arg, sfeature);
                     }else
-                    if(statusflag=='3') { // 批准
+                    if(statusflag=='2') { // 批准
                         var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=Approve&amp;strSubcttInfoPkid=" + pkid, arg, sfeature);
                     }
                 }else
                 if (type == '3') {// 分包数量结算
-                    if(statusflag=="" || statusflag=='0') { // 录入
+                    if(statusflag=="") { // 录入
                         var rtn = dialog("../item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strProgWorkqtyInfoPkid=" +pkid, arg, sfeature);
                     }else
-                    if(statusflag=='1') { // 审核
+                    if(statusflag=='0') { // 审核
                         var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=Check&amp;strProgWorkqtyInfoPkid=" + pkid, arg, sfeature);
                     }else
-                    if(statusflag=='2') { // 复核
+                    if(statusflag=='1') { // 复核
                         var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=DoubleCheck&amp;strProgWorkqtyInfoPkid=" + pkid, arg, sfeature);
                     }else
-                    if(statusflag=='3') { // 批准
+                    if(statusflag=='2') { // 批准
                         var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=Approve&amp;strProgWorkqtyInfoPkid=" + pkid, arg, sfeature);
                     }
                 }else
                 if (type == '4') {// 分包材料结算
-                    if(statusflag=="" || statusflag=='0') { // 录入
+                    if(statusflag=="") { // 录入
                         var rtn = dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strProgMatqtyInfoPkid=" +pkid, arg, sfeature);
                     }else
-                    if(statusflag=='1') { // 审核
+                    if(statusflag=='0') { // 审核
                         var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=Check&amp;strProgMatqtyInfoPkid=" + pkid, arg, sfeature);
                     }else
-                    if(statusflag=='2') { // 复核
+                    if(statusflag=='1') { // 复核
                         var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=DoubleCheck&amp;strProgMatqtyInfoPkid=" + pkid, arg, sfeature);
                     }else
-                    if(statusflag=='3') { // 批准
+                    if(statusflag=='2') { // 批准
                         var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=Approve&amp;strProgMatqtyInfoPkid=" + pkid, arg, sfeature);
                     }
                 }else
@@ -118,7 +118,7 @@
                     <p:commandButton icon="ui-icon-triangle-1-e"
                                      style="height:20px;width:20px"
                                      rendered="#{record.type eq null?'false':'true'}"
-                                     onclick="actSelect('#{record.type}','#{record.statusFlag}','#{record.pkid}')">
+                                     onclick="actSelect('#{record.type}','#{record.statusFlag}','#{record.preStatusFlag}','#{record.pkid}')">
                     </p:commandButton>
                 </p:column>
                 <p:column headerText="序号" style="width:30px">

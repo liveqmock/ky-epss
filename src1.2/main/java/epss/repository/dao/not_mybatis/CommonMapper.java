@@ -79,7 +79,7 @@ public interface CommonMapper {
 
     @Select("select " +
             "   eis.stl_type as type," +
-            "   eis.stl_pkid as pkid," +
+            "   eis.pkid as pkid," +
             "   eis.id as id," +
             "   eci.name as name" +
             " from " +

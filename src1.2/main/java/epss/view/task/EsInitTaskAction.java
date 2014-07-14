@@ -106,7 +106,7 @@ public class EsInitTaskAction {
             //创建并初始化判断合同是否是特定类型和状态的布尔变量
             Boolean isHasTask=false;
             //创建并初始化存放一定状态合同的集合
-            List<TaskShow> taskShowListOfStatusFlag;
+            List<TaskShow> inputNotFinishTaskShowList;
 
             //当合同状态为录入时
             if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())){
@@ -114,20 +114,20 @@ public class EsInitTaskAction {
                 if (strType.equals(ESEnum.ITEMTYPE0.getCode())||
                     strType.equals(ESEnum.ITEMTYPE1.getCode())||
                     strType.equals(ESEnum.ITEMTYPE2.getCode())){
-                    taskShowListOfStatusFlag =esCommonService.getTaskModelListOfCtt(strType);
+                    inputNotFinishTaskShowList =esCommonService.getTaskModelListOfCtt(strType);
                 }else {
-                    taskShowListOfStatusFlag =esCommonService.getTaskModelListOfStl(strType);
+                    inputNotFinishTaskShowList =esCommonService.getTaskModelListOfStl(strType);
                 }
                 //当存放合同的集合不为空时，设置显示列表的任务类别列的表头，小标题的组成为合同类型+合同状态+合同数量；
                 //同时给对应的隐藏列表头赋值
-                if (taskShowListOfStatusFlag.size()>0){
-                    taskShow.setName(itemUnit.getMenulabel() + "(" + taskShowListOfStatusFlag.size() + ")");
+                if (inputNotFinishTaskShowList.size()>0){
+                    taskShow.setName(itemUnit.getMenulabel() + "(" + inputNotFinishTaskShowList.size() + ")");
                     taskShowList.add(taskShow);
                 }else {
                     continue;
                 }//当存放合同的计划不为空时，将符合特定类型和状态的合同——即录入类型的合同的具体信息添加到显示表格中
-                if (taskShowListOfStatusFlag !=null){
-                    for(TaskShow itemUnitEP: taskShowListOfStatusFlag){
+                if (inputNotFinishTaskShowList !=null){
+                    for(TaskShow itemUnitEP: inputNotFinishTaskShowList){
                         taskShow =new TaskShow();
                         taskShow.setType(itemUnitEP.getType());
                         taskShow.setPkid(itemUnitEP.getPkid());
