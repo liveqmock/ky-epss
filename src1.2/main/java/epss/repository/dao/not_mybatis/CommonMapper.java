@@ -31,42 +31,74 @@ public interface CommonMapper {
     @Select("select max(id) from es_init_cust")
     String strMaxCustId();
 
-    @Select("select POWER_TYPE,STATUS_FLAG,count(1) as GROUP_COUNTS" +
+    @Select("select " +
+            " POWER_TYPE as type," +
+            " STATUS_FLAG as statusFlag," +
+            " count(1) as recordsCountInGroup" +
             " from ES_INIT_POWER" +
             " group by POWER_TYPE,STATUS_FLAG" +
             " order by POWER_TYPE,STATUS_FLAG")
     List<TaskShow> getPowerListByPowerTypeAndStatusFlag();
 
-    @Select("select eip.POWER_TYPE,eip.POWER_PKID,eip.PERIOD_NO,eip.STATUS_FLAG,eip.PRE_STATUS_FLAG," +
-            " ecinfo.ID,ecinfo.NAME,ecinfo.PARENT_PKID," +
-            " NVL(eicName.NAME,' ') as parentName" +
-            " from ES_INIT_POWER eip" +
-            " join ES_CTT_INFO ecinfo" +
-            " on eip.POWER_PKID=ecinfo.PKID" +
-            " left join (select PKID,NAME from ES_CTT_INFO)eicName" +
-            " on eicName.pkid=ecinfo.PARENT_PKID" +
-            " order by eip.POWER_TYPE,eip.STATUS_FLAG")
+    @Select("select " +
+            "   eip.POWER_TYPE as type," +
+            "   eip.POWER_PKID as pkid," +
+            "   eip.PERIOD_NO as periodNo," +
+            "   eip.STATUS_FLAG as statusFlag," +
+            "   eip.PRE_STATUS_FLAG as preStatusFlag," +
+            "   ecinfo.ID as id," +
+            "   ecinfo.NAME as name" +
+            " from " +
+            "   ES_INIT_POWER eip" +
+            " left join " +
+            "   ES_CTT_INFO ecinfo" +
+            " on " +
+            "   eip.POWER_PKID=ecinfo.PKID" +
+            " order by" +
+            "   eip.POWER_TYPE,eip.STATUS_FLAG")
     List<TaskShow> getTaskModelList();
 
-    @Select("select t.ctt_type as power_Type,t.pkid as power_pkid,t.ID as id,t.NAME as name," +
-            " t.PARENT_PKID as belong_To_Pkid,NVL(eicName.NAME,' ') as parentName" +
-            " from ES_CTT_INFO t left join (select PKID,NAME from ES_CTT_INFO)eicName" +
-            " on eicName.pkid=t.PARENT_PKID" +
-            " where t.ctt_type=#{strCttType}"+
-            " and t.pkid not in (select p.power_pkid  from es_init_power p where p.power_type=#{strCttType}"+
-            " )" )
+    @Select("select " +
+            "   eci.ctt_type as type," +
+            "   eci.pkid as pkid," +
+            "   eci.ID as id," +
+            "   eci.NAME as name" +
+            " from " +
+            "   ES_CTT_INFO eci" +
+            " left join " +
+            "   es_init_power eip" +
+            " on" +
+            "   eci.ctt_type=eip.power_type" +
+            " and" +
+            "   eci.pkid=eip.power_pkid" +
+            " where " +
+            "   eci.ctt_type=#{strCttType}"+
+            " and " +
+            "   eip.power_pkid is null")
     List<TaskShow> getTaskModelListOfCtt(@Param("strCttType") String strCttType);
 
-    @Select("select s.stl_type as power_Type,s.stl_pkid as power_pkid,s.id as id,NVL(eicName1.NAME,' ') as name," +
-            " eicName1.PARENT_PKID as belong_To_Pkid,NVL(eicName2.NAME,' ') as parentName" +
-            " from es_init_stl s left join (select PKID,NAME,PARENT_PKID from ES_CTT_INFO)eicName1" +
-            " on eicName1.pkid=s.stl_pkid" +
-            " left join (select PKID,NAME from ES_CTT_INFO)eicName2" +
-            " on eicName2.pkid=eicName1.PARENT_PKID" +
-            " where s.stl_type=#{strCttType}" +
-            " and s.stl_pkid||s.period_no not in (select p.power_pkid||p.period_no  from es_init_power p where p.power_type=#{strCttType}"+
-            " )" )
-    List<TaskShow> getTaskModelListOfStl(@Param("strCttType") String strCttType);
+    @Select("select " +
+            "   eis.stl_type as type," +
+            "   eis.stl_pkid as pkid," +
+            "   eis.id as id," +
+            "   eci.name as name" +
+            " from " +
+            "   es_init_stl eis" +
+            " left join " +
+            "   es_init_power eip" +
+            " on" +
+            "   eis.stl_type=eip.power_type" +
+            " and" +
+            "   eis.stl_pkid=eip.power_pkid" +
+            " left join " +
+            "   ES_CTT_INFO eci" +
+            " on" +
+            "   eis.stl_pkid=eci.pkid" +
+            " where " +
+            "   eis.stl_type=#{strStlType}"+
+            " and " +
+            "   eip.power_pkid is null")
+    List<TaskShow> getTaskModelListOfStl(@Param("strStlType") String strStlType);
 
     @Select("select max(id) from ES_CTT_INFO where ctt_type = #{strCttType}")
     String getStrMaxCttId(@Param("strCttType") String strCttType);

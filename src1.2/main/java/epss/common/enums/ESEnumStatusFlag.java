@@ -37,7 +37,7 @@ public enum ESEnumStatusFlag {
         aliasEnums.put(title, this);
     }
 
-    public static ESEnumStatusFlag valueOfAlias(String alias) {
+    public static ESEnumStatusFlag getValueByKey(String alias) {
         return aliasEnums.get(alias);
     }
 

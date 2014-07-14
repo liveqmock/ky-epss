@@ -40,7 +40,7 @@ public enum ESEnumPreStatusFlag {
         aliasEnums.put(title, this);
     }
 
-    public static ESEnumPreStatusFlag valueOfAlias(String alias) {
+    public static ESEnumPreStatusFlag getValueByKey(String alias) {
         return aliasEnums.get(alias);
     }
 

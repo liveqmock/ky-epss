@@ -21,10 +21,6 @@ public class EsCommonService {
     @Autowired
     private CommonMapper commonMapper;
 
-    /*public List<ColumnModel> getColumnNameByTableName(String strTableName){
-        return commonMapper.getColumnNameListByTableName(strTableName) ;
-    }*/
-
     public List<TaskShow> getPowerListByPowerTypeAndStatusFlag(){
         return commonMapper.getPowerListByPowerTypeAndStatusFlag();
     }
