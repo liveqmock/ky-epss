@@ -21,7 +21,7 @@
     <ui:define name="content">
         <h:form id="form">
             <p:panel>
-                <p:growl id="msgs" showDetail="false"/>
+            <p:growl id="msgs" showDetail="true"/>
                 <h:panelGrid id="pgCondition" columns="3">
                     <p:commandButton id="addBtn"
                                      value="增加" icon="ui-icon-plus"
@@ -90,7 +90,7 @@
                                     rendered="#{record.name eq '合计'? 'false': record.nameContrast eq '合计'? 'false':
                                                   record.name eq '总合计'? 'false':record.nameContrast eq '总合计'? 'false':'true'}"
                                     actionListener="#{cstplItemAction.selectRecordAction('From_tkctt_to_cstpl',record)}"
-                                    update="pdt,:form:pgViewForUpd">
+                                    update="pdt,:form:msgs">
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:30px" headerText="序号">
