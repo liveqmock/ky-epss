@@ -286,7 +286,7 @@ public class CstplItemAction {
                         ToolUtil.getIgnoreSpaceOfStr(cttItemShowDel.getStrCorrespondingItemNo()));
             }
             else if(strSubmitTypePara.equals("From_tkctt_to_cstpl")){
-                if(!fromTkcttToCstplAction(cstplItemShowPara)){
+                if(fromTkcttToCstplAction(cstplItemShowPara)){
                     strSubmitType=strSubmitTypeBefore;
                 }
             }
