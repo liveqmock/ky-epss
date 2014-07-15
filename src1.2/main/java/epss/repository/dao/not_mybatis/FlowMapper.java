@@ -1,5 +1,6 @@
 package epss.repository.dao.not_mybatis;
 
+import epss.repository.model.EsInitPowerHis;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import epss.repository.model.EsInitStl;
@@ -421,4 +422,37 @@ public interface FlowMapper {
     String getStatusFlag(@Param("stlType") String stlType,
                          @Param("subCttPkid") String subCttPkid,
                          @Param("periodNo") String periodNo);
+
+    @Select("select DISTINCT" +
+            "  eipwai.power_type as powerType, " +
+            "  eipwai.status_flag as statusFlag,  " +
+            "  eipwai.note as note, " +
+            "  eipwai.created_by as createdBy, " +
+            "  eipwai.created_date as createdDate    " +
+            "from " +
+            "  ES_INIT_POWER_HIS eipwai  " +
+            "inner join " +
+            "( " +
+            "select  " +
+            "  max(created_date) as maxDate, " +
+            "  power_type, " +
+            "  status_flag " +
+            "from " +
+            "  ES_INIT_POWER_HIS  " +
+            "where  " +
+            "  power_type in ('3','4','5') " +
+            "  and power_pkid=#{powerPkid} " +
+            "  and period_no=#{periodNo} " +
+            "group by power_type,status_flag " +
+            ")maxcreated_date  " +
+            "on   " +
+            "  eipwai.power_type=maxcreated_date.power_type " +
+            "  and eipwai.status_flag=maxcreated_date.status_flag  " +
+            "  and NVL(eipwai.created_date,'NOTNULL')=NVL(maxcreated_date.maxDate,'NOTNULL')  "+
+            "where " +
+            "  eipwai.power_pkid=#{powerPkid} " +
+            "  and eipwai.period_no=#{periodNo} " +
+            "order by eipwai.power_type,eipwai.status_flag")
+    List<EsInitPowerHis> getMngFromPowerHisForSubcttStlList(@Param("powerPkid") String powerPkid,
+                                                          @Param("periodNo") String periodNo);
 }

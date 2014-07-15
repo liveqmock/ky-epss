@@ -57,6 +57,8 @@ public class ProgSubstlItemAction {
     private ProgWorkqtyItemService progWorkqtyItemService;
     @ManagedProperty(value = "#{flowCtrlService}")
     private FlowCtrlService flowCtrlService;
+    @ManagedProperty(value = "#{flowCtrlHisService}")
+    private FlowCtrlHisService flowCtrlHisService;
 
     private List<ProgSubstlItemShow> progSubstlItemShowList;
     private List<ProgSubstlItemShow> progSubstlItemShowListForApprove;
@@ -96,7 +98,6 @@ public class ProgSubstlItemAction {
 
     /*初始化操作*/
     private void initData() {
-        // From StlPkid To SubcttPkid
         esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strEsInitStlPkid);
         initHeadMsg();
         EsInitPower esInitPowerTemp = new EsInitPower();
@@ -104,68 +105,43 @@ public class ProgSubstlItemAction {
         esInitPowerTemp.setPowerPkid(esInitStl.getStlPkid());
         esInitPowerTemp.setPeriodNo(esInitStl.getPeriodNo());
         esInitPower = flowCtrlService.selectByPrimaryKey(esInitPowerTemp);
-        if ("Account".equals(strSubmitType) || "Qry".equals(strSubmitType)) {
-            progSubstlItemShowListForAccountAndQry = new ArrayList<EsItemStlSubcttEngP>();
-            if (ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(esInitPower.getStatusFlag())) {
-                strAccountBtnRendered = "false";
-            } else {
-                strAccountBtnRendered = "true";
+        if (ESEnumStatusFlag.STATUS_FLAG3.getCode().compareTo(ToolUtil.getStrIgnoreNull(esInitPower.getStatusFlag())) <= 0) {
+            initMsgForExcel();
+            if ("Account".equals(strSubmitType) || "Qry".equals(strSubmitType)) {
+                if (ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(esInitPower.getStatusFlag())) {
+                    strAccountBtnRendered = "false";
+                } else {
+                    strAccountBtnRendered = "true";
+                }
+                /*表内容设定,查询和记账，查P表*/
+                progSubstlItemShowListForAccountAndQry = new ArrayList<EsItemStlSubcttEngP>();
+                progSubstlItemShowListForAccountAndQry = progSubstlItemService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
+                return;
             }
-            /*表内容设定,查询和记账*/
-            progSubstlItemShowListForAccountAndQry =
-                    progSubstlItemService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
-            return;
-        }
-        if ("Approve".equals(strSubmitType)) {
-            strExportToExcelRendered = "true";
-            progSubstlItemShowList = new ArrayList<ProgSubstlItemShow>();
-            progSubstlItemShowListForApprove = new ArrayList<ProgSubstlItemShow>();
-            if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPower.getStatusFlag())) {
+            if ("Approve".equals(strSubmitType)) {
+                strExportToExcelRendered = "true";
                 strApproveBtnRendered = "false";
                 strApprovedNotBtnRendered = "true";
-            } else {
-                strApproveBtnRendered = "true";
-                strApprovedNotBtnRendered = "true";
+                List<EsItemStlSubcttEngP> esItemStlSubcttEngPList = progSubstlItemService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
+                /*表内容设定，批准，查P表*/
+                progSubstlItemShowList = new ArrayList<ProgSubstlItemShow>();
+                for (EsItemStlSubcttEngP esItemStlSubcttEngP : esItemStlSubcttEngPList) {
+                    progSubstlItemShowList.add(progSubstlItemService.fromModelToShow(esItemStlSubcttEngP));
+                }
             }
-            /*表内容设定,批准*/
-            if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPower.getStatusFlag())) {
-                List<ProgSubstlItemShow> records0 = new ArrayList<ProgSubstlItemShow>();
-                List<ProgSubstlItemShow> records1 = new ArrayList<ProgSubstlItemShow>();
-                List<EsItemStlSubcttEngP> progSubstlItemShowListForApprove =
-                        progSubstlItemService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
-                for (EsItemStlSubcttEngP esItemStlSubcttEngP : progSubstlItemShowListForApprove) {
-                    ProgSubstlItemShow progSubstlItemShowTemp = progSubstlItemService.fromModelToShow(esItemStlSubcttEngP);
-                    if (ESEnum.ITEMTYPE3.getCode().equals(progSubstlItemShowTemp.getEngPMng_SubStlType())){
-                        if (progSubstlItemShowTemp.getSubctt_ItemPkid().contains("stl")){
-                            beansMap.put(progSubstlItemShowTemp.getSubctt_ItemPkid(),progSubstlItemShowTemp);
-                        }else {
-                            records0.add(progSubstlItemShowTemp);
-                        }
-                    }
-                    if (ESEnum.ITEMTYPE4.getCode().equals(progSubstlItemShowTemp.getEngPMng_SubStlType())){
-                        if (progSubstlItemShowTemp.getSubctt_ItemPkid().contains("stl")){
-                            beansMap.put(progSubstlItemShowTemp.getSubctt_ItemPkid(),progSubstlItemShowTemp);
-                        }else {
-                            records1.add(progSubstlItemShowTemp);
-                        }
-                    }
-                    progSubstlItemShowList.add(progSubstlItemShowTemp);
-                }
-                beansMap.put("records0",records0);
-                beansMap.put("records1",records1);
-                return;
+        } else {
+            strApproveBtnRendered = "true";
+            strApprovedNotBtnRendered = "true";
+            List<EsCttItem> esCttItemList = cttItemService.getEsItemList(
+                    ESEnum.ITEMTYPE2.getCode(), esInitStl.getStlPkid());
+            if (esCttItemList.size() > 0) {
+                recursiveDataTable("root", esCttItemList, progSubstlItemShowList);
+                progSubstlItemShowList = getStlSubCttEngPMngConstructList_DoFromatNo(progSubstlItemShowList);
+                /*表内容设定,复核，查询拼装*/
+                progSubstlItemShowListForApprove = new ArrayList<ProgSubstlItemShow>();
+                setStlSubCttEngPMngConstructList_AddSettle();
             } else {
-                /*表内容设定,复核*/
-                List<EsCttItem> esCttItemList = cttItemService.getEsItemList(
-                        ESEnum.ITEMTYPE2.getCode(), esInitStl.getStlPkid());
-                if (esCttItemList.size() > 0) {
-                    recursiveDataTable("root", esCttItemList, progSubstlItemShowList);
-                    progSubstlItemShowList = getStlSubCttEngPMngConstructList_DoFromatNo(progSubstlItemShowList);
-                    /*价格结算数据添加*/
-                    setStlSubCttEngPMngConstructList_AddSettle();
-                } else {
-                    strExportToExcelRendered = "false";
-                }
+                strExportToExcelRendered = "false";
             }
         }
     }
@@ -192,8 +168,73 @@ public class ProgSubstlItemAction {
         EsCttInfo esCttInfo_Tkctt = cttInfoService.getCttInfoByPkId(commStlSubcttEngH.getStrTkcttPkid());
         commStlSubcttEngH.setStrTkcttId(esCttInfo_Tkctt.getId());
         commStlSubcttEngH.setStrTkcttName(esCttInfo_Tkctt.getName());
+        beansMap.put("commStlSubcttEngH",commStlSubcttEngH);
     }
-
+    private void initMsgForExcel() {
+        List<ProgSubstlItemShow> records0 = new ArrayList<ProgSubstlItemShow>();
+        List<ProgSubstlItemShow> records1 = new ArrayList<ProgSubstlItemShow>();
+        List<EsItemStlSubcttEngP> progSubstlItemShowListForApproveTemp =
+                progSubstlItemService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
+        for (EsItemStlSubcttEngP esItemStlSubcttEngP : progSubstlItemShowListForApproveTemp) {
+            ProgSubstlItemShow progSubstlItemShowTemp = progSubstlItemService.fromModelToShow(esItemStlSubcttEngP);
+            if (ESEnum.ITEMTYPE3.getCode().equals(progSubstlItemShowTemp.getEngPMng_SubStlType())) {
+                if (progSubstlItemShowTemp.getSubctt_ItemPkid().contains("stl")) {
+                    beansMap.put(progSubstlItemShowTemp.getSubctt_ItemPkid(), progSubstlItemShowTemp);
+                } else {
+                    records0.add(progSubstlItemShowTemp);
+                }
+            }
+            if (ESEnum.ITEMTYPE4.getCode().equals(progSubstlItemShowTemp.getEngPMng_SubStlType())) {
+                if (progSubstlItemShowTemp.getSubctt_ItemPkid().contains("stl")) {
+                    beansMap.put(progSubstlItemShowTemp.getSubctt_ItemPkid(), progSubstlItemShowTemp);
+                } else {
+                    records1.add(progSubstlItemShowTemp);
+                }
+            }
+        }
+        beansMap.put("records0", records0);
+        beansMap.put("records1", records1);
+        //
+        EsInitPowerHis esInitPowerHis = new EsInitPowerHis();
+        beansMap.put("esInitPowerHisForSubcttStlQMng", esInitPowerHis);
+        beansMap.put("esInitPowerHisForSubcttStlQCheck", esInitPowerHis);
+        beansMap.put("esInitPowerHisForSubcttStlQDoubleCheck", esInitPowerHis);
+        beansMap.put("esInitPowerHisForSubcttStlMMng", esInitPowerHis);
+        beansMap.put("esInitPowerHisForSubcttStlMCheck", esInitPowerHis);
+        beansMap.put("esInitPowerHisForSubcttStlMDoubleCheck", esInitPowerHis);
+        beansMap.put("esInitPowerHisForSubcttStlPApprove", esInitPowerHis);
+        beansMap.put("esInitPowerHisForSubcttStlPAct", esInitPowerHis);
+        beansMap.put("esInitPowerHisForSubcttStlPFile", esInitPowerHis);
+        List<EsInitPowerHis> esInitPowerHisForSubcttStlList = flowCtrlHisService.getMngFromPowerHisForSubcttStlList(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
+        for (EsInitPowerHis esInitPowerHisTemp : esInitPowerHisForSubcttStlList) {
+            esInitPowerHisTemp.setCreatedBy(esCommon.getOperNameByOperId(ToolUtil.getStrIgnoreNull(esInitPowerHisTemp.getCreatedBy())));
+            if (ESEnum.ITEMTYPE3.getCode().equals(esInitPowerHisTemp.getPowerType())) {
+                if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
+                    beansMap.put("esInitPowerHisForSubcttStlQMng", esInitPowerHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
+                    beansMap.put("esInitPowerHisForSubcttStlQCheck", esInitPowerHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
+                    beansMap.put("esInitPowerHisForSubcttStlQDoubleCheck", esInitPowerHisTemp);
+                }
+            } else if (ESEnum.ITEMTYPE4.getCode().equals(esInitPowerHisTemp.getPowerType())) {
+                if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
+                    beansMap.put("esInitPowerHisForSubcttStlMMng", esInitPowerHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
+                    beansMap.put("esInitPowerHisForSubcttStlMCheck", esInitPowerHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
+                    beansMap.put("esInitPowerHisForSubcttStlMDoubleCheck", esInitPowerHisTemp);
+                }
+            } else if (("Account".equals(strSubmitType) || "Qry".equals(strSubmitType)) && ESEnum.ITEMTYPE5.getCode().equals(esInitPowerHisTemp.getPowerType())) {
+                if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
+                    beansMap.put("esInitPowerHisForSubcttStlPApprove", esInitPowerHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
+                    beansMap.put("esInitPowerHisForSubcttStlPAct", esInitPowerHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG5.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
+                    beansMap.put("esInitPowerHisForSubcttStlPFile", esInitPowerHisTemp);
+                }
+            }
+        }
+    }
     /**
      * 根据权限进行审核
      */
@@ -216,8 +257,6 @@ public class ProgSubstlItemAction {
             BigDecimal bdBeginToCurrentPeriodTotalAmtTemp = new BigDecimal(0);
             // 0:稅金率；1:质保金率；2:付款率；3:安全施工措施费率
             BigDecimal[] bdRates = {bd0, bd0, bd0, bd0};
-
-            beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
 
             List<ProgSubstlItemShow> progSubstlItemShowListForSubcttEngQ = new ArrayList<ProgSubstlItemShow>();
             List<ProgSubstlItemShow> progSubstlItemShowListForSubcttEngM = new ArrayList<ProgSubstlItemShow>();
@@ -487,15 +526,26 @@ public class ProgSubstlItemAction {
     }
 
     public String onExportExcel() throws IOException, WriteException {
-        if (this.progSubstlItemShowList.size() == 0) {
-            MessageUtil.addWarn("记录为空...");
-            return null;
+        String strExcelName;
+        if ("Account".equals(strSubmitType) || "Qry".equals(strSubmitType)) {
+            if (this.progSubstlItemShowListForAccountAndQry.size() == 0) {
+                MessageUtil.addWarn("记录为空...");
+                return null;
+            }else {
+                strExcelName = "subStl.xls";
+            }
         } else {
-            String excelFilename = "分包工程预结算单-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
-            JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap, "stlSubCttEngP.xls");
-            // 其他状态的票据需要添加时再修改导出文件名
+            if (this.progSubstlItemShowList.size() == 0) {
+                MessageUtil.addWarn("记录为空...");
+                return null;
+            }else {
+                strExcelName = "stlSubCttEngP.xls";
+            }
         }
+        String excelFilename = "分包工程预结算单-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+        JxlsManager jxls = new JxlsManager();
+        jxls.exportList(excelFilename, beansMap, strExcelName);
+        // 其他状态的票据需要添加时再修改导出文件名
         return null;
     }
 
@@ -747,5 +797,12 @@ public class ProgSubstlItemAction {
         this.progSubstlItemShowListForAccountAndQry = progSubstlItemShowListForAccountAndQry;
     }
 
+    public FlowCtrlHisService getFlowCtrlHisService() {
+        return flowCtrlHisService;
+    }
+
+    public void setFlowCtrlHisService(FlowCtrlHisService flowCtrlHisService) {
+        this.flowCtrlHisService = flowCtrlHisService;
+    }
 /*智能字段End*/
 }

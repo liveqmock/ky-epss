@@ -2,8 +2,10 @@ package epss.service;
 
 import epss.repository.dao.EsInitPowerHisMapper;
 import epss.repository.dao.not_mybatis.CommonMapper;
+import epss.repository.dao.not_mybatis.FlowMapper;
 import epss.repository.model.EsInitPowerHis;
 import epss.repository.model.EsInitPowerHisExample;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import platform.service.PlatformService;
@@ -26,6 +28,8 @@ public class FlowCtrlHisService {
     private CommonMapper commonMapper;
     @Resource
     private PlatformService platformService;
+    @Resource
+    private FlowMapper flowMapper;
 
     public List<EsInitPowerHis> selectListByModel(EsInitPowerHis esInitPowerHis) {
         EsInitPowerHisExample example= new EsInitPowerHisExample();
@@ -48,7 +52,7 @@ public class FlowCtrlHisService {
         if (!stringIgnoreNull(esInitPowerHis.getSpareField()).equals("")){
             criteria.andSpareFieldLike("%"+esInitPowerHis .getSpareField()+"%");
         }
-        example.setOrderByClause("POWER_TYPE ASC,POWER_PKID,PERIOD_NO ASC") ;
+        example.setOrderByClause("POWER_TYPE ASC,POWER_PKID ASC,PERIOD_NO ASC,STATUS_FLAG ASC,CREATED_DATE ASC") ;
         return esInitPowerHisMapper.selectByExample(example);
     }
 
@@ -59,5 +63,8 @@ public class FlowCtrlHisService {
         else {
             return strOriginal;
         }
+    }
+    public List<EsInitPowerHis> getMngFromPowerHisForSubcttStlList(String powerPkid,String periodNo){
+        return flowMapper.getMngFromPowerHisForSubcttStlList(powerPkid,periodNo);
     }
 }
