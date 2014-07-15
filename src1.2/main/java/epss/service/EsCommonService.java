@@ -25,8 +25,8 @@ public class EsCommonService {
         return commonMapper.getTaskCountsInFlowGroup();
     }
 
-    public List<TaskShow> getTaskModelList(){
-        return commonMapper.getTaskModelList();
+    public List<TaskShow> getTaskShowList(){
+        return commonMapper.getTaskShowList();
     }
 
     public List<TaskShow> getTaskModelListOfCtt(String strCttType){

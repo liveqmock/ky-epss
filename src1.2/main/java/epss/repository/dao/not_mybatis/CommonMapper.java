@@ -31,14 +31,54 @@ public interface CommonMapper {
     @Select("select max(id) from es_init_cust")
     String strMaxCustId();
 
-    @Select("select " +
+    /*@Select("select " +
             " POWER_TYPE as type," +
             " STATUS_FLAG as statusFlag," +
             " count(1) as recordsCountInGroup" +
             " from ES_INIT_POWER" +
             " group by POWER_TYPE,STATUS_FLAG" +
             " order by POWER_TYPE,STATUS_FLAG")
+    List<TaskShow> getTaskCountsInFlowGroup();*/
+
+    @Select(" select " +
+            "   type," +
+            "   statusFlag," +
+            "   recordsCountInGroup" +
+            " from" +
+            "    (select  " +
+            "      eci.CTT_TYPE as type," +
+            "      eip.STATUS_FLAG as statusFlag," +
+            "      count(1) as recordsCountInGroup" +
+            "    from  " +
+            "      ES_CTT_INFO eci " +
+            "    left join  " +
+            "      ES_INIT_POWER eip " +
+            "    on" +
+            "      eci.CTT_TYPE=eip.POWER_TYPE" +
+            "    and " +
+            "      eci.PKID=eip.POWER_PKID" +
+            "    group by " +
+            "      eci.CTT_TYPE,eip.STATUS_FLAG" +
+            "    union" +
+            "    select  " +
+            "      eis.STL_TYPE as type," +
+            "      eip.STATUS_FLAG as statusFlag," +
+            "      count(1) as recordsCountInGroup" +
+            "    from  " +
+            "      ES_INIT_STL eis" +
+            "    left join  " +
+            "      ES_INIT_POWER eip" +
+            "    on" +
+            "      eis.STL_TYPE=eip.POWER_TYPE" +
+            "    and " +
+            "      eis.STL_PKID=eip.POWER_PKID" +
+            "    group by " +
+            "      eis.STL_TYPE,eip.STATUS_FLAG" +
+            "   )" +
+            " order by" +
+            "   type,statusFlag nulls first")
     List<TaskShow> getTaskCountsInFlowGroup();
+
 
     @Select("select " +
             "   eip.POWER_TYPE as type," +
