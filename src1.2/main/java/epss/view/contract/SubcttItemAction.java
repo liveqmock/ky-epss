@@ -696,19 +696,19 @@ public class SubcttItemAction {
                         subcttInfo.setPkid(cttInfoShowSel.getPkid());
                         cttInfoService.updateByPKid(subcttInfo);
                     }else if (checkQuantiyZero==1&&checkPriceZero == 1&&checkSecurityZero==0){
-                        subcttInfo.setType("4");
+                        subcttInfo.setType("3");
                         subcttInfo.setPkid(cttInfoShowSel.getPkid());
                         cttInfoService.updateByPKid(subcttInfo);
                     }else if (checkQuantiyZero==1&&checkPriceZero == 0&&checkSecurityZero==1){
-                        subcttInfo.setType("5");
+                        subcttInfo.setType("4");
                         subcttInfo.setPkid(cttInfoShowSel.getPkid());
                         cttInfoService.updateByPKid(subcttInfo);
                     }else if (checkQuantiyZero==0&&checkPriceZero == 1&&checkSecurityZero==1){
-                        subcttInfo.setType("6");
+                        subcttInfo.setType("5");
                         subcttInfo.setPkid(cttInfoShowSel.getPkid());
                         cttInfoService.updateByPKid(subcttInfo);
                     }else if (checkQuantiyZero==1&&checkPriceZero == 1&&checkSecurityZero==1){
-                        subcttInfo.setType("7");
+                        subcttInfo.setType("6");
                         subcttInfo.setPkid(cttInfoShowSel.getPkid());
                         cttInfoService.updateByPKid(subcttInfo);
                     }
