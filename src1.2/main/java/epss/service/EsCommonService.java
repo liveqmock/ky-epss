@@ -21,8 +21,8 @@ public class EsCommonService {
     @Autowired
     private CommonMapper commonMapper;
 
-    public List<TaskShow> getPowerListByPowerTypeAndStatusFlag(){
-        return commonMapper.getPowerListByPowerTypeAndStatusFlag();
+    public List<TaskShow> getTaskCountsInFlowGroup(){
+        return commonMapper.getTaskCountsInFlowGroup();
     }
 
     public List<TaskShow> getTaskModelList(){

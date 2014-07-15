@@ -38,7 +38,7 @@ public interface CommonMapper {
             " from ES_INIT_POWER" +
             " group by POWER_TYPE,STATUS_FLAG" +
             " order by POWER_TYPE,STATUS_FLAG")
-    List<TaskShow> getPowerListByPowerTypeAndStatusFlag();
+    List<TaskShow> getTaskCountsInFlowGroup();
 
     @Select("select " +
             "   eip.POWER_TYPE as type," +
