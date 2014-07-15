@@ -79,6 +79,46 @@ public interface CommonMapper {
             "   type,statusFlag nulls first")
     List<TaskShow> getTaskCountsInFlowGroup();
 
+    @Select(" select  " +
+            "   eci.CTT_TYPE as type," +
+            "   eci.PKID as pkid," +
+            "   eci.ID as id," +
+            "   eci.NAME as name," +
+            "   eip.PERIOD_NO as periodNo," +
+            "   eip.STATUS_FLAG as statusFlag," +
+            "   eip.PRE_STATUS_FLAG as preStatusFlag" +
+            " from  " +
+            "   ES_CTT_INFO eci " +
+            " left join  " +
+            "   ES_INIT_POWER eip " +
+            " on" +
+            "   eci.CTT_TYPE=eip.POWER_TYPE" +
+            " and " +
+            "   eci.PKID=eip.POWER_PKID" +
+            " union" +
+            " select  " +
+            "   eis.STL_TYPE as type," +
+            "   eis.STL_PKID as pkid," +
+            "   eis.ID as id," +
+            "   ecinfo.NAME as name," +
+            "   eip.PERIOD_NO as periodNo," +
+            "   eip.STATUS_FLAG as statusFlag," +
+            "   eip.PRE_STATUS_FLAG as preStatusFlag" +
+            " from  " +
+            "   ES_INIT_STL eis" +
+            " left join  " +
+            "   ES_INIT_POWER eip" +
+            " on" +
+            "   eis.STL_TYPE=eip.POWER_TYPE" +
+            " and " +
+            "   eis.STL_PKID=eip.POWER_PKID" +
+            " left join  " +
+            "   ES_CTT_INFO ecinfo" +
+            " on  " +
+            "   eis.STL_PKID=ecinfo.PKID" +
+            " order by" +
+            "   type,statusFlag")
+    List<TaskShow> getTaskShowList();
 
     @Select("select " +
             "   eip.POWER_TYPE as type," +
