@@ -55,8 +55,12 @@
                                  readonly="true"
                                  style="background-color:gainsboro;width:200px;"/>
                 </h:panelGrid>
-                <h:panelGrid columns="2">
+                <h:panelGrid columns="3">
                     <p:commandButton value="分包合同附件" oncomplete="actSelect()">
+                    </p:commandButton>
+                    <p:commandButton value="导出到EXCEL"
+                                     action="#{progSubstlItemAction.onExportExcel}"
+                                     ajax="false">
                     </p:commandButton>
                     <p:ajaxStatus style="width:16px;height:16px;">
                         <f:facet name="start">
@@ -96,7 +100,7 @@
                                          record.subcttItemName eq '合计(扣除其它栏款项后本期结算价值)'?'false':
                                          record.subcttItemName eq '其中:安全施工措施费'?'false':
                                          record.subcttItemName eq '质保金'? 'false':'true'}"
-                                      update="pdt,:form:pgView,:form:msgs"
+                                      update="pdt,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
                         <!--action="#{progSubstlItemAction.selectRecordAction('Sel',record)}"-->
                     </p:commandButton>
