@@ -16,6 +16,9 @@ import java.util.List;
  */
 @Component
 public interface CttInfoMapper {
+    @Select("select max(id) from ES_CTT_INFO where ctt_type = #{strCttType}")
+    String getStrMaxCttId(@Param("strCttType") String strCttType);
+
     @Select(" select" +
                  " eic.PKID" +
                  ",eic.NAME" +
@@ -56,6 +59,5 @@ public interface CttInfoMapper {
     List<CttInfoShow> getCttInfoListByCttType_ParentPkid_Status(@Param("strCttType") String strCttType,
                                                                 @Param("strParentPkid") String strParentPkid,
                                                                 @Param("strStatusFlag") String strStatusFlag);
-
 
 }

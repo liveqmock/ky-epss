@@ -1,14 +1,12 @@
 package epss.service;
 
 import epss.repository.dao.EsInitPowerHisMapper;
-import epss.repository.dao.not_mybatis.CommonMapper;
 import epss.repository.dao.not_mybatis.FlowMapper;
 import epss.repository.model.EsInitPowerHis;
 import epss.repository.model.EsInitPowerHisExample;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import platform.service.PlatformService;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -24,10 +22,6 @@ import java.util.List;
 public class FlowCtrlHisService {
     @Autowired
     private EsInitPowerHisMapper esInitPowerHisMapper;
-    @Autowired
-    private CommonMapper commonMapper;
-    @Resource
-    private PlatformService platformService;
     @Resource
     private FlowMapper flowMapper;
 

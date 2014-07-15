@@ -131,7 +131,7 @@
                     <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.statusFlag)}"/>
                 </p:column>
                 <p:column headerText="创建人" style="text-align:center">
-                    <h:outputText value="#{esCommon.opersMap.get(record.createdBy)}"/>
+                    <h:outputText value="#{record.createdBy}"/>
                 </p:column>
                 <p:column headerText="创建时间" style="text-align:center">
                     <h:outputText value="#{record.createdDate}"/>

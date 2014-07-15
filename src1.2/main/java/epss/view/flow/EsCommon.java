@@ -76,17 +76,9 @@ public class EsCommon implements Serializable {
 
     private String strToday;
     private BigDecimal bigDecimal0;
-    // 操作员列表
-    private Map<String,String> opersMap;
 
     @PostConstruct
     public void init() {
-        opersMap=new HashMap<String, String>();
-        List<Ptoper> ptoperList=esCommonService.getOperList();
-        for(Ptoper itemUnit:ptoperList){
-            opersMap.put(itemUnit.getOperid(), itemUnit.getOpername());
-        }
-
         this.originFlagList = toolsService.getEnuSelectItemList("ORIGIN_FLAG", false, false);
         this.itemTypeList = toolsService.getEnuSelectItemList("ITEM_TYPE", true, false);
         this.cstplItemNamelist = toolsService.getEnuSelectItemList("CSTPLITEM_NAME", false, false);
@@ -357,14 +349,6 @@ public class EsCommon implements Serializable {
 
     public BigDecimal getBigDecimal0() {
         return bigDecimal0;
-    }
-
-    public Map<String, String> getOpersMap() {
-        return opersMap;
-    }
-
-    public void setOpersMap(Map<String, String> opersMap) {
-        this.opersMap = opersMap;
     }
 //职能字段 End
 }

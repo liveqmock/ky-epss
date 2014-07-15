@@ -4,9 +4,9 @@ import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.common.utils.ToolUtil;
+import epss.repository.dao.not_mybatis.CttStlMapper;
 import epss.repository.model.model_show.ProgInfoShow;
 import epss.repository.dao.EsInitStlMapper;
-import epss.repository.dao.not_mybatis.CommonMapper;
 import epss.repository.model.*;
 import epss.repository.model.model_show.ProgSubstlItemShow;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class ProgStlInfoService {
     @Resource
     private EsInitStlMapper esInitStlMapper;
     @Resource
-    private CommonMapper commonMapper;
+    private CttStlMapper cttStlMapper;
     @Resource
     private FlowCtrlService flowCtrlService;
     @Resource
@@ -212,6 +212,6 @@ public class ProgStlInfoService {
     }
 
     public String getStrMaxStlId(String strCttType){
-        return commonMapper.getStrMaxStlId(strCttType) ;
+        return cttStlMapper.getStrMaxStlId(strCttType) ;
     }
 }

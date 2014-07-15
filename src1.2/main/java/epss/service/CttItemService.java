@@ -2,7 +2,7 @@ package epss.service;
 
 import epss.common.utils.ToolUtil;
 import epss.repository.dao.EsCttItemMapper;
-import epss.repository.dao.not_mybatis.CommonMapper;
+import epss.repository.dao.not_mybatis.CttItemMapper;
 import epss.repository.model.EsCttItem;
 import epss.repository.model.EsCttItemExample;
 import epss.repository.model.model_show.CttInfoShow;
@@ -25,7 +25,7 @@ public class CttItemService {
     @Resource
     private EsCttItemMapper esCttItemMapper;
     @Resource
-    private CommonMapper commonMapper;
+    private CttItemMapper cttItemMapper;
     @Resource
     private PlatformService platformService;
 
@@ -60,7 +60,7 @@ public class CttItemService {
     /**
      * 判断记录是否已存在
      *
-     * @param   esCttItem
+     * @param   strPkId
      * @return
      */
     public EsCttItem getEsCttItemByPkId(String strPkId){
@@ -200,7 +200,7 @@ public class CttItemService {
                                                    String strParentPkid,
                                                    Integer intGrade,
                                                    Integer intOrderid){
-        commonMapper.setAfterThisOrderidPlusOneByNode(strBelongToType,
+        cttItemMapper.setAfterThisOrderidPlusOneByNode(strBelongToType,
                 strBelongToPkid,
                 strParentPkid,
                 intGrade,
@@ -212,7 +212,7 @@ public class CttItemService {
                                                 String strParentPkid,
                                                 Integer intGrade,
                                                 Integer intOrderid){
-        commonMapper.setAfterThisOrderidSubOneByNode(strBelongToType,
+        cttItemMapper.setAfterThisOrderidSubOneByNode(strBelongToType,
                 strBelongToPkid,
                 strParentPkid,
                 intGrade,

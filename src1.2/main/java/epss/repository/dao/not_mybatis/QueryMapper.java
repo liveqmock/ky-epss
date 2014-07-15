@@ -17,7 +17,6 @@ import java.util.List;
  */
 @Component
 public interface QueryMapper {
-
     @Select("select ecitem.CORRESPONDING_PKID as strCorrespondingPkid," +
                 " max(eicust.NAME) as strName," +
                 " sum(ecitem.Contract_Unit_Price) as bdUnitPrice," +

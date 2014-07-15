@@ -10,7 +10,7 @@ public class TaskShow {
     private String statusFlagName;
     private String preStatusFlag;
     private String preStatusFlagName;
-    private String recordsCountInGroup;
+    private Integer recordsCountInGroup;
 
     public String getType() {
         return type;
@@ -84,11 +84,11 @@ public class TaskShow {
         this.preStatusFlagName = preStatusFlagName;
     }
 
-    public String getRecordsCountInGroup() {
+    public Integer getRecordsCountInGroup() {
         return recordsCountInGroup;
     }
 
-    public void setRecordsCountInGroup(String recordsCountInGroup) {
+    public void setRecordsCountInGroup(Integer recordsCountInGroup) {
         this.recordsCountInGroup = recordsCountInGroup;
     }
 }

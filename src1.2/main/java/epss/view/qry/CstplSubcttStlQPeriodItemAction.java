@@ -167,7 +167,7 @@ public class CstplSubcttStlQPeriodItemAction {
         recursiveDataTable("root", esCttItemList, progWorkqtyItemShowList);
         progWorkqtyItemShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progWorkqtyItemShowList);
 
-        List<String> periodList = progWorkqtyItemService.selectEsItemStlSubcttEngQPeriodsByPeriod(
+        List<String> periodList = progWorkqtyItemService.getProgWorkqtyItemPeriodsByPeriod(
                                  strSubcttPkid,
                                  strStartPeriodNo,
                                  strEndPeriodNo);
@@ -184,7 +184,7 @@ public class CstplSubcttStlQPeriodItemAction {
         }
 
         List<EsItemStlSubcttEngQ> esItemStlSubcttEngQList =
-                progWorkqtyItemService.selectEsItemStlSubcttEngQListByPeriod(
+                progWorkqtyItemService.getProgWorkqtyItemListByPeriod(
                         strSubcttPkid,
                         strStartPeriodNo,
                         strEndPeriodNo);

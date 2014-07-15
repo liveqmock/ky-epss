@@ -4,7 +4,6 @@ import epss.common.utils.ToolUtil;
 import epss.repository.dao.EsCttInfoMapper;
 import epss.repository.dao.not_mybatis.CttInfoMapper;
 import epss.repository.model.model_show.CttInfoShow;
-import epss.repository.dao.not_mybatis.CommonMapper;
 import epss.repository.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,8 +27,6 @@ public class CttInfoService {
     private CttInfoMapper cttInfoMapper;
     @Resource
     private PlatformService platformService;
-    @Autowired
-    private CommonMapper commonMapper;
 
     public List<EsCttInfo> selectListByModel(CttInfoShow cttInfoShowPara) {
         EsCttInfoExample example= new EsCttInfoExample();
@@ -163,7 +160,7 @@ public class CttInfoService {
     }
 
     public String getStrMaxCttId(String strCttType){
-        return commonMapper.getStrMaxCttId(strCttType) ;
+        return cttInfoMapper.getStrMaxCttId(strCttType) ;
     }
 
     private EsCttInfo fromModelShowToModel(CttInfoShow cttInfoShowPara) {

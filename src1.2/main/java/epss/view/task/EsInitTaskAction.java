@@ -7,6 +7,7 @@ import epss.common.utils.ToolUtil;
 import epss.repository.model.model_show.TaskShow;
 import epss.service.EsCommonService;
 import epss.service.FlowCtrlService;
+import epss.service.TaskService;
 import platform.repository.model.Ptmenu;
 import platform.service.PlatformService;
 import epss.view.flow.EsFlowControl;
@@ -34,8 +35,8 @@ public class EsInitTaskAction {
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{platformService}")
     private PlatformService platformService;
-    @ManagedProperty(value = "#{esCommonService}")
-    private EsCommonService esCommonService;
+    @ManagedProperty(value = "#{taskService}")
+    private TaskService taskService;
     @ManagedProperty(value = "#{flowCtrlService}")
     private FlowCtrlService flowCtrlService;
 
@@ -98,59 +99,16 @@ public class EsInitTaskAction {
             TaskShow taskShow =new TaskShow();
             //给变量taskShow的属性Pkid赋值
             taskShow.setPkid(itemUnit.getMenuid());
-            //创建并初始化特定类型和状态合同的数量
-            Integer intGroupCounts=0;
             //创建并初始化判断合同是否是特定类型和状态的布尔变量
-            Boolean isHasTask=false;
-            //创建并初始化存放一定状态合同的集合
-            List<TaskShow> inputNotFinishTaskShowList;
-
-            //当合同状态为录入时
-           /* if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())){
-                //根据合同类型是总成分合同还是其它类型的合同进行查询（因为分包数量、分包材料等有了期的限定）
-                if (strType.equals(ESEnum.ITEMTYPE0.getCode())||
-                    strType.equals(ESEnum.ITEMTYPE1.getCode())||
-                    strType.equals(ESEnum.ITEMTYPE2.getCode())){
-                    inputNotFinishTaskShowList =esCommonService.getTaskModelListOfCtt(strType);
-                }else {
-                    inputNotFinishTaskShowList =esCommonService.getTaskModelListOfStl(strType);
-                }
-                //当存放合同的集合不为空时，设置显示列表的任务类别列的表头，小标题的组成为合同类型+合同状态+合同数量；
-                //同时给对应的隐藏列表头赋值
-                if (inputNotFinishTaskShowList.size()>0){
-                    taskShow.setName(itemUnit.getMenulabel() + "(" + inputNotFinishTaskShowList.size() + ")");
-                    taskShowList.add(taskShow);
-                    //当存放合同的计划不为空时，将符合特定类型和状态的合同——即录入类型的合同的具体信息添加到显示表格中
-                    for(TaskShow itemUnitEP: inputNotFinishTaskShowList){
-                        taskShow =new TaskShow();
-                        taskShow.setType(itemUnitEP.getType());
-                        taskShow.setPkid(itemUnitEP.getPkid());
-                        taskShow.setId(itemUnitEP.getId());
-                        taskShow.setName("&#8195;" + itemUnitEP.getName());
-                        taskShow.setPeriodNo(itemUnitEP.getPeriodNo());
-                        taskShow.setName(itemUnitEP.getName());
-                        taskShow.setStatusFlag(itemUnitEP.getStatusFlag());
-                        if(itemUnitEP.getStatusFlag()!=null) {
-                            taskShow.setStatusFlagName(
-                                    ESEnumStatusFlag.getValueByKey(itemUnitEP.getStatusFlag()).getTitle());
-                        }
-                        taskShow.setPreStatusFlag(itemUnitEP.getPreStatusFlag());
-                        if(itemUnitEP.getPreStatusFlag()!=null) {
-                            taskShow.setPreStatusFlagName(
-                                    ESEnumPreStatusFlag.getValueByKey(itemUnitEP.getPreStatusFlag()).getTitle());
-                        }
-                        taskShowList.add(taskShow);
-                    }
-                }else {
-                    continue;
-                }
-            }*/
-
+            Boolean isHasTask;
             // 以合同类型和状态为分组,取得各组的数量
-            List<TaskShow> taskCountsInFlowGroupListTemp =esCommonService.getTaskCountsInFlowGroup();
+            List<TaskShow> taskCountsInFlowGroupListTemp =taskService.getTaskCountsInFlowGroup();
+            // 获得详细任务列表
+            List<TaskShow> taskShowListTemp=taskService.getTaskShowList();
             //遍历存放“合同类型+状态+数量”信息的集合
             for(TaskShow itemUnitCM: taskCountsInFlowGroupListTemp){
-                String strStatusFlagInTaskCountsInFlowGroupList=ToolUtil.getStrIgnoreNull(itemUnitCM.getStatusFlag());
+                String strStatusFlagInTaskCountsInFlowGroupList=
+                        ToolUtil.getStrIgnoreNull(itemUnitCM.getStatusFlag());
                 //任务列表type是排好序的（升序），大于比较的菜单type就不用再比较了
                 if(ToolUtil.getStrIgnoreNull(itemUnitCM.getType()).compareTo(strType)>0){
                     break;
@@ -181,67 +139,72 @@ public class EsInitTaskAction {
                         }
                     } //当任务为待处理任务时，统计待处理任务中的任务个数
                     if(isHasTask.equals(true)){
-                        intGroupCounts=intGroupCounts+Integer.parseInt(itemUnitCM.getRecordsCountInGroup());
-                    }
-                }
-            }
+                        // 追加标题行
+                        taskShow.setName(itemUnit.getMenulabel()+"("+itemUnitCM.getRecordsCountInGroup()+")");
+                        taskShow.setPkid("");
+                        taskShowList.add(taskShow);
 
-            //当待处理任务的个数不为空的时候，将值赋给待处理任务的表头
-            if(intGroupCounts>0){
-                // 追加标题行
-                taskShow.setName(itemUnit.getMenulabel()+"("+intGroupCounts+")");
-                taskShow.setPkid("");
-                taskShowList.add(taskShow);
-
-                //当合同状态为进入流程时
-                //流程（非‘录入未完’）信息
-                List<TaskShow> esInitPowerList=esCommonService.getTaskShowList();
-                for(TaskShow itemUnitEP:esInitPowerList){
-                    String strStatusFlagInTaskShowList=ToolUtil.getStrIgnoreNull(itemUnitEP.getStatusFlag());
-                    if(itemUnitEP.getType().equals(strType)){
-                        isHasTask=false;
-                        if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())){
-                            if(strStatusFlagInTaskShowList.equals("")){
-                                isHasTask=true;
-                            }
-                        }else if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())){
-                            if(strStatusFlagInTaskShowList.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())){
-                                isHasTask=true;
-                            }
-                        }else if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())){
-                            if(strStatusFlagInTaskShowList.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())){
-                                isHasTask=true;
-                            }
-                        }else if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG3.getCode())){
-                            if(strStatusFlagInTaskShowList.equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())){
-                                isHasTask=true;
-                            }
-                        }else if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG4.getCode())){
-                            if(strStatusFlagInTaskShowList.equals(ESEnumStatusFlag.STATUS_FLAG3.getCode())){
-                                isHasTask=true;
+                        for(TaskShow itemUnitEP:taskShowListTemp){
+                            if (ToolUtil.getStrIgnoreNull(itemUnitEP.getName()).equals("")){
+                                System.out.println(itemUnitEP.getName());
                             }
                         }
-                        //如果其是待处理任务，在显示列表上添加隐藏列和任务列的具体信息
-                        if(isHasTask.equals(true)){
-                            taskShow =new TaskShow();
-                            taskShow.setType(itemUnitEP.getType());
-                            taskShow.setPkid(itemUnitEP.getPkid());
-                            taskShow.setId(itemUnitEP.getId());
-                            taskShow.setName("&#8195;" + itemUnitEP.getName());
-                            taskShow.setPeriodNo(itemUnitEP.getPeriodNo());
-                            taskShow.setName(itemUnitEP.getName());
-                            taskShow.setStatusFlag(strStatusFlagInTaskShowList);
-                            if(!strStatusFlagInTaskShowList.equals("")) {
-                                taskShow.setStatusFlagName(
-                                        ESEnumStatusFlag.getValueByKey(strStatusFlagInTaskShowList).getTitle());
+
+                        //当合同状态为进入流程时
+                        //流程（非‘录入未完’）信息
+                        for(TaskShow itemUnitEP:taskShowListTemp){
+                            String strStatusFlagInTaskShowList=ToolUtil.getStrIgnoreNull(itemUnitEP.getStatusFlag());
+                            if(itemUnitEP.getType().equals(strType)){
+                                isHasTask=false;
+                                if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())){
+                                    if(strStatusFlagInTaskShowList.equals("")){
+                                        isHasTask=true;
+                                    }
+                                }else if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())){
+                                    if(strStatusFlagInTaskShowList.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())){
+                                        isHasTask=true;
+                                    }
+                                }else if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())){
+                                    if(strStatusFlagInTaskShowList.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())){
+                                        isHasTask=true;
+                                    }
+                                }else if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG3.getCode())){
+                                    if(strStatusFlagInTaskShowList.equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())){
+                                        isHasTask=true;
+                                    }
+                                }else if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG4.getCode())){
+                                    if(strStatusFlagInTaskShowList.equals(ESEnumStatusFlag.STATUS_FLAG3.getCode())){
+                                        isHasTask=true;
+                                    }
+                                }else if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG4.getCode())){
+                                    if(strStatusFlagInTaskShowList.equals(ESEnumStatusFlag.STATUS_FLAG3.getCode())){
+                                        isHasTask=true;
+                                    }
+                                }
+
+                                //如果其是待处理任务，在显示列表上添加隐藏列和任务列的具体信息
+                                if(isHasTask.equals(true)){
+                                    taskShow =new TaskShow();
+                                    taskShow.setType(itemUnitEP.getType());
+                                    taskShow.setPkid(itemUnitEP.getPkid());
+                                    taskShow.setId(itemUnitEP.getId());
+                                    taskShow.setName(itemUnitEP.getName());
+                                    taskShow.setPeriodNo(itemUnitEP.getPeriodNo());
+                                    taskShow.setStatusFlag(strStatusFlagInTaskShowList);
+                                    if(!strStatusFlagInTaskShowList.equals("")) {
+                                        taskShow.setStatusFlagName(
+                                                ESEnumStatusFlag.getValueByKey(strStatusFlagInTaskShowList).getTitle());
+                                    }
+                                    taskShow.setPreStatusFlag(itemUnitEP.getPreStatusFlag());
+                                    if(itemUnitEP.getPreStatusFlag()!=null) {
+                                        taskShow.setPreStatusFlagName(
+                                                ESEnumPreStatusFlag.getValueByKey(itemUnitEP.getPreStatusFlag()).getTitle());
+                                    }
+                                    taskShowList.add(taskShow);
+                                }
                             }
-                            taskShow.setPreStatusFlag(itemUnitEP.getPreStatusFlag());
-                            if(itemUnitEP.getPreStatusFlag()!=null) {
-                                taskShow.setPreStatusFlagName(
-                                        ESEnumPreStatusFlag.getValueByKey(itemUnitEP.getPreStatusFlag()).getTitle());
-                            }
-                            taskShowList.add(taskShow);
                         }
+                        break;
                     }
                 }
             }
@@ -268,12 +231,12 @@ public class EsInitTaskAction {
         return taskShowList;
     }
 
-    public EsCommonService getEsCommonService() {
-        return esCommonService;
+    public TaskService getTaskService() {
+        return taskService;
     }
 
-    public void setEsCommonService(EsCommonService esCommonService) {
-        this.esCommonService = esCommonService;
+    public void setTaskService(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     public FlowCtrlService getFlowCtrlService() {
