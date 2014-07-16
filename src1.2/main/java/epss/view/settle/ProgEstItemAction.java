@@ -4,7 +4,7 @@ import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.model_show.CommStlSubcttEngH;
-import epss.repository.model.model_show.ProgEstStaItemShow;
+import epss.repository.model.model_show.ProgEstItemShow;
 import epss.common.utils.MessageUtil;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.*;
@@ -21,7 +21,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import java.math.BigDecimal;
 import java.util.*;
 import epss.common.utils.JxlsManager;
@@ -58,10 +57,10 @@ public class ProgEstItemAction {
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
 
-    private List<ProgEstStaItemShow> progEstStaItemShowList;
-    private ProgEstStaItemShow progEstStaItemShow;
-    private ProgEstStaItemShow progEstStaItemShowUpd;
-    private ProgEstStaItemShow progEstStaItemShowDel;
+    private List<ProgEstItemShow> progEstItemShowList;
+    private ProgEstItemShow progEstItemShowSel;
+    private ProgEstItemShow progEstItemShowUpd;
+    private ProgEstItemShow progEstItemShowDel;
 
     private BigDecimal bDEng_BeginToCurrentPeriodEQtyInDB;
     private BigDecimal bDEng_CurrentPeriodEQtyInDB;
@@ -81,7 +80,7 @@ public class ProgEstItemAction {
     private Map beansMap;
     // 画面上控件的显示控制
     private String strExportToExcelRendered;
-    private List<ProgEstStaItemShow> progEstItemShowListForExcel;
+    private List<ProgEstItemShow> progEstItemShowListForExcel;
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
@@ -126,9 +125,9 @@ public class ProgEstItemAction {
     }
     /*重置*/
     public void resetAction(){
-        progEstStaItemShow =new ProgEstStaItemShow();
-        progEstStaItemShowUpd =new ProgEstStaItemShow();
-        progEstStaItemShowDel =new ProgEstStaItemShow();
+        progEstItemShowSel =new ProgEstItemShow();
+        progEstItemShowUpd =new ProgEstItemShow();
+        progEstItemShowDel =new ProgEstItemShow();
         strSubmitType="Add";
     }
 
@@ -138,26 +137,26 @@ public class ProgEstItemAction {
                 if(!blurEng_CurrentPeriodEQty("submit")){
                     return;
                 }
-                progEstStaItemShowUpd.setEng_PeriodNo(esInitStl.getPeriodNo());
+                progEstItemShowUpd.setEng_PeriodNo(esInitStl.getPeriodNo());
                 List<EsItemStlTkcttEngSta> esItemStlTkcttEngStaListTemp =
-                        progEstItemService.isExistInDb(progEstStaItemShowUpd);
+                        progEstItemService.isExistInDb(progEstItemShowUpd);
                 if (esItemStlTkcttEngStaListTemp.size() > 1) {
                     MessageUtil.addInfo("数据有误，数据库中存在多条记录。");
                     return;
                 }
                 if (esItemStlTkcttEngStaListTemp.size() == 1) {
-                    progEstStaItemShowUpd.setEng_Pkid(esItemStlTkcttEngStaListTemp.get(0).getPkid());
-                    progEstItemService.updateRecord(progEstStaItemShowUpd);
+                    progEstItemShowUpd.setEng_Pkid(esItemStlTkcttEngStaListTemp.get(0).getPkid());
+                    progEstItemService.updateRecord(progEstItemShowUpd);
                 }
                 if (esItemStlTkcttEngStaListTemp.size()==0){
-				    progEstStaItemShowUpd.setEng_TkcttPkid(strTkcttPkid);
-                    progEstStaItemShowUpd.setEng_TkcttItemPkid(progEstStaItemShowUpd.getTkctt_Pkid());
-                    progEstItemService.insertRecord(progEstStaItemShowUpd);
+				    progEstItemShowUpd.setEng_TkcttPkid(strTkcttPkid);
+                    progEstItemShowUpd.setEng_TkcttItemPkid(progEstItemShowUpd.getTkctt_Pkid());
+                    progEstItemService.insertRecord(progEstItemShowUpd);
                 }
                 MessageUtil.addInfo("更新数据完成。");
             }
             else if(strSubmitType.equals("Del")){
-                delRecordAction(progEstStaItemShowDel);
+                delRecordAction(progEstItemShowDel);
             }
             initData();
         }
@@ -168,26 +167,26 @@ public class ProgEstItemAction {
     }
 
     public boolean blurEng_CurrentPeriodEQty(String strBlurOrSubmitFlag){
-        if(ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getTkctt_ContractQuantity()).equals( new BigDecimal(0))){
+        if(ToolUtil.getBdIgnoreNull(progEstItemShowUpd.getTkctt_ContractQuantity()).equals( new BigDecimal(0))){
             return true;
         }
         else{
-            String strTemp= progEstStaItemShowUpd.getEng_CurrentPeriodEQty().toString();
+            String strTemp= progEstItemShowUpd.getEng_CurrentPeriodEQty().toString();
             //String strRegex = "[0-9]+\\.?[0-9]*";
             String strRegex = "[-]?[0-9]+\\.?[0-9]*";
-            if (!progEstStaItemShowUpd.getEng_CurrentPeriodEQty().toString().matches(strRegex) ){
+            if (!progEstItemShowUpd.getEng_CurrentPeriodEQty().toString().matches(strRegex) ){
                 MessageUtil.addError("请确认输入的数据，" + strTemp + "不是正确的数据格式！");
                 return false;
             }
 
             BigDecimal bDEng_CurrentPeriodEQtyTemp=
-                    ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getEng_CurrentPeriodEQty());
+                    ToolUtil.getBdIgnoreNull(progEstItemShowUpd.getEng_CurrentPeriodEQty());
 
             BigDecimal bigDecimalTemp=
                     bDEng_BeginToCurrentPeriodEQtyInDB.add(bDEng_CurrentPeriodEQtyTemp).subtract(bDEng_CurrentPeriodEQtyInDB);
 
             BigDecimal bDTkctt_ContractQuantity=
-                    ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getTkctt_ContractQuantity());
+                    ToolUtil.getBdIgnoreNull(progEstItemShowUpd.getTkctt_ContractQuantity());
 
             if(strBlurOrSubmitFlag.equals("blur")) {
                 if(bigDecimalTemp.compareTo(bDTkctt_ContractQuantity)>0){
@@ -195,10 +194,10 @@ public class ProgEstItemAction {
                             + bDEng_CurrentPeriodEQtyTemp.toString() + "）！");
                     return false;
                 }
-                progEstStaItemShowUpd.setEng_BeginToCurrentPeriodEQty(bigDecimalTemp);
+                progEstItemShowUpd.setEng_BeginToCurrentPeriodEQty(bigDecimalTemp);
             }else if (strBlurOrSubmitFlag.equals("submit")) {
                 BigDecimal bDEngQMng_BeginToCurrentPeriodEQtyTemp=
-                        ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getEng_BeginToCurrentPeriodEQty());
+                        ToolUtil.getBdIgnoreNull(progEstItemShowUpd.getEng_BeginToCurrentPeriodEQty());
 
                 if(bDEngQMng_BeginToCurrentPeriodEQtyTemp.compareTo(bDEng_BeginToCurrentPeriodEQtyInDB)==0){
                     if(bigDecimalTemp.compareTo(bDTkctt_ContractQuantity)>0){
@@ -214,13 +213,13 @@ public class ProgEstItemAction {
         return true;
     }
 
-    private void delRecordAction(ProgEstStaItemShow progEstStaItemShowPara){
+    private void delRecordAction(ProgEstItemShow progEstItemShowPara){
         try {
-            if(progEstStaItemShowPara.getEng_Pkid()==null||
-                    progEstStaItemShowPara.getEng_Pkid().equals("")){
+            if(progEstItemShowPara.getEng_Pkid()==null||
+                    progEstItemShowPara.getEng_Pkid().equals("")){
                 MessageUtil.addError("无可删除的数据！") ;
             }else{
-                int deleteRecordNum= progEstItemService.deleteRecord(progEstStaItemShowPara.getEng_Pkid()) ;
+                int deleteRecordNum= progEstItemService.deleteRecord(progEstItemShowPara.getEng_Pkid()) ;
                 if (deleteRecordNum<=0){
                     MessageUtil.addInfo("该记录已删除。");
                 }else {
@@ -234,14 +233,14 @@ public class ProgEstItemAction {
     }
 
     /*右单击事件*/
-    public void selectRecordAction(String strSubmitTypePara,ProgEstStaItemShow progEstStaItemShowPara){
+    public void selectRecordAction(String strSubmitTypePara,ProgEstItemShow progEstItemShowPara){
         try {
             strSubmitType=strSubmitTypePara;
             if (strSubmitTypePara.equals("Sel")){                
-                progEstStaItemShow =(ProgEstStaItemShow)BeanUtils.cloneBean(progEstStaItemShowPara) ;
-                progEstStaItemShow.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstStaItemShow.getTkctt_StrNo()));
+                progEstItemShowSel =(ProgEstItemShow)BeanUtils.cloneBean(progEstItemShowPara) ;
+                progEstItemShowSel.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstItemShowSel.getTkctt_StrNo()));
             }            
-            String strTkctt_Unit= progEstStaItemShowPara.getTkctt_Unit();
+            String strTkctt_Unit= progEstItemShowPara.getTkctt_Unit();
             if(strTkctt_Unit==null) {
                 if(strSubmitTypePara.equals("Upd")){
                     MessageUtil.addInfo("该数据不是项数据，无法更新");
@@ -253,15 +252,15 @@ public class ProgEstItemAction {
                 return;
             }
             if(strSubmitTypePara.equals("Upd")){
-                progEstStaItemShowUpd =(ProgEstStaItemShow) BeanUtils.cloneBean(progEstStaItemShowPara) ;
-                progEstStaItemShowUpd.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstStaItemShowUpd.getTkctt_StrNo()));
-                bDEng_CurrentPeriodEQtyInDB=ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getEng_CurrentPeriodEQty());
+                progEstItemShowUpd =(ProgEstItemShow) BeanUtils.cloneBean(progEstItemShowPara) ;
+                progEstItemShowUpd.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstItemShowUpd.getTkctt_StrNo()));
+                bDEng_CurrentPeriodEQtyInDB=ToolUtil.getBdIgnoreNull(progEstItemShowUpd.getEng_CurrentPeriodEQty());
                 bDEng_BeginToCurrentPeriodEQtyInDB=
-                        ToolUtil.getBdIgnoreNull(progEstStaItemShowUpd.getEng_BeginToCurrentPeriodEQty());
+                        ToolUtil.getBdIgnoreNull(progEstItemShowUpd.getEng_BeginToCurrentPeriodEQty());
             }
             else if(strSubmitTypePara.equals("Del")){
-                progEstStaItemShowDel =(ProgEstStaItemShow) BeanUtils.cloneBean(progEstStaItemShowPara) ;
-                progEstStaItemShowDel.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstStaItemShowDel.getTkctt_StrNo()));
+                progEstItemShowDel =(ProgEstItemShow) BeanUtils.cloneBean(progEstItemShowPara) ;
+                progEstItemShowDel.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progEstItemShowDel.getTkctt_StrNo()));
             }
         } catch (Exception e) {
             logger.error("", e);
@@ -272,19 +271,19 @@ public class ProgEstItemAction {
     private void initData() {
         /*分包合同*/
         List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
-        progEstItemShowListForExcel=new ArrayList<ProgEstStaItemShow>();
+        progEstItemShowListForExcel=new ArrayList<ProgEstItemShow>();
         esCttItemList = cttItemService.getEsItemList(
                 ESEnum.ITEMTYPE0.getCode(), strTkcttPkid);
         if(esCttItemList.size()<=0){
             return;
         }
-        progEstStaItemShowList =new ArrayList<ProgEstStaItemShow>();
-        recursiveDataTable("root", esCttItemList, progEstStaItemShowList);
-        progEstStaItemShowList =getItemStlTkcttEngSMList_DoFromatNo(progEstStaItemShowList);
+        progEstItemShowList =new ArrayList<ProgEstItemShow>();
+        recursiveDataTable("root", esCttItemList, progEstItemShowList);
+        progEstItemShowList =getItemStlTkcttEngSMList_DoFromatNo(progEstItemShowList);
         setItemOfEsItemHieRelapList_AddTotal();
         beansMap.put("progEstItemShowListForExcel", progEstItemShowListForExcel);
         // 表内容设定
-        if(progEstStaItemShowList.size()>0){
+        if(progEstItemShowList.size()>0){
             strExportToExcelRendered="true";
         }else{
             strExportToExcelRendered="false";
@@ -293,7 +292,7 @@ public class ProgEstItemAction {
     /*根据数据库中层级关系数据列表得到总包合同*/
     private void recursiveDataTable(String strLevelParentId,
                                       List<EsCttItem> esCttItemListPara,
-                                      List<ProgEstStaItemShow> sprogEstStaItemShowListPara){
+                                      List<ProgEstItemShow> sprogEstItemShowListPara){
         // 根据父层级号获得该父层级下的子节点
         List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
         // 通过父层id查找它的孩子
@@ -302,25 +301,25 @@ public class ProgEstItemAction {
         BigDecimal bdCurrentPeriodQty=new BigDecimal(0);
         BigDecimal bdBeginToCurrentPeriodQty=new BigDecimal(0);
         for(EsCttItem itemUnit: subEsCttItemList){
-            ProgEstStaItemShow progEstStaItemShowTemp = new ProgEstStaItemShow();
-            progEstStaItemShowTemp.setTkctt_Pkid(itemUnit.getPkid());
-            progEstStaItemShowTemp.setTkctt_BelongToType(itemUnit.getBelongToType());
-            progEstStaItemShowTemp.setTkctt_BelongToPkid(itemUnit.getBelongToPkid());
-            progEstStaItemShowTemp.setTkctt_ParentPkid(itemUnit.getParentPkid());
-            progEstStaItemShowTemp.setTkctt_Grade(itemUnit.getGrade());
-            progEstStaItemShowTemp.setTkctt_Orderid(itemUnit.getOrderid());
-            progEstStaItemShowTemp.setTkctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
-            progEstStaItemShowTemp.setTkctt_Name(itemUnit.getName());
-            progEstStaItemShowTemp.setTkctt_Note(itemUnit.getNote());
-            progEstStaItemShowTemp.setTkctt_Unit(itemUnit.getUnit());
-            progEstStaItemShowTemp.setTkctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
+            ProgEstItemShow progEstItemShowTemp = new ProgEstItemShow();
+            progEstItemShowTemp.setTkctt_Pkid(itemUnit.getPkid());
+            progEstItemShowTemp.setTkctt_BelongToType(itemUnit.getBelongToType());
+            progEstItemShowTemp.setTkctt_BelongToPkid(itemUnit.getBelongToPkid());
+            progEstItemShowTemp.setTkctt_ParentPkid(itemUnit.getParentPkid());
+            progEstItemShowTemp.setTkctt_Grade(itemUnit.getGrade());
+            progEstItemShowTemp.setTkctt_Orderid(itemUnit.getOrderid());
+            progEstItemShowTemp.setTkctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
+            progEstItemShowTemp.setTkctt_Name(itemUnit.getName());
+            progEstItemShowTemp.setTkctt_Note(itemUnit.getNote());
+            progEstItemShowTemp.setTkctt_Unit(itemUnit.getUnit());
+            progEstItemShowTemp.setTkctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             bdContractUnitPrice=ToolUtil.getBdIgnoreNull(itemUnit.getContractUnitPrice());
-            progEstStaItemShowTemp.setTkctt_ContractQuantity(itemUnit.getContractQuantity());
-            progEstStaItemShowTemp.setTkctt_ContractAmount(itemUnit.getContractAmount());
+            progEstItemShowTemp.setTkctt_ContractQuantity(itemUnit.getContractQuantity());
+            progEstItemShowTemp.setTkctt_ContractAmount(itemUnit.getContractAmount());
 
             EsItemStlTkcttEngSta esItemStlTkcttEngSta=new EsItemStlTkcttEngSta();
             esItemStlTkcttEngSta.setTkcttPkid(strTkcttPkid);
-            esItemStlTkcttEngSta.setTkcttItemPkid(progEstStaItemShowTemp.getTkctt_Pkid());
+            esItemStlTkcttEngSta.setTkcttItemPkid(progEstItemShowTemp.getTkctt_Pkid());
             esItemStlTkcttEngSta.setPeriodNo(esInitStl.getPeriodNo());
             List<EsItemStlTkcttEngSta> esItemStlTkcttEngStaList =
                     progEstItemService.selectRecordsByExample(esItemStlTkcttEngSta);
@@ -328,39 +327,39 @@ public class ProgEstItemAction {
                 esItemStlTkcttEngSta= esItemStlTkcttEngStaList.get(0);
                 String strCreatedByName= esCommon.getOperNameByOperId(esItemStlTkcttEngSta.getCreatedBy());
                 String strLastUpdByName= esCommon.getOperNameByOperId(esItemStlTkcttEngSta.getLastUpdBy());
-                progEstStaItemShowTemp.setEng_Pkid(esItemStlTkcttEngSta.getPkid());
-                progEstStaItemShowTemp.setEng_PeriodNo(esItemStlTkcttEngSta.getPeriodNo());
-                progEstStaItemShowTemp.setEng_TkcttPkid(esItemStlTkcttEngSta.getTkcttPkid());
-                progEstStaItemShowTemp.setEng_TkcttItemPkid(esItemStlTkcttEngSta.getTkcttItemPkid());
-                progEstStaItemShowTemp.setEng_CurrentPeriodEQty(esItemStlTkcttEngSta.getCurrentPeriodQty());
+                progEstItemShowTemp.setEng_Pkid(esItemStlTkcttEngSta.getPkid());
+                progEstItemShowTemp.setEng_PeriodNo(esItemStlTkcttEngSta.getPeriodNo());
+                progEstItemShowTemp.setEng_TkcttPkid(esItemStlTkcttEngSta.getTkcttPkid());
+                progEstItemShowTemp.setEng_TkcttItemPkid(esItemStlTkcttEngSta.getTkcttItemPkid());
+                progEstItemShowTemp.setEng_CurrentPeriodEQty(esItemStlTkcttEngSta.getCurrentPeriodQty());
                 bdCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngSta.getCurrentPeriodQty());
-                progEstStaItemShowTemp.setEng_CurrentPeriodEAmount(
+                progEstItemShowTemp.setEng_CurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdCurrentPeriodQty)));
 
-                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEQty(esItemStlTkcttEngSta.getBeginToCurrentPeriodQty());
+                progEstItemShowTemp.setEng_BeginToCurrentPeriodEQty(esItemStlTkcttEngSta.getBeginToCurrentPeriodQty());
                 bdBeginToCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngSta.getBeginToCurrentPeriodQty());
-                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
+                progEstItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdBeginToCurrentPeriodQty)));
 
-                progEstStaItemShowTemp.setEng_DeletedFlag(esItemStlTkcttEngSta.getDeleteFlag());
-                progEstStaItemShowTemp.setEng_CreatedBy(esItemStlTkcttEngSta.getCreatedBy());
-                progEstStaItemShowTemp.setEng_CreatedByName(strCreatedByName);
-                progEstStaItemShowTemp.setEng_CreatedDate(esItemStlTkcttEngSta.getCreatedDate());
-                progEstStaItemShowTemp.setEng_LastUpdBy(esItemStlTkcttEngSta.getLastUpdBy());
-                progEstStaItemShowTemp.setEng_LastUpdByName(strLastUpdByName);
-                progEstStaItemShowTemp.setEng_LastUpdDate(esItemStlTkcttEngSta.getLastUpdDate());
-                progEstStaItemShowTemp.setEng_ModificationNum(esItemStlTkcttEngSta.getModificationNum());
+                progEstItemShowTemp.setEng_DeletedFlag(esItemStlTkcttEngSta.getDeleteFlag());
+                progEstItemShowTemp.setEng_CreatedBy(esItemStlTkcttEngSta.getCreatedBy());
+                progEstItemShowTemp.setEng_CreatedByName(strCreatedByName);
+                progEstItemShowTemp.setEng_CreatedDate(esItemStlTkcttEngSta.getCreatedDate());
+                progEstItemShowTemp.setEng_LastUpdBy(esItemStlTkcttEngSta.getLastUpdBy());
+                progEstItemShowTemp.setEng_LastUpdByName(strLastUpdByName);
+                progEstItemShowTemp.setEng_LastUpdDate(esItemStlTkcttEngSta.getLastUpdDate());
+                progEstItemShowTemp.setEng_ModificationNum(esItemStlTkcttEngSta.getModificationNum());
             }
-            sprogEstStaItemShowListPara.add(progEstStaItemShowTemp) ;
-            recursiveDataTable(progEstStaItemShowTemp.getTkctt_Pkid(), esCttItemListPara, sprogEstStaItemShowListPara);
+            sprogEstItemShowListPara.add(progEstItemShowTemp) ;
+            recursiveDataTable(progEstItemShowTemp.getTkctt_Pkid(), esCttItemListPara, sprogEstItemShowListPara);
         }
     }
 
     private void setItemOfEsItemHieRelapList_AddTotal(){
-        List<ProgEstStaItemShow> progEstStaItemShowListTemp =new ArrayList<ProgEstStaItemShow>();
-        progEstStaItemShowListTemp.addAll(progEstStaItemShowList);
+        List<ProgEstItemShow> progEstItemShowListTemp =new ArrayList<ProgEstItemShow>();
+        progEstItemShowListTemp.addAll(progEstItemShowList);
 
-        progEstStaItemShowList.clear();
+        progEstItemShowList.clear();
         // 合同数量小计
         BigDecimal bdQuantityTotal=new BigDecimal(0);
         // 合同数量大计
@@ -388,11 +387,11 @@ public class ProgEstItemAction {
         // 当期金额大计
         BigDecimal bdCurrentPeriodEAmountAllTotal=new BigDecimal(0);
 
-        ProgEstStaItemShow itemUnit=new ProgEstStaItemShow();
-        ProgEstStaItemShow itemUnitNext=new ProgEstStaItemShow();
+        ProgEstItemShow itemUnit=new ProgEstItemShow();
+        ProgEstItemShow itemUnitNext=new ProgEstItemShow();
 
-        for(int i=0;i< progEstStaItemShowListTemp.size();i++){
-            itemUnit = progEstStaItemShowListTemp.get(i);
+        for(int i=0;i< progEstItemShowListTemp.size();i++){
+            itemUnit = progEstItemShowListTemp.get(i);
             bdQuantityTotal=bdQuantityTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getTkctt_ContractQuantity()));
             bdQuantityAllTotal=bdQuantityAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getTkctt_ContractQuantity()));
             bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getTkctt_ContractAmount()));
@@ -416,12 +415,12 @@ public class ProgEstItemAction {
             bdCurrentPeriodEAmountAllTotal=
                     bdCurrentPeriodEAmountAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEng_CurrentPeriodEAmount()));
 
-            progEstStaItemShowList.add(itemUnit);
+            progEstItemShowList.add(itemUnit);
 
-            if(i+1< progEstStaItemShowListTemp.size()){
-                itemUnitNext = progEstStaItemShowListTemp.get(i+1);
+            if(i+1< progEstItemShowListTemp.size()){
+                itemUnitNext = progEstItemShowListTemp.get(i+1);
                 if(itemUnitNext.getTkctt_ParentPkid().equals("root")){
-                    ProgEstStaItemShow itemOfEsItemHieRelapTemp=new ProgEstStaItemShow();
+                    ProgEstItemShow itemOfEsItemHieRelapTemp=new ProgEstItemShow();
                     itemOfEsItemHieRelapTemp.setTkctt_Name("合计");
                     itemOfEsItemHieRelapTemp.setTkctt_Pkid("total"+i);
                     itemOfEsItemHieRelapTemp.setTkctt_ContractQuantity(
@@ -436,7 +435,7 @@ public class ProgEstItemAction {
                             ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEAmountTotal));
                     itemOfEsItemHieRelapTemp.setEng_CurrentPeriodEAmount(
                             ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEAmountTotal));
-                    progEstStaItemShowList.add(itemOfEsItemHieRelapTemp);
+                    progEstItemShowList.add(itemOfEsItemHieRelapTemp);
                     bdQuantityTotal=new BigDecimal(0);
                     bdAmountTotal=new BigDecimal(0);
                     bdBeginToCurrentPeriodEQtyTotal=new BigDecimal(0);
@@ -444,24 +443,24 @@ public class ProgEstItemAction {
                     bdBeginToCurrentPeriodEAmountTotal=new BigDecimal(0);
                     bdCurrentPeriodEAmountTotal=new BigDecimal(0);
                 }
-            } else if(i+1== progEstStaItemShowListTemp.size()){
-                itemUnitNext = progEstStaItemShowListTemp.get(i);
-                ProgEstStaItemShow progEstStaItemShowTemp =new ProgEstStaItemShow();
-                progEstStaItemShowTemp.setTkctt_Name("合计");
-                progEstStaItemShowTemp.setTkctt_Pkid("total"+i);
-                progEstStaItemShowTemp.setTkctt_ContractQuantity(
+            } else if(i+1== progEstItemShowListTemp.size()){
+                itemUnitNext = progEstItemShowListTemp.get(i);
+                ProgEstItemShow progEstItemShowTemp =new ProgEstItemShow();
+                progEstItemShowTemp.setTkctt_Name("合计");
+                progEstItemShowTemp.setTkctt_Pkid("total"+i);
+                progEstItemShowTemp.setTkctt_ContractQuantity(
                         ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
-                progEstStaItemShowTemp.setTkctt_ContractAmount(
+                progEstItemShowTemp.setTkctt_ContractAmount(
                         ToolUtil.getBdFrom0ToNull(bdAmountTotal));
-                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEQty(
+                progEstItemShowTemp.setEng_BeginToCurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyTotal));
-                progEstStaItemShowTemp.setEng_CurrentPeriodEQty(
+                progEstItemShowTemp.setEng_CurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal));
-                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
+                progEstItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEAmountTotal));
-                progEstStaItemShowTemp.setEng_CurrentPeriodEAmount(
+                progEstItemShowTemp.setEng_CurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEAmountTotal));
-                progEstStaItemShowList.add(progEstStaItemShowTemp);
+                progEstItemShowList.add(progEstItemShowTemp);
                 bdQuantityTotal=new BigDecimal(0);
                 bdAmountTotal=new BigDecimal(0);
                 bdBeginToCurrentPeriodEQtyTotal=new BigDecimal(0);
@@ -470,34 +469,34 @@ public class ProgEstItemAction {
                 bdCurrentPeriodEAmountTotal=new BigDecimal(0);
 
                 // 总合计
-                progEstStaItemShowTemp =new ProgEstStaItemShow();
-                progEstStaItemShowTemp.setTkctt_Name("总合计");
-                progEstStaItemShowTemp.setTkctt_Pkid("total_all"+i);
-                progEstStaItemShowTemp.setTkctt_ContractQuantity(
+                progEstItemShowTemp =new ProgEstItemShow();
+                progEstItemShowTemp.setTkctt_Name("总合计");
+                progEstItemShowTemp.setTkctt_Pkid("total_all"+i);
+                progEstItemShowTemp.setTkctt_ContractQuantity(
                         ToolUtil.getBdFrom0ToNull(bdQuantityAllTotal));
-                progEstStaItemShowTemp.setTkctt_ContractAmount(
+                progEstItemShowTemp.setTkctt_ContractAmount(
                         ToolUtil.getBdFrom0ToNull(bdAmountAllTotal));
 
-                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEQty(
+                progEstItemShowTemp.setEng_BeginToCurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyAllTotal));
-                progEstStaItemShowTemp.setEng_CurrentPeriodEQty(
+                progEstItemShowTemp.setEng_CurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyAllTotal));
-                progEstStaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
+                progEstItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEAmountAllTotal));
-                progEstStaItemShowTemp.setEng_CurrentPeriodEAmount(
+                progEstItemShowTemp.setEng_CurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEAmountAllTotal));
-                progEstStaItemShowList.add(progEstStaItemShowTemp);
+                progEstItemShowList.add(progEstItemShowTemp);
             }
         }
     }
 
     /*根据group和orderid临时编制编码strNo*/
-    private List<ProgEstStaItemShow> getItemStlTkcttEngSMList_DoFromatNo(
-            List<ProgEstStaItemShow> progEstStaItemShowListPara){
+    private List<ProgEstItemShow> getItemStlTkcttEngSMList_DoFromatNo(
+            List<ProgEstItemShow> progEstItemShowListPara){
         try{
             String strTemp="";
             Integer intBeforeGrade=-1;
-            for(ProgEstStaItemShow itemUnit: progEstStaItemShowListPara){
+            for(ProgEstItemShow itemUnit: progEstItemShowListPara){
                 if(itemUnit.getTkctt_Grade().equals(intBeforeGrade)){
                     if(strTemp.lastIndexOf(".")<0) {
                         strTemp=itemUnit.getTkctt_Orderid().toString();
@@ -525,7 +524,7 @@ public class ProgEstItemAction {
                 intBeforeGrade=itemUnit.getTkctt_Grade() ;
                 itemUnit.setTkctt_StrNo(ToolUtil.padLeft_DoLevel(itemUnit.getTkctt_Grade(), strTemp)) ;
 
-                ProgEstStaItemShow itemUnitTemp= (ProgEstStaItemShow) BeanUtils.cloneBean(itemUnit);
+                ProgEstItemShow itemUnitTemp= (ProgEstItemShow) BeanUtils.cloneBean(itemUnit);
                 itemUnitTemp.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getTkctt_StrNo()));
                 progEstItemShowListForExcel.add(itemUnitTemp);
             }
@@ -534,12 +533,12 @@ public class ProgEstItemAction {
             logger.error("", e);
             MessageUtil.addError(e.getMessage());
         }
-        return progEstStaItemShowListPara;
+        return progEstItemShowListPara;
     }
 
 
     public String onExportExcel()throws IOException, WriteException {
-        if (this.progEstStaItemShowList.size() == 0) {
+        if (this.progEstItemShowList.size() == 0) {
             MessageUtil.addWarn("记录为空...");
             return null;
         } else {
@@ -760,43 +759,43 @@ public class ProgEstItemAction {
         this.bDEng_BeginToCurrentPeriodEQtyInDB = bDEng_BeginToCurrentPeriodEQtyInDB;
     }
 
-    public ProgEstStaItemShow getProgEstStaItemShow() {
-        return progEstStaItemShow;
+    public ProgEstItemShow getProgEstItemShowSel() {
+        return progEstItemShowSel;
     }
 
-    public void setProgEstStaItemShow(ProgEstStaItemShow progEstStaItemShow) {
-        this.progEstStaItemShow = progEstStaItemShow;
+    public void setProgEstItemShowSel(ProgEstItemShow progEstItemShowSel) {
+        this.progEstItemShowSel = progEstItemShowSel;
     }
 
-    public ProgEstStaItemShow getProgEstStaItemShowDel() {
-        return progEstStaItemShowDel;
+    public ProgEstItemShow getProgEstItemShowDel() {
+        return progEstItemShowDel;
     }
 
-    public void setProgEstStaItemShowDel(ProgEstStaItemShow progEstStaItemShowDel) {
-        this.progEstStaItemShowDel = progEstStaItemShowDel;
+    public void setProgEstItemShowDel(ProgEstItemShow progEstItemShowDel) {
+        this.progEstItemShowDel = progEstItemShowDel;
     }
 
-    public ProgEstStaItemShow getProgEstStaItemShowUpd() {
-        return progEstStaItemShowUpd;
+    public ProgEstItemShow getProgEstItemShowUpd() {
+        return progEstItemShowUpd;
     }
 
-    public void setProgEstStaItemShowUpd(ProgEstStaItemShow progEstStaItemShowUpd) {
-        this.progEstStaItemShowUpd = progEstStaItemShowUpd;
+    public void setProgEstItemShowUpd(ProgEstItemShow progEstItemShowUpd) {
+        this.progEstItemShowUpd = progEstItemShowUpd;
     }
 
-    public List<ProgEstStaItemShow> getProgEstStaItemShowList() {
-        return progEstStaItemShowList;
+    public List<ProgEstItemShow> getProgEstItemShowList() {
+        return progEstItemShowList;
     }
 
-    public void setProgEstStaItemShowList(List<ProgEstStaItemShow> progEstStaItemShowList) {
-        this.progEstStaItemShowList = progEstStaItemShowList;
+    public void setProgEstItemShowList(List<ProgEstItemShow> progEstItemShowList) {
+        this.progEstItemShowList = progEstItemShowList;
     }
 
-    public List<ProgEstStaItemShow> getProgEstItemShowListForExcel() {
+    public List<ProgEstItemShow> getProgEstItemShowListForExcel() {
         return progEstItemShowListForExcel;
     }
 
-    public void setProgEstItemShowListForExcel(List<ProgEstStaItemShow> progEstItemShowListForExcel) {
+    public void setProgEstItemShowListForExcel(List<ProgEstItemShow> progEstItemShowListForExcel) {
         this.progEstItemShowListForExcel = progEstItemShowListForExcel;
     }
 

@@ -20,310 +20,313 @@
 </ui:define>
 <ui:define name="content">
     <h:form id="form">
-        <p:growl id="msgs" showDetail="false"/>
-        <h:panelGrid id="pgCondition" columns="2">
-            <p:commandButton id="endInputBtn" value="录入完成"
-                             action="#{progMatqtyItemAction.onClickForPowerAction('Pass')}"
-                             update="pgCondition,pdt,msgs"
-                             rendered="#{progMatqtyItemAction.strPassFlag}"
-                             oncomplete="window.close()">
-            </p:commandButton>
-            <p:commandButton id="startInputBtn" value="录入未完"
-                             action="#{progMatqtyItemAction.onClickForPowerAction('Fail')}"
-                             update="pgCondition,pdt,msgs"
-                             rendered="#{!progMatqtyItemAction.strPassFlag}"
-                             oncomplete="window.close()">
-            </p:commandButton>
-        </h:panelGrid>
-        <p:dataTable id="pdt" style="width:100%;"
-                     value="#{progMatqtyItemAction.progMatQtyItemShowList}"
-                     var="record"
-                     rowKey="#{record.subctt_Pkid}"
-                     selectionMode="single"
-                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-			            {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     paginator="true"
-                     paginatorPosition="bottom"
-                     rows="20"
-                     rowsPerPageTemplate="500,200,100,50,30,20,10"
-                     rowIndexVar="row"
-                     emptyMessage="数据记录为空..."
-                     rowStyleClass="#{record.subctt_SignPartAPrice eq 0? 'rowDoneStyle':
-                     record.subctt_SignPartAPrice eq null? 'rowDoneStyle':null}"
-                     scrollable="true">
-            <p:column headerText="操作" style="width:91px" rendered='#{progMatqtyItemAction.strPassFlag}'>
-                <p:commandButton  icon="ui-icon-pencil"
-                                  style="height:20px;width:20px"
-                                  rendered="#{record.subctt_SignPartAPrice eq 0? 'false':
-                                                record.subctt_SignPartAPrice eq null? 'false':'true'}"
-                                  actionListener="#{progMatqtyItemAction.selectRecordAction('Upd',record)}"
-                                  update="pdt,:form:pgViewForUpd"
-                                  oncomplete="PF('wVDlgViewForUpd').show()">
+        <p:panel>
+            <p:growl id="msgs" showDetail="true"/>
+            <h:panelGrid id="pgCondition" columns="2">
+                <p:commandButton id="endInputBtn" value="录入完成"
+                                 action="#{progMatqtyItemAction.onClickForPowerAction('Pass')}"
+                                 update="pgCondition,pdt,msgs"
+                                 rendered="#{progMatqtyItemAction.strPassFlag}"
+                                 oncomplete="window.close()">
                 </p:commandButton>
-                <p:commandButton  icon="ui-icon-trash"
-                                  style="height:20px;width:20px"
-                                  rendered="#{record.subctt_SignPartAPrice eq 0? 'false':
-                                                record.subctt_SignPartAPrice eq null? 'false':'true'}"
-                                  actionListener="#{progMatqtyItemAction.selectRecordAction('Del',record)}"
-                                  update="pdt,:form:pgViewForDel"
-                                  oncomplete="PF('wVDlgViewForDel').show()">
-                </p:commandButton>
-            </p:column>
-            <p:column style="width:30px" headerText="序号">
-                <h:outputText value="#{row + 1}"/>
-            </p:column>
-            <p:column style="width:100px" headerText="编号">
-                <h:outputText value="#{record.subctt_StrNo}" escape="false"/>
-            </p:column>
-            <p:column style="width:200px" headerText="名称">
-                <h:outputText value="#{record.subctt_Name}"/>
-            </p:column>
-            <p:column style="width:30px" headerText="单位">
-                <h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
-            </p:column>
-            <p:column style="width:80px" headerText="合同单价">
-                <h:outputText value="#{record.subctt_ContractUnitPrice}" style="float: right">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                </h:outputText>
-            </p:column>
-            <p:column style="width:80px" headerText="合同数量">
-                <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                </h:outputText>
-            </p:column>
-            <p:column style="width:80px" headerText="合同金额">
-                <h:outputText value="#{record.subctt_ContractAmount}" style="float: right">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                </h:outputText>
-            </p:column>
-            <p:column style="width:80px" headerText="甲供材单价">
-                <h:outputText value="#{record.subctt_SignPartAPrice}" style="float: right">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                </h:outputText>
-            </p:column>
-            <p:column style="width:100px" headerText="开累材料量">
-                <h:outputText value="#{record.engMMng_BeginToCurrentPeriodMQty}" style="float: right">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                </h:outputText>
-            </p:column>
-            <p:column style="width:100px" headerText="当期材料量">
-                <h:outputText value="#{record.engMMng_CurrentPeriodMQty}" style="float: right">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                </h:outputText>
-            </p:column>
-            <p:column style="width:100px" headerText="备注内容">
-                <h:outputText value="#{record.subctt_Note}"/>
-            </p:column>
-        </p:dataTable>
-        <p:dialog id="dlgViewForUpd" header="分包材料结算更新信息" widgetVar="wVDlgViewForUpd"
-                  resizable="false" modal="true"
-                  showEffect="clip" hideEffect="fold">
-            <h:panelGrid id="pgViewForUpd">
-            <h:panelGrid columns="4">
-                <p:outputLabel for="noItemHieRelapForUpd" value="编号:"/>
-                <h:inputText id="noItemHieRelapForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_StrNo}"
-                             style="background-color:gainsboro"
-                             readonly="true">
-                </h:inputText>
-                <p:outputLabel for="nameForUpd" value="名称:"/>
-                <h:inputText id="nameForUpd" value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_Name}"
-                             style="background-color:gainsboro"
-                             readonly="true"/>
-                <p:outputLabel for="noteForUpd" value="备注内容:"/>
-                <h:inputText id="noteForUpd" value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_Note}"
-                             style="background-color:gainsboro"
-                             readonly="true"/>
-                <p:outputLabel for="unitItemInfoForUpd" value="单位:"/>
-                <h:inputText id="unitItemInfoForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_Unit}"
-                             style="background-color:gainsboro"
-                             readonly="true"/>
-                <p:outputLabel for="contractQuantityItemInfoForUpd" value="合同数量:"/>
-                <h:inputText id="contractQuantityItemInfoForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_ContractQuantity}"
-                             style="background-color:gainsboro;text-align:right;"
-                             readonly="true">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                </h:inputText>
-                <p:outputLabel for="engMMng_BeginToCurrentPeriodMQtyForUpd" value="开累材料量:"/>
-                <h:inputText id="engMMng_BeginToCurrentPeriodMQtyForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_BeginToCurrentPeriodMQty}"
-                             style="background-color:gainsboro;text-align:right;"
-                             readonly="true">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                </h:inputText>
-                <p:outputLabel for="engMMng_CurrentPeriodMQtyForUpd" value="本期材料量:"/>
-                <h:inputText id="engMMng_CurrentPeriodMQtyForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_CurrentPeriodMQty}"
-                             style="text-align:right;float:left">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    <p:ajax event="blur" update="msgs,engMMng_BeginToCurrentPeriodMQtyForUpd"
-                            listener="#{progMatqtyItemAction.blurEngMMng_CurrentPeriodMQty('blur')}"/>
-                </h:inputText>
-                <p:outputLabel for="contractAmountItemInfoForUpd" value="合同金额:" rendered="false"/>
-                <h:inputText id="contractAmountItemInfoForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_ContractAmount}"
-                             style="background-color:gainsboro;"
-                             rendered="false">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                </h:inputText>
-                <p:outputLabel for="signPartAPriceItemInfoForUpd" value="其中：甲供材单价:" rendered="false"/>
-                <h:inputText id="signPartAPriceItemInfoForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_SignPartAPrice}"
-                             style="background-color:gainsboro"
-                             rendered="false">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                </h:inputText>
-                <p:outputLabel for="originFlagItemInfoForUpd" value="数据来源:"/>
-                <h:inputText id="originFlagItemInfoForUpd"
-                             value="#{esCommon.originFlagListValueOfAlias(
-	                                             progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_OriginFlag)}"
-                             style="background-color:gainsboro"
-                             readonly="true"/>
-                <p:outputLabel for="createdByItemInfoForUpd" value="创建人:"/>
-                <h:inputText id="createdByItemInfoForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_CreatedByName}"
-                             style="background-color:gainsboro"
-                             readonly="true"/>
-                <p:outputLabel for="createdDateItemInfoForUpd" value="创建时间:"/>
-                <h:inputText id="createdDateItemInfoForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_CreatedDate}"
-                             style="background-color:gainsboro"
-                             readonly="true"/>
-                <p:outputLabel for="lastUpdByItemInfoForUpd" value="修改人:"/>
-                <h:inputText id="lastUpdByItemInfoForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_LastUpdByName}"
-                             style="background-color:gainsboro"
-                             readonly="true"/>
-                <p:outputLabel for="lastUpdDateItemInfoForUpd" value="修改时间:"/>
-                <h:inputText id="lastUpdDateItemInfoForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_LastUpdDate}"
-                             style="background-color:gainsboro"
-                             readonly="true"/>
-                <p:outputLabel for="modificationNumItemInfoForUpd" value="修改次数:"/>
-                <h:inputText id="modificationNumItemInfoForUpd"
-                             value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_ModificationNum}"
-                             style="background-color:gainsboro;text-align:right;"
-                             readonly="true">
-                    <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                </h:inputText>
-            </h:panelGrid>
-            <h:panelGrid id="pgOperBtnForUpd" columns="2">
-                <p:commandButton id="submitBtnForUpd"
-                                 value="提交（更新）"
-                                 action="#{progMatqtyItemAction.submitThisRecordAction}"
-                                 update="pgViewForUpd,pdt,msgs,pgOperBtnForUpd">
-                </p:commandButton>
-                <p:commandButton id="resetBtnForUpd" value="重置"
-                                 type="reset"
-                                 update="pgViewForUpd">
+                <p:commandButton id="startInputBtn" value="录入未完"
+                                 action="#{progMatqtyItemAction.onClickForPowerAction('Fail')}"
+                                 update="pgCondition,pdt,msgs"
+                                 rendered="#{!progMatqtyItemAction.strPassFlag}"
+                                 oncomplete="window.close()">
                 </p:commandButton>
             </h:panelGrid>
-            </h:panelGrid>
-        </p:dialog>
-        <p:dialog id="dlgViewForDel" header="分包材料结算删除信息" widgetVar="wVDlgViewForDel"
-                  resizable="false" modal="true"
-                  showEffect="clip" hideEffect="fold">
-            <h:panelGrid id="pgViewForDel">
+            <p:dataTable id="pdt" style="width:100%;"
+                         value="#{progMatqtyItemAction.progMatQtyItemShowList}"
+                         var="record"
+                         rowKey="#{record.subctt_Pkid}"
+                         selectionMode="single"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                            {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="15"
+                         rowsPerPageTemplate="500,200,100,45,30,15"
+                         rowIndexVar="row"
+                         emptyMessage="数据记录为空..."
+                         rowStyleClass="#{record.subctt_SignPartAPrice eq 0? 'rowDoneStyle':
+                                             record.subctt_SignPartAPrice eq null? 'rowDoneStyle':null}"
+                         scrollable="true"
+                         scrollHeight="480">
+                <p:column headerText="操作" style="width:91px" rendered='#{progMatqtyItemAction.strPassFlag}'>
+                    <p:commandButton  icon="ui-icon-pencil"
+                                      style="height:20px;width:20px"
+                                      rendered="#{record.subctt_SignPartAPrice eq 0? 'false':
+                                                    record.subctt_SignPartAPrice eq null? 'false':'true'}"
+                                      actionListener="#{progMatqtyItemAction.selectRecordAction('Upd',record)}"
+                                      update="pdt,:form:pgViewForUpd"
+                                      oncomplete="PF('wVDlgViewForUpd').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-trash"
+                                      style="height:20px;width:20px"
+                                      rendered="#{record.subctt_SignPartAPrice eq 0? 'false':
+                                                    record.subctt_SignPartAPrice eq null? 'false':'true'}"
+                                      actionListener="#{progMatqtyItemAction.selectRecordAction('Del',record)}"
+                                      update="pdt,:form:pgViewForDel"
+                                      oncomplete="PF('wVDlgViewForDel').show()">
+                    </p:commandButton>
+                </p:column>
+                <p:column style="width:30px" headerText="序号">
+                    <h:outputText value="#{row + 1}"/>
+                </p:column>
+                <p:column style="width:100px" headerText="编号">
+                    <h:outputText value="#{record.subctt_StrNo}" escape="false"/>
+                </p:column>
+                <p:column style="width:200px" headerText="名称">
+                    <h:outputText value="#{record.subctt_Name}"/>
+                </p:column>
+                <p:column style="width:30px" headerText="单位">
+                    <h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
+                </p:column>
+                <p:column style="width:80px" headerText="合同单价">
+                    <h:outputText value="#{record.subctt_ContractUnitPrice}" style="float: right">
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:80px" headerText="合同数量">
+                    <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right">
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:80px" headerText="合同金额">
+                    <h:outputText value="#{record.subctt_ContractAmount}" style="float: right">
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:80px" headerText="甲供材单价">
+                    <h:outputText value="#{record.subctt_SignPartAPrice}" style="float: right">
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:100px" headerText="开累材料量">
+                    <h:outputText value="#{record.engMMng_BeginToCurrentPeriodMQty}" style="float: right">
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:100px" headerText="当期材料量">
+                    <h:outputText value="#{record.engMMng_CurrentPeriodMQty}" style="float: right">
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:100px" headerText="备注内容">
+                    <h:outputText value="#{record.subctt_Note}"/>
+                </p:column>
+            </p:dataTable>
+            <p:dialog id="dlgViewForUpd" header="分包材料结算更新信息" widgetVar="wVDlgViewForUpd"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgViewForUpd">
                 <h:panelGrid columns="4">
-                    <p:outputLabel for="noItemHieRelapForDel" value="编号:"/>
-                    <h:inputText id="noItemHieRelapForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_StrNo}"
+                    <p:outputLabel for="noItemHieRelapForUpd" value="编号:"/>
+                    <h:inputText id="noItemHieRelapForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_StrNo}"
                                  style="background-color:gainsboro"
                                  readonly="true">
                     </h:inputText>
-                    <p:outputLabel for="nameForDel" value="名称:"/>
-                    <h:inputText id="nameForDel" value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_Name}"
+                    <p:outputLabel for="nameForUpd" value="名称:"/>
+                    <h:inputText id="nameForUpd" value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_Name}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
-                    <p:outputLabel for="note" value="备注内容:"/>
-                    <h:inputText id="note" value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_Note}"
+                    <p:outputLabel for="noteForUpd" value="备注内容:"/>
+                    <h:inputText id="noteForUpd" value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_Note}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
-                    <p:outputLabel for="unitItemInfoForDel" value="单位:"/>
-                    <h:inputText id="unitItemInfoForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_Unit}"
+                    <p:outputLabel for="unitItemInfoForUpd" value="单位:"/>
+                    <h:inputText id="unitItemInfoForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_Unit}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
-                    <p:outputLabel for="contractQuantityItemInfoForDel" value="合同数量:"/>
-                    <h:inputText id="contractQuantityItemInfoForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_ContractQuantity}"
+                    <p:outputLabel for="contractQuantityItemInfoForUpd" value="合同数量:"/>
+                    <h:inputText id="contractQuantityItemInfoForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_ContractQuantity}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:inputText>
-                    <p:outputLabel for="engMMng_BeginToCurrentPeriodMQtyForDel" value="开累材料量:"/>
-                    <h:inputText id="engMMng_BeginToCurrentPeriodMQtyForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_BeginToCurrentPeriodMQty}"
+                    <p:outputLabel for="engMMng_BeginToCurrentPeriodMQtyForUpd" value="开累材料量:"/>
+                    <h:inputText id="engMMng_BeginToCurrentPeriodMQtyForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_BeginToCurrentPeriodMQty}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:inputText>
-                    <p:outputLabel for="engMMng_CurrentPeriodMQtyForDel" value="本期材料量:"/>
-                    <h:inputText id="engMMng_CurrentPeriodMQtyForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_CurrentPeriodMQty}"
-                                 style="background-color:gainsboro;text-align:right;float:left"
-                                 readonly="true">
+                    <p:outputLabel for="engMMng_CurrentPeriodMQtyForUpd" value="本期材料量:"/>
+                    <h:inputText id="engMMng_CurrentPeriodMQtyForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_CurrentPeriodMQty}"
+                                 style="text-align:right;float:left">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        <p:ajax event="blur" update="msgs,engMMng_BeginToCurrentPeriodMQtyForUpd"
+                                listener="#{progMatqtyItemAction.blurEngMMng_CurrentPeriodMQty('blur')}"/>
                     </h:inputText>
-                    <p:outputLabel for="contractAmountItemInfoForDel" value="合同金额:" rendered="false"/>
-                    <h:inputText id="contractAmountItemInfoForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_ContractAmount}"
+                    <p:outputLabel for="contractAmountItemInfoForUpd" value="合同金额:" rendered="false"/>
+                    <h:inputText id="contractAmountItemInfoForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_ContractAmount}"
                                  style="background-color:gainsboro;"
                                  rendered="false">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:inputText>
-                    <p:outputLabel for="signPartAPriceItemInfoForDel" value="其中：甲供材单价:" rendered="false"/>
-                    <h:inputText id="signPartAPriceItemInfoForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_SignPartAPrice}"
+                    <p:outputLabel for="signPartAPriceItemInfoForUpd" value="其中：甲供材单价:" rendered="false"/>
+                    <h:inputText id="signPartAPriceItemInfoForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.subctt_SignPartAPrice}"
                                  style="background-color:gainsboro"
                                  rendered="false">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:inputText>
-                    <p:outputLabel for="originFlagItemInfoForDel" value="数据来源:"/>
-                    <h:inputText id="originFlagItemInfoForDel"
+                    <p:outputLabel for="originFlagItemInfoForUpd" value="数据来源:"/>
+                    <h:inputText id="originFlagItemInfoForUpd"
                                  value="#{esCommon.originFlagListValueOfAlias(
-	                                             progMatqtyItemAction.progMatQtyItemShowDel.engMMng_OriginFlag)}"
+                                                     progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_OriginFlag)}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
-                    <p:outputLabel for="createdByItemInfoForDel" value="创建人:"/>
-                    <h:inputText id="createdByItemInfoForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_CreatedByName}"
+                    <p:outputLabel for="createdByItemInfoForUpd" value="创建人:"/>
+                    <h:inputText id="createdByItemInfoForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_CreatedByName}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
-                    <p:outputLabel for="createdDateItemInfoForDel" value="创建时间:"/>
-                    <h:inputText id="createdDateItemInfoForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_CreatedDate}"
+                    <p:outputLabel for="createdDateItemInfoForUpd" value="创建时间:"/>
+                    <h:inputText id="createdDateItemInfoForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_CreatedDate}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
-                    <p:outputLabel for="lastUpdByItemInfoForDel" value="修改人:"/>
-                    <h:inputText id="lastUpdByItemInfoForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_LastUpdByName}"
+                    <p:outputLabel for="lastUpdByItemInfoForUpd" value="修改人:"/>
+                    <h:inputText id="lastUpdByItemInfoForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_LastUpdByName}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
-                    <p:outputLabel for="lastUpdDateItemInfoForDel" value="修改时间:"/>
-                    <h:inputText id="lastUpdDateItemInfoForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_LastUpdDate}"
+                    <p:outputLabel for="lastUpdDateItemInfoForUpd" value="修改时间:"/>
+                    <h:inputText id="lastUpdDateItemInfoForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_LastUpdDate}"
                                  style="background-color:gainsboro"
                                  readonly="true"/>
-                    <p:outputLabel for="modificationNumItemInfoForDel" value="修改次数:"/>
-                    <h:inputText id="modificationNumItemInfoForDel"
-                                 value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_ModificationNum}"
+                    <p:outputLabel for="modificationNumItemInfoForUpd" value="修改次数:"/>
+                    <h:inputText id="modificationNumItemInfoForUpd"
+                                 value="#{progMatqtyItemAction.progMatQtyItemShowUpd.engMMng_ModificationNum}"
                                  style="background-color:gainsboro;text-align:right;"
                                  readonly="true">
                         <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                     </h:inputText>
                 </h:panelGrid>
-                <h:panelGrid id="pgOperBtnForDel">
-                    <p:commandButton id="submitBtn"
-                                     value="提交（删除）"
+                <h:panelGrid id="pgOperBtnForUpd" columns="2">
+                    <p:commandButton id="submitBtnForUpd"
+                                     value="提交（更新）"
                                      action="#{progMatqtyItemAction.submitThisRecordAction}"
-                                     update="pgViewForDel,pdt,msgs,pgOperBtnForDel">
+                                     update="pgViewForUpd,pdt,msgs,pgOperBtnForUpd">
+                    </p:commandButton>
+                    <p:commandButton id="resetBtnForUpd" value="重置"
+                                     type="reset"
+                                     update="pgViewForUpd">
                     </p:commandButton>
                 </h:panelGrid>
-            </h:panelGrid>
-        </p:dialog>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog id="dlgViewForDel" header="分包材料结算删除信息" widgetVar="wVDlgViewForDel"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgViewForDel">
+                    <h:panelGrid columns="4">
+                        <p:outputLabel for="noItemHieRelapForDel" value="编号:"/>
+                        <h:inputText id="noItemHieRelapForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_StrNo}"
+                                     style="background-color:gainsboro"
+                                     readonly="true">
+                        </h:inputText>
+                        <p:outputLabel for="nameForDel" value="名称:"/>
+                        <h:inputText id="nameForDel" value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_Name}"
+                                     style="background-color:gainsboro"
+                                     readonly="true"/>
+                        <p:outputLabel for="note" value="备注内容:"/>
+                        <h:inputText id="note" value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_Note}"
+                                     style="background-color:gainsboro"
+                                     readonly="true"/>
+                        <p:outputLabel for="unitItemInfoForDel" value="单位:"/>
+                        <h:inputText id="unitItemInfoForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_Unit}"
+                                     style="background-color:gainsboro"
+                                     readonly="true"/>
+                        <p:outputLabel for="contractQuantityItemInfoForDel" value="合同数量:"/>
+                        <h:inputText id="contractQuantityItemInfoForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_ContractQuantity}"
+                                     style="background-color:gainsboro;text-align:right;"
+                                     readonly="true">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:inputText>
+                        <p:outputLabel for="engMMng_BeginToCurrentPeriodMQtyForDel" value="开累材料量:"/>
+                        <h:inputText id="engMMng_BeginToCurrentPeriodMQtyForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_BeginToCurrentPeriodMQty}"
+                                     style="background-color:gainsboro;text-align:right;"
+                                     readonly="true">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:inputText>
+                        <p:outputLabel for="engMMng_CurrentPeriodMQtyForDel" value="本期材料量:"/>
+                        <h:inputText id="engMMng_CurrentPeriodMQtyForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_CurrentPeriodMQty}"
+                                     style="background-color:gainsboro;text-align:right;float:left"
+                                     readonly="true">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:inputText>
+                        <p:outputLabel for="contractAmountItemInfoForDel" value="合同金额:" rendered="false"/>
+                        <h:inputText id="contractAmountItemInfoForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_ContractAmount}"
+                                     style="background-color:gainsboro;"
+                                     rendered="false">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:inputText>
+                        <p:outputLabel for="signPartAPriceItemInfoForDel" value="其中：甲供材单价:" rendered="false"/>
+                        <h:inputText id="signPartAPriceItemInfoForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.subctt_SignPartAPrice}"
+                                     style="background-color:gainsboro"
+                                     rendered="false">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:inputText>
+                        <p:outputLabel for="originFlagItemInfoForDel" value="数据来源:"/>
+                        <h:inputText id="originFlagItemInfoForDel"
+                                     value="#{esCommon.originFlagListValueOfAlias(
+                                                     progMatqtyItemAction.progMatQtyItemShowDel.engMMng_OriginFlag)}"
+                                     style="background-color:gainsboro"
+                                     readonly="true"/>
+                        <p:outputLabel for="createdByItemInfoForDel" value="创建人:"/>
+                        <h:inputText id="createdByItemInfoForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_CreatedByName}"
+                                     style="background-color:gainsboro"
+                                     readonly="true"/>
+                        <p:outputLabel for="createdDateItemInfoForDel" value="创建时间:"/>
+                        <h:inputText id="createdDateItemInfoForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_CreatedDate}"
+                                     style="background-color:gainsboro"
+                                     readonly="true"/>
+                        <p:outputLabel for="lastUpdByItemInfoForDel" value="修改人:"/>
+                        <h:inputText id="lastUpdByItemInfoForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_LastUpdByName}"
+                                     style="background-color:gainsboro"
+                                     readonly="true"/>
+                        <p:outputLabel for="lastUpdDateItemInfoForDel" value="修改时间:"/>
+                        <h:inputText id="lastUpdDateItemInfoForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_LastUpdDate}"
+                                     style="background-color:gainsboro"
+                                     readonly="true"/>
+                        <p:outputLabel for="modificationNumItemInfoForDel" value="修改次数:"/>
+                        <h:inputText id="modificationNumItemInfoForDel"
+                                     value="#{progMatqtyItemAction.progMatQtyItemShowDel.engMMng_ModificationNum}"
+                                     style="background-color:gainsboro;text-align:right;"
+                                     readonly="true">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                        </h:inputText>
+                    </h:panelGrid>
+                    <h:panelGrid id="pgOperBtnForDel">
+                        <p:commandButton id="submitBtn"
+                                         value="提交（删除）"
+                                         action="#{progMatqtyItemAction.submitThisRecordAction}"
+                                         update="pgViewForDel,pdt,msgs,pgOperBtnForDel">
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+        </p:panel>
     </h:form>
 </ui:define>
 </ui:composition>

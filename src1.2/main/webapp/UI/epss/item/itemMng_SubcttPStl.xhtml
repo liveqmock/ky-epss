@@ -26,139 +26,142 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form">
-            <p:growl id="msgs" showDetail="false"/>
-            <h:inputHidden id="hiPkid" value="#{progSubstlItemAction.commStlSubcttEngH.strSubcttPkid}"/>
-            <h:panelGrid id="pgCondition">
-                <h:panelGrid columns="4">
-                    <p:outputLabel value="工程名称：" for="id"/>
-                    <p:inputText id="id" value="#{progSubstlItemAction.commStlSubcttEngH.strTkcttName}"
-                                 readonly="true"
-                                 style="background-color:gainsboro;width:500px;"/>
-                    <p:outputLabel value="结算单编号：" for="strStlId"/>
-                    <p:inputText id="strStlId" value="#{progSubstlItemAction.commStlSubcttEngH.strStlId}"
-                                 readonly="true"
-                                 style="background-color:gainsboro;width:200px;"/>
-                    <p:outputLabel value="工程项目：" for="strSubcttName"/>
-                    <p:inputText id="strSubcttName" value="#{progSubstlItemAction.commStlSubcttEngH.strSubcttName}"
-                                 readonly="true"
-                                 style="background-color:gainsboro;width:500px;"/>
-                    <p:outputLabel value="协作合同编号：" for="strSubcttId"/>
-                    <p:inputText id="strSubcttId" value="#{progSubstlItemAction.commStlSubcttEngH.strSubcttId}"
-                                 readonly="true"
-                                 style="background-color:gainsboro;width:200px;"/>
-                    <p:outputLabel value="协作队伍：" for="strSignPartName"/>
-                    <p:inputText id="strSignPartName" value="#{progSubstlItemAction.commStlSubcttEngH.strSignPartName}"
-                                 readonly="true"
-                                 style="background-color:gainsboro;width:500px;"/>
-                    <p:outputLabel value="日期：" for="strDate"/>
-                    <p:inputText id="strDate" value="#{progSubstlItemAction.commStlSubcttEngH.strDate}"
-                                 readonly="true"
-                                 style="background-color:gainsboro;width:200px;"/>
-                </h:panelGrid>
-                <h:panelGrid columns="4">
-                    <h:panelGrid id="ApproveBtn" columns="3">
-                        <p:commandButton id="ApprovePassBtn" value="批准通过"
-                                         action="#{progSubstlItemAction.onClickForPowerAction('ApprovePass')}"
-                                         update="ApproveBtn,msgs"
-                                         rendered="#{progSubstlItemAction.strApproveBtnRendered}">
+            <p:panel>
+                <p:growl id="msgs" showDetail="true"/>
+                <h:inputHidden id="hiPkid" value="#{progSubstlItemAction.commStlSubcttEngH.strSubcttPkid}"/>
+                <h:panelGrid id="pgCondition">
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="工程名称：" for="id"/>
+                        <p:inputText id="id" value="#{progSubstlItemAction.commStlSubcttEngH.strTkcttName}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:500px;"/>
+                        <p:outputLabel value="结算单编号：" for="strStlId"/>
+                        <p:inputText id="strStlId" value="#{progSubstlItemAction.commStlSubcttEngH.strStlId}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:200px;"/>
+                        <p:outputLabel value="工程项目：" for="strSubcttName"/>
+                        <p:inputText id="strSubcttName" value="#{progSubstlItemAction.commStlSubcttEngH.strSubcttName}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:500px;"/>
+                        <p:outputLabel value="协作合同编号：" for="strSubcttId"/>
+                        <p:inputText id="strSubcttId" value="#{progSubstlItemAction.commStlSubcttEngH.strSubcttId}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:200px;"/>
+                        <p:outputLabel value="协作队伍：" for="strSignPartName"/>
+                        <p:inputText id="strSignPartName" value="#{progSubstlItemAction.commStlSubcttEngH.strSignPartName}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:500px;"/>
+                        <p:outputLabel value="日期：" for="strDate"/>
+                        <p:inputText id="strDate" value="#{progSubstlItemAction.commStlSubcttEngH.strDate}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:200px;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+                        <h:panelGrid id="ApproveBtn" columns="3">
+                            <p:commandButton id="ApprovePassBtn" value="批准通过"
+                                             action="#{progSubstlItemAction.onClickForPowerAction('ApprovePass')}"
+                                             update="ApproveBtn,msgs"
+                                             rendered="#{progSubstlItemAction.strApproveBtnRendered}">
+                            </p:commandButton>
+                            <p:commandButton id="ApproveFailToQBtn" value="批准未过至分包数量结算"
+                                             action="#{progSubstlItemAction.onClickForPowerAction('ApproveFailToQ')}"
+                                             update="ApproveBtn,msgs"
+                                             rendered="#{progSubstlItemAction.strApprovedNotBtnRendered}">
+                            </p:commandButton>
+                            <p:commandButton id="ApproveFailToMBtn" value="批准未过至分包材料结算"
+                                             action="#{progSubstlItemAction.onClickForPowerAction('ApproveFailToM')}"
+                                             update="ApproveBtn,msgs"
+                                             rendered="#{progSubstlItemAction.strApprovedNotBtnRendered}">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
+                        <p:commandButton value="导出到EXCEL"
+                                         action="#{progSubstlItemAction.onExportExcel}"
+                                         ajax="false">
                         </p:commandButton>
-                        <p:commandButton id="ApproveFailToQBtn" value="批准未过至分包数量结算"
-                                         action="#{progSubstlItemAction.onClickForPowerAction('ApproveFailToQ')}"
-                                         update="ApproveBtn,msgs"
-                                         rendered="#{progSubstlItemAction.strApprovedNotBtnRendered}">
-                        </p:commandButton>
-                        <p:commandButton id="ApproveFailToMBtn" value="批准未过至分包材料结算"
-                                         action="#{progSubstlItemAction.onClickForPowerAction('ApproveFailToM')}"
-                                         update="ApproveBtn,msgs"
-                                         rendered="#{progSubstlItemAction.strApprovedNotBtnRendered}">
+                        <p:commandButton value="分包合同附件" oncomplete="actSelect()">
                         </p:commandButton>
                     </h:panelGrid>
-                    <p:ajaxStatus style="width:16px;height:16px;">
-                        <f:facet name="start">
-                            <h:graphicImage value="/images/ajaxloading.gif"/>
-                        </f:facet>
-                        <f:facet name="complete">
-                            <h:outputText value=""/>
-                        </f:facet>
-                    </p:ajaxStatus>
-                    <p:commandButton value="导出到EXCEL"
-                                     action="#{progSubstlItemAction.onExportExcel}"
-                                     ajax="false">
-                    </p:commandButton>
-                    <p:commandButton value="分包合同附件" oncomplete="actSelect()">
-                    </p:commandButton>
                 </h:panelGrid>
-            </h:panelGrid>
-            <p:dataTable id="pdt" style="heiht:100%;width:100%;"
-                     value="#{progSubstlItemAction.progSubstlItemShowList}"
-                     var="record"
-                     rowKey="#{record.subctt_ItemPkid}"
-                     selectionMode="single"
-                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     paginator="true"
-                     paginatorPosition="bottom"
-                     rows="15"
-                     rowsPerPageTemplate="500,200,90,45,30,15"
-                     rowIndexVar="row"
-                     emptyMessage="数据记录为空..."
-                     widgetVar="dtItemDetail"
-                     rowStyleClass="#{record.subctt_ItemName eq '小计'? 'rowDoneStyle':
-                                         record.subctt_ItemName eq '本期净结算额'? 'rowTotalStyle':
-                                         record.subctt_ItemName eq '合计(扣除其它栏款项后本期结算价值)'?'rowTotalStyle':
-                                         record.subctt_ItemName eq '其中:安全施工措施费'?'rowDoneStyle':
-                                         record.subctt_ItemName eq '质保金'? 'rowTotalStyle':null}"
-                     scrollable="true">
-                <p:column headerText="序号" style="width:30px">
-                    <h:outputText value="#{row + 1}"/>
-                </p:column>
-                <p:column headerText="编号" style="width:100px">
-                    <h:outputText value="#{record.subctt_StrNo}" escape="false"/>
-                </p:column>
-                <p:column headerText="分项项目名称" style="width:200px">
-                    <h:outputText value="#{record.subctt_ItemName}" />
-                </p:column>
-                <p:column headerText="单位" style="width:60px">
-                    <h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
-                </p:column>
-                <p:column headerText="合同单价" style="width:100px">
-                    <h:outputText value="#{record.subctt_ContractUnitPrice}" style="float: right" >
-                    </h:outputText>
-                </p:column>
-                <p:column headerText="合同数量" style="width:100px">
-                    <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column headerText="合同金额" style="width:100px">
-                    <h:outputText value="#{record.subctt_ContractAmount}" style="float: right" >
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column headerText="本期_数量" style="width:100px">
-                    <h:outputText value="#{record.engPMng_CurrentPeriodEQty}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column headerText="本期_金额" style="width:100px">
-                    <h:outputText value="#{record.engPMng_CurrentPeriodAmt}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column headerText="开累_数量" style="width:100px">
-                    <h:outputText value="#{record.engPMng_BeginToCurrentPeriodEQty}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column headerText="开累_金额" style="width:100px">
-                    <h:outputText value="#{record.engPMng_BeginToCurrentPeriodAmt}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column headerText="备注内容" style="width:200px">
-                    <h:outputText value="#{record.subctt_Note}" />
-                </p:column>
-            </p:dataTable>
+                <p:dataTable id="pdt" style="heiht:100%;width:100%;"
+                         value="#{progSubstlItemAction.progSubstlItemShowList}"
+                         var="record"
+                         rowKey="#{record.subctt_ItemPkid}"
+                         selectionMode="single"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="15"
+                         rowsPerPageTemplate="500,200,90,45,30,15"
+                         rowIndexVar="row"
+                         emptyMessage="数据记录为空..."
+                         widgetVar="dtItemDetail"
+                         rowStyleClass="#{record.subctt_ItemName eq '小计'? 'rowDoneStyle':
+                                             record.subctt_ItemName eq '本期净结算额'? 'rowTotalStyle':
+                                             record.subctt_ItemName eq '合计(扣除其它栏款项后本期结算价值)'?'rowTotalStyle':
+                                             record.subctt_ItemName eq '其中:安全施工措施费'?'rowDoneStyle':
+                                             record.subctt_ItemName eq '质保金'? 'rowTotalStyle':null}"
+                         scrollable="true"
+                         scrollHeight="400">
+                    <p:column headerText="序号" style="width:30px">
+                        <h:outputText value="#{row + 1}"/>
+                    </p:column>
+                    <p:column headerText="编号" style="width:100px">
+                        <h:outputText value="#{record.subctt_StrNo}" escape="false"/>
+                    </p:column>
+                    <p:column headerText="分项项目名称" style="width:200px">
+                        <h:outputText value="#{record.subctt_ItemName}" />
+                    </p:column>
+                    <p:column headerText="单位" style="width:60px">
+                        <h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
+                    </p:column>
+                    <p:column headerText="合同单价" style="width:100px">
+                        <h:outputText value="#{record.subctt_ContractUnitPrice}" style="float: right" >
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="合同数量" style="width:100px">
+                        <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="合同金额" style="width:100px">
+                        <h:outputText value="#{record.subctt_ContractAmount}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="本期_数量" style="width:100px">
+                        <h:outputText value="#{record.engPMng_CurrentPeriodEQty}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="本期_金额" style="width:100px">
+                        <h:outputText value="#{record.engPMng_CurrentPeriodAmt}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="开累_数量" style="width:100px">
+                        <h:outputText value="#{record.engPMng_BeginToCurrentPeriodEQty}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="开累_金额" style="width:100px">
+                        <h:outputText value="#{record.engPMng_BeginToCurrentPeriodAmt}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="备注内容" style="width:200px">
+                        <h:outputText value="#{record.subctt_Note}" />
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
         </h:form>
     </ui:define>
 </ui:composition>

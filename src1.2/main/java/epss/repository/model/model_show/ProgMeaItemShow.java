@@ -10,7 +10,7 @@ import java.math.BigDecimal;
  * Time: 上午10:44
  * To change this template use File | Settings | File Templates.
  */
-public class ProgEstMeaItemShow implements Serializable {
+public class ProgMeaItemShow implements Serializable {
 
     /*编号，用作显示用，不在数据库里存储，动态显示.依据grade,orderid*/
     private String tkctt_StrNo;
@@ -47,7 +47,7 @@ public class ProgEstMeaItemShow implements Serializable {
     private String eng_LastUpdDate;
     private Integer eng_ModificationNum;
 
-    public ProgEstMeaItemShow() {
+    public ProgMeaItemShow() {
 
     }
 

@@ -51,6 +51,8 @@ public interface TaskMapper {
             "      eis.STL_TYPE=eip.POWER_TYPE" +
             "    and " +
             "      eis.STL_PKID=eip.POWER_PKID" +
+            "    and " +
+            "      eis.PERIOD_NO=eip.PERIOD_NO" +
             "    group by " +
             "      eis.STL_TYPE,eip.STATUS_FLAG" +
             "   )" +
@@ -77,7 +79,7 @@ public interface TaskMapper {
             " union" +
             " select  " +
             "   eis.STL_TYPE as type," +
-            "   eis.STL_PKID as pkid," +
+            "   eis.PKID as pkid," +
             "   eis.ID as id," +
             "   ecinfo.NAME as name," +
             "   eip.PERIOD_NO as periodNo," +
