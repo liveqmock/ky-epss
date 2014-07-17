@@ -143,6 +143,13 @@ public class EsInitTaskAction {
                         taskShow.setName(itemUnit.getMenulabel()+"("+itemUnitCM.getRecordsCountInGroup()+")");
                         taskShow.setPkid("");
                         taskShowList.add(taskShow);
+
+                        for(TaskShow itemUnitEP:taskShowListTemp){
+                            if (ToolUtil.getStrIgnoreNull(itemUnitEP.getName()).equals("")){
+                                System.out.println(itemUnitEP.getName());
+                            }
+                        }
+
                         //当合同状态为进入流程时
                         //流程（非‘录入未完’）信息
                         for(TaskShow itemUnitEP:taskShowListTemp){

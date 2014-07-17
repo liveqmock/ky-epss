@@ -201,9 +201,10 @@ public class TkMeaCSubStlQItemAction {
                             // 列表主键
                             qryTkMeaCSStlQShowTempRe.setTkcttItem_Pkid(
                                     qryTkMeaCSStlQShowList.size() +";"+tkcttItemShowUnit.getPkid());
-                            // 成本计划内容
-                            qryTkMeaCSStlQShowTempRe.setCstplItem_No(cstplItemShowUnit.getStrNo());
+                            // 成 本计划内容
                             qryTkMeaCSStlQShowTempRe.setCstplItem_Pkid(cstplItemShowUnit.getPkid());
+                            qryTkMeaCSStlQShowTempRe.setCstplItem_No(cstplItemShowUnit.getStrNo());
+                            qryTkMeaCSStlQShowTempRe.setCstplItem_Name(cstplItemShowUnit.getName());
                             qryTkMeaCSStlQShowTempRe.setCstplItem_UnitPrice(cstplItemShowUnit.getContractUnitPrice());
                             qryTkMeaCSStlQShowTempRe.setCstplItem_Qty(cstplItemShowUnit.getContractQuantity());
                             if(cstplItemShowUnit.getContractUnitPrice()!=null&&
@@ -216,6 +217,7 @@ public class TkMeaCSubStlQItemAction {
                             strFrontNoAndName=tkcttItemShowUnit.getStrNo()+tkcttItemShowUnit .getName();
                             qryTkMeaCSStlQShowTemp.setCstplItem_Pkid(cstplItemShowUnit.getPkid());
                             qryTkMeaCSStlQShowTemp.setCstplItem_No(cstplItemShowUnit.getStrNo());
+                            qryTkMeaCSStlQShowTemp.setCstplItem_Name(cstplItemShowUnit.getName());
                             qryTkMeaCSStlQShowTemp.setCstplItem_UnitPrice(cstplItemShowUnit.getContractUnitPrice());
                             qryTkMeaCSStlQShowTemp.setCstplItem_Qty(cstplItemShowUnit.getContractQuantity());
                             if(cstplItemShowUnit.getContractUnitPrice()!=null&&
@@ -231,7 +233,7 @@ public class TkMeaCSubStlQItemAction {
                     qryTkMeaCSStlQShowList.add(qryTkMeaCSStlQShowTemp);
                 }
             }
-            // 成本计划
+            // 成本计划中空头项需要在最后一一列出
             for(CttItemShow cstplItemShowUnit : cstplItemShowListTemp){
                 if(ToolUtil.getStrIgnoreNull(cstplItemShowUnit.getCorrespondingPkid()).length()<=0){
                     QryTkMeaCSStlQShow qryTkMeaCSStlQShowTempRe =new QryTkMeaCSStlQShow();
@@ -239,8 +241,9 @@ public class TkMeaCSubStlQItemAction {
                     qryTkMeaCSStlQShowTempRe.setTkcttItem_Pkid(qryTkMeaCSStlQShowList.size()+":");
                     qryTkMeaCSStlQShowTempRe.setTkcttItem_Name("成本计划：（"+cstplItemShowUnit.getName()+")");
                     // 成本计划内容
-                    qryTkMeaCSStlQShowTempRe.setCstplItem_No(cstplItemShowUnit.getStrNo());
                     qryTkMeaCSStlQShowTempRe.setCstplItem_Pkid(cstplItemShowUnit.getPkid());
+                    qryTkMeaCSStlQShowTempRe.setCstplItem_No(cstplItemShowUnit.getStrNo());
+                    qryTkMeaCSStlQShowTempRe.setCstplItem_Name(cstplItemShowUnit.getName());
                     qryTkMeaCSStlQShowTempRe.setCstplItem_UnitPrice(cstplItemShowUnit.getContractUnitPrice());
                     qryTkMeaCSStlQShowTempRe.setCstplItem_Qty(cstplItemShowUnit.getContractQuantity());
                     if(!ToolUtil.getBdIgnoreNull(cstplItemShowUnit.getContractAmount()).equals(ToolUtil.bigDecimal0)) {
@@ -308,6 +311,7 @@ public class TkMeaCSubStlQItemAction {
                             tkMeaCstplUnitTemp.setCstplItem_Amt(null);
                         }
                         // 分包合同
+                        tkMeaCstplUnitTemp.setSubcttItem_Name(subcttStlQBySignPartList.get(i).getSubcttItem_Name());
                         tkMeaCstplUnitTemp.setSubcttItem_CorrPkid(subcttStlQBySignPartList.get(i).getSubcttItem_CorrPkid());
                         tkMeaCstplUnitTemp.setSubcttItem_SignPartName(subcttStlQBySignPartList.get(i).getSubcttItem_SignPartName());
 
@@ -376,14 +380,12 @@ public class TkMeaCSubStlQItemAction {
                                       List<EsCttItem> esCttItemListPara,
                                       List<CttItemShow> cttItemShowListPara){
         // 根据父层级号获得该父层级下的子节点
-        List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
         // 通过父层id查找它的孩子
-        subEsCttItemList =getEsItemListByLevelParentPkid(strLevelParentId, esCttItemListPara);
+        List<EsCttItem> subEsCttItemList =getEsItemListByLevelParentPkid(strLevelParentId, esCttItemListPara);
         for(EsCttItem itemUnit: subEsCttItemList){
-            CttItemShow cttItemShowTemp = null;
             String strCreatedByName= esCommon.getOperNameByOperId(itemUnit.getCreatedBy());
             String strLastUpdByName= esCommon.getOperNameByOperId(itemUnit.getLastUpdBy());
-            cttItemShowTemp = new CttItemShow(
+            CttItemShow cttItemShowTemp = new CttItemShow(
                 itemUnit.getPkid(),
                 itemUnit.getBelongToType(),
                 itemUnit.getBelongToPkid(),
