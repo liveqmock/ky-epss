@@ -382,7 +382,7 @@ public class CstplItemShow implements Serializable {
     private String spareField;
 
     public CstplItemShow() {
-        //To change body of created methods use File | Settings | File Templates.
+
     }
 
     public String getPkid() {

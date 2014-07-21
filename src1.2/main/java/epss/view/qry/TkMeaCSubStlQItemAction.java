@@ -152,7 +152,6 @@ public class TkMeaCSubStlQItemAction {
         /*Æ´×°ÁÐ±í*/
         try {
             qryTkMeaCSStlQShowList =new ArrayList<QryTkMeaCSStlQShow>();
-            String strFrontNoAndName="";
             for(CttItemShow tkcttItemShowUnit : tkcttItemShowList){
                 Boolean insertedFlag=false ;
                 QryTkMeaCSStlQShow qryTkMeaCSStlQShowTemp =new QryTkMeaCSStlQShow();
