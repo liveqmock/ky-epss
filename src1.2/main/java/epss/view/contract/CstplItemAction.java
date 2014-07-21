@@ -455,30 +455,7 @@ public class CstplItemAction {
     }
     public void delThisRecordAction(CttItemShow cttItemShowPara) {
         try {
-            Integer intItemUnitConstructSelectedGrade=-1;
-            List<CstplItemShow> cstplItemShowListTemp =new ArrayList<>();
-            cstplItemShowListTemp.addAll(cstplItemShowList);
-            for(CstplItemShow itemUnitConstructItem: cstplItemShowListTemp){
-                if(intItemUnitConstructSelectedGrade>-1){
-                    if((itemUnitConstructItem .getGradeContrast()==null?0:itemUnitConstructItem .getGradeContrast())
-                            <=intItemUnitConstructSelectedGrade){
-                        break;
-                    }
-                    else{
-                        cttItemService.deleteRecord(itemUnitConstructItem.getPkidContrast()) ;
-                    }
-                }
-                if(intItemUnitConstructSelectedGrade==-1){
-                    if(itemUnitConstructItem.equals(cttItemShowPara) ){
-                        intItemUnitConstructSelectedGrade=itemUnitConstructItem.getGradeContrast();
-                        int deleteRecordNumOfSelf= cttItemService.deleteRecord(itemUnitConstructItem.getPkidContrast()) ;
-                        if (deleteRecordNumOfSelf<=0){
-                            MessageUtil.addInfo("¸Ã¼ÇÂ¼ÒÑÉ¾³ý¡£");
-                            return;
-                        }
-                    }
-                }
-            }
+            cttItemService.deleteRecord(cttItemShowPara.getPkid()) ;
             cttItemService.setAfterThisOrderidSubOneByNode(
                     cttItemShowPara.getBelongToType(),
                     cttItemShowPara.getBelongToPkid(),
