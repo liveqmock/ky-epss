@@ -64,7 +64,7 @@
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{tkMeaCSubStlQItemAction.qryTkMeaCSStlQShowList}"
                          var="record"
-                         rowKey="#{record.tkcttItem_Pkid}"
+                         rowKey="#{row + 1}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -95,6 +95,11 @@
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
+                <p:column style="width:80px" headerText="总包_金额">
+                    <h:outputText value="#{record.tkcttItem_CttAmt}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                    </h:outputText>
+                </p:column>
                 <p:column style="width:100px" headerText="成本_PKID" rendered="false">
                     <h:outputText value="#{record.cstplItem_Pkid}"/>
                 </p:column>
@@ -108,13 +113,33 @@
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                     </h:outputText>
                 </p:column>
+                <p:column style="width:80px" headerText="成本_总包组金额">
+                    <h:outputText value="#{record.cstplTkcttItem_TotalAmt}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:80px" headerText="成本_总包组单价">
+                    <h:outputText value="#{record.cstplTkcttItem_TotalUnitPrice}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                    </h:outputText>
+                </p:column>
                 <p:column style="width:100px" headerText="计量_本期数量">
                     <h:outputText value="#{record.tkcttStlItem_ThisStageQty}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
+                <p:column style="width:100px" headerText="计量_本期金额">
+                    <h:outputText value="#{record.tkcttStlItem_ThisStageAmt}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                    </h:outputText>
+                </p:column>
                 <p:column style="width:100px" headerText="计量_累计数量">
                     <h:outputText value="#{record.tkcttStlItem_AddUpQty}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:100px" headerText="计量_累计金额">
+                    <h:outputText value="#{record.tkcttStlItem_AddUpAmt}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
@@ -126,8 +151,18 @@
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
+                <p:column style="width:120px" headerText="分包结算_本期金额">
+                    <h:outputText value="#{record.subcttStlItem_ThisStageAmt}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                    </h:outputText>
+                </p:column>
                 <p:column style="width:120px" headerText="分包结算_累计数量">
                     <h:outputText value="#{record.subcttStlItem_AddUpQty}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:120px" headerText="分包结算_累计金额">
+                    <h:outputText value="#{record.subcttStlItem_AddUpAmt}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>
@@ -137,6 +172,11 @@
                 </p:column>
                 <p:column style="width:150px" headerText="计量分包结算比较＿数量">
                     <h:outputText value="#{record.meaSItem_AddUpQty}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                    </h:outputText>
+                </p:column>
+                <p:column style="width:150px" headerText="计量分包结算比较＿金额">
+                    <h:outputText value="#{record.meaSItem_AddUpAmt}" style="float: right" >
                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                     </h:outputText>
                 </p:column>

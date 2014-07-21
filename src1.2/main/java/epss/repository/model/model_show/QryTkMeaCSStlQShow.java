@@ -29,6 +29,8 @@ public class QryTkMeaCSStlQShow implements Serializable {
     private BigDecimal cstplItem_UnitPrice;
     private BigDecimal cstplItem_Qty;
     private BigDecimal cstplItem_Amt;
+    private BigDecimal cstplTkcttItem_TotalAmt;
+    private BigDecimal cstplTkcttItem_TotalUnitPrice;
 
     // 当期计量结算工程数量
     private BigDecimal tkcttStlItem_ThisStageQty;
@@ -170,6 +172,22 @@ public class QryTkMeaCSStlQShow implements Serializable {
 
     public void setCstplItem_Amt(BigDecimal cstplItem_Amt) {
         this.cstplItem_Amt = cstplItem_Amt;
+    }
+
+    public BigDecimal getCstplTkcttItem_TotalAmt() {
+        return cstplTkcttItem_TotalAmt;
+    }
+
+    public void setCstplTkcttItem_TotalAmt(BigDecimal cstplTkcttItem_TotalAmt) {
+        this.cstplTkcttItem_TotalAmt = cstplTkcttItem_TotalAmt;
+    }
+
+    public BigDecimal getCstplTkcttItem_TotalUnitPrice() {
+        return cstplTkcttItem_TotalUnitPrice;
+    }
+
+    public void setCstplTkcttItem_TotalUnitPrice(BigDecimal cstplTkcttItem_TotalUnitPrice) {
+        this.cstplTkcttItem_TotalUnitPrice = cstplTkcttItem_TotalUnitPrice;
     }
 
     public BigDecimal getTkcttStlItem_ThisStageQty() {

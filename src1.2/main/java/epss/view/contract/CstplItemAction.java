@@ -502,7 +502,6 @@ public class CstplItemAction {
                     return;
                 }
                 delThisRecordAction(cttItemShowDel);
-                return;
             } else {
                 if (!subMitActionPreCheck()) {
                     return;
@@ -560,144 +559,137 @@ public class CstplItemAction {
     }
 
     private void initData() {
-        /*初始化流程状态列表*/
-        esFlowControl.getBackToStatusFlagList(strFlowType);
+        try {
+             /*初始化流程状态列表*/
+            esFlowControl.getBackToStatusFlagList(strFlowType);
         /*总包合同列表*/
-        List<EsCttItem> esCttItemListTkctt =new ArrayList<EsCttItem>();
-        cstplInfo = cttInfoService.getCttInfoByPkId(strCstplInfoPkid);
-        String strTkcttPkidInCstpl= cstplInfo.getParentPkid();
-        esCttItemListTkctt =
-                cttItemService.getEsItemList(ESEnum.ITEMTYPE0.getCode(), strTkcttPkidInCstpl);
-        List<CttItemShow> cttItemShowListTkctt =new ArrayList<>();
-        recursiveDataTable("root", esCttItemListTkctt, cttItemShowListTkctt);
-        cttItemShowListTkctt =getCstplItemList_DoFromatNo(cttItemShowListTkctt);
+            List<EsCttItem> esCttItemListTkctt =new ArrayList<EsCttItem>();
+            cstplInfo = cttInfoService.getCttInfoByPkId(strCstplInfoPkid);
+            String strTkcttPkidInCstpl= cstplInfo.getParentPkid();
+            esCttItemListTkctt =
+                    cttItemService.getEsItemList(ESEnum.ITEMTYPE0.getCode(), strTkcttPkidInCstpl);
+            List<CttItemShow> cttItemShowListTkctt =new ArrayList<>();
+            recursiveDataTable("root", esCttItemListTkctt, cttItemShowListTkctt);
+            cttItemShowListTkctt =getCstplItemList_DoFromatNo(cttItemShowListTkctt);
 
         /*成本计划列表*/
-        List<EsCttItem> esCttItemListCstpl = cttItemService.getEsItemList(
-                strBelongToType, strCstplInfoPkid);
+            List<EsCttItem> esCttItemListCstpl = cttItemService.getEsItemList(
+                    strBelongToType, strCstplInfoPkid);
 
-        List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();
-        recursiveDataTable("root", esCttItemListCstpl, cttItemShowListCstpl);
-        cttItemShowListCstpl =getCstplItemList_DoFromatNo(
-                cttItemShowListCstpl) ;
+            List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();
+            recursiveDataTable("root", esCttItemListCstpl, cttItemShowListCstpl);
+            cttItemShowListCstpl =getCstplItemList_DoFromatNo(
+                    cttItemShowListCstpl) ;
 
         /*拼装列表*/
-        List<CstplItemShow> cstplItemShowList_ForSort =new ArrayList<>();
+            List<CstplItemShow> cstplItemShowList_ForSort =new ArrayList<>();
 
-        for(CttItemShow itemTkctt: cttItemShowListTkctt){
-            Boolean insertedFlag=false ;
-            String strFrontNoAndName="";
-            for(CttItemShow itemCstpl: cttItemShowListCstpl){
-                CstplItemShow itemTkcttInsertItem=new CstplItemShow();
-                if(itemTkctt.getPkid().equals(itemCstpl.getCorrespondingPkid())){
-                    //总包合同
-                    if(strFrontNoAndName.equals(itemTkctt.getStrNo()+itemTkctt .getName())){
-                        itemTkcttInsertItem.setStrNo("") ;
-                        itemTkcttInsertItem.setName("") ;
-                        itemTkcttInsertItem.setNote("") ;
-                        itemTkcttInsertItem.setPkid(cstplItemShowList_ForSort.size() +";"+itemTkctt.getPkid());
-                        itemTkcttInsertItem.setUnit("");
-                        itemTkcttInsertItem.setContractUnitPrice(null) ;
-                        itemTkcttInsertItem.setContractQuantity(null) ;
-                        itemTkcttInsertItem.setContractAmount(null) ;
-                    }else{
-                        strFrontNoAndName=itemTkctt.getStrNo()+itemTkctt .getName();
-                        itemTkcttInsertItem.setStrNo(itemTkctt.getStrNo());
-                        itemTkcttInsertItem.setName(itemTkctt.getName());
-                        itemTkcttInsertItem.setNote(itemTkctt.getNote());
-                        itemTkcttInsertItem.setPkid(itemTkctt.getPkid());
-                        itemTkcttInsertItem.setUnit(itemTkctt.getUnit());
-                        itemTkcttInsertItem.setContractUnitPrice(itemTkctt.getContractUnitPrice()) ;
-                        itemTkcttInsertItem.setContractQuantity(itemTkctt.getContractQuantity()) ;
-                        itemTkcttInsertItem.setContractAmount(itemTkctt.getContractAmount()) ;
+            for(CttItemShow itemTkctt: cttItemShowListTkctt){
+                Boolean insertedFlag=false ;
+                for(CttItemShow itemCstpl: cttItemShowListCstpl){
+                    CstplItemShow itemTkcttInsertItem=getCstplItem(itemTkctt,"Tkctt");
+                    if(itemTkctt.getPkid().equals(itemCstpl.getCorrespondingPkid())){
+                        //总包合同
+                        if(insertedFlag.equals(true)){
+                            itemTkcttInsertItem.setPkid(null);
+                            itemTkcttInsertItem.setStrNo(null) ;
+                            itemTkcttInsertItem.setName(null) ;
+                            itemTkcttInsertItem.setNote(null) ;
+                            itemTkcttInsertItem.setUnit(null);
+                            itemTkcttInsertItem.setContractUnitPrice(null) ;
+                            itemTkcttInsertItem.setContractQuantity(null) ;
+                            itemTkcttInsertItem.setContractAmount(null);
+                            itemTkcttInsertItem.setBelongToType(null) ;
+                            itemTkcttInsertItem.setBelongToPkid(null) ;
+                            itemTkcttInsertItem.setParentPkid(null);
+                            itemTkcttInsertItem.setGrade(null);
+                            itemTkcttInsertItem.setOrderid(null) ;
+                            itemTkcttInsertItem.setSignPartAPrice(null) ;
+                            itemTkcttInsertItem.setDeletedFlag(null);
+                            itemTkcttInsertItem.setOriginFlag(null) ;
+                            itemTkcttInsertItem.setCreatedBy(null);
+                            itemTkcttInsertItem.setCreatedDate(null);
+                            itemTkcttInsertItem.setLastUpdBy(null);
+                            itemTkcttInsertItem.setLastUpdDate(null);
+                            itemTkcttInsertItem.setModificationNum(null);
+                            itemTkcttInsertItem.setCorrespondingPkid(null);
+                        }else
+                        //成本计划
+                        itemTkcttInsertItem.setStrNoContrast(itemCstpl.getStrNo()) ;
+                        itemTkcttInsertItem.setPkidContrast(itemCstpl.getPkid());
+                        itemTkcttInsertItem.setBelongToTypeContrast(itemCstpl.getBelongToType());
+                        itemTkcttInsertItem.setBelongToPkidContrast(itemCstpl.getBelongToPkid());
+                        itemTkcttInsertItem.setParentPkidContrast(itemCstpl.getParentPkid());
+                        itemTkcttInsertItem.setGradeContrast(itemCstpl.getGrade());
+                        itemTkcttInsertItem.setOrderidContrast(itemCstpl.getOrderid()) ;
+                        itemTkcttInsertItem.setNameContrast(itemCstpl.getName());
+                        itemTkcttInsertItem.setNoteContrast(itemCstpl.getNote());
+                        itemTkcttInsertItem.setUnitContrast(itemCstpl.getUnit());
+                        itemTkcttInsertItem.setContractUnitPriceContrast(itemCstpl.getContractUnitPrice()) ;
+                        itemTkcttInsertItem.setContractQuantityContrast(itemCstpl.getContractQuantity()) ;
+                        itemTkcttInsertItem.setContractAmountContrast(itemCstpl.getContractAmount()) ;
+                        itemTkcttInsertItem.setSignPartAPriceContrast(itemCstpl.getSignPartAPrice()) ;
+                        itemTkcttInsertItem.setDeletedFlagContrast(itemCstpl.getDeletedFlag());
+                        itemTkcttInsertItem.setOriginFlagContrast(itemCstpl.getOriginFlag()) ;
+                        itemTkcttInsertItem.setCreatedByContrast(itemCstpl.getCreatedBy());
+                        itemTkcttInsertItem.setCreatedDateContrast(itemCstpl.getCreatedDate());
+                        itemTkcttInsertItem.setLastUpdByContrast(itemCstpl.getLastUpdBy());
+                        itemTkcttInsertItem.setLastUpdDateContrast(itemCstpl.getLastUpdDate());
+                        itemTkcttInsertItem.setModificationNumContrast(itemCstpl.getModificationNum());
+                        itemTkcttInsertItem.setCorrespondingPkidContrast(itemCstpl.getCorrespondingPkid());
+                        if(itemTkcttInsertItem.getPkid() ==null||itemTkcttInsertItem.getPkid().equals("")){
+                            itemTkcttInsertItem.setPkid(cstplItemShowList_ForSort.size() +"");
+                        }
+                        insertedFlag=true ;
+                        cstplItemShowList_ForSort.add(itemTkcttInsertItem);
                     }
-                    itemTkcttInsertItem.setBelongToType(itemTkctt.getBelongToType()) ;
-                    itemTkcttInsertItem.setBelongToPkid(itemTkctt.getBelongToPkid()) ;
-                    itemTkcttInsertItem.setParentPkid(itemTkctt.getParentPkid());
-                    itemTkcttInsertItem.setGrade(itemTkctt.getGrade());
-                    itemTkcttInsertItem.setOrderid(itemTkctt.getOrderid()) ;
-                    itemTkcttInsertItem.setCorrespondingPkid(itemTkctt .getCorrespondingPkid());
-
-                    itemTkcttInsertItem.setSignPartAPrice(itemTkctt.getSignPartAPrice()) ;
-                    itemTkcttInsertItem.setDeletedFlag(itemTkctt.getDeletedFlag());
-                    itemTkcttInsertItem.setOriginFlag(itemTkctt.getOriginFlag()) ;
-                    itemTkcttInsertItem.setCreatedBy(itemTkctt.getCreatedBy());
-                    itemTkcttInsertItem.setCreatedDate(itemTkctt.getCreatedDate());
-                    itemTkcttInsertItem.setLastUpdBy(itemTkctt.getLastUpdBy());
-                    itemTkcttInsertItem.setLastUpdDate(itemTkctt.getLastUpdDate());
-                    itemTkcttInsertItem.setModificationNum(itemTkctt.getModificationNum());
-                    //成本计划
-                    itemTkcttInsertItem.setStrNoContrast(itemCstpl.getStrNo()) ;
-                    itemTkcttInsertItem.setPkidContrast(itemCstpl.getPkid());
-                    itemTkcttInsertItem.setBelongToTypeContrast(itemCstpl.getBelongToType());
-                    itemTkcttInsertItem.setBelongToPkidContrast(itemCstpl.getBelongToPkid());
-                    itemTkcttInsertItem.setParentPkidContrast(itemCstpl.getParentPkid());
-                    itemTkcttInsertItem.setGradeContrast(itemCstpl.getGrade());
-                    itemTkcttInsertItem.setOrderidContrast(itemCstpl.getOrderid()) ;
-                    itemTkcttInsertItem.setNameContrast(itemCstpl.getName());
-                    itemTkcttInsertItem.setNoteContrast(itemCstpl.getNote());
-                    itemTkcttInsertItem.setUnitContrast(itemCstpl.getUnit());
-                    itemTkcttInsertItem.setContractUnitPriceContrast(itemCstpl.getContractUnitPrice()) ;
-                    itemTkcttInsertItem.setContractQuantityContrast(itemCstpl.getContractQuantity()) ;
-                    itemTkcttInsertItem.setContractAmountContrast(itemCstpl.getContractAmount()) ;
-                    itemTkcttInsertItem.setSignPartAPriceContrast(itemCstpl.getSignPartAPrice()) ;
-                    itemTkcttInsertItem.setDeletedFlagContrast(itemCstpl.getDeletedFlag());
-                    itemTkcttInsertItem.setOriginFlagContrast(itemCstpl.getOriginFlag()) ;
-                    itemTkcttInsertItem.setCreatedByContrast(itemCstpl.getCreatedBy());
-                    itemTkcttInsertItem.setCreatedDateContrast(itemCstpl.getCreatedDate());
-                    itemTkcttInsertItem.setLastUpdByContrast(itemCstpl.getLastUpdBy());
-                    itemTkcttInsertItem.setLastUpdDateContrast(itemCstpl.getLastUpdDate());
-                    itemTkcttInsertItem.setModificationNumContrast(itemCstpl.getModificationNum());
-                    itemTkcttInsertItem.setCorrespondingPkidContrast(itemCstpl.getCorrespondingPkid());
-                    if(itemTkcttInsertItem.getPkid() ==null||itemTkcttInsertItem.getPkid().equals("")){
-                        itemTkcttInsertItem.setPkid(cstplItemShowList_ForSort.size() +"");
-                    }
-                    insertedFlag=true ;
+                }
+                if (insertedFlag.equals(false)){
+                    CstplItemShow itemTkcttInsertItem=getCstplItem(itemTkctt,"Tkctt");
                     cstplItemShowList_ForSort.add(itemTkcttInsertItem);
                 }
             }
-            if (insertedFlag.equals(false)){
-                CstplItemShow itemTkcttInsertItem=getCstplItem(itemTkctt,"Tkctt");
-                cstplItemShowList_ForSort.add(itemTkcttInsertItem);
-            }
-        }
 
-        for(CttItemShow itemCstpl: cttItemShowListCstpl){
-            Boolean insertedFlag=false ;
-            for(CttItemShow itemTkctt: cttItemShowListTkctt){
-                if(itemTkctt.getPkid().equals(itemCstpl.getCorrespondingPkid())){
-                    insertedFlag=true;
-                    break;
+            for(CttItemShow itemCstpl: cttItemShowListCstpl){
+                Boolean insertedFlag=false ;
+                for(CttItemShow itemTkctt: cttItemShowListTkctt){
+                    if(itemTkctt.getPkid().equals(itemCstpl.getCorrespondingPkid())){
+                        insertedFlag=true;
+                        break;
+                    }
+                }
+                if(insertedFlag.equals(false)){
+                    CstplItemShow itemTkcttInsertItem=getCstplItem(itemCstpl,"Cstpl");
+                    if (itemTkcttInsertItem.getPkid() == null||itemTkcttInsertItem.getPkid().equals("")){
+                        itemTkcttInsertItem.setPkid(cstplItemShowList_ForSort.size() +"");
+                    }
+                    cstplItemShowList_ForSort.add(itemTkcttInsertItem);
                 }
             }
-            if(insertedFlag.equals(false)){
-                CstplItemShow itemTkcttInsertItem=getCstplItem(itemCstpl,"Cstpl");
-                if (itemTkcttInsertItem.getPkid() == null||itemTkcttInsertItem.getPkid().equals("")){
-                    itemTkcttInsertItem.setPkid(cstplItemShowList_ForSort.size() +"");
-                }
-                cstplItemShowList_ForSort.add(itemTkcttInsertItem);
-            }
-        }
 
-        for(CstplItemShow itemUnit: cstplItemShowList_ForSort){
-            if(itemUnit.getStrNoContrast()!=null){
-                String correspondingItemNoContrast=itemUnit.getCorrespondingPkidContrast()==null?"":itemUnit.getCorrespondingPkidContrast();
-                CstplItemShow cstplItemShowTemp =
-                        getItemOfTkcttAndCstplByPkid(correspondingItemNoContrast, cstplItemShowList_ForSort, "Tkctt");
-                if(cstplItemShowTemp !=null){
-                    itemUnit.setCorrespondingItemNoContrast(cstplItemShowTemp.getStrNo());
+            for(CstplItemShow itemUnit: cstplItemShowList_ForSort){
+                if(itemUnit.getStrNoContrast()!=null){
+                    String correspondingItemNoContrast=itemUnit.getCorrespondingPkidContrast()==null?"":itemUnit.getCorrespondingPkidContrast();
+                    CstplItemShow cstplItemShowTemp =
+                            getItemOfTkcttAndCstplByPkid(correspondingItemNoContrast, cstplItemShowList_ForSort, "Tkctt");
+                    if(cstplItemShowTemp !=null){
+                        itemUnit.setCorrespondingItemNoContrast(cstplItemShowTemp.getStrNo());
+                    }
+                } else{
+                    itemUnit.setCorrespondingItemNoContrast(itemUnit.getStrNo());
                 }
-            } else{
-                itemUnit.setCorrespondingItemNoContrast(itemUnit.getStrNo());
             }
-        }
 
-        cstplItemShowList =new ArrayList<CstplItemShow>();
-        cstplItemShowList.addAll(cstplItemShowList_ForSort);
-        //cstplItemShowList =getItemOfTkcttAndCstplListSorted(cstplItemShowList_ForSort,0);
-        // 添加合计
-        setCstplItemList_AddTotal();
-        resetActionForAdd();
+            cstplItemShowList =new ArrayList<CstplItemShow>();
+            cstplItemShowList.addAll(cstplItemShowList_ForSort);
+            //cstplItemShowList =getItemOfTkcttAndCstplListSorted(cstplItemShowList_ForSort,0);
+            // 添加合计
+            setCstplItemList_AddTotal();
+            resetActionForAdd();
+        }catch (Exception e) {
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
+        }
     }
     private void setCstplItemList_AddTotal(){
         List<CstplItemShow> cstplItemShowListTemp =new ArrayList<CstplItemShow>();
