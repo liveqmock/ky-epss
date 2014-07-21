@@ -1,7 +1,10 @@
 package epss.service;
 
+import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.ESEnumType;
+import epss.common.utils.MessageUtil;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.FlowCtrlShow;
 import epss.repository.model.model_show.ProgInfoShow;
@@ -9,11 +12,15 @@ import epss.common.utils.ToolUtil;
 import epss.repository.dao.EsInitPowerHisMapper;
 import epss.repository.dao.EsInitPowerMapper;
 import epss.repository.model.*;
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.ibatis.transaction.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import platform.service.PlatformService;
 
 import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -31,6 +38,12 @@ public class FlowCtrlService {
     private EsInitPowerHisMapper esInitPowerHisMapper;
     @Resource
     private PlatformService platformService;
+    @Resource
+    private EsFlowService esFlowService;
+    @Resource
+    private ProgStlInfoService progStlInfoService;
+    @Resource
+    private CttInfoService cttInfoService;
 
     public List<EsInitPower> selectListByModel() {
         EsInitPowerExample example= new EsInitPowerExample();
@@ -131,8 +144,19 @@ public class FlowCtrlService {
         esInitPowerMapper.updateByPrimaryKey(fromCttInfoShowToPower(cttInfoShowPara));
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
     }
-
+    @Transactional
     public void updateRecordByStl(ProgInfoShow progInfoShowPara){
+        progInfoShowPara.setModificationNum(
+                ToolUtil.getIntIgnoreNull(progInfoShowPara.getModificationNum()) + 1);
+        progInfoShowPara.setDeletedFlag("0");
+        progInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
+        progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        EsInitPower esInitPowerTemp = fromProgInfoShowToPower(progInfoShowPara);
+        esInitPowerMapper.updateByPrimaryKey(esInitPowerTemp);
+        esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp, "update"));
+    }
+    @Transactional
+    public void updateRecordByStl(ProgInfoShow progInfoShowPara,String strFlowTypePara) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         progInfoShowPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(progInfoShowPara.getModificationNum())+1);
         progInfoShowPara.setDeletedFlag("0");
@@ -140,7 +164,53 @@ public class FlowCtrlService {
         progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
         EsInitPower esInitPowerTemp=fromProgInfoShowToPower(progInfoShowPara);
         esInitPowerMapper.updateByPrimaryKey(esInitPowerTemp);
+        esInitPowerTemp.setCreatedBy(platformService.getStrLastUpdBy());
+        esInitPowerTemp.setCreatedDate(platformService.getStrLastUpdDate());
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
+
+        EsCttInfo esCttInfo=cttInfoService.getCttInfoByPkId(progInfoShowPara.getStlPkid());
+        if ("".equals(ToolUtil.getStrIgnoreNull(esCttInfo.getType()))){
+
+        }else if (ESEnumType.TYPE0.getCode().equals(esCttInfo.getType())){
+
+        }else if (ESEnumType.TYPE1.getCode().equals(esCttInfo.getType())){
+
+        }else if (ESEnumType.TYPE2.getCode().equals(esCttInfo.getType())){
+
+        }else if (ESEnumType.TYPE3.getCode().equals(esCttInfo.getType())) {
+            if (ESEnum.ITEMTYPE3.getCode().equals(progInfoShowPara.getPowerType())) {
+                String SubcttStlMStatus = ToolUtil.getStrIgnoreNull(
+                        esFlowService.getStatusFlag(ESEnum.ITEMTYPE4.getCode(), progInfoShowPara.getStlPkid(), progInfoShowPara.getPeriodNo()));
+                if (ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlMStatus) > 0) {
+                    return;
+                }
+            }else if (ESEnum.ITEMTYPE4.getCode().equals(progInfoShowPara.getPowerType())){
+                String SubcttStlQStatus = ToolUtil.getStrIgnoreNull(
+                        esFlowService.getStatusFlag(ESEnum.ITEMTYPE3.getCode(), progInfoShowPara.getStlPkid(), progInfoShowPara.getPeriodNo()));
+                if (ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlQStatus) > 0) {
+                    return;
+                }
+            }
+        }else if (ESEnumType.TYPE4.getCode().equals(esCttInfo.getType())){
+
+        }else if (ESEnumType.TYPE5.getCode().equals(esCttInfo.getType())){
+
+        }else if (ESEnumType.TYPE6.getCode().equals(esCttInfo.getType())){
+
+        }
+        if ("DoubleCheckPass".equals(strFlowTypePara)){
+            EsInitStl esInitStlTemp = new EsInitStl();
+            esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
+            esInitStlTemp.setStlPkid(progInfoShowPara.getStlPkid());
+            esInitStlTemp.setPeriodNo(progInfoShowPara.getPeriodNo());
+            esInitStlTemp.setNote("");
+            // 结算登记表和流程控制表登记
+            progStlInfoService.insertStlAndPowerRecord(esInitStlTemp);
+        } else if ("DoubleCheckFail".equals(strFlowTypePara)) {
+            ProgInfoShow progInfoShowTemp = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
+            progInfoShowTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
+            progStlInfoService.deleteRecord(progInfoShowTemp);
+        }
     }
     public void updateRecordByStl(EsInitPower esInitPowerPara){
         EsInitPower esInitPower = selectByPrimaryKey(esInitPowerPara);

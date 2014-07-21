@@ -85,11 +85,8 @@
                     }
                 }else
                 if (type == '5') {// 分包价格结算
-                    if(statusflag=="" ||statusflag=='2') { // 复核
-                        var rtn = dialog("../item/itemFlw_TkcttDoubleCheck.xhtml?strTkcttInfoPkid=" + pkid, arg, sfeature);
-                    }else
-                    if(statusflag=='3') { // 批准
-                        var rtn = dialog("../item/itemFlw_TkcttApprove.xhtml?strTkcttInfoPkid=" + pkid, arg, sfeature);
+                    if(statusflag=="" ||statusflag=='2') { // 批准
+                        var rtn = dialog("../item/itemMng_SubcttPStl.xhtml?strEsInitStlPkid=" + pkid, arg, sfeature);
                     }
                 }
             }
