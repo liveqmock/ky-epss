@@ -2,6 +2,7 @@ package epss.view.settle;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.ESEnumType;
 import epss.repository.model.model_show.CommStlSubcttEngH;
 import epss.repository.model.model_show.ProgSubstlItemShow;
 import epss.common.utils.JxlsManager;
@@ -78,7 +79,8 @@ public class ProgSubstlItemAction {
     // 控制记账按钮的显示
     private String strAccountBtnRendered;
     private String strApproveBtnRendered;
-    private String strApprovedNotBtnRendered;
+    private String strApprovedNotBtnRenderedForStlQ;
+    private String strApprovedNotBtnRenderedForStlM;
     private String strSubmitType;
 
     @PostConstruct
@@ -98,6 +100,7 @@ public class ProgSubstlItemAction {
 
     /*初始化操作*/
     private void initData() {
+        progSubstlItemShowList = new ArrayList<ProgSubstlItemShow>();
         esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strEsInitStlPkid);
         initHeadMsg();
         EsInitPower esInitPowerTemp = new EsInitPower();
@@ -105,6 +108,30 @@ public class ProgSubstlItemAction {
         esInitPowerTemp.setPowerPkid(esInitStl.getStlPkid());
         esInitPowerTemp.setPeriodNo(esInitStl.getPeriodNo());
         esInitPower = flowCtrlService.selectByPrimaryKey(esInitPowerTemp);
+
+        EsCttInfo esCttInfo=cttInfoService.getCttInfoByPkId(esInitStl.getStlPkid());
+        if ("".equals(ToolUtil.getStrIgnoreNull(esCttInfo.getType()))){
+            strApprovedNotBtnRenderedForStlQ="true";
+            strApprovedNotBtnRenderedForStlM="true";
+        }else if (ESEnumType.TYPE0.getCode().equals(esCttInfo.getType())){
+            strApprovedNotBtnRenderedForStlQ="true";
+            strApprovedNotBtnRenderedForStlM="false";
+        } else if (ESEnumType.TYPE1.getCode().equals(esCttInfo.getType())){
+            strApprovedNotBtnRenderedForStlQ="false";
+            strApprovedNotBtnRenderedForStlM="true";
+        }else if (ESEnumType.TYPE2.getCode().equals(esCttInfo.getType())){
+
+        }else if (ESEnumType.TYPE3.getCode().equals(esCttInfo.getType())){
+            strApprovedNotBtnRenderedForStlQ="true";
+            strApprovedNotBtnRenderedForStlM="true";
+        }else if (ESEnumType.TYPE4.getCode().equals(esCttInfo.getType())){
+
+        }else if (ESEnumType.TYPE5.getCode().equals(esCttInfo.getType())){
+
+        }else if (ESEnumType.TYPE6.getCode().equals(esCttInfo.getType())){
+
+        }
+
         if (ESEnumStatusFlag.STATUS_FLAG3.getCode().compareTo(ToolUtil.getStrIgnoreNull(esInitPower.getStatusFlag())) <= 0) {
             initMsgForExcel();
             if ("Account".equals(strSubmitType) || "Qry".equals(strSubmitType)) {
@@ -121,17 +148,14 @@ public class ProgSubstlItemAction {
             if ("Approve".equals(strSubmitType)) {
                 strExportToExcelRendered = "true";
                 strApproveBtnRendered = "false";
-                strApprovedNotBtnRendered = "true";
                 List<EsItemStlSubcttEngP> esItemStlSubcttEngPList = progSubstlItemService.selectRecordsForAccount(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
                 /*表内容设定，批准，查P表*/
-                progSubstlItemShowList = new ArrayList<ProgSubstlItemShow>();
                 for (EsItemStlSubcttEngP esItemStlSubcttEngP : esItemStlSubcttEngPList) {
                     progSubstlItemShowList.add(progSubstlItemService.fromModelToShow(esItemStlSubcttEngP));
                 }
             }
         } else {
             strApproveBtnRendered = "true";
-            strApprovedNotBtnRendered = "true";
             List<EsCttItem> esCttItemList = cttItemService.getEsItemList(
                     ESEnum.ITEMTYPE2.getCode(), esInitStl.getStlPkid());
             if (esCttItemList.size() > 0) {
@@ -611,19 +635,22 @@ public class ProgSubstlItemAction {
                     esInitStlTemp.setId(getMaxIdPlusOne());
                     progStlInfoService.updateRecordForSubCttPApprovePass(esInitStlTemp, progSubstlItemShowListForApprove);
                     strApproveBtnRendered = "false";
-                    strApprovedNotBtnRendered = "true";
+                    strApprovedNotBtnRenderedForStlQ = "true";
+                    strApprovedNotBtnRenderedForStlM = "true";
                 } else if (strPowerType.equals("ApproveFailToQ")) {
                     EsInitStl esInitStlTemp = (EsInitStl) BeanUtils.cloneBean(esInitStl);
                     esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
                     progStlInfoService.deleteRecordForSubCttPApprovePass(esInitStlTemp, ESEnum.ITEMTYPE3.getCode());
                     strApproveBtnRendered = "false";
-                    strApprovedNotBtnRendered = "false";
+                    strApprovedNotBtnRenderedForStlQ = "false";
+                    strApprovedNotBtnRenderedForStlM = "false";
                 } else if (strPowerType.equals("ApproveFailToM")) {
                     EsInitStl esInitStlTemp = (EsInitStl) BeanUtils.cloneBean(esInitStl);
                     esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
                     progStlInfoService.deleteRecordForSubCttPApprovePass(esInitStlTemp, ESEnum.ITEMTYPE4.getCode());
                     strApproveBtnRendered = "false";
-                    strApprovedNotBtnRendered = "false";
+                    strApprovedNotBtnRenderedForStlQ = "false";
+                    strApprovedNotBtnRenderedForStlM = "false";
                 }
                 MessageUtil.addInfo("批准数据完成。");
             }
@@ -781,14 +808,6 @@ public class ProgSubstlItemAction {
         this.strApproveBtnRendered = strApproveBtnRendered;
     }
 
-    public String getStrApprovedNotBtnRendered() {
-        return strApprovedNotBtnRendered;
-    }
-
-    public void setStrApprovedNotBtnRendered(String strApprovedNotBtnRendered) {
-        this.strApprovedNotBtnRendered = strApprovedNotBtnRendered;
-    }
-
     public List<EsItemStlSubcttEngP> getProgSubstlItemShowListForAccountAndQry() {
         return progSubstlItemShowListForAccountAndQry;
     }
@@ -803,6 +822,22 @@ public class ProgSubstlItemAction {
 
     public void setFlowCtrlHisService(FlowCtrlHisService flowCtrlHisService) {
         this.flowCtrlHisService = flowCtrlHisService;
+    }
+
+    public String getStrApprovedNotBtnRenderedForStlQ() {
+        return strApprovedNotBtnRenderedForStlQ;
+    }
+
+    public void setStrApprovedNotBtnRenderedForStlQ(String strApprovedNotBtnRenderedForStlQ) {
+        this.strApprovedNotBtnRenderedForStlQ = strApprovedNotBtnRenderedForStlQ;
+    }
+
+    public String getStrApprovedNotBtnRenderedForStlM() {
+        return strApprovedNotBtnRenderedForStlM;
+    }
+
+    public void setStrApprovedNotBtnRenderedForStlM(String strApprovedNotBtnRenderedForStlM) {
+        this.strApprovedNotBtnRenderedForStlM = strApprovedNotBtnRenderedForStlM;
     }
 /*智能字段End*/
 }

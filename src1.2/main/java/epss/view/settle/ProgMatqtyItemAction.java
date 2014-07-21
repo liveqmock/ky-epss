@@ -419,52 +419,37 @@ public class ProgMatqtyItemAction {
                 }
             }else if(strPowerType.contains("DoubleCheck")){// 复核
                 if(strPowerType.equals("DoubleCheckPass")){
-                    // 状态标志：复核
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
-                    // 原因：复核通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
-
-                    //todo
-                    String SubcttStlQStatus = ToolUtil.getStrIgnoreNull(
-                            esFlowService.getStatusFlag(ESEnum.ITEMTYPE3.getCode(), progInfoShowSel.getStlPkid(), progInfoShowSel.getPeriodNo()));
-                    if (!("".equals(SubcttStlQStatus)) && ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlQStatus) == 0) {
-                        EsInitStl esInitStlTemp = new EsInitStl();
-                        esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
-                        esInitStlTemp.setStlPkid(progInfoShowSel.getStlPkid());
-                        esInitStlTemp.setPeriodNo(progInfoShowSel.getPeriodNo());
-                        esInitStlTemp.setNote("");
-                        // 结算登记表和流程控制表登记
-                        progStlInfoService.insertStlAndPowerRecord(esInitStlTemp);
-                    }
-                    MessageUtil.addInfo("数据复核通过！");
-                }else if(strPowerType.equals("DoubleCheckFail")){
-                    String SubcttStlPStatus = ToolUtil.getStrIgnoreNull(
-                            esFlowService.getStatusFlag(ESEnum.ITEMTYPE5.getCode(), progInfoShowSel.getStlPkid(), progInfoShowSel.getPeriodNo()));
-                    String SubcttStlQStatus = ToolUtil.getStrIgnoreNull(
-                            esFlowService.getStatusFlag(ESEnum.ITEMTYPE3.getCode(), progInfoShowSel.getStlPkid(), progInfoShowSel.getPeriodNo()));
-                    if (!("".equals(SubcttStlPStatus))&&ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlPStatus) < 0) {
-                        MessageUtil.addInfo("该数据已被分包价格结算批准，您无权进行操作！");
+                    try {
+                        // 状态标志：复核
+                        progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+                        // 原因：复核通过
+                        progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+                        flowCtrlService.updateRecordByStl(progInfoShowSel,strPowerType);
+                        MessageUtil.addInfo("数据复核通过！");
+                    }catch (Exception e) {
+                        logger.error("复核通过操作失败。", e);
+                        MessageUtil.addError("复核通过操作失败。");
                         return;
-                    } else {
-                        if (!("".equals(SubcttStlQStatus)) && ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlQStatus) == 0) {
-                            try {
-                                ProgInfoShow progInfoShowTemp = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowSel);
-                                progInfoShowTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
-                                progStlInfoService.deleteRecord(progInfoShowTemp);
-                            } catch (Exception e) {
-                                logger.error("删除数据失败,复核未过操作失败。", e);
-                                MessageUtil.addError(e.getMessage());
-                                return;
-                            }
-                        }
                     }
-                    // 这样写可以实现越级退回
-                    progInfoShowSel.setStatusFlag(strNotPassToStatus);
-                    // 原因：复核未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
-                    MessageUtil.addInfo("数据复核未过！");
+                }else if(strPowerType.equals("DoubleCheckFail")){
+                    try {
+                        String SubcttStlPStatus = ToolUtil.getStrIgnoreNull(
+                                esFlowService.getStatusFlag(ESEnum.ITEMTYPE5.getCode(), progInfoShowSel.getStlPkid(), progInfoShowSel.getPeriodNo()));
+                        if (!("".equals(SubcttStlPStatus)) && ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlPStatus) < 0) {
+                            MessageUtil.addInfo("该数据已被分包价格结算批准，您无权进行操作！");
+                            return;
+                        }
+                        // 这样写可以实现越级退回
+                        progInfoShowSel.setStatusFlag(strNotPassToStatus);
+                        // 原因：复核未过
+                        progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
+                        flowCtrlService.updateRecordByStl(progInfoShowSel,strPowerType);
+                        MessageUtil.addInfo("数据复核未过！");
+                    }catch (Exception e) {
+                        logger.error("删除数据失败,复核未过操作失败。", e);
+                        MessageUtil.addError("复核未过操作失败。");
+                        return;
+                    }
                 }
             } else if(strPowerType.contains("Approve")){// 批准
                 if(strPowerType.equals("ApprovePass")){
