@@ -7,6 +7,7 @@ package epss.view.contract;
  * Time: 下午1:53
  * To change this template use File | Settings | File Templates.
  */
+import epss.common.utils.JxlsManager;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.common.enums.*;
@@ -22,6 +23,7 @@ import epss.service.CttInfoService;
 import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
+import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -33,7 +35,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @ManagedBean
@@ -76,9 +80,12 @@ public class CstplItemAction {
     private StyleModel styleModelNo;
     private StyleModel styleModel;
     /*控制控件在画面上的可用与现实End*/
+    private List<CstplItemShow> cstplItemShowListExcel;
+    private Map beansMap;
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        beansMap = new HashMap();
         strBelongToType=ESEnum.ITEMTYPE1.getCode();
         strCstplInfoPkid=parammap.get("strCstplInfoPkid").toString();
 
@@ -455,7 +462,30 @@ public class CstplItemAction {
     }
     public void delThisRecordAction(CttItemShow cttItemShowPara) {
         try {
-            cttItemService.deleteRecord(cttItemShowPara.getPkid()) ;
+            Integer intItemUnitConstructSelectedGrade=-1;
+            List<CstplItemShow> cstplItemShowListTemp =new ArrayList<>();
+            cstplItemShowListTemp.addAll(cstplItemShowList);
+            for(CstplItemShow itemUnitConstructItem: cstplItemShowListTemp){
+                if(intItemUnitConstructSelectedGrade>-1){
+                    if((itemUnitConstructItem .getGradeContrast()==null?0:itemUnitConstructItem .getGradeContrast())
+                            <=intItemUnitConstructSelectedGrade){
+                        break;
+                    }
+                    else{
+                        cttItemService.deleteRecord(itemUnitConstructItem.getPkidContrast()) ;
+                    }
+                }
+                if(intItemUnitConstructSelectedGrade==-1){
+                    if(itemUnitConstructItem.equals(cttItemShowPara) ){
+                        intItemUnitConstructSelectedGrade=itemUnitConstructItem.getGradeContrast();
+                        int deleteRecordNumOfSelf= cttItemService.deleteRecord(itemUnitConstructItem.getPkidContrast()) ;
+                        if (deleteRecordNumOfSelf<=0){
+                            MessageUtil.addInfo("该记录已删除。");
+                            return;
+                        }
+                    }
+                }
+            }
             cttItemService.setAfterThisOrderidSubOneByNode(
                     cttItemShowPara.getBelongToType(),
                     cttItemShowPara.getBelongToPkid(),
@@ -542,6 +572,7 @@ public class CstplItemAction {
         /*总包合同列表*/
             List<EsCttItem> esCttItemListTkctt =new ArrayList<EsCttItem>();
             cstplInfo = cttInfoService.getCttInfoByPkId(strCstplInfoPkid);
+            beansMap.put("cstplInfo", cstplInfo);
             String strTkcttPkidInCstpl= cstplInfo.getParentPkid();
             esCttItemListTkctt =
                     cttItemService.getEsItemList(ESEnum.ITEMTYPE0.getCode(), strTkcttPkidInCstpl);
@@ -656,12 +687,19 @@ public class CstplItemAction {
                     itemUnit.setCorrespondingItemNoContrast(itemUnit.getStrNo());
                 }
             }
-
             cstplItemShowList =new ArrayList<CstplItemShow>();
             cstplItemShowList.addAll(cstplItemShowList_ForSort);
+            cstplItemShowListExcel =new ArrayList<CstplItemShow>();
+            for(CstplItemShow itemUnit: cstplItemShowList){
+                CstplItemShow itemUnitTemp= (CstplItemShow) BeanUtils.cloneBean(itemUnit);
+                itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
+                cstplItemShowListExcel.add(itemUnitTemp);
+            }
+            beansMap.put("cstplItemShowListExcel", cstplItemShowListExcel);
             //cstplItemShowList =getItemOfTkcttAndCstplListSorted(cstplItemShowList_ForSort,0);
             // 添加合计
             setCstplItemList_AddTotal();
+            beansMap.put("cstplItemShowList", cstplItemShowList);
             resetActionForAdd();
         }catch (Exception e) {
             logger.error("初始化失败", e);
@@ -1153,6 +1191,18 @@ public class CstplItemAction {
         }
         return cttItemShowListPara;
     }
+    public String onExportExcel()throws IOException, WriteException {
+        if (this.cstplItemShowList.size() == 0) {
+            MessageUtil.addWarn("记录为空...");
+            return null;
+        } else {
+            String excelFilename = "成本计划-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+            JxlsManager jxls = new JxlsManager();
+            jxls.exportList(excelFilename, beansMap,"approveCstpl.xls");
+            // 其他状态的票据需要添加时再修改导出文件名
+        }
+        return null;
+    }
 
     /*智能字段Start*/
     public EsCttInfo getCstplInfo() {
@@ -1280,4 +1330,12 @@ public class CstplItemAction {
         this.strFlowType = strFlowType;
     }
 /*智能字段End*/
+
+    public List<CstplItemShow> getCstplItemShowListExcel() {
+        return cstplItemShowListExcel;
+    }
+
+    public void setCstplItemShowListExcel(List<CstplItemShow> cstplItemShowListExcel) {
+        this.cstplItemShowListExcel = cstplItemShowListExcel;
+    }
 }
