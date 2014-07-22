@@ -669,7 +669,9 @@ public class CstplItemAction {
             cstplItemShowListExcel =new ArrayList<CstplItemShow>();
             for(CstplItemShow itemUnit: cstplItemShowList){
                 CstplItemShow itemUnitTemp= (CstplItemShow) BeanUtils.cloneBean(itemUnit);
+                String correspondingStrNoContrast=ToolUtil.getStrIgnoreNull(itemUnit.getStrNoContrast()).replaceAll("&#8195;","");
                 itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
+                itemUnitTemp.setStrNoContrast(correspondingStrNoContrast);
                 cstplItemShowListExcel.add(itemUnitTemp);
             }
             beansMap.put("cstplItemShowListExcel", cstplItemShowListExcel);

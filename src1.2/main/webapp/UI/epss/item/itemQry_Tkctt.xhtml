@@ -22,13 +22,17 @@
         <h:form id="form">
             <p:panel>
                 <p:growl id="msgs" showDetail="true"/>
-                <h:panelGrid columns="4">
+                <h:panelGrid columns="5">
                     <p:outputLabel value="总包合同编号：" for="id"/>
                     <p:inputText id="id" value="#{tkcttItemAction.tkcttInfo.id}"
                                  readonly="true" style="background-color:gainsboro;"/>
                     <p:outputLabel value="总包合同名称：" for="cttName"/>
                     <p:inputText id="cttName" value="#{tkcttItemAction.tkcttInfo.name}"
                                  readonly="true" style="width:400px;background-color:gainsboro;"/>
+                    <p:commandButton value="导出到EXCEL"
+                                     action="#{tkcttItemAction.onExportExcel}"
+                                     ajax="false">
+                    </p:commandButton>
                 </h:panelGrid>
                 <p:dataTable id="pdt" style="width:100%;"
                              value="#{tkcttItemAction.cttItemShowList}"
