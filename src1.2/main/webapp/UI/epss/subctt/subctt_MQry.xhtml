@@ -81,7 +81,7 @@
                          widgetVar="DtInitSubcttList"
                          scrollable="true">
                 <p:column headerText="操作" style="width:61px">
-                    <p:commandButton  icon="ui-icon-plus"
+                    <p:commandButton  icon="ui-icon-search"
                                       style="height:20px;width:20px"
                                       actionListener="#{progMatqtyInfoAction.selectRecordAction('Qry','',record)}"
                                       update="pdt,:form:msgs,:form:pgView"
@@ -128,14 +128,14 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel value="分包合同：" for="cttNameForDlg"/>
                         <p:inputText id="cttNameForDlg"
-                                     value="#{progMatqtyInfoAction.progInfoShowSel.signPartBName}"
+                                     value="#{progMatqtyInfoAction.progInfoShowSel.stlName}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel value="协作单位：" for="noteForDlg"/>
                         <p:inputText id="noteForDlg"
-                                     value="#{progMatqtyInfoAction.progInfoShowSel.note}"
+                                     value="#{progMatqtyInfoAction.progInfoShowSel.signPartBName}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel value="期数编码：" for="signDateForDlg"/>
@@ -167,6 +167,11 @@
                                      style="background-color:gainsboro;text-align:right;" readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                         </h:inputText>
+                        <p:outputLabel value="备注：" for="noteSel"/>
+                        <p:inputText id="noteSel"
+                                     value="#{progMatqtyInfoAction.progInfoShowSel.note}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
                     </h:panelGrid>
                 </h:panelGrid>
             </p:dialog>

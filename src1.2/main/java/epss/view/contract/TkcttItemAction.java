@@ -799,7 +799,6 @@ public class TkcttItemAction {
     public Boolean getCheckForUpd() {
         return checkForUpd;
     }
-/*ÖÇÄÜ×Ö¶ÎEnd*/
 
     public List<CttItemShow> getCttItemShowListExcel() {
         return cttItemShowListExcel;
@@ -808,4 +807,5 @@ public class TkcttItemAction {
     public void setCttItemShowListExcel(List<CttItemShow> cttItemShowListExcel) {
         this.cttItemShowListExcel = cttItemShowListExcel;
     }
+	/*ÖÇÄÜ×Ö¶ÎEnd*/
 }

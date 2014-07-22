@@ -799,7 +799,6 @@ public class ProgMeaItemAction {
     public void setStrNotPassToStatus(String strNotPassToStatus) {
         this.strNotPassToStatus = strNotPassToStatus;
     }
-/*ÖÇÄÜ×Ö¶ÎEnd*/
 
     public List<ProgMeaItemShow> getProgMeaItemShowListForExcel() {
         return progMeaItemShowListForExcel;
@@ -808,4 +807,6 @@ public class ProgMeaItemAction {
     public void setProgMeaItemShowListForExcel(List<ProgMeaItemShow> progMeaItemShowListForExcel) {
         this.progMeaItemShowListForExcel = progMeaItemShowListForExcel;
     }
+	
+	/*ÖÇÄÜ×Ö¶ÎEnd*/
 }

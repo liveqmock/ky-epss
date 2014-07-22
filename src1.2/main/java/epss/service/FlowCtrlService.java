@@ -3,7 +3,7 @@ package epss.service;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.common.enums.ESEnumType;
+import epss.common.enums.ESEnumSubcttType;
 import epss.common.utils.MessageUtil;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.FlowCtrlShow;
@@ -133,6 +133,8 @@ public class FlowCtrlService {
         esInitPowerTemp.setLastUpdBy(platformService.getStrLastUpdBy());
         esInitPowerTemp.setLastUpdDate(platformService.getStrLastUpdDate());
         esInitPowerMapper.updateByPrimaryKey(esInitPowerTemp);
+        esInitPowerTemp.setCreatedBy(platformService.getStrLastUpdBy());
+        esInitPowerTemp.setCreatedDate(platformService.getStrLastUpdDate());
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
     }
     public void updateRecordByCtt(CttInfoShow cttInfoShowPara){
@@ -171,13 +173,13 @@ public class FlowCtrlService {
         EsCttInfo esCttInfo=cttInfoService.getCttInfoByPkId(progInfoShowPara.getStlPkid());
         if ("".equals(ToolUtil.getStrIgnoreNull(esCttInfo.getType()))){
 
-        }else if (ESEnumType.TYPE0.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE0.getCode().equals(esCttInfo.getType())){
 
-        }else if (ESEnumType.TYPE1.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE1.getCode().equals(esCttInfo.getType())){
 
-        }else if (ESEnumType.TYPE2.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE2.getCode().equals(esCttInfo.getType())){
 
-        }else if (ESEnumType.TYPE3.getCode().equals(esCttInfo.getType())) {
+        }else if (ESEnumSubcttType.TYPE3.getCode().equals(esCttInfo.getType())) {
             if (ESEnum.ITEMTYPE3.getCode().equals(progInfoShowPara.getPowerType())) {
                 String SubcttStlMStatus = ToolUtil.getStrIgnoreNull(
                         esFlowService.getStatusFlag(ESEnum.ITEMTYPE4.getCode(), progInfoShowPara.getStlPkid(), progInfoShowPara.getPeriodNo()));
@@ -191,11 +193,11 @@ public class FlowCtrlService {
                     return;
                 }
             }
-        }else if (ESEnumType.TYPE4.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE4.getCode().equals(esCttInfo.getType())){
 
-        }else if (ESEnumType.TYPE5.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE5.getCode().equals(esCttInfo.getType())){
 
-        }else if (ESEnumType.TYPE6.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE6.getCode().equals(esCttInfo.getType())){
 
         }
         if ("DoubleCheckPass".equals(strFlowTypePara)){

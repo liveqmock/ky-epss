@@ -2,7 +2,7 @@ package epss.view.settle;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.common.enums.ESEnumType;
+import epss.common.enums.ESEnumSubcttType;
 import epss.repository.model.model_show.CommStlSubcttEngH;
 import epss.repository.model.model_show.ProgSubstlItemShow;
 import epss.common.utils.JxlsManager;
@@ -113,22 +113,22 @@ public class ProgSubstlItemAction {
         if ("".equals(ToolUtil.getStrIgnoreNull(esCttInfo.getType()))){
             strApprovedNotBtnRenderedForStlQ="true";
             strApprovedNotBtnRenderedForStlM="true";
-        }else if (ESEnumType.TYPE0.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE0.getCode().equals(esCttInfo.getType())){
             strApprovedNotBtnRenderedForStlQ="true";
             strApprovedNotBtnRenderedForStlM="false";
-        } else if (ESEnumType.TYPE1.getCode().equals(esCttInfo.getType())){
+        } else if (ESEnumSubcttType.TYPE1.getCode().equals(esCttInfo.getType())){
             strApprovedNotBtnRenderedForStlQ="false";
             strApprovedNotBtnRenderedForStlM="true";
-        }else if (ESEnumType.TYPE2.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE2.getCode().equals(esCttInfo.getType())){
 
-        }else if (ESEnumType.TYPE3.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE3.getCode().equals(esCttInfo.getType())){
             strApprovedNotBtnRenderedForStlQ="true";
             strApprovedNotBtnRenderedForStlM="true";
-        }else if (ESEnumType.TYPE4.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE4.getCode().equals(esCttInfo.getType())){
 
-        }else if (ESEnumType.TYPE5.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE5.getCode().equals(esCttInfo.getType())){
 
-        }else if (ESEnumType.TYPE6.getCode().equals(esCttInfo.getType())){
+        }else if (ESEnumSubcttType.TYPE6.getCode().equals(esCttInfo.getType())){
 
         }
 

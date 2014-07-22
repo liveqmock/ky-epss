@@ -9,20 +9,20 @@ import java.util.Hashtable;
  * Time: 9:58:32
  * To change this template use File | Settings | File Templates.
  */
-public enum ESEnumType {
+public enum ESEnumSubcttType {
     TYPE0("0","数量"),
     TYPE1("1","材料"),
     TYPE2("2","安全施工措施费"),
     TYPE3("3","数量和材料"),
     TYPE4("4","数量和安全施工措施费"),
     TYPE5("5","材料和安全施工措施费"),
-    TYPE6("6","材料和安全措施费");
+    TYPE6("6","数量材料和安全措施费");
 
     private String code = null;
     private String title = null;
-    private static Hashtable<String, ESEnumType> aliasEnums;
+    private static Hashtable<String, ESEnumSubcttType> aliasEnums;
 
-    ESEnumType(String code, String title){
+    ESEnumSubcttType(String code, String title){
         this.init(code, title);
     }
 
@@ -39,7 +39,7 @@ public enum ESEnumType {
         aliasEnums.put(title, this);
     }
 
-    public static ESEnumType valueOfAlias(String alias) {
+    public static ESEnumSubcttType valueOfAlias(String alias) {
         return aliasEnums.get(alias);
     }
 
