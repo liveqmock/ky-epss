@@ -23,7 +23,10 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import java.math.BigDecimal;
 import java.util.*;
-
+import epss.common.utils.JxlsManager;
+import java.text.SimpleDateFormat;
+import java.io.IOException;
+import jxl.write.WriteException;
 /**
  * Created with IntelliJ IDEA.
  * User: Think
@@ -531,6 +534,18 @@ public class ProgMeaItemAction {
         }
         return progMeaItemShowListPara;
     }
+    public String onExportExcel()throws IOException, WriteException {
+        if (this.progMeaItemShowList.size() == 0) {
+            MessageUtil.addWarn("记录为空...");
+            return null;
+        } else {
+            String excelFilename = "总包数量计量-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+            JxlsManager jxls = new JxlsManager();
+            jxls.exportList(excelFilename, beansMap,"stlTkcttEngMea.xls");
+            // 其他状态的票据需要添加时再修改导出文件名
+        }
+        return null;
+    }
 
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
     private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
@@ -785,4 +800,12 @@ public class ProgMeaItemAction {
         this.strNotPassToStatus = strNotPassToStatus;
     }
 /*智能字段End*/
+
+    public List<ProgMeaItemShow> getProgMeaItemShowListForExcel() {
+        return progMeaItemShowListForExcel;
+    }
+
+    public void setProgMeaItemShowListForExcel(List<ProgMeaItemShow> progMeaItemShowListForExcel) {
+        this.progMeaItemShowListForExcel = progMeaItemShowListForExcel;
+    }
 }

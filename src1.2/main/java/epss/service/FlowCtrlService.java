@@ -220,6 +220,8 @@ public class FlowCtrlService {
             esInitPower.setLastUpdBy(platformService.getStrLastUpdBy());
             esInitPower.setLastUpdDate(platformService.getStrLastUpdDate());
             esInitPowerMapper.updateByPrimaryKey(esInitPower);
+            esInitPower.setCreatedBy(platformService.getStrLastUpdBy());
+            esInitPower.setCreatedDate(platformService.getStrLastUpdDate());
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"update"));
         }
     }

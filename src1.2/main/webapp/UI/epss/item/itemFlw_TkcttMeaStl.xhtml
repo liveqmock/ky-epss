@@ -22,7 +22,7 @@
         <h:form id="form">
             <p:panel>
                 <p:growl id="msgs" showDetail="true"/>
-                <h:panelGrid id="pgCondition" columns="4">
+                <h:panelGrid id="pgCondition" columns="5">
                     <p:commandButton id="endInputBtn" value="通过"
                                      action="#{progMeaItemAction.onClickForPowerAction('Pass')}"
                                      update="msgs,pgCondition"
@@ -36,6 +36,10 @@
                                      action="#{progMeaItemAction.onClickForPowerAction('Fail')}"
                                      update="msgs,pgCondition"
                                      oncomplete="window.close()">
+                    </p:commandButton>
+                    <p:commandButton value="导出到EXCEL"
+                                     action="#{progMeaItemAction.onExportExcel}"
+                                     ajax="false">
                     </p:commandButton>
                 </h:panelGrid>
                 <p:dataTable id="pdt" style="width:100%;"
