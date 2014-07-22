@@ -8,6 +8,7 @@ package epss.view.contract;
  * To change this template use File | Settings | File Templates.
  */
 
+import epss.common.utils.JxlsManager;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.common.enums.*;
@@ -21,6 +22,7 @@ import epss.service.*;
 import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
+import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -32,7 +34,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @ManagedBean
@@ -76,10 +80,12 @@ public class TkcttItemAction {
     private String strNotPassToStatus;
     private String strFlowType;
     private Boolean checkForUpd;
-
+    private List<CttItemShow> cttItemShowListExcel;
+    private Map beansMap;
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        beansMap = new HashMap();
         strBelongToType = ESEnum.ITEMTYPE0.getCode();
         if (parammap.containsKey("strTkcttInfoPkid")) {
             strTkcttInfoPkid = parammap.get("strTkcttInfoPkid").toString();
@@ -103,16 +109,30 @@ public class TkcttItemAction {
     /*初始化操作*/
     private void initData() {
         /*形成关系树*/
-        esCttItemList =new ArrayList<EsCttItem>();
-        cttItemShowList =new ArrayList<CttItemShow>();
+        try {
+            esCttItemList =new ArrayList<EsCttItem>();
+            cttItemShowList =new ArrayList<CttItemShow>();
         /*初始化流程状态列表*/
-        esFlowControl.getBackToStatusFlagList(strFlowType);
-        tkcttInfo = cttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
-        esCttItemList = cttItemService.getEsItemList(
-                strBelongToType, strTkcttInfoPkid);
-        recursiveDataTable("root", esCttItemList);
-        cttItemShowList = getTkcttItemList_DoFromatNo(cttItemShowList);
-        setTkcttItemList_AddTotal();
+            esFlowControl.getBackToStatusFlagList(strFlowType);
+            tkcttInfo = cttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
+            beansMap.put("tkcttInfo", tkcttInfo);
+            esCttItemList = cttItemService.getEsItemList(
+                    strBelongToType, strTkcttInfoPkid);
+            recursiveDataTable("root", esCttItemList);
+            cttItemShowList = getTkcttItemList_DoFromatNo(cttItemShowList);
+            cttItemShowListExcel =new ArrayList<CttItemShow>();
+            for(CttItemShow itemUnit: cttItemShowList){
+                CttItemShow itemUnitTemp= (CttItemShow) BeanUtils.cloneBean(itemUnit);
+                itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
+                cttItemShowListExcel.add(itemUnitTemp);
+            }
+            beansMap.put("cttItemShowListExcel", cttItemShowListExcel);
+            setTkcttItemList_AddTotal();
+            beansMap.put("cttItemShowList", cttItemShowList);
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
+        }
     }
 
     /*根据数据库中层级关系数据列表得到总包合同*/
@@ -642,6 +662,18 @@ public class TkcttItemAction {
             MessageUtil.addError(e.getMessage());
         }
     }
+    public String onExportExcel()throws IOException, WriteException {
+        if (this.cttItemShowList.size() == 0) {
+            MessageUtil.addWarn("记录为空...");
+            return null;
+        } else {
+            String excelFilename = "总包合同-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+            JxlsManager jxls = new JxlsManager();
+            jxls.exportList(excelFilename, beansMap,"tkctt.xls");
+            // 其他状态的票据需要添加时再修改导出文件名
+        }
+        return null;
+    }
 
     /*智能字段Start*/
     public CttItemService getCttItemService() {
@@ -768,4 +800,12 @@ public class TkcttItemAction {
         return checkForUpd;
     }
 /*智能字段End*/
+
+    public List<CttItemShow> getCttItemShowListExcel() {
+        return cttItemShowListExcel;
+    }
+
+    public void setCttItemShowListExcel(List<CttItemShow> cttItemShowListExcel) {
+        this.cttItemShowListExcel = cttItemShowListExcel;
+    }
 }

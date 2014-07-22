@@ -542,7 +542,7 @@ public class ProgEstItemAction {
             MessageUtil.addWarn("记录为空...");
             return null;
         } else {
-            String excelFilename = "分包工程统计数量-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+            String excelFilename = "总包数量统计-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
             JxlsManager jxls = new JxlsManager();
             jxls.exportList(excelFilename, beansMap,"stlTkcttEngSta.xls");
             // 其他状态的票据需要添加时再修改导出文件名
