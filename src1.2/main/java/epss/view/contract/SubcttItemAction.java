@@ -7,6 +7,7 @@ package epss.view.contract;
  * Time: 下午1:53
  * To change this template use File | Settings | File Templates.
  */
+import epss.common.utils.JxlsManager;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.common.enums.*;
@@ -20,6 +21,7 @@ import epss.service.*;
 import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
+import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -31,7 +33,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @ManagedBean
@@ -84,10 +88,12 @@ public class SubcttItemAction {
     private StyleModel styleModelCttQty;
     private StyleModel styleModelCttAmount;
     /*控制控件在画面上的可用与现实End*/
-
+    private Map beansMap;
+    private List<CttItemShow> cttItemShowListExcel;
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        beansMap = new HashMap();
         strBelongToType=ESEnum.ITEMTYPE2.getCode();
         strSubcttInfoPkid=parammap.get("strSubcttInfoPkid").toString();
         strFlowType=parammap.get("strFlowType").toString();
@@ -105,38 +111,52 @@ public class SubcttItemAction {
 
     /*初始化操作*/
     private void initData() {
-        /*初始化流程状态列表*/
-        esFlowControl.getBackToStatusFlagList(strFlowType);
+        try{
+            /*初始化流程状态列表*/
+            esFlowControl.getBackToStatusFlagList(strFlowType);
         /*分包合同*/
-        cttItemShowList_Cstpl =new ArrayList<CttItemShow>();
-        subcttInfo = cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
-
+            cttItemShowList_Cstpl =new ArrayList<CttItemShow>();
+            subcttInfo = cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
+            beansMap.put("subcttInfo", subcttInfo);
         /*成本计划*/
-        String strCstplPkidInInitCtt= subcttInfo.getParentPkid() ;
-        esCttItemList = cttItemService.getEsItemList(
-                ESEnum.ITEMTYPE1.getCode(), strCstplPkidInInitCtt);
-        recursiveDataTable("root", esCttItemList, cttItemShowList_Cstpl);
-        cttItemShowList_Cstpl =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList_Cstpl);
+            String strCstplPkidInInitCtt= subcttInfo.getParentPkid() ;
+            esCttItemList = cttItemService.getEsItemList(
+                    ESEnum.ITEMTYPE1.getCode(), strCstplPkidInInitCtt);
+            recursiveDataTable("root", esCttItemList, cttItemShowList_Cstpl);
+            cttItemShowList_Cstpl =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList_Cstpl);
         /*分包合同*/
-        esCttItemList =new ArrayList<EsCttItem>();
-        cttItemShowList =new ArrayList<CttItemShow>();
-        esCttItemList = cttItemService.getEsItemList(
-                strBelongToType, strSubcttInfoPkid);
-        cttItemShowList.clear();
-        recursiveDataTable("root", esCttItemList, cttItemShowList);
-        cttItemShowList =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList);
+            esCttItemList =new ArrayList<EsCttItem>();
+            cttItemShowList =new ArrayList<CttItemShow>();
+            esCttItemList = cttItemService.getEsItemList(
+                    strBelongToType, strSubcttInfoPkid);
+            cttItemShowList.clear();
+            recursiveDataTable("root", esCttItemList, cttItemShowList);
+            cttItemShowList =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList);
         /*分包合同对应成本计划中的项*/
-        for(CttItemShow itemUnit: cttItemShowList){
-            for(CttItemShow itemUnitCstpl: cttItemShowList_Cstpl){
-                if(itemUnit.getCorrespondingPkid()!=null&&
-                        itemUnit.getCorrespondingPkid().equals(itemUnitCstpl .getPkid())){
-                    itemUnit.setStrCorrespondingItemNo(itemUnitCstpl.getStrNo());
-                    itemUnit.setStrCorrespondingItemName(itemUnitCstpl .getName());
+            for(CttItemShow itemUnit: cttItemShowList){
+                for(CttItemShow itemUnitCstpl: cttItemShowList_Cstpl){
+                    if(itemUnit.getCorrespondingPkid()!=null&&
+                            itemUnit.getCorrespondingPkid().equals(itemUnitCstpl .getPkid())){
+                        itemUnit.setStrCorrespondingItemNo(itemUnitCstpl.getStrNo());
+                        itemUnit.setStrCorrespondingItemName(itemUnitCstpl .getName());
+                    }
                 }
             }
+            cttItemShowListExcel =new ArrayList<CttItemShow>();
+            for(CttItemShow itemUnit: cttItemShowList){
+                CttItemShow itemUnitTemp= (CttItemShow) BeanUtils.cloneBean(itemUnit);
+                itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
+                itemUnitTemp.setStrCorrespondingItemNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrCorrespondingItemNo()));
+                cttItemShowListExcel.add(itemUnitTemp);
+            }
+            beansMap.put("cttItemShowListExcel", cttItemShowListExcel);
+            beansMap.put("cttItemShowList", cttItemShowList);
+            // 添加合计
+            setItemOfCstplAndSubcttList_AddTotal();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
         }
-        // 添加合计
-        setItemOfCstplAndSubcttList_AddTotal();
     }
     /*根据数据库中层级关系数据列表得到总包合同*/
     private void recursiveDataTable(String strLevelParentId,
@@ -808,6 +828,18 @@ public class SubcttItemAction {
             MessageUtil.addError(e.getMessage());
         }
     }
+    public String onExportExcel()throws IOException, WriteException {
+        if (this.cttItemShowList.size() == 0) {
+            MessageUtil.addWarn("记录为空...");
+            return null;
+        } else {
+            String excelFilename = "分包合同-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+            JxlsManager jxls = new JxlsManager();
+            jxls.exportList(excelFilename, beansMap,"subctt.xls");
+            // 其他状态的票据需要添加时再修改导出文件名
+        }
+        return null;
+    }
     /*智能字段Start*/
     public CttItemService getCttItemService() {
         return cttItemService;
@@ -981,4 +1013,12 @@ public class SubcttItemAction {
     }
 
     /*智能字段End*/
+
+    public List<CttItemShow> getCttItemShowListExcel() {
+        return cttItemShowListExcel;
+    }
+
+    public void setCttItemShowListExcel(List<CttItemShow> cttItemShowListExcel) {
+        this.cttItemShowListExcel = cttItemShowListExcel;
+    }
 }

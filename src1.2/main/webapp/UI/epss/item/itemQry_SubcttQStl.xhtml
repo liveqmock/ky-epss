@@ -22,7 +22,7 @@
         <h:form id="form">
             <p:panel>
                 <p:growl id="msgs" showDetail="true"/>
-                <h:panelGrid columns="6">
+                <h:panelGrid columns="7">
                     <p:outputLabel value="分包合同编号：" for="id"/>
                     <p:inputText id="id" value="#{progWorkqtyItemAction.progWorkqtyInfoShowH.id}"
                                  readonly="true" style="background-color:gainsboro;"/>
@@ -32,6 +32,10 @@
                     <p:outputLabel value="期号：" for="periodNo"/>
                     <p:inputText id="periodNo" value="#{progWorkqtyItemAction.progWorkqtyInfoShowH.periodNo}"
                                  readonly="true" style="background-color:gainsboro;"/>
+                    <p:commandButton value="导出到EXCEL"
+                                     action="#{progWorkqtyItemAction.onExportExcel}"
+                                     ajax="false">
+                    </p:commandButton>
                 </h:panelGrid>
                 <p:dataTable id="pdt" style="width:100%;"
                              value="#{progWorkqtyItemAction.progWorkqtyItemShowList}"

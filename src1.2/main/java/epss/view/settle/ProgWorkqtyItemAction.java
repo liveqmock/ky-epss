@@ -1,6 +1,7 @@
 package epss.view.settle;
 
 import epss.common.enums.*;
+import epss.common.utils.JxlsManager;
 import epss.repository.model.model_show.ProgInfoShow;
 import epss.repository.model.model_show.ProgWorkqtyItemShow;
 import epss.common.utils.ToolUtil;
@@ -9,6 +10,7 @@ import epss.service.*;
 import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
+import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +21,9 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -50,6 +54,8 @@ public class ProgWorkqtyItemAction {
     private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
+    @ManagedProperty(value = "#{signPartService}")
+    private SignPartService signPartService;
 
     private List<ProgWorkqtyItemShow> progWorkqtyItemShowList;
     private ProgWorkqtyItemShow progWorkqtyItemShowSel;
@@ -67,10 +73,12 @@ public class ProgWorkqtyItemAction {
     private String strPassFlag;
     private String strFlowType;
     private String strNotPassToStatus;
-
+    private List<ProgWorkqtyItemShow> progWorkqtyItemShowListExcel;
+    private Map beansMap;
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        beansMap = new HashMap();
         if(parammap.containsKey("strFlowType")){
             strFlowType=parammap.get("strFlowType").toString();
         }
@@ -94,23 +102,39 @@ public class ProgWorkqtyItemAction {
 
     /*初始化操作*/
     private void initData() {
-        // 详细页头
-        progWorkqtyInfoShowH.setId(progWorkqtyInfo.getId());
-        progWorkqtyInfoShowH.setStlName(cttInfoService.getCttInfoByPkId(progWorkqtyInfo.getStlPkid()).getName());
-        progWorkqtyInfoShowH.setPeriodNo(progWorkqtyInfo.getPeriodNo());
-
+        try {
+            // 详细页头
+            EsCttInfo esCttInfo_Subctt= cttInfoService.getCttInfoByPkId(progWorkqtyInfo.getStlPkid());
+            progWorkqtyInfoShowH.setId(progWorkqtyInfo.getId());
+            progWorkqtyInfoShowH.setStlName(cttInfoService.getCttInfoByPkId(progWorkqtyInfo.getStlPkid()).getName());
+            progWorkqtyInfoShowH.setPeriodNo(progWorkqtyInfo.getPeriodNo());
+            progWorkqtyInfoShowH.setSignPartBName(signPartService.getEsInitCustByPkid(esCttInfo_Subctt.getSignPartB()).getName());
+            beansMap.put("progWorkqtyInfoShowH", progWorkqtyInfoShowH);
         /*分包合同*/
-        List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
-        esCttItemList = cttItemService.getEsItemList(
-                ESEnum.ITEMTYPE2.getCode(), strSubcttPkid);
-        if(esCttItemList.size()<=0){
-            return;
+            List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
+            esCttItemList = cttItemService.getEsItemList(
+                    ESEnum.ITEMTYPE2.getCode(), strSubcttPkid);
+            if(esCttItemList.size()<=0){
+                return;
+            }
+            progWorkqtyItemShowList =new ArrayList<ProgWorkqtyItemShow>();
+            recursiveDataTable("root", esCttItemList, progWorkqtyItemShowList);
+            progWorkqtyItemShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progWorkqtyItemShowList);
+            List<EsInitPower> esInitPowerList= flowCtrlService.selectListByModel(ESEnumPower.POWER_TYPE3.getCode(),
+                    strSubcttPkid, esCommon.getStrDateThisPeriod());
+            progWorkqtyItemShowListExcel =new ArrayList<ProgWorkqtyItemShow>();
+            for(ProgWorkqtyItemShow itemUnit: progWorkqtyItemShowList){
+                ProgWorkqtyItemShow itemUnitTemp= (ProgWorkqtyItemShow) BeanUtils.cloneBean(itemUnit);
+                itemUnitTemp.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getSubctt_StrNo()));
+                progWorkqtyItemShowListExcel.add(itemUnitTemp);
+            }
+            beansMap.put("progWorkqtyItemShowListExcel", progWorkqtyItemShowListExcel);
+            beansMap.put("progWorkqtyItemShowList", progWorkqtyItemShowList);
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
         }
-        progWorkqtyItemShowList =new ArrayList<ProgWorkqtyItemShow>();
-        recursiveDataTable("root", esCttItemList, progWorkqtyItemShowList);
-        progWorkqtyItemShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progWorkqtyItemShowList);
-        List<EsInitPower> esInitPowerList= flowCtrlService.selectListByModel(ESEnumPower.POWER_TYPE3.getCode(),
-                strSubcttPkid, esCommon.getStrDateThisPeriod());
+
     }
     /*根据数据库中层级关系数据列表得到总包合同*/
     private void recursiveDataTable(String strLevelParentId,
@@ -444,6 +468,18 @@ public class ProgWorkqtyItemAction {
             MessageUtil.addError(e.getMessage());
         }
     }
+    public String onExportExcel()throws IOException, WriteException {
+        if (this.progWorkqtyItemShowList.size() == 0) {
+            MessageUtil.addWarn("记录为空...");
+            return null;
+        } else {
+            String excelFilename = "分包数量结算-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+            JxlsManager jxls = new JxlsManager();
+            jxls.exportList(excelFilename, beansMap,"stlSubCttEngQ.xls");
+            // 其他状态的票据需要添加时再修改导出文件名
+        }
+        return null;
+    }
     /* 智能字段Start*/
     public CttInfoService getCttInfoService() {
         return cttInfoService;
@@ -573,5 +609,21 @@ public class ProgWorkqtyItemAction {
         this.strFlowType = strFlowType;
     }
 /*智能字段End*/
+
+    public List<ProgWorkqtyItemShow> getProgWorkqtyItemShowListExcel() {
+        return progWorkqtyItemShowListExcel;
+    }
+
+    public void setProgWorkqtyItemShowListExcel(List<ProgWorkqtyItemShow> progWorkqtyItemShowListExcel) {
+        this.progWorkqtyItemShowListExcel = progWorkqtyItemShowListExcel;
+    }
+
+    public SignPartService getSignPartService() {
+        return signPartService;
+    }
+
+    public void setSignPartService(SignPartService signPartService) {
+        this.signPartService = signPartService;
+    }
 }
 

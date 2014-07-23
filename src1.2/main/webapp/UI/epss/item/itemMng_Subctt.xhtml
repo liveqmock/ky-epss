@@ -22,7 +22,7 @@
         <h:form id="form">
             <p:panel>
                 <p:growl id="msgs" showDetail="true"/>
-                <h:panelGrid id="pgCondition" columns="3">
+                <h:panelGrid id="pgCondition" columns="4">
                     <p:commandButton id="addBtn"
                                      value="增加" icon="ui-icon-plus"
                                      rendered='#{subcttItemAction.strPassFlag}'
@@ -41,6 +41,10 @@
                                      update="pgCondition,pdt,msgs"
                                      rendered="#{!subcttItemAction.strPassFlag}"
                                      oncomplete="window.close()">
+                    </p:commandButton>
+                    <p:commandButton value="导出到EXCEL"
+                                     action="#{subcttItemAction.onExportExcel}"
+                                     ajax="false">
                     </p:commandButton>
                 </h:panelGrid>
                 <h:panelGrid columns="4">
