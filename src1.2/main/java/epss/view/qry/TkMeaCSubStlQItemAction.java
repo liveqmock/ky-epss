@@ -190,7 +190,7 @@ public class TkMeaCSubStlQItemAction {
                 }
 
                 // 成本计划
-                BigDecimal bdCstplTkcttItem_TotalAmt;
+                BigDecimal bdCstplTkcttItem_TotalAmt=new BigDecimal(0);
                 for(CttItemShow cstplItemShowUnit : cstplItemShowListTemp){
                     QryTkMeaCSStlQShow tkMeaCstplUnitTemp= (QryTkMeaCSStlQShow) BeanUtils.cloneBean(qryTkMeaCSStlQShowTemp);
                     if(tkcttItemShowUnit.getPkid().equals(cstplItemShowUnit.getCorrespondingPkid())) {
@@ -213,10 +213,13 @@ public class TkMeaCSubStlQItemAction {
                         tkMeaCstplUnitTemp.setCstplItem_Name(cstplItemShowUnit.getName());
                         tkMeaCstplUnitTemp.setCstplItem_UnitPrice(cstplItemShowUnit.getContractUnitPrice());
                         tkMeaCstplUnitTemp.setCstplItem_Qty(cstplItemShowUnit.getContractQuantity());
-                        if(cstplItemShowUnit.getContractUnitPrice()!=null&&
-                                cstplItemShowUnit.getContractQuantity()!=null) {
+                        if(ToolUtil.getBdIgnoreNull(cstplItemShowUnit.getContractUnitPrice()).compareTo(ToolUtil.bigDecimal0)>0&&
+                           ToolUtil.getBdIgnoreNull(cstplItemShowUnit.getContractQuantity()).compareTo(ToolUtil.bigDecimal0)>0) {
                             tkMeaCstplUnitTemp.setCstplItem_Amt(
                                     cstplItemShowUnit.getContractUnitPrice().multiply(cstplItemShowUnit.getContractQuantity()));
+                        }
+                        if(tkMeaCstplUnitTemp.getCstplItem_Amt()!=null) {
+                            bdCstplTkcttItem_TotalAmt=bdCstplTkcttItem_TotalAmt.add(tkMeaCstplUnitTemp.getCstplItem_Amt()) ;
                         }
                         qryTkMeaCSStlQShowList.add(tkMeaCstplUnitTemp);
                     }
@@ -224,6 +227,30 @@ public class TkMeaCSubStlQItemAction {
 
                 if (insertedFlag.equals(false)){
                     qryTkMeaCSStlQShowList.add(qryTkMeaCSStlQShowTemp);
+                }
+
+                if(bdCstplTkcttItem_TotalAmt.compareTo(new BigDecimal(0))>0) {
+                    qryTkMeaCSStlQShowList.get(qryTkMeaCSStlQShowList.size()-1).setCstplTkcttItem_TotalAmt(bdCstplTkcttItem_TotalAmt);
+                    if(ToolUtil.getBdIgnoreNull(tkcttItemShowUnit.getContractQuantity()).compareTo(ToolUtil.bigDecimal0)>0) {
+                        // 算出机量产值单价
+                        BigDecimal bdCstplTkcttItem_TotalUnitPrice=
+                                bdCstplTkcttItem_TotalAmt.divide(tkcttItemShowUnit.getContractQuantity(),6,BigDecimal.ROUND_HALF_UP);
+                        qryTkMeaCSStlQShowList.get(qryTkMeaCSStlQShowList.size()-1).setCstplTkcttItem_TotalUnitPrice(bdCstplTkcttItem_TotalUnitPrice);
+
+                        for(int i=qryTkMeaCSStlQShowList.size()-1;i>=0;i--){
+                            if(qryTkMeaCSStlQShowList.get(i).getTkcttItem_Pkid()!=null) {
+                                if(qryTkMeaCSStlQShowList.get(i).getTkcttStlItem_ThisStageQty()!=null) {
+                                    qryTkMeaCSStlQShowList.get(i).setTkcttStlCstplItem_ThisStageAmt(
+                                            bdCstplTkcttItem_TotalUnitPrice.multiply(qryTkMeaCSStlQShowList.get(i).getTkcttStlItem_ThisStageQty()));
+                                }
+                                if(qryTkMeaCSStlQShowList.get(i).getTkcttStlItem_AddUpQty()!=null) {
+                                    qryTkMeaCSStlQShowList.get(i).setTkcttStlCstplItem_AddUpAmt(
+                                            bdCstplTkcttItem_TotalUnitPrice.multiply(qryTkMeaCSStlQShowList.get(i).getTkcttStlItem_AddUpQty()));
+                                }
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             // 成本计划中空头项需要在最后一一列出
@@ -266,6 +293,7 @@ public class TkMeaCSubStlQItemAction {
                 // 开累计量
                 BigDecimal bdTkcttStlBToCMeaQty=ToolUtil.getBdIgnoreNull(tkMeaCstplUnit.getTkcttStlItem_AddUpQty());
                 BigDecimal bdTkcttStlBToCMeaAmt=ToolUtil.getBdIgnoreNull(tkMeaCstplUnit.getTkcttStlItem_AddUpAmt());
+                BigDecimal bdTkcttStlCstplBToCMeaAmt=ToolUtil.getBdIgnoreNull(tkMeaCstplUnit.getTkcttStlCstplItem_AddUpAmt());
                 for(int i=0;i<subcttStlQBySignPartList.size();i++) {
                     QryTkMeaCSStlQShow tkMeaCstplUnitTemp= (QryTkMeaCSStlQShow) BeanUtils.cloneBean(tkMeaCstplUnit);
                     // 成本计划项遇到目标分包合同项
@@ -295,12 +323,16 @@ public class TkMeaCSubStlQItemAction {
                             tkMeaCstplUnitTemp.setTkcttItem_CttAmt(null);
                             tkMeaCstplUnitTemp.setTkcttStlItem_ThisStageQty(null);
                             tkMeaCstplUnitTemp.setTkcttStlItem_ThisStageAmt(null);
+                            tkMeaCstplUnitTemp.setTkcttStlCstplItem_ThisStageAmt(null);
                             tkMeaCstplUnitTemp.setTkcttStlItem_AddUpQty(null);
                             tkMeaCstplUnitTemp.setTkcttStlItem_AddUpAmt(null);
+                            tkMeaCstplUnitTemp.setTkcttStlCstplItem_AddUpAmt(null);
                             tkMeaCstplUnitTemp.setCstplItem_Name(null);
                             tkMeaCstplUnitTemp.setCstplItem_UnitPrice(null);
                             tkMeaCstplUnitTemp.setCstplItem_Qty(null);
                             tkMeaCstplUnitTemp.setCstplItem_Amt(null);
+                            tkMeaCstplUnitTemp.setCstplTkcttItem_TotalAmt(null);
+                            tkMeaCstplUnitTemp.setCstplTkcttItem_TotalUnitPrice(null);
                         }
 
                         insertedFlag=true ;
@@ -328,6 +360,8 @@ public class TkMeaCSubStlQItemAction {
                                         ToolUtil.getBdIgnoreNull(bdTkcttStlBToCMeaQty).subtract(bdSubcttCttQtyTotal));
                                 tkMeaCstplUnitTemp.setMeaSItem_AddUpAmt(
                                         ToolUtil.getBdIgnoreNull(bdTkcttStlBToCMeaAmt).subtract(bdSubcttCttAmtTotal));
+                                tkMeaCstplUnitTemp.setMeaSCstplItem_AddUpAmt(
+                                        ToolUtil.getBdIgnoreNull(bdTkcttStlCstplBToCMeaAmt).subtract(bdSubcttCttAmtTotal));
                                 qryTkMeaCSStlQShowList.add(tkMeaCstplUnitTemp);
                                 break;
                             }
@@ -337,6 +371,8 @@ public class TkMeaCSubStlQItemAction {
                                     bdTkcttStlBToCMeaQty.subtract(bdSubcttCttQtyTotal));
                             tkMeaCstplUnitTemp.setMeaSItem_AddUpAmt(
                                     bdTkcttStlBToCMeaAmt.subtract(bdSubcttCttAmtTotal));
+                            tkMeaCstplUnitTemp.setMeaSCstplItem_AddUpAmt(
+                                    bdTkcttStlCstplBToCMeaAmt.subtract(bdSubcttCttAmtTotal));
                             qryTkMeaCSStlQShowList.add(tkMeaCstplUnitTemp);
                         }
                     }
@@ -345,6 +381,7 @@ public class TkMeaCSubStlQItemAction {
                 if(insertedFlag.equals(false)){
                     tkMeaCstplUnit.setMeaSItem_AddUpQty(tkMeaCstplUnit.getTkcttStlItem_AddUpQty());
                     tkMeaCstplUnit.setMeaSItem_AddUpAmt(tkMeaCstplUnit.getTkcttStlItem_AddUpAmt());
+                    tkMeaCstplUnit.setMeaSCstplItem_AddUpAmt(tkMeaCstplUnit.getTkcttStlCstplItem_AddUpAmt());
                     qryTkMeaCSStlQShowList.add(tkMeaCstplUnit);
                 }
             }

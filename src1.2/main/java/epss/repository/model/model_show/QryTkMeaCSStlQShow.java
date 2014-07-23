@@ -40,6 +40,10 @@ public class QryTkMeaCSStlQShow implements Serializable {
     private BigDecimal tkcttStlItem_ThisStageAmt;
     // 当期计量结算开累工程金额
     private BigDecimal tkcttStlItem_AddUpAmt;
+    // 当期计量结算成本工程金额
+    private BigDecimal tkcttStlCstplItem_ThisStageAmt;
+    // 当期计量结算成本开累工程金额
+    private BigDecimal tkcttStlCstplItem_AddUpAmt;
 
     // 当期分包结算工程数量
     private String subcttItem_CorrPkid;
@@ -57,8 +61,10 @@ public class QryTkMeaCSStlQShow implements Serializable {
 
     // 数量差
     private BigDecimal meaSItem_AddUpQty;
-    // 金额差
+    // 计量分包结算金额差
     private BigDecimal meaSItem_AddUpAmt;
+    // 计量成本分包结算金额差
+    private BigDecimal meaSCstplItem_AddUpAmt;
 
     private String itemNote;
 
@@ -222,6 +228,22 @@ public class QryTkMeaCSStlQShow implements Serializable {
         this.tkcttStlItem_AddUpAmt = tkcttStlItem_AddUpAmt;
     }
 
+    public BigDecimal getTkcttStlCstplItem_ThisStageAmt() {
+        return tkcttStlCstplItem_ThisStageAmt;
+    }
+
+    public void setTkcttStlCstplItem_ThisStageAmt(BigDecimal tkcttStlCstplItem_ThisStageAmt) {
+        this.tkcttStlCstplItem_ThisStageAmt = tkcttStlCstplItem_ThisStageAmt;
+    }
+
+    public BigDecimal getTkcttStlCstplItem_AddUpAmt() {
+        return tkcttStlCstplItem_AddUpAmt;
+    }
+
+    public void setTkcttStlCstplItem_AddUpAmt(BigDecimal tkcttStlCstplItem_AddUpAmt) {
+        this.tkcttStlCstplItem_AddUpAmt = tkcttStlCstplItem_AddUpAmt;
+    }
+
     public String getSubcttItem_CorrPkid() {
         return subcttItem_CorrPkid;
     }
@@ -300,6 +322,14 @@ public class QryTkMeaCSStlQShow implements Serializable {
 
     public void setMeaSItem_AddUpAmt(BigDecimal meaSItem_AddUpAmt) {
         this.meaSItem_AddUpAmt = meaSItem_AddUpAmt;
+    }
+
+    public BigDecimal getMeaSCstplItem_AddUpAmt() {
+        return meaSCstplItem_AddUpAmt;
+    }
+
+    public void setMeaSCstplItem_AddUpAmt(BigDecimal meaSCstplItem_AddUpAmt) {
+        this.meaSCstplItem_AddUpAmt = meaSCstplItem_AddUpAmt;
     }
 
     public String getItemNote() {
