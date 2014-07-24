@@ -640,7 +640,6 @@ public class ProgMatqtyItemAction {
     public void setStrNotPassToStatus(String strNotPassToStatus) {
         this.strNotPassToStatus = strNotPassToStatus;
     }
-/*ÖÇÄÜ×Ö¶ÎEnd*/
 
     public List<ProgMatQtyItemShow> getProgMatQtyItemShowListExcel() {
         return progMatQtyItemShowListExcel;
@@ -673,4 +672,5 @@ public class ProgMatqtyItemAction {
     public void setEsInitStl(EsInitStl esInitStl) {
         this.esInitStl = esInitStl;
     }
+	/*ÖÇÄÜ×Ö¶ÎEnd*/
 }
