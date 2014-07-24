@@ -22,6 +22,12 @@
         <h:form id="form">
             <p:panel>
                 <p:growl id="msgs" showDetail="true"/>
+                <h:panelGrid  columns="1">
+                    <p:commandButton value="导出到EXCEL"
+                                    action="#{progMatqtyItemAction.onExportExcel}"
+                                    ajax="false">
+                    </p:commandButton>
+                </h:panelGrid >
                 <p:dataTable id="pdt" style="width:100%;"
                              value="#{progMatqtyItemAction.progMatQtyItemShowList}"
                              var="record"
