@@ -369,6 +369,7 @@ public class TkcttInfoAction {
             } else {
                 addRecordAction(cttInfoShowAdd);
                 MessageUtil.addInfo("新增数据完成。");
+                resetActionForAdd();
             }
         } else if (strSubmitType.equals("Upd")) {
             updRecordAction(cttInfoShowUpd);

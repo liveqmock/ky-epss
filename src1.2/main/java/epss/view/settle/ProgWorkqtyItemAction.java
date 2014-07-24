@@ -106,7 +106,7 @@ public class ProgWorkqtyItemAction {
             // ÏêÏ¸Ò³Í·
             EsCttInfo esCttInfo_Subctt= cttInfoService.getCttInfoByPkId(progWorkqtyInfo.getStlPkid());
             progWorkqtyInfoShowH.setId(progWorkqtyInfo.getId());
-            progWorkqtyInfoShowH.setStlName(cttInfoService.getCttInfoByPkId(progWorkqtyInfo.getStlPkid()).getName());
+            progWorkqtyInfoShowH.setStlName(esCttInfo_Subctt.getName());
             progWorkqtyInfoShowH.setPeriodNo(progWorkqtyInfo.getPeriodNo());
             progWorkqtyInfoShowH.setSignPartBName(signPartService.getEsInitCustByPkid(esCttInfo_Subctt.getSignPartB()).getName());
             beansMap.put("progWorkqtyInfoShowH", progWorkqtyInfoShowH);

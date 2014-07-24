@@ -378,6 +378,7 @@ public class CstplInfoAction {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             } else {
                 addRecordAction(cttInfoShowAdd);
+                resetActionForAdd();
             }
         } else if (strSubmitType.equals("Upd")) {
             cttInfoShowUpd.setCttType(ESEnum.ITEMTYPE1.getCode());

@@ -219,11 +219,13 @@
                     <p:commandButton id="submitBtnForUpd"
                                      value="提交（更新）"
                                      action="#{progMatqtyItemAction.submitThisRecordAction}"
-                                     update="pgViewForUpd,pdt,msgs,pgOperBtnForUpd">
+                                     update="pgViewForUpd,pdt,msgs,pgOperBtnForUpd"
+                                     oncomplete="wVDlgViewForUpd.hide()">
                     </p:commandButton>
                     <p:commandButton id="resetBtnForUpd" value="重置"
                                      type="reset"
-                                     update="pgViewForUpd">
+                                     update="pgViewForUpd"
+                                     oncomplete="wVDlgViewForUpd.hide()">
                     </p:commandButton>
                 </h:panelGrid>
                 </h:panelGrid>
@@ -325,7 +327,8 @@
                         <p:commandButton id="submitBtn"
                                          value="提交（删除）"
                                          action="#{progMatqtyItemAction.submitThisRecordAction}"
-                                         update="pgViewForDel,pdt,msgs,pgOperBtnForDel">
+                                         update="pgViewForDel,pdt,msgs,pgOperBtnForDel"
+                                         oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                     </h:panelGrid>
                 </h:panelGrid>

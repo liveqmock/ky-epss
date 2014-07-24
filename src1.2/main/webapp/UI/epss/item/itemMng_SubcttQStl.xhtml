@@ -60,13 +60,13 @@
                                           style="height:20px;width:20px"
                                           actionListener="#{progWorkqtyItemAction.selectRecordAction('Upd',record)}"
                                           update="pdt,:form:pgViewForUpd"
-                                          oncomplete="PF('wVDlgViewForUpd').show()">
+                                          onclick="PF('wVDlgViewForUpd').show()">
                         </p:commandButton>
                         <p:commandButton  icon="ui-icon-trash"
                                           style="height:20px;width:20px"
                                           actionListener="#{progWorkqtyItemAction.selectRecordAction('Del',record)}"
                                           update="pdt,:form:pgViewForDel"
-                                          oncomplete="PF('wVDlgViewForDel').show()">
+                                          onclick="PF('wVDlgViewForDel').show()">
                         </p:commandButton>
                     </p:column>
                     <p:column style="width:30px" headerText="序号" >
@@ -206,7 +206,8 @@
                             <p:commandButton id="submitBtnForUpd"
                                              value="提交（更新）"
                                              action="#{progWorkqtyItemAction.submitThisRecordAction}"
-                                             update="pdt,msgs">
+                                             update="pdt,msgs"
+                                             oncomplete="wVDlgViewForUpd.hide()">
                             </p:commandButton>
                         </h:panelGrid>
                     </h:panelGrid>
@@ -301,7 +302,8 @@
                             <p:commandButton id="submitBtnForDel"
                                              value="提交（删除）"
                                              action="#{progWorkqtyItemAction.submitThisRecordAction}"
-                                             update="pdt,msgs">
+                                             update="pdt,msgs"
+                                             oncomplete="wVDlgViewForDel.hide()">
                             </p:commandButton>
                         </h:panelGrid>
                     </h:panelGrid>

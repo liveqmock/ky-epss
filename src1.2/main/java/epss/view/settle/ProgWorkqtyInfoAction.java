@@ -284,8 +284,10 @@ public class ProgWorkqtyInfoAction {
             if (!"".equals(strTemp)) {
                 MessageUtil.addError(strTemp);
                 return;
+            }else{
+                addRecordAction(progInfoShowAdd);
+                resetActionForAdd();
             }
-            addRecordAction(progInfoShowAdd);
         } else if (strSubmitType.equals("Upd")) {
             progInfoShowUpd.setStlType(strStlType);
             if (!submitPreCheck(progInfoShowUpd)) {

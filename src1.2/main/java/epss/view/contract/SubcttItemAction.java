@@ -505,8 +505,6 @@ public class SubcttItemAction {
                     addRecordAction(cttItemShowAdd);
                     resetActionForAdd();
                 }else if(strSubmitType.equals("Upd")){
-                    Integer intModificationNum= cttItemShowUpd.getModificationNum()==null?0: cttItemShowUpd.getModificationNum();
-                    cttItemShowUpd.setModificationNum(intModificationNum+1);
                     updRecordAction(cttItemShowUpd);
                 }
             }
