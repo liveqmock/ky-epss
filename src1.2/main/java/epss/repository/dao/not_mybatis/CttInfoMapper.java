@@ -16,12 +16,20 @@ import java.util.List;
  */
 @Component
 public interface CttInfoMapper {
+    @Select("select eic.ID,eic.name, eic.SIGN_DATE,eic.CTT_START_DATE,eic.CTT_END_DATE,eic.note,eic.SIGN_PART_A,eic.SIGN_PART_B, " +
+            " eip.PRE_STATUS_FLAG,eip.STATUS_FLAG " +
+            " from ES_CTT_INFO eic inner join ES_INIT_POWER eip " +
+            " on eic.pkid=eip.POWER_PKID and eic.CTT_TYPE=eip.POWER_TYPE " +
+            " where eic.pkid = #{strPkid}")
+    CttInfoShow selectByPrimaryKey(@Param("strPkid") String strCttPkid);
+
     @Select("select max(id) from ES_CTT_INFO where ctt_type = #{strCttType}")
     String getStrMaxCttId(@Param("strCttType") String strCttType);
 
     @Select(" select" +
                  " eic.PKID" +
                  ",eic.NAME" +
+                 ",eic.MODIFICATION_NUM" +
             " from" +
                  " ES_CTT_INFO eic" +
             " inner join" +
@@ -40,6 +48,7 @@ public interface CttInfoMapper {
     @Select(" select" +
                 " eic.PKID" +
                 ",eic.NAME" +
+                ",eic.MODIFICATION_NUM"+
             " from" +
                 " ES_CTT_INFO eic" +
             " inner join" +

@@ -2,11 +2,11 @@ package epss.view.contract;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.common.utils.*;
 import epss.repository.model.EsCttInfo;
+import epss.repository.model.EsCttItem;
 import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.CttInfoShow;
-import epss.common.utils.StyleModel;
-import epss.common.utils.ToolUtil;
 import epss.service.CttInfoService;
 import epss.service.CttItemService;
 import epss.service.FlowCtrlService;
@@ -16,12 +16,9 @@ import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import epss.common.utils.MessageUtil;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
@@ -43,7 +40,7 @@ import java.util.List;
  */
 @ManagedBean
 @ViewScoped
-public class TkcttInfoAction {
+public class TkcttInfoAction implements Serializable{
     private static final Logger logger = LoggerFactory.getLogger(TkcttInfoAction.class);
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
@@ -75,11 +72,61 @@ public class TkcttInfoAction {
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
     //更新时检验用，符合立刻关闭，不符合进行提升
-    private boolean checkForUpd;
-
+    private TreeNode root;
+    private TreeNode selectedNode;
+    private static List<CttInfoShow> cttInfoShowTreeList;
+    private static List<EsCttItem> cttItemShowTreeList;
+    private CttInfoShow cttInfoShow;
     @PostConstruct
     public void init() {
         initData();
+        initTkcttMng();
+        cttInfoShow=new CttInfoShow();
+    }
+    public void  initTkcttMng(){
+        cttInfoShowTreeList=new ArrayList<CttInfoShow>();
+        root=new DefaultTreeNode("root",null);
+        cttInfoShowQry = new CttInfoShow();
+        cttInfoShowQry.setCttType(ESEnum.ITEMTYPE0.getCode());
+        cttInfoShowQry.setStrStatusFlagBegin(null);
+        cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+        cttInfoShowQry.setPeriodNo("NULL");
+        cttInfoShowTreeList=esFlowService.selectCttByStatusFlagBegin_End(cttInfoShowQry);
+        for(CttInfoShow item:cttInfoShowTreeList){
+            TreeNode childNodeTkctt = null;
+            if(item.getPkid()!=null){
+                CttInfoShow cttInfoShowTemp = cttInfoService.getCttInfoShowByPkId(item.getPkid());
+                childNodeTkctt = new DefaultTreeNode(new CttInfoShow(item.getId(),item.getName(),
+                        esCommon.getCustNameByCustIdFromList(item.getSignPartA()),
+                        esCommon.getCustNameByCustIdFromList(item.getSignPartB()),
+                        esFlowControl.getLabelByValueInPreStatusFlaglist(item.getStatusFlag()),
+                        esFlowControl.getLabelByValueInPreStatusFlaglist(item.getPreStatusFlag()),
+                item.getCttStartDate(),item.getCttEndDate(),
+                item.getSignDate(),item.getNote()), root);
+                cttItemShowTreeList = cttItemService.getEsItemList( item.getCttType(),item.getPkid());
+                for(EsCttItem cttItem:cttItemShowTreeList){
+                    TreeNode  childNodeCstpl=new DefaultTreeNode(new CttInfoShow(cttItem.getPkid(),cttItem.getName(), "-","-","-","-","-","-","-",cttItem.getNote()),childNodeTkctt);
+                }
+            }else{
+                childNodeTkctt = new DefaultTreeNode(new CttInfoShow("-",item.getName(), "-","-","-","-","-","-","-","-"), root);
+            }
+        }
+    }
+
+    public void addNode(){
+        TreeNode childNode = new DefaultTreeNode(new CttInfoShow(cttInfoShow.getId(),cttInfoShow.getName(), esCommon.getCustNameByCustIdFromList(cttInfoShow.getSignPartA()),
+                esCommon.getCustNameByCustIdFromList(cttInfoShow.getSignPartB()),cttInfoShow.getStatusFlag(),
+                cttInfoShow.getPreStatusFlag(),
+                cttInfoShow.getCttStartDate(),cttInfoShow.getCttEndDate(),
+                cttInfoShow.getSignDate(),cttInfoShow.getNote()));
+    }
+
+    public void deleteNode() {
+        selectedNode.getChildren().clear();
+        selectedNode.getParent().getChildren().remove(selectedNode);
+        selectedNode.setParent(null);
+
+        selectedNode = null;
     }
     public void initData() {
         this.attachmentList=new ArrayList<AttachmentModel>();
@@ -98,7 +145,6 @@ public class TkcttInfoAction {
         styleModel.setDisabled_Flag("false");
         strSubmitType = "Add";
         esFlowControl.getBackToStatusFlagList("Qry");
-        checkForUpd=true;
     }
 
     public void setMaxNoPlusOne() {
@@ -373,7 +419,6 @@ public class TkcttInfoAction {
             }
         } else if (strSubmitType.equals("Upd")) {
             updRecordAction(cttInfoShowUpd);
-            checkForUpd=true;
             MessageUtil.addInfo("更新数据完成。");
         } else if (strSubmitType.equals("Del")) {
             deleteRecordAction(cttInfoShowDel);
@@ -563,13 +608,33 @@ public class TkcttInfoAction {
     public void setCttInfoShowAttachment(CttInfoShow cttInfoShowAttachment) {
         this.cttInfoShowAttachment = cttInfoShowAttachment;
     }
-
-    public boolean isCheckForUpd() {
-        return checkForUpd;
-    }
-
-    public void setCheckForUpd(boolean checkForUpd) {
-        this.checkForUpd = checkForUpd;
-    }
 /*智能字段 End*/
+
+    public TreeNode getRoot() {
+        return root;
+    }
+
+    public void setRoot(TreeNode root) {
+        this.root = root;
+    }
+
+    public TreeNode getSelectedNode() {
+        return selectedNode;
+    }
+
+    public void setSelectedNode(TreeNode selectedNode) {
+        this.selectedNode = selectedNode;
+    }
+
+    public static List<CttInfoShow> getCttInfoShowTreeList() {
+        return cttInfoShowTreeList;
+    }
+
+    public CttInfoShow getCttInfoShow() {
+        return cttInfoShow;
+    }
+
+    public void setCttInfoShow(CttInfoShow cttInfoShow) {
+        this.cttInfoShow = cttInfoShow;
+    }
 }
