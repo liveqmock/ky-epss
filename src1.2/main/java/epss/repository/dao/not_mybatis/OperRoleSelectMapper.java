@@ -25,7 +25,7 @@ public interface OperRoleSelectMapper {
             "    (select " +
             "       operid as selid , " +
             "       opername as slename , " +
-            "       1 as seltype, " +
+            "       0 as seltype, " +
             "       0 as countnumer " +
             "     from " +
             "        ptoper " +
@@ -35,7 +35,7 @@ public interface OperRoleSelectMapper {
             "     select " +
             "       deptid as selid , " +
             "       deptname as slename, " +
-            "       0 as seltype , " +
+            "       1 as seltype , " +
             "       (select  count(deptid) as a from ptdept  where parentdeptid=ta.deptid) as countnumer " +
             "     from " +
             "       ptdept ta " +
