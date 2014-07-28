@@ -138,6 +138,9 @@
                     <p:column headerText="签订日期" style="width:66px;text-align:center">
                         <h:outputText value="#{record.signDate}"/>
                     </p:column>
+                    <p:column headerText="分包合同类型" style="width:80px;text-align:center">
+                        <h:outputText value="#{record.type}"/>
+                    </p:column>
                 </p:dataTable>
                 <!--附件列表维护-->
                 <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"

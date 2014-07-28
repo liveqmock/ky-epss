@@ -118,12 +118,6 @@
                         </p:commandButton>
                     </h:panelGrid>
                 </h:panelGrid>
-                <!--列表维护-->
-                <p:contextMenu for="pdt">
-                    <p:menuitem value="详细内容" icon="ui-icon-search"
-                                oncomplete="actSelect(DtInitSubcttList.selection)" >
-                    </p:menuitem>
-                </p:contextMenu>
                 <p:dataTable id="pdt" style="width:100%;"
                              value="#{progSubstlInfoAction.progInfoShowList}"
                              var="record"
