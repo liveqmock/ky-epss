@@ -61,14 +61,16 @@ public class OperRoleSelectAction {
     @PostConstruct
     public void init() {
         root = new DefaultTreeNode("Root", null);
+        cttroot = new DefaultTreeNode("cttroot", null);
         OperRoleSelectShow operRoleSelectShow=new OperRoleSelectShow();
-        operRoleSelectShow.setSlename("ÈËÔ±ÊÚÈ¨");
+        operRoleSelectShow.setSlename("ï¿½ï¿½Ô±ï¿½ï¿½È¨");
         operRoleSelectShow.setSeltype("1");
         TreeNode node0 = new DefaultTreeNode(operRoleSelectShow, root);
         recursiveTreeNode("0",node0);
         node0.setExpanded(true);
         //expandTreeNode(node0);
         cttInfoShow = new CttInfoShow();
+        initCttInfo();
     }
     private void recursiveTreeNode(String strLevelParentId,TreeNode parentNode){
         List<OperRoleSelectShow> operRoleSelectShowList=operRoleSelectService.selectOperaRoleRecords(strLevelParentId);
@@ -120,7 +122,7 @@ public class OperRoleSelectAction {
     }
     public void initCttInfo() {
         tkCttInfoShowTreeList = new ArrayList<CttInfoShow>();
-        root = new DefaultTreeNode("root", null);
+        cttroot = new DefaultTreeNode("cttroot", null);
         tkCttInfoShowQry = new CttInfoShow();
         tkCttInfoShowQry.setCttType(ESEnum.ITEMTYPE0.getCode());
         tkCttInfoShowQry.setStrStatusFlagBegin(null);
@@ -136,7 +138,7 @@ public class OperRoleSelectAction {
                         esFlowControl.getLabelByValueInPreStatusFlaglist(item.getStatusFlag()),
                         esFlowControl.getLabelByValueInPreStatusFlaglist(item.getPreStatusFlag()),
                         item.getCttStartDate(), item.getCttEndDate(),
-                        item.getSignDate(), item.getNote()), root);
+                        item.getSignDate(), item.getNote()), cttroot);
                 cstplInfoShowQry = new CttInfoShow();
                 cstplInfoShowQry.setCttType(ESEnum.ITEMTYPE1.getCode());
                 cstplInfoShowQry.setStrStatusFlagBegin(null);
@@ -191,7 +193,7 @@ public class OperRoleSelectAction {
         selectedNode = null;
     }
 
-    /*ÖÇÄÜ×Ö¶Î Start*/
+    /*ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ Start*/
 
     public CttItemService getCttItemService() {
         return cttItemService;
@@ -241,7 +243,7 @@ public class OperRoleSelectAction {
         this.esFlowControl = esFlowControl;
     }
 
-/*ÖÇÄÜ×Ö¶Î End*/
+/*ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ End*/
 
     public CttInfoShow getTkCttInfoShowQry() {
         return tkCttInfoShowQry;
@@ -288,4 +290,5 @@ public class OperRoleSelectAction {
     public void setSubCttInfoShowQry(CttInfoShow subCttInfoShowQry) {
         this.subCttInfoShowQry = subCttInfoShowQry;
     }
+
 }

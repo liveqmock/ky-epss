@@ -36,6 +36,7 @@
                     <h:outputText value="#{node.seltype eq '0'?node.slename:''}" />
                 </p:column>
             </p:treeTable>
+            <p:panel>
             <p:treeTable id="pdt" style="width:100%;"
                          value="#{operRoleSelectAction.cttroot}"
                          var="document"
@@ -51,6 +52,7 @@
                     <h:outputText value="#{document.name}"/>
                 </p:column>
             </p:treeTable>
+        </p:panel>
         </h:form>
     </ui:define>
 </ui:composition>
