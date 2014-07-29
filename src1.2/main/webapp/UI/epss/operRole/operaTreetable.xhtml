@@ -37,38 +37,19 @@
                     <h:outputText value="#{node.seltype eq '0'?node.slename:''}" />
                 </p:column>
             </p:treeTable>
-            <p:treeTable id="pdt" style="width:100%;" value="#{operRoleSelectAction.cttroot}" var="document"
-                         selection="#{cttInfoAction.selectedNode}"
+            <p:treeTable id="pdt" style="width:100%;"
+                         value="#{operRoleSelectAction.cttroot}"
+                         var="document"
+                         selection="#{operRoleSelectAction.selectedNode}"
                          rowKey="#{document.pkid}"
                          selectionMode="single"
-                         scrollable="true"
-                         emptyMessage="数据记录为空..."
-                         widgetVar="DtInitSubcttList">
-                <p:column  style="width:120px;text-align:center">
-                    <f:facet name="header">
-                        合同号
-                    </f:facet>
+                         scrollable="true">
+                <p:column style="width:120px;text-align:center">
                     <h:outputText value="#{document.id}"/>
                 </p:column>
-                <p:column  style="width:400px;text-align:left">
-                    <f:facet name="header">
-                        合同名
-                    </f:facet>
+                <p:column style="width:400px;text-align:left">
                     <h:outputText value="#{document.name}"/>
                 </p:column>
-                <p:column  style="width:200px;text-align:left">
-                    <f:facet name="header">
-                        签订甲方
-                    </f:facet>
-                    <h:outputText value="#{document.signPartAName}"/>
-                </p:column>
-                <p:column  style="width:200px;text-align:left">
-                    <f:facet name="header">
-                        签订乙方
-                    </f:facet>
-                    <h:outputText value="#{document.signPartBName}"/>
-                </p:column>
-         
             </p:treeTable>
         </h:form>
     </ui:define>
