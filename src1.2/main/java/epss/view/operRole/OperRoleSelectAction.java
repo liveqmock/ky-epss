@@ -1,5 +1,4 @@
 package epss.view.operRole;
-package epss.view.contract;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
