@@ -39,7 +39,7 @@ import java.util.List;
  */
 @ManagedBean
 @ViewScoped
-public class TkcttInfoAction implements Serializable{
+public class TkcttInfoAction {
     private static final Logger logger = LoggerFactory.getLogger(TkcttInfoAction.class);
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
