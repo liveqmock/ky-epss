@@ -92,10 +92,6 @@ public class CttInfoService {
         return esCttInfoMapper.selectByPrimaryKey(strPkid);
     }
 
-    public CttInfoShow getCttInfoShowByPkId(String strPkid) {
-        return cttInfoMapper.selectByPrimaryKey(strPkid);
-    }
-
     private String stringIgnoreNull(String strOriginal){
         if(strOriginal ==null){
             return "";

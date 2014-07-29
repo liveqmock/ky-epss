@@ -95,7 +95,6 @@ public class TkcttInfoAction implements Serializable{
         for(CttInfoShow item:cttInfoShowTreeList){
             TreeNode childNodeTkctt = null;
             if(item.getPkid()!=null){
-                CttInfoShow cttInfoShowTemp = cttInfoService.getCttInfoShowByPkId(item.getPkid());
                 childNodeTkctt = new DefaultTreeNode(new CttInfoShow(item.getId(),item.getName(),
                         esCommon.getCustNameByCustIdFromList(item.getSignPartA()),
                         esCommon.getCustNameByCustIdFromList(item.getSignPartB()),
