@@ -34,6 +34,7 @@ public class OperRoleSelectAction {
         operRoleSelectShow.setSlename("»À‘± ⁄»®");
         TreeNode node0 = new DefaultTreeNode(operRoleSelectShow, root);
         recursiveTreeNode("0",node0);
+        expandTreeNode(node0);
     }
     private void recursiveTreeNode(String strLevelParentId,TreeNode parentNode){
         List<OperRoleSelectShow> operRoleSelectShowList=operRoleSelectService.selectOperaRoleRecords(strLevelParentId);
@@ -41,6 +42,14 @@ public class OperRoleSelectAction {
             TreeNode childNode = null;
             childNode=new DefaultTreeNode(operRoleSelectShowList.get(i), parentNode);
             recursiveTreeNode(operRoleSelectShowList.get(i).getSelid(),childNode);
+        }
+    }
+
+    private void expandTreeNode(TreeNode node){
+        node.setExpanded(true);
+        for (int i=0;i<node.getChildCount();i++){
+            node.getChildren().get(i).setExpanded(true);
+            expandTreeNode(node.getChildren().get(i));
         }
     }
 
