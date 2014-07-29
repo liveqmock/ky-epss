@@ -66,7 +66,8 @@ public class OperRoleSelectAction {
         operRoleSelectShow.setSeltype("1");
         TreeNode node0 = new DefaultTreeNode(operRoleSelectShow, root);
         recursiveTreeNode("0",node0);
-        expandTreeNode(node0);
+        node0.setExpanded(true);
+        //expandTreeNode(node0);
         cttInfoShow = new CttInfoShow();
     }
     private void recursiveTreeNode(String strLevelParentId,TreeNode parentNode){
