@@ -32,6 +32,7 @@ public class OperRoleSelectAction {
         root = new DefaultTreeNode("Root", null);
         OperRoleSelectShow operRoleSelectShow=new OperRoleSelectShow();
         operRoleSelectShow.setSlename("»À‘± ⁄»®");
+        operRoleSelectShow.setSeltype("1");
         TreeNode node0 = new DefaultTreeNode(operRoleSelectShow, root);
         recursiveTreeNode("0",node0);
         expandTreeNode(node0);
