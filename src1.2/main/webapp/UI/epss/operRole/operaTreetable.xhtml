@@ -24,13 +24,17 @@
             <p:treeTable value="#{operRoleSelectAction.root}" var="node" dynamic="true" cache="false"
                     selectionMode="single"  selection="#{operRoleSelectAction.selectedNode}"
                     >
+
                 <!--<p:ajax event="expand" update=":form:messages" listener="#{operRoleSelectAction.onNodeExpand}" />
                 <p:ajax event="collapse" update=":form:messages" listener="#{operRoleSelectAction.onNodeCollapse}" />
                 <p:ajax event="select" update=":form:messages" listener="#{operRoleSelectAction.onNodeSelect}" />
                 <p:ajax event="unselect" update=":form:messages" listener="#{operRoleSelectAction.onNodeUnselect}" />
                 -->
                 <p:column>
-                    <h:outputText value="#{node.slename}" />
+                    <h:outputText value="#{node.seltype eq '1'?node.slename:''}" />
+                </p:column>
+                <p:column>
+                    <h:outputText value="#{node.seltype eq '0'?node.slename:''}" />
                 </p:column>
             </p:treeTable>
         </h:form>
