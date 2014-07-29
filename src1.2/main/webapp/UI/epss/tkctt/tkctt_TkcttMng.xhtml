@@ -67,105 +67,82 @@
                              update="pgViewForAdd"
                              onclick="PF('wVDlgViewForAdd').show()">
             </p:commandButton>
-            <p:treeTable id="pdt" style="width:100%;" value="#{tkcttInfoAction.root}" var="document"
-                             selection="#{tkcttInfoAction.selectedNode}"
-                             rowKey="#{document.pkid}"
-                             selectionMode="single"
-                             scrollable="true"
-                             emptyMessage="数据记录为空..."
-                             widgetVar="DtInitSubcttList">
-                    <!--<p:column style="width:120px;text-align:center">
-                        <f:facet name="header">
-                            操作
-                        </f:facet>
-                        <p:commandButton icon="ui-icon-pencil"
-                                         style="height:20px;width:20px"
-                                         action="#{tkcttInfoAction.selectRecordAction('Mng','Upd',document)}"
-                                         update="pdt,:form:pgViewForUpd,:form:msgs"
-                                         onclick="PF('wVDlgViewForUpd').show()">
-                        </p:commandButton>
-                        <p:commandButton icon="ui-icon-trash"
-                                         style="height:20px;width:20px"
-                                         action="#{tkcttInfoAction.selectRecordAction('Mng','Del',document)}"
-                                         update="pdt,:form:pgViewForDel,:form:msgs"
-                                         onclick="PF('wVDlgViewForDel').show()">
-                        </p:commandButton>
-                        <p:commandButton icon="ui-icon-document"
-                                         style="height:20px;width:20px"
-                                         action="#{tkcttInfoAction.attachmentStrToList()}"
-                                         update="pdt,:form:pgAttachmentView,:form:msgs"
-                                         onclick="PF('wvAttachmentList').show()">
-                            <f:setPropertyActionListener value="#{document}" target="#{tkcttInfoAction.cttInfoShowAttachment}"/>
-                        </p:commandButton>
-                        <p:commandButton icon="ui-icon-triangle-1-e"
-                                         style="height:20px;width:20px"
-                                         onclick="actSelect('#{document.pkid}')">
-                        </p:commandButton>
-                    </p:column>-->
-                <!--<p:column headerText="序号" style="width:30px">
+            <p:dataTable id="pdt" style="width:100%;"
+                         value="#{tkcttInfoAction.cttInfoShowList}"
+                         var="record"
+                         rowKey="#{record.pkid}"
+                         selectionMode="single"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="20"
+                         rowIndexVar="row"
+                         rowsPerPageTemplate="200,100,50,30,20,10"
+                         emptyMessage="数据记录为空..."
+                         widgetVar="DtInitTkcttList"
+                         rowStyleClass="#{record.statusFlag eq null? null:'rowDoneStyle'}"
+                         scrollable="true">
+                <p:column headerText="操作" style="width:62px">
+                    <p:commandButton icon="ui-icon-pencil"
+                                     style="height:20px;width:20px"
+                                     action="#{tkcttInfoAction.selectRecordAction('Mng','Upd',record)}"
+                                     update="pdt,:form:pgViewForUpd,:form:msgs"
+                                     onclick="PF('wVDlgViewForUpd').show()">
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-trash"
+                                     style="height:20px;width:20px"
+                                     action="#{tkcttInfoAction.selectRecordAction('Mng','Del',record)}"
+                                     update="pdt,:form:pgViewForDel,:form:msgs"
+                                     onclick="PF('wVDlgViewForDel').show()">
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-document"
+                                     style="height:20px;width:20px"
+                                     action="#{tkcttInfoAction.attachmentStrToList()}"
+                                     update="pdt,:form:pgAttachmentView,:form:msgs"
+                                     onclick="PF('wvAttachmentList').show()">
+                        <f:setPropertyActionListener value="#{record}" target="#{tkcttInfoAction.cttInfoShowAttachment}"/>
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-triangle-1-e"
+                                     style="height:20px;width:20px"
+                                     onclick="actSelect('#{record.pkid}')">
+                    </p:commandButton>
+                </p:column>
+                <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
-                </p:column>-->
-                <p:column  style="width:120px;text-align:center">
-                    <f:facet name="header">
-                        合同号
-                    </f:facet>
-                    <h:outputText value="#{document.id}"/>
                 </p:column>
-                <p:column  style="width:400px;text-align:left">
-                    <f:facet name="header">
-                        合同名
-                    </f:facet>
-                    <h:outputText value="#{document.name}"/>
+                <p:column headerText="总包合同号" style="width:120px;text-align:center">
+                    <h:outputText value="#{record.id}"/>
                 </p:column>
-                <p:column  style="width:200px;text-align:left">
-                    <f:facet name="header">
-                        签订甲方
-                    </f:facet>
-                    <h:outputText value="#{document.signPartAName}"/>
+                <p:column headerText="总包合同名" style="width:400px;text-align:left">
+                    <h:outputText value="#{record.name}"/>
                 </p:column>
-                <p:column  style="width:200px;text-align:left">
-                    <f:facet name="header">
-                        签订乙方
-                    </f:facet>
-                    <h:outputText value="#{document.signPartBName}"/>
+                <p:column headerText="签订甲方" style="width:200px;text-align:left">
+                    <h:outputText value="#{esCommon.getCustNameByCustIdFromList(record.signPartA)}"/>
                 </p:column>
-                <p:column  style="width:60px;text-align:center">
-                    <f:facet name="header">
-                        状态标志
-                    </f:facet>
-                    <h:outputText value="#{document.statusFlag}"/>
+                <p:column headerText="签订乙方" style="width:200px;text-align:left">
+                    <h:outputText value="#{esCommon.getCustNameByCustIdFromList(record.signPartB)}"/>
                 </p:column>
-                <p:column  style="width:60px;text-align:center">
-                    <f:facet name="header">
-                        原因
-                    </f:facet>
-                    <h:outputText value="#{document.preStatusFlag}"/>
+                <p:column headerText="状态标志" style="width:60px;text-align:center">
+                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.statusFlag)}"/>
                 </p:column>
-                <p:column  style="width:66px;text-align:center">
-                    <f:facet name="header">
-                        开始时间
-                    </f:facet>
-                    <h:outputText value="#{document.cttStartDate}"/>
+                <p:column headerText="原因" style="width:60px;text-align:center">
+                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.preStatusFlag)}"/>
                 </p:column>
-                <p:column  style="width:66px;text-align:center">
-                    <f:facet name="header">
-                        截止时间
-                    </f:facet>
-                    <h:outputText value="#{document.cttEndDate}"/>
+                <p:column headerText="开始时间" style="width:66px;text-align:center">
+                    <h:outputText value="#{record.cttStartDate}"/>
                 </p:column>
-                <p:column  style="width:66px;text-align:center">
-                    <f:facet name="header">
-                        签订日期
-                    </f:facet>
-                    <h:outputText value="#{document.signDate}"/>
+                <p:column headerText="截止时间" style="width:66px;text-align:center">
+                    <h:outputText value="#{record.cttEndDate}"/>
                 </p:column>
-                <p:column  style="width:200px;text-align:left">
-                    <f:facet name="header">
-                        备注内容
-                    </f:facet>
-                    <h:outputText value="#{document.note}"/>
+                <p:column headerText="签订日期" style="width:66px;text-align:center">
+                    <h:outputText value="#{record.signDate}"/>
                 </p:column>
-                </p:treeTable>
+                <p:column headerText="备注内容" style="width:200px;text-align:left">
+                    <h:outputText value="#{record.note}"/>
+                </p:column>
+            </p:dataTable>
+
             <!--附件列表维护-->
             <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
                       showEffect="clip" hideEffect="fold" header="附件列表">
@@ -358,7 +335,7 @@
                                          value="提交（更新）"
                                          action="#{tkcttInfoAction.onClickForMngAction()}"
                                          update="pdt,msgs,pgViewForUpd"
-                                         oncomplete="wVDlgViewForUpd.hide()">
+                                         oncomplete="if(#{tkCttInfoAction.checkForUpd})wVDlgViewForUpd.hide()">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForUpd" value="重置"
                                          type="reset"
