@@ -4,7 +4,6 @@ import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.common.utils.*;
 import epss.repository.model.EsCttInfo;
-import epss.repository.model.EsCttItem;
 import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.service.CttInfoService;
@@ -72,60 +71,9 @@ public class TkcttInfoAction implements Serializable{
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
     //更新时检验用，符合立刻关闭，不符合进行提升
-    private TreeNode root;
-    private TreeNode selectedNode;
-    private static List<CttInfoShow> cttInfoShowTreeList;
-    private static List<EsCttItem> cttItemShowTreeList;
-    private CttInfoShow cttInfoShow;
     @PostConstruct
     public void init() {
         initData();
-        initTkcttMng();
-        cttInfoShow=new CttInfoShow();
-    }
-    public void  initTkcttMng(){
-        cttInfoShowTreeList=new ArrayList<CttInfoShow>();
-        root=new DefaultTreeNode("root",null);
-        cttInfoShowQry = new CttInfoShow();
-        cttInfoShowQry.setCttType(ESEnum.ITEMTYPE0.getCode());
-        cttInfoShowQry.setStrStatusFlagBegin(null);
-        cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-        cttInfoShowQry.setPeriodNo("NULL");
-        cttInfoShowTreeList=esFlowService.selectCttByStatusFlagBegin_End(cttInfoShowQry);
-        for(CttInfoShow item:cttInfoShowTreeList){
-            TreeNode childNodeTkctt = null;
-            if(item.getPkid()!=null){
-                childNodeTkctt = new DefaultTreeNode(new CttInfoShow(item.getId(),item.getName(),
-                        esCommon.getCustNameByCustIdFromList(item.getSignPartA()),
-                        esCommon.getCustNameByCustIdFromList(item.getSignPartB()),
-                        esFlowControl.getLabelByValueInPreStatusFlaglist(item.getStatusFlag()),
-                        esFlowControl.getLabelByValueInPreStatusFlaglist(item.getPreStatusFlag()),
-                item.getCttStartDate(),item.getCttEndDate(),
-                item.getSignDate(),item.getNote()), root);
-                cttItemShowTreeList = cttItemService.getEsItemList( item.getCttType(),item.getPkid());
-                for(EsCttItem cttItem:cttItemShowTreeList){
-                    TreeNode  childNodeCstpl=new DefaultTreeNode(new CttInfoShow(cttItem.getPkid(),cttItem.getName(), "-","-","-","-","-","-","-",cttItem.getNote()),childNodeTkctt);
-                }
-            }else{
-                childNodeTkctt = new DefaultTreeNode(new CttInfoShow("-",item.getName(), "-","-","-","-","-","-","-","-"), root);
-            }
-        }
-    }
-
-    public void addNode(){
-        TreeNode childNode = new DefaultTreeNode(new CttInfoShow(cttInfoShow.getId(),cttInfoShow.getName(), esCommon.getCustNameByCustIdFromList(cttInfoShow.getSignPartA()),
-                esCommon.getCustNameByCustIdFromList(cttInfoShow.getSignPartB()),cttInfoShow.getStatusFlag(),
-                cttInfoShow.getPreStatusFlag(),
-                cttInfoShow.getCttStartDate(),cttInfoShow.getCttEndDate(),
-                cttInfoShow.getSignDate(),cttInfoShow.getNote()));
-    }
-
-    public void deleteNode() {
-        selectedNode.getChildren().clear();
-        selectedNode.getParent().getChildren().remove(selectedNode);
-        selectedNode.setParent(null);
-
-        selectedNode = null;
     }
     public void initData() {
         this.attachmentList=new ArrayList<AttachmentModel>();
@@ -609,31 +557,4 @@ public class TkcttInfoAction implements Serializable{
     }
 /*智能字段 End*/
 
-    public TreeNode getRoot() {
-        return root;
-    }
-
-    public void setRoot(TreeNode root) {
-        this.root = root;
-    }
-
-    public TreeNode getSelectedNode() {
-        return selectedNode;
-    }
-
-    public void setSelectedNode(TreeNode selectedNode) {
-        this.selectedNode = selectedNode;
-    }
-
-    public static List<CttInfoShow> getCttInfoShowTreeList() {
-        return cttInfoShowTreeList;
-    }
-
-    public CttInfoShow getCttInfoShow() {
-        return cttInfoShow;
-    }
-
-    public void setCttInfoShow(CttInfoShow cttInfoShow) {
-        this.cttInfoShow = cttInfoShow;
-    }
 }

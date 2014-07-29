@@ -22,7 +22,6 @@ public interface CttInfoMapper {
     @Select(" select" +
                  " eic.PKID" +
                  ",eic.NAME" +
-                 ",eic.MODIFICATION_NUM" +
             " from" +
                  " ES_CTT_INFO eic" +
             " inner join" +
@@ -41,7 +40,6 @@ public interface CttInfoMapper {
     @Select(" select" +
                 " eic.PKID" +
                 ",eic.NAME" +
-                ",eic.MODIFICATION_NUM"+
             " from" +
                 " ES_CTT_INFO eic" +
             " inner join" +
