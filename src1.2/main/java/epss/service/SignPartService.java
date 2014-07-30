@@ -2,7 +2,7 @@ package epss.service;
 
 import epss.common.utils.ToolUtil;
 import epss.repository.dao.EsInitCustMapper;
-import epss.repository.dao.not_mybatis.SignPartMapper;
+import epss.repository.dao.not_mybatis.MySignPartMapper;
 import epss.repository.model.EsInitCust;
 import epss.repository.model.EsInitCustExample;
 import epss.repository.model.model_show.SignPartShow;
@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 public class SignPartService {
     @Autowired
-    private SignPartMapper signPartMapper;
+    private MySignPartMapper mySignPartMapper;
     @Autowired
     private EsInitCustMapper esInitCustMapper;
     @Resource
@@ -87,7 +87,7 @@ public class SignPartService {
     }
 
     public String getMaxId(){
-        return signPartMapper.strMaxCustId() ;
+        return mySignPartMapper.strMaxCustId() ;
     }
 
     public void insertRecord(SignPartShow signPartShowPara) {

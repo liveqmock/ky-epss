@@ -4,7 +4,7 @@ import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.common.utils.ToolUtil;
-import epss.repository.dao.not_mybatis.CttStlMapper;
+import epss.repository.dao.not_mybatis.MyCttStlMapper;
 import epss.repository.model.model_show.ProgInfoShow;
 import epss.repository.dao.EsInitStlMapper;
 import epss.repository.model.*;
@@ -28,7 +28,7 @@ public class ProgStlInfoService {
     @Resource
     private EsInitStlMapper esInitStlMapper;
     @Resource
-    private CttStlMapper cttStlMapper;
+    private MyCttStlMapper myCttStlMapper;
     @Resource
     private FlowCtrlService flowCtrlService;
     @Resource
@@ -212,6 +212,6 @@ public class ProgStlInfoService {
     }
 
     public String getStrMaxStlId(String strCttType){
-        return cttStlMapper.getStrMaxStlId(strCttType) ;
+        return myCttStlMapper.getStrMaxStlId(strCttType) ;
     }
 }

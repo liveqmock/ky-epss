@@ -2,7 +2,7 @@ package epss.service;
 
 import epss.common.utils.ToolUtil;
 import epss.repository.dao.EsCttInfoMapper;
-import epss.repository.dao.not_mybatis.CttInfoMapper;
+import epss.repository.dao.not_mybatis.MyCttInfoMapper;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class CttInfoService {
     @Autowired
     private EsCttInfoMapper esCttInfoMapper;
     @Autowired
-    private CttInfoMapper cttInfoMapper;
+    private MyCttInfoMapper myCttInfoMapper;
     @Resource
     private PlatformService platformService;
 
@@ -58,14 +58,14 @@ public class CttInfoService {
     }
 
     public List<CttInfoShow> getCttInfoListByCttType_Status(String strCttyTypePara,String strStatusPara) {
-        return cttInfoMapper.getCttInfoListByCttType_Status(strCttyTypePara,strStatusPara);
+        return myCttInfoMapper.getCttInfoListByCttType_Status(strCttyTypePara,strStatusPara);
     }
 
     public List<CttInfoShow> getCttInfoListByCttType_ParentPkid_Status(
             String strCttyTypePara,
             String strParentPkidPara,
             String strStatusPara) {
-        return cttInfoMapper.getCttInfoListByCttType_ParentPkid_Status(
+        return myCttInfoMapper.getCttInfoListByCttType_ParentPkid_Status(
                 strCttyTypePara,
                 strParentPkidPara,
                 strStatusPara);
@@ -160,7 +160,7 @@ public class CttInfoService {
     }
 
     public String getStrMaxCttId(String strCttType){
-        return cttInfoMapper.getStrMaxCttId(strCttType) ;
+        return myCttInfoMapper.getStrMaxCttId(strCttType) ;
     }
 
     private EsCttInfo fromModelShowToModel(CttInfoShow cttInfoShowPara) {

@@ -5,7 +5,7 @@ import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import epss.common.utils.ToolUtil;
-import epss.repository.dao.not_mybatis.FlowMapper;
+import epss.repository.dao.not_mybatis.MyFlowMapper;
 import epss.repository.model.EsInitPower;
 import epss.repository.model.EsInitPowerHis;
 import epss.repository.model.EsInitStl;
@@ -24,61 +24,61 @@ import java.util.List;
 @Service
 public class EsFlowService {
     @Autowired
-    private FlowMapper flowMapper;
+    private MyFlowMapper myFlowMapper;
 
     public List<CttInfoShow> selectCttByStatusFlagBegin_End(CttInfoShow cttInfoShowPara){
-        return flowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
+        return myFlowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
     }
 
     public List<ProgInfoShow> selectSubcttStlQMByStatusFlagBegin_End(ProgInfoShow progInfoShowPara){
-        return flowMapper.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowPara);
+        return myFlowMapper.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowPara);
     }
 
     public List<ProgInfoShow> selectNotFormEsInitSubcttStlP(String strParentPkid,
                                                              String strStlPkid,
                                                              String strPeriodNo){
-        return flowMapper.selectNotFormEsInitSubcttStlP(strParentPkid, strStlPkid, strPeriodNo);
+        return myFlowMapper.selectNotFormEsInitSubcttStlP(strParentPkid, strStlPkid, strPeriodNo);
     }
     public List<ProgInfoShow> selectFormPreEsInitSubcttStlP(String strParentPkid,
                                                               String strStlPkid,
                                                               String strPeriodNo){
-        return flowMapper.selectFormPreEsInitSubcttStlP(strParentPkid,strStlPkid,strPeriodNo);
+        return myFlowMapper.selectFormPreEsInitSubcttStlP(strParentPkid,strStlPkid,strPeriodNo);
     }
     public List<ProgInfoShow> selectFormingEsInitSubcttStlP(String strParentPkid,
                                                               String strStlPkid,
                                                               String strPeriodNo){
-        return flowMapper.selectFormingEsInitSubcttStlP(strParentPkid,strStlPkid,strPeriodNo);
+        return myFlowMapper.selectFormingEsInitSubcttStlP(strParentPkid,strStlPkid,strPeriodNo);
     }
     public List<ProgInfoShow> selectFormedEsInitSubcttStlP(String strParentPkid,
                                                              String strStlPkid,
                                                              String strPeriodNo){
-        return flowMapper.selectFormedEsInitSubcttStlPList(strParentPkid,strStlPkid,strPeriodNo);
+        return myFlowMapper.selectFormedEsInitSubcttStlPList(strParentPkid,strStlPkid,strPeriodNo);
     }
 
     public List<ProgInfoShow> getFormedAfterEsInitSubcttStlPList(String strParentPkid,
                                                                   String strStlPkid,
                                                                   String strPeriodNo){
-        return flowMapper.getFormedAfterEsInitSubcttStlPList(strParentPkid,strStlPkid,strPeriodNo);
+        return myFlowMapper.getFormedAfterEsInitSubcttStlPList(strParentPkid,strStlPkid,strPeriodNo);
     }
 
     public List<EsInitStl> selectIsUsedInQMPBySubcttPkid(String strSubcttPkid){
-        return flowMapper.selectIsUsedInQMPBySubcttPkid(strSubcttPkid);
+        return myFlowMapper.selectIsUsedInQMPBySubcttPkid(strSubcttPkid);
     }
 
     public List<ProgInfoShow> selectTkcttStlSMByStatusFlagBegin_End(ProgInfoShow progInfoShowPara){
-        return flowMapper.selectTkcttStlSMByStatusFlagBegin_End(progInfoShowPara);
+        return myFlowMapper.selectTkcttStlSMByStatusFlagBegin_End(progInfoShowPara);
     }
 
     public String getLatestDoubleCkeckedPeriodNo(String strPowerType,String strPowerPkid) {
-        return flowMapper.getLatestDoubleCkeckedPeriodNo(strPowerType, strPowerPkid);
+        return myFlowMapper.getLatestDoubleCkeckedPeriodNo(strPowerType, strPowerPkid);
     }
 
     public String getLatestApprovedPeriodNo(String strPowerType,String strPowerPkid) {
-        return flowMapper.getLatestApprovedPeriodNo(strPowerType, strPowerPkid);
+        return myFlowMapper.getLatestApprovedPeriodNo(strPowerType, strPowerPkid);
     }
 
     public String getLatestApprovedPeriodNoByEndPeriod(String strPowerType,String strPowerPkid,String strEndPeriodNo) {
-        return flowMapper.getLatestApprovedPeriodNoByEndPeriod(strPowerType, strPowerPkid,strEndPeriodNo);
+        return myFlowMapper.getLatestApprovedPeriodNoByEndPeriod(strPowerType, strPowerPkid,strEndPeriodNo);
     }
 
     private EsInitPowerHis  fromEsInitPowerToEsInitPowerHis(EsInitPower esInitPowerPara,String strOperType){
@@ -95,7 +95,7 @@ public class EsFlowService {
     }
 
     public Integer getChildrenOfThisRecordInEsInitCtt(String strCttType,String strBelongToPkid){
-        return flowMapper.getChildrenOfThisRecordInEsInitCtt(strCttType,strBelongToPkid);
+        return myFlowMapper.getChildrenOfThisRecordInEsInitCtt(strCttType,strBelongToPkid);
     }
 
     public String subCttStlCheckForMng(String stlType,String subCttPkid,String periodNo) {
@@ -226,10 +226,10 @@ public class EsFlowService {
 
     //TODO add by yxy
     public String getMaxPeriodNo(String stlType, String subCttPkid) {
-        return flowMapper.getMaxPeriodNo(stlType,subCttPkid);
+        return myFlowMapper.getMaxPeriodNo(stlType,subCttPkid);
     }
     public String getStatusFlag(String stlType,String subCttPkid,String periodNo){
-        return flowMapper.getStatusFlag(stlType,subCttPkid,periodNo);
+        return myFlowMapper.getStatusFlag(stlType,subCttPkid,periodNo);
     }
 }
 

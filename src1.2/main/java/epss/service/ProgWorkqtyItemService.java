@@ -1,6 +1,6 @@
 package epss.service;
 
-import epss.repository.dao.not_mybatis.ProgWorkqtyItemMapper;
+import epss.repository.dao.not_mybatis.MyProgWorkqtyItemMapper;
 import epss.repository.model.model_show.ProgInfoShow;
 import epss.common.utils.ToolUtil;
 import epss.repository.dao.EsItemStlSubcttEngQMapper;
@@ -25,7 +25,7 @@ public class ProgWorkqtyItemService {
     @Resource
     private EsItemStlSubcttEngQMapper esItemStlSubcttEngQMapper;
     @Resource
-    private ProgWorkqtyItemMapper progWorkqtyItemMapper;
+    private MyProgWorkqtyItemMapper myProgWorkqtyItemMapper;
     @Resource
     private EsFlowService esFlowService;
     @Resource
@@ -57,14 +57,14 @@ public class ProgWorkqtyItemService {
 
     public List<EsItemStlSubcttEngQ> getProgWorkqtyItemListByPeriod(
             String strSubcttPkid,String strPeriodNoBegin,String strPeriodNoEnd){
-        return progWorkqtyItemMapper.getProgWorkqtyItemListByPeriod(strSubcttPkid, strPeriodNoBegin, strPeriodNoEnd);
+        return myProgWorkqtyItemMapper.getProgWorkqtyItemListByPeriod(strSubcttPkid, strPeriodNoBegin, strPeriodNoEnd);
     }
 
     public List<String> getProgWorkqtyItemPeriodsByPeriod(
             String strSubcttPkid,
             String strPeriodNoBegin,
             String strPeriodNoEnd){
-        return progWorkqtyItemMapper.getProgWorkqtyItemPeriodsByPeriod(strSubcttPkid, strPeriodNoBegin, strPeriodNoEnd);
+        return myProgWorkqtyItemMapper.getProgWorkqtyItemPeriodsByPeriod(strSubcttPkid, strPeriodNoBegin, strPeriodNoEnd);
     }
 
     private EsItemStlSubcttEngQ fromModelShowToModel

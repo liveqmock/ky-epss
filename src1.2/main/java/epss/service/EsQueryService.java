@@ -1,7 +1,7 @@
 package epss.service;
 
 import epss.repository.model.model_show.*;
-import epss.repository.dao.not_mybatis.QueryMapper;
+import epss.repository.dao.not_mybatis.MyQueryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,21 +17,21 @@ import java.util.List;
 @Service
 public class EsQueryService {
     @Autowired
-    private QueryMapper queryMapper;
+    private MyQueryMapper myQueryMapper;
 
     public List<QryShow> getCSList(String strCttType,String strBelongToPkid){
-        return queryMapper.getCSList(strCttType,strBelongToPkid) ;
+        return myQueryMapper.getCSList(strCttType,strBelongToPkid) ;
     }
 
     public List<QryShow> getCSStlMList(String strBelongToPkid,String strPeriodNo){
-        return queryMapper.getCSStlMList(strBelongToPkid,strPeriodNo) ;
+        return myQueryMapper.getCSStlMList(strBelongToPkid,strPeriodNo) ;
     }
 
     public List<QryShow> getCSStlQList(String strBelongToPkid,String strPeriodNo){
-        return queryMapper.getCSStlQList(strBelongToPkid,strPeriodNo) ;
+        return myQueryMapper.getCSStlQList(strBelongToPkid,strPeriodNo) ;
     }
 
     public List<QryTkMeaCSStlQShow> getCSStlQBySignPartList(String strCstplInfoPkidPara,String strPeriodNo){
-        return queryMapper.getCSStlQBySignPartList(strCstplInfoPkidPara,strPeriodNo) ;
+        return myQueryMapper.getCSStlQBySignPartList(strCstplInfoPkidPara,strPeriodNo) ;
     }
 }

@@ -2,7 +2,7 @@ package epss.service;
 
 import epss.common.utils.ToolUtil;
 import epss.repository.dao.EsItemStlSubcttEngPMapper;
-import epss.repository.dao.not_mybatis.QueryMapper;
+import epss.repository.dao.not_mybatis.MyQueryMapper;
 import epss.repository.model.EsItemStlSubcttEngP;
 import epss.repository.model.EsItemStlSubcttEngPExample;
 import epss.repository.model.model_show.ProgSubstlItemShow;
@@ -28,7 +28,7 @@ public class ProgSubstlItemService {
     @Resource
     private EsCommonService esCommonService;
     @Resource
-    private QueryMapper queryMapper;
+    private MyQueryMapper myQueryMapper;
 
     public EsItemStlSubcttEngP selectRecordsByDetailPrimaryKey(String strPkId){
         return esItemStlSubcttEngPMapper.selectByPrimaryKey(strPkId);
@@ -49,7 +49,7 @@ public class ProgSubstlItemService {
         return esItemStlSubcttEngPMapper.selectByExample(example);
     }
     public List<EsItemStlSubcttEngP> selectRecordsForAccount(String strSubcttPkidPara,String strPeriodNoPara){
-        return queryMapper.selectRecordsForAccount(strSubcttPkidPara,strPeriodNoPara);
+        return myQueryMapper.selectRecordsForAccount(strSubcttPkidPara,strPeriodNoPara);
     }
 
     public void deleteRecordDetail(String strPkId){

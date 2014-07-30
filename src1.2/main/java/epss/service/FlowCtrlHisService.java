@@ -1,10 +1,9 @@
 package epss.service;
 
 import epss.repository.dao.EsInitPowerHisMapper;
-import epss.repository.dao.not_mybatis.FlowMapper;
+import epss.repository.dao.not_mybatis.MyFlowMapper;
 import epss.repository.model.EsInitPowerHis;
 import epss.repository.model.EsInitPowerHisExample;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +22,7 @@ public class FlowCtrlHisService {
     @Autowired
     private EsInitPowerHisMapper esInitPowerHisMapper;
     @Resource
-    private FlowMapper flowMapper;
+    private MyFlowMapper myFlowMapper;
 
     public List<EsInitPowerHis> selectListByModel(EsInitPowerHis esInitPowerHis) {
         EsInitPowerHisExample example= new EsInitPowerHisExample();
@@ -59,6 +58,6 @@ public class FlowCtrlHisService {
         }
     }
     public List<EsInitPowerHis> getMngFromPowerHisForSubcttStlList(String powerPkid,String periodNo){
-        return flowMapper.getMngFromPowerHisForSubcttStlList(powerPkid,periodNo);
+        return myFlowMapper.getMngFromPowerHisForSubcttStlList(powerPkid,periodNo);
     }
 }

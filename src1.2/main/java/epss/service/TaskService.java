@@ -1,6 +1,6 @@
 package epss.service;
 
-import epss.repository.dao.not_mybatis.TaskMapper;
+import epss.repository.dao.not_mybatis.MyTaskMapper;
 import epss.repository.model.model_show.TaskShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,13 +17,13 @@ import java.util.List;
 @Service
 public class TaskService {
     @Autowired
-    private TaskMapper taskMapper;
+    private MyTaskMapper myTaskMapper;
 
     public List<TaskShow> getTaskCountsInFlowGroup(){
-        return taskMapper.getTaskCountsInFlowGroup();
+        return myTaskMapper.getTaskCountsInFlowGroup();
     }
 
     public List<TaskShow> getTaskShowList(){
-        return taskMapper.getTaskShowList();
+        return myTaskMapper.getTaskShowList();
     }
 }

@@ -2,7 +2,7 @@ package epss.service;
 
 import epss.common.utils.ToolUtil;
 import epss.repository.dao.EsCttItemMapper;
-import epss.repository.dao.not_mybatis.CttItemMapper;
+import epss.repository.dao.not_mybatis.MyCttItemMapper;
 import epss.repository.model.EsCttItem;
 import epss.repository.model.EsCttItemExample;
 import epss.repository.model.model_show.CttInfoShow;
@@ -25,7 +25,7 @@ public class CttItemService {
     @Resource
     private EsCttItemMapper esCttItemMapper;
     @Resource
-    private CttItemMapper cttItemMapper;
+    private MyCttItemMapper myCttItemMapper;
     @Resource
     private PlatformService platformService;
 
@@ -200,7 +200,7 @@ public class CttItemService {
                                                    String strParentPkid,
                                                    Integer intGrade,
                                                    Integer intOrderid){
-        cttItemMapper.setAfterThisOrderidPlusOneByNode(strBelongToType,
+        myCttItemMapper.setAfterThisOrderidPlusOneByNode(strBelongToType,
                 strBelongToPkid,
                 strParentPkid,
                 intGrade,
@@ -212,7 +212,7 @@ public class CttItemService {
                                                 String strParentPkid,
                                                 Integer intGrade,
                                                 Integer intOrderid){
-        cttItemMapper.setAfterThisOrderidSubOneByNode(strBelongToType,
+        myCttItemMapper.setAfterThisOrderidSubOneByNode(strBelongToType,
                 strBelongToPkid,
                 strParentPkid,
                 intGrade,

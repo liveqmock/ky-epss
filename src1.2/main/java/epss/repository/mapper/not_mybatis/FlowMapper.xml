@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="epss.repository.dao.not_mybatis.FlowMapper">
+<mapper namespace="epss.repository.dao.not_mybatis.MyFlowMapper">
     <resultMap id="BaseResultMapCtt" type="epss.repository.model.model_show.CttInfoShow">
         <id column="PKID" jdbcType="VARCHAR" property="pkid" />
         <result column="CTT_TYPE" jdbcType="VARCHAR" property="cttType" />
