@@ -63,7 +63,7 @@ public class OperRoleSelectAction {
         root = new DefaultTreeNode("Root", null);
         cttroot = new DefaultTreeNode("cttroot", null);
         OperRoleSelectShow operRoleSelectShow=new OperRoleSelectShow();
-        operRoleSelectShow.setSlename("ï¿½ï¿½Ô±ï¿½ï¿½È¨");
+        operRoleSelectShow.setSlename("ÈËÔ±ÊÚÈ¨");
         operRoleSelectShow.setSeltype("1");
         TreeNode node0 = new DefaultTreeNode(operRoleSelectShow, root);
         recursiveTreeNode("0",node0);
@@ -193,7 +193,7 @@ public class OperRoleSelectAction {
         selectedNode = null;
     }
 
-    /*ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ Start*/
+    /*ÖÇÄÜ×Ö¶Î Start*/
 
     public CttItemService getCttItemService() {
         return cttItemService;
@@ -243,7 +243,7 @@ public class OperRoleSelectAction {
         this.esFlowControl = esFlowControl;
     }
 
-/*ï¿½ï¿½ï¿½ï¿½ï¿½Ö¶ï¿½ End*/
+/*ÖÇÄÜ×Ö¶Î End*/
 
     public CttInfoShow getTkCttInfoShowQry() {
         return tkCttInfoShowQry;
@@ -290,5 +290,4 @@ public class OperRoleSelectAction {
     public void setSubCttInfoShowQry(CttInfoShow subCttInfoShowQry) {
         this.subCttInfoShowQry = subCttInfoShowQry;
     }
-
 }
