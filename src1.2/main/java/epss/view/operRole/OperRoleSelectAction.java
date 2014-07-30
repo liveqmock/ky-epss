@@ -20,6 +20,7 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,19 +45,13 @@ public class OperRoleSelectAction {
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
-    private TreeNode cttroot;
-    private TreeNode selectedNode;
-    //tkctt
-    private CttInfoShow tkCttInfoShowQry;
-    private static List<CttInfoShow> tkCttInfoShowTreeList;
-    //cstpl
-    private CttInfoShow cstplInfoShowQry;
-    private static List<CttInfoShow> cstplInfoShowTreeList;
-    // subctt
-    private CttInfoShow subCttInfoShowQry;
-    private static List<CttInfoShow> subCttInfoShowTreeList;
+
+    // task_function
+    private ArrayList<SelectItem> taskFunctionList;
     private CttInfoShow cttInfoShow;
     private TreeNode root;
+    private TreeNode cttroot;
+    private TreeNode selectedNode;
 
     @PostConstruct
     public void init() {
@@ -66,11 +61,25 @@ public class OperRoleSelectAction {
         operRoleSelectShow.setSlename("ÈËÔ±ÊÚÈ¨");
         operRoleSelectShow.setSeltype("1");
         TreeNode node0 = new DefaultTreeNode(operRoleSelectShow, root);
-        recursiveTreeNode("0",node0);
+        recursiveTreeNode("0", node0);
         node0.setExpanded(true);
         //expandTreeNode(node0);
         cttInfoShow = new CttInfoShow();
         initCttInfo();
+
+        taskFunctionList = new ArrayList<SelectItem>();
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG1.getCode(),ESEnumStatusFlag.STATUS_FLAG1.getTitle()));
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG2.getCode(),ESEnumStatusFlag.STATUS_FLAG2.getTitle()));
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG3.getCode(),ESEnumStatusFlag.STATUS_FLAG3.getTitle()));
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG4.getCode(),ESEnumStatusFlag.STATUS_FLAG4.getTitle()));
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG5.getCode(),ESEnumStatusFlag.STATUS_FLAG5.getTitle()));
     }
     private void recursiveTreeNode(String strLevelParentId,TreeNode parentNode){
         List<OperRoleSelectShow> operRoleSelectShowList=operRoleSelectService.selectOperaRoleRecords(strLevelParentId);
@@ -121,9 +130,9 @@ public class OperRoleSelectAction {
         this.cttroot = cttroot;
     }
     public void initCttInfo() {
-        tkCttInfoShowTreeList = new ArrayList<CttInfoShow>();
+        List<CttInfoShow> tkCttInfoShowTreeList = new ArrayList<CttInfoShow>();
         cttroot = new DefaultTreeNode("cttroot", null);
-        tkCttInfoShowQry = new CttInfoShow();
+        CttInfoShow tkCttInfoShowQry = new CttInfoShow();
         tkCttInfoShowQry.setCttType(ESEnum.ITEMTYPE0.getCode());
         tkCttInfoShowQry.setStrStatusFlagBegin(null);
         tkCttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG3.getCode());
@@ -131,7 +140,7 @@ public class OperRoleSelectAction {
         for (CttInfoShow item : tkCttInfoShowTreeList) {
             TreeNode childNodeTkctt = null;
             if (item.getPkid() != null) {
-                cstplInfoShowTreeList = new ArrayList<CttInfoShow>();
+                List<CttInfoShow> cstplInfoShowTreeList = new ArrayList<CttInfoShow>();
                 childNodeTkctt = new DefaultTreeNode(new CttInfoShow(item.getId(), item.getName(),
                         esCommon.getCustNameByCustIdFromList(item.getSignPartA()),
                         esCommon.getCustNameByCustIdFromList(item.getSignPartB()),
@@ -139,7 +148,7 @@ public class OperRoleSelectAction {
                         esFlowControl.getLabelByValueInPreStatusFlaglist(item.getPreStatusFlag()),
                         item.getCttStartDate(), item.getCttEndDate(),
                         item.getSignDate(), item.getNote()), cttroot);
-                cstplInfoShowQry = new CttInfoShow();
+                CttInfoShow cstplInfoShowQry = new CttInfoShow();
                 cstplInfoShowQry.setCttType(ESEnum.ITEMTYPE1.getCode());
                 cstplInfoShowQry.setStrStatusFlagBegin(null);
                 cstplInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG3.getCode());
@@ -153,8 +162,8 @@ public class OperRoleSelectAction {
                             esFlowControl.getLabelByValueInPreStatusFlaglist(cstplItem .getPreStatusFlag()),
                             cstplItem .getCttStartDate(), cstplItem .getCttEndDate(),
                             cstplItem .getSignDate(), cstplItem.getNote()), childNodeTkctt);
-                    subCttInfoShowTreeList = new ArrayList<CttInfoShow>();
-                    subCttInfoShowQry = new CttInfoShow();
+                    List<CttInfoShow> subCttInfoShowTreeList = new ArrayList<CttInfoShow>();
+                    CttInfoShow subCttInfoShowQry = new CttInfoShow();
                     subCttInfoShowQry.setCttType(ESEnum.ITEMTYPE2.getCode());
                     subCttInfoShowQry.setStrStatusFlagBegin(null);
                     subCttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG3.getCode());
@@ -194,7 +203,6 @@ public class OperRoleSelectAction {
     }
 
     /*ÖÇÄÜ×Ö¶Î Start*/
-
     public CttItemService getCttItemService() {
         return cttItemService;
     }
@@ -243,25 +251,7 @@ public class OperRoleSelectAction {
         this.esFlowControl = esFlowControl;
     }
 
-/*ÖÇÄÜ×Ö¶Î End*/
-
-    public CttInfoShow getTkCttInfoShowQry() {
-        return tkCttInfoShowQry;
-    }
-
-    public void setTkCttInfoShowQry(CttInfoShow tkCttInfoShowQry) {
-        this.tkCttInfoShowQry = tkCttInfoShowQry;
-    }
-
-
-    public static List<CttInfoShow> getTkCttInfoShowTreeList() {
-        return tkCttInfoShowTreeList;
-    }
-
-    public static List<CttInfoShow> getCstplInfoShowTreeList() {
-        return cstplInfoShowTreeList;
-    }
-
+    /*ÖÇÄÜ×Ö¶Î End*/
     public CttInfoShow getCttInfoShow() {
         return cttInfoShow;
     }
@@ -270,24 +260,11 @@ public class OperRoleSelectAction {
         this.cttInfoShow = cttInfoShow;
     }
 
-    public static List<CttInfoShow> getSubCttInfoShowTreeList() {
-        return subCttInfoShowTreeList;
+    public ArrayList<SelectItem> getTaskFunctionList() {
+        return taskFunctionList;
     }
 
-
-    public CttInfoShow getCstplInfoShowQry() {
-        return cstplInfoShowQry;
-    }
-
-    public void setCstplInfoShowQry(CttInfoShow cstplInfoShowQry) {
-        this.cstplInfoShowQry = cstplInfoShowQry;
-    }
-
-    public CttInfoShow getSubCttInfoShowQry() {
-        return subCttInfoShowQry;
-    }
-
-    public void setSubCttInfoShowQry(CttInfoShow subCttInfoShowQry) {
-        this.subCttInfoShowQry = subCttInfoShowQry;
+    public void setTaskFunctionList(ArrayList<SelectItem> taskFunctionList) {
+        this.taskFunctionList = taskFunctionList;
     }
 }
