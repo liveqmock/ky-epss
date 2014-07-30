@@ -19,22 +19,23 @@
         </script>
     </ui:define>
     <ui:define name="content">
-        <h:form id="form" enctype="multipart/form-data">
+        <h:form id="form">
             <p:growl id="messages" showDetail="true" />
+            <h:panelGrid  columns="1">
+                <p:commandButton value="保存" update="messages"
+                               actionListener="#{operRoleSelectAction.saveSelectedMultiple}"/>
+            </h:panelGrid>
             <h:panelGrid id="pdQry" columns="3">
                 <p:panel header="资源列表">
                     <p:treeTable id="resTreeTable"
                                  value="#{operRoleSelectAction.cttroot}"
                                  var="document"
-                                 selection="#{operRoleSelectAction.selectedNode}"
+                                 selection="#{operRoleSelectAction.selResNodesList}"
                                  rowKey="#{document.pkid}"
-                                 selectionMode="single"
+                                 selectionMode="checkbox"
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="300">
-                        <p:column headerText="编号"  style="width:120px;text-align:left">
-                            <h:outputText value="#{document.id}"/>
-                        </p:column>
                         <p:column headerText="名称" style="width:400px;text-align:left">
                             <h:outputText value="#{document.name}"/>
                         </p:column>
@@ -43,32 +44,28 @@
                 <p:panel header="功能列表">
                     <p:dataTable id="pdt"
                                  value="#{operRoleSelectAction.taskFunctionList}"
+                                 selection="#{operRoleSelectAction.selTaskFunctionsList}"
                                  var="record"
                                  rowIndexVar="row"
                                  rowKey="#{row + 1}"
-                                 selectionMode="multiple"
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="300">
-                        <p:column headerText="序号" style="width:30px">
-                            <h:outputText value="#{row + 1}"/>
-                        </p:column>
-                        <p:column headerText="编号" style="width:100px;text-align:center">
-                            <h:outputText value="#{record.value}"/>
-                        </p:column>
+                        <p:column selectionMode="multiple"
+                                  style="width:30px;text-align:center"/>
                         <p:column headerText="名称" style="width:100px;text-align:left">
                             <h:outputText value="#{record.label}"/>
                         </p:column>
                     </p:dataTable>
                 </p:panel>
                 <p:panel header="人员列表">
-                    <p:treeTable
+                    <p:treeTable   id="operTreeTable"
                             value="#{operRoleSelectAction.root}"
                             var="node"
                             dynamic="true"
                             cache="false"
-                            selectionMode="single"
-                            selection="#{operRoleSelectAction.selectedNode}"
+                            selectionMode="checkbox"
+                            selection="#{operRoleSelectAction.selOperNodesList}"
                             scrollable="true"
                             scrollHeight="300">
                         <!--<p:ajax event="expand" update=":form:messages" listener="#{operRoleSelectAction.onNodeExpand}" />

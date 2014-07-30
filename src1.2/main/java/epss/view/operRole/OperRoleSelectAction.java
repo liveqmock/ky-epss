@@ -2,8 +2,8 @@ package epss.view.operRole;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.repository.model.OperRes;
 import epss.repository.model.model_show.CttInfoShow;
-import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.OperRoleSelectShow;
 import epss.service.CttInfoService;
 import epss.service.CttItemService;
@@ -16,12 +16,14 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import platform.repository.model.SysLock;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +32,7 @@ import java.util.List;
  */
 @ManagedBean
 @ViewScoped
-public class OperRoleSelectAction {
+public class OperRoleSelectAction implements Serializable{
     private static final Logger logger = LoggerFactory.getLogger(OperRoleSelectAction.class);
     @ManagedProperty(value = "#{operRoleSelectService}")
     private OperRoleSelectService operRoleSelectService;
@@ -47,15 +49,15 @@ public class OperRoleSelectAction {
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
 
-    private List<OperResShow> operResShowList;
-
     // task_function
-    private List<SelectItem> taskFunctionList;
+    private ArrayList<SelectItem> taskFunctionList;
     private CttInfoShow cttInfoShow;
     private TreeNode root;
     private TreeNode cttroot;
     private TreeNode selectedNode;
-
+    private TreeNode[]  selResNodesList;
+    private TreeNode[] selOperNodesList;
+    private List<SelectItem> selTaskFunctionsList;
     @PostConstruct
     public void init() {
         root = new DefaultTreeNode("Root", null);
@@ -100,7 +102,6 @@ public class OperRoleSelectAction {
             expandTreeNode(node.getChildren().get(i));
         }
     }
-
     public OperRoleSelectService getOperRoleSelectService() {
         return operRoleSelectService;
     }
@@ -115,14 +116,6 @@ public class OperRoleSelectAction {
 
     public void setRoot(TreeNode root) {
         this.root = root;
-    }
-
-    public TreeNode getSelectedNode() {
-        return selectedNode;
-    }
-
-    public void setSelectedNode(TreeNode selectedNode) {
-        this.selectedNode = selectedNode;
     }
 
     public TreeNode getCttroot() {
@@ -189,7 +182,19 @@ public class OperRoleSelectAction {
             }
         }
     }
+    public void saveSelectedMultiple() {
+        StringBuilder res=new StringBuilder();
+        if(selResNodesList != null && selResNodesList.length > 0) {
+            for(TreeNode node : selResNodesList) {
+                System.out.println(res.append(node.getData().toString()));
+            }
+        }
+        /* if(selOperNodesList != null && selOperNodesList.length > 0) {
 
+        }*/
+        OperRes operRes=new OperRes();
+        //operRes.setInfoPkid();
+    }
     public void addNode() {
         TreeNode childNode = new DefaultTreeNode(new CttInfoShow(cttInfoShow.getId(), cttInfoShow.getName(), esCommon.getCustNameByCustIdFromList(cttInfoShow.getSignPartA()),
                 esCommon.getCustNameByCustIdFromList(cttInfoShow.getSignPartB()), cttInfoShow.getStatusFlag(),
@@ -263,19 +268,42 @@ public class OperRoleSelectAction {
         this.cttInfoShow = cttInfoShow;
     }
 
-    public List<SelectItem> getTaskFunctionList() {
+    public ArrayList<SelectItem> getTaskFunctionList() {
         return taskFunctionList;
     }
 
-    public void setTaskFunctionList(List<SelectItem> taskFunctionList) {
+    public void setTaskFunctionList(ArrayList<SelectItem> taskFunctionList) {
         this.taskFunctionList = taskFunctionList;
     }
-
-    public List<OperResShow> getOperResShowList() {
-        return operResShowList;
+    public TreeNode getSelectedNode() {
+        return selectedNode;
     }
 
-    public void setOperResShowList(List<OperResShow> operResShowList) {
-        this.operResShowList = operResShowList;
+    public void setSelectedNode(TreeNode selectedNode) {
+        this.selectedNode = selectedNode;
+    }
+
+    public TreeNode[] getSelResNodesList() {
+        return selResNodesList;
+    }
+
+    public void setSelResNodesList(TreeNode[] selResNodesList) {
+        this.selResNodesList = selResNodesList;
+    }
+
+    public TreeNode[] getSelOperNodesList() {
+        return selOperNodesList;
+    }
+
+    public void setSelOperNodesList(TreeNode[] selOperNodesList) {
+        this.selOperNodesList = selOperNodesList;
+    }
+
+    public List<SelectItem> getSelTaskFunctionsList() {
+        return selTaskFunctionsList;
+    }
+
+    public void setSelTaskFunctionsList(List<SelectItem> selTaskFunctionsList) {
+        this.selTaskFunctionsList = selTaskFunctionsList;
     }
 }
