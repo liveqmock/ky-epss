@@ -100,6 +100,38 @@ public class OperResAction implements Serializable{
         }
     }
 
+    private void initOperRes(){
+        operResShowList=new ArrayList<OperResShow>();
+        List<OperResShow> operResShowTempList=operResService.selectOperaResRecords();
+        if (operResShowTempList.size()>0){
+            String strStatusFlag=null;
+            for (int i=0;i<operResShowTempList.size();i++){
+                strStatusFlag=operResShowTempList.get(i).getFlowStatus();
+                if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(strStatusFlag)){
+                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG0.getTitle());
+                }else if (ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(strStatusFlag)){
+                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG1.getTitle());
+                }else if (ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(strStatusFlag)){
+                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG2.getTitle());
+                }else if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(strStatusFlag)){
+                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG3.getTitle());
+                }else if (ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(strStatusFlag)){
+                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG4.getTitle());
+                }else if (ESEnumStatusFlag.STATUS_FLAG5.getCode().equals(strStatusFlag)){
+                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG5.getTitle());
+                }
+                operResShowList.add(operResShowTempList.get(i));
+            }
+        }
+    }
+
+    public OperResService getOperResService() {
+        return operResService;
+    }
+
+    public void setOperResService(OperResService operResService) {
+        this.operResService = operResService;
+    }
     public void initCttInfo() {
         List<CttInfoShow> tkCttInfoShowTreeList = new ArrayList<CttInfoShow>();
         cttroot = new DefaultTreeNode("cttroot", null);
