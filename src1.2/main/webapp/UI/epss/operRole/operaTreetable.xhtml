@@ -48,6 +48,7 @@
                                  var="record"
                                  rowIndexVar="row"
                                  rowKey="#{row + 1}"
+                                 selectionMode="multiple"
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="300">
@@ -59,7 +60,7 @@
                     </p:dataTable>
                 </p:panel>
                 <p:panel header="人员列表">
-                    <p:treeTable   id="operTreeTable"
+                    <p:treeTable id="operTreeTable"
                             value="#{operRoleSelectAction.root}"
                             var="node"
                             dynamic="true"

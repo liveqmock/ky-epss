@@ -4,6 +4,7 @@ import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.OperRes;
 import epss.repository.model.model_show.CttInfoShow;
+import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.OperRoleSelectShow;
 import epss.service.CttInfoService;
 import epss.service.CttItemService;
@@ -16,7 +17,6 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import platform.repository.model.SysLock;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -49,13 +49,15 @@ public class OperRoleSelectAction implements Serializable{
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
 
+    private List<OperResShow> operResShowList;
+
     // task_function
-    private ArrayList<SelectItem> taskFunctionList;
+    private List<SelectItem> taskFunctionList;
     private CttInfoShow cttInfoShow;
     private TreeNode root;
     private TreeNode cttroot;
     private TreeNode selectedNode;
-    private TreeNode[]  selResNodesList;
+    private TreeNode[] selResNodesList;
     private TreeNode[] selOperNodesList;
     private List<SelectItem> selTaskFunctionsList;
     @PostConstruct
@@ -95,36 +97,6 @@ public class OperRoleSelectAction implements Serializable{
         }
     }
 
-    private void expandTreeNode(TreeNode node){
-        node.setExpanded(true);
-        for (int i=0;i<node.getChildCount();i++){
-            node.getChildren().get(i).setExpanded(true);
-            expandTreeNode(node.getChildren().get(i));
-        }
-    }
-    public OperRoleSelectService getOperRoleSelectService() {
-        return operRoleSelectService;
-    }
-
-    public void setOperRoleSelectService(OperRoleSelectService operRoleSelectService) {
-        this.operRoleSelectService = operRoleSelectService;
-    }
-
-    public TreeNode getRoot() {
-        return root;
-    }
-
-    public void setRoot(TreeNode root) {
-        this.root = root;
-    }
-
-    public TreeNode getCttroot() {
-        return cttroot;
-    }
-
-    public void setCttroot(TreeNode cttroot) {
-        this.cttroot = cttroot;
-    }
     public void initCttInfo() {
         List<CttInfoShow> tkCttInfoShowTreeList = new ArrayList<CttInfoShow>();
         cttroot = new DefaultTreeNode("cttroot", null);
@@ -195,20 +167,6 @@ public class OperRoleSelectAction implements Serializable{
         OperRes operRes=new OperRes();
         //operRes.setInfoPkid();
     }
-    public void addNode() {
-        TreeNode childNode = new DefaultTreeNode(new CttInfoShow(cttInfoShow.getId(), cttInfoShow.getName(), esCommon.getCustNameByCustIdFromList(cttInfoShow.getSignPartA()),
-                esCommon.getCustNameByCustIdFromList(cttInfoShow.getSignPartB()), cttInfoShow.getStatusFlag(),
-                cttInfoShow.getPreStatusFlag(),
-                cttInfoShow.getCttStartDate(), cttInfoShow.getCttEndDate(),
-                cttInfoShow.getSignDate(), cttInfoShow.getNote()));
-    }
-
-    public void deleteNode() {
-        selectedNode.getChildren().clear();
-        selectedNode.getParent().getChildren().remove(selectedNode);
-        selectedNode.setParent(null);
-        selectedNode = null;
-    }
 
     /*ÖÇÄÜ×Ö¶Î Start*/
     public CttItemService getCttItemService() {
@@ -239,6 +197,30 @@ public class OperRoleSelectAction implements Serializable{
         return esFlowService;
     }
 
+    public OperRoleSelectService getOperRoleSelectService() {
+        return operRoleSelectService;
+    }
+
+    public void setOperRoleSelectService(OperRoleSelectService operRoleSelectService) {
+        this.operRoleSelectService = operRoleSelectService;
+    }
+
+    public TreeNode getRoot() {
+        return root;
+    }
+
+    public void setRoot(TreeNode root) {
+        this.root = root;
+    }
+
+    public TreeNode getCttroot() {
+        return cttroot;
+    }
+
+    public void setCttroot(TreeNode cttroot) {
+        this.cttroot = cttroot;
+    }
+
     public void setEsFlowService(EsFlowService esFlowService) {
         this.esFlowService = esFlowService;
     }
@@ -259,7 +241,6 @@ public class OperRoleSelectAction implements Serializable{
         this.esFlowControl = esFlowControl;
     }
 
-    /*ÖÇÄÜ×Ö¶Î End*/
     public CttInfoShow getCttInfoShow() {
         return cttInfoShow;
     }
@@ -268,11 +249,11 @@ public class OperRoleSelectAction implements Serializable{
         this.cttInfoShow = cttInfoShow;
     }
 
-    public ArrayList<SelectItem> getTaskFunctionList() {
+    public List<SelectItem> getTaskFunctionList() {
         return taskFunctionList;
     }
 
-    public void setTaskFunctionList(ArrayList<SelectItem> taskFunctionList) {
+    public void setTaskFunctionList(List<SelectItem> taskFunctionList) {
         this.taskFunctionList = taskFunctionList;
     }
     public TreeNode getSelectedNode() {
@@ -305,5 +286,13 @@ public class OperRoleSelectAction implements Serializable{
 
     public void setSelTaskFunctionsList(List<SelectItem> selTaskFunctionsList) {
         this.selTaskFunctionsList = selTaskFunctionsList;
+    }
+
+    public List<OperResShow> getOperResShowList() {
+        return operResShowList;
+    }
+
+    public void setOperResShowList(List<OperResShow> operResShowList) {
+        this.operResShowList = operResShowList;
     }
 }

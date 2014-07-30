@@ -138,7 +138,7 @@
         <if test="preStatusFlag != null and preStatusFlag != ''">
             and eip.pre_status_flag = #{preStatusFlag}
         </if>
-        order by eip.status_flag asc,eic.ID asc,eic.NAME asc 
+        order by eip.status_flag asc,eic.NAME asc 
     </select>
 
     <resultMap id="BaseResultMapStl" type="epss.repository.model.model_show.ProgInfoShow">
