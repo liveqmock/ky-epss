@@ -3,6 +3,7 @@ package epss.view.operRole;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.model_show.CttInfoShow;
+import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.OperRoleSelectShow;
 import epss.service.CttInfoService;
 import epss.service.CttItemService;
@@ -46,8 +47,10 @@ public class OperRoleSelectAction {
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
 
+    private List<OperResShow> operResShowList;
+
     // task_function
-    private ArrayList<SelectItem> taskFunctionList;
+    private List<SelectItem> taskFunctionList;
     private CttInfoShow cttInfoShow;
     private TreeNode root;
     private TreeNode cttroot;
@@ -260,11 +263,19 @@ public class OperRoleSelectAction {
         this.cttInfoShow = cttInfoShow;
     }
 
-    public ArrayList<SelectItem> getTaskFunctionList() {
+    public List<SelectItem> getTaskFunctionList() {
         return taskFunctionList;
     }
 
-    public void setTaskFunctionList(ArrayList<SelectItem> taskFunctionList) {
+    public void setTaskFunctionList(List<SelectItem> taskFunctionList) {
         this.taskFunctionList = taskFunctionList;
+    }
+
+    public List<OperResShow> getOperResShowList() {
+        return operResShowList;
+    }
+
+    public void setOperResShowList(List<OperResShow> operResShowList) {
+        this.operResShowList = operResShowList;
     }
 }
