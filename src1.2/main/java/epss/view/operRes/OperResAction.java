@@ -102,7 +102,8 @@ public class OperResAction implements Serializable{
 
     private void initOperRes(){
         operResShowList=new ArrayList<OperResShow>();
-        List<OperResShow> operResShowTempList=operResService.selectOperaResRecords();
+        List<OperResShow> operResShowTempList=new ArrayList<OperResShow>();
+        operResShowTempList=operResService.selectOperaResRecords();
         if (operResShowTempList.size()>0){
             String strStatusFlag=null;
             for (int i=0;i<operResShowTempList.size();i++){
@@ -230,14 +231,6 @@ public class OperResAction implements Serializable{
 
     public EsFlowService getEsFlowService() {
         return esFlowService;
-    }
-
-    public OperRoleSelectService getOperRoleSelectService() {
-        return operRoleSelectService;
-    }
-
-    public void setOperRoleSelectService(OperRoleSelectService operRoleSelectService) {
-        this.operRoleSelectService = operRoleSelectService;
     }
 
     public TreeNode getRoot() {

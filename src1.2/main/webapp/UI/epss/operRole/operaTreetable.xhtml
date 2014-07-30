@@ -23,14 +23,14 @@
             <p:growl id="messages" showDetail="true" />
             <h:panelGrid  columns="1">
                 <p:commandButton value="保存" update="messages"
-                               actionListener="#{operRoleSelectAction.saveSelectedMultiple}"/>
+                               actionListener="#{operResAction.saveSelectedMultiple}"/>
             </h:panelGrid>
             <h:panelGrid id="pdQry" columns="3">
                 <p:panel header="资源列表">
                     <p:treeTable id="resTreeTable"
-                                 value="#{operRoleSelectAction.cttroot}"
+                                 value="#{operResAction.cttroot}"
                                  var="document"
-                                 selection="#{operRoleSelectAction.selResNodesList}"
+                                 selection="#{operResAction.selResNodesList}"
                                  rowKey="#{document.pkid}"
                                  selectionMode="checkbox"
                                  emptyMessage="数据记录为空..."
@@ -43,8 +43,8 @@
                 </p:panel>
                 <p:panel header="功能列表">
                     <p:dataTable id="pdt"
-                                 value="#{operRoleSelectAction.taskFunctionList}"
-                                 selection="#{operRoleSelectAction.selTaskFunctionsList}"
+                                 value="#{operResAction.taskFunctionList}"
+                                 selection="#{operResAction.selTaskFunctionsList}"
                                  var="record"
                                  rowIndexVar="row"
                                  rowKey="#{row + 1}"
@@ -61,18 +61,18 @@
                 </p:panel>
                 <p:panel header="人员列表">
                     <p:treeTable id="operTreeTable"
-                            value="#{operRoleSelectAction.root}"
+                            value="#{operResAction.root}"
                             var="node"
                             dynamic="true"
                             cache="false"
                             selectionMode="checkbox"
-                            selection="#{operRoleSelectAction.selOperNodesList}"
+                            selection="#{operResAction.selOperNodesList}"
                             scrollable="true"
                             scrollHeight="300">
-                        <!--<p:ajax event="expand" update=":form:messages" listener="#{operRoleSelectAction.onNodeExpand}" />
-                        <p:ajax event="collapse" update=":form:messages" listener="#{operRoleSelectAction.onNodeCollapse}" />
-                        <p:ajax event="select" update=":form:messages" listener="#{operRoleSelectAction.onNodeSelect}" />
-                        <p:ajax event="unselect" update=":form:messages" listener="#{operRoleSelectAction.onNodeUnselect}" />
+                        <!--<p:ajax event="expand" update=":form:messages" listener="#{operResAction.onNodeExpand}" />
+                        <p:ajax event="collapse" update=":form:messages" listener="#{operResAction.onNodeCollapse}" />
+                        <p:ajax event="select" update=":form:messages" listener="#{operResAction.onNodeSelect}" />
+                        <p:ajax event="unselect" update=":form:messages" listener="#{operResAction.onNodeUnselect}" />
                         -->
                         <p:column headerText="编号" style="width:200px;text-align:left">
                             <h:outputText value="#{node.seltype eq '1'?node.slename:''}" />
@@ -86,7 +86,7 @@
             <h:panelGrid id="pdView">
                 <p:panel header="权限追加列表">
                     <p:dataTable id="pdtView"
-                                 value="#{operRoleSelectAction.operResShowList}"
+                                 value="#{operResAction.operResShowList}"
                                  var="recordView"
                                  rowIndexVar="row"
                                  rowKey="#{row + 1}"
