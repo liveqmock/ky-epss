@@ -1,0 +1,102 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="../templates/ui.xhtml">
+
+    <ui:define name="head">
+        <!--
+
+                <script language="JavaScript" type="text/javascript"><![CDATA[
+                    document.onkeydown = function enterToTab() {
+                        if (event.srcElement.type != 'submit' && event.srcElement.type != "image" && event.srcElement.type != 'textarea' && event.keyCode == 13)
+                            event.keyCode = 9;
+                    }
+                    ]]>
+                    </script>
+
+        -->
+        <script language="JavaScript" type="text/JavaScript">
+            // document.getElementByIdx("inputform:txt_title").focus();
+            function KeyDown() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.id == 'inputform:txt_author') {
+                        event.returnValue = false;
+                        event.cancel = true;
+                        //inputform.inputform:btnsubmit.click();
+                        //document.forms['inputform']['inputform:Go8101'].focus();
+                        document.forms['inputform']['inputform:Go8101'].click();
+                    } else {
+                        event.keyCode = 9;
+                    }
+                }
+            }
+        </script>
+    </ui:define>
+
+
+    <ui:define name="content">
+        <!--<h1 class="title">批量输入</h1>-->
+        <div class="entry">
+            <p>>批量输入交易：8101</p>
+            <h:form id="inputform">
+                <p:focus for="txt_title"/>
+                <p:messages/>
+                <p:panel header="Create a new book">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Title* :" for="txt_title"></h:outputLabel>
+                        <h:inputText id="txt_title" value="#{createBookBean.book.title}" required="true" onkeydown="KeyDown()"/>
+
+                        <h:outputLabel value="Author* :" for="txt_author"></h:outputLabel>
+                        <h:inputText id="txt_author" value="#{createBookBean.book.author}" required="true"  onkeydown="KeyDown()"/>
+
+                        <h:outputText value=""/>
+
+                        <h:panelGroup>
+                            <h:commandButton id="Go8101" value="确定" action="#{createBookBean.createNew}">
+                                <p:collector value="#{createBookBean.book}" addTo="#{createBookBean.books}"/>
+                            </h:commandButton>
+
+                            <h:commandButton value="重置" type="reset"/>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                </p:panel>
+
+            </h:form>
+
+            <br/>
+
+            <h:form>
+                <p:dataTable value="#{createBookBean.books}" var="book">
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="标题"/>
+                        </f:facet>
+                        <h:outputText value="#{book.title}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Author"/>
+                        </f:facet>
+                        <h:outputText value="#{book.author}"/>
+                    </p:column>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="Operation"/>
+                        </f:facet>
+                        <h:commandLink value="Remove">
+                            <p:collector value="#{book}" removeFrom="#{createBookBean.books}"/>
+                        </h:commandLink>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+        </div>
+
+    </ui:define>
+</ui:composition>
