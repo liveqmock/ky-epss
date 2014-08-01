@@ -1,0 +1,171 @@
+﻿<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <link type="text/css" href="#{request.contextPath}/UI/epss/epss.css" rel="stylesheet"/>
+        <script type="text/javascript" src="#{request.contextPath}/UI/support/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+            function actSelect(obj) {
+                var pkid=obj;
+                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
+                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
+                var arg = new Object();
+                arg.doType = "select";
+                var rtn =dialog("../item/itemMng_SubcttPStl.xhtml?strSubmitType=Approve&amp;strEsInitStlPkid="+pkid+"",arg,sfeature);
+                document.getElementById("form:qryBtn").click();
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:panel header="未形成结算单" style="width: 100%">
+                <h:panelGrid id="pgConditionNotForm" columns="2" style="width: 100%">
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="分包合同：" for="idNotForm" />
+                        <p:selectOneMenu id="idNotForm"
+                                         value="#{progSubstlInfoAction.progInfoShowNotForm.stlPkid}">
+                            <f:selectItems value="#{progSubstlInfoAction.subcttList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="期数编码：" for="periodNoNotForm"/>
+                        <p:inputText id="periodNoNotForm" value="#{progSubstlInfoAction.progInfoShowNotForm.periodNo}"
+                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton id="qryBtnNotForm" value="查询"
+                                         action="#{progSubstlInfoAction.onQueryFormPreAction('Approve')}"
+                                         update="pdtNotForm,msgs">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtnNotForm" value="重置"
+                                         type="reset"
+                                         update="pgConditionNotForm,msgs">
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <p:dataTable id="pdtNotForm" style="width:100%;"
+                             value="#{progSubstlInfoAction.progInfoShowNotFormList}"
+                             var="recordNotForm"
+                             rowKey="#{recordNotForm.pkid}"
+                             selection="#{progSubstlInfoAction.progInfoShowNotFormSelected}"
+                             selectionMode="single"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="6"
+                             rowIndexVar="rowNotForm"
+                             rowsPerPageTemplate="100,50,40,30,20,10,5"
+                             rowStyleClass="#{recordNotForm.id eq '分包结算单'?'rowDoneStyle':null}"
+                             emptyMessage="数据记录为空...">
+                    <p:column headerText="序号" style="width:30px">
+                        <h:outputText value="#{rowNotForm + 1}"/>
+                    </p:column>
+                    <p:column headerText="结算编号" style="text-align:center;width:110px">
+                        <h:outputText value="#{recordNotForm.id}"/>
+                    </p:column>
+                    <p:column headerText="分包合同" style="text-align:left;width:300px">
+                        <h:outputText value="#{recordNotForm.stlName}"/>
+                    </p:column>
+                    <p:column headerText="协作单位" style="text-align:left;width:280px">
+                        <h:outputText value="#{recordNotForm.signPartBName}"/>
+                    </p:column>
+                    <p:column headerText="期数编码" style="text-align:center;width:66px">
+                        <h:outputText value="#{recordNotForm.periodNo}"/>
+                    </p:column>
+                    <p:column headerText="今期状态" style="text-align:center;width:66px;">
+                        <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(recordNotForm.statusFlag)}"/>
+                    </p:column>
+                    <p:column headerText="今期原因" style="text-align:center;width:66px;">
+                        <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(recordNotForm.preStatusFlag)}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            <p:panel header="已形成结算单" style="width: 100%">
+                <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="分包合同：" for="id" />
+                        <p:selectOneMenu id="id"
+                                         value="#{progSubstlInfoAction.progInfoShow.stlPkid}"
+                                         disabled="#{progSubstlInfoAction.styleModel.disabled_Flag}"
+                                         style="#{progSubstlInfoAction.styleModel.disabled_Style};">
+                            <f:selectItems value="#{progSubstlInfoAction.subcttList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="期数编码：" for="periodNo"/>
+                        <p:inputText id="periodNo" value="#{progSubstlInfoAction.progInfoShow.periodNo}"
+                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"
+                                     disabled="#{progSubstlInfoAction.styleModel.disabled_Flag}"
+                                     style="#{progSubstlInfoAction.styleModel.disabled_Style};"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton id="qryBtn" value="查询"
+                                         action="#{progSubstlInfoAction.onQueryFormedAction('Approve','true')}"
+                                         update="pdt,msgs">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtn" value="重置"
+                                         type="reset"
+                                         update="pgCondition,msgs">
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:panelGrid>
+                <p:dataTable id="pdt" style="width:100%;"
+                             value="#{progSubstlInfoAction.progInfoShowList}"
+                             var="record"
+                             rowKey="#{record.pkid}"
+                             selectionMode="single"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="5"
+                             rowIndexVar="row"
+                             rowsPerPageTemplate="100,50,40,30,20,10,5"
+                             emptyMessage="数据记录为空..."
+                             widgetVar="DtInitSubcttList"
+                             rowStyleClass="#{record.statusFlag eq '3'?'rowDoneStyle':null}"
+                             scrollable="true">
+                    <p:column headerText="操作" style="width:31px">
+                        <p:commandButton icon="ui-icon-triangle-1-e"
+                                         style="height:20px;width:20px"
+                                         onclick="actSelect('#{record.pkid}')">
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="Pkid" style="width:200px" rendered="false">
+                        <h:outputText value="#{record.pkid}"/>
+                    </p:column>
+                    <p:column headerText="序号" style="width:30px">
+                        <h:outputText value="#{row + 1}"/>
+                    </p:column>
+                    <p:column headerText="结算编号" style="text-align:center;width:120px">
+                        <h:outputText value="#{record.id}"/>
+                    </p:column>
+                    <p:column headerText="分包合同" style="text-align:left;width:200px">
+                        <h:outputText value="#{record.stlName}"/>
+                    </p:column>
+                    <p:column headerText="协作单位" style="text-align:left;width:200px">
+                        <h:outputText value="#{record.signPartBName}"/>
+                    </p:column>
+                    <p:column headerText="期数编码" style="text-align:center;width:66px">
+                        <h:outputText value="#{record.periodNo}"/>
+                    </p:column>
+                    <p:column headerText="今期状态" style="text-align:center;width:66px;">
+                        <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.statusFlag)}"/>
+                    </p:column>
+                    <p:column headerText="今期原因" style="text-align:center;width:66px;">
+                        <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.preStatusFlag)}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
