@@ -62,34 +62,24 @@ public class OperResAction implements Serializable{
     private List<SelectItem> selTaskFunctionsList;
     @PostConstruct
     public void init() {
-        root = new DefaultTreeNode("Root", null);
+        initOper();
+        initOperRes();
+        initFunc();
+
         cttroot = new DefaultTreeNode("cttroot", null);
+        cttInfoShow = new CttInfoShow();
+        initCttInfo();
+    }
+    private void initOper(){
+        root = new DefaultTreeNode("Root", null);
         OperRoleSelectShow operRoleSelectShow=new OperRoleSelectShow();
         operRoleSelectShow.setSlename("»À‘± ⁄»®");
         operRoleSelectShow.setSeltype("1");
         TreeNode node0 = new DefaultTreeNode(operRoleSelectShow, root);
         recursiveTreeNode("0", node0);
         node0.setExpanded(true);
-        //expandTreeNode(node0);
-        initOperRes();
-
-        cttInfoShow = new CttInfoShow();
-        initCttInfo();
-
-        taskFunctionList = new ArrayList<SelectItem>();
-        taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
-        taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG1.getCode(),ESEnumStatusFlag.STATUS_FLAG1.getTitle()));
-        taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG2.getCode(),ESEnumStatusFlag.STATUS_FLAG2.getTitle()));
-        taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG3.getCode(),ESEnumStatusFlag.STATUS_FLAG3.getTitle()));
-        taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG4.getCode(),ESEnumStatusFlag.STATUS_FLAG4.getTitle()));
-        taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG5.getCode(),ESEnumStatusFlag.STATUS_FLAG5.getTitle()));
     }
+
     private void recursiveTreeNode(String strLevelParentId,TreeNode parentNode){
         List<OperRoleSelectShow> operRoleSelectShowList= operResService.selectOperaRoleRecords(strLevelParentId);
         for (int i=0;i<operRoleSelectShowList.size();i++){
@@ -125,13 +115,22 @@ public class OperResAction implements Serializable{
         }
     }
 
-    public OperResService getOperResService() {
-        return operResService;
+    private void initFunc(){
+        taskFunctionList = new ArrayList<SelectItem>();
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG1.getCode(),ESEnumStatusFlag.STATUS_FLAG1.getTitle()));
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG2.getCode(),ESEnumStatusFlag.STATUS_FLAG2.getTitle()));
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG3.getCode(),ESEnumStatusFlag.STATUS_FLAG3.getTitle()));
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG4.getCode(),ESEnumStatusFlag.STATUS_FLAG4.getTitle()));
+        taskFunctionList.add(
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG5.getCode(),ESEnumStatusFlag.STATUS_FLAG5.getTitle()));
     }
 
-    public void setOperResService(OperResService operResService) {
-        this.operResService = operResService;
-    }
     public void initCttInfo() {
         List<CttInfoShow> tkCttInfoShowTreeList = new ArrayList<CttInfoShow>();
         cttroot = new DefaultTreeNode("cttroot", null);
@@ -321,5 +320,12 @@ public class OperResAction implements Serializable{
 
     public void setOperResShowList(List<OperResShow> operResShowList) {
         this.operResShowList = operResShowList;
+    }
+    public OperResService getOperResService() {
+        return operResService;
+    }
+
+    public void setOperResService(OperResService operResService) {
+        this.operResService = operResService;
     }
 }
