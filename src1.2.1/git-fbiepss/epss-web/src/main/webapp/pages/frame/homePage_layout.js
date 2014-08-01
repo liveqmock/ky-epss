@@ -1,4 +1,7 @@
 var dhxLayout;
+var taskdhxLayout;
+var taskdhxAccord;
+var tasktabbar;
 var bizdhxLayout;
 var bizdhxAccord;
 var biztabbar;
@@ -104,7 +107,23 @@ function doSysLoad() {
         return true;
     });
 }
+function doTaskLoad() {
+    taskdhxLayout.cells("a").setWidth(5);
+    taskdhxLayout.cells("a").hideHeader();
+    taskdhxLayout.cells("b").hideHeader();
+    taskdhxAccord = taskdhxLayout.cells("a").attachAccordion();
+    tasktabbar = taskdhxLayout.cells("b").attachTabbar();
 
+    tasktabbar.setSkin("dhx_skyblue");
+    tasktabbar.setImagePath(contextPath + "/dhtmlx/dhtmlxTabbar/codebase/imgs/");
+    tasktabbar.setHrefMode("iframes-on-demand");
+    tasktabbar.setSkinColors("#FCFBFC", "#F4F3EE");
+    tasktabbar.enableTabCloseButton(true);
+    tasktabbar.addTab("a1", "´ý°ìÈÎÎñ", "100px");
+    tasktabbar.setContentHref("a1", contextPath+"/UI/epss/task/task.xhtml");
+    tasktabbar.setTabActive("a1");
+
+}
 function bizaddtabbar(divID, tabname, url) {
     var tabbarCell = biztabbar.cells(divID);
     if (tabbarCell == undefined) {
@@ -128,8 +147,8 @@ function sysaddtabbar(divID, tabname, url) {
     }
 }
 
-var layoutary = new Array('bizlayout', 'syslayout', 'helplayout', 'verlayout');
-var tabbarary = new Array('biz', 'sys', 'help', 'ver');
+var layoutary = new Array('tasklayout','bizlayout', 'syslayout', 'helplayout', 'verlayout');
+var tabbarary = new Array('task','biz', 'sys', 'help', 'ver');
 
 function changepwd() {
     var sfeature = "dialogwidth:400px; dialogheight:200px;center:yes;help:no;resizable:no;scroll:no;status:no";

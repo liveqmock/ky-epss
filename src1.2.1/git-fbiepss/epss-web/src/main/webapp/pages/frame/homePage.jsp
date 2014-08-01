@@ -114,9 +114,14 @@
             doBizLoad();
             sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
             doSysLoad();
-            tabbarhide("bizlayout");
-            document.getElementById("biz").setAttribute("active", "true");
-            document.getElementById("biz").className = "tabs-item-active";
+//            tabbarhide("bizlayout");
+//            document.getElementById("biz").setAttribute("active", "true");
+//            document.getElementById("biz").className = "tabs-item-active";
+            taskdhxLayout = new dhtmlXLayoutObject("tasklayout", "2U", "dhx_skyblue");
+            doTaskLoad();
+            tabbarhide("tasklayout");
+            document.getElementById("task").setAttribute("active", "true");
+            document.getElementById("task").className = "tabs-item-active";
 
         }
 
@@ -150,8 +155,13 @@
         </tr>
         <tr style="width:100%; height:25px">
             <td colspan="3" style="height:25px;">
-                <div onclick="tabbarclk(this);" active="true" id="biz" class="tabs-item-active"
+                <div onclick="tabbarclk(this);" active="true" id="task" class="tabs-item-active"
                      style="float:left;width:80px;margin-left:12px;">
+                    <span style="width:100%;">待办业务</span>
+                </div>
+                <div style="float:left;width:2px;"></div>
+                <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
+                     style="float:left;width:80px;">
                     <span style="width:100%;">业务操作</span>
                 </div>
                 <div style="float:left;width:2px;"></div>
@@ -176,6 +186,7 @@
         </tr>
         <tr style="width:100%">
             <td width="100%" colspan="4">
+                <div class="divlayout" id="tasklayout"></div>
                 <div class="divlayout" id="bizlayout"></div>
                 <div class="divlayout" id="syslayout"></div>
                 <div class="divlayout" id="helplayout">
