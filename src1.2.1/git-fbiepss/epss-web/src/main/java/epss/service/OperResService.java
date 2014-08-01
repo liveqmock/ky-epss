@@ -23,4 +23,8 @@ public class OperResService {
     public List<OperResShow> selectOperaResRecords(){
         return myOperResMapper.selectOperaResRecords();
     }
+
+    public List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara){
+        return myOperResMapper.selectOperaResRecordsByModelShow(operResShowPara);
+    }
 }

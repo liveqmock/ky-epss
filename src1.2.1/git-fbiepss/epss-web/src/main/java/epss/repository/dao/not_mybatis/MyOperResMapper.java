@@ -67,6 +67,6 @@ public interface MyOperResMapper {
             "from " +
             " OPER_RES t")
     List<OperResShow> selectOperaResRecords();
-    
 
+    List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara);
 }
