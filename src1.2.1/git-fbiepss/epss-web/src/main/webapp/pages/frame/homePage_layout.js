@@ -1,7 +1,4 @@
 var dhxLayout;
-var taskdhxLayout;
-var taskdhxAccord;
-var tasktabbar;
 var bizdhxLayout;
 var bizdhxAccord;
 var biztabbar;
@@ -38,16 +35,18 @@ function doBizLoad() {
     bizdhxAccord.setSkin("dhx_skyblue");
     bizdhxAccord.setIconsPath(contextPath + "/dhtmlx/dhtmlxAccordion/codebase/icons/");
     bizdhxAccord.addItem("a1", "业务功能");
-    bizdhxAccord.addItem("a2", "常用功能");
-    bizdhxAccord.addItem("a3", "待办事项");
-    bizdhxAccord.addItem("a4", "实时消息");
+//    TODO (modified by yxy,2014-08-02,Total:3 line)
+//    bizdhxAccord.addItem("a2", "常用功能");
+//    bizdhxAccord.addItem("a3", "待办事项");
+//    bizdhxAccord.addItem("a4", "实时消息");
 
     bizdhxAccord.openItem("a1");
     bizdhxAccord._enableOpenEffect = true;
     bizdhxAccord.cells("a1").setIcon("accord_biz.png");
-    bizdhxAccord.cells("a2").setIcon("accord_manage.png");
-    bizdhxAccord.cells("a3").setIcon("editor.gif");
-    bizdhxAccord.cells("a4").setIcon("accord_support.png");
+//    TODO (modified by yxy,2014-08-02,Total:3 line)
+//    bizdhxAccord.cells("a2").setIcon("accord_manage.png");
+//    bizdhxAccord.cells("a3").setIcon("editor.gif");
+//    bizdhxAccord.cells("a4").setIcon("accord_support.png");
 
     var biztree = bizdhxAccord.cells("a1").attachTree();
     var treeDefaultJson = eval('(' + defaultMenuStr + ')');
@@ -107,23 +106,6 @@ function doSysLoad() {
         return true;
     });
 }
-function doTaskLoad() {
-    taskdhxLayout.cells("a").setWidth(5);
-    taskdhxLayout.cells("a").hideHeader();
-    taskdhxLayout.cells("b").hideHeader();
-    taskdhxAccord = taskdhxLayout.cells("a").attachAccordion();
-    tasktabbar = taskdhxLayout.cells("b").attachTabbar();
-
-    tasktabbar.setSkin("dhx_skyblue");
-    tasktabbar.setImagePath(contextPath + "/dhtmlx/dhtmlxTabbar/codebase/imgs/");
-    tasktabbar.setHrefMode("iframes-on-demand");
-    tasktabbar.setSkinColors("#FCFBFC", "#F4F3EE");
-    tasktabbar.enableTabCloseButton(true);
-    tasktabbar.addTab("a1", "待办任务", "100px");
-    tasktabbar.setContentHref("a1", contextPath+"/UI/epss/task/task.xhtml");
-    tasktabbar.setTabActive("a1");
-
-}
 function bizaddtabbar(divID, tabname, url) {
     var tabbarCell = biztabbar.cells(divID);
     if (tabbarCell == undefined) {
@@ -147,8 +129,11 @@ function sysaddtabbar(divID, tabname, url) {
     }
 }
 
-var layoutary = new Array('tasklayout','bizlayout', 'syslayout', 'helplayout', 'verlayout');
-var tabbarary = new Array('task','biz', 'sys', 'help', 'ver');
+//var layoutary = new Array('bizlayout', 'syslayout', 'helplayout', 'verlayout');
+//var tabbarary = new Array('biz', 'sys', 'help', 'ver');
+//TODO (modified by yxy,2014-08-02,Total:2 line)
+var layoutary = new Array('tasklayout', 'bizlayout', 'syslayout', 'helplayout', 'verlayout');
+var tabbarary = new Array('task', 'biz', 'sys', 'help', 'ver');
 
 function changepwd() {
     var sfeature = "dialogwidth:400px; dialogheight:200px;center:yes;help:no;resizable:no;scroll:no;status:no";

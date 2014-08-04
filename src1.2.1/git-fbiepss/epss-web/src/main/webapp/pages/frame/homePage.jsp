@@ -117,8 +117,7 @@
 //            tabbarhide("bizlayout");
 //            document.getElementById("biz").setAttribute("active", "true");
 //            document.getElementById("biz").className = "tabs-item-active";
-            taskdhxLayout = new dhtmlXLayoutObject("tasklayout", "2U", "dhx_skyblue");
-            doTaskLoad();
+            //TODO (modified by yxy,2014-08-02,Total:4 line)
             tabbarhide("tasklayout");
             document.getElementById("task").setAttribute("active", "true");
             document.getElementById("task").className = "tabs-item-active";
@@ -128,6 +127,17 @@
         function Relogin() {
             parent.window.reload = "true";
             parent.window.location.replace("<%=contextPath%>/pages/security/logout.jsp");
+        }
+
+        //TODO (add by yxy,2014-08-02,Total:8 line)
+        //控制加载页面时间长时，给用户友好提示
+        document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
+        function subSomething() {
+            if (document.readyState == "complete" && window.parent.frames["workFrame"].document.readyState == "complete") {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loading').style.visibility = 'none';
+                document.getElementById('main').style.display = "inline";
+            }
         }
     </script>
 </head>
@@ -186,7 +196,25 @@
         </tr>
         <tr style="width:100%">
             <td width="100%" colspan="4">
-                <div class="divlayout" id="tasklayout"></div>
+                <%--TODO (add by yxy,2014-08-02,Total:18 line)--%>
+                <div class="divlayout" id="tasklayout">
+                    <div class="divlayout" id="loading">
+                        <div style="position:absolute;top:30%;left: 40%;text-align: center;">
+                            <img src="<%=contextPath%>/images/ajaxloadingbar.gif"/>
+                            <span>页面正在加载中...</span>
+                        </div>
+                    </div>
+                    <div class="divlayout" id="main">
+                        <iframe id="workFrame" name="workFrame"
+                                src="<%=contextPath%>/UI/epss/task/task.xhtml"
+                                width="100%" height="100%"
+                                frameborder="no"
+                                border="0"
+                                marginwidth="0" marginheight="0"
+                                scrolling="no">
+                        </iframe>
+                    </div>
+                </div>
                 <div class="divlayout" id="bizlayout"></div>
                 <div class="divlayout" id="syslayout"></div>
                 <div class="divlayout" id="helplayout">
