@@ -201,6 +201,7 @@
                     <div class="divlayout" id="loading">
                         <div style="position:absolute;top:30%;left: 40%;text-align: center;">
                             <img src="<%=contextPath%>/images/ajaxloadingbar.gif"/>
+                            <br>
                             <span>页面正在加载中...</span>
                         </div>
                     </div>
