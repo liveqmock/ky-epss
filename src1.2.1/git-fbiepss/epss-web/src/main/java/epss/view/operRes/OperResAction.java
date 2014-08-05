@@ -1,8 +1,9 @@
 package epss.view.operRes;
 
 import epss.common.enums.ESEnum;
+import epss.common.enums.ESEnumEndFlag;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.repository.model.OperRes;
+import epss.common.utils.MessageUtil;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.OperRoleSelectShow;
@@ -24,8 +25,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by XIANGYANG on 2014/7/27.
@@ -50,16 +51,15 @@ public class OperResAction implements Serializable{
     private EsFlowControl esFlowControl;
 
     private List<OperResShow> operResShowList;
-
+    //获取界面三大panel的内容，并持久化
+    private List<CttInfoShow> selResList=new ArrayList<>();
+    private List<OperRoleSelectShow>  selOperList=new ArrayList<>();
     // task_function
     private List<SelectItem> taskFunctionList;
-    private CttInfoShow cttInfoShow;
     private TreeNode root;
     private TreeNode cttroot;
     private TreeNode selectedNode;
-    private TreeNode[] selResNodesList;
-    private TreeNode[] selOperNodesList;
-    private List<SelectItem> selTaskFunctionsList;
+    private List<SelectItem> selTaskFunctionList;
     @PostConstruct
     public void init() {
         initOper();
@@ -67,7 +67,6 @@ public class OperResAction implements Serializable{
         initFunc();
 
         cttroot = new DefaultTreeNode("cttroot", null);
-        cttInfoShow = new CttInfoShow();
         initCttInfo();
     }
     private void initOper(){
@@ -116,7 +115,8 @@ public class OperResAction implements Serializable{
     }
 
     private void initFunc(){
-        taskFunctionList = new ArrayList<SelectItem>();
+        taskFunctionList = new ArrayList<SelectItem>();		
+        this.selTaskFunctionList= new ArrayList<SelectItem>();
         taskFunctionList.add(
                 new SelectItem(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
         taskFunctionList.add(
@@ -132,76 +132,142 @@ public class OperResAction implements Serializable{
     }
 
     public void initCttInfo() {
-        List<CttInfoShow> tkCttInfoShowTreeList = new ArrayList<CttInfoShow>();
         cttroot = new DefaultTreeNode("cttroot", null);
         CttInfoShow tkCttInfoShowQry = new CttInfoShow();
         tkCttInfoShowQry.setCttType(ESEnum.ITEMTYPE0.getCode());
         tkCttInfoShowQry.setStrStatusFlagBegin(null);
-        tkCttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-        tkCttInfoShowTreeList = esFlowService.selectCttByStatusFlagBegin_End(tkCttInfoShowQry);
+        tkCttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG5.getCode());
+        List<CttInfoShow> tkCttInfoShowTreeList = esFlowService.selectCttByStatusFlagBegin_End(tkCttInfoShowQry);
         for (CttInfoShow item : tkCttInfoShowTreeList) {
-            TreeNode childNodeTkctt = null;
-            if (item.getPkid() != null) {
-                List<CttInfoShow> cstplInfoShowTreeList = new ArrayList<CttInfoShow>();
-                childNodeTkctt = new DefaultTreeNode(new CttInfoShow(item.getId(), item.getName(),
-                        esCommon.getCustNameByCustIdFromList(item.getSignPartA()),
-                        esCommon.getCustNameByCustIdFromList(item.getSignPartB()),
-                        esFlowControl.getLabelByValueInPreStatusFlaglist(item.getStatusFlag()),
-                        esFlowControl.getLabelByValueInPreStatusFlaglist(item.getPreStatusFlag()),
-                        item.getCttStartDate(), item.getCttEndDate(),
-                        item.getSignDate(), item.getNote()), cttroot);
-                CttInfoShow cstplInfoShowQry = new CttInfoShow();
-                cstplInfoShowQry.setCttType(ESEnum.ITEMTYPE1.getCode());
-                cstplInfoShowQry.setStrStatusFlagBegin(null);
-                cstplInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                cstplInfoShowQry.setParentPkid(item.getPkid());
-                cstplInfoShowTreeList = esFlowService.selectCttByStatusFlagBegin_End(cstplInfoShowQry);
-                for (CttInfoShow cstplItem : cstplInfoShowTreeList) {
-                    TreeNode childNodeCstpl = new DefaultTreeNode(new CttInfoShow(cstplItem.getId(), cstplItem .getName(),
-                            esCommon.getCustNameByCustIdFromList(cstplItem.getSignPartA()),
-                            esCommon.getCustNameByCustIdFromList(cstplItem.getSignPartB()),
-                            esFlowControl.getLabelByValueInPreStatusFlaglist(cstplItem .getStatusFlag()),
-                            esFlowControl.getLabelByValueInPreStatusFlaglist(cstplItem .getPreStatusFlag()),
-                            cstplItem .getCttStartDate(), cstplItem .getCttEndDate(),
-                            cstplItem .getSignDate(), cstplItem.getNote()), childNodeTkctt);
-                    List<CttInfoShow> subCttInfoShowTreeList = new ArrayList<CttInfoShow>();
-                    CttInfoShow subCttInfoShowQry = new CttInfoShow();
-                    subCttInfoShowQry.setCttType(ESEnum.ITEMTYPE2.getCode());
-                    subCttInfoShowQry.setStrStatusFlagBegin(null);
-                    subCttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                    subCttInfoShowQry.setParentPkid(cstplItem.getPkid());
-                    subCttInfoShowTreeList = esFlowService.selectCttByStatusFlagBegin_End(subCttInfoShowQry);
-                    for (CttInfoShow subItem : subCttInfoShowTreeList) {
-                        if (subItem.getPkid() != null) {
-                            TreeNode childNodeSubctt = new DefaultTreeNode(new CttInfoShow(subItem.getId(), subItem.getName(),
-                                    esCommon.getCustNameByCustIdFromList(subItem.getSignPartA()),
-                                    esCommon.getCustNameByCustIdFromList(subItem.getSignPartB()),
-                                    esFlowControl.getLabelByValueInPreStatusFlaglist(subItem.getStatusFlag()),
-                                    esFlowControl.getLabelByValueInPreStatusFlaglist(subItem.getPreStatusFlag()),
-                                    subItem.getCttStartDate(), subItem.getCttEndDate(),
-                                    subItem.getSignDate(), subItem.getNote()), childNodeCstpl);
-                        }
+            TreeNode childNodeTkctt = new DefaultTreeNode(
+                    new CttInfoShow(
+                            item.getPkid(),
+                            item.getId(),
+                            item.getCttType(),
+                            item.getName(),
+                            item.getNote(),
+                            esFlowControl.getLabelByValueInPreStatusFlaglist(item.getStatusFlag()),
+                            esFlowControl.getLabelByValueInPreStatusFlaglist(item.getPreStatusFlag()),
+                            item.getEndFlag(),
+                            item.getLastUpdBy(),
+                            item.getLastUpdDate(),
+                            item.getModificationNum(),
+                            false),
+                        cttroot);
+            CttInfoShow cstplInfoShowQry = new CttInfoShow();
+            cstplInfoShowQry.setCttType(ESEnum.ITEMTYPE1.getCode());
+            cstplInfoShowQry.setStrStatusFlagBegin(null);
+            cstplInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG5.getCode());
+            cstplInfoShowQry.setParentPkid(item.getPkid());
+            List<CttInfoShow> cstplInfoShowTreeList = esFlowService.selectCttByStatusFlagBegin_End(cstplInfoShowQry);
+            for (CttInfoShow cstplItem : cstplInfoShowTreeList) {
+                TreeNode childNodeCstpl = new DefaultTreeNode(
+                        new CttInfoShow(
+                                cstplItem.getPkid(),
+                                cstplItem.getId(),
+                                cstplItem.getCttType(),
+                                cstplItem.getName(),
+                                cstplItem.getNote(),
+                                esFlowControl.getLabelByValueInPreStatusFlaglist(cstplItem.getStatusFlag()),
+                                esFlowControl.getLabelByValueInPreStatusFlaglist(cstplItem.getPreStatusFlag()),
+                                cstplItem.getEndFlag(),
+                                cstplItem.getLastUpdBy(),
+                                cstplItem.getLastUpdDate(),
+                                cstplItem.getModificationNum(),
+                                false),
+                        childNodeTkctt);
+                CttInfoShow subCttInfoShowQry = new CttInfoShow();
+                subCttInfoShowQry.setCttType(ESEnum.ITEMTYPE2.getCode());
+                subCttInfoShowQry.setStrStatusFlagBegin(null);
+                subCttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG5.getCode());
+                subCttInfoShowQry.setParentPkid(cstplItem.getPkid());
+                List<CttInfoShow> subCttInfoShowTreeList = esFlowService.selectCttByStatusFlagBegin_End(subCttInfoShowQry);
+                for (CttInfoShow subItem : subCttInfoShowTreeList) {
+                    if (subItem.getPkid() != null) {
+                        new DefaultTreeNode(
+                            new CttInfoShow(
+                                subItem.getPkid(),
+                                subItem.getId(),
+                                subItem.getCttType(),
+                                subItem.getName(),
+                                subItem.getNote(),
+                                esFlowControl.getLabelByValueInPreStatusFlaglist(subItem.getStatusFlag()),
+                                esFlowControl.getLabelByValueInPreStatusFlaglist(subItem.getPreStatusFlag()),
+                                subItem.getEndFlag(),
+                                subItem.getLastUpdBy(),
+                                subItem.getLastUpdDate(),
+                                subItem.getModificationNum(),
+                                false),
+                            childNodeCstpl
+                        );
                     }
                 }
-            } else {
-                childNodeTkctt = new DefaultTreeNode(new CttInfoShow("-", item.getName(), "-", "-", "-", "-", "-", "-", "-", "-"), root);
             }
         }
     }
+
+    public void selRes(CttInfoShow cttInfoShowPara) {
+        if (cttInfoShowPara.getIsSeled()){
+            selResList.add(cttInfoShowPara);
+        }else{
+            selResList.remove(cttInfoShowPara);
+        }
+    }
+    
+    public void SelOper(OperRoleSelectShow operRoleSelectShowPara) {
+         if (operRoleSelectShowPara.getIsSel()){
+             selOperList.add(operRoleSelectShowPara);
+         }else{
+            selOperList.remove(operRoleSelectShowPara);
+         }
+   }
     public void saveSelectedMultiple() {
-        StringBuilder res=new StringBuilder();
-        if(selResNodesList != null && selResNodesList.length > 0) {
-            for(TreeNode node : selResNodesList) {
-                System.out.println(res.append(node.getData().toString()));
-            }
-        }
-        /* if(selOperNodesList != null && selOperNodesList.length > 0) {
-
-        }*/
-        OperRes operRes=new OperRes();
-        //operRes.setInfoPkid();
+       if(selResList.size()==0){
+           MessageUtil.addError("资源列表不能为空，请选择");
+           return;
+       }
+       if(selTaskFunctionList.size()==0){
+           MessageUtil.addError("功能列表不能为空，请选择");
+           return;
+       }
+       if(selOperList.size()==0){
+           MessageUtil.addError("人员列表不能为空，请选择");
+           return;
+       }
+       for(int i=0;i<selResList.size();i++){
+           for(int m=0;m<selTaskFunctionList.size();m++){
+               for(int n=0;n<selOperList.size();n++){
+                   OperResShow operResShowAdd=new OperResShow();
+                   operResShowAdd.setOperPkid(selOperList.get(n).getSelid());
+                   operResShowAdd.setOperName(selOperList.get(n).getSlename());
+                   operResShowAdd.setFlowStatus((String) selTaskFunctionList.get(m).getValue());
+                   operResShowAdd.setFlowStatusName(selResList.get(i).getPreStatusFlag());
+                   operResShowAdd.setInfoPkid(selResList.get(i).getPkid());
+                   operResShowAdd.setInfoPkidName(selResList.get(i).getName());
+                   operResShowAdd.setArchivedFlag(selResList.get(i).getEndFlag());
+                   operResShowAdd.setCreatedBy(selResList.get(i).getCreatedBy());
+                   operResShowAdd.setCreatedByName(selResList.get(i).getCreatedByName());
+                   operResShowAdd.setCreatedTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                   //operResShowAdd.setTid(selOperList.get(n).getTid());//人员归属地，待开发
+                   operResShowAdd.setInfoType(selResList.get(i).getCttType());
+                   operResShowAdd.setLastUpdBy(selResList.get(i).getLastUpdBy());
+                   operResShowAdd.setLastUpdTime(selResList.get(i).getLastUpdDate());
+                   if (("null").equals(selResList.get(i).getModificationNum())){
+                       operResShowAdd.setRecversion(0);
+                   }else{
+                       operResShowAdd.setRecversion(selResList.get(i).getModificationNum());
+                   }
+                  operResService.save(operResShowAdd);
+               }
+           }
+       }
+       clearList();
     }
 
+    private void clearList(){
+        selResList.clear();
+        selOperList.clear();
+    }
     /*智能字段 Start*/
     public CttItemService getCttItemService() {
         return cttItemService;
@@ -266,15 +332,6 @@ public class OperResAction implements Serializable{
     public void setEsFlowControl(EsFlowControl esFlowControl) {
         this.esFlowControl = esFlowControl;
     }
-
-    public CttInfoShow getCttInfoShow() {
-        return cttInfoShow;
-    }
-
-    public void setCttInfoShow(CttInfoShow cttInfoShow) {
-        this.cttInfoShow = cttInfoShow;
-    }
-
     public List<SelectItem> getTaskFunctionList() {
         return taskFunctionList;
     }
@@ -289,30 +346,15 @@ public class OperResAction implements Serializable{
     public void setSelectedNode(TreeNode selectedNode) {
         this.selectedNode = selectedNode;
     }
-
-    public TreeNode[] getSelResNodesList() {
-        return selResNodesList;
+	
+	 public List<SelectItem> getSelTaskFunctionList() {
+        return selTaskFunctionList;
     }
 
-    public void setSelResNodesList(TreeNode[] selResNodesList) {
-        this.selResNodesList = selResNodesList;
+    public void setSelTaskFunctionList(List<SelectItem> selTaskFunctionList) {
+        this.selTaskFunctionList = selTaskFunctionList;
     }
-
-    public TreeNode[] getSelOperNodesList() {
-        return selOperNodesList;
-    }
-
-    public void setSelOperNodesList(TreeNode[] selOperNodesList) {
-        this.selOperNodesList = selOperNodesList;
-    }
-
-    public List<SelectItem> getSelTaskFunctionsList() {
-        return selTaskFunctionsList;
-    }
-
-    public void setSelTaskFunctionsList(List<SelectItem> selTaskFunctionsList) {
-        this.selTaskFunctionsList = selTaskFunctionsList;
-    }
+    
 
     public List<OperResShow> getOperResShowList() {
         return operResShowList;

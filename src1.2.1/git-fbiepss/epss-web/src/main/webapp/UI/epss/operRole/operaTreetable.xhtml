@@ -19,56 +19,54 @@
         </script>
     </ui:define>
     <ui:define name="content">
-        <h:form id="form">
-            <p:growl id="messages" showDetail="true" />
+        <h:form id="form" >
+            <p:growl id="msgs" showDetail="true" />
             <h:panelGrid  columns="1">
-                <p:commandButton value="保存" update="messages"
-                               actionListener="#{operResAction.saveSelectedMultiple}"/>
+                <p:commandButton value="保存" update=":form:pdtView,msgs" action="#{operResAction.saveSelectedMultiple()}"/>
             </h:panelGrid>
             <h:panelGrid id="pdQry" columns="3">
                 <p:panel header="资源列表">
                     <p:treeTable id="resTreeTable"
                                  value="#{operResAction.cttroot}"
                                  var="document"
-                                 selection="#{operResAction.selResNodesList}"
-                                 rowKey="#{document.pkid}"
-                                 selectionMode="checkbox"
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="300">
                         <p:column headerText="名称" style="width:400px;text-align:left">
                             <h:outputText value="#{document.name}"/>
                         </p:column>
+                        <p:column headerText="选择" style="width:30px;text-align:center">
+                        <p:selectBooleanCheckbox value="#{document.isSeled}" >
+                            <p:ajax  listener="#{operResAction.selRes(document)}"/>
+                        </p:selectBooleanCheckbox>
+                    </p:column>
                     </p:treeTable>
                 </p:panel>
                 <p:panel header="功能列表">
                     <p:dataTable id="pdt"
                                  value="#{operResAction.taskFunctionList}"
-                                 selection="#{operResAction.selTaskFunctionsList}"
                                  var="record"
-                                 rowIndexVar="row"
-                                 rowKey="#{row + 1}"
-                                 selectionMode="multiple"
+                                 rowKey="#{record.value}"
+                                 selection="#{operResAction.selTaskFunctionList}"
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="300">
-                        <p:column selectionMode="multiple"
-                                  style="width:30px;text-align:center"/>
                         <p:column headerText="名称" style="width:100px;text-align:left">
                             <h:outputText value="#{record.label}"/>
                         </p:column>
+                        <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                     </p:dataTable>
                 </p:panel>
                 <p:panel header="人员列表">
                     <p:treeTable id="operTreeTable"
-                            value="#{operResAction.root}"
-                            var="node"
-                            dynamic="true"
-                            cache="false"
-                            selectionMode="checkbox"
-                            selection="#{operResAction.selOperNodesList}"
-                            scrollable="true"
-                            scrollHeight="300">
+                                 value="#{operResAction.root}"
+                                 var="node"
+                                 dynamic="true"
+                                 cache="false"
+                                 widgetVar="DtInitCstplList"
+                                 rowStyleClass="#{node.seltype  eq '0' ? '0':'rowDoneStyle'}"
+                                 scrollable="true"
+                                 scrollHeight="300">
                         <!--<p:ajax event="expand" update=":form:messages" listener="#{operResAction.onNodeExpand}" />
                         <p:ajax event="collapse" update=":form:messages" listener="#{operResAction.onNodeCollapse}" />
                         <p:ajax event="select" update=":form:messages" listener="#{operResAction.onNodeSelect}" />
@@ -80,6 +78,11 @@
                         <p:column headerText="名称" style="width:120px;text-align:center">
                             <h:outputText value="#{node.seltype eq '0'?node.slename:''}" />
                         </p:column>
+                        <p:column headerText="选择" style="width:30px;text-align:center">
+                            <p:selectBooleanCheckbox value="#{node.isSel}" rendered="#{node.seltype  eq '0' ? true:false}">
+                                <p:ajax  listener="#{operResAction.SelOper(node)}"/>
+                            </p:selectBooleanCheckbox>
+                        </p:column>
                     </p:treeTable>
                 </p:panel>
             </h:panelGrid>
@@ -90,54 +93,53 @@
                                  var="recordView"
                                  rowIndexVar="row"
                                  rowKey="#{row + 1}"
-                                 selectionMode="multiple"
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="200">
-                        <p:column headerText="序号" style="width:30px">
-                            <h:outputText value="#{row + 1}"/>
-                        </p:column>
-                        <p:column headerText="编号" style="width:100px;text-align:center">
-                            <h:outputText value="#{recordView.pkid}"/>
-                        </p:column>
-                        <p:column headerText="用户PKID" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.operPkid}"/>
-                        </p:column>
-                        <p:column headerText="用户名称" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.operName}"/>
-                        </p:column>
-                        <p:column headerText="状态" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.flowStatus}"/>
-                        </p:column>
-                        <p:column headerText="状态名称" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.flowStatusName}"/>
-                        </p:column>
-                        <p:column headerText="资源PKID" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.infoPkid}"/>
-                        </p:column>
-                        <p:column headerText="资源名称" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.infoPkidName}"/>
-                        </p:column>
-                        <p:column headerText="废止标志" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.archivedFlag}"/>
-                        </p:column>
-                        <p:column headerText="创建者PKID" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.createdBy}"/>
-                        </p:column>
-                        <p:column headerText="创建者名称" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.createdByName}"/>
-                        </p:column>
-                        <p:column headerText="创建时间" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.createdTime}"/>
-                        </p:column>
-                        <p:column headerText="修改次数" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.recversion}"/>
-                        </p:column>
-                        <p:column headerText="所属区域号" style="width:100px;text-align:left">
-                            <h:outputText value="#{recordView.tid}"/>
-                        </p:column>
-                    </p:dataTable>
-                </p:panel>
+                 <p:column headerText="序号" style="width:30px">
+                     <h:outputText value="#{row + 1}"/>
+                 </p:column>
+                 <p:column headerText="编号" style="width:100px;text-align:center">
+                     <h:outputText value="#{recordView.pkid}"/>
+                 </p:column>
+                 <p:column headerText="用户PKID" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.operPkid}"/>
+                 </p:column>
+                 <p:column headerText="用户名称" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.operName}"/>
+                 </p:column>
+                 <p:column headerText="状态" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.flowStatus}"/>
+                 </p:column>
+                 <p:column headerText="状态名称" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.flowStatusName}"/>
+                 </p:column>
+                 <p:column headerText="资源PKID" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.infoPkid}"/>
+                 </p:column>
+                 <p:column headerText="资源名称" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.infoPkidName}"/>
+                 </p:column>
+                 <p:column headerText="废止标志" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.archivedFlag}"/>
+                 </p:column>
+                 <p:column headerText="创建者PKID" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.createdBy}"/>
+                 </p:column>
+                 <p:column headerText="创建者名称" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.createdByName}"/>
+                 </p:column>
+                 <p:column headerText="创建时间" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.createdTime}"/>
+                 </p:column>
+                 <p:column headerText="修改次数" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.recversion}"/>
+                 </p:column>
+                 <p:column headerText="所属区域号" style="width:100px;text-align:left">
+                     <h:outputText value="#{recordView.tid}"/>
+                 </p:column>
+             </p:dataTable>
+         </p:panel>
             </h:panelGrid>
         </h:form>
     </ui:define>

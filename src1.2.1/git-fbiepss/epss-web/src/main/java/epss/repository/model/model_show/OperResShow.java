@@ -19,6 +19,7 @@ public class OperResShow {
     private String lastUpdTime;
     private String remark;
     private Integer recversion;
+    private Boolean isSel;
     public String getPkid() {
         return pkid;
     }
@@ -136,5 +137,13 @@ public class OperResShow {
 
     public void setLastUpdByName(String lastUpdByName) {
         this.lastUpdByName = lastUpdByName;
+    }
+
+    public Boolean getIsSel() {
+        return isSel;
+    }
+
+    public void setIsSel(Boolean isSel) {
+        this.isSel = isSel;
     }
 }
