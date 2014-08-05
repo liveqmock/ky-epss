@@ -129,14 +129,12 @@
             parent.window.location.replace("<%=contextPath%>/pages/security/logout.jsp");
         }
 
-        //TODO (add by yxy,2014-08-02,Total:8 line)
+        //TODO (add by yxy,2014-08-02,Total:6 line)
         //控制加载页面时间长时，给用户友好提示
         document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
         function subSomething() {
             if (document.readyState == "complete" && window.parent.frames["workFrame"].document.readyState == "complete") {
                 document.getElementById('loading').style.display = 'none';
-                document.getElementById('loading').style.visibility = 'none';
-                document.getElementById('main').style.display = "inline";
             }
         }
     </script>
@@ -205,16 +203,14 @@
                             <span>页面正在加载中...</span>
                         </div>
                     </div>
-                    <div class="divlayout" id="main">
-                        <iframe id="workFrame" name="workFrame"
-                                src="<%=contextPath%>/UI/epss/task/task.xhtml"
-                                width="100%" height="100%"
-                                frameborder="no"
-                                border="0"
-                                marginwidth="0" marginheight="0"
-                                scrolling="no">
-                        </iframe>
-                    </div>
+                    <iframe id="workFrame" name="workFrame"
+                            src="<%=contextPath%>/UI/epss/task/task.xhtml"
+                            width="100%" height="100%"
+                            frameborder="no"
+                            border="0"
+                            marginwidth="0" marginheight="0"
+                            scrolling="no">
+                    </iframe>
                 </div>
                 <div class="divlayout" id="bizlayout"></div>
                 <div class="divlayout" id="syslayout"></div>

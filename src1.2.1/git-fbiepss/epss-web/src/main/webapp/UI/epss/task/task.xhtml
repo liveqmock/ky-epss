@@ -89,12 +89,18 @@
                         var rtn = dialog("../item/itemMng_SubcttPStl.xhtml?strEsInitStlPkid=" + pkid, arg, sfeature);
                     }
                 }
+                document.getElementById("form:qryBtn").click();
             }
         </script>
     </ui:define>
     <ui:define name="content">
         <h:form id="form" enctype="multipart/form-data">
             <p:growl id="msgs" showDetail="true"/>
+            <p:commandButton id="qryBtn" value="查询"
+                             action="#{esInitTaskAction.init()}"
+                             update="pdt,msgs"
+                             style="display: none">
+            </p:commandButton>
             <!--列表维护-->
             <p:dataTable id="pdt"
                          value="#{esInitTaskAction.taskShowList}"
