@@ -19,10 +19,11 @@
         </script>
     </ui:define>
     <ui:define name="content">
-        <h:form id="form" >
-            <p:growl id="msgs" showDetail="true" />
+        <h:form id="form">
+            <p:growl id="messages" showDetail="true" />
             <h:panelGrid  columns="1">
-                <p:commandButton value="保存" update=":form:pdtView,msgs" action="#{operResAction.saveSelectedMultiple()}"/>
+                <p:commandButton value="保存" update="messages"
+                               actionListener="#{operResAction.saveSelectedMultiple}"/>
             </h:panelGrid>
             <h:panelGrid id="pdQry" columns="3">
                 <p:panel header="资源列表">
@@ -96,50 +97,50 @@
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="200">
-                 <p:column headerText="序号" style="width:30px">
-                     <h:outputText value="#{row + 1}"/>
-                 </p:column>
-                 <p:column headerText="编号" style="width:100px;text-align:center">
-                     <h:outputText value="#{recordView.pkid}"/>
-                 </p:column>
-                 <p:column headerText="用户PKID" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.operPkid}"/>
-                 </p:column>
-                 <p:column headerText="用户名称" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.operName}"/>
-                 </p:column>
-                 <p:column headerText="状态" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.flowStatus}"/>
-                 </p:column>
-                 <p:column headerText="状态名称" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.flowStatusName}"/>
-                 </p:column>
-                 <p:column headerText="资源PKID" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.infoPkid}"/>
-                 </p:column>
-                 <p:column headerText="资源名称" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.infoPkidName}"/>
-                 </p:column>
-                 <p:column headerText="废止标志" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.archivedFlag}"/>
-                 </p:column>
-                 <p:column headerText="创建者PKID" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.createdBy}"/>
-                 </p:column>
-                 <p:column headerText="创建者名称" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.createdByName}"/>
-                 </p:column>
-                 <p:column headerText="创建时间" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.createdTime}"/>
-                 </p:column>
-                 <p:column headerText="修改次数" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.recversion}"/>
-                 </p:column>
-                 <p:column headerText="所属区域号" style="width:100px;text-align:left">
-                     <h:outputText value="#{recordView.tid}"/>
-                 </p:column>
-             </p:dataTable>
-         </p:panel>
+                        <p:column headerText="序号" style="width:30px">
+                            <h:outputText value="#{row + 1}"/>
+                        </p:column>
+                        <p:column headerText="编号" style="width:100px;text-align:center">
+                            <h:outputText value="#{recordView.pkid}"/>
+                        </p:column>
+                        <p:column headerText="用户PKID" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.operPkid}"/>
+                        </p:column>
+                        <p:column headerText="用户名称" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.operName}"/>
+                        </p:column>
+                        <p:column headerText="状态" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.flowStatus}"/>
+                        </p:column>
+                        <p:column headerText="状态名称" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.flowStatusName}"/>
+                        </p:column>
+                        <p:column headerText="资源PKID" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.infoPkid}"/>
+                        </p:column>
+                        <p:column headerText="资源名称" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.infoPkidName}"/>
+                        </p:column>
+                        <p:column headerText="废止标志" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.archivedFlag}"/>
+                        </p:column>
+                        <p:column headerText="创建者PKID" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.createdBy}"/>
+                        </p:column>
+                        <p:column headerText="创建者名称" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.createdByName}"/>
+                        </p:column>
+                        <p:column headerText="创建时间" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.createdTime}"/>
+                        </p:column>
+                        <p:column headerText="修改次数" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.recversion}"/>
+                        </p:column>
+                        <p:column headerText="所属区域号" style="width:100px;text-align:left">
+                            <h:outputText value="#{recordView.tid}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
             </h:panelGrid>
         </h:form>
     </ui:define>

@@ -17,8 +17,7 @@
 <div style='margin-left:15px;margin-right:35px; overflow:auto;height:520px;top:0px;width:100%;position:absolute;'>
     <table align="center" width="100%">
         <tr align="left">
-            <td height="30">&nbsp;在线人数：<font color="red" size="1"><%=operMaps.size()%>
-            </font></td>
+            <td height="30">&nbsp;在线人数：<%=operMaps.size()%></td>
         </tr>
         <tr align="center">
             <td>
@@ -35,25 +34,23 @@
                                     <%--<td width='10%' align="center" class="borderGrooveBR">操作</td>--%>
                                 </tr>
                                 <%
-                                        Iterator iter = operMaps.entrySet().iterator();
-                                        while (iter.hasNext()) {
-                                        Map.Entry<String,OperatorManager> entry = (Map.Entry<String,OperatorManager>) iter.next();
-                                        String sessionKey = entry.getKey();
-                                        OperatorManager om = entry.getValue();
-                                        PtOperBean onLineOper = om.getOperator();
-                                        %>
-                                  <tr >
-                                  <td align="center" class="borderGrooveBR" ><%=onLineOper.getPtDeptBean().getDeptname()%></td>
-                                  <td align="center" class="borderGrooveBR" ><%=onLineOper.getOpername()%></td>
-                                  <td align="center" class="borderGrooveBR"><%=onLineOper.getOperid()%></td>
-                                  <td class="borderGrooveBR" ><%=onLineOper.getFillstr600()%> </td>
-                                  <td align="center" class="borderGrooveBR" ><%=sessionKey%></td>
-<%--
-                                      <td align="center" class="borderGrooveBR"><a href="killlineuser.jsp?killsession=<%=sessionId%>">强制下线</a>
---%>
+                                    Iterator iter = operMaps.entrySet().iterator();
+                                    while (iter.hasNext()) {
+                                    Map.Entry<String,OperatorManager> entry = (Map.Entry<String,OperatorManager>) iter.next();
+                                    String sessionKey = entry.getKey();
+                                    OperatorManager om = entry.getValue();
+                                    PtOperBean onLineOper = om.getOperator();
+                                %>
+                                <tr >
+                                    <td align="center" class="borderGrooveBR" ><%=onLineOper.getPtDeptBean().getDeptname()%></td>
+                                    <td align="center" class="borderGrooveBR" ><%=onLineOper.getOpername()%></td>
+                                    <td align="center" class="borderGrooveBR"><%=onLineOper.getOperid()%></td>
+                                    <td class="borderGrooveBR" ><%=onLineOper.getFillstr600()%> </td>
+                                    <td align="center" class="borderGrooveBR" ><%=sessionKey%></td>
+                                    <td align="center" class="borderGrooveBR"><a href="killlineuser.jsp?killsession=<%=sessionKey%>">强制下线</a>
                                 </tr>
                                 <%
-                                        }
+                                    }
                                 %>
                             </table>
                         </td>

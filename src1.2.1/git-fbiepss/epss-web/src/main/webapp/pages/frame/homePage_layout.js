@@ -1,4 +1,3 @@
-var dhxLayout;
 var bizdhxLayout;
 var bizdhxAccord;
 var biztabbar;

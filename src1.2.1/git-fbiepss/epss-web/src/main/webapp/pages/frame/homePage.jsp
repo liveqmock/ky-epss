@@ -1,7 +1,6 @@
 <%@ page import="skyline.platform.db.ConnectionManager" %>
 <%@ page import="skyline.platform.db.DatabaseConnection" %>
 <%@ page import="skyline.platform.db.RecordSet" %>
-<%@ page import="skyline.util.PlatformHelper" %>
 <%@ page contentType="text/html; charset=GBK" %>
 <%@ include file="/pages/security/loginassistor.jsp" %>
 <%
@@ -114,9 +113,6 @@
             doBizLoad();
             sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
             doSysLoad();
-//            tabbarhide("bizlayout");
-//            document.getElementById("biz").setAttribute("active", "true");
-//            document.getElementById("biz").className = "tabs-item-active";
             //TODO (modified by yxy,2014-08-02,Total:4 line)
             tabbarhide("tasklayout");
             document.getElementById("task").setAttribute("active", "true");

@@ -41,7 +41,6 @@ public class OperRoleSelectShow {
     public void setCountnumer(String countnumer) {
         this.countnumer = countnumer;
     }
-
     
     public Boolean getIsSel() {
         return isSel;
