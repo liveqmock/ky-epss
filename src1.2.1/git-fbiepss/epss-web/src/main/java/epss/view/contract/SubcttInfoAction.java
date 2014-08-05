@@ -612,6 +612,10 @@ public class SubcttInfoAction {
         return cttInfoShowAttachment;
     }
 
+    public void setCttInfoShowAttachment(CttInfoShow cttInfoShowAttachment) {
+        this.cttInfoShowAttachment = cttInfoShowAttachment;
+    }
+
     public List<AttachmentModel> getAttachmentList() {
         return attachmentList;
     }
