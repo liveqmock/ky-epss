@@ -21,6 +21,50 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="messages" showDetail="true" />
+            <p:panel>
+                <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
+                    <h:panelGrid>
+                        <h:panelGrid columns="6">
+                            <p:outputLabel value="所属种类：" for="powerType"/>
+                            <p:selectOneMenu id="powerType" value="#{operResAction.cttAndStlInfoShowAdd.type}"
+                                             style="width:133px">
+                                <f:selectItems value="#{esCommon.itemTypeList}"/>
+                                <p:ajax update="messages,pgCondition"
+                                        listener="#{operResAction.setEsInitPowerHisActionOfPowerPkidAction}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel id="strLabel"
+                                           value="#{operResAction.strLabel}："
+                                           for="tkcttCstpl"
+                                           rendered="#{operResAction.strRendered1}"/>
+                            <p:selectOneMenu id="tkcttCstpl"
+                                             value="#{operResAction.cttAndStlInfoShowAdd.correspondingPkid}"
+                                             rendered="#{operResAction.strRendered1}">
+                                <f:selectItems value="#{operResAction.esInitCttList}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="名称：" for="idForName"
+                                           rendered="#{operResAction.strRendered2}"/>
+                            <p:inputText id="idForName"
+                                         value="#{operResAction.cttAndStlInfoShowAdd.name}"
+                                         rendered="#{operResAction.strRendered2}"/>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:commandButton id="addBtn"
+                                         value="增加" icon="ui-icon-plus"
+                                         action="#{operResAction.onClickForMngAction()}"
+                                         update="messages">
+                        </p:commandButton>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
             <h:panelGrid  columns="1">
                 <p:commandButton value="保存" update="messages"
                                actionListener="#{operResAction.saveSelectedMultiple}"/>

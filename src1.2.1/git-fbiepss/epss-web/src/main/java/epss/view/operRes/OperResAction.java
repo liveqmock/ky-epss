@@ -4,6 +4,9 @@ import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumEndFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.common.utils.MessageUtil;
+import epss.common.utils.ToolUtil;
+import epss.repository.model.EsCttInfo;
+import epss.repository.model.model_show.CttAndStlInfoShow;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.OperRoleSelectShow;
@@ -26,6 +29,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.*;
 
 /**
@@ -60,8 +64,24 @@ public class OperResAction implements Serializable{
     private TreeNode cttroot;
     private TreeNode selectedNode;
     private List<SelectItem> selTaskFunctionList;
+
+    private String strRendered1;
+    private String strRendered2;
+    private String strLabel;
+    private List<SelectItem> esInitCttList;
+
+    private List<CttAndStlInfoShow> cttAndStlInfoShowList;
+    private CttAndStlInfoShow cttAndStlInfoShowAdd;
+    private String strSubmitType;
     @PostConstruct
     public void init() {
+        strRendered1 = "false";
+        strRendered2 = "false";
+        strLabel = "";
+        strSubmitType = "Add";
+        cttAndStlInfoShowAdd = new CttAndStlInfoShow();
+        esInitCttList = new ArrayList<SelectItem>();
+        cttAndStlInfoShowList = new ArrayList<CttAndStlInfoShow>();
         initOper();
         initOperRes();
         initFunc();
@@ -113,7 +133,121 @@ public class OperResAction implements Serializable{
             }
         }
     }
+    public void setEsInitPowerHisActionOfPowerPkidAction() {
+        String strCttType = cttAndStlInfoShowAdd.getType();
+        if (!strCttType.equals("")) {
+            if (strCttType.equals(ESEnum.ITEMTYPE1.getCode())
+                    || strCttType.equals(ESEnum.ITEMTYPE6.getCode())
+                    || strCttType.equals(ESEnum.ITEMTYPE7.getCode())) {
+                strLabel = ESEnum.ITEMTYPE0.getTitle();
+                strRendered1 = "true";
+                if (strCttType.equals(ESEnum.ITEMTYPE1.getCode())) {
+                    strRendered2 = "true";
+                } else {
+                    strRendered2 = "false";
+                }
+                List<EsCttInfo> esCttInfoListTemp = new ArrayList<EsCttInfo>();
+                esCttInfoListTemp = cttInfoService.getEsInitCttListByCttType(ESEnum.ITEMTYPE0.getCode());
+                SelectItem selectItem = new SelectItem("", "全部");
+                esInitCttList.add(selectItem);
+                if (esCttInfoListTemp.size() > 0) {
+                    for (EsCttInfo itemUnit : esCttInfoListTemp) {
+                        selectItem = new SelectItem();
+                        selectItem.setValue(itemUnit.getPkid());
+                        selectItem.setLabel(itemUnit.getName());
+                        esInitCttList.add(selectItem);
+                    }
+                }
+            } else if (strCttType.equals(ESEnum.ITEMTYPE0.getCode())) {
+                strRendered2 = "true";
+            } else {
+                strLabel = ESEnum.ITEMTYPE1.getTitle();
+                strRendered1 = "true";
+                if (strCttType.equals(ESEnum.ITEMTYPE2.getCode())) {
+                    strRendered2 = "true";
+                } else {
+                    strRendered2 = "false";
+                }
+                List<EsCttInfo> esCttInfoListTemp = new ArrayList<EsCttInfo>();
+                esCttInfoListTemp = cttInfoService.getEsInitCttListByCttType(ESEnum.ITEMTYPE1.getCode());
+                SelectItem selectItem = new SelectItem("", "全部");
+                esInitCttList.add(selectItem);
+                if (esCttInfoListTemp.size() > 0) {
+                    for (EsCttInfo itemUnit : esCttInfoListTemp) {
+                        selectItem = new SelectItem();
+                        selectItem.setValue(itemUnit.getPkid());
+                        selectItem.setLabel(itemUnit.getName());
+                        esInitCttList.add(selectItem);
+                    }
+                }
+            }
+        }
+    }
+    public void onClickForMngAction() {
+        try {
+            if (strSubmitType.equals("Add")) {
+                addRecordAction(cttAndStlInfoShowAdd);
+            }
+        } catch (Exception e) {
+            logger.error("操作失败。", e);
+            MessageUtil.addError("操作失败。");
+        }
+    }
 
+    private void addRecordAction(CttAndStlInfoShow cttAndStlInfoShowPara) {
+        if (!submitPreCheck(cttAndStlInfoShowPara)) {
+            return;
+        }
+        if (ESEnum.ITEMTYPE0.getCode().equals(cttAndStlInfoShowPara.getType())
+                || ESEnum.ITEMTYPE1.getCode().equals(cttAndStlInfoShowPara.getType())
+                || ESEnum.ITEMTYPE2.getCode().equals(cttAndStlInfoShowPara.getType())) {
+            if (ESEnum.ITEMTYPE0.getCode().equals(cttAndStlInfoShowPara.getType())) {
+                cttAndStlInfoShowPara.setCorrespondingPkid("ROOT");
+            }
+            operResService.insertEsCttInfo(cttAndStlInfoShowPara);
+            MessageUtil.addInfo("新增数据完成。");
+        } else {
+        }
+    }
+
+    private boolean submitPreCheck(CttAndStlInfoShow cttAndStlInfoShowPara) {
+        if ("".equals(ToolUtil.getStrIgnoreNull(cttAndStlInfoShowPara.getType()))) {
+            MessageUtil.addError("请选择所属类型！");
+            return false;
+        }
+        if (ESEnum.ITEMTYPE0.getCode().equals(cttAndStlInfoShowPara.getType())
+                || ESEnum.ITEMTYPE1.getCode().equals(cttAndStlInfoShowPara.getType())
+                || ESEnum.ITEMTYPE2.getCode().equals(cttAndStlInfoShowPara.getType())) {
+            if ("".equals(ToolUtil.getStrIgnoreNull(cttAndStlInfoShowPara.getName()))) {
+                MessageUtil.addError("请输入名称！");
+                return false;
+            } else {
+                if (ESEnum.ITEMTYPE1.getCode().equals(cttAndStlInfoShowPara.getType())
+                        && "".equals(ToolUtil.getStrIgnoreNull(cttAndStlInfoShowPara.getCorrespondingPkid()))) {
+                    MessageUtil.addError("请选择总包合同名称！");
+                    return false;
+                }
+                if (ESEnum.ITEMTYPE2.getCode().equals(cttAndStlInfoShowPara.getType())){
+                    MessageUtil.addError("请选择成本计划名称！");
+                    return false;
+                }
+            }
+        }
+        if (ESEnum.ITEMTYPE3.getCode().equals(cttAndStlInfoShowPara.getType())
+                || ESEnum.ITEMTYPE4.getCode().equals(cttAndStlInfoShowPara.getType())
+                || ESEnum.ITEMTYPE5.getCode().equals(cttAndStlInfoShowPara.getType())
+                || ESEnum.ITEMTYPE6.getCode().equals(cttAndStlInfoShowPara.getType()))  {
+            if (ESEnum.ITEMTYPE3.getCode().equals(cttAndStlInfoShowPara.getType())
+                    || ESEnum.ITEMTYPE4.getCode().equals(cttAndStlInfoShowPara.getType())) {
+                MessageUtil.addError("请选择成本计划名称！");
+                return false;
+            } else {
+                MessageUtil.addError("请选择总包合同名称！");
+                return false;
+            }
+        }
+        return true;
+    }
     private void initFunc(){
         taskFunctionList = new ArrayList<SelectItem>();		
         this.selTaskFunctionList= new ArrayList<SelectItem>();
@@ -220,7 +354,7 @@ public class OperResAction implements Serializable{
          }else{
             selOperList.remove(operRoleSelectShowPara);
          }
-   }
+    }
     public void saveSelectedMultiple() {
        if(selResList.size()==0){
            MessageUtil.addError("资源列表不能为空，请选择");
@@ -369,5 +503,61 @@ public class OperResAction implements Serializable{
 
     public void setOperResService(OperResService operResService) {
         this.operResService = operResService;
+    }
+
+    public String getStrSubmitType() {
+        return strSubmitType;
+    }
+
+    public void setStrSubmitType(String strSubmitType) {
+        this.strSubmitType = strSubmitType;
+    }
+
+    public CttAndStlInfoShow getCttAndStlInfoShowAdd() {
+        return cttAndStlInfoShowAdd;
+    }
+
+    public void setCttAndStlInfoShowAdd(CttAndStlInfoShow cttAndStlInfoShowAdd) {
+        this.cttAndStlInfoShowAdd = cttAndStlInfoShowAdd;
+    }
+
+    public List<CttAndStlInfoShow> getCttAndStlInfoShowList() {
+        return cttAndStlInfoShowList;
+    }
+
+    public void setCttAndStlInfoShowList(List<CttAndStlInfoShow> cttAndStlInfoShowList) {
+        this.cttAndStlInfoShowList = cttAndStlInfoShowList;
+    }
+
+    public List<SelectItem> getEsInitCttList() {
+        return esInitCttList;
+    }
+
+    public void setEsInitCttList(List<SelectItem> esInitCttList) {
+        this.esInitCttList = esInitCttList;
+    }
+
+    public String getStrLabel() {
+        return strLabel;
+    }
+
+    public void setStrLabel(String strLabel) {
+        this.strLabel = strLabel;
+    }
+
+    public String getStrRendered2() {
+        return strRendered2;
+    }
+
+    public void setStrRendered2(String strRendered2) {
+        this.strRendered2 = strRendered2;
+    }
+
+    public String getStrRendered1() {
+        return strRendered1;
+    }
+
+    public void setStrRendered1(String strRendered1) {
+        this.strRendered1 = strRendered1;
     }
 }

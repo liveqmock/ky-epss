@@ -1,5 +1,6 @@
 package epss.repository.dao.not_mybatis;
 
+import epss.repository.model.model_show.CttAndStlInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.OperRoleSelectShow;
 import org.apache.ibatis.annotations.Param;
@@ -69,4 +70,22 @@ public interface MyOperResMapper {
     List<OperResShow> selectOperaResRecords();
 
     List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara);
+
+    @Select("select    " +
+            "    t.pkid as pkid,   " +
+            "    t.ctt_type as type,   " +
+            "    t.parent_pkid as correspondingPkid,   " +
+            "    t.id as id,      " +
+            "    t.name as name,   " +
+            "    t.note as note,   " +
+            "    t.created_by as createdBy,   " +
+            "    (select opername from ptoper where operid=t.created_by) as createdByName,   " +
+            "    t.created_date as createdDate   " +
+            "from   " +
+            "    ES_CTT_INFO t   " +
+            "where    " +
+            "    t.parent_pkid=#{parentPkid}   " +
+            "order by    " +
+            "    t.name")
+    List<CttAndStlInfoShow> selectRecordsFromCtt(@Param("parentPkid") String parentPkidPara);
 }
