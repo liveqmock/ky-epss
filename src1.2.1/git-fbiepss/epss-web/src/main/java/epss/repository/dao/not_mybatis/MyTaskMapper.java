@@ -73,7 +73,7 @@ public interface MyTaskMapper {
             " and " +
             "   eci.PKID=eip.POWER_PKID" +
             " union" +
-            " select  " +
+            " select " +
             "   eis.STL_TYPE as type," +
             "   eis.PKID as pkid," +
             "   eis.ID as id," +

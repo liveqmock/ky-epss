@@ -4,8 +4,10 @@ import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.common.utils.ToolUtil;
+import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.TaskShow;
 import epss.service.FlowCtrlService;
+import epss.service.OperResService;
 import epss.service.TaskService;
 import skyline.repository.model.Ptmenu;
 import skyline.service.PlatformService;
@@ -38,6 +40,8 @@ public class EsInitTaskAction {
     private TaskService taskService;
     @ManagedProperty(value = "#{flowCtrlService}")
     private FlowCtrlService flowCtrlService;
+    @ManagedProperty(value = "#{operResService}")
+    private OperResService operResService;
 
     private List<TaskShow> taskShowList;
 
@@ -50,8 +54,16 @@ public class EsInitTaskAction {
         //合同状态
         String strStatusFlag;
 
+        OperResShow operResShowTemp=new OperResShow();
+        List<OperResShow> operResShowList=
+                operResService.selectOperaResRecordsByModelShow(operResShowTemp);
+
         //通过OperatorManager获取相应权限下菜单列表
         List<Ptmenu> ptmenuList = platformService.getPtmenuList();
+        // 以合同类型和状态为分组,取得各组的数量
+        List<TaskShow> taskCountsInFlowGroupListTemp =taskService.getTaskCountsInFlowGroup();
+        // 获得详细任务列表
+        List<TaskShow> taskShowListTemp=taskService.getTaskShowList();
         //遍历菜单
         for(Ptmenu itemUnit:ptmenuList){
             //如果菜单为空或者地址中不含有总包合同和成本计划的话，继续循环查找
@@ -100,10 +112,7 @@ public class EsInitTaskAction {
             taskShow.setPkid(itemUnit.getMenuid());
             //创建并初始化判断合同是否是特定类型和状态的布尔变量
             Boolean isHasTask;
-            // 以合同类型和状态为分组,取得各组的数量
-            List<TaskShow> taskCountsInFlowGroupListTemp =taskService.getTaskCountsInFlowGroup();
-            // 获得详细任务列表
-            List<TaskShow> taskShowListTemp=taskService.getTaskShowList();
+
             //遍历存放“合同类型+状态+数量”信息的集合
             for(TaskShow itemUnitCM: taskCountsInFlowGroupListTemp){
                 String strStatusFlagInTaskCountsInFlowGroupList=
@@ -138,15 +147,22 @@ public class EsInitTaskAction {
                         }
                     } //当任务为待处理任务时，统计待处理任务中的任务个数
                     if(isHasTask.equals(true)){
-                        // 追加标题行
-                        taskShow.setName(itemUnit.getMenulabel()+"("+itemUnitCM.getRecordsCountInGroup()+")");
-                        taskShow.setPkid("");
-                        taskShowList.add(taskShow);
-
-                        for(TaskShow itemUnitEP:taskShowListTemp){
-                            if (ToolUtil.getStrIgnoreNull(itemUnitEP.getName()).equals("")){
-                                System.out.println(itemUnitEP.getName());
+                        //权限筛选
+                        Boolean hasPower=false;
+                        /*for(OperResShow operResShowUnit:operResShowList){
+                            if(operResShowUnit.getInfoType().equals(strType)){
+                                hasPower=true;
+                                break;
                             }
+                        }*/
+                        hasPower=true;//暂时用
+                        if(hasPower.equals(true)){
+                            // 追加标题行
+                            taskShow.setName(itemUnit.getMenulabel()+"("+itemUnitCM.getRecordsCountInGroup()+")");
+                            taskShow.setPkid("");
+                            taskShowList.add(taskShow);
+                        }else{
+                            continue;
                         }
 
                         //当合同状态为进入流程时
@@ -155,6 +171,20 @@ public class EsInitTaskAction {
                             String strStatusFlagInTaskShowList=ToolUtil.getStrIgnoreNull(itemUnitEP.getStatusFlag());
                             if(itemUnitEP.getType().equals(strType)){
                                 isHasTask=false;
+
+                                /*//权限筛选
+                                hasPower=false;
+                                for(OperResShow operResShowUnit:operResShowList){
+                                    if(operResShowUnit.getInfoType().equals(strType)&&
+                                            operResShowUnit.getInfoPkid().equals(itemUnitEP.getPkid())){
+                                        hasPower=true;
+                                        break;
+                                    }
+                                }
+                                if(hasPower.equals(false)){
+                                    continue;
+                                }*/
+
                                 if(strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())){
                                     if(strStatusFlagInTaskShowList.equals("")){
                                         isHasTask=true;
@@ -192,12 +222,12 @@ public class EsInitTaskAction {
                                     taskShow.setStatusFlag(strStatusFlagInTaskShowList);
                                     if(!strStatusFlagInTaskShowList.equals("")) {
                                         taskShow.setStatusFlagName(
-                                                ESEnumStatusFlag.getValueByKey(strStatusFlagInTaskShowList).getTitle());
+                                        ESEnumStatusFlag.getValueByKey(strStatusFlagInTaskShowList).getTitle());
                                     }
                                     taskShow.setPreStatusFlag(itemUnitEP.getPreStatusFlag());
                                     if(itemUnitEP.getPreStatusFlag()!=null) {
                                         taskShow.setPreStatusFlagName(
-                                                ESEnumPreStatusFlag.getValueByKey(itemUnitEP.getPreStatusFlag()).getTitle());
+                                        ESEnumPreStatusFlag.getValueByKey(itemUnitEP.getPreStatusFlag()).getTitle());
                                     }
                                     taskShowList.add(taskShow);
                                 }
@@ -244,5 +274,13 @@ public class EsInitTaskAction {
 
     public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
         this.flowCtrlService = flowCtrlService;
+    }
+
+    public OperResService getOperResService() {
+        return operResService;
+    }
+
+    public void setOperResService(OperResService operResService) {
+        this.operResService = operResService;
     }
 }

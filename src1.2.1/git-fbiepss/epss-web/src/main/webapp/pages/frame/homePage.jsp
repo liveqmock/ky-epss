@@ -117,7 +117,6 @@
             tabbarhide("tasklayout");
             document.getElementById("task").setAttribute("active", "true");
             document.getElementById("task").className = "tabs-item-active";
-
         }
 
         function Relogin() {
@@ -145,7 +144,7 @@
         <tr style="width:100%; height:45px">
             <td width="5%" rowspan="2">
                 &nbsp;
-                <img src="../../images/epss.jpg" height="60px">
+                <img src="../../images/epss.jpg" height="40px">
             </td>
             <td colspan="2">
                 <img src="../../images/epss_title.png" height="40px" style="margin-left: 5px">

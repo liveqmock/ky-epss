@@ -275,33 +275,36 @@ public class SubcttItemAction {
         cttItemShowAdd =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
     }
     /*右单击事件*/
-    public void selectRecordAction(String strSubmitTypePara,CttItemShow cttItemShowSelected){
+    public void selectRecordAction(String strSubmitTypePara,CttItemShow cttItemShowSeledPara){
         try {
             strSubmitType=strSubmitTypePara;
             if(!strSubmitTypePara.equals("Add")){
-                if(cttItemShowSelected.getStrNo()==null){
+                if(cttItemShowSeledPara.getStrNo()==null){
                     MessageUtil.addError("请确认选择的行，合计行不可编辑！");
                     return;
                 }
             }
             if(strSubmitTypePara.equals("Sel")){
-                cttItemShowSel =(CttItemShow) BeanUtils.cloneBean(cttItemShowSelected) ;
+                cttItemShowSel =(CttItemShow) BeanUtils.cloneBean(cttItemShowSeledPara) ;
                 cttItemShowSel.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowSel.getStrNo())) ;
                 cttItemShowSel.setStrCorrespondingItemNo(
                         ToolUtil.getIgnoreSpaceOfStr(cttItemShowSel.getStrCorrespondingItemNo()));
             }
             if(strSubmitTypePara.equals("Upd")){
-                cttItemShowUpd =(CttItemShow) BeanUtils.cloneBean(cttItemShowSelected) ;
+                cttItemShowUpd =(CttItemShow) BeanUtils.cloneBean(cttItemShowSeledPara) ;
                 cttItemShowUpd.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowUpd.getStrNo())) ;
                 cttItemShowUpd.setStrCorrespondingItemNo(
                         ToolUtil.getIgnoreSpaceOfStr(cttItemShowUpd.getStrCorrespondingItemNo()));
                 esCommon.getIndexOfSubcttItemNamelist(cttItemShowUpd.getName());
             }
-            else if(strSubmitTypePara.equals("Del")){
-                cttItemShowDel =(CttItemShow) BeanUtils.cloneBean(cttItemShowSelected) ;
+            if(strSubmitTypePara.equals("Del")){
+                cttItemShowDel =(CttItemShow) BeanUtils.cloneBean(cttItemShowSeledPara) ;
                 cttItemShowDel.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowDel.getStrNo())) ;
                 cttItemShowDel.setStrCorrespondingItemNo(
                         ToolUtil.getIgnoreSpaceOfStr(cttItemShowDel.getStrCorrespondingItemNo()));
+            }
+            if(strSubmitTypePara.equals("FromCstplToSubctt")){
+                cttItemShowSelected =(CttItemShow) BeanUtils.cloneBean(cttItemShowSeledPara) ;
             }
         } catch (Exception e) {
             logger.error("选择数据失败，", e);
