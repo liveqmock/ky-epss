@@ -1,6 +1,6 @@
 package epss.repository.dao.not_mybatis;
 
-import epss.repository.model.model_show.CttAndStlInfoShow;
+import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -70,20 +70,21 @@ public interface MyOperResMapper {
     List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara);
 
     @Select("select    " +
-            "    t.pkid as pkid,   " +
-            "    t.ctt_type as type,   " +
-            "    t.parent_pkid as correspondingPkid," +
-            "    t.id as id,      " +
-            "    t.name as name,   " +
-            "    t.note as note,   " +
-            "    t.created_by as createdBy,   " +
+            "    t.pkid,   " +
+            "    (select distinct ctt_type from ES_CTT_INFO where parent_pkid=#{parentPkid}) as cttType,   " +
+            "    t.parent_pkid,   " +
+            "    t.id,      " +
+            "    t.name,   " +
+            "    t.note,   " +
+            "    t.end_flag,   " +
+            "    t.created_by,   " +
             "    (select opername from ptoper where operid=t.created_by) as createdByName,   " +
-            "    t.created_date as createdDate   " +
+            "    t.created_date " +
             "from   " +
             "    ES_CTT_INFO t   " +
             "where    " +
             "    t.parent_pkid=#{parentPkid}   " +
             "order by    " +
             "    t.name")
-    List<CttAndStlInfoShow> selectRecordsFromCtt(@Param("parentPkid") String parentPkidPara);
+    List<CttInfoShow> selectRecordsFromCtt(@Param("parentPkid") String parentPkidPara);
 }

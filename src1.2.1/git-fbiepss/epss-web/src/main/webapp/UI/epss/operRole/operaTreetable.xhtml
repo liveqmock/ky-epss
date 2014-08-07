@@ -70,6 +70,7 @@
                     <p:treeTable id="resTreeTable"
                                  value="#{operResAction.resRoot}"
                                  var="document"
+                                 selection="#{operResAction.resSeledList}"
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="300">
@@ -88,7 +89,7 @@
                                  value="#{operResAction.taskFunctionList}"
                                  var="record"
                                  rowKey="#{record.value}"
-                                 selection="#{operResAction.selTaskFunctionList}"
+                                 selection="#{operResAction.taskFunctionSeledList}"
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="200">
@@ -97,8 +98,6 @@
                         </p:column>
                         <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                     </p:dataTable>
-                    <p:commandButton value="保存" update="messages"
-                                     action="#{operResAction.saveSelectedMultiple}"/>
                 </p:panel>
                 <p:panel header="人员列表">
                     <p:treeTable id="operTreeTable"
@@ -124,6 +123,8 @@
                     </p:treeTable>
                 </p:panel>
             </h:panelGrid>
+            <p:commandButton value="保存" update=":form:pdtView,messages" action="#{operResAction.saveSelectedMultiple}"
+                             style="width:1200px;text-align:center"/>
             <h:panelGrid id="pdView">
                 <p:panel header="权限追加列表">
                     <p:dataTable id="pdtView"

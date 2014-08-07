@@ -1,15 +1,12 @@
 package epss.view.operRes;
 
 import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumEndFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.common.utils.MessageUtil;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.EsCttInfo;
-import epss.repository.model.model_show.CttAndStlInfoShow;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
-import epss.repository.model.model_show.OperRoleSelectShow;
 import epss.service.CttInfoService;
 import epss.service.CttItemService;
 import epss.service.EsFlowService;
@@ -21,7 +18,6 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -53,23 +49,19 @@ public class OperResAction implements Serializable{
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
-
     private List<OperResShow> operResShowList;
-    //获取界面三大panel的内容，并持久化
-    private List<CttInfoShow> selResList=new ArrayList<>();
-    private List<OperResShow>  selOperList=new ArrayList<>();
     // task_function
     private List<SelectItem> taskFunctionList;
+    //获取界面三大panel的内容，并持久化
+    private List<CttInfoShow> resSeledList;
+    private List<OperResShow> operSeledList;
+    private List<SelectItem> taskFunctionSeledList;
     private TreeNode root;
-    private TreeNode cttroot;
     private TreeNode selectedNode;
-    private List<SelectItem> selTaskFunctionList;
-
     private String strRendered1;
     private String strRendered2;
     private String strLabel;
     private List<SelectItem> esInitCttList;
-
     private List<CttInfoShow> cttInfoShowList;
     private CttInfoShow cttInfoShowAdd;
     private String strSubmitType;
@@ -89,25 +81,23 @@ public class OperResAction implements Serializable{
         initOperRes();
         initFunc();
         initEnuSelectItemList();
-
-        cttroot = new DefaultTreeNode("cttroot", null);
-        //initCttInfo();
+        resRoot = new DefaultTreeNode("ROOT", null);
         initRes();
     }
     private void initRes(){
-        resRoot = new DefaultTreeNode("ROOT", null);
-        CttAndStlInfoShow cttAndStlInfoShow=new CttAndStlInfoShow();
-        cttAndStlInfoShow.setName("资源信息");
-        TreeNode node0 = new DefaultTreeNode(cttAndStlInfoShow,resRoot);
+        this.resSeledList=new ArrayList<CttInfoShow>();
+        CttInfoShow cttInfoShow=new CttInfoShow();
+        cttInfoShow.setName("资源信息");
+        TreeNode node0 = new DefaultTreeNode(cttInfoShow,resRoot);
         recursiveResTreeNode("ROOT", node0);
         node0.setExpanded(true);
     }
     private void recursiveResTreeNode(String parentPkidPara,TreeNode parentNode){
-        List<CttAndStlInfoShow> cttAndStlInfoShowList=operResService.selectRecordsFromCtt(parentPkidPara);
-        for (int i=0;i<cttAndStlInfoShowList.size();i++){
+        List<CttInfoShow> cttInfoShowList=operResService.selectRecordsFromCtt(parentPkidPara);
+        for (int i=0;i<cttInfoShowList.size();i++){
             TreeNode childNode = null;
-            childNode=new DefaultTreeNode(cttAndStlInfoShowList.get(i), parentNode);
-            recursiveResTreeNode(cttAndStlInfoShowList.get(i).getPkid(),childNode);
+            childNode=new DefaultTreeNode(cttInfoShowList.get(i), parentNode);
+            recursiveResTreeNode(cttInfoShowList.get(i).getPkid(),childNode);
         }
     }
     private void initOper(){
@@ -131,6 +121,7 @@ public class OperResAction implements Serializable{
 
     private void initOperRes(){
         operResShowList=new ArrayList<OperResShow>();
+        this.operSeledList=new ArrayList<OperResShow>();
         List<OperResShow> operResShowTempList=new ArrayList<OperResShow>();
         operResShowTempList=operResService.selectOperaResRecords();
         if (operResShowTempList.size()>0){
@@ -246,7 +237,7 @@ public class OperResAction implements Serializable{
 
     private void initFunc(){
         taskFunctionList = new ArrayList<SelectItem>();		
-        this.selTaskFunctionList= new ArrayList<SelectItem>();
+        this.taskFunctionSeledList= new ArrayList<SelectItem>();
         taskFunctionList.add(
                 new SelectItem(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
         taskFunctionList.add(
@@ -263,55 +254,44 @@ public class OperResAction implements Serializable{
 
     public void selRes(CttInfoShow cttInfoShowPara) {
         if (cttInfoShowPara.getIsSeled()){
-            selResList.add(cttInfoShowPara);
+            resSeledList.add(cttInfoShowPara);
         }else{
-            selResList.remove(cttInfoShowPara);
+            resSeledList.remove(cttInfoShowPara);
         }
     }
     
     public void SelOper(OperResShow operResShowPara) {
          if (operResShowPara.getIsSel()){
-             selOperList.add(operResShowPara);
+             operSeledList.add(operResShowPara);
          }else{
-            selOperList.remove(operResShowPara);
+            operSeledList.remove(operResShowPara);
          }
     }
     public void saveSelectedMultiple() {
-       if(selResList.size()==0){
+       if(resSeledList.size()==0){
            MessageUtil.addError("资源列表不能为空，请选择");
            return;
        }
-       if(selTaskFunctionList.size()==0){
+       if(taskFunctionSeledList.size()==0){
            MessageUtil.addError("功能列表不能为空，请选择");
            return;
        }
-       if(selOperList.size()==0){
+       if(operSeledList.size()==0){
            MessageUtil.addError("人员列表不能为空，请选择");
            return;
        }
-       for(int i=0;i<selResList.size();i++){
-           for(int m=0;m<selTaskFunctionList.size();m++){
-               for(int n=0;n<selOperList.size();n++){
+       for(int i=0;i<resSeledList.size();i++){
+           for(int m=0;m<taskFunctionSeledList.size();m++){
+               for(int n=0;n<operSeledList.size();n++){
                    OperResShow operResShowAdd=new OperResShow();
-                   operResShowAdd.setOperPkid(selOperList.get(n).getOperPkid());
-                   operResShowAdd.setOperName(selOperList.get(n).getOperName());
-                   operResShowAdd.setFlowStatus((String) selTaskFunctionList.get(m).getValue());
-                   operResShowAdd.setFlowStatusName(selResList.get(i).getPreStatusFlag());
-                   operResShowAdd.setInfoPkid(selResList.get(i).getPkid());
-                   operResShowAdd.setInfoPkidName(selResList.get(i).getName());
-                   operResShowAdd.setArchivedFlag(selResList.get(i).getEndFlag());
-                   operResShowAdd.setCreatedBy(selResList.get(i).getCreatedBy());
-                   operResShowAdd.setCreatedByName(selResList.get(i).getCreatedByName());
+                   operResShowAdd.setOperPkid(operSeledList.get(n).getOperPkid());
+                   operResShowAdd.setFlowStatus((String) taskFunctionSeledList.get(m).getValue());
+                   operResShowAdd.setInfoType(resSeledList.get(i).getCttType());
+                   operResShowAdd.setInfoPkid(resSeledList.get(i).getPkid());
+                   operResShowAdd.setArchivedFlag(resSeledList.get(i).getEndFlag());
+                   operResShowAdd.setCreatedBy(resSeledList.get(i).getCreatedBy());
+                   operResShowAdd.setCreatedByName(resSeledList.get(i).getCreatedByName());
                    operResShowAdd.setCreatedTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                   //operResShowAdd.setTid(selOperList.get(n).getTid());//人员归属地，待开发
-                   operResShowAdd.setInfoType(selResList.get(i).getCttType());
-                   operResShowAdd.setLastUpdBy(selResList.get(i).getLastUpdBy());
-                   operResShowAdd.setLastUpdTime(selResList.get(i).getLastUpdDate());
-                   if (("null").equals(selResList.get(i).getModificationNum())){
-                       operResShowAdd.setRecversion(0);
-                   }else{
-                       operResShowAdd.setRecversion(selResList.get(i).getModificationNum());
-                   }
                   operResService.save(operResShowAdd);
                }
            }
@@ -320,16 +300,17 @@ public class OperResAction implements Serializable{
     }
 
     private void clearList(){
-        selResList.clear();
-        selOperList.clear();
+        resSeledList.clear();
+        operSeledList.clear();
     }
     /*智能字段 Start*/
-    public CttItemService getCttItemService() {
-        return cttItemService;
+
+    public OperResService getOperResService() {
+        return operResService;
     }
 
-    public void setCttItemService(CttItemService cttItemService) {
-        this.cttItemService = cttItemService;
+    public void setOperResService(OperResService operResService) {
+        this.operResService = operResService;
     }
 
     public CttInfoService getCttInfoService() {
@@ -338,6 +319,14 @@ public class OperResAction implements Serializable{
 
     public void setCttInfoService(CttInfoService cttInfoService) {
         this.cttInfoService = cttInfoService;
+    }
+
+    public CttItemService getCttItemService() {
+        return cttItemService;
+    }
+
+    public void setCttItemService(CttItemService cttItemService) {
+        this.cttItemService = cttItemService;
     }
 
     public FlowCtrlService getFlowCtrlService() {
@@ -350,22 +339,6 @@ public class OperResAction implements Serializable{
 
     public EsFlowService getEsFlowService() {
         return esFlowService;
-    }
-
-    public TreeNode getRoot() {
-        return root;
-    }
-
-    public void setRoot(TreeNode root) {
-        this.root = root;
-    }
-
-    public TreeNode getCttroot() {
-        return cttroot;
-    }
-
-    public void setCttroot(TreeNode cttroot) {
-        this.cttroot = cttroot;
     }
 
     public void setEsFlowService(EsFlowService esFlowService) {
@@ -387,29 +360,6 @@ public class OperResAction implements Serializable{
     public void setEsFlowControl(EsFlowControl esFlowControl) {
         this.esFlowControl = esFlowControl;
     }
-    public List<SelectItem> getTaskFunctionList() {
-        return taskFunctionList;
-    }
-
-    public void setTaskFunctionList(List<SelectItem> taskFunctionList) {
-        this.taskFunctionList = taskFunctionList;
-    }
-    public TreeNode getSelectedNode() {
-        return selectedNode;
-    }
-
-    public void setSelectedNode(TreeNode selectedNode) {
-        this.selectedNode = selectedNode;
-    }
-	
-	 public List<SelectItem> getSelTaskFunctionList() {
-        return selTaskFunctionList;
-    }
-
-    public void setSelTaskFunctionList(List<SelectItem> selTaskFunctionList) {
-        this.selTaskFunctionList = selTaskFunctionList;
-    }
-    
 
     public List<OperResShow> getOperResShowList() {
         return operResShowList;
@@ -418,60 +368,53 @@ public class OperResAction implements Serializable{
     public void setOperResShowList(List<OperResShow> operResShowList) {
         this.operResShowList = operResShowList;
     }
-    public OperResService getOperResService() {
-        return operResService;
+
+    public List<CttInfoShow> getResSeledList() {
+        return resSeledList;
     }
 
-    public void setOperResService(OperResService operResService) {
-        this.operResService = operResService;
+    public void setResSeledList(List<CttInfoShow> resSeledList) {
+        this.resSeledList = resSeledList;
     }
 
-    public String getStrSubmitType() {
-        return strSubmitType;
+    public List<OperResShow> getOperSeledList() {
+        return operSeledList;
     }
 
-    public void setStrSubmitType(String strSubmitType) {
-        this.strSubmitType = strSubmitType;
+    public void setOperSeledList(List<OperResShow> operSeledList) {
+        this.operSeledList = operSeledList;
     }
 
-    public CttInfoShow getCttInfoShowAdd() {
-        return cttInfoShowAdd;
+    public List<SelectItem> getTaskFunctionSeledList() {
+        return taskFunctionSeledList;
     }
 
-    public void setCttInfoShowAdd(CttInfoShow cttInfoShowAdd) {
-        this.cttInfoShowAdd = cttInfoShowAdd;
+    public void setTaskFunctionSeledList(List<SelectItem> taskFunctionSeledList) {
+        this.taskFunctionSeledList = taskFunctionSeledList;
     }
 
-    public List<CttInfoShow> getCttInfoShowList() {
-        return cttInfoShowList;
+    public List<SelectItem> getTaskFunctionList() {
+        return taskFunctionList;
     }
 
-    public void setCttInfoShowList(List<CttInfoShow> cttInfoShowList) {
-        this.cttInfoShowList = cttInfoShowList;
+    public void setTaskFunctionList(List<SelectItem> taskFunctionList) {
+        this.taskFunctionList = taskFunctionList;
     }
 
-    public List<SelectItem> getEsInitCttList() {
-        return esInitCttList;
+    public TreeNode getRoot() {
+        return root;
     }
 
-    public void setEsInitCttList(List<SelectItem> esInitCttList) {
-        this.esInitCttList = esInitCttList;
+    public void setRoot(TreeNode root) {
+        this.root = root;
     }
 
-    public String getStrLabel() {
-        return strLabel;
+    public TreeNode getSelectedNode() {
+        return selectedNode;
     }
 
-    public void setStrLabel(String strLabel) {
-        this.strLabel = strLabel;
-    }
-
-    public String getStrRendered2() {
-        return strRendered2;
-    }
-
-    public void setStrRendered2(String strRendered2) {
-        this.strRendered2 = strRendered2;
+    public void setSelectedNode(TreeNode selectedNode) {
+        this.selectedNode = selectedNode;
     }
 
     public String getStrRendered1() {
@@ -482,12 +425,52 @@ public class OperResAction implements Serializable{
         this.strRendered1 = strRendered1;
     }
 
-    public List<SelectItem> getItemTypeList() {
-        return itemTypeList;
+    public String getStrRendered2() {
+        return strRendered2;
     }
 
-    public void setItemTypeList(List<SelectItem> itemTypeList) {
-        this.itemTypeList = itemTypeList;
+    public void setStrRendered2(String strRendered2) {
+        this.strRendered2 = strRendered2;
+    }
+
+    public String getStrLabel() {
+        return strLabel;
+    }
+
+    public void setStrLabel(String strLabel) {
+        this.strLabel = strLabel;
+    }
+
+    public List<SelectItem> getEsInitCttList() {
+        return esInitCttList;
+    }
+
+    public void setEsInitCttList(List<SelectItem> esInitCttList) {
+        this.esInitCttList = esInitCttList;
+    }
+
+    public List<CttInfoShow> getCttInfoShowList() {
+        return cttInfoShowList;
+    }
+
+    public void setCttInfoShowList(List<CttInfoShow> cttInfoShowList) {
+        this.cttInfoShowList = cttInfoShowList;
+    }
+
+    public CttInfoShow getCttInfoShowAdd() {
+        return cttInfoShowAdd;
+    }
+
+    public void setCttInfoShowAdd(CttInfoShow cttInfoShowAdd) {
+        this.cttInfoShowAdd = cttInfoShowAdd;
+    }
+
+    public String getStrSubmitType() {
+        return strSubmitType;
+    }
+
+    public void setStrSubmitType(String strSubmitType) {
+        this.strSubmitType = strSubmitType;
     }
 
     public TreeNode getResRoot() {
@@ -496,5 +479,13 @@ public class OperResAction implements Serializable{
 
     public void setResRoot(TreeNode resRoot) {
         this.resRoot = resRoot;
+    }
+
+    public List<SelectItem> getItemTypeList() {
+        return itemTypeList;
+    }
+
+    public void setItemTypeList(List<SelectItem> itemTypeList) {
+        this.itemTypeList = itemTypeList;
     }
 }

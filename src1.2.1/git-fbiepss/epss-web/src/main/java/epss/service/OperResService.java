@@ -6,7 +6,6 @@ import epss.repository.dao.OperResMapper;
 import epss.repository.dao.not_mybatis.MyOperResMapper;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.OperRes;
-import epss.repository.model.model_show.CttAndStlInfoShow;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import org.springframework.stereotype.Service;
@@ -40,8 +39,8 @@ public class OperResService {
     public List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara){
         return myOperResMapper.selectOperaResRecordsByModelShow(operResShowPara);
     }
-    public List<CttAndStlInfoShow> selectRecordsFromCtt(String parentPkidPara){
-        return myOperResMapper.selectRecordsFromCtt(parentPkidPara);
+	public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara){
+        return  myOperResMapper.selectRecordsFromCtt(parentPkidPara);
     }
     public void save(OperResShow record){
         operResMapper.insert(fromOperShowToModel(record));
