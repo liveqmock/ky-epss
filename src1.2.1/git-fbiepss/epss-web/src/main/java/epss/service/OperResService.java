@@ -1,9 +1,12 @@
 package epss.service;
 
 import epss.common.utils.ToolUtil;
+import epss.repository.dao.EsCttInfoMapper;
 import epss.repository.dao.OperResMapper;
 import epss.repository.dao.not_mybatis.MyOperResMapper;
+import epss.repository.model.EsCttInfo;
 import epss.repository.model.OperRes;
+import epss.repository.model.model_show.CttAndStlInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.OperRoleSelectShow;
 import org.springframework.stereotype.Service;
@@ -23,6 +26,8 @@ public class OperResService {
     private OperResMapper operResMapper;
     @Resource
     private PlatformService platformService;
+    @Resource
+    private EsCttInfoMapper esCttInfoMapper;
 
     public List<OperRoleSelectShow> selectOperaRoleRecords(String parentDeptid){
         return myOperResMapper.selectOperaRoleRecords(parentDeptid);
@@ -53,6 +58,23 @@ public class OperResService {
         operResPara.setRemark(record.getRemark());
         operResPara.setRecversion( ToolUtil.getIntIgnoreNull(record.getRecversion()));
         return operResPara;
+    }
+
+    public void insertEsCttInfo(CttAndStlInfoShow cttAndStlInfoShowPara){
+        cttAndStlInfoShowPara.setCreatedBy(platformService.getStrLastUpdBy());
+        cttAndStlInfoShowPara.setCreatedDate(platformService.getStrLastUpdDate());
+        esCttInfoMapper.insert(fromCttAndStlShowToModel(cttAndStlInfoShowPara));
+    }
+    private EsCttInfo fromCttAndStlShowToModel(CttAndStlInfoShow cttAndStlInfoShowPara){
+        EsCttInfo esCttInfo=new EsCttInfo();
+        esCttInfo.setId("NULL");
+        esCttInfo.setName(cttAndStlInfoShowPara.getName());
+        esCttInfo.setParentPkid(cttAndStlInfoShowPara.getCorrespondingPkid());
+        esCttInfo.setCttType(cttAndStlInfoShowPara.getType());
+        esCttInfo.setNote(cttAndStlInfoShowPara.getNote());
+        esCttInfo.setCreatedBy(cttAndStlInfoShowPara.getCreatedBy());
+        esCttInfo.setCreatedDate(cttAndStlInfoShowPara.getCreatedDate());
+        return esCttInfo;
     }
 
 }
