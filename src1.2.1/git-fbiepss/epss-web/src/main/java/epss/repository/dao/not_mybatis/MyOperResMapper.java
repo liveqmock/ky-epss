@@ -74,11 +74,10 @@ public interface MyOperResMapper {
     @Select("select    " +
             "    t.pkid as pkid,   " +
             "    t.ctt_type as type,   " +
-            "    t.parent_pkid as correspondingPkid,   " +
+            "    t.parent_pkid as correspondingPkid," +
             "    t.id as id,      " +
             "    t.name as name,   " +
             "    t.note as note,   " +
-            "    t.end_flag as endFlag,   " +
             "    t.created_by as createdBy,   " +
             "    (select opername from ptoper where operid=t.created_by) as createdByName,   " +
             "    t.created_date as createdDate   " +

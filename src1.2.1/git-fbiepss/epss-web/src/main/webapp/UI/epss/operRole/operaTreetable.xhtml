@@ -65,10 +65,6 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <h:panelGrid  columns="1">
-                <p:commandButton value="保存" update="messages"
-                               actionListener="#{operResAction.saveSelectedMultiple}"/>
-            </h:panelGrid>
             <h:panelGrid id="pdQry" columns="3">
                 <p:panel header="资源列表">
                     <p:treeTable id="resTreeTable"
@@ -95,12 +91,14 @@
                                  selection="#{operResAction.selTaskFunctionList}"
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
-                                 scrollHeight="300">
+                                 scrollHeight="200">
                         <p:column headerText="名称" style="width:100px;text-align:left">
                             <h:outputText value="#{record.label}"/>
                         </p:column>
                         <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
                     </p:dataTable>
+                    <p:commandButton value="保存" update="messages"
+                                     action="#{operResAction.saveSelectedMultiple}"/>
                 </p:panel>
                 <p:panel header="人员列表">
                     <p:treeTable id="operTreeTable"

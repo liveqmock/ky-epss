@@ -56,7 +56,7 @@ public class OperResAction implements Serializable{
 
     private List<OperResShow> operResShowList;
     //获取界面三大panel的内容，并持久化
-    private List<CttAndStlInfoShow> selResList=new ArrayList<>();
+    private List<CttInfoShow> selResList=new ArrayList<>();
     private List<OperRoleSelectShow>  selOperList=new ArrayList<>();
     // task_function
     private List<SelectItem> taskFunctionList;
@@ -284,86 +284,11 @@ public class OperResAction implements Serializable{
                 new SelectItem(ESEnumStatusFlag.STATUS_FLAG5.getCode(),ESEnumStatusFlag.STATUS_FLAG5.getTitle()));
     }
 
-    /*public void initCttInfo() {
-        cttroot = new DefaultTreeNode("cttroot", null);
-        CttInfoShow tkCttInfoShowQry = new CttInfoShow();
-        tkCttInfoShowQry.setCttType(ESEnum.ITEMTYPE0.getCode());
-        tkCttInfoShowQry.setStrStatusFlagBegin(null);
-        tkCttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG5.getCode());
-        List<CttInfoShow> tkCttInfoShowTreeList = esFlowService.selectCttByStatusFlagBegin_End(tkCttInfoShowQry);
-        for (CttInfoShow item : tkCttInfoShowTreeList) {
-            TreeNode childNodeTkctt = new DefaultTreeNode(
-                    new CttInfoShow(
-                            item.getPkid(),
-                            item.getId(),
-                            item.getCttType(),
-                            item.getName(),
-                            item.getNote(),
-                            esFlowControl.getLabelByValueInPreStatusFlaglist(item.getStatusFlag()),
-                            esFlowControl.getLabelByValueInPreStatusFlaglist(item.getPreStatusFlag()),
-                            item.getEndFlag(),
-                            item.getLastUpdBy(),
-                            item.getLastUpdDate(),
-                            item.getModificationNum(),
-                            false),
-                        cttroot);
-            CttInfoShow cstplInfoShowQry = new CttInfoShow();
-            cstplInfoShowQry.setCttType(ESEnum.ITEMTYPE1.getCode());
-            cstplInfoShowQry.setStrStatusFlagBegin(null);
-            cstplInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG5.getCode());
-            cstplInfoShowQry.setParentPkid(item.getPkid());
-            List<CttInfoShow> cstplInfoShowTreeList = esFlowService.selectCttByStatusFlagBegin_End(cstplInfoShowQry);
-            for (CttInfoShow cstplItem : cstplInfoShowTreeList) {
-                TreeNode childNodeCstpl = new DefaultTreeNode(
-                        new CttInfoShow(
-                                cstplItem.getPkid(),
-                                cstplItem.getId(),
-                                cstplItem.getCttType(),
-                                cstplItem.getName(),
-                                cstplItem.getNote(),
-                                esFlowControl.getLabelByValueInPreStatusFlaglist(cstplItem.getStatusFlag()),
-                                esFlowControl.getLabelByValueInPreStatusFlaglist(cstplItem.getPreStatusFlag()),
-                                cstplItem.getEndFlag(),
-                                cstplItem.getLastUpdBy(),
-                                cstplItem.getLastUpdDate(),
-                                cstplItem.getModificationNum(),
-                                false),
-                        childNodeTkctt);
-                CttInfoShow subCttInfoShowQry = new CttInfoShow();
-                subCttInfoShowQry.setCttType(ESEnum.ITEMTYPE2.getCode());
-                subCttInfoShowQry.setStrStatusFlagBegin(null);
-                subCttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG5.getCode());
-                subCttInfoShowQry.setParentPkid(cstplItem.getPkid());
-                List<CttInfoShow> subCttInfoShowTreeList = esFlowService.selectCttByStatusFlagBegin_End(subCttInfoShowQry);
-                for (CttInfoShow subItem : subCttInfoShowTreeList) {
-                    if (subItem.getPkid() != null) {
-                        new DefaultTreeNode(
-                            new CttInfoShow(
-                                subItem.getPkid(),
-                                subItem.getId(),
-                                subItem.getCttType(),
-                                subItem.getName(),
-                                subItem.getNote(),
-                                esFlowControl.getLabelByValueInPreStatusFlaglist(subItem.getStatusFlag()),
-                                esFlowControl.getLabelByValueInPreStatusFlaglist(subItem.getPreStatusFlag()),
-                                subItem.getEndFlag(),
-                                subItem.getLastUpdBy(),
-                                subItem.getLastUpdDate(),
-                                subItem.getModificationNum(),
-                                false),
-                            childNodeCstpl
-                        );
-                    }
-                }
-            }
-        }
-    }*/
-
-    public void selRes(CttAndStlInfoShow cttAndStlInfoShowPara) {
-        if (cttAndStlInfoShowPara.getIsSeled()){
-            selResList.add(cttAndStlInfoShowPara);
+    public void selRes(CttInfoShow cttInfoShowPara) {
+        if (cttInfoShowPara.getIsSeled()){
+            selResList.add(cttInfoShowPara);
         }else{
-            selResList.remove(cttAndStlInfoShowPara);
+            selResList.remove(cttInfoShowPara);
         }
     }
     
@@ -394,7 +319,7 @@ public class OperResAction implements Serializable{
                    operResShowAdd.setOperPkid(selOperList.get(n).getSelid());
                    operResShowAdd.setOperName(selOperList.get(n).getSlename());
                    operResShowAdd.setFlowStatus((String) selTaskFunctionList.get(m).getValue());
-                   //operResShowAdd.setFlowStatusName(selResList.get(i).getPreStatusFlag());
+                   operResShowAdd.setFlowStatusName(selResList.get(i).getPreStatusFlag());
                    operResShowAdd.setInfoPkid(selResList.get(i).getPkid());
                    operResShowAdd.setInfoPkidName(selResList.get(i).getName());
                    operResShowAdd.setArchivedFlag(selResList.get(i).getEndFlag());
@@ -402,14 +327,14 @@ public class OperResAction implements Serializable{
                    operResShowAdd.setCreatedByName(selResList.get(i).getCreatedByName());
                    operResShowAdd.setCreatedTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                    //operResShowAdd.setTid(selOperList.get(n).getTid());//人员归属地，待开发
-                  // operResShowAdd.setInfoType(selResList.get(i).getCttType());
-                   //operResShowAdd.setLastUpdBy(selResList.get(i).getLastUpdBy());
-                  // operResShowAdd.setLastUpdTime(selResList.get(i).getLastUpdDate());
-                   /*if (("null").equals(selResList.get(i).getModificationNum())){
+                   operResShowAdd.setInfoType(selResList.get(i).getCttType());
+                   operResShowAdd.setLastUpdBy(selResList.get(i).getLastUpdBy());
+                   operResShowAdd.setLastUpdTime(selResList.get(i).getLastUpdDate());
+                   if (("null").equals(selResList.get(i).getModificationNum())){
                        operResShowAdd.setRecversion(0);
                    }else{
                        operResShowAdd.setRecversion(selResList.get(i).getModificationNum());
-                   }*/
+                   }
                   operResService.save(operResShowAdd);
                }
            }
