@@ -56,7 +56,7 @@ public class OperResAction implements Serializable{
 
     private List<OperResShow> operResShowList;
     //获取界面三大panel的内容，并持久化
-    private List<CttInfoShow> selResList=new ArrayList<>();
+    private List<CttAndStlInfoShow> selResList=new ArrayList<>();
     private List<OperRoleSelectShow>  selOperList=new ArrayList<>();
     // task_function
     private List<SelectItem> taskFunctionList;
@@ -359,11 +359,11 @@ public class OperResAction implements Serializable{
         }
     }*/
 
-    public void selRes(CttInfoShow cttInfoShowPara) {
-        if (cttInfoShowPara.getIsSeled()){
-            selResList.add(cttInfoShowPara);
+    public void selRes(CttAndStlInfoShow cttAndStlInfoShowPara) {
+        if (cttAndStlInfoShowPara.getIsSeled()){
+            selResList.add(cttAndStlInfoShowPara);
         }else{
-            selResList.remove(cttInfoShowPara);
+            selResList.remove(cttAndStlInfoShowPara);
         }
     }
     
@@ -394,7 +394,7 @@ public class OperResAction implements Serializable{
                    operResShowAdd.setOperPkid(selOperList.get(n).getSelid());
                    operResShowAdd.setOperName(selOperList.get(n).getSlename());
                    operResShowAdd.setFlowStatus((String) selTaskFunctionList.get(m).getValue());
-                   operResShowAdd.setFlowStatusName(selResList.get(i).getPreStatusFlag());
+                   //operResShowAdd.setFlowStatusName(selResList.get(i).getPreStatusFlag());
                    operResShowAdd.setInfoPkid(selResList.get(i).getPkid());
                    operResShowAdd.setInfoPkidName(selResList.get(i).getName());
                    operResShowAdd.setArchivedFlag(selResList.get(i).getEndFlag());
@@ -402,14 +402,14 @@ public class OperResAction implements Serializable{
                    operResShowAdd.setCreatedByName(selResList.get(i).getCreatedByName());
                    operResShowAdd.setCreatedTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
                    //operResShowAdd.setTid(selOperList.get(n).getTid());//人员归属地，待开发
-                   operResShowAdd.setInfoType(selResList.get(i).getCttType());
-                   operResShowAdd.setLastUpdBy(selResList.get(i).getLastUpdBy());
-                   operResShowAdd.setLastUpdTime(selResList.get(i).getLastUpdDate());
-                   if (("null").equals(selResList.get(i).getModificationNum())){
+                  // operResShowAdd.setInfoType(selResList.get(i).getCttType());
+                   //operResShowAdd.setLastUpdBy(selResList.get(i).getLastUpdBy());
+                  // operResShowAdd.setLastUpdTime(selResList.get(i).getLastUpdDate());
+                   /*if (("null").equals(selResList.get(i).getModificationNum())){
                        operResShowAdd.setRecversion(0);
                    }else{
                        operResShowAdd.setRecversion(selResList.get(i).getModificationNum());
-                   }
+                   }*/
                   operResService.save(operResShowAdd);
                }
            }

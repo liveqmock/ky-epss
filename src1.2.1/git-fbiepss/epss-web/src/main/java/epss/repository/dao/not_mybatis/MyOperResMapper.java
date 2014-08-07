@@ -78,6 +78,7 @@ public interface MyOperResMapper {
             "    t.id as id,      " +
             "    t.name as name,   " +
             "    t.note as note,   " +
+            "    t.end_flag as endFlag,   " +
             "    t.created_by as createdBy,   " +
             "    (select opername from ptoper where operid=t.created_by) as createdByName,   " +
             "    t.created_date as createdDate   " +

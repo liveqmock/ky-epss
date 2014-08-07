@@ -20,6 +20,7 @@ public class CttAndStlInfoShow implements Serializable {
     private String createdByName;
     private String createdDate;
     private Boolean isSeled;
+    private String endFlag;
 
     public String getPkid() {
         return pkid;
@@ -99,5 +100,13 @@ public class CttAndStlInfoShow implements Serializable {
 
     public void setIsSeled(Boolean isSeled) {
         this.isSeled = isSeled;
+    }
+
+    public String getEndFlag() {
+        return endFlag;
+    }
+
+    public void setEndFlag(String endFlag) {
+        this.endFlag = endFlag;
     }
 }
