@@ -79,7 +79,7 @@ public interface MyOperResMapper {
             "    t.end_flag as endFlag," +
             "    t.created_by as createdBy," +
             "    (select opername from ptoper where operid=t.created_by) as createdByName," +
-            "    t.created_date as createdDate" +
+            "    t.created_date as createdDate " +
             "from" +
             "    ES_CTT_INFO t   " +
             "where    " +
