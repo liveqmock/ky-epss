@@ -73,6 +73,7 @@ public class OperResAction implements Serializable{
     private List<CttInfoShow> cttInfoShowList;
     private CttInfoShow cttInfoShowAdd;
     private String strSubmitType;
+    private List<SelectItem> itemTypeList;
     //ctt tree
     private  TreeNode resRoot;
     @PostConstruct
