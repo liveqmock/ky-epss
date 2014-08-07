@@ -69,9 +69,9 @@ public interface MyOperResMapper {
 
     List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara);
 
-    @Select("select    " +
+    @Select(" select    " +
             "    t.pkid as pkid," +
-            "    t.ctt_type  as cttType," +
+            "    t.ctt_type as cttType," +
             "    t.parent_pkid as parentPkid," +
             "    t.id as id," +
             "    t.name as name," +
@@ -80,11 +80,11 @@ public interface MyOperResMapper {
             "    t.created_by as createdBy," +
             "    (select opername from ptoper where operid=t.created_by) as createdByName," +
             "    t.created_date as createdDate " +
-            "from" +
-            "    ES_CTT_INFO t   " +
-            "where    " +
-            "    t.parent_pkid=#{parentPkid}   " +
-            "order by    " +
+            " from" +
+            "    ES_CTT_INFO t" +
+            " where" +
+            "    t.parent_pkid=#{parentPkid}" +
+            " order by" +
             "    t.name")
     List<CttInfoShow> selectRecordsFromCtt(@Param("parentPkid") String parentPkidPara);
 }

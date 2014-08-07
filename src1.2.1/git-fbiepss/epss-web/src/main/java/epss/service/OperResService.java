@@ -42,7 +42,7 @@ public class OperResService {
 	public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara){
         return  myOperResMapper.selectRecordsFromCtt(parentPkidPara);
     }
-    public void save(OperResShow record){
+    public void insertRecord(OperResShow record){
         operResMapper.insert(fromOperShowToModel(record));
     }
     private OperRes fromOperShowToModel(OperResShow record) {

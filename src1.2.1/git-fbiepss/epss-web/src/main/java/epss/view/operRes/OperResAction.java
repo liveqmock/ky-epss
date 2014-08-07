@@ -57,8 +57,6 @@ public class OperResAction implements Serializable{
     private List<CttInfoShow> resSeledList;
     private List<OperResShow> operSeledList;
     private List<SelectItem> taskFunctionSeledList;
-    private TreeNode root;
-    private TreeNode selectedNode;
 
     private OperResShow operResShowQry;
     private OperResShow operResShowSel;
@@ -72,8 +70,11 @@ public class OperResAction implements Serializable{
     private CttInfoShow cttInfoShowAdd;
     private String strSubmitType;
     private List<SelectItem> itemTypeList;
+
+    private List<CttInfoShow> testList;
     //ctt tree
-    private  TreeNode resRoot;
+    private TreeNode operRoot;
+    private TreeNode resRoot;
     @PostConstruct
     public void init() {
         strRendered1 = "false";
@@ -90,6 +91,8 @@ public class OperResAction implements Serializable{
         cttInfoShowAdd = new CttInfoShow();
         operResShowQry = new OperResShow();
         operResShowSel = new OperResShow();
+
+        testList=operResService.selectRecordsFromCtt("ROOT");
 
         initOper();
         initOperRes();
@@ -114,16 +117,16 @@ public class OperResAction implements Serializable{
             recursiveResTreeNode(cttInfoShowList.get(i).getPkid(),childNode);
         }
     }
+
     private void initOper(){
-        root = new DefaultTreeNode("Root", null);
+        operRoot = new DefaultTreeNode("Root", null);
         OperResShow operResShowTemp=new OperResShow();
         operResShowTemp.setOperName("人员授权");
         operResShowTemp.setInfoType("1");
-        TreeNode node0 = new DefaultTreeNode(operResShowTemp, root);
+        TreeNode node0 = new DefaultTreeNode(operResShowTemp, operRoot);
         recursiveTreeNode("0", node0);
         node0.setExpanded(true);
     }
-
     private void recursiveTreeNode(String strLevelParentId,TreeNode parentNode){
         List<OperResShow> operResShowListTemp= operResService.selectOperaRoleRecords(strLevelParentId);
         for (int i=0;i<operResShowListTemp.size();i++){
@@ -167,7 +170,7 @@ public class OperResAction implements Serializable{
                 strRendered2 = "false";
         }else {
             if (strCttType.equals(ESEnum.ITEMTYPE0.getCode())) {
-                strRendered1="false";
+                strRendered1 = "false";
                 strRendered2 = "true";
             }else{
                 strRendered1 = "true";
@@ -314,11 +317,12 @@ public class OperResAction implements Serializable{
                    operResShowAdd.setCreatedBy(resSeledList.get(i).getCreatedBy());
                    operResShowAdd.setCreatedByName(resSeledList.get(i).getCreatedByName());
                    operResShowAdd.setCreatedTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                  operResService.save(operResShowAdd);
+                  operResService.insertRecord(operResShowAdd);
                }
            }
        }
-       clearList();
+        resSeledList.clear();
+        operSeledList.clear();
     }
 
     public void onQueryAction() {
@@ -349,10 +353,6 @@ public class OperResAction implements Serializable{
         }
     }
 
-    private void clearList(){
-        resSeledList.clear();
-        operSeledList.clear();
-    }
     /*智能字段 Start*/
 
     public OperResService getOperResService() {
@@ -451,20 +451,12 @@ public class OperResAction implements Serializable{
         this.taskFunctionList = taskFunctionList;
     }
 
-    public TreeNode getRoot() {
-        return root;
+    public TreeNode getOperRoot() {
+        return operRoot;
     }
 
-    public void setRoot(TreeNode root) {
-        this.root = root;
-    }
-
-    public TreeNode getSelectedNode() {
-        return selectedNode;
-    }
-
-    public void setSelectedNode(TreeNode selectedNode) {
-        this.selectedNode = selectedNode;
+    public void setOperRoot(TreeNode operRoot) {
+        this.operRoot = operRoot;
     }
 
     public String getStrRendered1() {
@@ -561,5 +553,13 @@ public class OperResAction implements Serializable{
 
     public void setOperResShowQryList(List<OperResShow> operResShowQryList) {
         this.operResShowQryList = operResShowQryList;
+    }
+
+    public List<CttInfoShow> getTestList() {
+        return testList;
+    }
+
+    public void setTestList(List<CttInfoShow> testList) {
+        this.testList = testList;
     }
 }
