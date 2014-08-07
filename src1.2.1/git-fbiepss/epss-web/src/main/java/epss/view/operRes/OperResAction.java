@@ -70,8 +70,8 @@ public class OperResAction implements Serializable{
     private String strLabel;
     private List<SelectItem> esInitCttList;
 
-    private List<CttAndStlInfoShow> cttAndStlInfoShowList;
-    private CttAndStlInfoShow cttAndStlInfoShowAdd;
+    private List<CttInfoShow> cttInfoShowList;
+    private CttInfoShow cttInfoShowAdd;
     private String strSubmitType;
     //ctt tree
     private  TreeNode resRoot;
@@ -81,12 +81,13 @@ public class OperResAction implements Serializable{
         strRendered2 = "false";
         strLabel = "";
         strSubmitType = "Add";
-        cttAndStlInfoShowAdd = new CttAndStlInfoShow();
+        cttInfoShowAdd = new CttInfoShow();
         esInitCttList = new ArrayList<SelectItem>();
-        cttAndStlInfoShowList = new ArrayList<CttAndStlInfoShow>();
+        cttInfoShowList = new ArrayList<CttInfoShow>();
         initOper();
         initOperRes();
         initFunc();
+        initEnuSelectItemList();
 
         cttroot = new DefaultTreeNode("cttroot", null);
         //initCttInfo();
@@ -110,20 +111,20 @@ public class OperResAction implements Serializable{
     }
     private void initOper(){
         root = new DefaultTreeNode("Root", null);
-        OperRoleSelectShow operRoleSelectShow=new OperRoleSelectShow();
-        operRoleSelectShow.setSlename("人员授权");
-        operRoleSelectShow.setSeltype("1");
-        TreeNode node0 = new DefaultTreeNode(operRoleSelectShow, root);
+        OperResShow operResShowTemp=new OperResShow();
+        operResShowTemp.setOperName("人员授权");
+        operResShowTemp.setInfoType("1");
+        TreeNode node0 = new DefaultTreeNode(operResShowTemp, root);
         recursiveTreeNode("0", node0);
         node0.setExpanded(true);
     }
 
     private void recursiveTreeNode(String strLevelParentId,TreeNode parentNode){
-        List<OperRoleSelectShow> operRoleSelectShowList= operResService.selectOperaRoleRecords(strLevelParentId);
-        for (int i=0;i<operRoleSelectShowList.size();i++){
+        List<OperResShow> operResShowListTemp= operResService.selectOperaRoleRecords(strLevelParentId);
+        for (int i=0;i<operResShowListTemp.size();i++){
             TreeNode childNode = null;
-            childNode=new DefaultTreeNode(operRoleSelectShowList.get(i), parentNode);
-            recursiveTreeNode(operRoleSelectShowList.get(i).getSelid(),childNode);
+            childNode=new DefaultTreeNode(operResShowListTemp.get(i), parentNode);
+            recursiveTreeNode(operResShowListTemp.get(i).getOperPkid(),childNode);
         }
     }
 
@@ -153,39 +154,22 @@ public class OperResAction implements Serializable{
         }
     }
     public void setEsInitPowerHisActionOfPowerPkidAction() {
-        String strCttType = cttAndStlInfoShowAdd.getType();
-        if (!strCttType.equals("")) {
-            if (strCttType.equals(ESEnum.ITEMTYPE1.getCode())
-                    || strCttType.equals(ESEnum.ITEMTYPE6.getCode())
-                    || strCttType.equals(ESEnum.ITEMTYPE7.getCode())) {
-                strLabel = ESEnum.ITEMTYPE0.getTitle();
-                strRendered1 = "true";
-                if (strCttType.equals(ESEnum.ITEMTYPE1.getCode())) {
-                    strRendered2 = "true";
-                } else {
-                    strRendered2 = "false";
-                }
-                List<EsCttInfo> esCttInfoListTemp = new ArrayList<EsCttInfo>();
-                esCttInfoListTemp = cttInfoService.getEsInitCttListByCttType(ESEnum.ITEMTYPE0.getCode());
-                SelectItem selectItem = new SelectItem("", "全部");
-                esInitCttList.add(selectItem);
-                if (esCttInfoListTemp.size() > 0) {
-                    for (EsCttInfo itemUnit : esCttInfoListTemp) {
-                        selectItem = new SelectItem();
-                        selectItem.setValue(itemUnit.getPkid());
-                        selectItem.setLabel(itemUnit.getName());
-                        esInitCttList.add(selectItem);
-                    }
-                }
-            } else if (strCttType.equals(ESEnum.ITEMTYPE0.getCode())) {
+        String strCttType = cttInfoShowAdd.getType();
+        esInitCttList.clear();
+        if (strCttType.equals("")){
+                strRendered1 = "false";
+                strRendered2 = "false";
+        }else {
+            if (strCttType.equals(ESEnum.ITEMTYPE0.getCode())) {
+                strRendered1="false";
                 strRendered2 = "true";
-            } else {
-                strLabel = ESEnum.ITEMTYPE1.getTitle();
+            }else{
                 strRendered1 = "true";
-                if (strCttType.equals(ESEnum.ITEMTYPE2.getCode())) {
-                    strRendered2 = "true";
-                } else {
-                    strRendered2 = "false";
+                strRendered2 = "true";
+                if (strCttType.equals(ESEnum.ITEMTYPE1.getCode())) {
+                    strLabel = ESEnum.ITEMTYPE0.getTitle();
+                }else if (strCttType.equals(ESEnum.ITEMTYPE2.getCode())){
+                    strLabel = ESEnum.ITEMTYPE1.getTitle();
                 }
                 List<EsCttInfo> esCttInfoListTemp = new ArrayList<EsCttInfo>();
                 esCttInfoListTemp = cttInfoService.getEsInitCttListByCttType(ESEnum.ITEMTYPE1.getCode());
@@ -205,7 +189,7 @@ public class OperResAction implements Serializable{
     public void onClickForMngAction() {
         try {
             if (strSubmitType.equals("Add")) {
-                addRecordAction(cttAndStlInfoShowAdd);
+                addRecordAction(cttInfoShowAdd);
             }
         } catch (Exception e) {
             logger.error("操作失败。", e);
@@ -213,60 +197,52 @@ public class OperResAction implements Serializable{
         }
     }
 
-    private void addRecordAction(CttAndStlInfoShow cttAndStlInfoShowPara) {
-        if (!submitPreCheck(cttAndStlInfoShowPara)) {
+    private void addRecordAction(CttInfoShow cttInfoShowPara) {
+        if (!submitPreCheck(cttInfoShowPara)) {
             return;
         }
-        if (ESEnum.ITEMTYPE0.getCode().equals(cttAndStlInfoShowPara.getType())
-                || ESEnum.ITEMTYPE1.getCode().equals(cttAndStlInfoShowPara.getType())
-                || ESEnum.ITEMTYPE2.getCode().equals(cttAndStlInfoShowPara.getType())) {
-            if (ESEnum.ITEMTYPE0.getCode().equals(cttAndStlInfoShowPara.getType())) {
-                cttAndStlInfoShowPara.setCorrespondingPkid("ROOT");
+        if (ESEnum.ITEMTYPE0.getCode().equals(cttInfoShowPara.getType())
+                || ESEnum.ITEMTYPE1.getCode().equals(cttInfoShowPara.getType())
+                || ESEnum.ITEMTYPE2.getCode().equals(cttInfoShowPara.getType())) {
+            if (ESEnum.ITEMTYPE0.getCode().equals(cttInfoShowPara.getType())) {
+                cttInfoShowPara.setParentPkid("ROOT");
             }
-            operResService.insertEsCttInfo(cttAndStlInfoShowPara);
+            operResService.insertEsCttInfo(cttInfoShowPara);
             MessageUtil.addInfo("新增数据完成。");
         } else {
         }
     }
 
-    private boolean submitPreCheck(CttAndStlInfoShow cttAndStlInfoShowPara) {
-        if ("".equals(ToolUtil.getStrIgnoreNull(cttAndStlInfoShowPara.getType()))) {
+    private boolean submitPreCheck(CttInfoShow cttInfoShowPara) {
+        if ("".equals(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getType()))) {
             MessageUtil.addError("请选择所属类型！");
             return false;
         }
-        if (ESEnum.ITEMTYPE0.getCode().equals(cttAndStlInfoShowPara.getType())
-                || ESEnum.ITEMTYPE1.getCode().equals(cttAndStlInfoShowPara.getType())
-                || ESEnum.ITEMTYPE2.getCode().equals(cttAndStlInfoShowPara.getType())) {
-            if ("".equals(ToolUtil.getStrIgnoreNull(cttAndStlInfoShowPara.getName()))) {
+        if ("".equals(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getName()))){
                 MessageUtil.addError("请输入名称！");
                 return false;
-            } else {
-                if (ESEnum.ITEMTYPE1.getCode().equals(cttAndStlInfoShowPara.getType())
-                        && "".equals(ToolUtil.getStrIgnoreNull(cttAndStlInfoShowPara.getCorrespondingPkid()))) {
-                    MessageUtil.addError("请选择总包合同名称！");
-                    return false;
-                }
-                if (ESEnum.ITEMTYPE2.getCode().equals(cttAndStlInfoShowPara.getType())){
-                    MessageUtil.addError("请选择成本计划名称！");
-                    return false;
-                }
-            }
         }
-        if (ESEnum.ITEMTYPE3.getCode().equals(cttAndStlInfoShowPara.getType())
-                || ESEnum.ITEMTYPE4.getCode().equals(cttAndStlInfoShowPara.getType())
-                || ESEnum.ITEMTYPE5.getCode().equals(cttAndStlInfoShowPara.getType())
-                || ESEnum.ITEMTYPE6.getCode().equals(cttAndStlInfoShowPara.getType()))  {
-            if (ESEnum.ITEMTYPE3.getCode().equals(cttAndStlInfoShowPara.getType())
-                    || ESEnum.ITEMTYPE4.getCode().equals(cttAndStlInfoShowPara.getType())) {
-                MessageUtil.addError("请选择成本计划名称！");
-                return false;
-            } else {
+        if (ESEnum.ITEMTYPE1.getCode().equals(cttInfoShowPara.getType())
+                &&"".equals(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getParentPkid()))){
                 MessageUtil.addError("请选择总包合同名称！");
                 return false;
-            }
+        }
+        if (ESEnum.ITEMTYPE2.getCode().equals(cttInfoShowPara.getType())
+                &&"".equals(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getParentPkid()))){
+            MessageUtil.addError("请选择成本计划名称！");
+            return false;
         }
         return true;
     }
+
+    private void initEnuSelectItemList() {
+        itemTypeList=new ArrayList<SelectItem>();
+        itemTypeList.add(new SelectItem("", "全部"));
+        itemTypeList.add(new SelectItem(ESEnum.ITEMTYPE0.getCode(),ESEnum.ITEMTYPE0.getTitle()));
+        itemTypeList.add(new SelectItem(ESEnum.ITEMTYPE1.getCode(),ESEnum.ITEMTYPE1.getTitle()));
+        itemTypeList.add(new SelectItem(ESEnum.ITEMTYPE2.getCode(),ESEnum.ITEMTYPE2.getTitle()));
+    }
+
     private void initFunc(){
         taskFunctionList = new ArrayList<SelectItem>();		
         this.selTaskFunctionList= new ArrayList<SelectItem>();
@@ -292,11 +268,11 @@ public class OperResAction implements Serializable{
         }
     }
     
-    public void SelOper(OperRoleSelectShow operRoleSelectShowPara) {
-         if (operRoleSelectShowPara.getIsSel()){
-             selOperList.add(operRoleSelectShowPara);
+    public void SelOper(OperResShow operResShowPara) {
+         if (operResShowPara.getIsSel()){
+             selOperList.add(operResShowPara);
          }else{
-            selOperList.remove(operRoleSelectShowPara);
+            selOperList.remove(operResShowPara);
          }
     }
     public void saveSelectedMultiple() {
@@ -316,8 +292,8 @@ public class OperResAction implements Serializable{
            for(int m=0;m<selTaskFunctionList.size();m++){
                for(int n=0;n<selOperList.size();n++){
                    OperResShow operResShowAdd=new OperResShow();
-                   operResShowAdd.setOperPkid(selOperList.get(n).getSelid());
-                   operResShowAdd.setOperName(selOperList.get(n).getSlename());
+                   operResShowAdd.setOperPkid(selOperList.get(n).getOperPkid());
+                   operResShowAdd.setOperName(selOperList.get(n).getOperName());
                    operResShowAdd.setFlowStatus((String) selTaskFunctionList.get(m).getValue());
                    operResShowAdd.setFlowStatusName(selResList.get(i).getPreStatusFlag());
                    operResShowAdd.setInfoPkid(selResList.get(i).getPkid());
@@ -457,20 +433,20 @@ public class OperResAction implements Serializable{
         this.strSubmitType = strSubmitType;
     }
 
-    public CttAndStlInfoShow getCttAndStlInfoShowAdd() {
-        return cttAndStlInfoShowAdd;
+    public CttInfoShow getCttInfoShowAdd() {
+        return cttInfoShowAdd;
     }
 
-    public void setCttAndStlInfoShowAdd(CttAndStlInfoShow cttAndStlInfoShowAdd) {
-        this.cttAndStlInfoShowAdd = cttAndStlInfoShowAdd;
+    public void setCttInfoShowAdd(CttInfoShow cttInfoShowAdd) {
+        this.cttInfoShowAdd = cttInfoShowAdd;
     }
 
-    public List<CttAndStlInfoShow> getCttAndStlInfoShowList() {
-        return cttAndStlInfoShowList;
+    public List<CttInfoShow> getCttInfoShowList() {
+        return cttInfoShowList;
     }
 
-    public void setCttAndStlInfoShowList(List<CttAndStlInfoShow> cttAndStlInfoShowList) {
-        this.cttAndStlInfoShowList = cttAndStlInfoShowList;
+    public void setCttInfoShowList(List<CttInfoShow> cttInfoShowList) {
+        this.cttInfoShowList = cttInfoShowList;
     }
 
     public List<SelectItem> getEsInitCttList() {
@@ -505,11 +481,11 @@ public class OperResAction implements Serializable{
         this.strRendered1 = strRendered1;
     }
 
-    public TreeNode getResRoot() {
-        return resRoot;
+    public List<SelectItem> getItemTypeList() {
+        return itemTypeList;
     }
 
-    public void setResRoot(TreeNode resRoot) {
-        this.resRoot = resRoot;
+    public void setItemTypeList(List<SelectItem> itemTypeList) {
+        this.itemTypeList = itemTypeList;
     }
 }

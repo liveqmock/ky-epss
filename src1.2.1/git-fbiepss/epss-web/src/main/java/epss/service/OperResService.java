@@ -7,8 +7,8 @@ import epss.repository.dao.not_mybatis.MyOperResMapper;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.OperRes;
 import epss.repository.model.model_show.CttAndStlInfoShow;
+import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
-import epss.repository.model.model_show.OperRoleSelectShow;
 import org.springframework.stereotype.Service;
 import skyline.service.PlatformService;
 
@@ -29,7 +29,7 @@ public class OperResService {
     @Resource
     private EsCttInfoMapper esCttInfoMapper;
 
-    public List<OperRoleSelectShow> selectOperaRoleRecords(String parentDeptid){
+    public List<OperResShow> selectOperaRoleRecords(String parentDeptid){
         return myOperResMapper.selectOperaRoleRecords(parentDeptid);
     }
 
@@ -60,23 +60,21 @@ public class OperResService {
         return operResPara;
     }
 
-    public void insertEsCttInfo(CttAndStlInfoShow cttAndStlInfoShowPara){
-        cttAndStlInfoShowPara.setCreatedBy(platformService.getStrLastUpdBy());
-        cttAndStlInfoShowPara.setCreatedDate(platformService.getStrLastUpdDate());
-        esCttInfoMapper.insert(fromCttAndStlShowToModel(cttAndStlInfoShowPara));
+    public void insertEsCttInfo(CttInfoShow cttInfoShowPara){
+        cttInfoShowPara.setCreatedBy(platformService.getStrLastUpdBy());
+        cttInfoShowPara.setCreatedDate(platformService.getStrLastUpdDate());
+        esCttInfoMapper.insert(fromCttAndStlShowToModel(cttInfoShowPara));
     }
-    private EsCttInfo fromCttAndStlShowToModel(CttAndStlInfoShow cttAndStlInfoShowPara){
+    private EsCttInfo fromCttAndStlShowToModel(CttInfoShow cttInfoShowPara){
         EsCttInfo esCttInfo=new EsCttInfo();
         esCttInfo.setId("NULL");
-        esCttInfo.setName(cttAndStlInfoShowPara.getName());
-        esCttInfo.setParentPkid(cttAndStlInfoShowPara.getCorrespondingPkid());
-        esCttInfo.setCttType(cttAndStlInfoShowPara.getType());
-        esCttInfo.setNote(cttAndStlInfoShowPara.getNote());
-        esCttInfo.setCreatedBy(cttAndStlInfoShowPara.getCreatedBy());
-        esCttInfo.setCreatedDate(cttAndStlInfoShowPara.getCreatedDate());
+        esCttInfo.setName(cttInfoShowPara.getName());
+        esCttInfo.setParentPkid(cttInfoShowPara.getParentPkid());
+        esCttInfo.setCttType(cttInfoShowPara.getType());
+        esCttInfo.setNote(cttInfoShowPara.getNote());
+        esCttInfo.setCreatedBy(cttInfoShowPara.getCreatedBy());
+        esCttInfo.setCreatedDate(cttInfoShowPara.getCreatedDate());
         return esCttInfo;
     }
-    public List<CttAndStlInfoShow> selectRecordsFromCtt(String parentPkidPara){
-        return  myOperResMapper.selectRecordsFromCtt(parentPkidPara);
-    }
+
 }

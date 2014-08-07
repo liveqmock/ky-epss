@@ -26,9 +26,9 @@
                     <h:panelGrid>
                         <h:panelGrid columns="6">
                             <p:outputLabel value="所属种类：" for="powerType"/>
-                            <p:selectOneMenu id="powerType" value="#{operResAction.cttAndStlInfoShowAdd.type}"
+                            <p:selectOneMenu id="powerType" value="#{operResAction.cttInfoShowAdd.type}"
                                              style="width:133px">
-                                <f:selectItems value="#{esCommon.itemTypeList}"/>
+                                <f:selectItems value="#{operResAction.itemTypeList}"/>
                                 <p:ajax update="messages,pgCondition"
                                         listener="#{operResAction.setEsInitPowerHisActionOfPowerPkidAction}"/>
                             </p:selectOneMenu>
@@ -37,18 +37,18 @@
                                            for="tkcttCstpl"
                                            rendered="#{operResAction.strRendered1}"/>
                             <p:selectOneMenu id="tkcttCstpl"
-                                             value="#{operResAction.cttAndStlInfoShowAdd.correspondingPkid}"
+                                             value="#{operResAction.cttInfoShowAdd.parentPkid}"
                                              rendered="#{operResAction.strRendered1}">
                                 <f:selectItems value="#{operResAction.esInitCttList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="名称：" for="idForName"
                                            rendered="#{operResAction.strRendered2}"/>
                             <p:inputText id="idForName"
-                                         value="#{operResAction.cttAndStlInfoShowAdd.name}"
+                                         value="#{operResAction.cttInfoShowAdd.name}"
                                          rendered="#{operResAction.strRendered2}"/>
                         </h:panelGrid>
                     </h:panelGrid>
-                    <h:panelGrid columns="2">
+                    <h:panelGrid columns="2" style="position:absolute;right:5%;top:5%;">
                         <p:commandButton id="addBtn"
                                          value="增加" icon="ui-icon-plus"
                                          action="#{operResAction.onClickForMngAction()}"
@@ -107,22 +107,17 @@
                                  dynamic="true"
                                  cache="false"
                                  widgetVar="DtInitCstplList"
-                                 rowStyleClass="#{node.seltype  eq '0' ? '0':'rowDoneStyle'}"
+                                 rowStyleClass="#{node.infoType  eq '0' ? '0':'rowDoneStyle'}"
                                  scrollable="true"
                                  scrollHeight="300">
-                        <!--<p:ajax event="expand" update=":form:messages" listener="#{operResAction.onNodeExpand}" />
-                        <p:ajax event="collapse" update=":form:messages" listener="#{operResAction.onNodeCollapse}" />
-                        <p:ajax event="select" update=":form:messages" listener="#{operResAction.onNodeSelect}" />
-                        <p:ajax event="unselect" update=":form:messages" listener="#{operResAction.onNodeUnselect}" />
-                        -->
                         <p:column headerText="编号" style="width:200px;text-align:left">
-                            <h:outputText value="#{node.seltype eq '1'?node.slename:''}" />
+                            <h:outputText value="#{node.infoType eq '1'?node.operName:''}" />
                         </p:column>
                         <p:column headerText="名称" style="width:120px;text-align:center">
-                            <h:outputText value="#{node.seltype eq '0'?node.slename:''}" />
+                            <h:outputText value="#{node.infoType eq '0'?node.operName:''}" />
                         </p:column>
                         <p:column headerText="选择" style="width:30px;text-align:center">
-                            <p:selectBooleanCheckbox value="#{node.isSel}" rendered="#{node.seltype  eq '0' ? true:false}">
+                            <p:selectBooleanCheckbox value="#{node.isSel}" rendered="#{node.infoType  eq '0' ? true:false}">
                                 <p:ajax  listener="#{operResAction.SelOper(node)}"/>
                             </p:selectBooleanCheckbox>
                         </p:column>

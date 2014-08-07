@@ -19,15 +19,14 @@ import java.util.List;
 @Component
 public interface MyOperResMapper {
     @Select("select " +
-            "    selid, " +
-            "    slename, " +
-            "    seltype, " +
-            "    countnumer " +
+            "    operPkid, " +
+            "    operName, " +
+            "    infoType " +
             " from " +
             "    (select " +
-            "       operid as selid , " +
-            "       opername as slename , " +
-            "       0 as seltype, " +
+            "       operid as operPkid , " +
+            "       opername as operName , " +
+            "       0 as infoType, " +
             "       0 as countnumer " +
             "     from " +
             "        ptoper " +
@@ -35,9 +34,9 @@ public interface MyOperResMapper {
             "        deptid=#{parentDeptid} " +
             "     union " +
             "     select " +
-            "       deptid as selid , " +
-            "       deptname as slename, " +
-            "       1 as seltype , " +
+            "       deptid as operPkid , " +
+            "       deptname as operName, " +
+            "       1 as infoType , " +
             "       (select  count(deptid) as a from ptdept  where parentdeptid=ta.deptid) as countnumer " +
             "     from " +
             "       ptdept ta " +
@@ -45,8 +44,8 @@ public interface MyOperResMapper {
             "       parentdeptid=#{parentDeptid} " +
             "      ) ss " +
             "  order by  " +
-            "  seltype")
-    List<OperRoleSelectShow> selectOperaRoleRecords(@Param("parentDeptid") String parentDeptid);
+            "  infoType")
+    List<OperResShow> selectOperaRoleRecords(@Param("parentDeptid") String parentDeptid);
     @Select("select " +
             " t.pkid, " +
             " t.tid,  " +

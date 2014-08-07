@@ -73,37 +73,14 @@ public class OperResQryAction implements Serializable {
             if (!(operResShowQryTempList.size() > 0)) {
                 MessageUtil.addInfo("没有查询到数据。");
             } else {
-                String strStatusFlag = null;
-                String strInfoType = null;
                 for (int i = 0; i < operResShowQryTempList.size(); i++) {
-                    strStatusFlag = operResShowQryTempList.get(i).getFlowStatus();
-                    strInfoType = operResShowQryTempList.get(i).getInfoType();
-                    if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(strStatusFlag)) {
-                        operResShowQryTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG0.getTitle());
-                    } else if (ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(strStatusFlag)) {
-                        operResShowQryTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG1.getTitle());
-                    } else if (ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(strStatusFlag)) {
-                        operResShowQryTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG2.getTitle());
-                    } else if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(strStatusFlag)) {
-                        operResShowQryTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG3.getTitle());
-                    } else if (ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(strStatusFlag)) {
-                        operResShowQryTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG4.getTitle());
-                    } else if (ESEnumStatusFlag.STATUS_FLAG5.getCode().equals(strStatusFlag)) {
-                        operResShowQryTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG5.getTitle());
-                    }
-                    if (ESEnum.ITEMTYPE0.getCode().equals(strInfoType)){
-                        operResShowQryTempList.get(i).setInfoPkidName(
-                                "("+ESEnum.ITEMTYPE0.getTitle()+")-"+operResShowQryTempList.get(i).getInfoPkidName()
-                        );
-                    }else if (ESEnum.ITEMTYPE1.getCode().equals(strInfoType)){
-                        operResShowQryTempList.get(i).setInfoPkidName(
-                                "("+ESEnum.ITEMTYPE1.getTitle()+")-"+operResShowQryTempList.get(i).getInfoPkidName()
-                        );
-                    }else if (ESEnum.ITEMTYPE2.getCode().equals(strInfoType)){
-                        operResShowQryTempList.get(i).setInfoPkidName(
-                                "("+ESEnum.ITEMTYPE2.getTitle()+")-"+operResShowQryTempList.get(i).getInfoPkidName()
-                        );
-                    }
+                    operResShowQryTempList.get(i).setFlowStatusName(
+                            ESEnumStatusFlag.getValueByKey(operResShowQryTempList.get(i).getFlowStatus()).getTitle()
+                    );
+                    operResShowQryTempList.get(i).setInfoPkidName(
+                            "("+ESEnum.valueOfAlias(operResShowQryTempList.get(i).getInfoType()).getTitle()+")-"
+                                    +operResShowQryTempList.get(i).getInfoPkidName()
+                    );
                     operResShowQryList.add(operResShowQryTempList.get(i));
                 }
             }
