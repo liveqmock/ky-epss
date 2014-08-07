@@ -14,6 +14,7 @@ import epss.service.FlowCtrlService;
 import epss.service.OperResService;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
+import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
@@ -79,13 +80,17 @@ public class OperResAction implements Serializable{
         strRendered2 = "false";
         strLabel = "";
         strSubmitType = "Add";
-        cttInfoShowAdd = new CttInfoShow();
-        operResShowQry = new OperResShow();
-        selResList=new ArrayList<>();
-        selOperList=new ArrayList<>();
+
+        resSeledList = new ArrayList<>();
+        operSeledList = new ArrayList<>();
         esInitCttList = new ArrayList<SelectItem>();
         cttInfoShowList = new ArrayList<CttInfoShow>();
-        operResShowQryList=new ArrayList<>();
+        operResShowQryList = new ArrayList<>();
+
+        cttInfoShowAdd = new CttInfoShow();
+        operResShowQry = new OperResShow();
+        operResShowSel = new OperResShow();
+
         initOper();
         initOperRes();
         initFunc();
@@ -532,5 +537,29 @@ public class OperResAction implements Serializable{
 
     public void setItemTypeList(List<SelectItem> itemTypeList) {
         this.itemTypeList = itemTypeList;
+    }
+
+    public OperResShow getOperResShowQry() {
+        return operResShowQry;
+    }
+
+    public void setOperResShowQry(OperResShow operResShowQry) {
+        this.operResShowQry = operResShowQry;
+    }
+
+    public OperResShow getOperResShowSel() {
+        return operResShowSel;
+    }
+
+    public void setOperResShowSel(OperResShow operResShowSel) {
+        this.operResShowSel = operResShowSel;
+    }
+
+    public List<OperResShow> getOperResShowQryList() {
+        return operResShowQryList;
+    }
+
+    public void setOperResShowQryList(List<OperResShow> operResShowQryList) {
+        this.operResShowQryList = operResShowQryList;
     }
 }

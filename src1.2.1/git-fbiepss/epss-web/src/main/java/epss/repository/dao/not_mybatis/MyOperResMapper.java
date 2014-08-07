@@ -70,17 +70,17 @@ public interface MyOperResMapper {
     List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara);
 
     @Select("select    " +
-            "    t.pkid as pkid,   " +
-            "    t.ctt_type  as cttType,   " +
-            "    t.parent_pkid as parentPkid,   " +
-            "    t.id as id,      " +
-            "    t.name as name,   " +
-            "    t.note as note,   " +
-            "    t.end_flag as endFlag,   " +
-            "    t.created_by as createdBy,   " +
-            "    (select opername from ptoper where operid=t.created_by) as createdByName,   " +
-            "    t.created_date  as createdDate" +
-            "    from   " +
+            "    t.pkid as pkid," +
+            "    t.ctt_type  as cttType," +
+            "    t.parent_pkid as parentPkid," +
+            "    t.id as id," +
+            "    t.name as name," +
+            "    t.note as note," +
+            "    t.end_flag as endFlag," +
+            "    t.created_by as createdBy," +
+            "    (select opername from ptoper where operid=t.created_by) as createdByName," +
+            "    t.created_date as createdDate" +
+            "from" +
             "    ES_CTT_INFO t   " +
             "where    " +
             "    t.parent_pkid=#{parentPkid}   " +
