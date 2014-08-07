@@ -71,15 +71,15 @@ public interface MyOperResMapper {
 
     @Select("select    " +
             "    t.pkid,   " +
-            "    (select distinct ctt_type from ES_CTT_INFO where parent_pkid=#{parentPkid}) as cttType,   " +
-            "    t.parent_pkid,   " +
+            "    (select distinct ctt_type from ES_CTT_INFO where parent_pkid=#{parentPkid}) as cttType," +
+            "    t.parent_pkid as parentPkid,   " +
             "    t.id,      " +
             "    t.name,   " +
             "    t.note,   " +
-            "    t.end_flag,   " +
-            "    t.created_by,   " +
+            "    t.end_flag as endFlag,   " +
+            "    t.created_by as createdBy,   " +
             "    (select opername from ptoper where operid=t.created_by) as createdByName,   " +
-            "    t.created_date " +
+            "    t.created_date as createdDate" +
             "from   " +
             "    ES_CTT_INFO t   " +
             "where    " +

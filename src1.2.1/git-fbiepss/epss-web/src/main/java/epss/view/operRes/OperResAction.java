@@ -58,6 +58,11 @@ public class OperResAction implements Serializable{
     private List<SelectItem> taskFunctionSeledList;
     private TreeNode root;
     private TreeNode selectedNode;
+
+    private OperResShow operResShowQry;
+    private OperResShow operResShowSel;
+    private List<OperResShow> operResShowQryList;
+
     private String strRendered1;
     private String strRendered2;
     private String strLabel;
@@ -75,8 +80,12 @@ public class OperResAction implements Serializable{
         strLabel = "";
         strSubmitType = "Add";
         cttInfoShowAdd = new CttInfoShow();
+        operResShowQry = new OperResShow();
+        selResList=new ArrayList<>();
+        selOperList=new ArrayList<>();
         esInitCttList = new ArrayList<SelectItem>();
         cttInfoShowList = new ArrayList<CttInfoShow>();
+        operResShowQryList=new ArrayList<>();
         initOper();
         initOperRes();
         initFunc();
@@ -252,6 +261,14 @@ public class OperResAction implements Serializable{
                 new SelectItem(ESEnumStatusFlag.STATUS_FLAG5.getCode(),ESEnumStatusFlag.STATUS_FLAG5.getTitle()));
     }
 
+    public void selectRecordAction(OperResShow operResShowPara) {
+        try {
+            operResShowSel= (OperResShow) BeanUtils.cloneBean(operResShowPara);
+        } catch (Exception e) {
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+
     public void selRes(CttInfoShow cttInfoShowPara) {
         if (cttInfoShowPara.getIsSeled()){
             resSeledList.add(cttInfoShowPara);
@@ -297,6 +314,34 @@ public class OperResAction implements Serializable{
            }
        }
        clearList();
+    }
+
+    public void onQueryAction() {
+        try {
+            operResShowQryList.clear();
+            List<OperResShow> operResShowQryTempList = new ArrayList<OperResShow>();
+            if (!("".equals(ToolUtil.getStrIgnoreNull(operResShowQry.getInfoPkidName()).trim()))) {
+                operResShowQry.setInfoPkidName("%"+operResShowQry.getInfoPkidName()+"%");
+            }
+            operResShowQryTempList = operResService.selectOperaResRecordsByModelShow(operResShowQry);
+            if (!(operResShowQryTempList.size() > 0)) {
+                MessageUtil.addInfo("没有查询到数据。");
+            } else {
+                for (int i = 0; i < operResShowQryTempList.size(); i++) {
+                    operResShowQryTempList.get(i).setFlowStatusName(
+                            ESEnumStatusFlag.getValueByKey(operResShowQryTempList.get(i).getFlowStatus()).getTitle()
+                    );
+                    operResShowQryTempList.get(i).setInfoPkidName(
+                            "("+ESEnum.valueOfAlias(operResShowQryTempList.get(i).getInfoType()).getTitle()+")-"
+                                    +operResShowQryTempList.get(i).getInfoPkidName()
+                    );
+                    operResShowQryList.add(operResShowQryTempList.get(i));
+                }
+            }
+        } catch (Exception e) {
+            logger.error("权限追加信息查询失败", e);
+            MessageUtil.addError("权限追加信息查询失败");
+        }
     }
 
     private void clearList(){
