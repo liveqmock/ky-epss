@@ -70,8 +70,6 @@ public class OperResAction implements Serializable{
     private CttInfoShow cttInfoShowAdd;
     private String strSubmitType;
     private List<SelectItem> itemTypeList;
-
-    private List<CttInfoShow> testList;
     //ctt tree
     private TreeNode operRoot;
     private TreeNode resRoot;
@@ -91,8 +89,6 @@ public class OperResAction implements Serializable{
         cttInfoShowAdd = new CttInfoShow();
         operResShowQry = new OperResShow();
         operResShowSel = new OperResShow();
-
-        testList=operResService.selectRecordsFromCtt("ROOT");
 
         initOper();
         initOperRes();
@@ -553,13 +549,5 @@ public class OperResAction implements Serializable{
 
     public void setOperResShowQryList(List<OperResShow> operResShowQryList) {
         this.operResShowQryList = operResShowQryList;
-    }
-
-    public List<CttInfoShow> getTestList() {
-        return testList;
-    }
-
-    public void setTestList(List<CttInfoShow> testList) {
-        this.testList = testList;
     }
 }
