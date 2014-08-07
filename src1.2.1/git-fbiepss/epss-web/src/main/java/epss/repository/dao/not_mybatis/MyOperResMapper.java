@@ -2,7 +2,6 @@ package epss.repository.dao.not_mybatis;
 
 import epss.repository.model.model_show.CttAndStlInfoShow;
 import epss.repository.model.model_show.OperResShow;
-import epss.repository.model.model_show.OperRoleSelectShow;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;

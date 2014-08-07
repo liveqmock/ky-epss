@@ -57,7 +57,7 @@ public class OperResAction implements Serializable{
     private List<OperResShow> operResShowList;
     //获取界面三大panel的内容，并持久化
     private List<CttInfoShow> selResList=new ArrayList<>();
-    private List<OperRoleSelectShow>  selOperList=new ArrayList<>();
+    private List<OperResShow>  selOperList=new ArrayList<>();
     // task_function
     private List<SelectItem> taskFunctionList;
     private TreeNode root;
@@ -488,5 +488,13 @@ public class OperResAction implements Serializable{
 
     public void setItemTypeList(List<SelectItem> itemTypeList) {
         this.itemTypeList = itemTypeList;
+    }
+
+    public TreeNode getResRoot() {
+        return resRoot;
+    }
+
+    public void setResRoot(TreeNode resRoot) {
+        this.resRoot = resRoot;
     }
 }

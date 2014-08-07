@@ -40,6 +40,9 @@ public class OperResService {
     public List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara){
         return myOperResMapper.selectOperaResRecordsByModelShow(operResShowPara);
     }
+    public List<CttAndStlInfoShow> selectRecordsFromCtt(String parentPkidPara){
+        return myOperResMapper.selectRecordsFromCtt(parentPkidPara);
+    }
     public void save(OperResShow record){
         operResMapper.insert(fromOperShowToModel(record));
     }
