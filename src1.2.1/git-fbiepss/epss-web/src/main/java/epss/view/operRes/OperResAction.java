@@ -73,6 +73,8 @@ public class OperResAction implements Serializable{
     private List<CttAndStlInfoShow> cttAndStlInfoShowList;
     private CttAndStlInfoShow cttAndStlInfoShowAdd;
     private String strSubmitType;
+    //ctt tree
+    private  TreeNode resRoot;
     @PostConstruct
     public void init() {
         strRendered1 = "false";
@@ -87,7 +89,24 @@ public class OperResAction implements Serializable{
         initFunc();
 
         cttroot = new DefaultTreeNode("cttroot", null);
-        initCttInfo();
+        //initCttInfo();
+        initRes();
+    }
+    private void initRes(){
+        resRoot = new DefaultTreeNode("ROOT", null);
+        CttAndStlInfoShow cttAndStlInfoShow=new CttAndStlInfoShow();
+        cttAndStlInfoShow.setName("资源信息");
+        TreeNode node0 = new DefaultTreeNode(cttAndStlInfoShow,resRoot);
+        recursiveResTreeNode("ROOT", node0);
+        node0.setExpanded(true);
+    }
+    private void recursiveResTreeNode(String parentPkidPara,TreeNode parentNode){
+        List<CttAndStlInfoShow> cttAndStlInfoShowList=operResService.selectRecordsFromCtt(parentPkidPara);
+        for (int i=0;i<cttAndStlInfoShowList.size();i++){
+            TreeNode childNode = null;
+            childNode=new DefaultTreeNode(cttAndStlInfoShowList.get(i), parentNode);
+            recursiveResTreeNode(cttAndStlInfoShowList.get(i).getPkid(),childNode);
+        }
     }
     private void initOper(){
         root = new DefaultTreeNode("Root", null);
@@ -265,7 +284,7 @@ public class OperResAction implements Serializable{
                 new SelectItem(ESEnumStatusFlag.STATUS_FLAG5.getCode(),ESEnumStatusFlag.STATUS_FLAG5.getTitle()));
     }
 
-    public void initCttInfo() {
+    /*public void initCttInfo() {
         cttroot = new DefaultTreeNode("cttroot", null);
         CttInfoShow tkCttInfoShowQry = new CttInfoShow();
         tkCttInfoShowQry.setCttType(ESEnum.ITEMTYPE0.getCode());
@@ -338,7 +357,7 @@ public class OperResAction implements Serializable{
                 }
             }
         }
-    }
+    }*/
 
     public void selRes(CttInfoShow cttInfoShowPara) {
         if (cttInfoShowPara.getIsSeled()){
@@ -559,5 +578,13 @@ public class OperResAction implements Serializable{
 
     public void setStrRendered1(String strRendered1) {
         this.strRendered1 = strRendered1;
+    }
+
+    public TreeNode getResRoot() {
+        return resRoot;
+    }
+
+    public void setResRoot(TreeNode resRoot) {
+        this.resRoot = resRoot;
     }
 }

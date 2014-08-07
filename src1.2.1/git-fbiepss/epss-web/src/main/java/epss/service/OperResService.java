@@ -76,5 +76,7 @@ public class OperResService {
         esCttInfo.setCreatedDate(cttAndStlInfoShowPara.getCreatedDate());
         return esCttInfo;
     }
-
+    public List<CttAndStlInfoShow> selectRecordsFromCtt(String parentPkidPara){
+        return  myOperResMapper.selectRecordsFromCtt(parentPkidPara);
+    }
 }
