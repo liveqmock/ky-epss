@@ -89,18 +89,22 @@ public class OperResAction implements Serializable{
         cttInfoShowAdd = new CttInfoShow();
         operResShowQry = new OperResShow();
         operResShowSel = new OperResShow();
-
-        initOper();
-        initOperRes();
-        initFunc();
-        initEnuSelectItemList();
-        resRoot = new DefaultTreeNode("ROOT", null);
+        // 资源
         initRes();
+        // 功能
+        initFunc();
+        // 用户
+        initOper();
+        // 资源-用户-功能
+        initOperRes();
+
+        initEnuSelectItemList();
     }
     private void initRes(){
         this.resSeledList=new ArrayList<CttInfoShow>();
         CttInfoShow cttInfoShow=new CttInfoShow();
         cttInfoShow.setName("资源信息");
+        resRoot = new DefaultTreeNode("ROOT", null);
         TreeNode node0 = new DefaultTreeNode(cttInfoShow,resRoot);
         recursiveResTreeNode("ROOT", node0);
         node0.setExpanded(true);
@@ -195,6 +199,7 @@ public class OperResAction implements Serializable{
         try {
             if (strSubmitType.equals("Add")) {
                 addRecordAction(cttInfoShowAdd);
+                initRes();
             }
         } catch (Exception e) {
             logger.error("操作失败。", e);
@@ -214,7 +219,6 @@ public class OperResAction implements Serializable{
             }
             operResService.insertEsCttInfo(cttInfoShowPara);
             MessageUtil.addInfo("新增数据完成。");
-        } else {
         }
     }
 
@@ -319,6 +323,7 @@ public class OperResAction implements Serializable{
        }
         resSeledList.clear();
         operSeledList.clear();
+        initOperRes();
     }
 
     public void onQueryAction() {
