@@ -66,6 +66,7 @@ public class ProgStlInfoService {
         esInitStlTemp.setLastUpdBy(progInfoShowPara.getLastUpdBy());
         esInitStlTemp.setLastUpdDate(progInfoShowPara.getLastUpdDate());
         esInitStlTemp.setModificationNum(progInfoShowPara.getModificationNum());
+        esInitStlTemp.setAutoLinkAdd(progInfoShowPara.getAutoLinkAdd());
         return esInitStlTemp;
     }
 

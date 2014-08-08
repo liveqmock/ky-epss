@@ -1,6 +1,7 @@
 package epss.view.settle;
 
 import epss.common.enums.*;
+import epss.repository.model.EsCttInfo;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import epss.common.utils.StyleModel;
@@ -46,6 +47,8 @@ public class ProgWorkqtyInfoAction {
     private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
+    @ManagedProperty(value = "#{progMatqtyItemService}")
+    private ProgMatqtyItemService progMatqtyItemService;
 
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
@@ -296,6 +299,26 @@ public class ProgWorkqtyInfoAction {
             updRecordAction(progInfoShowUpd);
         } else if (strSubmitType.equals("Del")) {
             progInfoShowDel.setStlType(strStlType);
+            //判断是否已关联产生了分包材料结算
+            EsCttInfo esCttInfoTemp=cttInfoService.getCttInfoByPkId( progInfoShowDel.getStlPkid());
+            if (("3").equals(esCttInfoTemp.getType())||("6").equals(esCttInfoTemp.getType())){
+                ProgInfoShow progInfoShowQryM=new ProgInfoShow();
+                progInfoShowQryM.setStlPkid( progInfoShowDel.getStlPkid());
+                progInfoShowQryM.setStlType("4");
+                progInfoShowQryM.setPeriodNo( progInfoShowDel.getPeriodNo());
+                List<ProgInfoShow> progInfoShowConstructsTemp =
+                        esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQryM);
+                if (progInfoShowConstructsTemp.size()!=0){
+                    for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
+                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag())))&&(progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                            MessageUtil.addInfo("该记录已关联分包材料结算，不可删除！");
+                            return;
+                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))&&(progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                            delMatRecordAction(esISSOMPCUnit);
+                        }
+                    }
+                }
+            }
             delRecordAction(progInfoShowDel);
         }
         ProgInfoShow progInfoShowTemp = new ProgInfoShow();
@@ -360,7 +383,30 @@ public class ProgWorkqtyInfoAction {
             MessageUtil.addError(e.getMessage());
         }
     }
-
+    private void delMatRecordAction(ProgInfoShow progInfoShowPara){
+        try {
+            // 删除详细数据
+            int deleteItemsByInitStlTkcttEngNum=
+                    progMatqtyItemService.deleteItemsByInitStlSubcttEng(
+                            progInfoShowPara.getStlPkid(),
+                            progInfoShowPara.getPeriodNo());
+            // 删除登记数据
+            int deleteRecordOfRegistNum= progStlInfoService.deleteRecord(progInfoShowPara.getPkid()) ;
+            // 删除权限数据
+            int deleteRecordOfPowerNum= flowCtrlService.deleteRecord(
+                    progInfoShowPara.getStlType(),
+                    progInfoShowPara.getStlPkid(),
+                    progInfoShowPara.getPeriodNo());
+            if (deleteItemsByInitStlTkcttEngNum<=0&&deleteRecordOfRegistNum<=0&&deleteRecordOfPowerNum<=0){
+                MessageUtil.addInfo("该记录已删除。");
+                return;
+            }
+            MessageUtil.addInfo("对应材料结算删除数据完成。");
+        } catch (Exception e) {
+            logger.error("删除对应材料结算数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
     /*智能字段Start*/
     public ProgWorkqtyItemService getProgWorkqtyItemService() {
         return progWorkqtyItemService;
@@ -487,4 +533,12 @@ public class ProgWorkqtyInfoAction {
     }
 
     /*智能字段End*/
+
+    public ProgMatqtyItemService getProgMatqtyItemService() {
+        return progMatqtyItemService;
+    }
+
+    public void setProgMatqtyItemService(ProgMatqtyItemService progMatqtyItemService) {
+        this.progMatqtyItemService = progMatqtyItemService;
+    }
 }

@@ -12,6 +12,7 @@ import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
 import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import epss.common.utils.MessageUtil;
@@ -21,6 +22,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -381,6 +383,31 @@ public class ProgWorkqtyItemAction {
 
             if (strPowerType.contains("Mng")) {
                 if (strPowerType.equals("MngPass")) {
+                        EsCttInfo esCttInfoTemp=cttInfoService.getCttInfoByPkId(progInfoShowSel.getStlPkid());
+                        if (("3").equals(esCttInfoTemp.getType())||("6").equals(esCttInfoTemp.getType())){
+                            ProgInfoShow progInfoShowQryM=new ProgInfoShow();
+                            progInfoShowQryM.setStlPkid(progInfoShowSel.getStlPkid());
+                            progInfoShowQryM.setStlType("4");
+                            progInfoShowQryM.setPeriodNo(progInfoShowSel.getPeriodNo());
+                            List<ProgInfoShow> progInfoShowConstructsTemp =
+                                    esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQryM);
+                            if (progInfoShowConstructsTemp.size()==0){
+                                progWorkqtyInfo.setAutoLinkAdd("0");
+                                progStlInfoService.updateRecord(progWorkqtyInfo);
+                                progInfoShowQryM.setAutoLinkAdd("1");
+                                progInfoShowQryM.setId(getMaxId( progInfoShowQryM.getStlType()));
+                                progStlInfoService.insertRecord(progInfoShowQryM);
+                            }else{
+                                for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
+                                    if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))){
+                                        progWorkqtyInfo.setAutoLinkAdd("0");
+                                        progStlInfoService.updateRecord(progWorkqtyInfo);
+                                        progInfoShowQryM.setAutoLinkAdd("1");
+                                        progStlInfoService.insertRecord(progInfoShowQryM);
+                                    }
+                                }
+                            }
+                        }
                     esFlowControl.mngFinishAction(
                             progInfoShowSel.getStlType(),
                             progInfoShowSel.getStlPkid(),
@@ -388,6 +415,8 @@ public class ProgWorkqtyItemAction {
                     strPassFlag="false";
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerType.equals("MngFail")) {
+                    progWorkqtyInfo.setAutoLinkAdd("");
+                    progStlInfoService.updateRecord(progWorkqtyInfo);
                     esFlowControl.mngNotFinishAction(
                             progInfoShowSel.getStlType(),
                             progInfoShowSel.getStlPkid(),
@@ -479,6 +508,25 @@ public class ProgWorkqtyItemAction {
             // 其他状态的票据需要添加时再修改导出文件名
         }
         return null;
+    }
+    public String getMaxId(String strStlType) {
+            Integer intTemp;
+            String strMaxId = progStlInfoService.getStrMaxStlId(strStlType);
+            if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
+                strMaxId = "STLQ" + esCommon.getStrToday() + "001";
+            } else {
+                if (strMaxId.length() > 3) {
+                    String strTemp = strMaxId.substring(strMaxId.length() - 3).replaceFirst("^0+", "");
+                    if (ToolUtil.strIsDigit(strTemp)) {
+                        intTemp = Integer.parseInt(strTemp);
+                        intTemp = intTemp + 1;
+                        strMaxId = strMaxId.substring(0, strMaxId.length() - 3) + StringUtils.leftPad(intTemp.toString(), 3, "0");
+                    } else {
+                        strMaxId += "001";
+                    }
+                }
+            }
+        return strMaxId;
     }
     /* 智能字段Start*/
     public CttInfoService getCttInfoService() {

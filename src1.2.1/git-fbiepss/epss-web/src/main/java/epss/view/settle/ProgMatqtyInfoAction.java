@@ -1,6 +1,7 @@
 package epss.view.settle;
 
 import epss.common.enums.*;
+import epss.repository.model.EsCttInfo;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import epss.common.utils.StyleModel;
@@ -46,6 +47,8 @@ public class ProgMatqtyInfoAction {
     private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
+    @ManagedProperty(value = "#{progWorkqtyItemService}")
+    private ProgWorkqtyItemService progWorkqtyItemService;
 
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
@@ -297,6 +300,26 @@ public class ProgMatqtyInfoAction {
         }
         else if(strSubmitType.equals("Del")){
             progInfoShowDel.setStlType(strStlType);
+            //判断是否已关联产生了分包数量结算
+            EsCttInfo esCttInfoTemp=cttInfoService.getCttInfoByPkId(progInfoShowDel.getStlPkid());
+            if (("3").equals(esCttInfoTemp.getType())||("6").equals(esCttInfoTemp.getType())){
+                ProgInfoShow progInfoShowQryQ=new ProgInfoShow();
+                progInfoShowQryQ.setStlPkid(progInfoShowDel.getStlPkid());
+                progInfoShowQryQ.setStlType("3");
+                progInfoShowQryQ.setPeriodNo(progInfoShowDel.getPeriodNo());
+                List<ProgInfoShow> progInfoShowConstructsTemp =
+                        esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQryQ);
+                if (progInfoShowConstructsTemp.size()!=0){
+                    for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
+                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag())))&&(progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                            MessageUtil.addInfo("该记录已关联分包数量结算，不可删除！");
+                            return;
+                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))&&(progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                            delQtyRecordAction(esISSOMPCUnit);
+                        }
+                    }
+                }
+            }
             delRecordAction(progInfoShowDel);
         }
 
@@ -350,6 +373,30 @@ public class ProgMatqtyInfoAction {
                     progInfoShowPara.getStlPkid(),
                     progInfoShowPara.getPeriodNo());
             if (deleteItemsByInitStlTkcttEngNum<=0&&deleteRecordOfRegistNum<=0&&deleteRecordOfPowerNum<=0){
+                MessageUtil.addInfo("该记录已删除。");
+                return;
+            }
+            MessageUtil.addInfo("删除数据完成。");
+        } catch (Exception e) {
+            logger.error("删除数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+    private void delQtyRecordAction(ProgInfoShow progInfoShowPara) {
+        try {
+            // 删除详细数据
+            int deleteItemsByInitStlTkcttEngNum =
+                    progWorkqtyItemService.deleteItemsByInitStlSubcttEng(
+                            progInfoShowPara.getStlPkid(),
+                            progInfoShowPara.getPeriodNo());
+            // 删除登记数据
+            int deleteRecordOfRegistNum = progStlInfoService.deleteRecord(progInfoShowPara.getPkid());
+            // 删除权限数据
+            int deleteRecordOfPowerNum = flowCtrlService.deleteRecord(
+                    progInfoShowPara.getStlType(),
+                    progInfoShowPara.getStlPkid(),
+                    progInfoShowPara.getPeriodNo());
+            if (deleteItemsByInitStlTkcttEngNum <= 0 && deleteRecordOfRegistNum <= 0 && deleteRecordOfPowerNum <= 0) {
                 MessageUtil.addInfo("该记录已删除。");
                 return;
             }
@@ -485,4 +532,12 @@ public class ProgMatqtyInfoAction {
         this.progInfoShowDel = progInfoShowDel;
     }
     /*智能字段End*/
+
+    public ProgWorkqtyItemService getProgWorkqtyItemService() {
+        return progWorkqtyItemService;
+    }
+
+    public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
+        this.progWorkqtyItemService = progWorkqtyItemService;
+    }
 }

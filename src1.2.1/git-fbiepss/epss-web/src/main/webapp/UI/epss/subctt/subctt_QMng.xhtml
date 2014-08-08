@@ -133,6 +133,12 @@
                 <p:column headerText="期数编码" style="text-align:center;width:66px">
                     <h:outputText value="#{record.periodNo}"/>
                 </p:column>
+                <p:column headerText="甲供材情况" style="text-align:center;width:66px">
+                    <h:outputText value="#{record.type}"/>
+                </p:column>
+                <p:column headerText="生成情况" style="text-align:center;width:66px">
+                    <h:outputText value="#{record.autoLinkAdd}"/>
+                </p:column>
                 <p:column headerText="状态" style="text-align:center;width:66px;">
                     <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.statusFlag)}"/>
                 </p:column>

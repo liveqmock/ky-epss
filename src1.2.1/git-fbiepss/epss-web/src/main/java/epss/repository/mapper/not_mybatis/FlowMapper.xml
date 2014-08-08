@@ -165,6 +165,8 @@
         <result column="LAST_UPD_DATE" jdbcType="VARCHAR" property="lastUpdDate" />
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
         <result column="MODIFICATION_NUM" jdbcType="DECIMAL" property="modificationNum" />
+        <result column="TYPE" jdbcType="CHAR" property="type" />
+        <result column="AUTO_LINK_ADD" jdbcType="CHAR" property="autoLinkAdd" />
     </resultMap>
     <select id="selectSubcttStlQMByStatusFlagBegin_End"
             parameterType="epss.repository.model.model_show.ProgInfoShow"
@@ -187,12 +189,14 @@
                 eis.LAST_UPD_BY,
                 eis.LAST_UPD_DATE,
                 eis.MODIFICATION_NUM,
+                eis.AUTO_LINK_ADD AS autoLinkAdd,
                 eip.POWER_TYPE,
                 eip.POWER_PKID,
                 eip.PERIOD_NO AS POWER_PERIOD_NO,
                 eip.STATUS_FLAG,
                 eip.PRE_STATUS_FLAG,
-                eip.SPARE_FIELD
+                eip.SPARE_FIELD,
+                eic.TYPE
             from
                 ES_INIT_STL eis
             left outer join

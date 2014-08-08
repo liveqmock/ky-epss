@@ -173,6 +173,8 @@ public class ProgInfoShow {
     private String spareField;
 
     private Integer modificationNum;
+    private String type;
+    private String autoLinkAdd;
 
     public String getPkid() {
         return pkid;
@@ -380,5 +382,21 @@ public class ProgInfoShow {
 
     public void setLastUpdByName(String lastUpdByName) {
         this.lastUpdByName = lastUpdByName;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getAutoLinkAdd() {
+        return autoLinkAdd;
+    }
+
+    public void setAutoLinkAdd(String autoLinkAdd) {
+        this.autoLinkAdd = autoLinkAdd;
     }
 }
