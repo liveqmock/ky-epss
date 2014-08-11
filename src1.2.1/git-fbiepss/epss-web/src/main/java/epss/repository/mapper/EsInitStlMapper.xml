@@ -21,6 +21,7 @@
     <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
     <result column="LAST_UPD_DATE" jdbcType="VARCHAR" property="lastUpdDate" />
     <result column="MODIFICATION_NUM" jdbcType="DECIMAL" property="modificationNum" />
+    <result column="AUTO_LINK_ADD" jdbcType="CHAR" property="autoLinkAdd" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -97,7 +98,7 @@
       This element was generated on Fri Apr 25 17:26:31 CST 2014.
     -->
     PKID, ID, STL_TYPE, STL_PKID, PERIOD_NO, NOTE, ATTACHMENT, DELETED_FLAG, END_FLAG, 
-    CREATED_BY, CREATED_DATE, LAST_UPD_BY, LAST_UPD_DATE, MODIFICATION_NUM
+    CREATED_BY, CREATED_DATE, LAST_UPD_BY, LAST_UPD_DATE, MODIFICATION_NUM, AUTO_LINK_ADD
   </sql>
   <select id="selectByExample" parameterType="epss.repository.model.EsInitStlExample" resultMap="BaseResultMap">
     <!--
@@ -162,12 +163,14 @@
       STL_PKID, PERIOD_NO, NOTE, 
       ATTACHMENT, DELETED_FLAG, END_FLAG, 
       CREATED_BY, CREATED_DATE, LAST_UPD_BY, 
-      LAST_UPD_DATE, MODIFICATION_NUM)
+      LAST_UPD_DATE, MODIFICATION_NUM, AUTO_LINK_ADD
+      )
     values (#{pkid,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{stlType,jdbcType=VARCHAR}, 
       #{stlPkid,jdbcType=VARCHAR}, #{periodNo,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, 
       #{attachment,jdbcType=VARCHAR}, #{deletedFlag,jdbcType=CHAR}, #{endFlag,jdbcType=CHAR}, 
       #{createdBy,jdbcType=VARCHAR}, #{createdDate,jdbcType=VARCHAR}, #{lastUpdBy,jdbcType=VARCHAR}, 
-      #{lastUpdDate,jdbcType=VARCHAR}, #{modificationNum,jdbcType=DECIMAL})
+      #{lastUpdDate,jdbcType=VARCHAR}, #{modificationNum,jdbcType=DECIMAL}, #{autoLinkAdd,jdbcType=CHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="epss.repository.model.EsInitStl">
     <!--
@@ -220,6 +223,9 @@
       <if test="modificationNum != null">
         MODIFICATION_NUM,
       </if>
+      <if test="autoLinkAdd != null">
+        AUTO_LINK_ADD,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       #{pkid,jdbcType=VARCHAR},
@@ -261,6 +267,9 @@
       </if>
       <if test="modificationNum != null">
         #{modificationNum,jdbcType=DECIMAL},
+      </if>
+      <if test="autoLinkAdd != null">
+        #{autoLinkAdd,jdbcType=CHAR},
       </if>
     </trim>
   </insert>
@@ -325,6 +334,9 @@
       <if test="record.modificationNum != null">
         MODIFICATION_NUM = #{record.modificationNum,jdbcType=DECIMAL},
       </if>
+      <if test="record.autoLinkAdd != null">
+        AUTO_LINK_ADD = #{record.autoLinkAdd,jdbcType=CHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -350,7 +362,8 @@
       CREATED_DATE = #{record.createdDate,jdbcType=VARCHAR},
       LAST_UPD_BY = #{record.lastUpdBy,jdbcType=VARCHAR},
       LAST_UPD_DATE = #{record.lastUpdDate,jdbcType=VARCHAR},
-      MODIFICATION_NUM = #{record.modificationNum,jdbcType=DECIMAL}
+      MODIFICATION_NUM = #{record.modificationNum,jdbcType=DECIMAL},
+      AUTO_LINK_ADD = #{record.autoLinkAdd,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -402,6 +415,9 @@
       <if test="modificationNum != null">
         MODIFICATION_NUM = #{modificationNum,jdbcType=DECIMAL},
       </if>
+      <if test="autoLinkAdd != null">
+        AUTO_LINK_ADD = #{autoLinkAdd,jdbcType=CHAR},
+      </if>
     </set>
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
@@ -424,7 +440,8 @@
       CREATED_DATE = #{createdDate,jdbcType=VARCHAR},
       LAST_UPD_BY = #{lastUpdBy,jdbcType=VARCHAR},
       LAST_UPD_DATE = #{lastUpdDate,jdbcType=VARCHAR},
-      MODIFICATION_NUM = #{modificationNum,jdbcType=DECIMAL}
+      MODIFICATION_NUM = #{modificationNum,jdbcType=DECIMAL},
+      AUTO_LINK_ADD = #{autoLinkAdd,jdbcType=CHAR}
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
 </mapper>

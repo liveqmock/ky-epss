@@ -1163,6 +1163,76 @@ public class EsInitStlExample {
             addCriterion("MODIFICATION_NUM not between", value1, value2, "modificationNum");
             return (Criteria) this;
         }
+
+        public Criteria andAutoLinkAddIsNull() {
+            addCriterion("AUTO_LINK_ADD is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddIsNotNull() {
+            addCriterion("AUTO_LINK_ADD is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddEqualTo(String value) {
+            addCriterion("AUTO_LINK_ADD =", value, "autoLinkAdd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddNotEqualTo(String value) {
+            addCriterion("AUTO_LINK_ADD <>", value, "autoLinkAdd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddGreaterThan(String value) {
+            addCriterion("AUTO_LINK_ADD >", value, "autoLinkAdd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddGreaterThanOrEqualTo(String value) {
+            addCriterion("AUTO_LINK_ADD >=", value, "autoLinkAdd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddLessThan(String value) {
+            addCriterion("AUTO_LINK_ADD <", value, "autoLinkAdd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddLessThanOrEqualTo(String value) {
+            addCriterion("AUTO_LINK_ADD <=", value, "autoLinkAdd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddLike(String value) {
+            addCriterion("AUTO_LINK_ADD like", value, "autoLinkAdd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddNotLike(String value) {
+            addCriterion("AUTO_LINK_ADD not like", value, "autoLinkAdd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddIn(List<String> values) {
+            addCriterion("AUTO_LINK_ADD in", values, "autoLinkAdd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddNotIn(List<String> values) {
+            addCriterion("AUTO_LINK_ADD not in", values, "autoLinkAdd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddBetween(String value1, String value2) {
+            addCriterion("AUTO_LINK_ADD between", value1, value2, "autoLinkAdd");
+            return (Criteria) this;
+        }
+
+        public Criteria andAutoLinkAddNotBetween(String value1, String value2) {
+            addCriterion("AUTO_LINK_ADD not between", value1, value2, "autoLinkAdd");
+            return (Criteria) this;
+        }
     }
 
     /**
