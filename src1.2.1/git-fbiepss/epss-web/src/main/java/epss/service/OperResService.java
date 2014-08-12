@@ -7,6 +7,7 @@ import epss.repository.dao.not_mybatis.MyOperResMapper;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.OperRes;
 import epss.repository.model.model_show.CttInfoShow;
+import epss.repository.model.model_show.DeptAndOperShow;
 import epss.repository.model.model_show.OperResShow;
 import org.springframework.stereotype.Service;
 import skyline.service.PlatformService;
@@ -32,6 +33,10 @@ public class OperResService {
         return myOperResMapper.selectOperaRoleRecords(parentDeptid);
     }
 
+    public List<DeptAndOperShow> getOperList(String parentDeptid){
+        return myOperResMapper.getOperList(parentDeptid);
+    }
+
     public List<OperResShow> selectOperaResRecords(){
         return myOperResMapper.selectOperaResRecords();
     }
@@ -45,6 +50,13 @@ public class OperResService {
     public void insertRecord(OperResShow record){
         operResMapper.insert(fromOperShowToModel(record));
     }
+    public void insertRecord(OperRes operResPara){
+        operResPara.setCreatedBy(platformService.getStrLastUpdBy());
+        operResPara.setLastUpdTime(platformService.getStrLastUpdTime());
+        operResPara.setCreatedBy(platformService.getStrLastUpdBy());
+        operResPara.setLastUpdTime(platformService.getStrLastUpdTime());
+        operResMapper.insert(operResPara);
+    }
     private OperRes fromOperShowToModel(OperResShow record) {
         OperRes operResPara=new OperRes();
         operResPara.setTid(record.getTid());
@@ -53,10 +65,10 @@ public class OperResService {
         operResPara.setInfoType(record.getInfoType());
         operResPara.setInfoPkid(record.getInfoPkid());
         operResPara.setArchivedFlag(record.getArchivedFlag());
-        operResPara.setCreatedBy(platformService.getStrLastUpdBy());
+        operResPara.setCreatedBy(record.getCreatedBy());
         operResPara.setCreatedTime(record.getCreatedTime());
-        operResPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        operResPara.setLastUpdTime(platformService.getStrLastUpdDate());
+        operResPara.setLastUpdBy(record.getLastUpdBy());
+        operResPara.setLastUpdTime(record.getLastUpdTime());
         operResPara.setRemark(record.getRemark());
         operResPara.setRecversion( ToolUtil.getIntIgnoreNull(record.getRecversion()));
         return operResPara;

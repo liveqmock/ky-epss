@@ -1,6 +1,7 @@
 package epss.repository.dao.not_mybatis;
 
 import epss.repository.model.model_show.CttInfoShow;
+import epss.repository.model.model_show.DeptAndOperShow;
 import epss.repository.model.model_show.OperResShow;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -17,6 +18,33 @@ import java.util.List;
  */
 @Component
 public interface MyOperResMapper {
+    @Select("select " +
+            "    pkid, " +
+            "    name , " +
+            "    type " +
+            " from " +
+            "    (select " +
+            "       operid as pkid , " +
+            "       opername as name , " +
+            "       0 as type, " +
+            "       0 as countnumer " +
+            "     from " +
+            "        ptoper " +
+            "     where " +
+            "        deptid=#{parentDeptid} " +
+            "     union " +
+            "     select " +
+            "       deptid as pkid , " +
+            "       deptname as name, " +
+            "       1 as type , " +
+            "       (select  count(deptid) as a from ptdept  where parentdeptid=ta.deptid) as countnumer " +
+            "     from " +
+            "       ptdept ta " +
+            "     where " +
+            "       parentdeptid=#{parentDeptid} " +
+            "      ) ss " +
+            "  order by type ")
+    List<DeptAndOperShow> getOperList(@Param("parentDeptid") String parentDeptid);
     @Select("select " +
             "    operPkid, " +
             "    operName, " +

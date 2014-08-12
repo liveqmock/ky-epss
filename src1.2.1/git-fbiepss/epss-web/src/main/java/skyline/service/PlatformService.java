@@ -47,6 +47,7 @@ public class PlatformService {
 
     private String strLastUpdBy;
     private String strLastUpdDate;
+    private String strLastUpdTime;
 
     public OperatorManager getOperatorManager(){
         ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
@@ -233,6 +234,12 @@ public class PlatformService {
     public String getStrLastUpdDate() {
         Date date =new Date();
         strLastUpdDate= dateFormat(date, "yyyy-MM-dd");
+        return strLastUpdDate;
+    }
+
+    public String getStrLastUpdTime() {
+        Date date =new Date();
+        strLastUpdDate= dateFormat(date, "yyyy-MM-dd HH:mm:ss");
         return strLastUpdDate;
     }
 
