@@ -354,6 +354,21 @@ public class OperFuncResAction implements Serializable{
         this.esFlowControl = esFlowControl;
     }
 
+    public List<CommColModel> getTaskFunctionSeledList() {
+        return taskFunctionSeledList;
+    }
+
+    public void setTaskFunctionSeledList(List<CommColModel> taskFunctionSeledList) {
+        this.taskFunctionSeledList = taskFunctionSeledList;
+    }
+
+    public List<CommColModel> getTaskFunctionList() {
+        return taskFunctionList;
+    }
+
+    public void setTaskFunctionList(List<CommColModel> taskFunctionList) {
+        this.taskFunctionList = taskFunctionList;
+    }
 
     public List<SelectItem> getEsInitCttList() {
         return esInitCttList;

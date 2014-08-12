@@ -8,6 +8,7 @@ public class DeptAndOperShow {
     private String id;
     private String name;
     private String type;
+    private Boolean isSeled;
 
     public String getPkid() {
         return pkid;
@@ -39,5 +40,13 @@ public class DeptAndOperShow {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Boolean getIsSeled() {
+        return isSeled;
+    }
+
+    public void setIsSeled(Boolean isSeled) {
+        this.isSeled = isSeled;
     }
 }
