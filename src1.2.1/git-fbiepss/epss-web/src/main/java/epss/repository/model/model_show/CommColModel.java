@@ -12,9 +12,9 @@ public class CommColModel {
 
     }
 
-    public CommColModel(String disabled_flag, String rendered_flag){
-        this .disabled_flag=disabled_flag ;
-        this .rendered_flag=rendered_flag ;
+    public CommColModel(String column_id, String column_name){
+        this .column_id=column_id ;
+        this .column_name=column_name ;
     }
 
     public String getColumn_name() {
