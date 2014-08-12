@@ -165,7 +165,6 @@
         <result column="LAST_UPD_DATE" jdbcType="VARCHAR" property="lastUpdDate" />
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
         <result column="MODIFICATION_NUM" jdbcType="DECIMAL" property="modificationNum" />
-        <result column="TYPE" jdbcType="CHAR" property="type" />
         <result column="AUTO_LINK_ADD" jdbcType="CHAR" property="autoLinkAdd" />
     </resultMap>
     <select id="selectSubcttStlQMByStatusFlagBegin_End"
@@ -195,8 +194,7 @@
                 eip.PERIOD_NO AS POWER_PERIOD_NO,
                 eip.STATUS_FLAG,
                 eip.PRE_STATUS_FLAG,
-                eip.SPARE_FIELD,
-                eic.TYPE
+                eip.SPARE_FIELD
             from
                 ES_INIT_STL eis
             left outer join

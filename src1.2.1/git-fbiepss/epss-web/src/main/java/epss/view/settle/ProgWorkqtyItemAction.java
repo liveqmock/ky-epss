@@ -404,6 +404,13 @@ public class ProgWorkqtyItemAction {
                                         progStlInfoService.updateRecord(progWorkqtyInfo);
                                         progInfoShowQryM.setAutoLinkAdd("1");
                                         progStlInfoService.insertRecord(progInfoShowQryM);
+                                    }else{
+                                        if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                            progWorkqtyInfo.setAutoLinkAdd("0");
+                                        }else{
+                                            progWorkqtyInfo.setAutoLinkAdd("1");
+                                        }
+                                        progStlInfoService.updateRecord(progWorkqtyInfo);
                                     }
                                 }
                             }

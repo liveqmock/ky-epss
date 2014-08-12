@@ -440,6 +440,13 @@ public class ProgMatqtyItemAction {
                                     progStlInfoService.updateRecord(esInitStl);
                                     progInfoShowQryQ.setAutoLinkAdd("1");
                                     progStlInfoService.insertRecord(progInfoShowQryQ);
+                                }else{
+                                    if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                        esInitStl.setAutoLinkAdd("0");
+                                    }else{
+                                        esInitStl.setAutoLinkAdd("1");
+                                    }
+                                    progStlInfoService.updateRecord(esInitStl);
                                 }
                             }
                         }
