@@ -29,7 +29,7 @@
                              dynamic="true"
                              cache="false"
                              widgetVar="DtInitCstplList"
-                             rowStyleClass="#{node.type  eq '1' ? '1':node.isDisabled eq 'false'?'rowSelectStyle':'rowDoneStyle'}"
+                             rowStyleClass="#{node.type  eq '1' ? (node.isDisabled eq 'false'?'rowSelectStyle':null):(node.isDisabled eq 'false'?'rowSelectStyle':'rowDoneStyle')}"
                              scrollable="true"
                              scrollHeight="400">
                     <p:ajax event="select" listener="#{deptOperAction.onNodeSelect}" update="pdt,:form:msgs" />
