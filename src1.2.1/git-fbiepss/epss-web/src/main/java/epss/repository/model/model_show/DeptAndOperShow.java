@@ -9,6 +9,7 @@ public class DeptAndOperShow {
     private String name;
     private String type;
     private String isDisabled;
+    private Boolean isSeled;
 
     public String getPkid() {
         return pkid;
@@ -48,5 +49,13 @@ public class DeptAndOperShow {
 
     public void setIsDisabled(String isDisabled) {
         this.isDisabled = isDisabled;
+    }
+
+    public Boolean getIsSeled() {
+        return isSeled;
+    }
+
+    public void setIsSeled(Boolean isSeled) {
+        this.isSeled = isSeled;
     }
 }
