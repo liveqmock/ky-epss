@@ -8,7 +8,7 @@ public class DeptAndOperShow {
     private String id;
     private String name;
     private String type;
-    private Boolean isSeled;
+    private String isDisabled;
 
     public String getPkid() {
         return pkid;
@@ -42,11 +42,11 @@ public class DeptAndOperShow {
         this.type = type;
     }
 
-    public Boolean getIsSeled() {
-        return isSeled;
+    public String getIsDisabled() {
+        return isDisabled;
     }
 
-    public void setIsSeled(Boolean isSeled) {
-        this.isSeled = isSeled;
+    public void setIsDisabled(String isDisabled) {
+        this.isDisabled = isDisabled;
     }
 }
