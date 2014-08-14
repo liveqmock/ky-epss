@@ -5,6 +5,9 @@
 .rowDoneStyle {
     background: gray;
 }
+.rowSelectStyle {
+    background: yellow;
+}
 .rowTotalStyle{
     background: green;
 }
