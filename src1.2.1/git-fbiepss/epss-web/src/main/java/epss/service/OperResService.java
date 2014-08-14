@@ -44,6 +44,9 @@ public class OperResService {
     public List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara){
         return myOperResMapper.selectOperaResRecordsByModelShow(operResShowPara);
     }
+    public List<OperResShow> selectOperaResRecordsByModel(OperRes operResPara){
+        return myOperResMapper.selectOperaResRecordsByModelShow(fromModelToModelShow(operResPara));
+    }
 	public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara){
         return  myOperResMapper.selectRecordsFromCtt(parentPkidPara);
     }
@@ -72,6 +75,22 @@ public class OperResService {
         operResPara.setRemark(record.getRemark());
         operResPara.setRecversion( ToolUtil.getIntIgnoreNull(record.getRecversion()));
         return operResPara;
+    }
+    private OperResShow fromModelToModelShow(OperRes operResPara) {
+        OperResShow operResShowTemp=new OperResShow();
+        operResShowTemp.setTid(operResPara.getTid());
+        operResShowTemp.setOperPkid(operResPara.getOperPkid());
+        operResShowTemp.setFlowStatus(operResPara.getFlowStatus());
+        operResShowTemp.setInfoType(operResPara.getInfoType());
+        operResShowTemp.setInfoPkid(operResPara.getInfoPkid());
+        operResShowTemp.setArchivedFlag(operResPara.getArchivedFlag());
+        operResShowTemp.setCreatedBy(operResPara.getCreatedBy());
+        operResShowTemp.setCreatedTime(operResPara.getCreatedTime());
+        operResShowTemp.setLastUpdBy(operResPara.getLastUpdBy());
+        operResShowTemp.setLastUpdTime(operResPara.getLastUpdTime());
+        operResShowTemp.setRemark(operResPara.getRemark());
+        operResShowTemp.setRecversion( ToolUtil.getIntIgnoreNull(operResPara.getRecversion()));
+        return operResShowTemp;
     }
 
     public void insertEsCttInfo(CttInfoShow cttInfoShowPara){

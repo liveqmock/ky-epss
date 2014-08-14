@@ -2,34 +2,27 @@ package epss.view.operRes;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumDeletedFlag;
-import epss.common.enums.ESEnumEndFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.common.utils.MessageUtil;
 import epss.common.utils.ToolUtil;
-import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitPower;
 import epss.repository.model.OperRes;
 import epss.repository.model.model_show.*;
 import epss.service.*;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
-import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.service.PlatformService;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -78,7 +71,7 @@ public class OperFuncResAction implements Serializable{
         cttInfoShowDel=new CttInfoShow();
         esInitCttList = new ArrayList<>();
         cttInfoShowList = new ArrayList<>();
-        taskFunctionList = new ArrayList<CommColModel>();
+        taskFunctionList = new ArrayList<>();
         taskFunctionSeledList = new ArrayList<>();
         deptAndOperShowSeledList= new ArrayList<>();
         taskFunctionList.add(
@@ -293,6 +286,17 @@ public class OperFuncResAction implements Serializable{
                         operResTemp.setOperPkid(deptAndOperShowSeledList.get(n).getPkid());
                         operResTemp.setFlowStatus(taskFunctionSeledList.get(m));
                         operResTemp.setArchivedFlag(ESEnumDeletedFlag.DELETED_FLAG0.getCode());
+                        List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
+                        if(operResShowListTemp.size()>0){
+                            MessageUtil.addInfo("("+
+                                ESEnum.valueOfAlias(operResShowListTemp.get(0).getInfoType()).getTitle()+"-"+
+                                operResShowListTemp.get(0).getInfoPkidName()+"-"+
+                                ESEnumStatusFlag.getValueByKey(operResShowListTemp.get(0).getFlowStatus()).getTitle()+"-"+
+                                operResShowListTemp.get(0).getOperName()+")"+
+                                "此条数据已存在!");
+                            initRes();
+                            return;
+                        }
                         operResService.insertRecord(operResTemp);
                     }
                 }
