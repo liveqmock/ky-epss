@@ -55,7 +55,7 @@ public class OperFuncResAction implements Serializable{
     private EsFlowControl esFlowControl;
 
     private List<CommColModel> taskFunctionList;
-    private List<CommColModel> taskFunctionSeledList;
+    private List<String> taskFunctionSeledList;
 
     private List<DeptAndOperShow> deptAndOperShowSeledList;
 
@@ -78,7 +78,7 @@ public class OperFuncResAction implements Serializable{
         cttInfoShowDel=new CttInfoShow();
         esInitCttList = new ArrayList<>();
         cttInfoShowList = new ArrayList<>();
-        taskFunctionList = new ArrayList<>();
+        taskFunctionList = new ArrayList<CommColModel>();
         taskFunctionSeledList = new ArrayList<>();
         deptAndOperShowSeledList= new ArrayList<>();
         taskFunctionList.add(
@@ -121,7 +121,7 @@ public class OperFuncResAction implements Serializable{
         for (int i=0;i<cttInfoShowList.size();i++){
             CttInfoShow cttInfoShowTemp =cttInfoShowList.get(i);
             OperResShow operResShowPara=new OperResShow();
-            operResShowPara.setInfoType(cttInfoShowTemp.getType());
+            operResShowPara.setInfoType(cttInfoShowTemp.getCttType());
             operResShowPara.setInfoPkid(cttInfoShowTemp.getPkid());
             List<OperResShow> operResShowListTemp = operResService.selectOperaResRecordsByModelShow(operResShowPara);
             String strInputOperName="";
@@ -132,17 +132,41 @@ public class OperFuncResAction implements Serializable{
             String strPlaceOnFileOperName="";
             for(OperResShow operResShowUnit:operResShowListTemp){
                 if(operResShowUnit.getFlowStatus().equals("0")){
-                    strInputOperName= strInputOperName +"," + operResShowUnit.getOperName();
+                    if(strInputOperName.length()==0){
+                        strInputOperName = operResShowUnit.getOperName();
+                    }else {
+                        strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
+                    }
                 }else if(operResShowUnit.getFlowStatus().equals("1")){
-                    strCheckOperName= strCheckOperName +"," + operResShowUnit.getOperName();
+                    if(strCheckOperName.length()==0){
+                        strCheckOperName = operResShowUnit.getOperName();
+                    }else {
+                        strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
+                    }
                 }else if(operResShowUnit.getFlowStatus().equals("2")){
-                    strDoubleCheckOperName= strDoubleCheckOperName +"," + operResShowUnit.getOperName();
+                    if(strDoubleCheckOperName.length()==0){
+                        strDoubleCheckOperName = operResShowUnit.getOperName();
+                    }else {
+                        strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
+                    }
                 }else if(operResShowUnit.getFlowStatus().equals("3")){
-                    strApproveOperName= strApproveOperName +"," + operResShowUnit.getOperName();
+                    if(strApproveOperName.length()==0){
+                        strApproveOperName = operResShowUnit.getOperName();
+                    }else {
+                        strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
+                    }
                 }else if(operResShowUnit.getFlowStatus().equals("4")){
-                    strAccountOperName= strAccountOperName +"," + operResShowUnit.getOperName();
+                    if(strAccountOperName.length()==0){
+                        strAccountOperName = operResShowUnit.getOperName();
+                    }else {
+                        strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
+                    }
                 }else if(operResShowUnit.getFlowStatus().equals("5")){
-                    strPlaceOnFileOperName= strPlaceOnFileOperName +"," + operResShowUnit.getOperName();
+                    if(strInputOperName.length()==0){
+                        strPlaceOnFileOperName = operResShowUnit.getOperName();
+                    }else {
+                        strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
+                    }
                 }
             }
             OperFuncResShow operFuncResShowTemp=new OperFuncResShow();
@@ -267,11 +291,12 @@ public class OperFuncResAction implements Serializable{
                         operResTemp.setInfoType(cttInfoShowSel.getCttType());
                         operResTemp.setInfoPkid(cttInfoShowSel.getPkid());
                         operResTemp.setOperPkid(deptAndOperShowSeledList.get(n).getPkid());
-                        operResTemp.setFlowStatus(taskFunctionSeledList.get(m).getColumn_id());
+                        operResTemp.setFlowStatus(taskFunctionSeledList.get(m));
                         operResTemp.setArchivedFlag(ESEnumDeletedFlag.DELETED_FLAG0.getCode());
                         operResService.insertRecord(operResTemp);
                     }
                 }
+                MessageUtil.addInfo("权限添加成功!");
             }
             initRes();
         }catch (Exception e){
@@ -354,11 +379,11 @@ public class OperFuncResAction implements Serializable{
         this.esFlowControl = esFlowControl;
     }
 
-    public List<CommColModel> getTaskFunctionSeledList() {
+    public List<String> getTaskFunctionSeledList() {
         return taskFunctionSeledList;
     }
 
-    public void setTaskFunctionSeledList(List<CommColModel> taskFunctionSeledList) {
+    public void setTaskFunctionSeledList(List<String> taskFunctionSeledList) {
         this.taskFunctionSeledList = taskFunctionSeledList;
     }
 
