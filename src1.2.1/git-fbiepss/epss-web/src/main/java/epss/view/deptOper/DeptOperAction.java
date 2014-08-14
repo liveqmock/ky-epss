@@ -1,10 +1,10 @@
-package epss.view.deptAndOper;
+package epss.view.deptOper;
 
 import epss.common.utils.MessageUtil;
 import epss.repository.model.Dept;
 import epss.repository.model.Oper;
 import epss.repository.model.model_show.DeptAndOperShow;
-import epss.service.DeptAndOperService;
+import epss.service.DeptOperService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.NodeSelectEvent;
@@ -27,10 +27,10 @@ import java.util.List;
  */
 @ManagedBean
 @ViewScoped
-public class DeptAndOperAction implements Serializable {
-    private static final Logger logger = LoggerFactory.getLogger(DeptAndOperAction.class);
-    @ManagedProperty(value = "#{deptAndOperService}")
-    private DeptAndOperService deptAndOperService;
+public class DeptOperAction implements Serializable {
+    private static final Logger logger = LoggerFactory.getLogger(DeptOperAction.class);
+    @ManagedProperty(value = "#{deptOperService}")
+    private DeptOperService deptOperService;
 
     private TreeNode deptRoot;
     private TreeNode currentSelectedNode;
@@ -96,7 +96,7 @@ public class DeptAndOperAction implements Serializable {
 
     private void recursiveTreeNode(String strParentPkid, TreeNode parentNode) {
         List<DeptAndOperShow> deptAndOperShowTempList =new ArrayList<DeptAndOperShow>();
-        deptAndOperShowTempList=deptAndOperService.selectDeptAndOperRecords(strParentPkid);
+        deptAndOperShowTempList= deptOperService.selectDeptAndOperRecords(strParentPkid);
         for (int i = 0; i < deptAndOperShowTempList.size(); i++) {
             TreeNode childNode = null;
             childNode = new DefaultTreeNode(deptAndOperShowTempList.get(i), parentNode);
@@ -132,10 +132,10 @@ public class DeptAndOperAction implements Serializable {
                         strRendered1 = "false";
                         if (strSubmitTypePara.equals("Upd")) {
                             deptUpd = new Dept();
-                            deptUpd = (Dept) deptAndOperService.selectRecordByPkid(deptAndOperShowPara);
+                            deptUpd = (Dept) deptOperService.selectRecordByPkid(deptAndOperShowPara);
                         } else if (strSubmitTypePara.equals("Del")) {
                             deptDel = new Dept();
-                            deptDel = (Dept) deptAndOperService.selectRecordByPkid(deptAndOperShowPara);
+                            deptDel = (Dept) deptOperService.selectRecordByPkid(deptAndOperShowPara);
                         }
                     }
                 } else {
@@ -143,12 +143,12 @@ public class DeptAndOperAction implements Serializable {
                     strRendered1 = "true";
                     if (strSubmitTypePara.equals("Upd")) {
                         operUpd = new Oper();
-                        operUpd = (Oper) deptAndOperService.selectRecordByPkid(deptAndOperShowPara);
+                        operUpd = (Oper) deptOperService.selectRecordByPkid(deptAndOperShowPara);
                         System.out.println("*******operUpd.getPasswd():"+operUpd.getPasswd());
                     } else if (strSubmitTypePara.equals("Del")) {
                         currentSelectedNode=currentSelectedNode.getParent();
                         operDel = new Oper();
-                        operDel = (Oper) deptAndOperService.selectRecordByPkid(deptAndOperShowPara);
+                        operDel = (Oper) deptOperService.selectRecordByPkid(deptAndOperShowPara);
                     }
                 }
             }
@@ -173,7 +173,7 @@ public class DeptAndOperAction implements Serializable {
             if (!submitPreCheck(objectTemp)) {
                 return;
             }
-            if (deptAndOperService.isExistInDb(objectTemp, strType)) {
+            if (deptOperService.isExistInDb(objectTemp, strType)) {
                 MessageUtil.addError("该编号对应记录已存在，请重新录入！");
                 return;
             } else {
@@ -191,7 +191,7 @@ public class DeptAndOperAction implements Serializable {
             updRecordAction(objectTemp, deptAndOperShowSel.getType());
         } else if (strSubmitType.equals("Del")) {
             if ("0".equals(deptAndOperShowSel.getType())) {
-                if (deptAndOperService.findChildRecordsByPkid(deptAndOperShowSel)) {
+                if (deptOperService.findChildRecordsByPkid(deptAndOperShowSel)) {
                     MessageUtil.addInfo("该部门有员工，无法删除。");
                     return;
                 } else {
@@ -260,7 +260,7 @@ public class DeptAndOperAction implements Serializable {
 
     private void addRecordAction(Object objectPara, String strTypePara) {
         try {
-            deptAndOperService.insertRecord(objectPara, strTypePara);
+            deptOperService.insertRecord(objectPara, strTypePara);
             MessageUtil.addInfo("新增数据完成。");
         } catch (Exception e) {
             logger.error("增加信息失败。", e);
@@ -270,7 +270,7 @@ public class DeptAndOperAction implements Serializable {
 
     private void updRecordAction(Object objectPara, String strTypePara) {
         try {
-            deptAndOperService.updateRecord(objectPara, strTypePara);
+            deptOperService.updateRecord(objectPara, strTypePara);
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新信息失败。", e);
@@ -280,7 +280,7 @@ public class DeptAndOperAction implements Serializable {
 
     private void delRecordAction(Object objectPara, String strTypePara) {
         try {
-            deptAndOperService.deleteRecord(objectPara, strTypePara);
+            deptOperService.deleteRecord(objectPara, strTypePara);
             MessageUtil.addInfo("删除数据完成。");
         } catch (Exception e) {
             logger.error("删除信息失败。", e);
@@ -324,12 +324,12 @@ public class DeptAndOperAction implements Serializable {
         this.deptRoot = deptRoot;
     }
 
-    public DeptAndOperService getDeptAndOperService() {
-        return deptAndOperService;
+    public DeptOperService getDeptOperService() {
+        return deptOperService;
     }
 
-    public void setDeptAndOperService(DeptAndOperService deptAndOperService) {
-        this.deptAndOperService = deptAndOperService;
+    public void setDeptOperService(DeptOperService deptOperService) {
+        this.deptOperService = deptOperService;
     }
 
     public String getStrRendered0() {

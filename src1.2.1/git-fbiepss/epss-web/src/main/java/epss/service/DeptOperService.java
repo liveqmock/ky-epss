@@ -21,7 +21,7 @@ import java.util.List;
  * Created by XIANGYANG on 2014/7/27.
  */
 @Service
-public class DeptAndOperService {
+public class DeptOperService {
     @Resource
     private MyDeptAndOperMapper myDeptAndOperMapper;
     @Resource
