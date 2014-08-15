@@ -160,8 +160,8 @@
                              style="float:left;width:80px;margin-left:12px;">
                             <span style="width:100%;">´ý°ìÒµÎñ</span>
                 </div>
-                <div onclick="tabbarclk(this);" id="tip" active="false" 
-                     style="float:left;width:0;margin-left:12px;" >
+                <div onclick="tabbarclk(this);" id="tip" active="false"
+                     style="float:left;width:0;display:none" >
                         </div>
                         <div style="float:left;width:2px;"></div>
                         <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
