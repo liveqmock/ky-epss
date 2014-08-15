@@ -23,8 +23,6 @@ public class ScrollInfoService {
     @Resource
     private TaskService taskService;
     @Resource
-    private FlowCtrlService flowCtrlService;
-    @Resource
     private OperResService operResService;
 
     private List<TaskShow> taskShowList;
@@ -132,12 +130,12 @@ public class ScrollInfoService {
                         if(isHasTask.equals(true)){
                             //权限筛选
                             Boolean hasPower=false;
-                        /*for(OperResShow operResShowUnit:operResShowList){
-                            if(operResShowUnit.getInfoType().equals(strType)){
-                                hasPower=true;
-                                break;
-                            }
-                        }*/
+                            /*for(OperResShow operResShowUnit:operResShowList){
+                                if(operResShowUnit.getInfoType().equals(strType)){
+                                    hasPower=true;
+                                    break;
+                                }
+                            }*/
                             hasPower=true;//暂时用
                             if(hasPower.equals(true)){
                                 // 追加标题行

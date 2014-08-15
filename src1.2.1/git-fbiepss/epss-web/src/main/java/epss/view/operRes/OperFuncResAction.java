@@ -113,6 +113,7 @@ public class OperFuncResAction implements Serializable{
         List<CttInfoShow> cttInfoShowList=operResService.selectRecordsFromCtt(parentPkidPara);
         for (int i=0;i<cttInfoShowList.size();i++){
             CttInfoShow cttInfoShowTemp =cttInfoShowList.get(i);
+            // 总成分
             OperResShow operResShowPara=new OperResShow();
             operResShowPara.setInfoType(cttInfoShowTemp.getCttType());
             operResShowPara.setInfoPkid(cttInfoShowTemp.getPkid());
@@ -173,6 +174,320 @@ public class OperFuncResAction implements Serializable{
             operFuncResShowTemp.setAccountOperName(strAccountOperName);
             operFuncResShowTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
             TreeNode childNodeTemp = new DefaultTreeNode(operFuncResShowTemp, parentNode);
+
+            // 结算信息
+            if(cttInfoShowTemp.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
+                // 统计
+                operResShowPara = new OperResShow();
+                operResShowPara.setInfoType(ESEnum.ITEMTYPE6.getCode());
+                operResShowPara.setInfoPkid(cttInfoShowTemp.getPkid());
+                List<OperResShow> operResShowForStlListTemp = operResService.selectOperaResRecordsByModelShow(operResShowPara);
+                strInputOperName = "";
+                strCheckOperName = "";
+                strDoubleCheckOperName = "";
+                strApproveOperName = "";
+                strAccountOperName = "";
+                strPlaceOnFileOperName = "";
+                for (OperResShow operResShowUnit : operResShowForStlListTemp) {
+                    if (operResShowUnit.getFlowStatus().equals("0")) {
+                        if (strInputOperName.length() == 0) {
+                            strInputOperName = operResShowUnit.getOperName();
+                        } else {
+                            strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("1")) {
+                        if (strCheckOperName.length() == 0) {
+                            strCheckOperName = operResShowUnit.getOperName();
+                        } else {
+                            strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("2")) {
+                        if (strDoubleCheckOperName.length() == 0) {
+                            strDoubleCheckOperName = operResShowUnit.getOperName();
+                        } else {
+                            strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("3")) {
+                        if (strApproveOperName.length() == 0) {
+                            strApproveOperName = operResShowUnit.getOperName();
+                        } else {
+                            strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("4")) {
+                        if (strAccountOperName.length() == 0) {
+                            strAccountOperName = operResShowUnit.getOperName();
+                        } else {
+                            strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("5")) {
+                        if (strInputOperName.length() == 0) {
+                            strPlaceOnFileOperName = operResShowUnit.getOperName();
+                        } else {
+                            strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
+                        }
+                    }
+                }
+                OperFuncResShow operFuncResShowForStlTemp = new OperFuncResShow();
+                operFuncResShowForStlTemp.setResType(ESEnum.ITEMTYPE6.getCode());
+                operFuncResShowForStlTemp.setResPkid(cttInfoShowTemp.getPkid());
+                operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName()+"__统计");
+                operFuncResShowForStlTemp.setInputOperName(strInputOperName);
+                operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
+                operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
+                operFuncResShowForStlTemp.setApproveOperName(strApproveOperName);
+                operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
+                operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
+                new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+
+                // 计量
+                operResShowPara = new OperResShow();
+                operResShowPara.setInfoType(ESEnum.ITEMTYPE7.getCode());
+                operResShowPara.setInfoPkid(cttInfoShowTemp.getPkid());
+                operResShowForStlListTemp = operResService.selectOperaResRecordsByModelShow(operResShowPara);
+                strInputOperName = "";
+                strCheckOperName = "";
+                strDoubleCheckOperName = "";
+                strApproveOperName = "";
+                strAccountOperName = "";
+                strPlaceOnFileOperName = "";
+                for (OperResShow operResShowUnit : operResShowForStlListTemp) {
+                    if (operResShowUnit.getFlowStatus().equals("0")) {
+                        if (strInputOperName.length() == 0) {
+                            strInputOperName = operResShowUnit.getOperName();
+                        } else {
+                            strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("1")) {
+                        if (strCheckOperName.length() == 0) {
+                            strCheckOperName = operResShowUnit.getOperName();
+                        } else {
+                            strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("2")) {
+                        if (strDoubleCheckOperName.length() == 0) {
+                            strDoubleCheckOperName = operResShowUnit.getOperName();
+                        } else {
+                            strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("3")) {
+                        if (strApproveOperName.length() == 0) {
+                            strApproveOperName = operResShowUnit.getOperName();
+                        } else {
+                            strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("4")) {
+                        if (strAccountOperName.length() == 0) {
+                            strAccountOperName = operResShowUnit.getOperName();
+                        } else {
+                            strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("5")) {
+                        if (strInputOperName.length() == 0) {
+                            strPlaceOnFileOperName = operResShowUnit.getOperName();
+                        } else {
+                            strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
+                        }
+                    }
+                }
+                operFuncResShowForStlTemp = new OperFuncResShow();
+                operFuncResShowForStlTemp.setResType(ESEnum.ITEMTYPE7.getCode());
+                operFuncResShowForStlTemp.setResPkid(cttInfoShowTemp.getPkid());
+                operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName()+"__计量");
+                operFuncResShowForStlTemp.setInputOperName(strInputOperName);
+                operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
+                operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
+                operFuncResShowForStlTemp.setApproveOperName(strApproveOperName);
+                operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
+                operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
+                new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+            }else if(cttInfoShowTemp.getCttType().equals(ESEnum.ITEMTYPE2.getCode())) {
+                // 数量结算
+                operResShowPara = new OperResShow();
+                operResShowPara.setInfoType(ESEnum.ITEMTYPE3.getCode());
+                operResShowPara.setInfoPkid(cttInfoShowTemp.getPkid());
+                List<OperResShow> operResShowForStlListTemp = operResService.selectOperaResRecordsByModelShow(operResShowPara);
+                strInputOperName = "";
+                strCheckOperName = "";
+                strDoubleCheckOperName = "";
+                strApproveOperName = "";
+                strAccountOperName = "";
+                strPlaceOnFileOperName = "";
+                for (OperResShow operResShowUnit : operResShowForStlListTemp) {
+                    if (operResShowUnit.getFlowStatus().equals("0")) {
+                        if (strInputOperName.length() == 0) {
+                            strInputOperName = operResShowUnit.getOperName();
+                        } else {
+                            strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("1")) {
+                        if (strCheckOperName.length() == 0) {
+                            strCheckOperName = operResShowUnit.getOperName();
+                        } else {
+                            strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("2")) {
+                        if (strDoubleCheckOperName.length() == 0) {
+                            strDoubleCheckOperName = operResShowUnit.getOperName();
+                        } else {
+                            strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("3")) {
+                        if (strApproveOperName.length() == 0) {
+                            strApproveOperName = operResShowUnit.getOperName();
+                        } else {
+                            strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("4")) {
+                        if (strAccountOperName.length() == 0) {
+                            strAccountOperName = operResShowUnit.getOperName();
+                        } else {
+                            strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("5")) {
+                        if (strInputOperName.length() == 0) {
+                            strPlaceOnFileOperName = operResShowUnit.getOperName();
+                        } else {
+                            strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
+                        }
+                    }
+                }
+                OperFuncResShow operFuncResShowForStlTemp = new OperFuncResShow();
+                operFuncResShowForStlTemp.setResType(ESEnum.ITEMTYPE3.getCode());
+                operFuncResShowForStlTemp.setResPkid(cttInfoShowTemp.getPkid());
+                operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName()+"__数量结算");
+                operFuncResShowForStlTemp.setInputOperName(strInputOperName);
+                operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
+                operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
+                operFuncResShowForStlTemp.setApproveOperName(strApproveOperName);
+                operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
+                operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
+                new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+
+                // 材料结算
+                operResShowPara = new OperResShow();
+                operResShowPara.setInfoType(ESEnum.ITEMTYPE4.getCode());
+                operResShowPara.setInfoPkid(cttInfoShowTemp.getPkid());
+                operResShowForStlListTemp = operResService.selectOperaResRecordsByModelShow(operResShowPara);
+                strInputOperName = "";
+                strCheckOperName = "";
+                strDoubleCheckOperName = "";
+                strApproveOperName = "";
+                strAccountOperName = "";
+                strPlaceOnFileOperName = "";
+                for (OperResShow operResShowUnit : operResShowForStlListTemp) {
+                    if (operResShowUnit.getFlowStatus().equals("0")) {
+                        if (strInputOperName.length() == 0) {
+                            strInputOperName = operResShowUnit.getOperName();
+                        } else {
+                            strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("1")) {
+                        if (strCheckOperName.length() == 0) {
+                            strCheckOperName = operResShowUnit.getOperName();
+                        } else {
+                            strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("2")) {
+                        if (strDoubleCheckOperName.length() == 0) {
+                            strDoubleCheckOperName = operResShowUnit.getOperName();
+                        } else {
+                            strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("3")) {
+                        if (strApproveOperName.length() == 0) {
+                            strApproveOperName = operResShowUnit.getOperName();
+                        } else {
+                            strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("4")) {
+                        if (strAccountOperName.length() == 0) {
+                            strAccountOperName = operResShowUnit.getOperName();
+                        } else {
+                            strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("5")) {
+                        if (strInputOperName.length() == 0) {
+                            strPlaceOnFileOperName = operResShowUnit.getOperName();
+                        } else {
+                            strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
+                        }
+                    }
+                }
+                operFuncResShowForStlTemp = new OperFuncResShow();
+                operFuncResShowForStlTemp.setResType(ESEnum.ITEMTYPE4.getCode());
+                operFuncResShowForStlTemp.setResPkid(cttInfoShowTemp.getPkid());
+                operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName()+"__材料结算");
+                operFuncResShowForStlTemp.setInputOperName(strInputOperName);
+                operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
+                operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
+                operFuncResShowForStlTemp.setApproveOperName(strApproveOperName);
+                operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
+                operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
+                new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+
+                // 结算单
+                operResShowPara = new OperResShow();
+                operResShowPara.setInfoType(ESEnum.ITEMTYPE5.getCode());
+                operResShowPara.setInfoPkid(cttInfoShowTemp.getPkid());
+                operResShowForStlListTemp = operResService.selectOperaResRecordsByModelShow(operResShowPara);
+                strInputOperName = "";
+                strCheckOperName = "";
+                strDoubleCheckOperName = "";
+                strApproveOperName = "";
+                strAccountOperName = "";
+                strPlaceOnFileOperName = "";
+                for (OperResShow operResShowUnit : operResShowForStlListTemp) {
+                    if (operResShowUnit.getFlowStatus().equals("0")) {
+                        if (strInputOperName.length() == 0) {
+                            strInputOperName = operResShowUnit.getOperName();
+                        } else {
+                            strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("1")) {
+                        if (strCheckOperName.length() == 0) {
+                            strCheckOperName = operResShowUnit.getOperName();
+                        } else {
+                            strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("2")) {
+                        if (strDoubleCheckOperName.length() == 0) {
+                            strDoubleCheckOperName = operResShowUnit.getOperName();
+                        } else {
+                            strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("3")) {
+                        if (strApproveOperName.length() == 0) {
+                            strApproveOperName = operResShowUnit.getOperName();
+                        } else {
+                            strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("4")) {
+                        if (strAccountOperName.length() == 0) {
+                            strAccountOperName = operResShowUnit.getOperName();
+                        } else {
+                            strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
+                        }
+                    } else if (operResShowUnit.getFlowStatus().equals("5")) {
+                        if (strInputOperName.length() == 0) {
+                            strPlaceOnFileOperName = operResShowUnit.getOperName();
+                        } else {
+                            strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
+                        }
+                    }
+                }
+                operFuncResShowForStlTemp = new OperFuncResShow();
+                operFuncResShowForStlTemp.setResType(ESEnum.ITEMTYPE5.getCode());
+                operFuncResShowForStlTemp.setResPkid(cttInfoShowTemp.getPkid());
+                operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName()+"__结算单");
+                operFuncResShowForStlTemp.setInputOperName(strInputOperName);
+                operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
+                operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
+                operFuncResShowForStlTemp.setApproveOperName(strApproveOperName);
+                operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
+                operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
+                new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+            }
+
             recursiveResTreeNode(operFuncResShowTemp.getResPkid(),childNodeTemp);
         }
     }
