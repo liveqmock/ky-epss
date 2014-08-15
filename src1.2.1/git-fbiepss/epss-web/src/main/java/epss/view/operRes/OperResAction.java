@@ -62,9 +62,6 @@ public class OperResAction implements Serializable{
     private OperResShow operResShowSel;
     private List<OperResShow> operResShowQryList;
 
-    private String strRendered1;
-    private String strRendered2;
-    private String strLabel;
     private List<SelectItem> esInitCttList;
     private List<CttInfoShow> cttInfoShowList;
     private CttInfoShow cttInfoShowAdd;
@@ -75,9 +72,6 @@ public class OperResAction implements Serializable{
     private TreeNode resRoot;
     @PostConstruct
     public void init() {
-        strRendered1 = "false";
-        strRendered2 = "false";
-        strLabel = "";
         strSubmitType = "Add";
 
         resSeledList = new ArrayList<>();
@@ -162,39 +156,6 @@ public class OperResAction implements Serializable{
             }
         }
     }
-    public void setEsInitPowerHisActionOfPowerPkidAction() {
-        String strCttType = cttInfoShowAdd.getType();
-        esInitCttList.clear();
-        if (strCttType.equals("")){
-                strRendered1 = "false";
-                strRendered2 = "false";
-        }else {
-            if (strCttType.equals(ESEnum.ITEMTYPE0.getCode())) {
-                strRendered1 = "false";
-                strRendered2 = "true";
-            }else{
-                strRendered1 = "true";
-                strRendered2 = "true";
-                if (strCttType.equals(ESEnum.ITEMTYPE1.getCode())) {
-                    strLabel = ESEnum.ITEMTYPE0.getTitle();
-                }else if (strCttType.equals(ESEnum.ITEMTYPE2.getCode())){
-                    strLabel = ESEnum.ITEMTYPE1.getTitle();
-                }
-                List<EsCttInfo> esCttInfoListTemp = new ArrayList<EsCttInfo>();
-                esCttInfoListTemp = cttInfoService.getEsInitCttListByCttType(ESEnum.ITEMTYPE1.getCode());
-                SelectItem selectItem = new SelectItem("", "全部");
-                esInitCttList.add(selectItem);
-                if (esCttInfoListTemp.size() > 0) {
-                    for (EsCttInfo itemUnit : esCttInfoListTemp) {
-                        selectItem = new SelectItem();
-                        selectItem.setValue(itemUnit.getPkid());
-                        selectItem.setLabel(itemUnit.getName());
-                        esInitCttList.add(selectItem);
-                    }
-                }
-            }
-        }
-    }
     public void onClickForMngAction() {
         try {
             if (strSubmitType.equals("Add")) {
@@ -255,6 +216,7 @@ public class OperResAction implements Serializable{
     private void initFunc(){
         taskFunctionList = new ArrayList<SelectItem>();		
         this.taskFunctionSeledList= new ArrayList<SelectItem>();
+        taskFunctionList.add(new SelectItem("","全部"));
         taskFunctionList.add(
                 new SelectItem(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
         taskFunctionList.add(
@@ -275,55 +237,6 @@ public class OperResAction implements Serializable{
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
         }
-    }
-
-    public void selRes(CttInfoShow cttInfoShowPara) {
-        if (cttInfoShowPara.getIsSeled()){
-            resSeledList.add(cttInfoShowPara);
-        }else{
-            resSeledList.remove(cttInfoShowPara);
-        }
-    }
-    
-    public void SelOper(OperResShow operResShowPara) {
-         if (operResShowPara.getIsSel()){
-             operSeledList.add(operResShowPara);
-         }else{
-            operSeledList.remove(operResShowPara);
-         }
-    }
-    public void saveSelectedMultiple() {
-       if(resSeledList.size()==0){
-           MessageUtil.addError("资源列表不能为空，请选择");
-           return;
-       }
-       if(taskFunctionSeledList.size()==0){
-           MessageUtil.addError("功能列表不能为空，请选择");
-           return;
-       }
-       if(operSeledList.size()==0){
-           MessageUtil.addError("人员列表不能为空，请选择");
-           return;
-       }
-       for(int i=0;i<resSeledList.size();i++){
-           for(int m=0;m<taskFunctionSeledList.size();m++){
-               for(int n=0;n<operSeledList.size();n++){
-                   OperResShow operResShowAdd=new OperResShow();
-                   operResShowAdd.setOperPkid(operSeledList.get(n).getOperPkid());
-                   operResShowAdd.setFlowStatus((String) taskFunctionSeledList.get(m).getValue());
-                   operResShowAdd.setInfoType(resSeledList.get(i).getCttType());
-                   operResShowAdd.setInfoPkid(resSeledList.get(i).getPkid());
-                   operResShowAdd.setArchivedFlag(resSeledList.get(i).getEndFlag());
-                   operResShowAdd.setCreatedBy(resSeledList.get(i).getCreatedBy());
-                   operResShowAdd.setCreatedByName(resSeledList.get(i).getCreatedByName());
-                   operResShowAdd.setCreatedTime(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-                  operResService.insertRecord(operResShowAdd);
-               }
-           }
-       }
-        resSeledList.clear();
-        operSeledList.clear();
-        initOperRes();
     }
 
     public void onQueryAction() {
@@ -458,30 +371,6 @@ public class OperResAction implements Serializable{
 
     public void setOperRoot(TreeNode operRoot) {
         this.operRoot = operRoot;
-    }
-
-    public String getStrRendered1() {
-        return strRendered1;
-    }
-
-    public void setStrRendered1(String strRendered1) {
-        this.strRendered1 = strRendered1;
-    }
-
-    public String getStrRendered2() {
-        return strRendered2;
-    }
-
-    public void setStrRendered2(String strRendered2) {
-        this.strRendered2 = strRendered2;
-    }
-
-    public String getStrLabel() {
-        return strLabel;
-    }
-
-    public void setStrLabel(String strLabel) {
-        this.strLabel = strLabel;
     }
 
     public List<SelectItem> getEsInitCttList() {

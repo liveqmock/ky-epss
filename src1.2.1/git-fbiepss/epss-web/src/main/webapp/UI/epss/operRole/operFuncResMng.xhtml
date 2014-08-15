@@ -162,8 +162,8 @@
                                               columns="6">
                             <f:selectItems value="#{operFuncResAction.taskFunctionList}"
                                            var="taskRecord"
-                                           itemValue="#{taskRecord.column_id}"
-                                           itemLabel="#{taskRecord.column_name}"/>
+                                           itemValue="#{taskRecord.value}"
+                                           itemLabel="#{taskRecord.label}"/>
                         </p:selectManyCheckbox>
                     </p:panel>
                     <p:panel header="人员列表">

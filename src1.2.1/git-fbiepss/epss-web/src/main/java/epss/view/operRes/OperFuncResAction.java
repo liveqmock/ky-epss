@@ -47,7 +47,7 @@ public class OperFuncResAction implements Serializable{
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
 
-    private List<CommColModel> taskFunctionList;
+    private List<SelectItem> taskFunctionList;
     private List<String> taskFunctionSeledList;
 
     private List<DeptAndOperShow> deptAndOperShowSeledList;
@@ -75,17 +75,17 @@ public class OperFuncResAction implements Serializable{
         taskFunctionSeledList = new ArrayList<>();
         deptAndOperShowSeledList= new ArrayList<>();
         taskFunctionList.add(
-                new CommColModel(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
         taskFunctionList.add(
-                new CommColModel(ESEnumStatusFlag.STATUS_FLAG1.getCode(),ESEnumStatusFlag.STATUS_FLAG1.getTitle()));
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG1.getCode(),ESEnumStatusFlag.STATUS_FLAG1.getTitle()));
         taskFunctionList.add(
-                new CommColModel(ESEnumStatusFlag.STATUS_FLAG2.getCode(),ESEnumStatusFlag.STATUS_FLAG2.getTitle()));
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG2.getCode(),ESEnumStatusFlag.STATUS_FLAG2.getTitle()));
         taskFunctionList.add(
-                new CommColModel(ESEnumStatusFlag.STATUS_FLAG3.getCode(),ESEnumStatusFlag.STATUS_FLAG3.getTitle()));
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG3.getCode(),ESEnumStatusFlag.STATUS_FLAG3.getTitle()));
         taskFunctionList.add(
-                new CommColModel(ESEnumStatusFlag.STATUS_FLAG4.getCode(),ESEnumStatusFlag.STATUS_FLAG4.getTitle()));
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG4.getCode(),ESEnumStatusFlag.STATUS_FLAG4.getTitle()));
         taskFunctionList.add(
-                new CommColModel(ESEnumStatusFlag.STATUS_FLAG5.getCode(),ESEnumStatusFlag.STATUS_FLAG5.getTitle()));
+                new SelectItem(ESEnumStatusFlag.STATUS_FLAG5.getCode(),ESEnumStatusFlag.STATUS_FLAG5.getTitle()));
 
         // 资源-用户-功能
         initRes();
@@ -391,11 +391,11 @@ public class OperFuncResAction implements Serializable{
         this.taskFunctionSeledList = taskFunctionSeledList;
     }
 
-    public List<CommColModel> getTaskFunctionList() {
+    public List<SelectItem> getTaskFunctionList() {
         return taskFunctionList;
     }
 
-    public void setTaskFunctionList(List<CommColModel> taskFunctionList) {
+    public void setTaskFunctionList(List<SelectItem> taskFunctionList) {
         this.taskFunctionList = taskFunctionList;
     }
 
