@@ -12,12 +12,9 @@ import epss.common.utils.JxlsManager;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.common.enums.*;
-import epss.repository.model.EsCttInfo;
-import epss.repository.model.EsCttItem;
-import epss.repository.model.EsInitStl;
+import epss.repository.model.*;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
-import epss.repository.model.EsInitPower;
 import epss.service.*;
 import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
@@ -55,7 +52,8 @@ public class TkcttItemAction {
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
-
+	@ManagedProperty(value = "#{cttUpdInfoService}")
+    private CttUpdInfoService cttUpdInfoService;
     private EsCttInfo tkcttInfo;
     private CttItemShow cttItemShowSel;
     private CttItemShow cttItemShowAdd;
@@ -573,12 +571,18 @@ public class TkcttItemAction {
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
+                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
+                    cttUpdInfo.setTkcttUpd("1");
+                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
                     esFlowControl.mngNotFinishAction(
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
+                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
+                    cttUpdInfo.setTkcttUpd("0");
+                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }// 审核

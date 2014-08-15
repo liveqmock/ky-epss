@@ -3,16 +3,14 @@ package epss.view.contract;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.repository.model.CttUpdInfo;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.EsInitStl;
-import epss.service.CttInfoService;
-import epss.service.CttItemService;
-import epss.service.FlowCtrlService;
-import epss.service.EsFlowService;
+import epss.service.*;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
@@ -60,6 +58,8 @@ public class CstplInfoAction {
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
+    @ManagedProperty(value = "#{cttUpdInfoService}")
+    private CttUpdInfoService cttUpdInfoService;
     private CttInfoShow cttInfoShowQry;
     private String strNotPassToStatus;
     private CttInfoShow cttInfoShowSelected;
@@ -266,12 +266,18 @@ public class CstplInfoAction {
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
+                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
+                    cttUpdInfo.setCstplUpd("1");
+                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
                     esFlowControl.mngNotFinishAction(
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
+                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
+                    cttUpdInfo.setCstplUpd("0");
+                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }// 审核

@@ -11,12 +11,9 @@ import epss.common.utils.JxlsManager;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.common.enums.*;
-import epss.repository.model.EsCttInfo;
-import epss.repository.model.EsCttItem;
-import epss.repository.model.EsInitStl;
+import epss.repository.model.*;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
-import epss.repository.model.EsInitPower;
 import epss.service.*;
 import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
@@ -54,6 +51,8 @@ public class SubcttItemAction {
     private CttInfoService cttInfoService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
+	@ManagedProperty(value = "#{cttUpdInfoService}")
+    private CttUpdInfoService cttUpdInfoService;
     /*打开的成本计划页面用*/
     private List<CttItemShow> cttItemShowList_Cstpl;
     private CttItemShow cttItemShowSelected_Cstpl;
@@ -737,6 +736,9 @@ public class SubcttItemAction {
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
+                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
+                    cttUpdInfo.setSubcttUpd("1");
+                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
                     subcttInfo.setType("");
@@ -746,6 +748,9 @@ public class SubcttItemAction {
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
+                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
+                    cttUpdInfo.setSubcttUpd("0");
+                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }// 审核

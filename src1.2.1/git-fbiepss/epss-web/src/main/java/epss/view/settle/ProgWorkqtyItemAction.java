@@ -58,7 +58,8 @@ public class ProgWorkqtyItemAction {
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{signPartService}")
     private SignPartService signPartService;
-
+    @ManagedProperty(value = "#{cttUpdInfoService}")
+    private CttUpdInfoService cttUpdInfoService;
     private List<ProgWorkqtyItemShow> progWorkqtyItemShowList;
     private ProgWorkqtyItemShow progWorkqtyItemShowSel;
     private ProgWorkqtyItemShow progWorkqtyItemShowUpd;
@@ -420,6 +421,9 @@ public class ProgWorkqtyItemAction {
                             progInfoShowSel.getStlPkid(),
                             progInfoShowSel.getPeriodNo());
                     strPassFlag="false";
+                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
+                    cttUpdInfo.setSubcttQUpd("1");
+                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerType.equals("MngFail")) {
                     progWorkqtyInfo.setAutoLinkAdd("");
@@ -429,6 +433,9 @@ public class ProgWorkqtyItemAction {
                             progInfoShowSel.getStlPkid(),
                             progInfoShowSel.getPeriodNo());
                     strPassFlag="true";
+                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
+                    cttUpdInfo.setSubcttQUpd("0");
+                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
             } else if (strPowerType.contains("Check") && !strPowerType.contains("DoubleCheck")) {// 审核

@@ -155,10 +155,13 @@
                     </td>
                 </tr>
                 <tr style="width:100%; height:25px">
-                    <td colspan="3" style="height:25px;">
+            <td colspan="5" style="height:25px;">
                         <div onclick="tabbarclk(this);" active="true" id="task" class="tabs-item-active"
                              style="float:left;width:80px;margin-left:12px;">
                             <span style="width:100%;">´ý°ìÒµÎñ</span>
+                </div>
+                <div onclick="tabbarclk(this);" id="tip" active="false" 
+                     style="float:left;width:0;margin-left:12px;" >
                         </div>
                         <div style="float:left;width:2px;"></div>
                         <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
@@ -192,6 +195,18 @@
                                     marginwidth="0" marginheight="8"
                                     scrolling="no"
                                     allowtransparency="true">
+                    </iframe>
+                </div>
+            </td>
+            <td>
+                <div style="display: none" id="tiplayout">
+                    <iframe id="tipAdd" name="tipAdd"
+                            src="<%=contextPath%>/UI/epss/task/tipAdd.jsp"
+                            width="0" height="0"
+                            frameborder="no"
+                            border="0"
+                            marginwidth="0" marginheight="0"
+                            scrolling="no">
                             </iframe>
                         </div>
                     </td>
