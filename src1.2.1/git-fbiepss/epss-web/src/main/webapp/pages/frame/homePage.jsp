@@ -182,6 +182,20 @@
                      style="float:left;width:80px;">
                     <span style="width:100%;">°æ±¾ÀúÊ·</span>
                 </div>
+                <div style="float:left;width:2px;"></div>
+                <div id="dynamicInfo"
+                     style="float:right;width:838px;">
+                    <iframe id="myTestWorkFrame" name="myTestWorkFrame"
+                            src="<%=contextPath%>/UI/epss/scrollInfo/ScrollInfo.xhtml"
+                            width="100%"
+                            height="25px;"
+                            frameborder="no"
+                            border="0"
+                            marginwidth="0" marginheight="8"
+                            scrolling="no"
+                            allowtransparency="true">
+                    </iframe>
+                </div>
             </td>
         </tr>
         <tr style="width:100%; height:4px">
