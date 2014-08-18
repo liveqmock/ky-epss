@@ -1,7 +1,6 @@
 <%@ page import="skyline.platform.db.ConnectionManager" %>
 <%@ page import="skyline.platform.db.DatabaseConnection" %>
 <%@ page import="skyline.platform.db.RecordSet" %>
-<%@ page import="skyline.platform.security.MenuBean" %>
 <%@ page contentType="text/html; charset=GBK" %>
 <%@ include file="/pages/security/loginassistor.jsp" %>
 <%
@@ -45,7 +44,6 @@
     }
 
 %>
-
 <%--<!DOCTYPE html>--%>
 <html>
     <head>
@@ -68,44 +66,42 @@
 
         <link rel="stylesheet" type="text/css" href="../../dhtmlx/dhtmlxTabbar/codebase/dhtmlxtabbar.css"/>
         <script src="../../dhtmlx/dhtmlxTabbar/codebase/dhtmlxtabbar.js" type="text/javascript"></script>
-
-
-    <script type="text/javascript" src="homePage_layout.js"></script>
-    <script type="text/javascript" src="homePage_tab.js"></script>
-    <script type="text/javascript" src="myAjax.js"></script>
-    <LINK href="<%=contextPath%>/css/diytabbar.css" type="text/css" rel="stylesheet">
-    <style type="text/css">
-        html, body {
-            margin: 0px;
-            width: 100%;
-            height: 100%;
-            padding: 0px;
-            overflow: hidden;
-        }
-
-            .divlayout {
-                position: relative;
-                top: 0px;
-                left: 0px;
+        <script type="text/javascript" src="homePage_layout.js"></script>
+        <script type="text/javascript" src="homePage_tab.js"></script>
+        <script type="text/javascript" src="myAjax.js"></script>
+        <LINK href="<%=contextPath%>/css/diytabbar.css" type="text/css" rel="stylesheet">
+        <style type="text/css">
+            html, body {
+                margin: 0px;
                 width: 100%;
                 height: 100%;
-                margin: 0px;
                 padding: 0px;
                 overflow: hidden;
             }
 
-            .headfont {
-                font-size: 12px;
-                font-family: SimSun;
-                color: #7387A0;
-            }
+                .divlayout {
+                    position: relative;
+                    top: 0px;
+                    left: 0px;
+                    width: 100%;
+                    height: 100%;
+                    margin: 0px;
+                    padding: 0px;
+                    overflow: hidden;
+                }
 
-            .skin-top-right {
-                background-position: top right;
-                background-repeat: no-repeat;
-                background-image: url(../../images/top_right.jpg)
-            }
-        </style>
+                .headfont {
+                    font-size: 12px;
+                    font-family: SimSun;
+                    color: #7387A0;
+                }
+
+                .skin-top-right {
+                    background-position: top right;
+                    background-repeat: no-repeat;
+                    background-image: url(../../images/top_right.jpg)
+                }
+            </style>
         <script type="text/javascript">
             var contextPath = '<%=contextPath%>';
             var defaultMenuStr = '<%=jsonDefaultMenu%>';
@@ -147,9 +143,9 @@
             doBizLoad();
             sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
             doSysLoad();
-            tabbarhide("bizlayout");
-            document.getElementById("biz").setAttribute("active", "true");
-            document.getElementById("biz").className = "tabs-item-active";
+            tabbarhide("tasklayout");
+            document.getElementById("task").setAttribute("active", "true");
+            document.getElementById("task").className = "tabs-item-active";
         }
         function Relogin() {
             parent.window.reload = "true";
@@ -161,6 +157,7 @@
         document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
         function subSomething() {
             if (document.readyState == "complete" && window.parent.frames["scrollInfoWorkFrame"].document.readyState == "complete") {
+                document.getElementById('loading').style.display = 'none';
                 window.setTimeout("run()", 1000);
             }
         }
@@ -188,62 +185,50 @@
                     </td>
                 </tr>
                 <tr style="width:100%; height:25px">
-            <td colspan="5" style="height:25px;">
-                        <div onclick="tabbarclk(this);" active="true" id="task" class="tabs-item-active"
-                             style="float:left;width:80px;margin-left:12px;">
-                            <span style="width:100%;">待办业务</span>
-                </div>
-                <div onclick="tabbarclk(this);" id="tip" active="false"
-                     style="float:left;width:0;display:none" >
-                        </div>
+                    <td colspan="5" style="height:25px;">
+                                <div onclick="tabbarclk(this);" active="true" id="task" class="tabs-item-active"
+                                     style="float:left;width:80px;margin-left:12px;">
+                                    <span style="width:100%;">待办业务</span>
+                                </div>
+                                <div style="float:left;width:2px;"></div>
+                                <div onclick="tabbarclk(this);myRequest()" active="false" id="biz" class="tabs-item"
+                                     style="float:left;width:80px;">
+                                    <span style="width:100%;">业务操作</span>
+                                </div>
+                                <div style="float:left;width:2px;"></div>
+                                <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
+                                     style="float:left;width:80px;">
+                                    <span style="width:100%;">系统管理</span>
+                                </div>
+                                <div style="float:left;width:2px;"></div>
+                                <div onclick="tabbarclk(this);" active="false" id="help" class="tabs-item"
+                                     style="float:left;width:80px;">
+                                    <span style="width:100%;">操作帮助</span>
+                                </div>
+                                <div style="float:left;width:2px;"></div>
+                                <div onclick="tabbarclk(this);" active="false" id="ver" class="tabs-item"
+                                     style="float:left;width:80px;">
+                                    <span style="width:100%;">版本历史</span>
+                                </div>
+                                <div id="tip" active="false"
+                                     style="float:left;width:0;display:none" >
+                                </div>
+                        <%--TODO (add by yxy,2014-08-17,*start)--%>
                         <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);myRequest()" active="false" id="biz" class="tabs-item"
-                             style="float:left;width:80px;">
-                            <span style="width:100%;">业务操作</span>
-                        </div>
-                        <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
-                             style="float:left;width:80px;">
-                            <span style="width:100%;">系统管理</span>
-                        </div>
-                        <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="help" class="tabs-item"
-                             style="float:left;width:80px;">
-                            <span style="width:100%;">操作帮助</span>
-                        </div>
-                        <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="ver" class="tabs-item"
-                             style="float:left;width:80px;">
-                            <span style="width:100%;">版本历史</span>
-                        </div>
-                <%--TODO (add by yxy,2014-08-17,*start)--%>
-                <div style="float:left;width:2px;"></div>
-                <div id="dynamicInfo"
-                     style="float:right;width:838px;">
-                    <iframe id="scrollInfoWorkFrame" name="scrollInfoWorkFrame"
-                            src="<%=contextPath%>/UI/epss/scrollInfo/ScrollInfo.xhtml"
-                            width="100%"
-                            height="25px;"
-                            frameborder="no"
-                            border="0"
-                            marginwidth="0" marginheight="8"
-                            scrolling="no"
-                            allowtransparency="true">
-		<%--TODO (add by yxy,2014-08-17,*end)--%>
-                    </iframe>
-                </div>
-            </td>
-            <td>
-                <div style="display: none" id="tiplayout">
-                    <iframe id="tipAdd" name="tipAdd"
-                            src="<%=contextPath%>/UI/epss/task/tipAdd.jsp"
-                            width="0" height="0"
-                            frameborder="no"
-                            border="0"
-                            marginwidth="0" marginheight="0"
-                            scrolling="no">
+                        <div id="dynamicInfo"
+                             style="float:right;width:838px;">
+                            <iframe id="scrollInfoWorkFrame" name="scrollInfoWorkFrame"
+                                    src="<%=contextPath%>/UI/epss/scrollInfo/ScrollInfo.xhtml"
+                                    width="100%"
+                                    height="25px;"
+                                    frameborder="no"
+                                    border="0"
+                                    marginwidth="0" marginheight="8"
+                                    scrolling="no"
+                                    allowtransparency="true">
                             </iframe>
                         </div>
+                        <%--TODO (add by yxy,2014-08-17,*end)--%>
                     </td>
                 </tr>
                 <tr style="width:100%; height:4px">
@@ -276,6 +261,16 @@
                         </div>
                         <div class="divlayout" id="verlayout">
                             <br/>版本更新历史...
+                        </div>
+                        <div style="display: none">
+                            <iframe id="tipAdd" name="tipAdd"
+                                    src="<%=contextPath%>/UI/epss/task/tipAdd.jsp"
+                                    width="0" height="0"
+                                    frameborder="no"
+                                    border="0"
+                                    marginwidth="0" marginheight="0"
+                                    scrolling="no">
+                            </iframe>
                         </div>
                     </td>
                 </tr>

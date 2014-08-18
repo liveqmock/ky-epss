@@ -148,8 +148,8 @@ function sysaddtabbar(divID, tabname, url) {
 //var layoutary = new Array('bizlayout', 'syslayout', 'helplayout', 'verlayout');
 //var tabbarary = new Array('biz', 'sys', 'help', 'ver');
 //TODO (modified by yxy,2014-08-02,Total:2 line)
-var layoutary = new Array('tasklayout','tiplayout','bizlayout', 'syslayout', 'helplayout', 'verlayout');
-var tabbarary = new Array('task', 'tip','biz', 'sys', 'help', 'ver');
+var layoutary = new Array('tasklayout', 'bizlayout', 'syslayout', 'helplayout', 'verlayout');
+var tabbarary = new Array('task', 'biz', 'sys', 'help', 'ver');
 
 function changepwd() {
     var sfeature = "dialogwidth:400px; dialogheight:200px;center:yes;help:no;resizable:no;scroll:no;status:no";
