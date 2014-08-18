@@ -1,0 +1,36 @@
+
+.tabs-item {
+    BORDER-RIGHT: #9CB6CE 1px solid;
+    BORDER-TOP: #9CB6CE 1px solid;
+    PADDING-LEFT: 14px;
+    background-image: url("../images/diytabbar/tab_bg_noactive.jpg");
+    BORDER-LEFT: #9CB6CE 1px solid;
+    CURSOR: hand;
+    /*PADDING-TOP: 4px;*/
+    BORDER-BOTTOM: #9CB6CE 1px solid;
+    height: 25px;
+    line-height:25px;
+    vertical-align: bottom;
+    font-family: verdana;
+    color: #7387A0;
+    FONT-SIZE: 9pt;
+    /*height: 100%;*/
+}
+
+.tabs-item-active {
+    BORDER-RIGHT: #9CB6CE 1px solid;
+    BORDER-TOP: #9CB6CE 1px solid;
+    PADDING-LEFT: 14px;
+    background-image: url("../images/diytabbar/tab_bg_active.jpg");
+    BORDER-LEFT: #9CB6CE 1px solid;
+    /*PADDING-TOP: 4px;*/
+    BORDER-BOTTOM: #3169AD 1px solid;
+    height: 25px;
+    line-height:25px;
+    vertical-align: bottom;
+    font-family:verdana;
+    color: #ffffff;
+    font-weight: bold;
+    FONT-SIZE: 9pt;
+    /*height: 100%;*/
+}

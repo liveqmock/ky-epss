@@ -1,0 +1,116 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.prime.com.tr/ui"
+                template="../templates/ui.xhtml">
+
+    <ui:define name="head">
+        <script language="JavaScript" type="text/JavaScript">
+            function KeyDown() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.id == 'inputform:txt_author') {
+                        event.returnValue = false;
+                        event.cancel = true;
+                        document.forms['inputform']['inputform:Go8101'].click();
+                    } else {
+                        event.keyCode = 9;
+                    }
+                }
+            }
+        </script>
+    </ui:define>
+
+
+    <ui:define name="content">
+        <!--<h1 class="title">批量输入</h1>-->
+        <!--<div class="entry">-->
+        <p>>批量输入交易：8101</p>
+
+        <div>
+            <p:breadCrumb>
+                <p:menuitem value="Categories" url="#"/>
+                <p:menuitem value="运动" url="#"/>
+                <p:menuitem value="Football" url="#"/>
+                <p:menuitem value="Countries" url="#"/>
+                <p:menuitem value="Spain" url="#"/>
+                <p:menuitem value="F.C. Barcelona" url="#"/>
+                <p:menuitem value="Squad" url="#"/>
+                <p:menuitem value="Lionel Messi" url="#"/>
+            </p:breadCrumb>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <div>
+            <h:form id="inputform">
+                <p:focus for="txt_title"/>
+                <p:messages/>
+                <p:panel header="Create a new book">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Title* :" for="txt_title"></h:outputLabel>
+                        <h:inputText id="txt_title" value="#{createBookBean.book.title}" required="true"
+                                     onkeydown="KeyDown()"/>
+
+                        <h:outputLabel value="Author* :" for="txt_author"></h:outputLabel>
+                        <h:inputText id="txt_author" value="#{createBookBean.book.author}" required="true"
+                                     onkeydown="KeyDown()"/>
+
+                        <h:outputText value=""/>
+
+                        <!--<h:panelGroup>-->
+                        <h:commandButton value="Reset" type="reset"/>
+                        <h:commandButton id="Go8101" value="Add"
+                                         action="#{createBookBean.reinit}">
+                            <!--
+                                                        <p:collector value="#{createBookBean.book}"
+                                                                     addTo="#{createBookBean.books}"/>
+                            -->
+                        </h:commandButton>
+                        <!--</h:panelGroup>-->
+                    </h:panelGrid>
+                </p:panel>
+
+                <p:ajaxStatus style="width:16px;height:16px;">
+                    <f:facet name="start">
+                        <h:graphicImage value="../images/ajaxloading.gif"/>
+                    </f:facet>
+
+                    <f:facet name="complete">
+                        <h:outputText value=""/>
+                    </f:facet>
+                </p:ajaxStatus>
+
+                <p:outputPanel id="books">
+                    <p:dataTable value="#{createBookBean.books}" var="book">
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Title"/>
+                            </f:facet>
+                            <h:outputText value="#{book.title}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Author"/>
+                            </f:facet>
+                            <h:outputText value="#{book.author}"/>
+                        </p:column>
+
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Operation"/>
+                            </f:facet>
+                            <p:commandLink value="Remove" update="inputform:books">
+                                <p:collector value="#{book}" removeFrom="#{createBookBean.books}"/>
+                            </p:commandLink>
+                        </p:column>
+
+                    </p:dataTable>
+                </p:outputPanel>
+            </h:form>
+        </div>
+
+    </ui:define>
+</ui:composition>
