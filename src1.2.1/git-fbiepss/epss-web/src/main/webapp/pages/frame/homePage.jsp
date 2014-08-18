@@ -1,6 +1,7 @@
 <%@ page import="skyline.platform.db.ConnectionManager" %>
 <%@ page import="skyline.platform.db.DatabaseConnection" %>
 <%@ page import="skyline.platform.db.RecordSet" %>
+<%@ page import="skyline.platform.security.MenuBean" %>
 <%@ page contentType="text/html; charset=GBK" %>
 <%@ include file="/pages/security/loginassistor.jsp" %>
 <%
@@ -69,17 +70,18 @@
         <script src="../../dhtmlx/dhtmlxTabbar/codebase/dhtmlxtabbar.js" type="text/javascript"></script>
 
 
-        <script type="text/javascript" src="homePage_layout.js"></script>
-        <script type="text/javascript" src="homePage_tab.js"></script>
-        <LINK href="<%=contextPath%>/css/diytabbar.css" type="text/css" rel="stylesheet">
-        <style type="text/css">
-            html, body {
-                margin: 0px;
-                width: 100%;
-                height: 100%;
-                padding: 0px;
-                overflow: hidden;
-            }
+    <script type="text/javascript" src="homePage_layout.js"></script>
+    <script type="text/javascript" src="homePage_tab.js"></script>
+    <script type="text/javascript" src="myAjax.js"></script>
+    <LINK href="<%=contextPath%>/css/diytabbar.css" type="text/css" rel="stylesheet">
+    <style type="text/css">
+        html, body {
+            margin: 0px;
+            width: 100%;
+            height: 100%;
+            padding: 0px;
+            overflow: hidden;
+        }
 
             .divlayout {
                 position: relative;
@@ -108,30 +110,61 @@
             var contextPath = '<%=contextPath%>';
             var defaultMenuStr = '<%=jsonDefaultMenu%>';
             var systemMenuStr = '<%=jsonSystemMenu%>';
-            function doOnLoad() {
-                bizdhxLayout = new dhtmlXLayoutObject("bizlayout", "2U", "dhx_skyblue");
-                doBizLoad();
-                sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
-                doSysLoad();
-                //TODO (modified by yxy,2014-08-02,Total:4 line)
-                tabbarhide("tasklayout");
-                document.getElementById("task").setAttribute("active", "true");
-                document.getElementById("task").className = "tabs-item-active";
-            }
-
-            function Relogin() {
-                parent.window.reload = "true";
-                parent.window.location.replace("<%=contextPath%>/pages/security/logout.jsp");
-            }
-
-            //TODO (add by yxy,2014-08-02,Total:6 line)
-            //控制加载页面时间长时，给用户友好提示
-            document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
-            function subSomething() {
-                if (document.readyState == "complete" && window.parent.frames["workFrame"].document.readyState == "complete") {
-                    document.getElementById('loading').style.display = 'none';
+        //TODO (add by yxy,2014-08-17,*start)
+        var currentDefaultMenuStr;
+        var lastDefaultMenuStr = '<%=jsonDefaultMenu%>';
+        function myRequest() {
+            var url = "ajaxRequest.do?time=" + Math.random();
+            //要提交到服务器的数据
+            var content = "userName=ni";
+            //调用异常请求提交的函数
+            sendRequest("POST", url, content, "TEXT", myProcessResponse);
+        }
+        function myProcessResponse() {
+            // 请求已完成
+            if (http_request.readyState == 4) {
+                // 信息已经成功返回，开始处理信息
+                if (http_request.status == 200) {
+                    //返回的是文本格式信息
+                    currentDefaultMenuStr = http_request.responseText;
+                    if (lastDefaultMenuStr != currentDefaultMenuStr) {
+                        myDoBizLoad(currentDefaultMenuStr);
+                        lastDefaultMenuStr = currentDefaultMenuStr;
+                    }
+                } else { //页面不正常
+                    //"您所请求的页面有异常"
                 }
             }
+        }
+        function run() {
+            myRequest();
+            window.setTimeout("run()", 1000);
+        }
+        //TODO (add by yxy,2014-08-17,*end)
+
+        function doOnLoad() {
+            bizdhxLayout = new dhtmlXLayoutObject("bizlayout", "2U", "dhx_skyblue");
+            doBizLoad();
+            sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
+            doSysLoad();
+            tabbarhide("bizlayout");
+            document.getElementById("biz").setAttribute("active", "true");
+            document.getElementById("biz").className = "tabs-item-active";
+        }
+        function Relogin() {
+            parent.window.reload = "true";
+            parent.window.location.replace("<%=contextPath%>/pages/security/logout.jsp");
+        }
+
+        //TODO (add by yxy,2014-08-17,*start)
+        // 控制加载页面时间长时，给用户友好提示
+        document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
+        function subSomething() {
+            if (document.readyState == "complete" && window.parent.frames["scrollInfoWorkFrame"].document.readyState == "complete") {
+                window.setTimeout("run()", 1000);
+            }
+        }
+        //TODO (add by yxy,2014-08-17,*end)
         </script>
     </head>
     <body onload="doOnLoad()" onResize="doOnResize();">
@@ -164,7 +197,7 @@
                      style="float:left;width:0;display:none" >
                         </div>
                         <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
+                        <div onclick="tabbarclk(this);myRequest()" active="false" id="biz" class="tabs-item"
                              style="float:left;width:80px;">
                             <span style="width:100%;">业务操作</span>
                         </div>
@@ -183,18 +216,20 @@
                              style="float:left;width:80px;">
                             <span style="width:100%;">版本历史</span>
                         </div>
-                        <div style="float:left;width:2px;"></div>
-                        <div id="dynamicInfo"
-                             style="float:right;width:838px;">
-                            <iframe id="myTestWorkFrame" name="myTestWorkFrame"
-                                    src="<%=contextPath%>/UI/epss/scrollInfo/ScrollInfo.xhtml"
-                                    width="100%"
-                                    height="25px;"
-                                    frameborder="no"
-                                    border="0"
-                                    marginwidth="0" marginheight="8"
-                                    scrolling="no"
-                                    allowtransparency="true">
+                <%--TODO (add by yxy,2014-08-17,*start)--%>
+                <div style="float:left;width:2px;"></div>
+                <div id="dynamicInfo"
+                     style="float:right;width:838px;">
+                    <iframe id="scrollInfoWorkFrame" name="scrollInfoWorkFrame"
+                            src="<%=contextPath%>/UI/epss/scrollInfo/ScrollInfo.xhtml"
+                            width="100%"
+                            height="25px;"
+                            frameborder="no"
+                            border="0"
+                            marginwidth="0" marginheight="8"
+                            scrolling="no"
+                            allowtransparency="true">
+		<%--TODO (add by yxy,2014-08-17,*end)--%>
                     </iframe>
                 </div>
             </td>

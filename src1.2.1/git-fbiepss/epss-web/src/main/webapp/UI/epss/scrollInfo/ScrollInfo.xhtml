@@ -11,11 +11,11 @@
         <script type="text/javascript" language="javascript">
             function run() {
                 document.getElementById("form:qryBtn").click();
-                window.setTimeout( "run()", 20000 );
+                window.setTimeout( "run()", 1000 );
             }
             document.onreadystatechange = function init(){
                 if(document.readyState=="complete") {
-                    window.setTimeout( "run()", 10000 );
+                    window.setTimeout( "run()", 2000 );
                 }
             }
         </script>

@@ -64,6 +64,23 @@ function doBizLoad() {
         return true;
     });
 }
+function myDoBizLoad(myDefaultMenuStr){
+    var biztree = bizdhxAccord.cells("a1").attachTree();
+    var treeDefaultJson = eval('(' + myDefaultMenuStr + ')');
+    biztree.setSkin('dhx_skyblue');
+    biztree.setImagePath(contextPath + "/dhtmlx/dhtmlxTree/codebase/imgs/csh_books/");
+    biztree.loadJSONObject(treeDefaultJson);
+    biztree.attachEvent("onClick", function (id) {
+        var action = (biztree.getUserData(id, "url"));
+        if (action == "#") {
+            biztree.openItem(id);
+        } else {
+            var text = biztree.getSelectedItemText();
+            bizaddtabbar(id, text, contextPath + action);
+        }
+        return true;
+    });
+}
 function doSysLoad() {
     sysdhxLayout.cells("a").setWidth(200);
     sysdhxLayout.cells("a").hideHeader();
