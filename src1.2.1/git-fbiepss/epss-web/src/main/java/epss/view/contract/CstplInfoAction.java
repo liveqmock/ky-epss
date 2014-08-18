@@ -58,8 +58,8 @@ public class CstplInfoAction {
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
-    @ManagedProperty(value = "#{cttUpdInfoService}")
     private CttUpdInfoService cttUpdInfoService;
+    @ManagedProperty(value = "#{cttUpdInfoService}")
     private CttInfoShow cttInfoShowQry;
     private String strNotPassToStatus;
     private CttInfoShow cttInfoShowSelected;
