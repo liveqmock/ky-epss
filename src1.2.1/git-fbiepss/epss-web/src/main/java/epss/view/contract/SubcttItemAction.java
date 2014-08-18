@@ -51,8 +51,6 @@ public class SubcttItemAction {
     private CttInfoService cttInfoService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
-	@ManagedProperty(value = "#{cttUpdInfoService}")
-    private CttUpdInfoService cttUpdInfoService;
     /*打开的成本计划页面用*/
     private List<CttItemShow> cttItemShowList_Cstpl;
     private CttItemShow cttItemShowSelected_Cstpl;
@@ -736,9 +734,6 @@ public class SubcttItemAction {
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
-                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
-                    cttUpdInfo.setSubcttUpd("1");
-                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
                     subcttInfo.setType("");
@@ -748,9 +743,6 @@ public class SubcttItemAction {
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
-                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
-                    cttUpdInfo.setSubcttUpd("0");
-                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }// 审核

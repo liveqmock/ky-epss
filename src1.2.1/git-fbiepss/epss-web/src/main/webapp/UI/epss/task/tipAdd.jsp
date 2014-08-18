@@ -2,66 +2,13 @@
 <%@ page import="skyline.platform.db.DatabaseConnection" %>
 <%@ page import="skyline.platform.db.RecordSet" %>
 <%@ page contentType="text/html; charset=GBK" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.ArrayList" %>
 
 <%
     response.setContentType("text/html; charset=GBK");
-    String contextPath = request.getContextPath();
-    int tkcttCount = 0;
-    int cstplCount = 0;
-    int subcttCount = 0;
-    int subcttQCount = 0;
-    int subcttMCount = 0;
-    int tkcttQCount = 0;
-    int tkcttMCount = 0;
-
-
-    List tkcttList = new ArrayList();
-    List cstplList = new ArrayList();
-    List subcttList = new ArrayList();
-    List subcttQList = new ArrayList();
-    List subcttMList = new ArrayList();
-    List tkcttQList = new ArrayList();
-    List tkcttMList = new ArrayList();
-    DatabaseConnection conn = ConnectionManager.getInstance().get();
-    RecordSet rsCttInfo = conn.executeQuery("select t.tkctt_upd,t.cstpl_upd,t.subctt_upd,t.subctt_q_upd,t.subctt_m_upd,t.tkctt_qs_upd,t.tkctt_qm_upd from ctt_upd_info t ");
-
-    while (rsCttInfo.next()) {
-        tkcttList.add(rsCttInfo.getString("tkctt_upd"));
-        cstplList.add(rsCttInfo.getString("cstpl_upd"));
-        subcttList.add(rsCttInfo.getString("subctt_upd"));
-        subcttQList.add(rsCttInfo.getString("subctt_q_upd"));
-        subcttMList.add(rsCttInfo.getString("subctt_m_upd"));
-        tkcttQList.add(rsCttInfo.getString("tkctt_qs_upd"));
-        tkcttMList.add(rsCttInfo.getString("tkctt_qm_upd"));
-    }
-    ConnectionManager.getInstance().release();
-    for (int i = 0; i < tkcttList.size(); i++) {
-        tkcttCount += Integer.parseInt(tkcttList.get(i).toString());
-    }
-    for (int i = 0; i < cstplList.size(); i++) {
-        cstplCount += Integer.parseInt(cstplList.get(i).toString());
-    }
-    for (int i = 0; i < subcttList.size(); i++) {
-        subcttCount += Integer.parseInt(subcttList.get(i).toString());
-    }
-    for (int i = 0; i < subcttQList.size(); i++) {
-        subcttQCount += Integer.parseInt(subcttQList.get(i).toString());
-    }
-    for (int i = 0; i < subcttMList.size(); i++) {
-        subcttMCount += Integer.parseInt(subcttMList.get(i).toString());
-    }
-    for (int i = 0; i < tkcttQList.size(); i++) {
-        tkcttQCount += Integer.parseInt(tkcttQList.get(i).toString());
-    }
-    for (int i = 0; i < tkcttMList.size(); i++) {
-        tkcttMCount += Integer.parseInt(tkcttMList.get(i).toString());
-    }
 %>
 <html>
 <head>
-<meta http-equiv="refresh" content="180">
+<meta http-equiv="refresh" content="20">
 <title></title>
 <script>
 function CLASS_MSN_MESSAGE(id, width, height, caption, title, message, target, action) {
@@ -147,8 +94,8 @@ CLASS_MSN_MESSAGE.prototype.show = function () {
     str += "<SPAN title=关闭 style='FONT-WEIGHT: bold; FONT-SIZE: 12px; CURSOR: hand; COLOR: red; MARGIN-RIGHT: 4px' id='btSysClose' >×</SPAN></TD>"
     str += "</TR>"
     str += "<TR>"
-    str += "<TD style='PADDING-RIGHT: 1px;PADDING-BOTTOM: 1px' colSpan=3 height=" + (h - 28) + ">"
-    str += "<DIV style='BORDER-RIGHT: #b9c9ef 1px solid; PADDING-RIGHT: 8px; BORDER-TOP: #728eb8 1px solid; PADDING-LEFT: 8px; FONT-SIZE: 12px; PADDING-BOTTOM: 8px; BORDER-LEFT: #728eb8 1px solid; WIDTH: 100%; COLOR: #1f336b; PADDING-TOP: 8px; BORDER-BOTTOM: #b9c9ef 1px solid; HEIGHT: 100%'>" + this.title + "</div><br/>";
+    str += "<TD style='PADDING-RIGHT: 1px;PADDING-BOTTOM: 1px' colSpan=3 height=" + (h-28) + ">"
+    str += "<DIV style='BORDER-RIGHT: #b9c9ef 1px solid; PADDING-RIGHT: 8px; BORDER-TOP: #728eb8 1px solid; PADDING-LEFT: 8px; FONT-SIZE: 12px; PADDING-BOTTOM: 8px; BORDER-LEFT: #728eb8 1px solid; WIDTH: 100%; COLOR: #1f336b; PADDING-TOP: 8px; BORDER-BOTTOM: #b9c9ef 1px solid; HEIGHT: 100%'>" + this.title +"</div><br/>";
     str += "<DIV style='WORD-BREAK: break-all' align=left><A href='javascript:void(0)' hidefocus=false id='btCommand'><FONT color=#ff0000>" + this.message + "</FONT></A><A href='http:' hidefocus=false id='ommand'><FONT color=#ff0000></FONT></A></DIV>"
     str += "</DIV>"
     str += "</TD>"
@@ -237,54 +184,14 @@ CLASS_MSN_MESSAGE.prototype.rect = function (left, right, top, bottom) {
     } catch (e) {
     }
 }
-function test() {
-    var MSG1;
-    switch (<%=tkcttCount%>) {
-        case 1:
-            MSG1 = new CLASS_MSN_MESSAGE("aa", 210, 126, "消息提示：", "新录入完成一总包合同");
-            break;
-    }
-    switch (<%=cstplCount%>) {
-        case 1:
-            MSG1 = new CLASS_MSN_MESSAGE("aa", 210, 126, "消息提示：", "新录入完成一成本计划");
-            break;
-    }
-    switch (<%=subcttCount%>) {
-        case 1:
-            MSG1 = new CLASS_MSN_MESSAGE("aa", 210, 126, "消息提示：", "新录入完成一分包合同");
-            break;
-    }
-    switch (<%=subcttQCount%>) {
-        case 1:
-            MSG1 = new CLASS_MSN_MESSAGE("aa", 210, 126, "消息提示：", "新录入完成一分包数量结算");
-            break;
-    }
-    switch (<%=subcttMCount%>) {
-        case 1:
-            MSG1 = new CLASS_MSN_MESSAGE("aa", 210, 126, "消息提示：", "新录入完成一分包材料结算");
-            break;
-    }
-    switch (<%=tkcttQCount%>) {
-        case 1:
-            MSG1 = new CLASS_MSN_MESSAGE("aa", 210, 126, "消息提示：", "新录入完成一总包数量统计");
-            break;
-    }
-    switch (<%=tkcttMCount%>) {
-        case 1:
-            MSG1 = new CLASS_MSN_MESSAGE("aa", 210, 126, "消息提示：", "新录入完成一总包数量计量");
-            break;
-    }
+window.onload=function test() {
+    var MSG1=new CLASS_MSN_MESSAGE("aa", 210, 126, "消息提示：", "新录入完成一总包合同");
     MSG1.rect(null, null, null, screen.height - 50);
     MSG1.speed = 10;
     MSG1.step = 5;
     MSG1.show();
 }
-setTimeout(function () {
-    test();
-}, 200);
-setInterval(function () {
-    test();
-}, 30000);
+
 </script>
 </head>
 <body>

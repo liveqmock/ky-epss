@@ -56,8 +56,6 @@ public class ProgEstItemAction {
     private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
-    @ManagedProperty(value = "#{cttUpdInfoService}")
-    private CttUpdInfoService cttUpdInfoService;
     private List<ProgEstItemShow> progEstItemShowList;
     private ProgEstItemShow progEstItemShowSel;
     private ProgEstItemShow progEstItemShowUpd;
@@ -584,9 +582,6 @@ public class ProgEstItemAction {
                             progInfoShowSel.getStlType(),
                             progInfoShowSel.getStlPkid(),
                             progInfoShowSel.getPeriodNo());
-                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
-                    cttUpdInfo.setTkcttQsUpd("1");
-                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入完成！");
                     strPassFlag="false";
                 }else if(strPowerType.equals("MngFail")){
@@ -595,9 +590,6 @@ public class ProgEstItemAction {
                             progInfoShowSel.getStlPkid(),
                             progInfoShowSel.getPeriodNo());
                     strPassFlag="true";
-                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
-                    cttUpdInfo.setTkcttQsUpd("0");
-                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }else if(strPowerType.contains("Check")&&!strPowerType.contains("DoubleCheck")){// 审核

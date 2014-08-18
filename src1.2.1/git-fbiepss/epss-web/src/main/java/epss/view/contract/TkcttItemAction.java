@@ -52,8 +52,6 @@ public class TkcttItemAction {
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
-	@ManagedProperty(value = "#{cttUpdInfoService}")
-    private CttUpdInfoService cttUpdInfoService;
     private EsCttInfo tkcttInfo;
     private CttItemShow cttItemShowSel;
     private CttItemShow cttItemShowAdd;
@@ -571,18 +569,12 @@ public class TkcttItemAction {
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
-                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
-                    cttUpdInfo.setTkcttUpd("1");
-                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
                     esFlowControl.mngNotFinishAction(
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
                             "NULL");
-                    CttUpdInfo cttUpdInfo=new CttUpdInfo();
-                    cttUpdInfo.setTkcttUpd("0");
-                    cttUpdInfoService.updateByPrimaryKey(cttUpdInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }// 审核
