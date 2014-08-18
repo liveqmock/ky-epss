@@ -101,12 +101,97 @@
                     background-repeat: no-repeat;
                     background-image: url(../../images/top_right.jpg)
                 }
+            #tip {
+                position: absolute;
+                right: 0px;
+                bottom: 0px;
+                height: 0px;
+                width: 180px;
+                border: 1px solid #CCCCCC;
+                background-color: #eeeeee;
+                padding: 1px;
+                overflow: hidden;
+                display: none;
+                font-size: 12px;
+                z-index: 10;
+            }
+            #tip p {
+                padding: 6px;
+            }
+            #tip h1, #detail h1 {
+                font-size: 14px;
+                height: 25px;
+                line-height: 25px;
+                background-color: #0066CC;
+                color: #FFFFFF;
+                padding: 0px 3px 0px 3px;
+                filter: Alpha(Opacity=100);
+            }
+            #tip h1 a, #detail h1 a {
+                float: right;
+                text-decoration: none;
+                color: #FFFFFF;
+            }
+            #shadow {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background-color: #000000;
+                z-index: 11;
+                filter: Alpha(Opacity=70);
+                display: none;
+                overflow: hidden;
+            }
+            #detail {
+                width: 500px;
+                height: 200px;
+                border: 3px double #ccc;
+                background-color: #FFFFFF;
+                position: absolute;
+                z-index: 30;
+                display: none;
+                left: 30%;
+                top: 30%
+            }
             </style>
         <script type="text/javascript">
             var contextPath = '<%=contextPath%>';
             var defaultMenuStr = '<%=jsonDefaultMenu%>';
             var systemMenuStr = '<%=jsonSystemMenu%>';
-        //TODO (add by yxy,2014-08-17,*start)
+
+            var handle;
+            function start() {
+                var obj = document.getElementById("tip");
+                if (parseInt(obj.style.height) == 0) {
+                    obj.style.display = "block";
+                    handle = setInterval("changeH('up')", 2);
+                } else {
+                    handle = setInterval("changeH('down')", 2)
+                }
+            }
+
+            function changeH(str) {
+                var obj = document.getElementById("tip");
+                if (str == "up") {
+                    if (parseInt(obj.style.height) > 150)
+                        clearInterval(handle);
+                    else
+                        obj.style.height = (parseInt(obj.style.height) + 8).toString() + "px";
+                }
+                if (str == "down") {
+                    if (parseInt(obj.style.height) < 8) {
+                        clearInterval(handle);
+                        obj.style.display = "none";
+                    }else{
+                        obj.style.height = (parseInt(obj.style.height) - 8).toString() + "px";
+                    }
+                }
+            }
+            function myTimer() {
+                start();
+                window.setTimeout("myTimer()", 5000);//设置循环时间
+            }
+            //TODO (add by yxy,2014-08-17,*start)
         var currentDefaultMenuStr;
         var lastDefaultMenuStr = '<%=jsonDefaultMenu%>';
         function myRequest() {
@@ -152,6 +237,7 @@
             parent.window.location.replace("<%=contextPath%>/pages/security/logout.jsp");
         }
 
+
         //TODO (add by yxy,2014-08-17,*start)
         // 控制加载页面时间长时，给用户友好提示
         document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
@@ -159,6 +245,7 @@
             if (document.readyState == "complete" && window.parent.frames["scrollInfoWorkFrame"].document.readyState == "complete") {
                 document.getElementById('loading').style.display = 'none';
                 window.setTimeout("run()", 1000);
+                window.setTimeout("myTimer()", 5000);
             }
         }
         //TODO (add by yxy,2014-08-17,*end)
@@ -210,9 +297,6 @@
                                      style="float:left;width:80px;">
                                     <span style="width:100%;">版本历史</span>
                                 </div>
-                                <div id="tip" active="false"
-                                     style="float:left;width:0;display:none" >
-                                </div>
                         <%--TODO (add by yxy,2014-08-17,*start)--%>
                         <div style="float:left;width:2px;"></div>
                         <div id="dynamicInfo"
@@ -262,7 +346,23 @@
                         <div class="divlayout" id="verlayout">
                             <br/>版本更新历史...
                         </div>
-                        <div style="display: none">
+                        <div id="tip" style="display: none;height: 0px">
+                            <h1>
+                                <a href="javascript:void(0)" onclick="start()">×</a>
+                                您有新消息
+                            </h1>
+                            <iframe id="dynamicDialogInfoWorkFrame" name="dynamicDialogInfoWorkFrame"
+                                    src="<%=contextPath%>/UI/epss/scrollInfo/Dialog.xhtml"
+                                    width="180"
+                                    height="180"
+                                    frameborder="no"
+                                    border="0"
+                                    marginwidth="0" marginheight="0"
+                                    scrolling="no">
+                            </iframe>
+                        </div>
+                        <%--
+                        <div style="display: none" >
                             <iframe id="tipAdd" name="tipAdd"
                                     src="<%=contextPath%>/UI/epss/task/tipAdd.jsp"
                                     width="0" height="0"
@@ -271,7 +371,7 @@
                                     marginwidth="0" marginheight="0"
                                     scrolling="no">
                             </iframe>
-                        </div>
+                        </div>--%>
                     </td>
                 </tr>
             </table>
