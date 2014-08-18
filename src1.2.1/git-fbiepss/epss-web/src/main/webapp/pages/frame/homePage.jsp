@@ -191,7 +191,7 @@
                                     <span style="width:100%;">待办业务</span>
                                 </div>
                                 <div style="float:left;width:2px;"></div>
-                                <div onclick="tabbarclk(this);myRequest()" active="false" id="biz" class="tabs-item"
+                                <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
                                      style="float:left;width:80px;">
                                     <span style="width:100%;">业务操作</span>
                                 </div>
