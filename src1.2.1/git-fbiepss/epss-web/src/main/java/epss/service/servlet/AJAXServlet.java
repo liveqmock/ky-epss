@@ -30,6 +30,10 @@ public class AJAXServlet extends HttpServlet {
         MenuBean menuBean=new MenuBean();
         try {
             String strDefaultMenuUpt= (String) request.getSession().getAttribute("strDefaultMenuUpt");
+            if (strDefaultMenuUpt==null){
+                response.getWriter().write("");
+                return;
+            }
             String[] strDefaultMenuUptArray=strDefaultMenuUpt.split(";");
             String strJson=menuBean.generateJsonStream(
                     ((OperatorManager)request.getSession().getAttribute(SystemAttributeNames.USER_INFO_NAME)).getOperatorId()
