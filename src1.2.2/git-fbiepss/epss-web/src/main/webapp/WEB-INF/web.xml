@@ -136,6 +136,14 @@
         <!--<url-pattern>index.html</url-pattern>-->
         <url-pattern>*.login</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>AJAXServlet</servlet-name>
+        <servlet-class>epss.service.servlet.AJAXServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AJAXServlet</servlet-name>
+        <url-pattern>*.do</url-pattern>
+    </servlet-mapping>
 
     <mime-mapping>
         <extension>xls</extension>

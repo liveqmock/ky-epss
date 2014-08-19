@@ -33,6 +33,7 @@ public class DeptOperAction implements Serializable {
     private DeptOperService deptOperService;
 
     private TreeNode deptRoot;
+    private TreeNode deptRootSeled;
     private TreeNode currentSelectedNode;
     private TreeNode lastSelectedNode;
     private String strSubmitType;
@@ -77,7 +78,6 @@ public class DeptOperAction implements Serializable {
         operIsSuperList.add(new SelectItem("0", "否"));
         operIsSuperList.add(new SelectItem("1", "是"));
         typeList = new ArrayList<SelectItem>();
-        typeList.add(new SelectItem("", "全部"));
         typeList.add(new SelectItem("0", "增加机构信息"));
         typeList.add(new SelectItem("1", "增加人员信息"));
         initDept();

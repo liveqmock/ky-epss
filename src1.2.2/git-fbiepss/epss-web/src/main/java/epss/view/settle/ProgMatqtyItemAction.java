@@ -59,7 +59,6 @@ public class ProgMatqtyItemAction {
     private SignPartService signPartService;
     @ManagedProperty(value = "#{progWorkqtyItemService}")
     private ProgWorkqtyItemService progWorkqtyItemService;
-
     private List<ProgMatQtyItemShow> progMatQtyItemShowList;
     private ProgMatQtyItemShow progMatQtyItemShowSel;
     private ProgMatQtyItemShow progMatQtyItemShowUpd;

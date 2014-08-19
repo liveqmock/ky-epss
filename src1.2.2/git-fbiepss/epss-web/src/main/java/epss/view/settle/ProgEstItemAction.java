@@ -56,7 +56,6 @@ public class ProgEstItemAction {
     private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
-
     private List<ProgEstItemShow> progEstItemShowList;
     private ProgEstItemShow progEstItemShowSel;
     private ProgEstItemShow progEstItemShowUpd;

@@ -58,7 +58,6 @@ public class ProgWorkqtyItemAction {
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{signPartService}")
     private SignPartService signPartService;
-
     private List<ProgWorkqtyItemShow> progWorkqtyItemShowList;
     private ProgWorkqtyItemShow progWorkqtyItemShowSel;
     private ProgWorkqtyItemShow progWorkqtyItemShowUpd;

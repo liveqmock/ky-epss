@@ -4,18 +4,18 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
 <f:view contentType="text/html">
     <h:head>
         <script type="text/javascript" language="javascript">
             function run() {
                 document.getElementById("form:qryBtn").click();
-                window.setTimeout( "run()", 20000 );
+                window.setTimeout( "run()", 10000 );
             }
+            /*加载完毕之后延迟执行*/
             document.onreadystatechange = function init(){
                 if(document.readyState=="complete") {
-                    window.setTimeout( "run()", 10000 );
+                    window.setTimeout( "run()", 2000);
                 }
             }
         </script>
@@ -35,7 +35,7 @@
                          color: #7387A0;
                          FONT-SIZE: 9pt;
                          background-color:transparent">
-                <marquee width="100%" height="18px" direction="left" scrollamount="3"
+                <marquee width="100%" height="18px" direction="left" scrollamount="2"
                          onmouseover="this.stop()" onmouseout="this.start()" style="cursor: hand">
                     <h:outputText id="mytest" value="#{scrollInfoAction.strCurrentViewMng}" style="vertical-align: bottom;"/>
                 </marquee>

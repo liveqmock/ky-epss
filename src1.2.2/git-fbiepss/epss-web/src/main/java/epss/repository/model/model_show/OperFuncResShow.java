@@ -16,6 +16,7 @@ public class OperFuncResShow {
     private String accountOperName;
     private String placeOnFileOperPkid;
     private String placeOnFileOperName;
+    private String remark;
     private Boolean isSeled;
 
     public String getResType() {
@@ -144,5 +145,13 @@ public class OperFuncResShow {
 
     public void setIsSeled(Boolean isSeled) {
         this.isSeled = isSeled;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 }

@@ -12,12 +12,9 @@ import epss.common.utils.JxlsManager;
 import epss.common.utils.StyleModel;
 import epss.common.utils.ToolUtil;
 import epss.common.enums.*;
-import epss.repository.model.EsCttInfo;
-import epss.repository.model.EsCttItem;
-import epss.repository.model.EsInitStl;
+import epss.repository.model.*;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
-import epss.repository.model.EsInitPower;
 import epss.service.*;
 import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
@@ -55,7 +52,6 @@ public class TkcttItemAction {
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
-
     private EsCttInfo tkcttInfo;
     private CttItemShow cttItemShowSel;
     private CttItemShow cttItemShowAdd;

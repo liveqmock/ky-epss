@@ -56,7 +56,6 @@ public class ProgMeaItemAction {
     private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
-
     private List<ProgMeaItemShow> progMeaItemShowList;
     private ProgMeaItemShow progMeaItemShowSel;
     private ProgMeaItemShow progMeaItemShowUpd;

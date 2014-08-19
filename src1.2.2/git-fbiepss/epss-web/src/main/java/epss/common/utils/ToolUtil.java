@@ -104,7 +104,7 @@ public class ToolUtil {
 
     public static String padLeft_DoLevel(Integer integerPara,String strTemp){
         StringBuffer stringBuffer = new StringBuffer();
-        for (int j = 0; j < integerPara-1; j++) {
+        for (int j = 0; j < integerPara; j++) {
             stringBuffer.append("&#8195;");
         }
         return stringBuffer.toString()+strTemp;
@@ -112,7 +112,7 @@ public class ToolUtil {
 
     public static String padLeftSpace_DoLevel(Integer integerPara,String strTemp){
         StringBuffer stringBuffer = new StringBuffer();
-        for (int j = 0; j < integerPara-1; j++) {
+        for (int j = 0; j < integerPara; j++) {
             stringBuffer.append("   ");
         }
         return stringBuffer.toString()+strTemp;
