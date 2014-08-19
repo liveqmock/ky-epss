@@ -22,7 +22,12 @@
         <h:form id="form">
             <p:growl id="msgs" showDetail="true" />
             <p:panel header="资源列表">
-                <h:panelGrid id="pdQry" columns="3">
+                <h:panelGrid id="pdQry" columns="1">
+                    <p:commandButton value="导出到EXCEL"
+                                     action="#{operFuncResAction.onExportExcel}"
+                                     update="msgs"
+                                     ajax="false">
+                    </p:commandButton>
                     <p:treeTable id="resTreeTable"
                                  value="#{operFuncResAction.resRoot}"
                                  var="document"

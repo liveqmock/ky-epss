@@ -3,6 +3,7 @@ package epss.view.operRes;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumDeletedFlag;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.common.utils.JxlsManager;
 import epss.common.utils.MessageUtil;
 import epss.common.utils.ToolUtil;
 import epss.repository.model.EsInitPower;
@@ -11,6 +12,8 @@ import epss.repository.model.model_show.*;
 import epss.service.*;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
+import jxl.write.WriteException;
+import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
@@ -21,9 +24,11 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by XIANGYANG on 2014/7/27.
@@ -49,10 +54,10 @@ public class OperFuncResAction implements Serializable{
 
     private List<SelectItem> taskFunctionList;
     private List<String> taskFunctionSeledList;
-
     private List<DeptAndOperShow> deptAndOperShowSeledList;
+    private List<OperFuncResShow> operFuncResShowFowExcelList;
 
-    private List<OperFuncResShow> operFuncResShowList;
+    private Map beansMap;
 
     private CttInfoShow cttInfoShowSel;
     private CttInfoShow cttInfoShowAdd;
@@ -66,6 +71,8 @@ public class OperFuncResAction implements Serializable{
     private TreeNode operRoot;
     @PostConstruct
     public void init() {
+        beansMap = new HashMap();
+
         cttInfoShowAdd=new CttInfoShow();
         cttInfoShowUpd=new CttInfoShow();
         cttInfoShowDel=new CttInfoShow();
@@ -74,6 +81,7 @@ public class OperFuncResAction implements Serializable{
         taskFunctionList = new ArrayList<>();
         taskFunctionSeledList = new ArrayList<>();
         deptAndOperShowSeledList= new ArrayList<>();
+        operFuncResShowFowExcelList= new ArrayList<>();
         taskFunctionList.add(
                 new SelectItem(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
         taskFunctionList.add(
@@ -90,6 +98,7 @@ public class OperFuncResAction implements Serializable{
         // 资源-用户-功能
         initRes();
         initOper();
+        beansMap.put("operFuncResShowFowExcelList", operFuncResShowFowExcelList);
     }
     private void initRes(){
         OperFuncResShow operFuncResShowTemp=new OperFuncResShow();
@@ -97,7 +106,17 @@ public class OperFuncResAction implements Serializable{
         operFuncResShowTemp.setResName("资源信息");
         resRoot = new DefaultTreeNode("ROOT", null);
         TreeNode node0 = new DefaultTreeNode(operFuncResShowTemp,resRoot);
-        recursiveResTreeNode("ROOT", node0);
+        try {
+            recursiveResTreeNode("ROOT", node0);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         node0.setExpanded(true);
     }
     private void initOper(){
@@ -109,7 +128,7 @@ public class OperFuncResAction implements Serializable{
         recursiveOperTreeNode("0", node0);
         node0.setExpanded(true);
     }
-    private void recursiveResTreeNode(String parentPkidPara,TreeNode parentNode){
+    private void recursiveResTreeNode(String parentPkidPara,TreeNode parentNode) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         List<CttInfoShow> cttInfoShowList=operResService.selectRecordsFromCtt(parentPkidPara);
         for (int i=0;i<cttInfoShowList.size();i++){
             CttInfoShow cttInfoShowTemp =cttInfoShowList.get(i);
@@ -174,7 +193,10 @@ public class OperFuncResAction implements Serializable{
             operFuncResShowTemp.setAccountOperName(strAccountOperName);
             operFuncResShowTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
             TreeNode childNodeTemp = new DefaultTreeNode(operFuncResShowTemp, parentNode);
-
+            OperFuncResShow operFuncResShowForExcelTemp= (OperFuncResShow)BeanUtils.cloneBean(operFuncResShowTemp);
+            operFuncResShowForExcelTemp.setResName(
+            ToolUtil.padLeftSpace_DoLevel(Integer.parseInt(operFuncResShowForExcelTemp.getResType()),operFuncResShowForExcelTemp.getResName()));
+            operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
             // 结算信息
             if(cttInfoShowTemp.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
                 // 统计
@@ -238,7 +260,8 @@ public class OperFuncResAction implements Serializable{
                 operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
                 operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
                 new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
-
+                operFuncResShowForExcelTemp= (OperFuncResShow)BeanUtils.cloneBean(operFuncResShowForStlTemp);
+                operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
                 // 计量
                 operResShowPara = new OperResShow();
                 operResShowPara.setInfoType(ESEnum.ITEMTYPE7.getCode());
@@ -300,6 +323,9 @@ public class OperFuncResAction implements Serializable{
                 operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
                 operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
                 new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+
+                operFuncResShowForExcelTemp= (OperFuncResShow)BeanUtils.cloneBean(operFuncResShowForStlTemp);
+                operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
             }else if(cttInfoShowTemp.getCttType().equals(ESEnum.ITEMTYPE2.getCode())) {
                 // 数量结算
                 operResShowPara = new OperResShow();
@@ -363,6 +389,10 @@ public class OperFuncResAction implements Serializable{
                 operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
                 new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
 
+                operFuncResShowForExcelTemp= (OperFuncResShow)BeanUtils.cloneBean(operFuncResShowForStlTemp);
+                operFuncResShowForExcelTemp.setResName(
+                        ToolUtil.padLeftSpace_DoLevel(3,operFuncResShowForExcelTemp.getResName()));
+                operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
                 // 材料结算
                 operResShowPara = new OperResShow();
                 operResShowPara.setInfoType(ESEnum.ITEMTYPE4.getCode());
@@ -425,6 +455,11 @@ public class OperFuncResAction implements Serializable{
                 operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
                 new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
 
+                operFuncResShowForExcelTemp= (OperFuncResShow)BeanUtils.cloneBean(operFuncResShowForStlTemp);
+                operFuncResShowForExcelTemp.setResName(
+                        ToolUtil.padLeftSpace_DoLevel(3,operFuncResShowForExcelTemp.getResName()));
+                operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
+
                 // 结算单
                 operResShowPara = new OperResShow();
                 operResShowPara.setInfoType(ESEnum.ITEMTYPE5.getCode());
@@ -486,6 +521,11 @@ public class OperFuncResAction implements Serializable{
                 operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
                 operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
                 new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+
+                operFuncResShowForExcelTemp= (OperFuncResShow)BeanUtils.cloneBean(operFuncResShowForStlTemp);
+                operFuncResShowForExcelTemp.setResName(
+                        ToolUtil.padLeftSpace_DoLevel(3,operFuncResShowForExcelTemp.getResName()));
+                operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
             }
 
             recursiveResTreeNode(operFuncResShowTemp.getResPkid(),childNodeTemp);
@@ -640,6 +680,19 @@ public class OperFuncResAction implements Serializable{
         return true;
     }
 
+    public String onExportExcel()throws IOException, WriteException {
+        if (this.operFuncResShowFowExcelList.size() == 0) {
+            MessageUtil.addWarn("记录为空...");
+            return null;
+        } else {
+            String excelFilename = "人员权限资源分配表-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+            JxlsManager jxls = new JxlsManager();
+            jxls.exportList(excelFilename, beansMap,"operFuncRes.xls");
+            // 其他状态的票据需要添加时再修改导出文件名
+        }
+        return null;
+    }
+
     /*智能字段 Start*/
 
     public OperResService getOperResService() {
@@ -746,14 +799,6 @@ public class OperFuncResAction implements Serializable{
         this.operRoot = operRoot;
     }
 
-    public List<OperFuncResShow> getOperFuncResShowList() {
-        return operFuncResShowList;
-    }
-
-    public void setOperFuncResShowList(List<OperFuncResShow> operFuncResShowList) {
-        this.operFuncResShowList = operFuncResShowList;
-    }
-
     public CttInfoShow getCttInfoShowAdd() {
         return cttInfoShowAdd;
     }
@@ -776,5 +821,13 @@ public class OperFuncResAction implements Serializable{
 
     public void setCttInfoShowDel(CttInfoShow cttInfoShowDel) {
         this.cttInfoShowDel = cttInfoShowDel;
+    }
+
+    public Map getBeansMap() {
+        return beansMap;
+    }
+
+    public void setBeansMap(Map beansMap) {
+        this.beansMap = beansMap;
     }
 }

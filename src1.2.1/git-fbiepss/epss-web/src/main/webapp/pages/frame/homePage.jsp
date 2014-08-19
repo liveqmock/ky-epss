@@ -25,9 +25,9 @@
         if (om.getOperator() != null) {
             username = om.getOperatorName();
             operid = om.getOperator().getOperid();
-            if (om.getOperator().getPtDeptBean() != null)
+            if (om.getOperator().getPtDeptBean() != null){
                 deptname = om.getOperator().getPtDeptBean().getDeptname();
-
+            }
             //角色
             List roles = new ArrayList();
             DatabaseConnection conn = ConnectionManager.getInstance().get();
@@ -42,7 +42,6 @@
             }
         }
     }
-
 %>
 <%--<!DOCTYPE html>--%>
 <html>
@@ -158,7 +157,6 @@
             var contextPath = '<%=contextPath%>';
             var defaultMenuStr = '<%=jsonDefaultMenu%>';
             var systemMenuStr = '<%=jsonSystemMenu%>';
-
             var handle;
             function start() {
                 var obj = document.getElementById("tip");
@@ -169,7 +167,6 @@
                     handle = setInterval("changeH('down')", 2)
                 }
             }
-
             function changeH(str) {
                 var obj = document.getElementById("tip");
                 if (str == "up") {
@@ -219,7 +216,7 @@
         }
         function run() {
             myRequest();
-            window.setTimeout("run()", 1000);
+            window.setTimeout("run()", 5000);
         }
         //TODO (add by yxy,2014-08-17,*end)
 
@@ -237,15 +234,14 @@
             parent.window.location.replace("<%=contextPath%>/pages/security/logout.jsp");
         }
 
-
         //TODO (add by yxy,2014-08-17,*start)
         // 控制加载页面时间长时，给用户友好提示
         document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
         function subSomething() {
             if (document.readyState == "complete" && window.parent.frames["scrollInfoWorkFrame"].document.readyState == "complete") {
                 document.getElementById('loading').style.display = 'none';
-                window.setTimeout("run()", 1000);
-                window.setTimeout("myTimer()", 5000);
+                window.setTimeout("run()", 5000);
+                //window.setTimeout("myTimer()", 5000);
             }
         }
         //TODO (add by yxy,2014-08-17,*end)
@@ -262,7 +258,7 @@
                         <img src="../../images/epss.jpg" height="40px">
                     </td>
                     <td colspan="2">
-                        <img src="../../images/epss_title.png" height="40px" style="margin-left: 5px">
+                        <img src="../../images/epss_title.png" height="50px" style="margin-left: 5px">
                     </td>
                     <td style="text-align:right" class="headfont">
                         <span>您好,<%=username%>! </span>
