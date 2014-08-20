@@ -83,12 +83,6 @@
                                     update="pdt,:form:pgViewForUpd,:form:msgs"
                                     onclick="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
-                    <p:commandButton  icon="ui-icon-trash"
-                                    style="height:20px;width:20px"
-                                    actionListener="#{subcttInfoAction.selectRecordAction('Mng','Del',record)}"
-                                    update="pdt,:form:pgViewForDel,:form:msgs"
-                                    onclick="PF('wVDlgViewForDel').show()">
-                    </p:commandButton>
                     <p:commandButton icon="ui-icon-triangle-1-e"
                                      style="height:20px;width:20px"
                                      oncomplete="actSelect('#{record.pkid}','Sub_Detail')">
@@ -280,84 +274,6 @@
                         <p:commandButton id="resetBtnForUpd" value="重置"
                                          type="reset"
                                          update="pgViewForUpd">
-                        </p:commandButton>
-                    </h:panelGrid>
-                </h:panelGrid>
-            </p:dialog>
-            <p:dialog id="dlgViewForDel" header="分包合同删除信息" widgetVar="wVDlgViewForDel"
-                      resizable="false" modal="true"
-                      showEffect="clip" hideEffect="fold">
-                <h:panelGrid id="pgViewForDel">
-                    <h:panelGrid columns="3">
-                        <p:outputLabel value="合同编号：" for="idForDel"/>
-                        <p:inputText id="idForDel" value="#{subcttInfoAction.cttInfoShowDel.id}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="合同名称：" for="cttNameForDel"/>
-                        <p:inputText id="cttNameForDel" value="#{subcttInfoAction.cttInfoShowDel.name}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;width:328px;"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="备注内容：" for="noteForDel"/>
-                        <p:inputText id="noteForDel" value="#{subcttInfoAction.cttInfoShowDel.note}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                        <p:outputLabel value="签订日期：  " for="signDateForDel"/>
-                        <p:inputText id="signDateForDel" value="#{subcttInfoAction.cttInfoShowDel.signDate}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                        <p:outputLabel value="开始时间：" for="cttStartDateForDel"/>
-                        <p:inputText id="cttStartDateForDel" value="#{subcttInfoAction.cttInfoShowDel.cttStartDate}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                        <p:outputLabel value="截止时间：" for="cttEndDateForDel"/>
-                        <p:inputText id="cttEndDateForDel" value="#{subcttInfoAction.cttInfoShowDel.cttEndDate}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="签订甲方：" for="signPartAForDel"/>
-                        <p:inputText id="signPartAForDel" value="#{subcttInfoAction.cttInfoShowDel.signPartAName}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;width:340px"/>
-                        <p:outputLabel value="签订乙方：" for="signPartBForDel"/>
-                        <p:inputText id="signPartBForDel" value="#{subcttInfoAction.cttInfoShowDel.signPartBName}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;width:340px"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel for="createdByNameForDel" value="创建人：" />
-                        <h:inputText id="createdByNameForDel"
-                                     value="#{subcttInfoAction.cttInfoShowDel.createdByName}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="createdDateForDel" value="创建时间：" />
-                        <h:inputText id="createdDateForDel"
-                                     value="#{subcttInfoAction.cttInfoShowDel.createdDate}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="lastUpdByNameForDel" value="修改人：" />
-                        <h:inputText id="lastUpdByNameForDel"
-                                     value="#{subcttInfoAction.cttInfoShowDel.lastUpdByName}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="lastUpdDateForDel" value="修改时间：" />
-                        <h:inputText id="lastUpdDateForDel"
-                                     value="#{subcttInfoAction.cttInfoShowDel.lastUpdDate}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="modificationNumForDel" value="修改次数：" />
-                        <h:inputText id="modificationNumForDel"
-                                     value="#{subcttInfoAction.cttInfoShowDel.modificationNum}"
-                                     style="background-color:gainsboro;text-align:right;" readonly="true">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                        </h:inputText>
-                    </h:panelGrid>
-                    <h:panelGrid id="pgOperBtnForDel" columns="2">
-                        <p:commandButton id="submitBtnForDel"
-                                         value="提交（删除）"
-                                         action="#{subcttInfoAction.onClickForMngAction()}"
-                                         update="pdt,msgs,pgViewForDel" 
-					 oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                     </h:panelGrid>
                 </h:panelGrid>

@@ -60,7 +60,6 @@ public class SubcttInfoAction {
     private String strNotPassToStatus;
     private CttInfoShow cttInfoShowSel;
     private CttInfoShow cttInfoShowUpd;
-    private CttInfoShow cttInfoShowDel;
     private List<CttInfoShow> cttInfoShowList;
 
     private String strSubmitType;
@@ -103,7 +102,6 @@ public class SubcttInfoAction {
         cttInfoShowQry.setParentPkid(strBelongToPkid);
         cttInfoShowSel = new CttInfoShow();
         cttInfoShowUpd = new CttInfoShow();
-        cttInfoShowDel = new CttInfoShow();
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType = "";
@@ -213,15 +211,10 @@ public class SubcttInfoAction {
                 if (strSubmitTypePara.equals("Sel")) {
                     cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                     rowSelectedFlag = "true";
-                } else {
-                    if (strSubmitTypePara.equals("Upd")) {
+                } else if (strSubmitTypePara.equals("Upd")) {
                         cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                         rowSelectedFlag = "false";
-                    } else if (strSubmitTypePara.equals("Del")) {
-                        cttInfoShowDel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
-                        rowSelectedFlag = "false";
                     }
-                }
             } else {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                 rowSelectedFlag = "true";
@@ -267,33 +260,11 @@ public class SubcttInfoAction {
      * @param
      */
     public void onClickForMngAction() {
-         if (strSubmitType.equals("Upd")) {
              if (!submitPreCheck(cttInfoShowUpd)) {
                  return;
              }
-             if (cttInfoService.isExistInDb(cttInfoShowUpd)) {
-                 MessageUtil.addError("该记录已存在，请重新录入！");
-             } else {
                  updRecordAction(cttInfoShowUpd);
-             }
-        } else if (strSubmitType.equals("Del")) {
-            deleteRecordAction(cttInfoShowDel);
-        }
-        onQueryAction("Mng","false");
-    }
-
-    private void addRecordAction(CttInfoShow cttInfoShowPara) {
-        try {
-            cttInfoShowPara.setCttType(ESEnum.ITEMTYPE2.getCode());
-            if (cttInfoShowPara.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
-                cttInfoShowPara.setParentPkid("ROOT");
-            }
-            cttInfoService.insertRecord(cttInfoShowPara);
-            MessageUtil.addInfo("新增数据完成。");
-        } catch (Exception e) {
-            logger.error("新增数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
+                 onQueryAction("Mng","false");
     }
     private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
@@ -302,25 +273,6 @@ public class SubcttInfoAction {
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-    private void deleteRecordAction(CttInfoShow cttInfoShowPara) {
-        try {
-            cttInfoShowPara.setCttType(ESEnum.ITEMTYPE2.getCode());
-            int deleteRecordNumOfCttItem= cttItemService.deleteRecord(cttInfoShowPara);
-            int deleteRecordNumOfCtt= cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
-            int deleteRecordNumOfPower= flowCtrlService.deleteRecord(
-                    cttInfoShowPara.getCttType(),
-                    cttInfoShowPara.getPkid(),
-                    "NULL");
-            if (deleteRecordNumOfCtt<=0&&deleteRecordNumOfPower<=0&&deleteRecordNumOfCttItem<=0){
-                MessageUtil.addInfo("该记录已删除。");
-                return;
-            }
-            MessageUtil.addInfo("删除数据完成。");
-        } catch (Exception e) {
-            logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
         }
     }
@@ -523,14 +475,6 @@ public class SubcttInfoAction {
 
     public void setCttInfoShowUpd(CttInfoShow cttInfoShowUpd) {
         this.cttInfoShowUpd = cttInfoShowUpd;
-    }
-
-    public CttInfoShow getCttInfoShowDel() {
-        return cttInfoShowDel;
-    }
-
-    public void setCttInfoShowDel(CttInfoShow cttInfoShowDel) {
-        this.cttInfoShowDel = cttInfoShowDel;
     }
 
     public CttInfoShow getCttInfoShowSel() {

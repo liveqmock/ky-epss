@@ -97,12 +97,6 @@
                                      update="pdt,:form:pgViewForUpd,:form:msgs"
                                      onclick="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
-                    <p:commandButton icon="ui-icon-trash"
-                                     style="height:20px;width:20px"
-                                     action="#{cstplInfoAction.selectRecordAction('Mng','Del',record)}"
-                                     update="pdt,:form:pgViewForDel,:form:msgs"
-                                     onclick="PF('wVDlgViewForDel').show()">
-                    </p:commandButton>
                     <p:commandButton  icon="ui-icon-document"
                                       style="height:20px;width:20px"
                                       action="#{cstplInfoAction.attachmentStrToList()}"
@@ -254,66 +248,6 @@
                         <p:commandButton id="resetBtnForUpd" value="重置"
                                          type="reset"
                                          update="pgViewForUpd">
-                        </p:commandButton>
-                    </h:panelGrid>
-                </h:panelGrid>
-            </p:dialog>
-            <p:dialog id="dlgViewForDel" header="成本计划删除信息" widgetVar="wVDlgViewForDel"
-                      resizable="false" modal="true"
-                      showEffect="clip" hideEffect="fold">
-                <h:panelGrid id="pgViewForDel">
-                    <h:panelGrid columns="3">
-                        <p:outputLabel value="计划编号：" for="idForDel"/>
-                        <p:inputText id="idForDel" value="#{cstplInfoAction.cttInfoShowDel.id}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="计划名称：" for="cstplNameForDel"/>
-                        <p:inputText id="cstplNameForDel" value="#{cstplInfoAction.cttInfoShowDel.name}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;width:340px"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="制定日期：" for="signDateForDel"/>
-                        <p:inputText id="signDateForDel" value="#{cstplInfoAction.cttInfoShowDel.signDate}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                        <p:outputLabel value="备注内容：" for="noteForDel"/>
-                        <p:inputText id="noteForDel" value="#{cstplInfoAction.cttInfoShowDel.note}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel for="createdByNameForDel" value="创建人：" />
-                        <h:inputText id="createdByNameForDel"
-                                     value="#{cstplInfoAction.cttInfoShowDel.createdByName}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="createdDateForDel" value="创建时间：" />
-                        <h:inputText id="createdDateForDel"
-                                     value="#{cstplInfoAction.cttInfoShowDel.createdDate}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="lastUpdByNameForDel" value="修改人：" />
-                        <h:inputText id="lastUpdByNameForDel"
-                                     value="#{cstplInfoAction.cttInfoShowDel.lastUpdByName}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="lastUpdDateForDel" value="修改时间：" />
-                        <h:inputText id="lastUpdDateForDel"
-                                     value="#{cstplInfoAction.cttInfoShowDel.lastUpdDate}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="modificationNumForDel" value="修改次数：" />
-                        <h:inputText id="modificationNumForDel"
-                                     value="#{cstplInfoAction.cttInfoShowDel.modificationNum}"
-                                     style="background-color:gainsboro;text-align:right;" readonly="true">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                        </h:inputText>
-                    </h:panelGrid>
-                    <h:panelGrid id="pgOperBtnForDel" columns="2">
-                        <p:commandButton id="submitBtn"
-                                         value="提交（删除）"
-                                         action="#{cstplInfoAction.onClickForMngAction()}"
-                                         update="pdt,msgs,pgViewForDel"
-                                         oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
                     </h:panelGrid>
                 </h:panelGrid>

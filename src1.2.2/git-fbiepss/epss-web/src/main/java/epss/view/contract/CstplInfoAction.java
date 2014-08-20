@@ -62,7 +62,6 @@ public class CstplInfoAction {
     private CttInfoShow cttInfoShowSelected;
     private CttInfoShow cttInfoShowSel;
     private CttInfoShow cttInfoShowUpd;
-    private CttInfoShow cttInfoShowDel;
     private List<CttInfoShow> cttInfoShowList;
 
     private String strSubmitType;
@@ -103,9 +102,6 @@ public class CstplInfoAction {
         cttInfoShowUpd = new CttInfoShow();
         cttInfoShowUpd.setCttType(ESEnum.ITEMTYPE1.getCode());
         cttInfoShowUpd.setParentPkid(strBelongToPkid);
-        cttInfoShowDel = new CttInfoShow();
-        cttInfoShowDel.setCttType(ESEnum.ITEMTYPE1.getCode());
-        cttInfoShowDel.setParentPkid(strBelongToPkid);
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType = "";
@@ -197,15 +193,10 @@ public class CstplInfoAction {
                 if (strSubmitTypePara.equals("Sel")) {
                     cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                     rowSelectedFlag = "true";
-                }else {
-                    if (strSubmitTypePara.equals("Upd")) {
+                }else if (strSubmitTypePara.equals("Upd")) {
                         cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                         rowSelectedFlag = "false";
-                    } else if (strSubmitTypePara.equals("Del")) {
-                        cttInfoShowDel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
-                        rowSelectedFlag = "false";
                     }
-                }
             } else {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                 rowSelectedFlag = "true";
@@ -349,21 +340,12 @@ public class CstplInfoAction {
      * @param
      */
     public void onClickForMngAction() {
-        if (strSubmitType.equals("Upd")) {
             if (!submitPreCheck(cttInfoShowUpd)) {
                 return;
             }
-            if (cttInfoService.isExistInDb(cttInfoShowUpd)) {
-                MessageUtil.addError("该记录已存在，请重新录入！");
-            } else {
                 cttInfoShowUpd.setCttType(ESEnum.ITEMTYPE1.getCode());
                 updRecordAction(cttInfoShowUpd);
-            }
-        } else if (strSubmitType.equals("Del")) {
-            cttInfoShowDel.setCttType(ESEnum.ITEMTYPE1.getCode());
-            deleteRecordAction(cttInfoShowDel);
-        }
-        onQueryAction("Mng","false");
+                onQueryAction("Mng","false");
     }
     private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
@@ -371,25 +353,6 @@ public class CstplInfoAction {
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-    private void deleteRecordAction(CttInfoShow cttInfoShowPara) {
-        try {
-            cttInfoShowPara.setCttType(ESEnum.ITEMTYPE1.getCode());
-            int deleteRecordNumOfCttItem= cttItemService.deleteRecord(cttInfoShowPara);
-            int deleteRecordNumOfCtt= cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
-            int deleteRecordNumOfPower= flowCtrlService.deleteRecord(
-                    cttInfoShowPara.getCttType(),
-                    cttInfoShowPara.getPkid(),
-                    "NULL");
-            if (deleteRecordNumOfCtt<=0&&deleteRecordNumOfPower<=0&&deleteRecordNumOfCttItem<=0){
-                MessageUtil.addInfo("该记录已删除。");
-                return;
-            }
-            MessageUtil.addInfo("删除数据完成。");
-        } catch (Exception e) {
-            logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
         }
     }
@@ -608,14 +571,6 @@ public class CstplInfoAction {
 
     public void setCttInfoShowUpd(CttInfoShow cttInfoShowUpd) {
         this.cttInfoShowUpd = cttInfoShowUpd;
-    }
-
-    public CttInfoShow getCttInfoShowDel() {
-        return cttInfoShowDel;
-    }
-
-    public void setCttInfoShowDel(CttInfoShow cttInfoShowDel) {
-        this.cttInfoShowDel = cttInfoShowDel;
     }
 
     public CttInfoShow getCttInfoShowSel() {
