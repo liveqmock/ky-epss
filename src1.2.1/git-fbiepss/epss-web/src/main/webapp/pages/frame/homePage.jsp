@@ -188,7 +188,7 @@
                 start();
                 window.setTimeout("myTimer()", 5000);//设置循环时间
             }
-            //TODO (add by yxy,2014-08-17,*start)
+
         var currentDefaultMenuStr;
         var lastDefaultMenuStr = '<%=jsonDefaultMenu%>';
         function myRequest() {
@@ -269,30 +269,26 @@
                 </tr>
                 <tr style="width:100%; height:25px">
                     <td colspan="5" style="height:25px;">
-                                <div onclick="tabbarclk(this);" active="true" id="task" class="tabs-item-active"
-                                     style="float:left;width:80px;margin-left:12px;">
-                                    <span style="width:100%;">待办业务</span>
-                                </div>
-                                <div style="float:left;width:2px;"></div>
-                                <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
-                                     style="float:left;width:80px;">
-                                    <span style="width:100%;">业务操作</span>
-                                </div>
-                                <div style="float:left;width:2px;"></div>
-                                <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
-                                     style="float:left;width:80px;">
-                                    <span style="width:100%;">系统管理</span>
-                                </div>
-                                <div style="float:left;width:2px;"></div>
-                                <div onclick="tabbarclk(this);" active="false" id="help" class="tabs-item"
-                                     style="float:left;width:80px;">
-                                    <span style="width:100%;">操作帮助</span>
-                                </div>
-                                <div style="float:left;width:2px;"></div>
-                                <div onclick="tabbarclk(this);" active="false" id="ver" class="tabs-item"
-                                     style="float:left;width:80px;">
-                                    <span style="width:100%;">版本历史</span>
-                                </div>
+                        <div onclick="tabbarclk(this);" active="true" id="task" class="tabs-item-active"
+                             style="float:left;width:80px;margin-left:12px;">
+                            <span style="width:100%;">待办业务</span>
+                        </div>
+                        <div style="float:left;width:2px;"></div>
+                        <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
+                             style="float:left;width:80px;">
+                            <span style="width:100%;">业务操作</span>
+                        </div>
+                        <div style="float:left;width:2px;"></div>
+                        <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
+                             style="float:left;width:80px;">
+                            <span style="width:100%;">系统管理</span>
+                        </div>
+                        <div style="float:left;width:2px;"></div>
+                        <div onclick="tabbarclk(this);" active="false" id="help" class="tabs-item"
+                             style="float:left;width:80px;">
+                            <span style="width:100%;">操作帮助</span>
+                        </div>
+                        <div style="float:left;width:2px;"></div>
                         <%--TODO (add by yxy,2014-08-17,*start)--%>
                         <div style="float:left;width:2px;"></div>
                         <div id="dynamicInfo"
@@ -339,10 +335,7 @@
                         <div class="divlayout" id="helplayout">
                             <br/>系统帮助信息...
                         </div>
-                        <div class="divlayout" id="verlayout">
-                            <br/>版本更新历史...
-                        </div>
-                        <div id="tip" style="display: none;height: 0px">
+                        <%--<div id="tip" style="display: none;height: 0px">
                             <h1>
                                 <a href="javascript:void(0)" onclick="start()">×</a>
                                 您有新消息
@@ -356,7 +349,7 @@
                                     marginwidth="0" marginheight="0"
                                     scrolling="no">
                             </iframe>
-                        </div>
+                        </div>--%>
                         <%--
                         <div style="display: none" >
                             <iframe id="tipAdd" name="tipAdd"

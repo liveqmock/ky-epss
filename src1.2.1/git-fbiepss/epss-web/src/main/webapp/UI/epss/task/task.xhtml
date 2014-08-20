@@ -99,54 +99,51 @@
             <p:commandButton id="qryBtn" value="查询"
                              action="#{esInitTaskAction.init()}"
                              update="pdt,msgs"
-                             style="display: none">
+                             rendered="false">
             </p:commandButton>
             <!--列表维护-->
-            <p:dataTable id="pdt"
-                         value="#{esInitTaskAction.taskShowList}"
-                         var="record"
-                         rowIndexVar="row"
-                         rowKey="#{row + 1}"
-                         selectionMode="single"
-                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         rows="20"
-                         rowsPerPageTemplate="500,200,100,45,30,20"
-                         emptyMessage="数据记录为空..."
-                         rowStyleClass="#{record.type eq null?'rowDoneStyle':null}"
-                         scrollable="true"
-                         scrollHeight="550">
-                <p:column headerText="操作" style="width:30px">
-                    <p:commandButton icon="ui-icon-triangle-1-e"
-                                     style="height:20px;width:20px"
-                                     rendered="#{record.type eq null?'false':'true'}"
-                                     onclick="actSelect('#{record.type}','#{record.statusFlag}','#{record.preStatusFlag}','#{record.pkid}')">
-                    </p:commandButton>
-                </p:column>
-                <p:column headerText="序号" style="width:30px">
-                    <h:outputText value="#{row + 1}"/>
-                </p:column>
-                <p:column headerText="任务类别" style="width:100px;text-align:left;">
-                    <h:outputText value="#{record.type}" escape="false"/>
-                </p:column>
-                <p:column headerText="待处理任务ID" style="width:150px;text-align:left;">
-                    <h:outputText value="#{record.id}"/>
-                </p:column>
-                <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
-                    <h:outputText value="#{record.name}"/>
-                </p:column>
-                <p:column headerText="期数" style="width:100px;text-align:left;">
-                    <h:outputText value="#{record.periodNo}"/>
-                </p:column>
-                <p:column headerText="状态标志" style="width:100px;text-align:center;">
-                    <h:outputText value="#{record.statusFlagName}"/>
-                </p:column>
-                <p:column headerText="原因" style="width:100px;text-align:center;">
-                    <h:outputText value="#{record.preStatusFlagName}"/>
-                </p:column>
-            </p:dataTable>
+            <p:panel>
+                <p:dataTable id="pdt"
+                             value="#{esInitTaskAction.taskShowList}"
+                             var="record"
+                             rowIndexVar="row"
+                             rowKey="#{row + 1}"
+                             selectionMode="single"
+                             emptyMessage="数据记录为空..."
+                             rowStyleClass="#{record.type eq null?'rowDoneStyle':null}"
+                             scrollable="true"
+                             scrollHeight="450">
+                    <p:column headerText="操作" style="width:30px">
+                        <p:commandButton icon="ui-icon-triangle-1-e"
+                                         style="height:20px;width:20px"
+                                         rendered="#{record.type eq null?'false':'true'}"
+                                         onclick="actSelect('#{record.type}','#{record.statusFlag}','#{record.preStatusFlag}','#{record.pkid}')">
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="序号" style="width:30px">
+                        <h:outputText value="#{row + 1}"/>
+                    </p:column>
+                    <p:column headerText="任务类别" style="width:100px;text-align:left;">
+                        <h:outputText value="#{record.type}" escape="false"/>
+                    </p:column>
+                    <p:column headerText="待处理任务ID" style="width:150px;text-align:left;">
+                        <h:outputText value="#{record.id}"/>
+                    </p:column>
+                    <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
+                        <h:outputText value="#{record.name}"/>
+                    </p:column>
+                    <p:column headerText="期数" style="width:100px;text-align:left;">
+                        <h:outputText value="#{record.periodNo}"/>
+                    </p:column>
+                    <p:column headerText="状态标志" style="width:100px;text-align:center;"
+                              rendered="false">
+                        <h:outputText value="#{record.statusFlagName}"/>
+                    </p:column>
+                    <p:column headerText="状态原因" style="width:100px;text-align:center;">
+                        <h:outputText value="#{record.preStatusFlagName}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
         </h:form>
     </ui:define>
 </ui:composition>
