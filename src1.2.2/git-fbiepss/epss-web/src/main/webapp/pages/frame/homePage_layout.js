@@ -52,8 +52,6 @@ function doBizLoad() {
                 bizaddtabbar(id, text, contextPath + action);
             }
             return true;
-        }
-        return true;
     });
 }
 function doSysLoad() {

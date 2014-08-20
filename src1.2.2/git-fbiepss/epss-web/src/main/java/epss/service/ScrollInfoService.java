@@ -30,7 +30,7 @@ public class ScrollInfoService {
 
     private List<TaskShow> taskShowList;
 
-    public List<TaskShow> getViewMsgFromTask(String strRequestType,String strOperatorId){
+    public List<TaskShow> getViewMsgFromTask(){
             //整个任务列表
             this.taskShowList = new ArrayList<TaskShow>();
             //合同类型
@@ -44,11 +44,7 @@ public class ScrollInfoService {
 
             //通过OperatorManager获取相应权限下菜单列表
             List<Ptmenu> ptmenuList=null;
-            if ("ScrollInfo".equals(strRequestType)){
-                ptmenuList = platformService.getPtmenuList();
-            }else {
-                ptmenuList=ptCommonMapper.getPtmenuList(strOperatorId);
-            }
+            ptmenuList = platformService.getPtmenuList();
             // 以合同类型和状态为分组,取得各组的数量
             List<TaskShow> taskCountsInFlowGroupListTemp =taskService.getTaskCountsInFlowGroup();
             // 获得详细任务列表

@@ -10,9 +10,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.List;
 
@@ -31,9 +28,6 @@ public class ScrollInfoAction implements Serializable {
 
     @PostConstruct
     public void init() {
-        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
-        HttpSession session = (HttpSession) extContext.getSession(true);
-        session.setAttribute("scrollInfoService",scrollInfoService);
         getViewMsg();
         if ("".equals(ToolUtil.getStrIgnoreNull(strCurrentViewMng))){
             strCurrentViewMng="欢迎您！！";
@@ -45,7 +39,7 @@ public class ScrollInfoAction implements Serializable {
         getViewMsgFromTaskAction();
     }
     private void getViewMsgFromTaskAction(){
-        List<TaskShow> taskShowTempList = scrollInfoService.getViewMsgFromTask("ScrollInfo","");
+        List<TaskShow> taskShowTempList = scrollInfoService.getViewMsgFromTask();
         if (taskShowTempList != null) {
             String strViewMngTemp="待处理任务：";
             for (TaskShow taskShowItem : taskShowTempList) {
@@ -54,9 +48,6 @@ public class ScrollInfoAction implements Serializable {
             if (!(strViewMngTemp.equals(strLastViewMng))){
                 strCurrentViewMng=strViewMngTemp;
                 strLastViewMng=strCurrentViewMng;
-                /*ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
-                HttpSession session = (HttpSession) extContext.getSession(true);
-                session.setAttribute("scrollInfoService",scrollInfoService);*/
             }
         }
     }

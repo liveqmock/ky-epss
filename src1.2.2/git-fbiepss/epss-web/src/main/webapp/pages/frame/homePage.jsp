@@ -150,8 +150,6 @@
             var contextPath = '<%=contextPath%>';
             var defaultMenuStr = '<%=jsonDefaultMenu%>';
             var systemMenuStr = '<%=jsonSystemMenu%>';
-            var currentDefaultMenuStr;
-            var lastDefaultMenuStr = '<%=jsonDefaultMenu%>';
               function doOnLoad() {
                 bizdhxLayout = new dhtmlXLayoutObject("bizlayout", "2U", "dhx_skyblue");
                 doBizLoad();
@@ -171,14 +169,6 @@
                 if (document.readyState == "complete" &&
                         window.parent.frames["scrollInfoWorkFrame"].document.readyState == "complete") {
                     document.getElementById('loading').style.display = 'none';
-                    //window.setTimeout("run()", 5000);
-                    //window.setTimeout("myTimer()", 5000);
-                }
-            var forTabClickStr=1;
-            function forTabClick() {
-                if(forTabClickStr==1){
-                    forTabClickStr=0;
-                    window.setTimeout("run()", 1000);
                 }
             }
         </script>
@@ -210,7 +200,7 @@
                             <span style="width:100%;">待办业务</span>
                         </div>
                         <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);forTabClick()" active="false" id="biz" class="tabs-item"
+                        <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
                              style="float:left;width:80px;">
                             <span style="width:100%;">业务操作</span>
                         </div>
