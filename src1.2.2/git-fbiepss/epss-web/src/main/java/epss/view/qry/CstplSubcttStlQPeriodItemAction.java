@@ -102,8 +102,8 @@ public class CstplSubcttStlQPeriodItemAction {
 
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         // 从成本计划传递过来的成本计划号
-        if (parammap.containsKey("strCstplPkid")){
-            strCstplPkid=parammap.get("strCstplPkid").toString();
+        if (parammap.containsKey("strCstplInfoPkid")){
+            strCstplPkid=parammap.get("strCstplInfoPkid").toString();
         }
 
         List<CttInfoShow> cttInfoShowList =
