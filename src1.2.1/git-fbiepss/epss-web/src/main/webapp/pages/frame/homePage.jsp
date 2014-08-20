@@ -335,32 +335,7 @@
                         <div class="divlayout" id="helplayout">
                             <br/>系统帮助信息...
                         </div>
-                        <%--<div id="tip" style="display: none;height: 0px">
-                            <h1>
-                                <a href="javascript:void(0)" onclick="start()">×</a>
-                                您有新消息
-                            </h1>
-                            <iframe id="dynamicDialogInfoWorkFrame" name="dynamicDialogInfoWorkFrame"
-                                    src="<%=contextPath%>/UI/epss/scrollInfo/Dialog.xhtml"
-                                    width="180"
-                                    height="180"
-                                    frameborder="no"
-                                    border="0"
-                                    marginwidth="0" marginheight="0"
-                                    scrolling="no">
-                            </iframe>
-                        </div>--%>
-                        <%--
-                        <div style="display: none" >
-                            <iframe id="tipAdd" name="tipAdd"
-                                    src="<%=contextPath%>/UI/epss/task/tipAdd.jsp"
-                                    width="0" height="0"
-                                    frameborder="no"
-                                    border="0"
-                                    marginwidth="0" marginheight="0"
-                                    scrolling="no">
-                            </iframe>
-                        </div>--%>
+                        
                     </td>
                 </tr>
             </table>
