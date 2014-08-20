@@ -204,11 +204,16 @@
                 // 信息已经成功返回，开始处理信息
                 if (http_request.status == 200) {
                     //返回的是文本格式信息
-                    currentDefaultMenuStr = http_request.responseText;
-                    if (lastDefaultMenuStr != currentDefaultMenuStr) {
-                        myDoBizLoad(currentDefaultMenuStr);
-                        lastDefaultMenuStr = currentDefaultMenuStr;
+                    if(http_request.responseText==""){
+                        alert("hdahhd");
+                    }else{
+                        currentDefaultMenuStr = http_request.responseText;
+                        if (lastDefaultMenuStr != currentDefaultMenuStr) {
+                            myDoBizLoad(currentDefaultMenuStr);
+                            lastDefaultMenuStr = currentDefaultMenuStr;
+                        }
                     }
+
                 } else { //页面不正常
                     //"您所请求的页面有异常"
                 }
@@ -216,7 +221,7 @@
         }
         function run() {
             myRequest();
-            window.setTimeout("run()", 5000);
+            window.setTimeout("run()", 3000);
         }
         //TODO (add by yxy,2014-08-17,*end)
 
@@ -233,15 +238,20 @@
             parent.window.reload = "true";
             parent.window.location.replace("<%=contextPath%>/pages/security/logout.jsp");
         }
-
         //TODO (add by yxy,2014-08-17,*start)
         // 控制加载页面时间长时，给用户友好提示
         document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
         function subSomething() {
             if (document.readyState == "complete" && window.parent.frames["scrollInfoWorkFrame"].document.readyState == "complete") {
                 document.getElementById('loading').style.display = 'none';
-                window.setTimeout("run()", 5000);
                 //window.setTimeout("myTimer()", 5000);
+            }
+        }
+        var forTabClickStr=1;
+        function forTabClick() {
+            if(forTabClickStr==1){
+                forTabClickStr=0;
+                window.setTimeout("run()", 1000);
             }
         }
         //TODO (add by yxy,2014-08-17,*end)
@@ -269,26 +279,26 @@
                 </tr>
                 <tr style="width:100%; height:25px">
                     <td colspan="5" style="height:25px;">
-                        <div onclick="tabbarclk(this);" active="true" id="task" class="tabs-item-active"
-                             style="float:left;width:80px;margin-left:12px;">
-                            <span style="width:100%;">待办业务</span>
-                        </div>
-                        <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
-                             style="float:left;width:80px;">
-                            <span style="width:100%;">业务操作</span>
-                        </div>
-                        <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
-                             style="float:left;width:80px;">
-                            <span style="width:100%;">系统管理</span>
-                        </div>
-                        <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="help" class="tabs-item"
-                             style="float:left;width:80px;">
-                            <span style="width:100%;">操作帮助</span>
-                        </div>
-                        <div style="float:left;width:2px;"></div>
+                                <div onclick="tabbarclk(this);" active="true" id="task" class="tabs-item-active"
+                                     style="float:left;width:80px;margin-left:12px;">
+                                    <span style="width:100%;">待办业务</span>
+                                </div>
+                                <div style="float:left;width:2px;"></div>
+                                <div onclick="tabbarclk(this);forTabClick()" active="false" id="biz" class="tabs-item"
+                                     style="float:left;width:80px;">
+                                    <span style="width:100%;">业务操作</span>
+                                </div>
+                                <div style="float:left;width:2px;"></div>
+                                <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
+                                     style="float:left;width:80px;">
+                                    <span style="width:100%;">系统管理</span>
+                                </div>
+                                <div style="float:left;width:2px;"></div>
+                                <div onclick="tabbarclk(this);" active="false" id="help" class="tabs-item"
+                                     style="float:left;width:80px;">
+                                    <span style="width:100%;">操作帮助</span>
+                                </div>
+                                <div style="float:left;width:2px;"></div>
                         <%--TODO (add by yxy,2014-08-17,*start)--%>
                         <div style="float:left;width:2px;"></div>
                         <div id="dynamicInfo"
@@ -349,7 +359,7 @@
                                     marginwidth="0" marginheight="0"
                                     scrolling="no">
                             </iframe>
-                        </div>--%>
+                        </div>
                         <%--
                         <div style="display: none" >
                             <iframe id="tipAdd" name="tipAdd"

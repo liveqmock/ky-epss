@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+    </ui:define>
+
+    <ui:define name="content">
+        <p:growl id="msgs" showDetail="false"/>
+
+        <div id="table">
+            <h:form id="form">
+                <div style="margin: 20px;">
+                     <h:graphicImage value="/images/status_warning.gif" />
+                </div>
+            </h:form>
+        </div>
+    </ui:define>
+</ui:composition>
