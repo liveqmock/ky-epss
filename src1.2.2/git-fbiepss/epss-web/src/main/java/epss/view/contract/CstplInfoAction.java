@@ -196,7 +196,7 @@ public class CstplInfoAction {
                 }else if (strSubmitTypePara.equals("Upd")) {
                         cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                         rowSelectedFlag = "false";
-                    }
+                }
             } else {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                 rowSelectedFlag = "true";

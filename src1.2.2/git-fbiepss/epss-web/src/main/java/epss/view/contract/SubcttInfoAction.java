@@ -128,7 +128,6 @@ public class SubcttInfoAction {
         strWarnMsg = "";
         if (cttInfoService.NameisExistInDb(cttInfoShowUpd)) {
             strWarnMsg = "该合同编号已存在，请重新输入。";
-
         }
     }
 
@@ -214,7 +213,7 @@ public class SubcttInfoAction {
                 } else if (strSubmitTypePara.equals("Upd")) {
                         cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                         rowSelectedFlag = "false";
-                    }
+                }
             } else {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                 rowSelectedFlag = "true";

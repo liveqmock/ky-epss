@@ -171,7 +171,7 @@ public class TkcttInfoAction {
                     cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                 }else if (strSubmitTypePara.equals("Upd")) {
                         cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
-                    }
+                }
             } else {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
             }
@@ -340,7 +340,6 @@ public class TkcttInfoAction {
                  updRecordAction(cttInfoShowUpd);
                  MessageUtil.addInfo("更新数据完成。");
                  onQueryAction("Mng","false");
-
     }
 
     private void updRecordAction(CttInfoShow cttInfoShowPara) {
