@@ -61,7 +61,6 @@ public class CstplInfoAction {
     private String strNotPassToStatus;
     private CttInfoShow cttInfoShowSelected;
     private CttInfoShow cttInfoShowSel;
-    private CttInfoShow cttInfoShowAdd;
     private CttInfoShow cttInfoShowUpd;
     private CttInfoShow cttInfoShowDel;
     private List<CttInfoShow> cttInfoShowList;
@@ -101,9 +100,6 @@ public class CstplInfoAction {
         cttInfoShowSel = new CttInfoShow();
         cttInfoShowSel.setCttType(ESEnum.ITEMTYPE1.getCode());
         cttInfoShowSel.setParentPkid(strBelongToPkid);
-        cttInfoShowAdd = new CttInfoShow();
-        cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE1.getCode());
-        cttInfoShowAdd.setParentPkid(strBelongToPkid);
         cttInfoShowUpd = new CttInfoShow();
         cttInfoShowUpd.setCttType(ESEnum.ITEMTYPE1.getCode());
         cttInfoShowUpd.setParentPkid(strBelongToPkid);
@@ -112,7 +108,7 @@ public class CstplInfoAction {
         cttInfoShowDel.setParentPkid(strBelongToPkid);
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
-        strSubmitType = "Add";
+        strSubmitType = "";
         esFlowControl.getBackToStatusFlagList("Qry");
         rowSelectedFlag = "false";
     }
@@ -135,7 +131,6 @@ public class CstplInfoAction {
                     }
                 }
             }
-            cttInfoShowAdd.setId(strMaxId);
             cttInfoShowUpd.setId(strMaxId);
         } catch (Exception e) {
             logger.error("信息查询失败", e);
@@ -187,14 +182,6 @@ public class CstplInfoAction {
         return cttInfoService.getCttInfoByPkId(strPkid);
     }
 
-    public void resetActionForAdd(){
-        strSubmitType="Add";
-        cttInfoShowAdd = new CttInfoShow();
-        cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE1.getCode());
-        cttInfoShowAdd.setParentPkid(strBelongToPkid);
-        rowSelectedFlag = "false";
-    }
-
     public void selectRecordAction(String strPowerTypePara,
                                    String strSubmitTypePara,
                                    CttInfoShow cttInfoShowSelected) {
@@ -210,11 +197,7 @@ public class CstplInfoAction {
                 if (strSubmitTypePara.equals("Sel")) {
                     cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                     rowSelectedFlag = "true";
-                } else if (strSubmitTypePara.equals("Add")) {
-                    cttInfoShowAdd = new CttInfoShow();
-                    cttInfoShowAdd.setParentPkid(strBelongToPkid);
-                    rowSelectedFlag = "false";
-                } else {
+                }else {
                     if (strSubmitTypePara.equals("Upd")) {
                         cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                         rowSelectedFlag = "false";
@@ -366,38 +349,21 @@ public class CstplInfoAction {
      * @param
      */
     public void onClickForMngAction() {
-        if (strSubmitType.equals("Add")) {
-            cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE1.getCode());
-            if (!submitPreCheck(cttInfoShowAdd)) {
+        if (strSubmitType.equals("Upd")) {
+            if (!submitPreCheck(cttInfoShowUpd)) {
                 return;
             }
-            if (cttInfoService.isExistInDb(cttInfoShowAdd)) {
+            if (cttInfoService.isExistInDb(cttInfoShowUpd)) {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             } else {
-                addRecordAction(cttInfoShowAdd);
-                resetActionForAdd();
+                cttInfoShowUpd.setCttType(ESEnum.ITEMTYPE1.getCode());
+                updRecordAction(cttInfoShowUpd);
             }
-        } else if (strSubmitType.equals("Upd")) {
-            cttInfoShowUpd.setCttType(ESEnum.ITEMTYPE1.getCode());
-            updRecordAction(cttInfoShowUpd);
         } else if (strSubmitType.equals("Del")) {
             cttInfoShowDel.setCttType(ESEnum.ITEMTYPE1.getCode());
             deleteRecordAction(cttInfoShowDel);
         }
         onQueryAction("Mng","false");
-    }
-
-    private void addRecordAction(CttInfoShow cttInfoShowPara) {
-        try {
-            if (cttInfoShowPara.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
-                cttInfoShowPara.setParentPkid("ROOT");
-            }
-            cttInfoService.insertRecord(cttInfoShowPara);
-            MessageUtil.addInfo("新增数据完成。");
-        } catch (Exception e) {
-            logger.error("新增数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
     }
     private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
@@ -642,14 +608,6 @@ public class CstplInfoAction {
 
     public void setCttInfoShowUpd(CttInfoShow cttInfoShowUpd) {
         this.cttInfoShowUpd = cttInfoShowUpd;
-    }
-
-    public CttInfoShow getCttInfoShowAdd() {
-        return cttInfoShowAdd;
-    }
-
-    public void setCttInfoShowAdd(CttInfoShow cttInfoShowAdd) {
-        this.cttInfoShowAdd = cttInfoShowAdd;
     }
 
     public CttInfoShow getCttInfoShowDel() {

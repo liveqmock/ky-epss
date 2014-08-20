@@ -61,12 +61,6 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:panel>
-            <p:commandButton id="addBtn"
-                             value="增加" icon="ui-icon-plus"
-                             action="#{tkcttInfoAction.resetActionForAdd()}"
-                             update="pgViewForAdd"
-                             onclick="PF('wVDlgViewForAdd').show()">
-            </p:commandButton>
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{tkcttInfoAction.cttInfoShowList}"
                          var="record"
@@ -205,63 +199,6 @@
                     <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
                         <h:graphicImage binding="#{tkcttInfoAction.image}"/>
                     </p:dialog>
-                </h:panelGrid>
-            </p:dialog>
-
-            <p:dialog id="dlgViewForAdd" header="总包合同增加信息" widgetVar="wVDlgViewForAdd"
-                      esizable="false" modal="true"
-                      showEffect="clip" hideEffect="fold">
-                <h:panelGrid id="pgViewForAdd">
-                    <h:panelGrid columns="3">
-                        <p:outputLabel value="合同编号：" for="idForAdd"/>
-                        <p:inputText id="idForAdd" value="#{tkcttInfoAction.cttInfoShowAdd.id}"/>
-                        <p:commandButton id="autoSetIdBtnForAdd" icon="ui-icon-plus"
-                                         action="#{tkcttInfoAction.setMaxNoPlusOne()}"
-                                         update="idForAdd"
-                                         style="height:20px">
-                        </p:commandButton>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="合同名称：" for="cttNameForAdd"/>
-                        <p:inputText id="cttNameForAdd" value="#{tkcttInfoAction.cttInfoShowAdd.name}"
-                                     style="width:328px"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="备注内容：" for="noteForAdd"/>
-                        <p:inputText id="noteForAdd" value="#{tkcttInfoAction.cttInfoShowAdd.note}"/>
-                        <p:outputLabel value="签订日期：" for="signDateForAdd"/>
-                        <p:inputText id="signDateForAdd" value="#{tkcttInfoAction.cttInfoShowAdd.signDate}"
-                                     onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                        <p:outputLabel value="开始时间：" for="cttStartDateForAdd"/>
-                        <p:inputText id="cttStartDateForAdd" value="#{tkcttInfoAction.cttInfoShowAdd.cttStartDate}"
-                                     onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                        <p:outputLabel value="截止时间：" for="cttEndDateForAdd"/>
-                        <p:inputText id="cttEndDateForAdd" value="#{tkcttInfoAction.cttInfoShowAdd.cttEndDate}"
-                                     onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="签订甲方：" for="signPartAForAdd"/>
-                        <p:selectOneMenu id="signPartAForAdd" value="#{tkcttInfoAction.cttInfoShowAdd.signPartA}"
-                                         style="width:328px">
-                            <f:selectItems value="#{esCommon.customerlist}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="签订乙方：" for="signPartBForAdd"/>
-                        <p:selectOneMenu id="signPartBForAdd" value="#{tkcttInfoAction.cttInfoShowAdd.signPartB}"
-                                         style="width:328px">
-                            <f:selectItems value="#{esCommon.customerlist}"/>
-                        </p:selectOneMenu>
-                    </h:panelGrid>
-                    <h:panelGrid id="pgOperBtnForAdd" columns="2">
-                        <p:commandButton id="submitBtnForAdd"
-                                         value="提交（增加）"
-                                         action="#{tkcttInfoAction.onClickForMngAction()}"
-                                         update="pdt,msgs,pgViewForAdd">
-                        </p:commandButton>
-                        <p:commandButton id="resetBtnForAdd" value="重置"
-                                         type="reset"
-                                         update="pgViewForAdd">
-                        </p:commandButton>
-                    </h:panelGrid>
                 </h:panelGrid>
             </p:dialog>
             <p:dialog id="dlgViewForUpd" header="总包合同更新信息" widgetVar="wVDlgViewForUpd"

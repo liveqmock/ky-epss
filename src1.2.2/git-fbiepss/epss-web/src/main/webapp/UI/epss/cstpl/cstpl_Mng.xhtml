@@ -63,12 +63,6 @@
                 </h:panelGrid>
             </p:panel>
             <h:panelGrid id="pgCondition" columns="4">
-                <p:commandButton id="addBtn"
-                                 value="增加" icon="ui-icon-plus"
-                                 action="#{cstplInfoAction.resetActionForAdd()}"
-                                 update="pgCondition,pgViewForAdd"
-                                 onclick="PF('wVDlgViewForAdd').show()">
-                </p:commandButton>
                 <p:commandButton id="endInputBtn" value="录入完成"
                                  action="#{cstplInfoAction.onClickForPowerAction('MngPass')}"
                                  update="pgCondition,pdt,msgs"
@@ -200,44 +194,6 @@
                     <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
                         <h:graphicImage binding="#{cstplInfoAction.image}"/>
                     </p:dialog>
-                </h:panelGrid>
-            </p:dialog>
-            <p:dialog id="dlgViewForAdd" header="成本计划增加信息" widgetVar="wVDlgViewForAdd"
-                      resizable="false" modal="true"
-                      showEffect="clip" hideEffect="fold">
-                <h:panelGrid id="pgViewForAdd">
-                    <h:panelGrid columns="3">
-                        <p:outputLabel value="计划编号：" for="idForAdd"/>
-                        <p:inputText id="idForAdd" value="#{cstplInfoAction.cttInfoShowAdd.id}"/>
-                        <p:commandButton id="autoSetIdBtnForAdd" icon="ui-icon-plus"
-                                         action="#{cstplInfoAction.setMaxNoPlusOne()}"
-                                         update="idForAdd"
-                                         style="height:20px">
-                        </p:commandButton>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="计划名称：" for="cstplNameForAdd"/>
-                        <p:inputText id="cstplNameForAdd" value="#{cstplInfoAction.cttInfoShowAdd.name}"
-                                     style="width:340px"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="制定日期：" for="signDateForAdd"/>
-                        <p:inputText id="signDateForAdd" value="#{cstplInfoAction.cttInfoShowAdd.signDate}"
-                                     onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                        <p:outputLabel value="备注内容：" for="noteForAdd"/>
-                        <p:inputText id="noteForAdd" value="#{cstplInfoAction.cttInfoShowAdd.note}"/>
-                    </h:panelGrid>                     
-                    <h:panelGrid id="pgOperBtnForAdd" columns="2">
-                        <p:commandButton id="submitBtnForAdd"
-                                         value="提交（增加）"
-                                         action="#{cstplInfoAction.onClickForMngAction()}"
-                                         update="pdt,msgs,pgViewForAdd">
-                        </p:commandButton>
-                        <p:commandButton id="resetBtnForAdd" value="重置"
-                                         type="reset"
-                                         update="pgViewForAdd">
-                        </p:commandButton>
-                    </h:panelGrid>
                 </h:panelGrid>
             </p:dialog>
             <p:dialog id="dlgViewForUpd" header="成本计划更新信息" widgetVar="wVDlgViewForUpd"

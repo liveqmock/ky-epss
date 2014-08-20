@@ -59,7 +59,6 @@ public class SubcttInfoAction {
     private CttInfoShow cttInfoShowQry;
     private String strNotPassToStatus;
     private CttInfoShow cttInfoShowSel;
-    private CttInfoShow cttInfoShowAdd;
     private CttInfoShow cttInfoShowUpd;
     private CttInfoShow cttInfoShowDel;
     private List<CttInfoShow> cttInfoShowList;
@@ -102,15 +101,12 @@ public class SubcttInfoAction {
         cttInfoShowQry = new CttInfoShow();
         cttInfoShowQry.setCttType(ESEnum.ITEMTYPE2.getCode());
         cttInfoShowQry.setParentPkid(strBelongToPkid);
-        cttInfoShowAdd = new CttInfoShow();
-        cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE2.getCode());
-        cttInfoShowAdd.setParentPkid(strBelongToPkid);
         cttInfoShowSel = new CttInfoShow();
         cttInfoShowUpd = new CttInfoShow();
         cttInfoShowDel = new CttInfoShow();
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
-        strSubmitType = "Add";
+        strSubmitType = "";
         esFlowControl.getBackToStatusFlagList("Qry");
         rowSelectedFlag = "false";
     }
@@ -118,11 +114,11 @@ public class SubcttInfoAction {
     //分包合同录入时，验证分包合同编号是否合法重复
     public void validSubCttId() {
         strWarnMsg = "";
-        String subCttIdFromPage = cttInfoShowAdd.getId();
+        String subCttIdFromPage = cttInfoShowUpd.getId();
         if (!(subCttIdFromPage.matches("^[a-zA-Z0-9]+$"))) {
             strWarnMsg = "合同编号应以字母数字开头，请重新输入。";
         } else {
-            if (cttInfoService.IdisExistInDb(cttInfoShowAdd)) {
+            if (cttInfoService.IdisExistInDb(cttInfoShowUpd)) {
                 strWarnMsg = "该合同编号已存在，请重新输入。";
 
             }
@@ -132,12 +128,10 @@ public class SubcttInfoAction {
     //分包合同录入时，验证分包合同编号是否合法重复
     public void validSubCttName() {
         strWarnMsg = "";
-
-        if (cttInfoService.NameisExistInDb(cttInfoShowAdd)) {
+        if (cttInfoService.NameisExistInDb(cttInfoShowUpd)) {
             strWarnMsg = "该合同编号已存在，请重新输入。";
 
         }
-
     }
 
     public void setMaxNoPlusOne() {
@@ -158,7 +152,6 @@ public class SubcttInfoAction {
                     }
                 }
             }
-            cttInfoShowAdd.setId(strMaxId);
             cttInfoShowUpd.setId(strMaxId);
         } catch (Exception e) {
             logger.error("总包合同信息查询失败", e);
@@ -206,15 +199,6 @@ public class SubcttInfoAction {
         return null;
     }
 
-    public void resetActionForAdd(){
-        strSubmitType="Add";
-        cttInfoShowAdd = new CttInfoShow();
-        cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE2.getCode());
-        cttInfoShowAdd.setParentPkid(strBelongToPkid);
-        rowSelectedFlag = "false";
-        strWarnMsg = "";
-    }
-
     public void selectRecordAction(String strPowerTypePara,
                                      String strSubmitTypePara,
                                      CttInfoShow cttInfoShowPara) {
@@ -229,10 +213,6 @@ public class SubcttInfoAction {
                 if (strSubmitTypePara.equals("Sel")) {
                     cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
                     rowSelectedFlag = "true";
-                } else if (strSubmitTypePara.equals("Add")) {
-                    cttInfoShowAdd = new CttInfoShow();
-                    cttInfoShowAdd.setParentPkid(strBelongToPkid);
-                    rowSelectedFlag = "false";
                 } else {
                     if (strSubmitTypePara.equals("Upd")) {
                         cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
@@ -287,18 +267,15 @@ public class SubcttInfoAction {
      * @param
      */
     public void onClickForMngAction() {
-        if (strSubmitType.equals("Add")) {
-            if (!submitPreCheck(cttInfoShowAdd)) {
-                return;
-            }
-            if (cttInfoService.isExistInDb(cttInfoShowAdd)) {
-                MessageUtil.addError("该记录已存在，请重新录入！");
-            } else {
-                addRecordAction(cttInfoShowAdd);
-                resetActionForAdd();
-            }
-        } else if (strSubmitType.equals("Upd")) {
-            updRecordAction(cttInfoShowUpd);
+         if (strSubmitType.equals("Upd")) {
+             if (!submitPreCheck(cttInfoShowUpd)) {
+                 return;
+             }
+             if (cttInfoService.isExistInDb(cttInfoShowUpd)) {
+                 MessageUtil.addError("该记录已存在，请重新录入！");
+             } else {
+                 updRecordAction(cttInfoShowUpd);
+             }
         } else if (strSubmitType.equals("Del")) {
             deleteRecordAction(cttInfoShowDel);
         }
@@ -546,14 +523,6 @@ public class SubcttInfoAction {
 
     public void setCttInfoShowUpd(CttInfoShow cttInfoShowUpd) {
         this.cttInfoShowUpd = cttInfoShowUpd;
-    }
-
-    public CttInfoShow getCttInfoShowAdd() {
-        return cttInfoShowAdd;
-    }
-
-    public void setCttInfoShowAdd(CttInfoShow cttInfoShowAdd) {
-        this.cttInfoShowAdd = cttInfoShowAdd;
     }
 
     public CttInfoShow getCttInfoShowDel() {
