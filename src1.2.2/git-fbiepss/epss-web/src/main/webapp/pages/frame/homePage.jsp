@@ -188,7 +188,7 @@
                 start();
                 window.setTimeout("myTimer()", 5000);//设置循环时间
             }
-            //TODO (add by yxy,2014-08-17,*start)
+
         var currentDefaultMenuStr;
         var lastDefaultMenuStr = '<%=jsonDefaultMenu%>';
         function myRequest() {
