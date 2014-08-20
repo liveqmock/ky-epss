@@ -2,13 +2,14 @@ package skyline.platform.system.manage.oper;
 
 import skyline.platform.form.control.Action;
 import skyline.platform.system.manage.dao.PtOperBean;
+import skyline.security.MD5Helper;
 
 public class PasswordInsertAction extends Action {
      PtOperBean operbean = new PtOperBean();
 
      public int doBusiness() {
            
-           operbean.setOperpasswd(this.req.getFieldValue("newpwd"));
+           operbean.setOperpasswd(MD5Helper.getMD5String(this.req.getFieldValue("newpwd")));
            
            this.res.setType(0);
            
