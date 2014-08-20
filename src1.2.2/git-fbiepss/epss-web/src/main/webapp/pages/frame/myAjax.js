@@ -49,7 +49,6 @@ function sendRequest(method, url, content, responseType, callback) {
             return false;
         }
     }
-
     // 确定发送请求的方式和URL以及是否异步执行下段代码
     if (method.toLowerCase() == "get") {
         http_request.open(method, url, true);
@@ -63,26 +62,6 @@ function sendRequest(method, url, content, responseType, callback) {
             return false;
         }
     }
-
     //开始发起浏览请求
     http_request.send(content);
 }
-/*************************************************************************
- *
- *　方法说明：回调函数(处理返回信息的函数)模板
- *
- *************************************************************************/
-function processResponse() {
-    // 请求已完成
-    if (http_request.readyState == 4) {
-        // 信息已经成功返回，开始处理信息
-        if (http_request.status == 200) {
-            //返回的是文本格式信息
-            alert(http_request.responseText);
-            //返回的XML格式文档就用alert(http_request.responseXML);
-        } else { //页面不正常
-            //"您所请求的页面有异常"
-            alert("/u60a8/u6240/u8bf7/u6c42/u7684/u9875/u9762/u6709/u5f02/u5e38/u3002");
-        }
-    }
-} 

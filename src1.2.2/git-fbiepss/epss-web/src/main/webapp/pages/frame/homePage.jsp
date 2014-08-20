@@ -16,18 +16,14 @@
     } catch (Exception e) {
         System.out.println("jsp" + e + "\n");
     }
-    String deptname = "";
     String operid = "";
-
     String rolesall = null;
 
     if (om != null) {
         if (om.getOperator() != null) {
             username = om.getOperatorName();
             operid = om.getOperator().getOperid();
-            if (om.getOperator().getPtDeptBean() != null){
-                deptname = om.getOperator().getPtDeptBean().getDeptname();
-            }
+
             //角色
             List roles = new ArrayList();
             DatabaseConnection conn = ConnectionManager.getInstance().get();
@@ -77,29 +73,26 @@
                 padding: 0px;
                 overflow: hidden;
             }
-
-                .divlayout {
-                    position: relative;
-                    top: 0px;
-                    left: 0px;
-                    width: 100%;
-                    height: 100%;
-                    margin: 0px;
-                    padding: 0px;
-                    overflow: hidden;
-                }
-
-                .headfont {
-                    font-size: 12px;
-                    font-family: SimSun;
-                    color: #7387A0;
-                }
-
-                .skin-top-right {
-                    background-position: top right;
-                    background-repeat: no-repeat;
-                    background-image: url(../../images/top_right.jpg)
-                }
+            .divlayout {
+                position: relative;
+                top: 0px;
+                left: 0px;
+                width: 100%;
+                height: 100%;
+                margin: 0px;
+                padding: 0px;
+                overflow: hidden;
+            }
+            .headfont {
+                font-size: 12px;
+                font-family: SimSun;
+                color: #7387A0;
+            }
+            .skin-top-right {
+                background-position: top right;
+                background-repeat: no-repeat;
+                background-image: url(../../images/top_right.jpg)
+            }
             #tip {
                 position: absolute;
                 right: 0px;
@@ -152,112 +145,45 @@
                 left: 30%;
                 top: 30%
             }
-            </style>
+        </style>
         <script type="text/javascript">
             var contextPath = '<%=contextPath%>';
             var defaultMenuStr = '<%=jsonDefaultMenu%>';
             var systemMenuStr = '<%=jsonSystemMenu%>';
-            var handle;
-            function start() {
-                var obj = document.getElementById("tip");
-                if (parseInt(obj.style.height) == 0) {
-                    obj.style.display = "block";
-                    handle = setInterval("changeH('up')", 2);
-                } else {
-                    handle = setInterval("changeH('down')", 2)
+            var currentDefaultMenuStr;
+            var lastDefaultMenuStr = '<%=jsonDefaultMenu%>';
+              function doOnLoad() {
+                bizdhxLayout = new dhtmlXLayoutObject("bizlayout", "2U", "dhx_skyblue");
+                doBizLoad();
+                sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
+                doSysLoad();
+                tabbarhide("tasklayout");
+                document.getElementById("task").setAttribute("active", "true");
+                document.getElementById("task").className = "tabs-item-active";
+            }
+            function relogin() {
+                parent.window.reload = "true";
+                parent.window.location.replace("<%=contextPath%>/pages/security/logout.jsp");
+            }
+            // 控制加载页面时间长时，给用户友好提示
+            document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
+            function subSomething() {
+                if (document.readyState == "complete" &&
+                        window.parent.frames["scrollInfoWorkFrame"].document.readyState == "complete") {
+                    document.getElementById('loading').style.display = 'none';
+                    //window.setTimeout("run()", 5000);
+                    //window.setTimeout("myTimer()", 5000);
+                }
+            var forTabClickStr=1;
+            function forTabClick() {
+                if(forTabClickStr==1){
+                    forTabClickStr=0;
+                    window.setTimeout("run()", 1000);
                 }
             }
-            function changeH(str) {
-                var obj = document.getElementById("tip");
-                if (str == "up") {
-                    if (parseInt(obj.style.height) > 150)
-                        clearInterval(handle);
-                    else
-                        obj.style.height = (parseInt(obj.style.height) + 8).toString() + "px";
-                }
-                if (str == "down") {
-                    if (parseInt(obj.style.height) < 8) {
-                        clearInterval(handle);
-                        obj.style.display = "none";
-                    }else{
-                        obj.style.height = (parseInt(obj.style.height) - 8).toString() + "px";
-                    }
-                }
-            }
-            function myTimer() {
-                start();
-                window.setTimeout("myTimer()", 5000);//设置循环时间
-            }
-
-        var currentDefaultMenuStr;
-        var lastDefaultMenuStr = '<%=jsonDefaultMenu%>';
-        function myRequest() {
-            var url = "ajaxRequest.do?time=" + Math.random();
-            //要提交到服务器的数据
-            var content = "userName=ni";
-            //调用异常请求提交的函数
-            sendRequest("POST", url, content, "TEXT", myProcessResponse);
-        }
-        function myProcessResponse() {
-            // 请求已完成
-            if (http_request.readyState == 4) {
-                // 信息已经成功返回，开始处理信息
-                if (http_request.status == 200) {
-                    //返回的是文本格式信息
-                    if(http_request.responseText==""){
-                        alert("hdahhd");
-                    }else{
-                        currentDefaultMenuStr = http_request.responseText;
-                        if (lastDefaultMenuStr != currentDefaultMenuStr) {
-                            myDoBizLoad(currentDefaultMenuStr);
-                            lastDefaultMenuStr = currentDefaultMenuStr;
-                        }
-                    }
-
-                } else { //页面不正常
-                    //"您所请求的页面有异常"
-                }
-            }
-        }
-        function run() {
-            myRequest();
-            window.setTimeout("run()", 3000);
-        }
-        //TODO (add by yxy,2014-08-17,*end)
-
-        function doOnLoad() {
-            bizdhxLayout = new dhtmlXLayoutObject("bizlayout", "2U", "dhx_skyblue");
-            doBizLoad();
-            sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
-            doSysLoad();
-            tabbarhide("tasklayout");
-            document.getElementById("task").setAttribute("active", "true");
-            document.getElementById("task").className = "tabs-item-active";
-        }
-        function Relogin() {
-            parent.window.reload = "true";
-            parent.window.location.replace("<%=contextPath%>/pages/security/logout.jsp");
-        }
-        //TODO (add by yxy,2014-08-17,*start)
-        // 控制加载页面时间长时，给用户友好提示
-        document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
-        function subSomething() {
-            if (document.readyState == "complete" && window.parent.frames["scrollInfoWorkFrame"].document.readyState == "complete") {
-                document.getElementById('loading').style.display = 'none';
-                //window.setTimeout("myTimer()", 5000);
-            }
-        }
-        var forTabClickStr=1;
-        function forTabClick() {
-            if(forTabClickStr==1){
-                forTabClickStr=0;
-                window.setTimeout("run()", 1000);
-            }
-        }
-        //TODO (add by yxy,2014-08-17,*end)
         </script>
     </head>
-    <body onload="doOnLoad()" onResize="doOnResize();">
+    <body onload="doOnLoad()">
         <%--关闭tab时返回上一个浏览的tab--%>
         <input type="hidden" id="lasttabdivid">
         <div class="skin-top-right">
@@ -274,36 +200,36 @@
                         <span>您好,<%=username%>! </span>
                         <span><%= " | [" + rolesall + "] |" %></span>
                         <span onclick="changepwd()" onMouseOver="this.style.cursor='hand'">修改密码</span>
-                        <span onclick="Relogin()" onMouseOver="this.style.cursor='hand'">| 退出&nbsp;&nbsp;</span>
+                        <span onclick="relogin()" onMouseOver="this.style.cursor='hand'">| 退出&nbsp;&nbsp;</span>
                     </td>
                 </tr>
                 <tr style="width:100%; height:25px">
                     <td colspan="5" style="height:25px;">
-                                <div onclick="tabbarclk(this);" active="true" id="task" class="tabs-item-active"
-                                     style="float:left;width:80px;margin-left:12px;">
-                                    <span style="width:100%;">待办业务</span>
-                                </div>
-                                <div style="float:left;width:2px;"></div>
-                                <div onclick="tabbarclk(this);forTabClick()" active="false" id="biz" class="tabs-item"
-                                     style="float:left;width:80px;">
-                                    <span style="width:100%;">业务操作</span>
-                                </div>
-                                <div style="float:left;width:2px;"></div>
-                                <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
-                                     style="float:left;width:80px;">
-                                    <span style="width:100%;">系统管理</span>
-                                </div>
-                                <div style="float:left;width:2px;"></div>
-                                <div onclick="tabbarclk(this);" active="false" id="help" class="tabs-item"
-                                     style="float:left;width:80px;">
-                                    <span style="width:100%;">操作帮助</span>
-                                </div>
-                                <div style="float:left;width:2px;"></div>
+                        <div onclick="tabbarclk(this);" active="true" id="task" class="tabs-item-active"
+                             style="float:left;width:80px;margin-left:12px;">
+                            <span style="width:100%;">待办业务</span>
+                        </div>
+                        <div style="float:left;width:2px;"></div>
+                        <div onclick="tabbarclk(this);forTabClick()" active="false" id="biz" class="tabs-item"
+                             style="float:left;width:80px;">
+                            <span style="width:100%;">业务操作</span>
+                        </div>
+                        <div style="float:left;width:2px;"></div>
+                        <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
+                             style="float:left;width:80px;">
+                            <span style="width:100%;">系统管理</span>
+                        </div>
+                        <div style="float:left;width:2px;"></div>
+                        <div onclick="tabbarclk(this);" active="false" id="help" class="tabs-item"
+                             style="float:left;width:80px;">
+                            <span style="width:100%;">操作帮助</span>
+                        </div>
+                        <div style="float:left;width:2px;"></div>
                         <%--TODO (add by yxy,2014-08-17,*start)--%>
                         <div style="float:left;width:2px;"></div>
                         <div id="dynamicInfo"
                              style="float:right;width:838px;">
-                            <iframe id="scrollInfoWorkFrame" name="scrollInfoWorkFrame"
+                            <iframe id="scrollInfoWorkFrame"
                                     src="<%=contextPath%>/UI/epss/scrollInfo/ScrollInfo.xhtml"
                                     width="100%"
                                     height="25px;"
@@ -345,32 +271,6 @@
                         <div class="divlayout" id="helplayout">
                             <br/>系统帮助信息...
                         </div>
-                        <%--<div id="tip" style="display: none;height: 0px">
-                            <h1>
-                                <a href="javascript:void(0)" onclick="start()">×</a>
-                                您有新消息
-                            </h1>
-                            <iframe id="dynamicDialogInfoWorkFrame" name="dynamicDialogInfoWorkFrame"
-                                    src="<%=contextPath%>/UI/epss/scrollInfo/Dialog.xhtml"
-                                    width="180"
-                                    height="180"
-                                    frameborder="no"
-                                    border="0"
-                                    marginwidth="0" marginheight="0"
-                                    scrolling="no">
-                            </iframe>
-                        </div>
-                        <%--
-                        <div style="display: none" >
-                            <iframe id="tipAdd" name="tipAdd"
-                                    src="<%=contextPath%>/UI/epss/task/tipAdd.jsp"
-                                    width="0" height="0"
-                                    frameborder="no"
-                                    border="0"
-                                    marginwidth="0" marginheight="0"
-                                    scrolling="no">
-                            </iframe>
-                        </div>--%>
                     </td>
                 </tr>
             </table>

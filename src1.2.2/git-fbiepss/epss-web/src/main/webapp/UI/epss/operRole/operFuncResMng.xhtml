@@ -21,76 +21,74 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="true" />
-            <p:panel header="资源列表">
-                <h:panelGrid id="pdQry" columns="1">
-                    <p:commandButton value="导出到EXCEL"
-                                     action="#{operFuncResAction.onExportExcel}"
-                                     update="msgs"
-                                     ajax="false">
-                    </p:commandButton>
-                    <p:treeTable id="resTreeTable"
-                                 value="#{operFuncResAction.resRoot}"
-                                 var="document"
-                                 emptyMessage="数据记录为空..."
-                                 scrollable="true"
-                                 scrollHeight="500">
-                        <p:column headerText="名称" style="width:400px;">
-                            <h:outputText value="#{document.resName}"/>
-                        </p:column>
-                        <p:column headerText="录入" >
-                            <h:outputText value="#{document.inputOperName}"/>
-                        </p:column>
-                        <p:column headerText="审核" style="width:100px;">
-                            <h:outputText value="#{document.checkOperName}"/>
-                        </p:column>
-                        <p:column headerText="复核" style="width:100px;">
-                            <h:outputText value="#{document.doubleCheckOperName}"/>
-                        </p:column>
-                        <p:column headerText="批准" style="width:100px;">
-                            <h:outputText value="#{document.approveOperName}"/>
-                        </p:column>
-                        <p:column headerText="记账" style="width:100px;">
-                            <h:outputText value="#{document.accountOperName}"/>
-                        </p:column>
-                        <p:column headerText="归档" style="width:100px;">
-                            <h:outputText value="#{document.doubleCheckOperName}"/>
-                        </p:column>
-                        <p:column headerText="操作">
-                            <p:commandButton
-                                             icon="ui-icon-plus"
-                                             style="height:20px;width:20px"
-                                             action="#{operFuncResAction.selectRecordAction('Add',document)}"
-                                             rendered="#{document.resType eq '2' ? 'false':'true'}"
-                                             update=":form:pgViewForAdd,:form:msgs"
-                                             onclick="PF('wVDlgViewForAdd').show()">
-                            </p:commandButton>
-                            <p:commandButton
-                                             icon="ui-icon-pencil"
-                                             style="height:20px;width:20px"
-                                             action="#{operFuncResAction.selectRecordAction('Upd',document)}"
-                                             rendered="#{document.resPkid eq 'ROOT'?'false':'true'}"
-                                             update=":form:pgViewForUpd,:form:msgs"
-                                             onclick="PF('wVDlgViewForUpd').show()">
-                            </p:commandButton>
-                            <p:commandButton
-                                             icon="ui-icon-trash"
-                                             style="height:20px;width:20px"
-                                             action="#{operFuncResAction.selectRecordAction('Del',document)}"
-                                             rendered="#{document.resPkid eq 'ROOT'?'false':'true'}"
-                                             update=":form:pgViewForDel,:form:msgs"
-                                             onclick="PF('wVDlgViewForDel').show()">
-                            </p:commandButton>
-                            <p:commandButton icon="ui-icon-search"
-                                             style="height:20px;width:20px"
-                                             action="#{operFuncResAction.selectRecordAction('Sel',document)}"
-                                             update=":form:pgViewForDel,:form:msgs"
-                                             onclick="wVDlgViewForPower.show()"
-                                             title="View">
-                            </p:commandButton>
-                        </p:column>
-                    </p:treeTable>
-                </h:panelGrid>
-            </p:panel>
+            <h:panelGrid id="pdQry" columns="1">
+                <p:commandButton value="导出到EXCEL"
+                                 action="#{operFuncResAction.onExportExcel}"
+                                 update="msgs"
+                                 ajax="false">
+                </p:commandButton>
+                <p:treeTable id="resTreeTable"
+                             value="#{operFuncResAction.resRoot}"
+                             var="document"
+                             emptyMessage="数据记录为空..."
+                             scrollable="true"
+                             scrollHeight="500">
+                    <p:column headerText="名称" style="width:400px;">
+                        <h:outputText value="#{document.resName}"/>
+                    </p:column>
+                    <p:column headerText="录入" style="width:100px;">
+                        <h:outputText value="#{document.inputOperName}"/>
+                    </p:column>
+                    <p:column headerText="审核" style="width:100px;">
+                        <h:outputText value="#{document.checkOperName}"/>
+                    </p:column>
+                    <p:column headerText="复核" style="width:100px;">
+                        <h:outputText value="#{document.doubleCheckOperName}"/>
+                    </p:column>
+                    <p:column headerText="批准" style="width:100px;">
+                        <h:outputText value="#{document.approveOperName}"/>
+                    </p:column>
+                    <p:column headerText="记账" style="width:100px;">
+                        <h:outputText value="#{document.accountOperName}"/>
+                    </p:column>
+                    <p:column headerText="归档" style="width:100px;">
+                        <h:outputText value="#{document.doubleCheckOperName}"/>
+                    </p:column>
+                    <p:column headerText="操作" style="width:85px;">
+                        <p:commandButton
+                                         icon="ui-icon-plus"
+                                         style="height:20px;width:20px"
+                                         action="#{operFuncResAction.selectRecordAction('Add',document)}"
+                                         rendered="#{document.resType eq '2' ? 'false':'true'}"
+                                         update=":form:pgViewForAdd,:form:msgs"
+                                         onclick="PF('wVDlgViewForAdd').show()">
+                        </p:commandButton>
+                        <p:commandButton
+                                         icon="ui-icon-pencil"
+                                         style="height:20px;width:20px"
+                                         action="#{operFuncResAction.selectRecordAction('Upd',document)}"
+                                         rendered="#{document.resPkid eq 'ROOT'?'false':'true'}"
+                                         update=":form:pgViewForUpd,:form:msgs"
+                                         onclick="PF('wVDlgViewForUpd').show()">
+                        </p:commandButton>
+                        <p:commandButton
+                                         icon="ui-icon-trash"
+                                         style="height:20px;width:20px"
+                                         action="#{operFuncResAction.selectRecordAction('Del',document)}"
+                                         rendered="#{document.resPkid eq 'ROOT'?'false':'true'}"
+                                         update=":form:pgViewForDel,:form:msgs"
+                                         onclick="PF('wVDlgViewForDel').show()">
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-search"
+                                         style="height:20px;width:20px"
+                                         action="#{operFuncResAction.selectRecordAction('Sel',document)}"
+                                         update=":form:pgViewForDel,:form:msgs"
+                                         onclick="wVDlgViewForPower.show()"
+                                         title="View">
+                        </p:commandButton>
+                    </p:column>
+                </p:treeTable>
+            </h:panelGrid>
             <p:dialog id="dlgViewForAdd" header="资源增加" widgetVar="wVDlgViewForAdd"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">

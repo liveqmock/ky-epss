@@ -12,7 +12,6 @@ function doBizLoad() {
     bizdhxLayout.setAutoSize("a;b", "a;b");
     bizdhxAccord = bizdhxLayout.cells("a").attachAccordion();
     biztabbar = bizdhxLayout.cells("b").attachTabbar();
-
     biztabbar.setSkin("dhx_skyblue");
     biztabbar.setImagePath(contextPath + "/dhtmlx/dhtmlxTabbar/codebase/imgs/");
     biztabbar.setHrefMode("iframes-on-demand");
@@ -34,49 +33,25 @@ function doBizLoad() {
     bizdhxAccord.setSkin("dhx_skyblue");
     bizdhxAccord.setIconsPath(contextPath + "/dhtmlx/dhtmlxAccordion/codebase/icons/");
     bizdhxAccord.addItem("a1", "业务功能");
-//    TODO (modified by yxy,2014-08-02,Total:3 line)
-//    bizdhxAccord.addItem("a2", "常用功能");
-//    bizdhxAccord.addItem("a3", "待办事项");
-//    bizdhxAccord.addItem("a4", "实时消息");
-
     bizdhxAccord.openItem("a1");
     bizdhxAccord._enableOpenEffect = true;
     bizdhxAccord.cells("a1").setIcon("accord_biz.png");
-//    TODO (modified by yxy,2014-08-02,Total:3 line)
-//    bizdhxAccord.cells("a2").setIcon("accord_manage.png");
-//    bizdhxAccord.cells("a3").setIcon("editor.gif");
-//    bizdhxAccord.cells("a4").setIcon("accord_support.png");
 
     var biztree = bizdhxAccord.cells("a1").attachTree();
     var treeDefaultJson = eval('(' + defaultMenuStr + ')');
     biztree.setSkin('dhx_skyblue');
     biztree.setImagePath(contextPath + "/dhtmlx/dhtmlxTree/codebase/imgs/csh_books/");
-    //biztree.enableDragAndDrop(true);
     biztree.loadJSONObject(treeDefaultJson);
-    biztree.attachEvent("onClick", function (id) {
-        var action = (biztree.getUserData(id, "url"));
-        if (action == "#") {
-            biztree.openItem(id);
-        } else {
-            var text = biztree.getSelectedItemText();
-            bizaddtabbar(id, text, contextPath + action);
-        }
-        return true;
-    });
-}
-function myDoBizLoad(myDefaultMenuStr){
-    var biztree = bizdhxAccord.cells("a1").attachTree();
-    var treeDefaultJson = eval('(' + myDefaultMenuStr + ')');
-    biztree.setSkin('dhx_skyblue');
-    biztree.setImagePath(contextPath + "/dhtmlx/dhtmlxTree/codebase/imgs/csh_books/");
-    biztree.loadJSONObject(treeDefaultJson);
-    biztree.attachEvent("onClick", function (id) {
-        var action = (biztree.getUserData(id, "url"));
-        if (action == "#") {
-            biztree.openItem(id);
-        } else {
-            var text = biztree.getSelectedItemText();
-            bizaddtabbar(id, text, contextPath + action);
+    biztree.attachEvent("onClick",
+        function (id) {
+            var action = (biztree.getUserData(id, "url"));
+            if (action == "#") {
+                biztree.openItem(id);
+            } else {
+                var text = biztree.getSelectedItemText();
+                bizaddtabbar(id, text, contextPath + action);
+            }
+            return true;
         }
         return true;
     });
@@ -156,7 +131,3 @@ function changepwd() {
     window.showModalDialog(contextPath + "/UI/system/deptUser/Passwordedit.jsp", "test", sfeature);
 }
 
-function doOnResize() {
-    bizdhxLayout.setSizes();
-    sysdhxLayout.setSizes();
-}
