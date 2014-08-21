@@ -77,31 +77,31 @@
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitCstplList"
                          scrollable="true">
-                <p:column headerText="操作" style="width:40px" >
-                <p:commandButton   icon="ui-icon-search"
-                                   style="height:20px;width:20px"
-                                   actionListener="#{cstplInfoAction.selectRecordAction('Qry','',record)}"
-                                   update=":form:pdt,:form:pgView,:form:msgs"
-                                   onclick="PF('wVDlgView').show()">
-                </p:commandButton>
-                <p:commandButton  icon="ui-icon-triangle-1-e"
-                                  style="height:20px;width:20px"
-                                  oncomplete="actSelect('#{record.pkid}')">
-                </p:commandButton>
+                <p:column headerText="操作" style="width:36px;text-align: center">
+                    <p:commandButton  icon="ui-icon-search"
+                                      style="height:20px;width:20px"
+                                      actionListener="#{cstplInfoAction.selectRecordAction('Qry','',record)}"
+                                      update=":form:pdt,:form:pgView,:form:msgs"
+                                      onclick="PF('wVDlgView').show()">
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-triangle-1-e"
+                                     style="height:20px;width:20px"
+                                     oncomplete="actSelect('#{record.pkid}')">
+                    </p:commandButton>
                 </p:column>
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
-                <p:column headerText="成本计划号" style="width:140px;text-align:center">
+                <p:column headerText="成本计划号" style="width:160px;text-align:center">
                     <h:outputText value="#{record.id}"/>
                 </p:column>
-                <p:column headerText="成本计划名" style="width:300px;text-align:left">
+                <p:column headerText="成本计划名" style="width:330px;text-align:left">
                     <h:outputText value="#{record.name}"/>
                 </p:column>
-                <p:column headerText="制定日期" style="width:66px;text-align:center">
+                <p:column headerText="制定日期" style="width:80px;text-align:center">
                     <h:outputText value="#{record.signDate}"/>
                 </p:column>
-                <p:column headerText="备注内容" style="width:200px;text-align:center">
+                <p:column headerText="备注内容" style="width:240px;text-align:center">
                     <h:outputText value="#{record.note}"/>
                 </p:column>
             </p:dataTable>
