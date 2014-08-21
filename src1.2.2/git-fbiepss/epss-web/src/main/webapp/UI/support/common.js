@@ -491,7 +491,6 @@ function hashCode( sVal )
 	return hash;
 }
 
-//////////////////////////Message Dialog Function//////////////////////////
 //var _dialogWin;
 function createMessageDialog(text)
 {
@@ -533,9 +532,6 @@ function hideMessage()
 {
 	hideMessageDialog();
 }
-//////////////////////////Message Dialog Function//////////////////////////
-
-
 /////////////////////// DBGrid Function //////////////////////////////
 function DBGrid_insertRow( tab, rowNum )
 {

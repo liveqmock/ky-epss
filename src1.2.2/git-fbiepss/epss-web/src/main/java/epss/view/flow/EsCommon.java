@@ -8,7 +8,7 @@ package epss.view.flow;
  * To change this template use File | Settings | File Templates.
  */
 
-import epss.common.utils.ToolUtil;
+import skyline.util.ToolUtil;
 import skyline.platform.utils.Util;
 import skyline.service.PlatformService;
 import epss.repository.model.EsInitCust;
@@ -19,7 +19,6 @@ import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.repository.model.Ptoper;
 import skyline.service.ToolsService;
 
 import javax.annotation.PostConstruct;

@@ -1,6 +1,6 @@
 package epss.service;
 
-import epss.common.utils.ToolUtil;
+import skyline.util.ToolUtil;
 import epss.repository.dao.EsCttInfoMapper;
 import epss.repository.dao.not_mybatis.MyCttInfoMapper;
 import epss.repository.model.model_show.CttInfoShow;

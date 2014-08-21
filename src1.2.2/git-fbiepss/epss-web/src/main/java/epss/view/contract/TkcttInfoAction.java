@@ -2,7 +2,6 @@ package epss.view.contract;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.common.utils.*;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.CttInfoShow;
@@ -18,6 +17,9 @@ import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skyline.util.MessageUtil;
+import skyline.util.StyleModel;
+import skyline.util.ToolUtil;
 
 import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;

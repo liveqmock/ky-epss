@@ -1,7 +1,7 @@
 package epss.view.cust;
 
-import epss.common.utils.StyleModel;
-import epss.common.utils.ToolUtil;
+import skyline.util.StyleModel;
+import skyline.util.ToolUtil;
 import epss.repository.model.model_show.SignPartShow;
 import epss.view.flow.EsCommon;
 import epss.service.SignPartService;
@@ -10,7 +10,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import epss.common.utils.MessageUtil;
+import skyline.util.MessageUtil;;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;

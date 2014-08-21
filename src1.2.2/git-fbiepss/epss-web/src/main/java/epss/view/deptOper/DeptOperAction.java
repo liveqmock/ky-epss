@@ -1,6 +1,6 @@
 package epss.view.deptOper;
 
-import epss.common.utils.MessageUtil;
+import skyline.util.MessageUtil;;
 import epss.repository.model.Dept;
 import epss.repository.model.Oper;
 import epss.repository.model.model_show.DeptAndOperShow;

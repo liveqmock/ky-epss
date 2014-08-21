@@ -2,9 +2,8 @@ package epss.view.operRes;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.common.utils.MessageUtil;
-import epss.common.utils.ToolUtil;
-import epss.repository.model.EsCttInfo;
+import skyline.util.MessageUtil;;
+import skyline.util.ToolUtil;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.service.CttInfoService;
@@ -25,7 +24,6 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.*;
 

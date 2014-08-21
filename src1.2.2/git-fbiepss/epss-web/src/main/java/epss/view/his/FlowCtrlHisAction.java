@@ -8,7 +8,7 @@ import epss.service.FlowCtrlHisService;
 import epss.service.EsCommonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import epss.common.utils.MessageUtil;
+import skyline.util.MessageUtil;;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;

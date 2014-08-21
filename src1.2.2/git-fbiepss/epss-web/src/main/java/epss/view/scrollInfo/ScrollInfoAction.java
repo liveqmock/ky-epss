@@ -1,6 +1,6 @@
 package epss.view.scrollInfo;
 
-import epss.common.utils.ToolUtil;
+import skyline.util.ToolUtil;
 import epss.repository.model.model_show.TaskShow;
 import epss.service.ScrollInfoService;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package epss.service;
 
-import epss.common.utils.ToolUtil;
+import skyline.util.ToolUtil;
 import epss.repository.dao.EsCttItemMapper;
 import epss.repository.dao.not_mybatis.MyCttItemMapper;
 import epss.repository.model.EsCttItem;
