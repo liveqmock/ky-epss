@@ -1,6 +1,8 @@
 <%@ page import="skyline.platform.db.ConnectionManager" %>
 <%@ page import="skyline.platform.db.DatabaseConnection" %>
 <%@ page import="skyline.platform.db.RecordSet" %>
+<%@ page import="net.sf.json.JSONObject" %>
+<%@ page import="net.sf.json.JSONArray" %>
 <%@ page contentType="text/html; charset=GBK" %>
 <%@ include file="/pages/security/loginassistor.jsp" %>
 <%
@@ -13,6 +15,14 @@
     try {
         jsonDefaultMenu = om.getJsonString("default");
         jsonSystemMenu = om.getJsonString("system");
+        JSONObject json = JSONObject.fromObject(jsonSystemMenu);
+        JSONArray jsonArray= (JSONArray) json.get("item");
+        for (Object object:jsonArray){
+            if("831".equals(((JSONObject)object).get("id").toString())){
+                jsonArray.remove(object);
+            }
+        }
+        jsonSystemMenu=json.toString();
     } catch (Exception e) {
         System.out.println("jsp" + e + "\n");
     }
