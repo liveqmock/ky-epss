@@ -41,8 +41,6 @@ public class PlatformService {
     @Autowired
     private PtmenuMapper menuMapper;
     @Autowired
-    private SysSchedulerLogMapper sysSchedulerLogMapper;
-    @Autowired
     private PtCommonMapper ptCommonMapper;
 
     private String strLastUpdBy;
@@ -151,23 +149,6 @@ public class PlatformService {
         return enuMap;
     }
 
-    /**
-     * 查询某一年的调度日志
-     *
-     * @param curryear
-     * @return
-     * @throws java.text.ParseException
-     */
-    public List<SysSchedulerLog> selectSchedulerLogByYear(String curryear) throws ParseException {
-        SysSchedulerLogExample example = new SysSchedulerLogExample();
-        String firstDayThisYear = new SimpleDateFormat("yyyy-01-01").format(new Date());
-        //Date date = new SimpleDateFormat("yyyy-MM-dd").parse(firstDayThisYear);
-        //example.createCriteria().andTimeGreaterThanOrEqualTo(date);
-        example.createCriteria();
-        List<SysSchedulerLog> sysSchedulerLogs = sysSchedulerLogMapper.selectByExample(example);
-        return sysSchedulerLogs;
-    }
-
     /*智能字段_Start*/
     public PtoperMapper getPtoperMapper() {
         return ptoperMapper;
@@ -207,14 +188,6 @@ public class PlatformService {
 
     public void setMenuMapper(PtmenuMapper menuMapper) {
         this.menuMapper = menuMapper;
-    }
-
-    public SysSchedulerLogMapper getSysSchedulerLogMapper() {
-        return sysSchedulerLogMapper;
-    }
-
-    public void setSysSchedulerLogMapper(SysSchedulerLogMapper sysSchedulerLogMapper) {
-        this.sysSchedulerLogMapper = sysSchedulerLogMapper;
     }
 
     public PtmenuMapper getPtmenuMapper() {
