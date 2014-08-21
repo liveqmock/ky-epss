@@ -11,6 +11,7 @@ public class TaskShow {
     private String preStatusFlag;
     private String preStatusFlagName;
     private Integer recordsCountInGroup;
+    private String preStatusFlagType;
 
     public String getType() {
         return type;
@@ -90,5 +91,13 @@ public class TaskShow {
 
     public void setRecordsCountInGroup(Integer recordsCountInGroup) {
         this.recordsCountInGroup = recordsCountInGroup;
+    }
+
+    public String getPreStatusFlagType() {
+        return preStatusFlagType;
+    }
+
+    public void setPreStatusFlagType(String preStatusFlagType) {
+        this.preStatusFlagType = preStatusFlagType;
     }
 }
