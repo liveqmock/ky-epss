@@ -4,14 +4,14 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="/svn-haierfip/ref/ojdbc6.jar"/>
+    <classPathEntry location="/workspace/svn-fbiepss/lib/ojdbc6.jar"/>
 
     <!--信息-->
     <context id="AllInfo" targetRuntime="MyBatis3">
         <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
                         connectionURL="jdbc:oracle:thin:@localhost:1521:orcl"
-                        userId="platform"
-                        password="platform">
+                        userId="epss"
+                        password="epss">
         </jdbcConnection>
 
         <javaTypeResolver>
