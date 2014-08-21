@@ -228,6 +228,22 @@ public class EsInitTaskAction {
                                     if(itemUnitEP.getPreStatusFlag()!=null) {
                                         taskShow.setPreStatusFlagName(
                                         ESEnumPreStatusFlag.getValueByKey(itemUnitEP.getPreStatusFlag()).getTitle());
+                                        //ÑÕÉ«Çø·Ö
+                                        if (taskShow.getStatusFlag()!=null){
+                                            if (taskShow.getPreStatusFlag().equals("0")){
+                                                taskShow.setPreStatusFlagType("1");
+                                            }else {
+                                                if ((int)(Integer.parseInt(itemUnitEP.getPreStatusFlag()))
+                                                        >2*(int)(Integer.parseInt(itemUnitEP.getStatusFlag()))){
+                                                    taskShow.setPreStatusFlagType("2");
+                                                }else if ((int)(Integer.parseInt(itemUnitEP.getStatusFlag())+(int)Integer.parseInt(itemUnitEP.getStatusFlag()))-1
+                                                        ==(int)Integer.parseInt(itemUnitEP.getStatusFlag())){
+                                                    taskShow.setPreStatusFlagType("1");
+                                                }
+                                            }
+                                        }else {
+                                            taskShow.setPreStatusFlagType("2");
+                                        }
                                     }
                                     taskShowList.add(taskShow);
                                 }

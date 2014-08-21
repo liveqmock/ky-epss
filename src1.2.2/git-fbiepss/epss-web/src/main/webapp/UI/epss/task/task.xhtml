@@ -110,7 +110,10 @@
                              rowKey="#{row + 1}"
                              selectionMode="single"
                              emptyMessage="数据记录为空..."
-                             rowStyleClass="#{record.type eq null?'rowDoneStyle':null}"
+                             rowStyleClass="#{record.type eq null?'rowDoneStyle':
+                             record.preStatusFlagType eq '2'?'rowDoneStyle2':
+                             record.preStatusFlagType eq '1'?'rowDoneStyle1':
+                             null}"
                              scrollable="true"
                              scrollHeight="450">
                     <p:column headerText="操作" style="width:30px">

@@ -5,6 +5,12 @@
 .rowDoneStyle {
     background: gray;
 }
+.rowDoneStyle1 {
+    background: greenyellow;
+}
+.rowDoneStyle2 {
+    background: red;
+}
 .rowSelectStyle {
     background: yellow;
 }
