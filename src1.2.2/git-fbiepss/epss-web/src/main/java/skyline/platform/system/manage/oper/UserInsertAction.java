@@ -6,6 +6,9 @@ import java.io.*;
 import skyline.platform.form.control.Action;
 import skyline.platform.system.manage.dao.*;
 import skyline.platform.utils.Util;
+import skyline.security.MD5Helper;
+
+
 
 public class UserInsertAction extends Action
 {
@@ -29,7 +32,7 @@ public class UserInsertAction extends Action
             operbean.setOpername(this.req.getFieldValue(i,"opername"));
             //operbean.setOpertype(this.req.getFieldValue(i,"opertype"));
             operbean.setOpertype("2");
-            operbean.setOperpasswd(this.req.getFieldValue(i,"operpasswd"));
+            operbean.setOperpasswd(MD5Helper.getMD5String(this.req.getFieldValue(i, "operpasswd")));
             operbean.setIssuper(this.req.getFieldValue(i,"issuper"));
             operbean.setSex(this.req.getFieldValue(i,"sex"));
             operbean.setEmail(this.req.getFieldValue(i,"email"));
