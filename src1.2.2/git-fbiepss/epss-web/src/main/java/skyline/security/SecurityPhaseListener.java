@@ -23,27 +23,12 @@ import java.io.IOException;
 public class SecurityPhaseListener implements PhaseListener {
     public void afterPhase(PhaseEvent event) {
     }
-
     public void beforePhase(PhaseEvent event) {
-
         FacesContext fc = event.getFacesContext();
-        /*
-        HttpServletResponse response = (HttpServletResponse)fc.getExternalContext().getResponse();
-        response.addHeader("Pragma", "no-cache");
-        response.addHeader("Cache-Control", "no-cache");
-        response.addHeader("Cache-Control", "no-store");
-        response.addHeader("Cache-Control", "must-revalidate");
-        */
-
         ExternalContext ec = fc.getExternalContext();
         HttpSession session = (HttpSession) ec.getSession(true);
         HttpServletResponse response = (HttpServletResponse) ec.getResponse();
         HttpServletRequest request = (HttpServletRequest) ec.getRequest();
-
-        //UIViewRoot uiv = new UIViewRoot();
-        //String viewid = fc.getViewRoot().getViewId();
-        //NavigationHandler nh = fc.getApplication().getNavigationHandler();
-
         OperatorManager om = (OperatorManager) session.getAttribute(SystemAttributeNames.USER_INFO_NAME);
         if (om == null) {
             try {
@@ -55,49 +40,8 @@ public class SecurityPhaseListener implements PhaseListener {
             }
             fc.responseComplete();
         }
-
     }
-
     public PhaseId getPhaseId() {
         return PhaseId.RENDER_RESPONSE;
     }
-
-/*
-    public void doRedirect(FacesContext fc, String redirectPage) throws FacesException {
-        ExternalContext ec = fc.getExternalContext();
-
-        try {
-            // workaround for PrimeFaces
-            new RequestContextImpl(ec);
-            if (ec.getRequestParameterMap().containsKey(Constants.PARTIAL_PROCESS_PARAM)
-                    && !ec.getRequestParameterMap().get(Constants.PARTIAL_PROCESS_PARAM).equals("@all")) {
-                fc.setViewRoot(new PartialViewRoot(new UIViewRoot()));
-            }
-
-            // fix for renderer kit (Mojarra's and PrimeFaces's ajax redirect)
-            if ((RequestContext.getCurrentInstance().isAjaxRequest()
-                    || fc.getPartialViewContext().isPartialRequest())
-                    && fc.getResponseWriter() == null
-                    && fc.getRenderKit() == null) {
-                ServletResponse response = (ServletResponse) ec.getResponse();
-                ServletRequest request = (ServletRequest) ec.getRequest();
-                response.setCharacterEncoding(request.getCharacterEncoding());
-
-                RenderKitFactory factory =
-                        (RenderKitFactory) FactoryFinder.getFactory(FactoryFinder.RENDER_KIT_FACTORY);
-                RenderKit renderKit =
-                        factory.getRenderKit(fc, fc.getApplication().getViewHandler().calculateRenderKitId(fc));
-                ResponseWriter responseWriter =
-                        renderKit.createResponseWriter(response.getWriter(), null, request.getCharacterEncoding());
-                fc.setResponseWriter(responseWriter);
-            }
-
-            ec.redirect(ec.getRequestContextPath() + (redirectPage != null ? redirectPage : ""));
-        } catch (IOException e) {
-            System.out.println("Redirect to the specified page '" + redirectPage + "' failed");
-            throw new FacesException(e);
-        }
-    }
-*/
-
 }

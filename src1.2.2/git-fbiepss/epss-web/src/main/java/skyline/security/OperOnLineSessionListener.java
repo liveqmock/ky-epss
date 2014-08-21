@@ -14,11 +14,7 @@ import javax.servlet.http.HttpSessionListener;
  * To change this template use File | Settings | File Templates.
  */
 public class OperOnLineSessionListener implements HttpSessionListener {
-
-    //private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh24:mm:ss");
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
-      //  HttpSession session = httpSessionEvent.getSession();
-       // System.out.println(sdf.format(new Date())+"  session created : " + session.getId()+"  creationTime: "+session.getCreationTime());
     }
 
     /**
@@ -28,6 +24,5 @@ public class OperOnLineSessionListener implements HttpSessionListener {
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
         HttpSession session = httpSessionEvent.getSession();
         OnLineOpersManager.removeSessionFromServer(session.getId(), session.getServletContext());
-        //System.out.println(sdf.format(new Date())+"  session Destroyed : "+session.getId() +"  creationTime: "+session.getCreationTime());
     }
 }

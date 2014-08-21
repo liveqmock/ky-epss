@@ -11,7 +11,7 @@
     <script language="javascript" src="<%=contextPath%>/js/dbgrid.js"></script>
     <script language="javascript" src="<%=contextPath%>/js/dropdownData.js"></script>
     <script language="javascript" src="<%=contextPath%>/js/dbutil.js"></script>
-    <script language="javascript" src="UserJsp.js"></script>
+    <script language="javascript" src="userJsp.js"></script>
   </head>
   <%
         DBGrid dbGrid = new DBGrid();

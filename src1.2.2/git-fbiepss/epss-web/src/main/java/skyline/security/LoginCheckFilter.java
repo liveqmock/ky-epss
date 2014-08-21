@@ -1,5 +1,4 @@
 package skyline.security;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.platform.form.config.SystemAttributeNames;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: zhanrui
@@ -26,8 +24,6 @@ public class LoginCheckFilter extends HttpServlet implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         HttpServletResponse httpServletResponse = (HttpServletResponse) response;
-        //logger.debug("REQUEST URL£∫" + httpServletRequest.getServletPath() + "?" + httpServletRequest.getQueryString());
-        //logger.debug("REQUEST PARAM£∫" + httpServletRequest.getParameterMap());
         String url = httpServletRequest.getServletPath();
         if (url.indexOf("pages") >= 0) {
             chain.doFilter(request, response);
@@ -41,8 +37,6 @@ public class LoginCheckFilter extends HttpServlet implements Filter {
                 if (httpServletRequest.getHeader("x-requested-with") != null
                         && httpServletRequest.getHeader("x-requested-with")
                         .equalsIgnoreCase("XMLHttpRequest")) {
-                     //AJAX
-                    //httpServletResponse.addHeader("X-ERROR-PAGE", httpServletRequest.getContextPath() +  "/pages/security/timeout.jsp");
                     httpServletResponse.addHeader("X-ERROR-PAGE", httpServletRequest.getContextPath());
                 } else {
                     // ∆’Õ®http«Î«Û
@@ -53,11 +47,9 @@ public class LoginCheckFilter extends HttpServlet implements Filter {
             }
         }
     }
-
     public void init(FilterConfig filterConfig) throws ServletException {
         this.loginPage = filterConfig.getInitParameter("loginPage");
     }
-
     public void destroy() {
     }
 }

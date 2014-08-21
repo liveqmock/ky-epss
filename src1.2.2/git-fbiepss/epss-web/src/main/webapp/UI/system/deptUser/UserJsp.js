@@ -17,7 +17,7 @@ function userTable_TRDbclick(el){
            var userArr = whereSArr[0].split("&");
             whArr = whereSArr[1].split("&");
 
-          var spath = "Useredit.jsp";
+          var spath = "useredit.jsp";
           var arg = new Object();
           arg.type = "select";
           arg.deptID = whArr[2];
@@ -101,7 +101,7 @@ function userTable_appendRecord_click(tab){
    
 	var sfeature = "dialogwidth:620px; Dialogheight:250px;center:yes;help:no;resizable:yes;scroll:no;status:no";
 
-     var spath = "Useredit.jsp";
+     var spath = "useredit.jsp";
      var arg = new Object();
      arg.type = "insert";
      arg.deptID = whArr[2];
@@ -139,7 +139,7 @@ function userTable_editRecord_click(tab){
           var userArr = whereSArr[0].split("&");
             whArr = whereSArr[1].split("&");
 
-          var spath = "Useredit.jsp";
+          var spath = "useredit.jsp";
           var arg = new Object();
           arg.type = "update";
 

@@ -12,7 +12,7 @@
     <script language="javascript" src="<%=contextPath%>/js/dbutil.js"></script>
     <script language="javascript" src="<%=contextPath%>/js/tree.js"></script>
     <script language="javascript" src="<%=contextPath%>/js/menu.js"></script>
-    <script language="javascript" src="DeptJsp.js"></script>
+    <script language="javascript" src="deptJsp.js"></script>
 
     <LINK href="<%=contextPath%>/dhtmlx/dhtmlxLayout/codebase/dhtmlxlayout.css" type="text/css" rel="stylesheet">
     <LINK href="<%=contextPath%>/dhtmlx/dhtmlxLayout/codebase/skins/dhtmlxlayout_dhx_skyblue.css" type="text/css" rel="stylesheet">

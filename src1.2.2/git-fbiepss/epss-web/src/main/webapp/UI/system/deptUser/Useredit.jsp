@@ -1,18 +1,15 @@
 <%@include file="/global.jsp" %>
 <%@ page contentType="text/html; charset=GBK"%>
-<%@ page import="skyline.platform.utils.BusinessDate"%>
-<%@ page import="skyline.platform.html.*,skyline.platform.advance.utils.*"%>
-<%@ page import="skyline.platform.security.OperatorManager"%>
-<%@ page import="skyline.platform.form.config.SystemAttributeNames"%>
+<%@ page import="skyline.platform.advance.utils.PropertyManager"%>
+<%@ page import="skyline.platform.html.ZtSelect,skyline.platform.utils.BusinessDate"%>
 <html>
-    <head>
-        <title></title>
-        <LINK href="<%=contextPath%>/css/ccb.css" type="text/css" rel="stylesheet">
+<head>
+    <title></title>
+    <LINK href="<%=contextPath%>/css/ccb.css" type="text/css" rel="stylesheet">
         <script language="javascript" src="<%=contextPath%>/js/basic.js"></script>
         <script language="javascript" src="<%=contextPath%>/js/xmlHttp.js"></script>
         <script language="javascript" src="<%=contextPath%>/js/dbutil.js"></script>
         <script language="javascript" src="<%=contextPath%>/js/tree.js"></script>
-        <script language="javascript" src="<%=contextPath%>/js/getDeptuser.js"></script>
     </head>
     <%
         BusinessDate busDa = new BusinessDate();
@@ -32,7 +29,6 @@
         var deptName="";
         var firstuser="";
         function SaveClick(){
-            //dropDeptInit();
             if (dbOperateType =="insert" ||dbOperateType =="update"){
                 if (checkForm(feerateedit)!="true")
                     return;
@@ -49,7 +45,6 @@
             }else
                 window.close();
         }
-
         function feeeditinit(){
             var arg = window.dialogArguments;
             if (arg){

@@ -5,23 +5,11 @@
   <head>
     <title></title>
     <LINK href="<%=contextPath%>/css/ccb.css" type="text/css" rel="stylesheet">
-      <%--
-          <script language="javascript" src="<%=contextPath%>/js/basic.js"></script>
-          <script language="javascript" src="<%=contextPath%>/js/xmlHttp.js"></script>
-          <script language="javascript" src="<%=contextPath%>/js/dbgrid.js"></script>
-          <script language="javascript" src="<%=contextPath%>/js/dropdownData.js"></script>
-          <script language="javascript" src="<%=contextPath%>/js/dbutil.js"></script>
-            <script language="javascript" src="<%=contextPath%>/js/menu.js"></script>
-      --%>
-      <script language="javascript" src="ActionJsp.js"></script>
+      <script language="javascript" src="actionJsp.js"></script>
   </head>
   <%
         DBGrid dbGrid = new DBGrid();
         dbGrid.setGridID("ActionTable");
-        //dbGrid.setGridTitleVisible(false);
-
-        //dbGrid.setGridBottomVisible(false);
-
         dbGrid.setGridType("edit");
         dbGrid
             .setfieldSQL("select LogicCode as keycode, LogicCode,LogicClass,LogicMethod,LogicDesc from PTLogicAct where  ");
@@ -38,7 +26,7 @@
         dbGrid.setCheck(true);
         dbGrid.setWhereStr("  1=2 ");
 
-        //////数据集按钮
+        //数据集按钮
         dbGrid.setdataPilotID("datapilot");
         dbGrid.setbuttons("default");
   %>
@@ -72,8 +60,14 @@
             &nbsp;
           </td>
           <td>
-            <input id="savebut" class="buttonGrooveDisable" onmouseover="button_onmouseover()" onmouseout="button_onmouseout()" type="button" value="查询" onclick="queryClick();">
-            <input name="" class="buttonGrooveDisable" type="reset" value="重填" onmouseover="button_onmouseover()" onmouseout="button_onmouseout()">
+            <input id="savebut" class="buttonGrooveDisable"
+                   onmouseover="button_onmouseover()"
+                   onmouseout="button_onmouseout()"
+                   type="button" value="查询" onclick="queryClick();">
+            <input name="" class="buttonGrooveDisable"
+                   type="reset" value="重填"
+                   onmouseover="button_onmouseover()"
+                   onmouseout="button_onmouseout()">
           </td>
         </tr>
         </form>

@@ -9,7 +9,7 @@
     <script language="javascript" src="<%=contextPath%>/js/xmlHttp.js"></script>
     <script language="javascript" src="<%=contextPath%>/js/dbgrid.js"></script>
     <script language="javascript" src="<%=contextPath%>/js/dbutil.js"></script>
-    <script language="javascript" src="EnumJsp.js"></script>
+    <script language="javascript" src="enumJsp.js"></script>
   </head>
   <%
         String type = request.getParameter("type");

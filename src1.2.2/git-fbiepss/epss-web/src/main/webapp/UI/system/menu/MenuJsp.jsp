@@ -10,7 +10,7 @@
     <script language="javascript" src="<%=contextPath%>/js/dbgrid.js"></script>
     <script language="javascript" src="<%=contextPath%>/js/dropdownData.js"></script>
     <script language="javascript" src="<%=contextPath%>/js/dbutil.js"></script>
-    <script language="javascript" src="MenuJsp.js"></script>
+    <script language="javascript" src="menuJsp.js"></script>
   </head>
   <%
         DBGrid dbGrid = new DBGrid();
