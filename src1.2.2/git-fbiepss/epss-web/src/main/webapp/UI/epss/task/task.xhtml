@@ -101,6 +101,14 @@
                              update="pdt,msgs"
                              rendered="false">
             </p:commandButton>
+            <div  style="height:15px;
+                         vertical-align: bottom;
+                         font-family: verdana;
+                         FONT-SIZE: 9pt;
+                         text-align: center;">
+                <h:outputLabel value="通 过" style="background-color: yellowgreen;position: relative;right: 15px;"/>
+                <h:outputLabel value="未 过" style="background-color: red"/>
+            </div>
             <!--列表维护-->
             <p:panel>
                 <p:dataTable id="pdt"
@@ -111,9 +119,7 @@
                              selectionMode="single"
                              emptyMessage="数据记录为空..."
                              rowStyleClass="#{record.type eq null?'rowDoneStyle':
-                             record.preStatusFlagType eq '2'?'rowDoneStyle2':
-                             record.preStatusFlagType eq '1'?'rowDoneStyle1':
-                             null}"
+                             record.preStatusFlagType eq '2'?'rowDoneStyle2':'rowDoneStyle1'}"
                              scrollable="true"
                              scrollHeight="450">
                     <p:column headerText="操作" style="width:30px">
