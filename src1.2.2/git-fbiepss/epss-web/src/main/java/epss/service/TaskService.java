@@ -28,8 +28,6 @@ public class TaskService {
     private MyTaskMapper myTaskMapper;
     @Autowired
     private PlatformService platformService;
-    @Autowired
-    private OperResService operResService;
 
     public List<TaskShow> getTaskCountsInFlowGroup() {
         return myTaskMapper.getTaskCountsInFlowGroup();
@@ -45,11 +43,6 @@ public class TaskService {
         //合同状态
         String strStatusFlag;
         List<TaskShow> taskShowList = new ArrayList<TaskShow>();
-
-        OperResShow operResShowTemp = new OperResShow();
-        List<OperResShow> operResShowList =
-                operResService.selectOperaResRecordsByModelShow(operResShowTemp);
-
         //通过OperatorManager获取相应权限下菜单列表
         List<Ptmenu> ptmenuList = platformService.getPtmenuList();
         // 以合同类型和状态为分组,取得各组的数量
@@ -137,24 +130,10 @@ public class TaskService {
                         }
                     } //当任务为待处理任务时，统计待处理任务中的任务个数
                     if (isHasTask.equals(true)) {
-                        //权限筛选
-                        Boolean hasPower = false;
-                        /*for(OperResShow operResShowUnit:operResShowList){
-                            if(operResShowUnit.getInfoType().equals(strType)){
-                                hasPower=true;
-                                break;
-                            }
-                        }*/
-                        hasPower = true;//暂时用
-                        if (hasPower.equals(true)) {
-                            // 追加标题行
-                            taskShow.setName(itemUnit.getMenulabel() + "(" + itemUnitCM.getRecordsCountInGroup() + ")");
-                            taskShow.setPkid("");
-                            taskShowList.add(taskShow);
-                        } else {
-                            continue;
-                        }
-
+                        // 追加标题行
+                        taskShow.setName(itemUnit.getMenulabel() + "(" + itemUnitCM.getRecordsCountInGroup() + ")");
+                        taskShow.setPkid("");
+                        taskShowList.add(taskShow);
                         //当合同状态为进入流程时
                         //流程（非‘录入未完’）信息
                         if ("EsInitTask".equals(strActionType)) {
@@ -162,20 +141,6 @@ public class TaskService {
                                 String strStatusFlagInTaskShowList = ToolUtil.getStrIgnoreNull(itemUnitEP.getStatusFlag());
                                 if (itemUnitEP.getType().equals(strType)) {
                                     isHasTask = false;
-
-                                /*//权限筛选
-                                hasPower=false;
-                                for(OperResShow operResShowUnit:operResShowList){
-                                    if(operResShowUnit.getInfoType().equals(strType)&&
-                                            operResShowUnit.getInfoPkid().equals(itemUnitEP.getPkid())){
-                                        hasPower=true;
-                                        break;
-                                    }
-                                }
-                                if(hasPower.equals(false)){
-                                    continue;
-                                }*/
-
                                     if (strStatusFlag.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
                                         if (strStatusFlagInTaskShowList.equals("")) {
                                             isHasTask = true;

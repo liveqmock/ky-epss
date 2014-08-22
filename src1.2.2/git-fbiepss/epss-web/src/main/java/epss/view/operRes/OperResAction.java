@@ -137,19 +137,7 @@ public class OperResAction implements Serializable{
             String strStatusFlag=null;
             for (int i=0;i<operResShowTempList.size();i++){
                 strStatusFlag=operResShowTempList.get(i).getFlowStatus();
-                if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(strStatusFlag)){
-                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG0.getTitle());
-                }else if (ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(strStatusFlag)){
-                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG1.getTitle());
-                }else if (ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(strStatusFlag)){
-                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG2.getTitle());
-                }else if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(strStatusFlag)){
-                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG3.getTitle());
-                }else if (ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(strStatusFlag)){
-                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG4.getTitle());
-                }else if (ESEnumStatusFlag.STATUS_FLAG5.getCode().equals(strStatusFlag)){
-                    operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.STATUS_FLAG5.getTitle());
-                }
+                operResShowTempList.get(i).setFlowStatusName(ESEnumStatusFlag.getValueByKey(strStatusFlag).getTitle());
                 operResShowList.add(operResShowTempList.get(i));
             }
         }

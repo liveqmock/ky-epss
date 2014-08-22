@@ -1,5 +1,11 @@
 package skyline.util;
 
+import skyline.platform.form.config.SystemAttributeNames;
+import skyline.platform.security.OperatorManager;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,6 +20,16 @@ public class ToolUtil {
             return true;
         }
         return false;
+    }
+
+    public static OperatorManager getOperatorManager(){
+        ExternalContext extContext = FacesContext.getCurrentInstance().getExternalContext();
+        HttpSession session = (HttpSession) extContext.getSession(true);
+        OperatorManager om = (OperatorManager) session.getAttribute(SystemAttributeNames.USER_INFO_NAME);
+        if (om == null) {
+            throw new RuntimeException("ÓÃ»§Î´µÇÂ¼£¡");
+        }
+        return om;
     }
 
     public static String getStrLastMonth(String strThisPeriodPara){
