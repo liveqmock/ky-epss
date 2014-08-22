@@ -97,5 +97,5 @@ public interface MyTaskMapper {
             "   eis.STL_PKID=ecinfo.PKID" +
             " order by" +
             "   type,statusFlag,preStatusFlag")
-    List<TaskShow> getTaskShowList();
+    List<TaskShow> getDetailTaskShowList();
 }

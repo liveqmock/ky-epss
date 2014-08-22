@@ -1,10 +1,10 @@
 package epss.view.scrollInfo;
 
-import skyline.util.ToolUtil;
 import epss.repository.model.model_show.TaskShow;
-import epss.service.ScrollInfoService;
+import epss.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skyline.util.ToolUtil;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -20,8 +20,8 @@ import java.util.List;
 @ViewScoped
 public class ScrollInfoAction implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(ScrollInfoAction.class);
-    @ManagedProperty(value = "#{scrollInfoService}")
-    private ScrollInfoService scrollInfoService;
+    @ManagedProperty(value = "#{taskService}")
+    private TaskService taskService;
 
     private String strCurrentViewMng;
     private String strLastViewMng;
@@ -39,7 +39,7 @@ public class ScrollInfoAction implements Serializable {
         getViewMsgFromTaskAction();
     }
     private void getViewMsgFromTaskAction(){
-        List<TaskShow> taskShowTempList = scrollInfoService.getViewMsgFromTask();
+        List<TaskShow> taskShowTempList =taskService.initTaskShowList("ScrollInfoAction");
         if (taskShowTempList != null) {
             String strViewMngTemp="待处理任务：";
             for (TaskShow taskShowItem : taskShowTempList) {
@@ -54,19 +54,19 @@ public class ScrollInfoAction implements Serializable {
 
     /*智能字段 Start*/
 
-    public ScrollInfoService getScrollInfoService() {
-        return scrollInfoService;
-    }
-
-    public void setScrollInfoService(ScrollInfoService scrollInfoService) {
-        this.scrollInfoService = scrollInfoService;
-    }
-
     public String getStrCurrentViewMng() {
         return strCurrentViewMng;
     }
 
     public void setStrCurrentViewMng(String strCurrentViewMng) {
         this.strCurrentViewMng = strCurrentViewMng;
+    }
+
+    public TaskService getTaskService() {
+        return taskService;
+    }
+
+    public void setTaskService(TaskService taskService) {
+        this.taskService = taskService;
     }
 }
