@@ -550,7 +550,7 @@ public class OperFuncResAction implements Serializable{
                 }else if(operFuncResShowPara.getResType().equals(ESEnum.ITEMTYPE0.getCode())) {
                     cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE1.getCode());
                     cttInfoShowAdd.setParentPkid(operFuncResShowPara.getResPkid());
-                }else if(operFuncResShowPara.getResPkid().equals(ESEnum.ITEMTYPE1.getCode())) {
+                }else if(operFuncResShowPara.getResType().equals(ESEnum.ITEMTYPE1.getCode())) {
                     cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE2.getCode());
                     cttInfoShowAdd.setParentPkid(operFuncResShowPara.getResPkid());
                 }

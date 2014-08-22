@@ -59,7 +59,9 @@
                                          icon="ui-icon-plus"
                                          style="height:20px;width:20px"
                                          action="#{operFuncResAction.selectRecordAction('Add',document)}"
-                                         rendered="#{document.resType eq '2' ? 'false':'true'}"
+                                         rendered="#{document.resType eq null ? 'true':
+                                                        document.resType eq '0' ? 'true':
+	                                                    document.resType eq '1' ? 'true':'false'}"
                                          update=":form:pgViewForAdd,:form:msgs"
                                          onclick="PF('wVDlgViewForAdd').show()">
                         </p:commandButton>
