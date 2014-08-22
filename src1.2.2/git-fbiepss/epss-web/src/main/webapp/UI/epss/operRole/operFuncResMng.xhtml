@@ -159,12 +159,12 @@
             <p:dialog id="dlgViewForPower" header="权限指派" widgetVar="wVDlgViewForPower"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">
-                <h:panelGrid id="pgViewForPower" style="width: 100%">
+                <h:panelGrid id="pgViewForPower" style="width: 100%" columns="2">
                     <p:panel header="功能列表">
                         <p:selectManyCheckbox id="grid"
                                               value="#{operFuncResAction.taskFunctionSeledList}"
                                               layout="grid"
-                                              columns="6">
+                                              columns="1">
                             <f:selectItems value="#{operFuncResAction.taskFunctionList}"
                                            var="taskRecord"
                                            itemValue="#{taskRecord.value}"
@@ -172,6 +172,13 @@
                         </p:selectManyCheckbox>
                     </p:panel>
                     <p:panel header="人员列表">
+                        <h:panelGrid id="pgOperBtnForPower">
+                            <p:commandButton id="submitBtnForPower"
+                                             value="提交"
+                                             action="#{operFuncResAction.onClickForMngAction('Power')}"
+                                             update=":form:resTreeTable,msgs,pgOperBtnForPower">
+                            </p:commandButton>
+                        </h:panelGrid>
                         <p:treeTable id="operTreeTable"
                                      value="#{operFuncResAction.operRoot}"
                                      var="node"
@@ -194,13 +201,6 @@
                             </p:column>
                         </p:treeTable>
                     </p:panel>
-                    <h:panelGrid id="pgOperBtnForPower">
-                        <p:commandButton id="submitBtnForPower"
-                                         value="提交"
-                                         action="#{operFuncResAction.onClickForMngAction('Power')}"
-                                         update=":form:resTreeTable,msgs,pgOperBtnForPower">
-                        </p:commandButton>
-                    </h:panelGrid>
                 </h:panelGrid>
             </p:dialog>
         </h:form>
