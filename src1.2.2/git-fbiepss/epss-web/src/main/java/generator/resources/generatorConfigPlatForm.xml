@@ -32,7 +32,6 @@
         </javaClientGenerator>
 
         <!--平台类 -->
-        <!--
         <table tableName="ptdept"/>
         <table tableName="ptenudetail"/>
         <table tableName="ptenumain"/>
@@ -42,22 +41,15 @@
         <table tableName="ptoper"/>
         <table tableName="ptoperrole"/>
         <table tableName="ptresource"/>
+        <table tableName="ptrole"/>
+        <table tableName="ptroleres"/>
         <table tableName="sys_lock"/>
-        <table tableName="sys_scheduler"/>
-        <table tableName="sys_scheduler_log"/>
-        <table tableName="cp_sequence"/>
-        -->
-
         <!--业务类例子 -->
-        <!--<table schema="epss" tableName="ptoper">
+        <!--<table schema="" tableName="">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
             <columnOverride column="" jdbcType="TIMESTAMP"/>
         </table>-->
-        <table schema="epss" tableName="ptoper">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
     </context>
 
 </generatorConfiguration>
