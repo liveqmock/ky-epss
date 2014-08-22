@@ -4,7 +4,6 @@ import epss.repository.model.model_show.TaskShow;
 import epss.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -46,5 +45,4 @@ public class EsInitTaskAction {
     public void setTaskService(TaskService taskService) {
         this.taskService = taskService;
     }
-
 }

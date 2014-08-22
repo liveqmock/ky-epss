@@ -220,7 +220,7 @@
                         <div id="dynamicInfo"
                              style="float:right;width:838px;">
                             <iframe id="scrollInfoWorkFrame"
-                                    src="<%=contextPath%>/UI/epss/scrollInfo/ScrollInfo.xhtml"
+                                    src="<%=contextPath%>/UI/epss/scrollInfo/scrollInfo.xhtml"
                                     width="100%"
                                     height="25px;"
                                     frameborder="no"
