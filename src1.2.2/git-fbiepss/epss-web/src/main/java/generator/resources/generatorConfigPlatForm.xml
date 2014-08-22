@@ -18,16 +18,16 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="skyline.repository.model" targetProject="main/java">
+        <javaModelGenerator targetPackage="skyline.repository.model" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="skyline.repository.mapper" targetProject="main/java">
+        <sqlMapGenerator targetPackage="skyline.repository.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="skyline.repository.dao" targetProject="main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="skyline.repository.dao" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
