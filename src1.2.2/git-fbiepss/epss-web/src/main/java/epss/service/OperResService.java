@@ -26,8 +26,6 @@ public class OperResService {
     private OperResMapper operResMapper;
     @Resource
     private PlatformService platformService;
-    @Resource
-    private EsCttInfoMapper esCttInfoMapper;
 
     public List<OperResShow> selectOperaRoleRecords(String parentDeptid){
         return myOperResMapper.selectOperaRoleRecords(parentDeptid);
@@ -92,22 +90,4 @@ public class OperResService {
         operResShowTemp.setRecversion( ToolUtil.getIntIgnoreNull(operResPara.getRecversion()));
         return operResShowTemp;
     }
-
-    public void insertEsCttInfo(CttInfoShow cttInfoShowPara){
-        cttInfoShowPara.setCreatedBy(platformService.getStrLastUpdBy());
-        cttInfoShowPara.setCreatedDate(platformService.getStrLastUpdDate());
-        esCttInfoMapper.insert(fromCttAndStlShowToModel(cttInfoShowPara));
-    }
-    private EsCttInfo fromCttAndStlShowToModel(CttInfoShow cttInfoShowPara){
-        EsCttInfo esCttInfo=new EsCttInfo();
-        esCttInfo.setId("NULL");
-        esCttInfo.setName(cttInfoShowPara.getName());
-        esCttInfo.setParentPkid(cttInfoShowPara.getParentPkid());
-        esCttInfo.setCttType(cttInfoShowPara.getType());
-        esCttInfo.setNote(cttInfoShowPara.getNote());
-        esCttInfo.setCreatedBy(cttInfoShowPara.getCreatedBy());
-        esCttInfo.setCreatedDate(cttInfoShowPara.getCreatedDate());
-        return esCttInfo;
-    }
-
 }

@@ -31,7 +31,7 @@ public class EsInitTaskAction {
     public void init() {
         //整个任务列表
         taskShowList = new ArrayList<TaskShow>();
-        taskShowList=taskService.initTaskShowList("EsInitTaskAction");
+        taskShowList=taskService.initTaskShowList("EsInitTask");
     }
 
     public List<TaskShow> getTaskShowList() {

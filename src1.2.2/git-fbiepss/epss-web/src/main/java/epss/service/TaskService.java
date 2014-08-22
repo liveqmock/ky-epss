@@ -157,7 +157,7 @@ public class TaskService {
 
                         //当合同状态为进入流程时
                         //流程（非‘录入未完’）信息
-                        if ("EsInitTaskAction".equals(strActionType)) {
+                        if ("EsInitTask".equals(strActionType)) {
                             for (TaskShow itemUnitEP : taskShowListTemp) {
                                 String strStatusFlagInTaskShowList = ToolUtil.getStrIgnoreNull(itemUnitEP.getStatusFlag());
                                 if (itemUnitEP.getType().equals(strType)) {

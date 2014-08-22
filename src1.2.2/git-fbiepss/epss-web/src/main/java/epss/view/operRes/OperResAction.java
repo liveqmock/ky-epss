@@ -176,7 +176,7 @@ public class OperResAction implements Serializable{
             if (ESEnum.ITEMTYPE0.getCode().equals(cttInfoShowPara.getType())) {
                 cttInfoShowPara.setParentPkid("ROOT");
             }
-            operResService.insertEsCttInfo(cttInfoShowPara);
+            cttInfoService.insertRecord(cttInfoShowPara);
             MessageUtil.addInfo("新增数据完成。");
         }
     }
