@@ -67,43 +67,41 @@ public class EsInitTaskAction {
         //遍历菜单
         for(Ptmenu itemUnit:ptmenuList){
             //如果菜单为空或者地址中不含有总包合同和成本计划的话，继续循环查找
-            if(itemUnit.getMenuaction()==null||
-                    (!itemUnit.getMenuaction().toLowerCase().contains("cstpl")&&
-                            !itemUnit.getMenuaction().toLowerCase().contains("tkctt"))){
+            if(itemUnit.getMenuaction()==null||itemUnit.getTargetmachine().toLowerCase().contains("system")){
                 continue;
             }
             //初始化合同类型
             strType="";
             //根据合同的类型，给变量strType赋上相应的值
-            if(itemUnit.getMenuaction().contains("tkctt_Tkctt")) {
+            if(itemUnit.getMenudesc().contains("0")) {
                 strType= ESEnum.ITEMTYPE0.getCode();
-            }else if(itemUnit.getMenuaction().contains("tkctt_Cstpl")) {
+            }else if(itemUnit.getMenudesc().contains("1")) {
                 strType= ESEnum.ITEMTYPE1.getCode();
-            }else if(itemUnit.getMenuaction().contains("cstpl_SubcttEngStlQ")) {
-                strType= ESEnum.ITEMTYPE3.getCode();
-            }else if(itemUnit.getMenuaction().contains("cstpl_SubcttEngStlM")) {
-                strType= ESEnum.ITEMTYPE4.getCode();
-            }else if(itemUnit.getMenuaction().contains("cstpl_SubcttEngStlP")) {
-                strType= ESEnum.ITEMTYPE5.getCode();
-            }else if(itemUnit.getMenuaction().contains("cstpl_SubcttEngSta")) {
-                strType= ESEnum.ITEMTYPE6.getCode();
-            }else if(itemUnit.getMenuaction().contains("cstpl_SubcttEngMea")) {
-                strType= ESEnum.ITEMTYPE7.getCode();
-            }else if(itemUnit.getMenuaction().contains("cstpl_Subctt")) {
+            }else if(itemUnit.getMenudesc().contains("2")) {
                 strType= ESEnum.ITEMTYPE2.getCode();
+            }else if(itemUnit.getMenudesc().contains("3")) {
+                strType= ESEnum.ITEMTYPE3.getCode();
+            }else if(itemUnit.getMenudesc().contains("4")) {
+                strType= ESEnum.ITEMTYPE4.getCode();
+            }else if(itemUnit.getMenudesc().contains("5")) {
+                strType= ESEnum.ITEMTYPE5.getCode();
+            }else if(itemUnit.getMenudesc().contains("6")) {
+                strType= ESEnum.ITEMTYPE6.getCode();
+            }else if(itemUnit.getMenudesc().contains("7")) {
+                strType= ESEnum.ITEMTYPE7.getCode();
             }
             //初始化合同类型
             strStatusFlag="";
             //根据合同状态的类型，给变量strStatusFlag赋上相应的值
-            if(itemUnit.getMenuaction().contains("Mng")) {
+            if(itemUnit.getMenudesc().contains("*A")) {
                 strStatusFlag= ESEnumStatusFlag.STATUS_FLAG0.getCode();
-            }else if(itemUnit.getMenuaction().contains("DoubleCheck")) {
-                strStatusFlag= ESEnumStatusFlag.STATUS_FLAG2.getCode();
-            }else if(itemUnit.getMenuaction().contains("Check")) {
+            }else if(itemUnit.getMenudesc().contains("*B")) {
                 strStatusFlag= ESEnumStatusFlag.STATUS_FLAG1.getCode();
-            }else if(itemUnit.getMenuaction().contains("Approve")) {
+            }else if(itemUnit.getMenudesc().contains("*C")) {
+                strStatusFlag= ESEnumStatusFlag.STATUS_FLAG2.getCode();
+            }else if(itemUnit.getMenudesc().contains("*D")) {
                 strStatusFlag= ESEnumStatusFlag.STATUS_FLAG3.getCode();
-            }else if(itemUnit.getMenuaction().contains("Print")) {
+            }else if(itemUnit.getMenudesc().contains("*E")) {
                 strStatusFlag= ESEnumStatusFlag.STATUS_FLAG4.getCode();
             }
             //实例化变量 taskShow
