@@ -15,8 +15,6 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import skyline.service.PlatformService;
-
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -34,8 +32,6 @@ public class FlowCtrlService {
     private EsInitPowerMapper esInitPowerMapper;
     @Autowired
     private EsInitPowerHisMapper esInitPowerHisMapper;
-    @Resource
-    private PlatformService platformService;
     @Resource
     private EsFlowService esFlowService;
     @Resource
@@ -104,42 +100,42 @@ public class FlowCtrlService {
 
     public void insertRecord(FlowCtrlShow flowCtrlShowPara) {
         EsInitPower esInitPowerTemp= fromFlowCtrlShowToPower(flowCtrlShowPara);
-        esInitPowerTemp.setCreatedBy(platformService.getStrLastUpdBy());
-        esInitPowerTemp.setCreatedDate(platformService.getStrLastUpdDate());
+        esInitPowerTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitPowerTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
         esInitPowerMapper.insertSelective(esInitPowerTemp);
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"insert"));
     }
     public void insertRecordByCtt(CttInfoShow cttInfoShowPara) {
         cttInfoShowPara.setDeletedFlag("0");
-        cttInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        cttInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        cttInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         EsInitPower esInitPowerTemp=fromCttInfoShowToPower(cttInfoShowPara);
         esInitPowerMapper.insertSelective(fromCttInfoShowToPower(cttInfoShowPara));
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"insert"));
     }
     public void insertRecordByStl( EsInitPower esInitPowerPara) {
-        esInitPowerPara.setCreatedBy(platformService.getStrLastUpdBy());
-        esInitPowerPara.setCreatedDate(platformService.getStrLastUpdDate());
-        esInitPowerPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        esInitPowerPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitPowerPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitPowerPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        esInitPowerPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitPowerPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitPowerMapper.insertSelective(esInitPowerPara);
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerPara,"insert"));
     }
 
     public void updateRecord(FlowCtrlShow flowCtrlShowPara){
         EsInitPower esInitPowerTemp= fromFlowCtrlShowToPower(flowCtrlShowPara);
-        esInitPowerTemp.setLastUpdBy(platformService.getStrLastUpdBy());
-        esInitPowerTemp.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitPowerTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitPowerTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitPowerMapper.updateByPrimaryKey(esInitPowerTemp);
-        esInitPowerTemp.setCreatedBy(platformService.getStrLastUpdBy());
-        esInitPowerTemp.setCreatedDate(platformService.getStrLastUpdDate());
+        esInitPowerTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitPowerTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
     }
     public void updateRecordByCtt(CttInfoShow cttInfoShowPara){
         cttInfoShowPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(cttInfoShowPara.getModificationNum())+1);
-        cttInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        cttInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        cttInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         EsInitPower esInitPowerTemp=fromCttInfoShowToPower(cttInfoShowPara);
         esInitPowerMapper.updateByPrimaryKey(fromCttInfoShowToPower(cttInfoShowPara));
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
@@ -149,8 +145,8 @@ public class FlowCtrlService {
         progInfoShowPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(progInfoShowPara.getModificationNum()) + 1);
         progInfoShowPara.setDeletedFlag("0");
-        progInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        progInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         EsInitPower esInitPowerTemp = fromProgInfoShowToPower(progInfoShowPara);
         esInitPowerMapper.updateByPrimaryKey(esInitPowerTemp);
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp, "update"));
@@ -160,12 +156,12 @@ public class FlowCtrlService {
         progInfoShowPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(progInfoShowPara.getModificationNum())+1);
         progInfoShowPara.setDeletedFlag("0");
-        progInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        progInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         EsInitPower esInitPowerTemp=fromProgInfoShowToPower(progInfoShowPara);
         esInitPowerMapper.updateByPrimaryKey(esInitPowerTemp);
-        esInitPowerTemp.setCreatedBy(platformService.getStrLastUpdBy());
-        esInitPowerTemp.setCreatedDate(platformService.getStrLastUpdDate());
+        esInitPowerTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitPowerTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerTemp,"update"));
 
         EsCttInfo esCttInfo=cttInfoService.getCttInfoByPkId(progInfoShowPara.getStlPkid());
@@ -217,17 +213,17 @@ public class FlowCtrlService {
         if (esInitPower!=null){
             esInitPower.setStatusFlag(esInitPowerPara.getStatusFlag());
             esInitPower.setPreStatusFlag(esInitPowerPara.getPreStatusFlag());
-            esInitPower.setLastUpdBy(platformService.getStrLastUpdBy());
-            esInitPower.setLastUpdDate(platformService.getStrLastUpdDate());
+            esInitPower.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+            esInitPower.setLastUpdDate(ToolUtil.getStrLastUpdDate());
             esInitPowerMapper.updateByPrimaryKey(esInitPower);
-            esInitPower.setCreatedBy(platformService.getStrLastUpdBy());
-            esInitPower.setCreatedDate(platformService.getStrLastUpdDate());
+            esInitPower.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+            esInitPower.setCreatedDate(ToolUtil.getStrLastUpdDate());
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"update"));
         }
     }
     public void updateRecordByPower(EsInitPower esInitPowerPara){
-        esInitPowerPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        esInitPowerPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitPowerPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitPowerPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitPowerMapper.updateByPrimaryKey(esInitPowerPara);
         esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPowerPara,"update"));
     }
@@ -297,8 +293,8 @@ public class FlowCtrlService {
             esInitPowerKey.setPeriodNo(strPeriodNo);
             deleteNum=esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
-            esInitPower.setCreatedBy(platformService.getStrLastUpdBy());
-            esInitPower.setCreatedDate(platformService.getStrLastUpdDate());
+            esInitPower.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+            esInitPower.setCreatedDate(ToolUtil.getStrLastUpdDate());
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }
         return deleteNum;
@@ -315,8 +311,8 @@ public class FlowCtrlService {
             esInitPowerKey.setPeriodNo(cttInfoShowPara.getPeriodNo());
             esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
-            esInitPower.setCreatedBy(platformService.getStrLastUpdBy());
-            esInitPower.setCreatedDate(platformService.getStrLastUpdDate());
+            esInitPower.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+            esInitPower.setCreatedDate(ToolUtil.getStrLastUpdDate());
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }
     }
@@ -332,8 +328,8 @@ public class FlowCtrlService {
             esInitPowerKey.setPeriodNo(progInfoShowPara.getPeriodNo());
             esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
-            esInitPower.setCreatedBy(platformService.getStrLastUpdBy());
-            esInitPower.setCreatedDate(platformService.getStrLastUpdDate());
+            esInitPower.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+            esInitPower.setCreatedDate(ToolUtil.getStrLastUpdDate());
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }
     }
@@ -345,8 +341,8 @@ public class FlowCtrlService {
             esInitPowerKey.setPowerPkid(strPowerPkid);
             esInitPowerMapper.deleteByPrimaryKey(esInitPowerKey);
             EsInitPower esInitPower =esInitPowerListTemp.get(0);
-            esInitPower.setCreatedBy(platformService.getStrLastUpdBy());
-            esInitPower.setCreatedDate(platformService.getStrLastUpdDate());
+            esInitPower.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+            esInitPower.setCreatedDate(ToolUtil.getStrLastUpdDate());
             esInitPowerHisMapper.insert(fromEsInitPowerToEsInitPowerHis(esInitPower,"Del"));
         }
     }

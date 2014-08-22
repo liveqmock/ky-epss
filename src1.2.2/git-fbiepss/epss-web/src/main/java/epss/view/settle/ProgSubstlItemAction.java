@@ -17,8 +17,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
-import skyline.service.PlatformService;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -72,7 +70,6 @@ public class ProgSubstlItemAction {
 
     /*所属号*/
     private String strEsInitStlPkid;
-    private Date nowDate;
 
     // 画面上控件的显示控制
     private String strExportToExcelRendered;
@@ -85,7 +82,6 @@ public class ProgSubstlItemAction {
 
     @PostConstruct
     public void init() {
-        nowDate = new Date();
         beansMap = new HashMap();
         commStlSubcttEngH = new CommStlSubcttEngH();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -172,7 +168,7 @@ public class ProgSubstlItemAction {
 
     private void initHeadMsg() {
         // Excel中的头信息
-        commStlSubcttEngH.setStrDate(PlatformService.dateFormat(nowDate, "yyyy-MM-dd"));
+        commStlSubcttEngH.setStrDate(ToolUtil.getStrLastUpdDate());
         commStlSubcttEngH.setStrSubcttPkid(esInitStl.getStlPkid());
         commStlSubcttEngH.setStrStlId(esInitStl.getId());
         // From SubcttPkid To CstplPkid
@@ -665,7 +661,7 @@ public class ProgSubstlItemAction {
             Integer intTemp;
             String strMaxTkStlId = progStlInfoService.getStrMaxStlId(esInitStl.getStlType());
             if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxTkStlId))) {
-                strMaxTkStlId = "STLP" + esCommon.getStrToday() + "001";
+                strMaxTkStlId = "STLP" + ToolUtil.getStrToday() + "001";
             } else {
                 if (strMaxTkStlId.length() > 3) {
                     String strTemp = strMaxTkStlId.substring(strMaxTkStlId.length() - 3).replaceFirst("^0+", "");

@@ -7,8 +7,6 @@ import epss.repository.dao.EsItemStlTkcttEngMeaMapper;
 import epss.repository.model.EsItemStlTkcttEngMea;
 import epss.repository.model.EsItemStlTkcttEngMeaExample;
 import org.springframework.stereotype.Service;
-import skyline.service.PlatformService;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -25,8 +23,6 @@ public class ProgMeaItemService {
     private EsItemStlTkcttEngMeaMapper esItemStlTkcttEngMeaMapper;
     @Resource
     private EsFlowService esFlowService;
-    @Resource
-    private PlatformService platformService;
     /**
      * 判断记录是否已存在
      *
@@ -68,18 +64,18 @@ public class ProgMeaItemService {
         esStlTkcttEngMeaTemp.setModificationNum(
                 ToolUtil.getIntIgnoreNull(esStlTkcttEngMeaTemp.getModificationNum())+1);
         esStlTkcttEngMeaTemp.setDeleteFlag("0");
-        esStlTkcttEngMeaTemp.setLastUpdBy(platformService.getStrLastUpdBy());
-        esStlTkcttEngMeaTemp.setLastUpdDate(platformService.getStrLastUpdDate());
+        esStlTkcttEngMeaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esStlTkcttEngMeaTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esItemStlTkcttEngMeaMapper.updateByPrimaryKey(esStlTkcttEngMeaTemp) ;
     }
 
     public void insertRecord(ProgMeaItemShow progMeaItemShowPara){
         EsItemStlTkcttEngMea esStlTkcttEngMeaTemp=fromModelShowToModel(progMeaItemShowPara);
-        esStlTkcttEngMeaTemp.setCreatedBy(platformService.getStrLastUpdBy());
-        esStlTkcttEngMeaTemp.setCreatedDate(platformService.getStrLastUpdDate());
+        esStlTkcttEngMeaTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esStlTkcttEngMeaTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
         esStlTkcttEngMeaTemp.setDeleteFlag("0");
-        esStlTkcttEngMeaTemp.setLastUpdBy(platformService.getStrLastUpdBy());
-        esStlTkcttEngMeaTemp.setLastUpdDate(platformService.getStrLastUpdDate());
+        esStlTkcttEngMeaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esStlTkcttEngMeaTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esItemStlTkcttEngMeaMapper.insert(esStlTkcttEngMeaTemp) ;
     }
 

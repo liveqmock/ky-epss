@@ -10,7 +10,6 @@ package epss.view.flow;
 
 import skyline.util.ToolUtil;
 import skyline.platform.utils.Util;
-import skyline.service.PlatformService;
 import epss.repository.model.EsInitCust;
 import epss.service.EsCommonService;
 import epss.service.SignPartService;
@@ -70,12 +69,6 @@ public class EsCommon implements Serializable {
     private List<SelectItem> deleteFlagList;
     private List<SelectItem> endFlagList;
 
-    private String strDateThisPeriod;
-    private String strDateLastPeriod;
-
-    private String strToday;
-    private BigDecimal bigDecimal0;
-
     @PostConstruct
     public void init() {
         this.originFlagList = toolsService.getEnuSelectItemList("ORIGIN_FLAG", false, false);
@@ -98,15 +91,6 @@ public class EsCommon implements Serializable {
             selectItem.setLabel(itemUnit.getName());
             customerlist.add(selectItem);
         }
-
-        Date dateNow =new Date();
-        Date dateLast = ToolUtil.getLastMonthDate(dateNow);
-
-        strDateThisPeriod= PlatformService.dateFormat(dateNow, "yyyyMM");
-        strDateLastPeriod= PlatformService.dateFormat(dateLast, "yyyyMM");
-        strToday= PlatformService.dateFormat(dateLast, "yyyyMMdd");
-
-        bigDecimal0=new BigDecimal(0);
     }
 
     public String getCustNameByCustIdFromList(String strCustId){
@@ -314,40 +298,12 @@ public class EsCommon implements Serializable {
         this.customerlist = customerlist;
     }
 
-    public String getStrDateThisPeriod() {
-        return strDateThisPeriod;
-    }
-
-    public void setStrDateThisPeriod(String strDateThisPeriod) {
-        this.strDateThisPeriod = strDateThisPeriod;
-    }
-
     public List<SelectItem> getPreStatusFlagList() {
         return preStatusFlagList;
     }
 
     public void setPreStatusFlagList(List<SelectItem> preStatusFlagList) {
         this.preStatusFlagList = preStatusFlagList;
-    }
-
-    public String getStrDateLastPeriod() {
-        return strDateLastPeriod;
-    }
-
-    public void setStrDateLastPeriod(String strDateLastPeriod) {
-        this.strDateLastPeriod = strDateLastPeriod;
-    }
-
-    public String getStrToday() {
-        return strToday;
-    }
-
-    public void setStrToday(String strToday) {
-        this.strToday = strToday;
-    }
-
-    public BigDecimal getBigDecimal0() {
-        return bigDecimal0;
     }
 //Ö°ÄÜ×Ö¶Î End
 }

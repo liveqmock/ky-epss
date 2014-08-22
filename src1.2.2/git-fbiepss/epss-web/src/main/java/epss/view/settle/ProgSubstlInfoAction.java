@@ -127,7 +127,7 @@ public class ProgSubstlInfoAction {
             Integer intTemp;
             String strMaxTkStlId= progStlInfoService.getStrMaxStlId(strStlType);
             if(StringUtils .isEmpty(ToolUtil.getStrIgnoreNull(strMaxTkStlId))){
-                strMaxTkStlId="STLP"+ esCommon.getStrToday()+"001";
+                strMaxTkStlId="STLP"+ ToolUtil.getStrToday()+"001";
             }
             else{
                 if(strMaxTkStlId .length()>3){

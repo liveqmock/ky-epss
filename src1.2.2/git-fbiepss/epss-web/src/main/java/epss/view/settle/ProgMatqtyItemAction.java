@@ -122,7 +122,7 @@ public class ProgMatqtyItemAction {
             recursiveDataTable("root", esCttItemList, progMatQtyItemShowList);
             progMatQtyItemShowList =getStlSubCttEngMMngConstructList_DoFromatNo(progMatQtyItemShowList);
             List<EsInitPower> esInitPowerList= flowCtrlService.selectListByModel(ESEnumPower.POWER_TYPE3.getCode(),
-                    strSubcttPkid, esCommon.getStrDateThisPeriod());
+                    strSubcttPkid, ToolUtil.getStrDateThisPeriod());
             progMatQtyItemShowListExcel =new ArrayList<ProgMatQtyItemShow>();
             for(ProgMatQtyItemShow itemUnit: progMatQtyItemShowList){
                 ProgMatQtyItemShow itemUnitTemp= (ProgMatQtyItemShow) BeanUtils.cloneBean(itemUnit);
@@ -555,7 +555,7 @@ public class ProgMatqtyItemAction {
         Integer intTemp;
         String strMaxId = progStlInfoService.getStrMaxStlId(strStlType);
         if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
-            strMaxId = "STLQ" + esCommon.getStrToday() + "001";
+            strMaxId = "STLQ" + ToolUtil.getStrToday() + "001";
         } else {
             if (strMaxId.length() > 3) {
                 String strTemp = strMaxId.substring(strMaxId.length() - 3).replaceFirst("^0+", "");

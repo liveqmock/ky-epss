@@ -7,8 +7,6 @@ import epss.repository.dao.EsItemStlTkcttEngStaMapper;
 import epss.repository.model.EsItemStlTkcttEngSta;
 import epss.repository.model.EsItemStlTkcttEngStaExample;
 import org.springframework.stereotype.Service;
-import skyline.service.PlatformService;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -25,8 +23,6 @@ public class ProgEstItemService {
     private EsItemStlTkcttEngStaMapper esItemStlTkcttEngStaMapper;
     @Resource
     private EsFlowService esFlowService;
-    @Resource
-    private PlatformService platformService;
 
     public List<EsItemStlTkcttEngSta> selectRecordsByExample(EsItemStlTkcttEngSta EsItemStlTkcttEngStaPara){
         EsItemStlTkcttEngStaExample example = new EsItemStlTkcttEngStaExample();
@@ -61,18 +57,18 @@ public class ProgEstItemService {
         esItemStlTkcttEngStaTemp.setModificationNum(
                 ToolUtil.getIntIgnoreNull(progEstItemShowPara.getEng_ModificationNum())+1);
         esItemStlTkcttEngStaTemp.setDeleteFlag("0");
-        esItemStlTkcttEngStaTemp.setLastUpdBy(platformService.getStrLastUpdBy());
-        esItemStlTkcttEngStaTemp.setLastUpdDate(platformService.getStrLastUpdDate());
+        esItemStlTkcttEngStaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esItemStlTkcttEngStaTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esItemStlTkcttEngStaMapper.updateByPrimaryKey(esItemStlTkcttEngStaTemp) ;
     }
 
     public void insertRecord(ProgEstItemShow progEstItemShowPara){
         EsItemStlTkcttEngSta esItemStlTkcttEngStaTemp=fromModelShowToModel(progEstItemShowPara);
-        esItemStlTkcttEngStaTemp.setCreatedBy(platformService.getStrLastUpdBy());
-        esItemStlTkcttEngStaTemp.setCreatedDate(platformService.getStrLastUpdDate());
+        esItemStlTkcttEngStaTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esItemStlTkcttEngStaTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
         esItemStlTkcttEngStaTemp.setDeleteFlag("0");
-        esItemStlTkcttEngStaTemp.setLastUpdBy(platformService.getStrLastUpdBy());
-        esItemStlTkcttEngStaTemp.setLastUpdDate(platformService.getStrLastUpdDate());
+        esItemStlTkcttEngStaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esItemStlTkcttEngStaTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esItemStlTkcttEngStaMapper.insert(esItemStlTkcttEngStaTemp);
     }
 

@@ -122,7 +122,7 @@ public class ProgWorkqtyInfoAction {
             Integer intTemp;
             String strMaxId = progStlInfoService.getStrMaxStlId(strStlType);
             if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
-                strMaxId = "STLQ" + esCommon.getStrToday() + "001";
+                strMaxId = "STLQ" + ToolUtil.getStrToday() + "001";
             } else {
                 if (strMaxId.length() > 3) {
                     String strTemp = strMaxId.substring(strMaxId.length() - 3).replaceFirst("^0+", "");

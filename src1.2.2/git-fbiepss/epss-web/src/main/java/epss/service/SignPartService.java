@@ -8,8 +8,6 @@ import epss.repository.model.EsInitCustExample;
 import epss.repository.model.model_show.SignPartShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import skyline.service.PlatformService;
-
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,8 +25,6 @@ public class SignPartService {
     private MySignPartMapper mySignPartMapper;
     @Autowired
     private EsInitCustMapper esInitCustMapper;
-    @Resource
-    private PlatformService platformService;
     @Resource
     private EsCommonService esCommonService;
 
@@ -93,10 +89,10 @@ public class SignPartService {
     public void insertRecord(SignPartShow signPartShowPara) {
         signPartShowPara.setDeletedFlag("0");
         signPartShowPara.setOriginFlag("0");
-        signPartShowPara.setCreatedBy(platformService.getStrLastUpdBy());
-        signPartShowPara.setCreatedDate(platformService.getStrLastUpdDate());
-        signPartShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        signPartShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        signPartShowPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        signPartShowPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        signPartShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitCustMapper.insertSelective(fromShowToModel(signPartShowPara));
     }
 
@@ -147,8 +143,8 @@ public class SignPartService {
                 ToolUtil.getIntIgnoreNull(signPartShowPara.getModificationNum())+1);
         signPartShowPara.setDeletedFlag("0");
         signPartShowPara.setOriginFlag("0");
-        signPartShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        signPartShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        signPartShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitCustMapper.updateByPrimaryKey(fromShowToModel(signPartShowPara));
     }
 

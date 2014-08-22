@@ -8,10 +8,9 @@ import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.TaskShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import skyline.repository.dao.not_mybatis.PtCommonMapper;
 import skyline.repository.model.Ptmenu;
-import skyline.service.PlatformService;
 import skyline.util.ToolUtil;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class TaskService {
     @Autowired
     private MyTaskMapper myTaskMapper;
     @Autowired
-    private PlatformService platformService;
+    private PtCommonMapper ptCommonMapper;
 
     public List<TaskShow> getTaskCountsInFlowGroup() {
         return myTaskMapper.getTaskCountsInFlowGroup();
@@ -44,7 +43,7 @@ public class TaskService {
         String strStatusFlag;
         List<TaskShow> taskShowList = new ArrayList<TaskShow>();
         //通过OperatorManager获取相应权限下菜单列表
-        List<Ptmenu> ptmenuList = platformService.getPtmenuList();
+        List<Ptmenu> ptmenuList = ptCommonMapper.getPtmenuList(ToolUtil.getOperatorManager().getOperatorId());
         // 以合同类型和状态为分组,取得各组的数量
         List<TaskShow> taskCountsInFlowGroupListTemp = getTaskCountsInFlowGroup();
         // 获得详细任务列表

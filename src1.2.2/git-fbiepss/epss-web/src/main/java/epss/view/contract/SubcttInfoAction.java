@@ -136,7 +136,7 @@ public class SubcttInfoAction {
             Integer intTemp;
             String strMaxId = cttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE2.getCode());
             if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
-                strMaxId = "SUBCTT" + esCommon.getStrToday() + "001";
+                strMaxId = "SUBCTT" + ToolUtil.getStrToday() + "001";
             } else {
                 if (strMaxId.length() > 3) {
                     String strTemp = strMaxId.substring(strMaxId.length() - 3).replaceFirst("^0+", "");

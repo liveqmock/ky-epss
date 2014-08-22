@@ -17,15 +17,25 @@ import java.util.List;
 @Component
 public interface PtCommonMapper {
 
-    @Select("select distinct pm.* " +
-            "from PTOPERROLE po " +
-            "join PTROLERES pro " +
-            "on po.ROLEID=pro.ROLEID " +
-            "join PTRESOURCE prs " +
-            "on pro.RESID=prs.RESID " +
-            "join PTMENU pm " +
-            "on prs.RESNAME=pm.MENUID " +
-            "where po.OPERID=#{strOperId} " +
-            "order by pm.Levelidx")
+    @Select("select " +
+            "   distinct pm.* " +
+            "from " +
+            "   PTOPERROLE po " +
+            "join " +
+            "   PTROLERES pro " +
+            "on " +
+            "   po.ROLEID=pro.ROLEID " +
+            "join " +
+            "   PTRESOURCE prs " +
+            "on " +
+            "   pro.RESID=prs.RESID " +
+            "join " +
+            "   PTMENU pm " +
+            "on " +
+            "   prs.RESNAME=pm.MENUID " +
+            "where " +
+            "   po.OPERID=#{strOperId} " +
+            "order by " +
+            "   pm.Levelidx")
     List<Ptmenu> getPtmenuList(@Param("strOperId") String strOperId);
 }

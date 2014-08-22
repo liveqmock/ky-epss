@@ -11,8 +11,6 @@ import epss.repository.model.*;
 import epss.repository.model.model_show.ProgSubstlItemShow;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import skyline.service.PlatformService;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -31,8 +29,6 @@ public class ProgStlInfoService {
     private MyCttStlMapper myCttStlMapper;
     @Resource
     private FlowCtrlService flowCtrlService;
-    @Resource
-    private PlatformService platformService;
     @Resource
     private ProgSubstlItemService progSubstlItemService;
 
@@ -83,28 +79,28 @@ public class ProgStlInfoService {
     }
 
     public void insertRecord(ProgInfoShow progInfoShowPara){
-        progInfoShowPara.setCreatedBy(platformService.getStrLastUpdBy());
-        progInfoShowPara.setCreatedDate(platformService.getStrLastUpdDate());
+        progInfoShowPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        progInfoShowPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
         progInfoShowPara.setDeletedFlag("0");
-        progInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        progInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitStlMapper.insert(fromModelShowToModel(progInfoShowPara)) ;
     }
     public void insertRecord(EsInitStl esInitStlPara){
-        esInitStlPara.setCreatedBy(platformService.getStrLastUpdBy());
-        esInitStlPara.setCreatedDate(platformService.getStrLastUpdDate());
+        esInitStlPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitStlPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
         esInitStlPara.setDeletedFlag("0");
-        esInitStlPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        esInitStlPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitStlPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitStlPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitStlMapper.insert(esInitStlPara) ;
     }
     @Transactional
     public void insertStlAndPowerRecord(EsInitStl esInitStlPara){
-        esInitStlPara.setCreatedBy(platformService.getStrLastUpdBy());
-        esInitStlPara.setCreatedDate(platformService.getStrLastUpdDate());
+        esInitStlPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitStlPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
         esInitStlPara.setDeletedFlag("0");
-        esInitStlPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        esInitStlPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitStlPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitStlPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitStlMapper.insert(esInitStlPara) ;
         EsInitPower esInitPowerTemp=new EsInitPower();
         esInitPowerTemp.setPowerType(ESEnum.ITEMTYPE5.getCode());
@@ -120,8 +116,8 @@ public class ProgStlInfoService {
         esInitStlPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(esInitStlPara.getModificationNum())+1);
         esInitStlPara.setDeletedFlag("0");
-        esInitStlPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        esInitStlPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitStlPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitStlPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitStlMapper.updateByPrimaryKey(esInitStlPara) ;
         //Power±í¸üÐÂ
         EsInitPower esInitPowerTemp = new EsInitPower();
@@ -142,16 +138,16 @@ public class ProgStlInfoService {
         progInfoShowPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(progInfoShowPara.getModificationNum())+1);
         progInfoShowPara.setDeletedFlag("0");
-        progInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        progInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        progInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitStlMapper.updateByPrimaryKey(fromModelShowToModel(progInfoShowPara)) ;
     }
     public void updateRecord(EsInitStl esInitStlPara){
         esInitStlPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(esInitStlPara.getModificationNum())+1);
         esInitStlPara.setDeletedFlag("0");
-        esInitStlPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        esInitStlPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esInitStlPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esInitStlPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitStlMapper.updateByPrimaryKey(esInitStlPara) ;
     }
 

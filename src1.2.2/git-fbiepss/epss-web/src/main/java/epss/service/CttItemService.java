@@ -8,8 +8,6 @@ import epss.repository.model.EsCttItemExample;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
 import org.springframework.stereotype.Service;
-import skyline.service.PlatformService;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -26,8 +24,6 @@ public class CttItemService {
     private EsCttItemMapper esCttItemMapper;
     @Resource
     private MyCttItemMapper myCttItemMapper;
-    @Resource
-    private PlatformService platformService;
 
     public Integer getMaxOrderidInEsCttItemList(String strBelongToType,
                                                  String strBelongToPkid,
@@ -117,17 +113,18 @@ public class CttItemService {
         EsCttItem esCttItemTemp=fromModelShowToModel(cttItemShowPara);
         esCttItemTemp.setDeletedFlag("0");
         esCttItemTemp.setOriginFlag("0");
-        esCttItemTemp.setCreatedBy(platformService.getStrLastUpdBy());
-        esCttItemTemp.setCreatedDate(platformService.getStrLastUpdDate());
-        esCttItemTemp.setLastUpdBy(platformService.getStrLastUpdBy());
-        esCttItemTemp.setLastUpdDate(platformService.getStrLastUpdDate());
+        String strOperatorId=ToolUtil.getOperatorManager().getOperatorId();
+        esCttItemTemp.setCreatedBy(strOperatorId);
+        esCttItemTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        esCttItemTemp.setLastUpdBy(strOperatorId);
+        esCttItemTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esCttItemMapper.insertSelective(esCttItemTemp);
     }
     public void insertRecord(EsCttItem esCttItemPara){
         esCttItemPara.setDeletedFlag("0");
         esCttItemPara.setOriginFlag("0");
-        esCttItemPara.setCreatedBy(platformService.getStrLastUpdBy());
-        esCttItemPara.setCreatedDate(platformService.getStrLastUpdDate());
+        esCttItemPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esCttItemPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
         esCttItemMapper.insert(esCttItemPara);
     }
 
@@ -178,8 +175,8 @@ public class CttItemService {
                 ToolUtil.getIntIgnoreNull(esCttItemTemp.getModificationNum())+1);
         esCttItemTemp.setDeletedFlag("0");
         esCttItemTemp.setOriginFlag("0");
-        esCttItemTemp.setLastUpdBy(platformService.getStrLastUpdBy());
-        esCttItemTemp.setLastUpdDate(platformService.getStrLastUpdDate());
+        esCttItemTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esCttItemTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esCttItemMapper.updateByPrimaryKey(esCttItemTemp) ;
     }
 

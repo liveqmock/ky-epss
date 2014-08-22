@@ -7,8 +7,6 @@ import epss.repository.model.EsItemStlSubcttEngM;
 import epss.repository.model.EsItemStlSubcttEngMExample;
 import epss.repository.model.model_show.ProgMatQtyItemShow;
 import org.springframework.stereotype.Service;
-import skyline.service.PlatformService;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -25,8 +23,6 @@ public class ProgMatqtyItemService {
     private EsItemStlSubcttEngMMapper esItemStlSubcttEngMMapper;
     @Resource
     private EsFlowService esFlowService;
-    @Resource
-    private PlatformService platformService;
 
     /**
      * 判断记录是否已存在
@@ -103,18 +99,18 @@ public class ProgMatqtyItemService {
         esItemStlSubcttEngMTemp.setModificationNum(
                 ToolUtil.getIntIgnoreNull(esItemStlSubcttEngMTemp.getModificationNum())+1);
         esItemStlSubcttEngMTemp.setDeleteFlag("0");
-        esItemStlSubcttEngMTemp.setLastUpdBy(platformService.getStrLastUpdBy());
-        esItemStlSubcttEngMTemp.setLastUpdDate(platformService.getStrLastUpdDate());
+        esItemStlSubcttEngMTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esItemStlSubcttEngMTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esItemStlSubcttEngMMapper.updateByPrimaryKey(esItemStlSubcttEngMTemp) ;
     }
 
     public void insertRecord(ProgMatQtyItemShow progMatQtyItemShowPara){
         EsItemStlSubcttEngM esItemStlSubcttEngMTemp=fromModelShowToModel(progMatQtyItemShowPara);
-        esItemStlSubcttEngMTemp.setCreatedBy(platformService.getStrLastUpdBy());
-        esItemStlSubcttEngMTemp.setCreatedDate(platformService.getStrLastUpdDate());
+        esItemStlSubcttEngMTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esItemStlSubcttEngMTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
         esItemStlSubcttEngMTemp.setDeleteFlag("0");
-        esItemStlSubcttEngMTemp.setLastUpdBy(platformService.getStrLastUpdBy());
-        esItemStlSubcttEngMTemp.setLastUpdDate(platformService.getStrLastUpdDate());
+        esItemStlSubcttEngMTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esItemStlSubcttEngMTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esItemStlSubcttEngMMapper.insert(esItemStlSubcttEngMTemp) ;
     }
 

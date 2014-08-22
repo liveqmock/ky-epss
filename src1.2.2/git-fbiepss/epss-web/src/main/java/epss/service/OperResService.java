@@ -10,8 +10,6 @@ import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.DeptAndOperShow;
 import epss.repository.model.model_show.OperResShow;
 import org.springframework.stereotype.Service;
-import skyline.service.PlatformService;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -24,8 +22,6 @@ public class OperResService {
     private MyOperResMapper myOperResMapper;
     @Resource
     private OperResMapper operResMapper;
-    @Resource
-    private PlatformService platformService;
 
     public List<OperResShow> selectOperaRoleRecords(String parentDeptid){
         return myOperResMapper.selectOperaRoleRecords(parentDeptid);
@@ -52,10 +48,10 @@ public class OperResService {
         operResMapper.insert(fromOperShowToModel(record));
     }
     public void insertRecord(OperRes operResPara){
-        operResPara.setCreatedBy(platformService.getStrLastUpdBy());
-        operResPara.setLastUpdTime(platformService.getStrLastUpdTime());
-        operResPara.setCreatedBy(platformService.getStrLastUpdBy());
-        operResPara.setLastUpdTime(platformService.getStrLastUpdTime());
+        operResPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        operResPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
+        operResPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        operResPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         operResMapper.insert(operResPara);
     }
     private OperRes fromOperShowToModel(OperResShow record) {

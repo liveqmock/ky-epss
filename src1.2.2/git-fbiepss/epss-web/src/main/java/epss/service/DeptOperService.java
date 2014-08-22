@@ -11,7 +11,7 @@ import epss.repository.model.OperExample;
 import epss.repository.model.model_show.DeptAndOperShow;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.stereotype.Service;
-import skyline.service.PlatformService;
+import skyline.util.ToolUtil;
 
 import javax.annotation.Resource;
 import java.lang.reflect.InvocationTargetException;
@@ -28,8 +28,6 @@ public class DeptOperService {
     private DeptMapper deptMapper;
     @Resource
     private OperMapper operMapper;
-    @Resource
-    private PlatformService platformService;
 
     public List<DeptAndOperShow> selectDeptAndOperRecords(String parentPkidPara) {
         return myDeptAndOperMapper.selectDeptAndOperRecords(parentPkidPara);
@@ -75,26 +73,26 @@ public class DeptOperService {
     public void insertRecord(Object objectPara,String strTypePara){
         if ("0".equals(strTypePara)){
             Dept dept=(Dept) objectPara;
-            dept.setCreatedBy(platformService.getStrLastUpdBy());
-            dept.setCreatedTime(platformService.getStrLastUpdDate());
+            dept.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+            dept.setCreatedTime(ToolUtil.getStrLastUpdDate());
             deptMapper.insert(dept);
         }else {
             Oper oper=(Oper) objectPara;
-            oper.setCreatedBy(platformService.getStrLastUpdBy());
-            oper.setCreatedTime(platformService.getStrLastUpdDate());
+            oper.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+            oper.setCreatedTime(ToolUtil.getStrLastUpdDate());
             operMapper.insert(oper);
         }
     }
     public void updateRecord(Object objectPara,String strTypePara) {
         if ("0".equals(strTypePara)){
             Dept dept=(Dept) objectPara;
-            dept.setLastUpdBy(platformService.getStrLastUpdBy());
-            dept.setLastUpdTime(platformService.getStrLastUpdDate());
+            dept.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+            dept.setLastUpdTime(ToolUtil.getStrLastUpdDate());
             deptMapper.updateByPrimaryKey(dept);
         }else {
             Oper oper=(Oper) objectPara;
-            oper.setLastUpdBy(platformService.getStrLastUpdBy());
-            oper.setLastUpdTime(platformService.getStrLastUpdDate());
+            oper.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+            oper.setLastUpdTime(ToolUtil.getStrLastUpdDate());
             operMapper.updateByPrimaryKey(oper);
         }
     }

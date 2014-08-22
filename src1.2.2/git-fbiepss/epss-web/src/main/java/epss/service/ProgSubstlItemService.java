@@ -7,8 +7,6 @@ import epss.repository.model.EsItemStlSubcttEngP;
 import epss.repository.model.EsItemStlSubcttEngPExample;
 import epss.repository.model.model_show.ProgSubstlItemShow;
 import org.springframework.stereotype.Service;
-import skyline.service.PlatformService;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -23,8 +21,6 @@ import java.util.List;
 public class ProgSubstlItemService {
     @Resource
     private EsItemStlSubcttEngPMapper esItemStlSubcttEngPMapper;
-    @Resource
-    private PlatformService platformService;
     @Resource
     private EsCommonService esCommonService;
     @Resource
@@ -60,18 +56,18 @@ public class ProgSubstlItemService {
         esItemStlSubcttEngPPara.setRecVersion(
                 ToolUtil.getIntIgnoreNull(esItemStlSubcttEngPPara.getRecVersion())+1);
         esItemStlSubcttEngPPara.setArchivedFlag("0");
-        esItemStlSubcttEngPPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        esItemStlSubcttEngPPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esItemStlSubcttEngPPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esItemStlSubcttEngPPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esItemStlSubcttEngPMapper.updateByPrimaryKey(esItemStlSubcttEngPPara) ;
     }
 
     public void insertRecordDetail(ProgSubstlItemShow progSubstlItemShowPara){
-        progSubstlItemShowPara.setEngPMng_CreatedBy(platformService.getStrLastUpdBy());
-        progSubstlItemShowPara.setEngPMng_CreatedByName(esCommonService.getOperNameByOperId(platformService.getStrLastUpdBy()));
-        progSubstlItemShowPara.setEngPMng_CreatedDate(platformService.getStrLastUpdDate());
-        progSubstlItemShowPara.setEngPMng_LastUpdBy(platformService.getStrLastUpdBy());
-        progSubstlItemShowPara.setEngPMng_LastUpdByName(esCommonService.getOperNameByOperId(platformService.getStrLastUpdBy()));
-        progSubstlItemShowPara.setEngPMng_LastUpdDate(platformService.getStrLastUpdDate());
+        progSubstlItemShowPara.setEngPMng_CreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        progSubstlItemShowPara.setEngPMng_CreatedByName(esCommonService.getOperNameByOperId(ToolUtil.getOperatorManager().getOperatorId()));
+        progSubstlItemShowPara.setEngPMng_CreatedDate(ToolUtil.getStrLastUpdDate());
+        progSubstlItemShowPara.setEngPMng_LastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progSubstlItemShowPara.setEngPMng_LastUpdByName(esCommonService.getOperNameByOperId(ToolUtil.getOperatorManager().getOperatorId()));
+        progSubstlItemShowPara.setEngPMng_LastUpdDate(ToolUtil.getStrLastUpdDate());
         esItemStlSubcttEngPMapper.insert(fromModelShowToModel(progSubstlItemShowPara));
     }
 

@@ -95,7 +95,7 @@ public class TkcttInfoAction {
             Integer intTemp;
             String strMaxId = cttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE0.getCode());
             if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
-                strMaxId = "TKCTT" + esCommon.getStrToday() + "001";
+                strMaxId = "TKCTT" + ToolUtil.getStrToday() + "001";
             } else {
                 if (strMaxId.length() > 3) {
                     String strTemp = strMaxId.substring(strMaxId.length() - 3).replaceFirst("^0+", "");

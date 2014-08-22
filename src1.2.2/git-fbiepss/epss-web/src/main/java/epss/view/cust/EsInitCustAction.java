@@ -78,7 +78,7 @@ public class EsInitCustAction {
             Integer intTemp;
             strMaxId= signPartService.getMaxId();
             if(StringUtils .isEmpty(strMaxId)){
-                strMaxId="CUST"+ esCommon.getStrToday()+"001";
+                strMaxId="CUST"+ ToolUtil.getStrToday()+"001";
             }
             else{
                 if(strMaxId .length()>3){

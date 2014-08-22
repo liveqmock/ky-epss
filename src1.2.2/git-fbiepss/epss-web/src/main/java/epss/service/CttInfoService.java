@@ -7,8 +7,6 @@ import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import skyline.service.PlatformService;
-
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -25,8 +23,6 @@ public class CttInfoService {
     private EsCttInfoMapper esCttInfoMapper;
     @Autowired
     private MyCttInfoMapper myCttInfoMapper;
-    @Resource
-    private PlatformService platformService;
 
     public List<EsCttInfo> selectListByModel(CttInfoShow cttInfoShowPara) {
         EsCttInfoExample example= new EsCttInfoExample();
@@ -131,10 +127,10 @@ public class CttInfoService {
 
     public void insertRecord(CttInfoShow cttInfoShowPara) {
         cttInfoShowPara.setDeletedFlag("0");
-        cttInfoShowPara.setCreatedBy(platformService.getStrLastUpdBy());
-        cttInfoShowPara.setCreatedDate(platformService.getStrLastUpdDate());
-        cttInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        cttInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        cttInfoShowPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttInfoShowPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        cttInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esCttInfoMapper.insertSelective(fromModelShowToModel(cttInfoShowPara));
     }
 
@@ -142,16 +138,16 @@ public class CttInfoService {
         esCttInfoPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(esCttInfoPara.getModificationNum())+1);
         esCttInfoPara.setDeletedFlag("0");
-        esCttInfoPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        esCttInfoPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        esCttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esCttInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esCttInfoMapper.updateByPrimaryKey(esCttInfoPara);
     }
     public void updateRecord(CttInfoShow cttInfoShowPara){
         cttInfoShowPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(cttInfoShowPara.getModificationNum())+1);
         cttInfoShowPara.setDeletedFlag("0");
-        cttInfoShowPara.setLastUpdBy(platformService.getStrLastUpdBy());
-        cttInfoShowPara.setLastUpdDate(platformService.getStrLastUpdDate());
+        cttInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esCttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
     }
 

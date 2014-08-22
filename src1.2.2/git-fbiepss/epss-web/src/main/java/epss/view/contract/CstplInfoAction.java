@@ -114,7 +114,7 @@ public class CstplInfoAction {
             Integer intTemp;
             String strMaxId = cttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE1.getCode());
             if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
-                strMaxId = "CSTPL" + esCommon.getStrToday() + "001";
+                strMaxId = "CSTPL" + ToolUtil.getStrToday() + "001";
             } else {
                 if (strMaxId.length() > 3) {
                     String strTemp = strMaxId.substring(strMaxId.length() - 3).replaceFirst("^0+", "");

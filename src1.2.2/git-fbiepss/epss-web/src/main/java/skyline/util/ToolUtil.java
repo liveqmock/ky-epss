@@ -32,61 +32,6 @@ public class ToolUtil {
         return om;
     }
 
-    public static String getStrLastMonth(String strThisPeriodPara){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMM");
-        try {
-            Calendar cd = Calendar.getInstance();
-            cd.setTime(simpleDateFormat.parse(strThisPeriodPara));
-            cd.add(Calendar.MONTH, -1);//减少一月
-            return simpleDateFormat.format(cd.getTime());
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    public static String getStrThisMonth(){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMM");
-            Calendar cd = Calendar.getInstance();
-            return simpleDateFormat.format(cd.getTime());
-    }
-
-    public static String getStrToday(){
-        return new SimpleDateFormat("yyyyMMdd").format(new Date());
-    }
-
-    public static int getDateByStr(String strStartDate,String strEndDate){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMM");
-        int intDiff=0;
-        try {
-            Date startDate=simpleDateFormat.parse(strStartDate);
-            Date endDate=simpleDateFormat.parse(strEndDate);
-            if(startDate.after(endDate)){
-                Date t=startDate;
-                startDate=endDate;
-                endDate=t;
-            }
-            Calendar startCalendar=Calendar.getInstance();
-            startCalendar.setTime(startDate);
-            Calendar endCalendar=Calendar.getInstance();
-            endCalendar.setTime(endDate);
-            //intDiff=endDate.getMonth()-startDate.getMonth();
-            int intYear=endCalendar.get(Calendar.YEAR)-startCalendar.get(Calendar.YEAR);
-            int intMonth=endCalendar.get(Calendar.MONTH)-startCalendar.get(Calendar.MONTH);
-            intDiff = intYear*12+intMonth;
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return intDiff;
-    }
-
-    public static Date getLastMonthDate(Date date) {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date);
-        cal.add(Calendar.MONTH, -1);
-        return cal.getTime();
-    }
-
     public static int lookIndex(String strTempPara,char charPara,Integer intPara){
         int count=0;
         char arr[] = strTempPara.toCharArray();
@@ -142,6 +87,93 @@ public class ToolUtil {
         Integer intIndexof=strFrom.lastIndexOf(";")+1;
         String strTemp=strFrom.substring(intIndexof);
         return strTemp ;
+    }
+
+    public static String getStrLastUpdDate() {
+        Date date =new Date();
+        return dateFormat(date, "yyyy-MM-dd");
+    }
+    public static String getStrLastUpdTime() {
+        Date date =new Date();
+        return dateFormat(date, "yyyy-MM-dd HH:mm:ss");
+    }
+
+    public static String getStrDateThisPeriod() {
+        Date date =new Date();
+        return dateFormat(date, "yyyyMM");
+    }
+
+    public static String getStrDateLastPeriod() {
+        Date dateNow =new Date();
+        Date dateLast = getLastMonthDate(dateNow);
+        return ToolUtil.dateFormat(dateLast, "yyyyMM");
+    }
+
+    public static String getStrToday() {
+        Date date =new Date();
+        return dateFormat(date, "yyyyMMdd");
+    }
+
+    public static int getDateByStr(String strStartDate,String strEndDate){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMM");
+        int intDiff=0;
+        try {
+            Date startDate=simpleDateFormat.parse(strStartDate);
+            Date endDate=simpleDateFormat.parse(strEndDate);
+            if(startDate.after(endDate)){
+                Date t=startDate;
+                startDate=endDate;
+                endDate=t;
+            }
+            Calendar startCalendar=Calendar.getInstance();
+            startCalendar.setTime(startDate);
+            Calendar endCalendar=Calendar.getInstance();
+            endCalendar.setTime(endDate);
+            //intDiff=endDate.getMonth()-startDate.getMonth();
+            int intYear=endCalendar.get(Calendar.YEAR)-startCalendar.get(Calendar.YEAR);
+            int intMonth=endCalendar.get(Calendar.MONTH)-startCalendar.get(Calendar.MONTH);
+            intDiff = intYear*12+intMonth;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return intDiff;
+    }
+
+    public static Date getLastMonthDate(Date date) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.MONTH, -1);
+        return cal.getTime();
+    }
+
+    public static String getStrLastMonth(String strThisPeriodPara){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMM");
+        try {
+            Calendar cd = Calendar.getInstance();
+            cd.setTime(simpleDateFormat.parse(strThisPeriodPara));
+            cd.add(Calendar.MONTH, -1);//减少一月
+            return simpleDateFormat.format(cd.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static String getStrThisMonth(){
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMM");
+        Calendar cd = Calendar.getInstance();
+        return simpleDateFormat.format(cd.getTime());
+    }
+
+    /**
+     * 将长时间格式化
+     * @param date
+     * @param strPattern
+     * @return
+     */
+    public static String dateFormat(Date date,String strPattern) {
+        SimpleDateFormat formatter = new SimpleDateFormat(strPattern);
+        return formatter.format(date);
     }
 }
 
