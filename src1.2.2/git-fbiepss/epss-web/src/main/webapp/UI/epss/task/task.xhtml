@@ -101,16 +101,17 @@
                              update="pdt,msgs"
                              rendered="false">
             </p:commandButton>
-            <div  style="height:15px;
-                         vertical-align: bottom;
-                         font-family: verdana;
-                         FONT-SIZE: 9pt;
-                         text-align: center;">
-                <h:outputLabel value="通 过" style="background-color: yellowgreen;position: relative;right: 15px;"/>
-                <h:outputLabel value="未 过" style="background-color: red"/>
-            </div>
             <!--列表维护-->
             <p:panel>
+                <div style="height:20px;
+                         vertical-align: bottom;
+                         font-family: verdana;
+                         FONT-SIZE:10pt;
+                         text-align: left;">
+                    <h:outputLabel value="待处理:" style="font-weight:normal"/>
+                    <h:outputLabel value="下级已通过" style="background-color: yellowgreen;"/>
+                    <h:outputLabel value="上级未通过" style="background-color: red"/>
+                </div>
                 <p:dataTable id="pdt"
                              value="#{esInitTaskAction.taskShowList}"
                              var="record"
@@ -121,10 +122,10 @@
                              rowStyleClass="#{record.type eq null?'rowDoneStyle':
                              record.preStatusFlagType eq '2'?'rowDoneStyle2':'rowDoneStyle1'}"
                              scrollable="true"
-                             scrollHeight="450">
-                    <p:column headerText="操作" style="width:30px">
+                             scrollHeight="442">
+                    <p:column headerText="操作" style="width:30px;text-align: center;">
                         <p:commandButton icon="ui-icon-triangle-1-e"
-                                         style="height:20px;width:20px"
+                                         style="height:16px;width:30px;"
                                          rendered="#{record.type eq null?'false':'true'}"
                                          onclick="actSelect('#{record.type}','#{record.statusFlag}','#{record.preStatusFlag}','#{record.pkid}')">
                         </p:commandButton>
