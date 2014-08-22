@@ -175,7 +175,7 @@ public class OperFuncResAction implements Serializable{
                         strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
                     }
                 }else if(operResShowUnit.getFlowStatus().equals("5")){
-                    if(strInputOperName.length()==0){
+                    if(strPlaceOnFileOperName.length()==0){
                         strPlaceOnFileOperName = operResShowUnit.getOperName();
                     }else {
                         strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
