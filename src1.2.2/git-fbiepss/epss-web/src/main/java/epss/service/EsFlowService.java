@@ -2,7 +2,9 @@ package epss.service;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.repository.model.OperRes;
 import epss.repository.model.model_show.CttInfoShow;
+import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import skyline.util.ToolUtil;
 import epss.repository.dao.not_mybatis.MyFlowMapper;
@@ -12,6 +14,8 @@ import epss.repository.model.EsInitStl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,13 +29,41 @@ import java.util.List;
 public class EsFlowService {
     @Autowired
     private MyFlowMapper myFlowMapper;
+    @Resource
+    private OperResService operResService;
 
     public List<CttInfoShow> selectCttByStatusFlagBegin_End(CttInfoShow cttInfoShowPara){
-        return myFlowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
+        OperRes operResTemp=new OperRes();
+        operResTemp.setOperPkid(ToolUtil.getOperatorManager().getOperatorId());
+        List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
+        List<CttInfoShow> cttInfoShowListTemp= myFlowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
+        List<CttInfoShow> cttInfoShowList=new ArrayList<>();
+        for(CttInfoShow cttInfoShowUnit:cttInfoShowListTemp){
+            for(OperResShow operResShowUnit:operResShowListTemp){
+                if(cttInfoShowUnit.getCttType().equals(operResShowUnit.getInfoType())&&
+                        cttInfoShowUnit.getPkid().equals(operResShowUnit.getInfoPkid())) {
+                    cttInfoShowList.add(cttInfoShowUnit);
+                }
+            }
+        }
+        return cttInfoShowList;
     }
 
     public List<ProgInfoShow> selectSubcttStlQMByStatusFlagBegin_End(ProgInfoShow progInfoShowPara){
-        return myFlowMapper.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowPara);
+        OperRes operResTemp=new OperRes();
+        operResTemp.setOperPkid(ToolUtil.getOperatorManager().getOperatorId());
+        List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
+        List<ProgInfoShow> progInfoShowListTemp= myFlowMapper.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowPara);
+        List<ProgInfoShow> progInfoShowList=new ArrayList<>();
+        for(ProgInfoShow progInfoShowUnit:progInfoShowListTemp){
+            for(OperResShow operResShowUnit:operResShowListTemp){
+                if(progInfoShowUnit.getStlType().equals(operResShowUnit.getInfoType())&&
+                        progInfoShowUnit.getStlPkid().equals(operResShowUnit.getInfoPkid())) {
+                    progInfoShowList.add(progInfoShowUnit);
+                }
+            }
+        }
+        return progInfoShowList;
     }
 
     public List<ProgInfoShow> selectNotFormEsInitSubcttStlP(String strParentPkid,

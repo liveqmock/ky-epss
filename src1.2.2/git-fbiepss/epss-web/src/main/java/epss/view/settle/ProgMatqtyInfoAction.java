@@ -2,7 +2,9 @@ package epss.view.settle;
 
 import epss.common.enums.*;
 import epss.repository.model.EsCttInfo;
+import epss.repository.model.OperRes;
 import epss.repository.model.model_show.CttInfoShow;
+import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import skyline.util.StyleModel;
 import skyline.util.ToolUtil;
@@ -49,7 +51,8 @@ public class ProgMatqtyInfoAction {
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{progWorkqtyItemService}")
     private ProgWorkqtyItemService progWorkqtyItemService;
-
+    @ManagedProperty(value = "#{operResService}")
+    private OperResService operResService;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{esCommon}")
@@ -81,19 +84,18 @@ public class ProgMatqtyInfoAction {
 
         resetAction();
 
-        List<CttInfoShow> cttInfoShowList =
-                cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
-                         ESEnum.ITEMTYPE2.getCode()
-                        ,strCstplInfoPkid
-                        ,ESEnumStatusFlag.STATUS_FLAG3.getCode());
-        subcttList=new ArrayList<SelectItem>();
-        if(cttInfoShowList.size()>0){
-            SelectItem selectItem=new SelectItem("","全部");
+        List<OperResShow> operResShowListTemp=
+                operResService.getInfoListByOperPkid(
+                        ESEnum.ITEMTYPE4.getCode(),
+                        ToolUtil.getOperatorManager().getOperatorId());
+        subcttList = new ArrayList<SelectItem>();
+        if (operResShowListTemp.size() > 0) {
+            SelectItem selectItem = new SelectItem("", "全部");
             subcttList.add(selectItem);
-            for(CttInfoShow itemUnit: cttInfoShowList){
-                selectItem=new SelectItem();
-                selectItem.setValue(itemUnit.getPkid());
-                selectItem.setLabel(itemUnit.getName());
+            for(OperResShow operResShowUnit : operResShowListTemp) {
+                selectItem = new SelectItem();
+                selectItem.setValue(operResShowUnit.getInfoPkid());
+                selectItem.setLabel(operResShowUnit.getInfoPkidName());
                 subcttList.add(selectItem);
             }
         }
@@ -539,5 +541,13 @@ public class ProgMatqtyInfoAction {
 
     public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
         this.progWorkqtyItemService = progWorkqtyItemService;
+    }
+
+    public OperResService getOperResService() {
+        return operResService;
+    }
+
+    public void setOperResService(OperResService operResService) {
+        this.operResService = operResService;
     }
 }

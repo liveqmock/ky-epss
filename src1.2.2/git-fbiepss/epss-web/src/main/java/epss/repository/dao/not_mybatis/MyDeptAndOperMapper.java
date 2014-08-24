@@ -1,6 +1,6 @@
 package epss.repository.dao.not_mybatis;
 
-import epss.repository.model.model_show.DeptAndOperShow;
+import epss.repository.model.model_show.DeptOperShow;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
@@ -42,5 +42,5 @@ public interface MyDeptAndOperMapper {
             "     where  " +
             "        parentpkid=#{parentPkid}) ss " +
             "order by type ")
-    List<DeptAndOperShow> selectDeptAndOperRecords(@Param("parentPkid") String parentPkidPara);
+    List<DeptOperShow> selectDeptAndOperRecords(@Param("parentPkid") String parentPkidPara);
 }

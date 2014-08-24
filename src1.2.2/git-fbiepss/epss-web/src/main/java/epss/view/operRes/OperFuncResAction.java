@@ -54,7 +54,7 @@ public class OperFuncResAction implements Serializable{
 
     private List<SelectItem> taskFunctionList;
     private List<String> taskFunctionSeledList;
-    private List<DeptAndOperShow> deptAndOperShowSeledList;
+    private List<DeptOperShow> deptOperShowSeledList;
     private List<OperFuncResShow> operFuncResShowFowExcelList;
 
     private Map beansMap;
@@ -80,7 +80,7 @@ public class OperFuncResAction implements Serializable{
         cttInfoShowList = new ArrayList<>();
         taskFunctionList = new ArrayList<>();
         taskFunctionSeledList = new ArrayList<>();
-        deptAndOperShowSeledList= new ArrayList<>();
+        deptOperShowSeledList = new ArrayList<>();
         operFuncResShowFowExcelList= new ArrayList<>();
         taskFunctionList.add(
                 new SelectItem(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
@@ -120,11 +120,11 @@ public class OperFuncResAction implements Serializable{
         node0.setExpanded(true);
     }
     private void initOper(){
-        DeptAndOperShow deptAndOperShowTemp=new DeptAndOperShow();
-        deptAndOperShowTemp.setPkid("ROOT");
-        deptAndOperShowTemp.setName("人员信息");
+        DeptOperShow deptOperShowTemp =new DeptOperShow();
+        deptOperShowTemp.setPkid("ROOT");
+        deptOperShowTemp.setName("人员信息");
         operRoot = new DefaultTreeNode("ROOT", null);
-        TreeNode node0 = new DefaultTreeNode(deptAndOperShowTemp, operRoot);
+        TreeNode node0 = new DefaultTreeNode(deptOperShowTemp, operRoot);
         recursiveOperTreeNode("0", node0);
         node0.setExpanded(true);
     }
@@ -532,7 +532,7 @@ public class OperFuncResAction implements Serializable{
         }
     }
     private void recursiveOperTreeNode(String strLevelParentId,TreeNode parentNode){
-        List<DeptAndOperShow> operResShowListTemp= operResService.getOperList(strLevelParentId);
+        List<DeptOperShow> operResShowListTemp= operResService.getOperList(strLevelParentId);
         for (int i=0;i<operResShowListTemp.size();i++){
             TreeNode childNode = null;
             childNode=new DefaultTreeNode(operResShowListTemp.get(i), parentNode);
@@ -566,11 +566,11 @@ public class OperFuncResAction implements Serializable{
             MessageUtil.addError(e.getMessage());
         }
     }
-    public void selOperRecordAction(DeptAndOperShow deptAndOperShowPara){
-        if (deptAndOperShowPara.getIsSeled()){
-            deptAndOperShowSeledList.add(deptAndOperShowPara);
+    public void selOperRecordAction(DeptOperShow deptOperShowPara){
+        if (deptOperShowPara.getIsSeled()){
+            deptOperShowSeledList.add(deptOperShowPara);
         }else{
-            deptAndOperShowSeledList.remove(deptAndOperShowPara);
+            deptOperShowSeledList.remove(deptOperShowPara);
         }
     }
 
@@ -629,16 +629,16 @@ public class OperFuncResAction implements Serializable{
                     MessageUtil.addError("功能列表不能为空，请选择");
                     return;
                 }
-                if (deptAndOperShowSeledList.size() == 0) {
+                if (deptOperShowSeledList.size() == 0) {
                     MessageUtil.addError("人员列表不能为空，请选择");
                     return;
                 }
                 for (int m = 0; m < taskFunctionSeledList.size(); m++) {
-                    for (int n = 0; n < deptAndOperShowSeledList.size(); n++) {
+                    for (int n = 0; n < deptOperShowSeledList.size(); n++) {
                         OperRes operResTemp = new OperRes();
                         operResTemp.setInfoType(cttInfoShowSel.getCttType());
                         operResTemp.setInfoPkid(cttInfoShowSel.getPkid());
-                        operResTemp.setOperPkid(deptAndOperShowSeledList.get(n).getPkid());
+                        operResTemp.setOperPkid(deptOperShowSeledList.get(n).getPkid());
                         operResTemp.setFlowStatus(taskFunctionSeledList.get(m));
                         operResTemp.setArchivedFlag(ESEnumDeletedFlag.DELETED_FLAG0.getCode());
                         List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);

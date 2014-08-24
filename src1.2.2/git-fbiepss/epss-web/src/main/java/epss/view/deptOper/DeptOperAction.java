@@ -3,7 +3,7 @@ package epss.view.deptOper;
 import skyline.util.MessageUtil;;
 import epss.repository.model.Dept;
 import epss.repository.model.Oper;
-import epss.repository.model.model_show.DeptAndOperShow;
+import epss.repository.model.model_show.DeptOperShow;
 import epss.service.DeptOperService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
@@ -46,7 +46,7 @@ public class DeptOperAction implements Serializable {
     private Oper operAdd;
     private Oper operUpd;
     private Oper operDel;
-    private DeptAndOperShow deptAndOperShowSel;
+    private DeptOperShow deptOperShowSel;
     private List<SelectItem> operSexList;
     private List<SelectItem> operIsSuperList;
     private List<SelectItem> typeList;
@@ -67,7 +67,7 @@ public class DeptOperAction implements Serializable {
         operAdd = new Oper();
         operUpd = new Oper();
         operDel = new Oper();
-        deptAndOperShowSel = new DeptAndOperShow();
+        deptOperShowSel = new DeptOperShow();
     }
 
     private void initData() {
@@ -85,43 +85,43 @@ public class DeptOperAction implements Serializable {
 
     private void initDept() {
         deptRoot = new DefaultTreeNode("Root", null);
-        DeptAndOperShow deptAndOperShowTemp = new DeptAndOperShow();
-        deptAndOperShowTemp.setPkid("root");
-        deptAndOperShowTemp.setName("机构人员信息");
-        deptAndOperShowTemp.setType("0");
-        TreeNode node0 = new DefaultTreeNode(deptAndOperShowTemp, deptRoot);
+        DeptOperShow deptOperShowTemp = new DeptOperShow();
+        deptOperShowTemp.setPkid("root");
+        deptOperShowTemp.setName("机构人员信息");
+        deptOperShowTemp.setType("0");
+        TreeNode node0 = new DefaultTreeNode(deptOperShowTemp, deptRoot);
         recursiveTreeNode("root", node0);
         node0.setExpanded(true);
     }
 
     private void recursiveTreeNode(String strParentPkid, TreeNode parentNode) {
-        List<DeptAndOperShow> deptAndOperShowTempList =new ArrayList<DeptAndOperShow>();
-        deptAndOperShowTempList= deptOperService.selectDeptAndOperRecords(strParentPkid);
-        for (int i = 0; i < deptAndOperShowTempList.size(); i++) {
+        List<DeptOperShow> deptOperShowTempList =new ArrayList<DeptOperShow>();
+        deptOperShowTempList = deptOperService.selectDeptAndOperRecords(strParentPkid);
+        for (int i = 0; i < deptOperShowTempList.size(); i++) {
             TreeNode childNode = null;
-            childNode = new DefaultTreeNode(deptAndOperShowTempList.get(i), parentNode);
+            childNode = new DefaultTreeNode(deptOperShowTempList.get(i), parentNode);
             if (currentSelectedNode!=null){
-                if (((DeptAndOperShow)currentSelectedNode.getData()).getPkid()
-                        .equals(((DeptAndOperShow)childNode.getData()).getPkid())){
+                if (((DeptOperShow)currentSelectedNode.getData()).getPkid()
+                        .equals(((DeptOperShow)childNode.getData()).getPkid())){
                     TreeNode treeNodeTemp=childNode;
-                    while (!(((DeptAndOperShow)treeNodeTemp.getData()).getPkid().equals("root"))){
+                    while (!(((DeptOperShow)treeNodeTemp.getData()).getPkid().equals("root"))){
                         treeNodeTemp.setExpanded(true);
                         treeNodeTemp=treeNodeTemp.getParent();
                     }
                 }
             }
-            recursiveTreeNode(deptAndOperShowTempList.get(i).getPkid(), childNode);
+            recursiveTreeNode(deptOperShowTempList.get(i).getPkid(), childNode);
         }
     }
 
     public void selectRecordAction(String strPowerTypePara,
                                    String strSubmitTypePara,
-                                   DeptAndOperShow deptAndOperShowPara) {
+                                   DeptOperShow deptOperShowPara) {
         try {
             strSubmitType = strSubmitTypePara;
-            deptAndOperShowSel = (DeptAndOperShow) BeanUtils.cloneBean(deptAndOperShowPara);
+            deptOperShowSel = (DeptOperShow) BeanUtils.cloneBean(deptOperShowPara);
             if (strPowerTypePara.equals("Mng")) {
-                if ("0".equals(deptAndOperShowSel.getType())) {
+                if ("0".equals(deptOperShowSel.getType())) {
                     if (strSubmitTypePara.equals("Add")) {
                         strType = "";
                         strRendered0 = "false";
@@ -132,10 +132,10 @@ public class DeptOperAction implements Serializable {
                         strRendered1 = "false";
                         if (strSubmitTypePara.equals("Upd")) {
                             deptUpd = new Dept();
-                            deptUpd = (Dept) deptOperService.selectRecordByPkid(deptAndOperShowPara);
+                            deptUpd = (Dept) deptOperService.selectRecordByPkid(deptOperShowPara);
                         } else if (strSubmitTypePara.equals("Del")) {
                             deptDel = new Dept();
-                            deptDel = (Dept) deptOperService.selectRecordByPkid(deptAndOperShowPara);
+                            deptDel = (Dept) deptOperService.selectRecordByPkid(deptOperShowPara);
                         }
                     }
                 } else {
@@ -143,12 +143,12 @@ public class DeptOperAction implements Serializable {
                     strRendered1 = "true";
                     if (strSubmitTypePara.equals("Upd")) {
                         operUpd = new Oper();
-                        operUpd = (Oper) deptOperService.selectRecordByPkid(deptAndOperShowPara);
+                        operUpd = (Oper) deptOperService.selectRecordByPkid(deptOperShowPara);
                         System.out.println("*******operUpd.getPasswd():"+operUpd.getPasswd());
                     } else if (strSubmitTypePara.equals("Del")) {
                         currentSelectedNode=currentSelectedNode.getParent();
                         operDel = new Oper();
-                        operDel = (Oper) deptOperService.selectRecordByPkid(deptAndOperShowPara);
+                        operDel = (Oper) deptOperService.selectRecordByPkid(deptOperShowPara);
                     }
                 }
             }
@@ -162,11 +162,11 @@ public class DeptOperAction implements Serializable {
         Object objectTemp;
         if (strSubmitType.equals("Add")) {
             if ("0".equals(strType)) {
-                deptAdd.setParentpkid(deptAndOperShowSel.getPkid());
+                deptAdd.setParentpkid(deptOperShowSel.getPkid());
                 deptAdd.setTid("NULL");
                 objectTemp = deptAdd;
             } else {
-                operAdd.setDeptPkid(deptAndOperShowSel.getPkid());
+                operAdd.setDeptPkid(deptOperShowSel.getPkid());
                 operAdd.setTid("NULL");
                 objectTemp = operAdd;
             }
@@ -180,7 +180,7 @@ public class DeptOperAction implements Serializable {
                 addRecordAction(objectTemp, strType);
             }
         } else if (strSubmitType.equals("Upd")) {
-            if ("0".equals(deptAndOperShowSel.getType())) {
+            if ("0".equals(deptOperShowSel.getType())) {
                 objectTemp = deptUpd;
             } else {
                 objectTemp = operUpd;
@@ -188,10 +188,10 @@ public class DeptOperAction implements Serializable {
             if (!submitPreCheck(objectTemp)) {
                 return;
             }
-            updRecordAction(objectTemp, deptAndOperShowSel.getType());
+            updRecordAction(objectTemp, deptOperShowSel.getType());
         } else if (strSubmitType.equals("Del")) {
-            if ("0".equals(deptAndOperShowSel.getType())) {
-                if (deptOperService.findChildRecordsByPkid(deptAndOperShowSel)) {
+            if ("0".equals(deptOperShowSel.getType())) {
+                if (deptOperService.findChildRecordsByPkid(deptOperShowSel)) {
                     MessageUtil.addInfo("该部门有员工，无法删除。");
                     return;
                 } else {
@@ -200,13 +200,13 @@ public class DeptOperAction implements Serializable {
             } else {
                 objectTemp = operDel;
             }
-            delRecordAction(objectTemp, deptAndOperShowSel.getType());
+            delRecordAction(objectTemp, deptOperShowSel.getType());
         }
         initVariables();
         initData();
     }
 
-    private void fromModelToShowForUpd(Object model,DeptAndOperShow show,String strType){
+    private void fromModelToShowForUpd(Object model,DeptOperShow show,String strType){
         if ("0".equals(strType)){
             Dept deptmodel=(Dept)model;
             show.setName(deptmodel.getName());
@@ -223,7 +223,7 @@ public class DeptOperAction implements Serializable {
         if ("Add".equals(strSubmitType)) {
             strTypeTemp = strType;
         } else if ("Upd".equals(strSubmitType)) {
-            strTypeTemp = deptAndOperShowSel.getType();
+            strTypeTemp = deptOperShowSel.getType();
         }
         if ("".equals(strTypeTemp)) {
             MessageUtil.addInfo("请选择操作类型！");
@@ -308,10 +308,10 @@ public class DeptOperAction implements Serializable {
         if (lastSelectedNode==null){
             lastSelectedNode=currentSelectedNode;
         }else {
-            ((DeptAndOperShow)lastSelectedNode.getData()).setIsDisabled("true");
+            ((DeptOperShow)lastSelectedNode.getData()).setIsDisabled("true");
             lastSelectedNode=currentSelectedNode;
         }
-        ((DeptAndOperShow)currentSelectedNode.getData()).setIsDisabled("false");
+        ((DeptOperShow)currentSelectedNode.getData()).setIsDisabled("false");
     }
 
     /*智能字段 Start*/
@@ -396,12 +396,12 @@ public class DeptOperAction implements Serializable {
         this.operDel = operDel;
     }
 
-    public DeptAndOperShow getDeptAndOperShowSel() {
-        return deptAndOperShowSel;
+    public DeptOperShow getDeptOperShowSel() {
+        return deptOperShowSel;
     }
 
-    public void setDeptAndOperShowSel(DeptAndOperShow deptAndOperShowSel) {
-        this.deptAndOperShowSel = deptAndOperShowSel;
+    public void setDeptOperShowSel(DeptOperShow deptOperShowSel) {
+        this.deptOperShowSel = deptOperShowSel;
     }
 
     public List<SelectItem> getOperSexList() {

@@ -5,10 +5,7 @@ import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.CttInfoShow;
-import epss.service.CttInfoService;
-import epss.service.CttItemService;
-import epss.service.FlowCtrlService;
-import epss.service.EsFlowService;
+import epss.service.*;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
@@ -55,6 +52,9 @@ public class TkcttInfoAction {
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
+    @ManagedProperty(value = "#{operResService}")
+    private OperResService operResService;
+
     private CttInfoShow cttInfoShowQry;
     private CttInfoShow cttInfoShowSel;
     private CttInfoShow cttInfoShowUpd;
@@ -142,6 +142,7 @@ public class TkcttInfoAction {
             cttInfoShowQry.setPeriodNo("NULL");
             this.cttInfoShowList.clear();
             cttInfoShowList = esFlowService.selectCttByStatusFlagBegin_End(cttInfoShowQry);
+
             if(strQryMsgOutPara.equals("true"))  {
                 if (cttInfoShowList.isEmpty()) {
                     MessageUtil.addWarn("没有查询到数据。");
@@ -336,12 +337,12 @@ public class TkcttInfoAction {
      * @param
      */
     public void onClickForMngAction() {
-             if (!submitPreCheck(cttInfoShowUpd)) {
-                 return;
-             }
-                 updRecordAction(cttInfoShowUpd);
-                 MessageUtil.addInfo("更新数据完成。");
-                 onQueryAction("Mng","false");
+        if (!submitPreCheck(cttInfoShowUpd)) {
+         return;
+        }
+        updRecordAction(cttInfoShowUpd);
+        MessageUtil.addInfo("更新数据完成。");
+        onQueryAction("Mng","false");
     }
 
     private void updRecordAction(CttInfoShow cttInfoShowPara) {
@@ -478,6 +479,14 @@ public class TkcttInfoAction {
     public void setCttInfoShowAttachment(CttInfoShow cttInfoShowAttachment) {
         this.cttInfoShowAttachment = cttInfoShowAttachment;
     }
-/*智能字段 End*/
+
+    public OperResService getOperResService() {
+        return operResService;
+    }
+
+    public void setOperResService(OperResService operResService) {
+        this.operResService = operResService;
+    }
+    /*智能字段 End*/
 
 }

@@ -1,6 +1,7 @@
 package epss.repository.dao.not_mybatis;
 
 import epss.repository.model.model_show.TaskShow;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
 
@@ -26,6 +27,14 @@ public interface MyTaskMapper {
             "      count(1) as recordsCountInGroup" +
             "    from  " +
             "      ES_CTT_INFO eci " +
+            "    inner join" +
+            "      OPER_RES opr" +
+            "    on" +
+            "      opr.INFO_TYPE=eci.CTT_TYPE" +
+            "    and " +
+            "      opr.INFO_PKID=eci.PKID" +
+            "    and " +
+            "      opr.OPER_PKID=#{strOperPkid}" +
             "    left join  " +
             "      ES_INIT_POWER eip " +
             "    on" +
@@ -41,6 +50,14 @@ public interface MyTaskMapper {
             "      count(1) as recordsCountInGroup" +
             "    from  " +
             "      ES_INIT_STL eis" +
+            "    inner join" +
+            "      OPER_RES opr" +
+            "    on" +
+            "      opr.INFO_TYPE=eis.STL_TYPE" +
+            "    and " +
+            "      opr.INFO_PKID=eis.STL_PKID" +
+            "    and " +
+            "      opr.OPER_PKID=#{strOperPkid}" +
             "    left join  " +
             "      ES_INIT_POWER eip" +
             "    on" +
@@ -54,48 +71,66 @@ public interface MyTaskMapper {
             "   )" +
             " order by" +
             "   type,statusFlag nulls first")
-    List<TaskShow> getTaskCountsInFlowGroup();
+    List<TaskShow> getTaskCountsInFlowGroup(@Param("strOperPkid") String strOperPkid);
 
-    @Select(" select  " +
-            "   eci.CTT_TYPE as type," +
-            "   eci.PKID as pkid," +
-            "   eci.ID as id," +
-            "   eci.NAME as name," +
-            "   eip.PERIOD_NO as periodNo," +
-            "   eip.STATUS_FLAG as statusFlag," +
-            "   eip.PRE_STATUS_FLAG as preStatusFlag" +
-            " from  " +
-            "   ES_CTT_INFO eci " +
-            " left join  " +
-            "   ES_INIT_POWER eip " +
-            " on" +
-            "   eci.CTT_TYPE=eip.POWER_TYPE" +
+    @Select(" select" +
+            "   info.type," +
+            "   info.pkid," +
+            "   info.id," +
+            "   info.name," +
+            "   info.periodNo," +
+            "   info.statusFlag," +
+            "   info.preStatusFlag" +
+            " from" +
+            "   OPER_RES opr" +
+            " inner join" +
+            "   (select  " +
+            "     eci.CTT_TYPE as type," +
+            "     eci.PKID as pkid," +
+            "     eci.ID as id," +
+            "     eci.NAME as name," +
+            "     eip.PERIOD_NO as periodNo," +
+            "     eip.STATUS_FLAG as statusFlag," +
+            "     eip.PRE_STATUS_FLAG as preStatusFlag" +
+            "   from  " +
+            "     ES_CTT_INFO eci " +
+            "   left join  " +
+            "     ES_INIT_POWER eip " +
+            "   on" +
+            "     eci.CTT_TYPE=eip.POWER_TYPE" +
+            "   and " +
+            "     eci.PKID=eip.POWER_PKID" +
+            "   union" +
+            "   select " +
+            "     eis.STL_TYPE as type," +
+            "     eis.STL_PKID as pkid," +
+            "     eis.ID as id," +
+            "     ecinfo.NAME as name," +
+            "     eip.PERIOD_NO as periodNo," +
+            "     eip.STATUS_FLAG as statusFlag," +
+            "     eip.PRE_STATUS_FLAG as preStatusFlag" +
+            "   from  " +
+            "     ES_INIT_STL eis" +
+            "   left join  " +
+            "     ES_INIT_POWER eip" +
+            "   on" +
+            "     eis.STL_TYPE=eip.POWER_TYPE" +
+            "   and " +
+            "     eis.STL_PKID=eip.POWER_PKID" +
+            "   and " +
+            "     eis.PERIOD_NO=eip.PERIOD_NO" +
+            "   left join  " +
+            "     ES_CTT_INFO ecinfo" +
+            "   on  " +
+            "     eis.STL_PKID=ecinfo.PKID" +
+            "   )info" +
+            " on " +
+            "   opr.INFO_TYPE=info.type" +
             " and " +
-            "   eci.PKID=eip.POWER_PKID" +
-            " union" +
-            " select " +
-            "   eis.STL_TYPE as type," +
-            "   eis.PKID as pkid," +
-            "   eis.ID as id," +
-            "   ecinfo.NAME as name," +
-            "   eip.PERIOD_NO as periodNo," +
-            "   eip.STATUS_FLAG as statusFlag," +
-            "   eip.PRE_STATUS_FLAG as preStatusFlag" +
-            " from  " +
-            "   ES_INIT_STL eis" +
-            " left join  " +
-            "   ES_INIT_POWER eip" +
-            " on" +
-            "   eis.STL_TYPE=eip.POWER_TYPE" +
-            " and " +
-            "   eis.STL_PKID=eip.POWER_PKID" +
-            " and " +
-            "   eis.PERIOD_NO=eip.PERIOD_NO" +
-            " left join  " +
-            "   ES_CTT_INFO ecinfo" +
-            " on  " +
-            "   eis.STL_PKID=ecinfo.PKID" +
+            "   opr.INFO_PKID=info.pkid" +
+            " where" +
+            "   opr.OPER_PKID=#{strOperPkid}" +
             " order by" +
             "   type,statusFlag,preStatusFlag")
-    List<TaskShow> getDetailTaskShowList();
+    List<TaskShow> getDetailTaskShowList(@Param("strOperPkid") String strOperPkid);
 }

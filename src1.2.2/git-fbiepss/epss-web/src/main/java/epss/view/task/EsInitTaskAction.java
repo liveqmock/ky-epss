@@ -29,8 +29,6 @@ public class EsInitTaskAction {
     private static final Logger logger = LoggerFactory.getLogger(EsInitTaskAction.class);
     @ManagedProperty(value = "#{taskService}")
     private TaskService taskService;
-    @ManagedProperty(value = "#{operResService}")
-    private OperResService operResService;
 
     private List<TaskShow> taskShowList;
 
@@ -39,22 +37,10 @@ public class EsInitTaskAction {
         //整个任务列表
         taskShowList = new ArrayList<TaskShow>();
         taskShowList=taskService.initTaskShowList("EsInitTask");
-        OperResShow operResShowTemp = new OperResShow();
-        operResShowTemp.setOperPkid(ToolUtil.getOperatorManager().getOperatorId());
-        List<OperResShow> operResShowList =
-                operResService.selectOperaResRecordsByModelShow(operResShowTemp);
     }
 
     public List<TaskShow> getTaskShowList() {
         return taskShowList;
-    }
-
-    public OperResService getOperResService() {
-        return operResService;
-    }
-
-    public void setOperResService(OperResService operResService) {
-        this.operResService = operResService;
     }
 
     public TaskService getTaskService() {

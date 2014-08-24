@@ -28,12 +28,12 @@ public class TaskService {
     @Autowired
     private PtCommonMapper ptCommonMapper;
 
-    public List<TaskShow> getTaskCountsInFlowGroup() {
-        return myTaskMapper.getTaskCountsInFlowGroup();
+    public List<TaskShow> getTaskCountsInFlowGroup(String strOperPkidPara) {
+        return myTaskMapper.getTaskCountsInFlowGroup(strOperPkidPara);
     }
 
-    public List<TaskShow> getDetailTaskShowList() {
-        return myTaskMapper.getDetailTaskShowList();
+    public List<TaskShow> getDetailTaskShowList(String strOperPkidPara) {
+        return myTaskMapper.getDetailTaskShowList(strOperPkidPara);
     }
 
     public List<TaskShow> initTaskShowList(String strActionType) {
@@ -44,10 +44,11 @@ public class TaskService {
         List<TaskShow> taskShowList = new ArrayList<TaskShow>();
         //通过OperatorManager获取相应权限下菜单列表
         List<Ptmenu> ptmenuList = ptCommonMapper.getPtmenuList(ToolUtil.getOperatorManager().getOperatorId());
+        String strOperIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         // 以合同类型和状态为分组,取得各组的数量
-        List<TaskShow> taskCountsInFlowGroupListTemp = getTaskCountsInFlowGroup();
+        List<TaskShow> taskCountsInFlowGroupListTemp = getTaskCountsInFlowGroup(strOperIdTemp);
         // 获得详细任务列表
-        List<TaskShow> taskShowListTemp = getDetailTaskShowList();
+        List<TaskShow> taskShowListTemp = getDetailTaskShowList(strOperIdTemp);
         //遍历菜单
         for (Ptmenu itemUnit : ptmenuList) {
             //如果菜单为空或者地址中不含有总包合同和成本计划的话，继续循环查找

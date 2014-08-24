@@ -1,13 +1,11 @@
 package epss.service;
 
 import skyline.util.ToolUtil;
-import epss.repository.dao.EsCttInfoMapper;
 import epss.repository.dao.OperResMapper;
 import epss.repository.dao.not_mybatis.MyOperResMapper;
-import epss.repository.model.EsCttInfo;
 import epss.repository.model.OperRes;
 import epss.repository.model.model_show.CttInfoShow;
-import epss.repository.model.model_show.DeptAndOperShow;
+import epss.repository.model.model_show.DeptOperShow;
 import epss.repository.model.model_show.OperResShow;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -27,7 +25,7 @@ public class OperResService {
         return myOperResMapper.selectOperaRoleRecords(parentDeptid);
     }
 
-    public List<DeptAndOperShow> getOperList(String parentDeptid){
+    public List<DeptOperShow> getOperList(String parentDeptid){
         return myOperResMapper.getOperList(parentDeptid);
     }
 
@@ -40,6 +38,9 @@ public class OperResService {
     }
     public List<OperResShow> selectOperaResRecordsByModel(OperRes operResPara){
         return myOperResMapper.selectOperaResRecordsByModelShow(fromModelToModelShow(operResPara));
+    }
+    public List<OperResShow> getInfoListByOperPkid(String strInfoTypePara,String strOperPkidPara){
+        return myOperResMapper.getInfoListByOperPkid(strInfoTypePara,strOperPkidPara);
     }
 	public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara){
         return  myOperResMapper.selectRecordsFromCtt(parentPkidPara);

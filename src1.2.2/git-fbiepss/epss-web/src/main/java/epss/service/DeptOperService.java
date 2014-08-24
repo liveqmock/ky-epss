@@ -2,19 +2,16 @@ package epss.service;
 
 import epss.repository.dao.DeptMapper;
 import epss.repository.dao.OperMapper;
-import epss.repository.dao.OperResMapper;
 import epss.repository.dao.not_mybatis.MyDeptAndOperMapper;
 import epss.repository.model.Dept;
 import epss.repository.model.DeptExample;
 import epss.repository.model.Oper;
 import epss.repository.model.OperExample;
-import epss.repository.model.model_show.DeptAndOperShow;
-import org.apache.commons.beanutils.BeanUtils;
+import epss.repository.model.model_show.DeptOperShow;
 import org.springframework.stereotype.Service;
 import skyline.util.ToolUtil;
 
 import javax.annotation.Resource;
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 /**
@@ -29,31 +26,31 @@ public class DeptOperService {
     @Resource
     private OperMapper operMapper;
 
-    public List<DeptAndOperShow> selectDeptAndOperRecords(String parentPkidPara) {
+    public List<DeptOperShow> selectDeptAndOperRecords(String parentPkidPara) {
         return myDeptAndOperMapper.selectDeptAndOperRecords(parentPkidPara);
     }
 
-    public boolean findChildRecordsByPkid(DeptAndOperShow deptAndOperShowPara) {
+    public boolean findChildRecordsByPkid(DeptOperShow deptOperShowPara) {
         DeptExample example = new DeptExample();
         example.createCriteria()
-                .andParentpkidEqualTo(deptAndOperShowPara.getPkid());
+                .andParentpkidEqualTo(deptOperShowPara.getPkid());
         OperExample operExample=new OperExample();
         operExample.createCriteria()
-                .andDeptPkidEqualTo(deptAndOperShowPara.getPkid());
+                .andDeptPkidEqualTo(deptOperShowPara.getPkid());
         return (deptMapper.selectByExample(example).size()>0||operMapper.selectByExample(operExample).size()>0);
     }
-    public int deleteByPkid(DeptAndOperShow deptAndOperShowPara) {
-        if ("1".equals(deptAndOperShowPara.getType())){
-            return deptMapper.deleteByPrimaryKey(deptAndOperShowPara.getPkid());
+    public int deleteByPkid(DeptOperShow deptOperShowPara) {
+        if ("1".equals(deptOperShowPara.getType())){
+            return deptMapper.deleteByPrimaryKey(deptOperShowPara.getPkid());
         }else {
-            return operMapper.deleteByPrimaryKey(deptAndOperShowPara.getPkid());
+            return operMapper.deleteByPrimaryKey(deptOperShowPara.getPkid());
         }
     }
-    public Object selectRecordByPkid(DeptAndOperShow deptAndOperShowPara) {
-        if ("0".equals(deptAndOperShowPara.getType())){
-            return deptMapper.selectByPrimaryKey(deptAndOperShowPara.getPkid());
+    public Object selectRecordByPkid(DeptOperShow deptOperShowPara) {
+        if ("0".equals(deptOperShowPara.getType())){
+            return deptMapper.selectByPrimaryKey(deptOperShowPara.getPkid());
         }else {
-            return operMapper.selectByPrimaryKey(deptAndOperShowPara.getPkid());
+            return operMapper.selectByPrimaryKey(deptOperShowPara.getPkid());
         }
     }
     public boolean isExistInDb(Object objectPara,String strTypePara) {

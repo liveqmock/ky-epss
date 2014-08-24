@@ -1,7 +1,7 @@
 package epss.repository.dao.not_mybatis;
 
 import epss.repository.model.model_show.CttInfoShow;
-import epss.repository.model.model_show.DeptAndOperShow;
+import epss.repository.model.model_show.DeptOperShow;
 import epss.repository.model.model_show.OperResShow;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -44,7 +44,7 @@ public interface MyOperResMapper {
             "       parentdeptid=#{parentDeptid} " +
             "      ) ss " +
             "  order by type ")
-    List<DeptAndOperShow> getOperList(@Param("parentDeptid") String parentDeptid);
+    List<DeptOperShow> getOperList(@Param("parentDeptid") String parentDeptid);
     @Select("select " +
             "    operPkid, " +
             "    operName, " +
@@ -97,7 +97,23 @@ public interface MyOperResMapper {
 
     List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara);
 
-    @Select(" select    " +
+    @Select("select distinct" +
+            "   opr.INFO_PKID as infoPkid, " +
+            "   eci.NAME as infoPkidName" +
+            " from " +
+            "   OPER_RES opr" +
+            " left join" +
+            "   ES_CTT_INFO eci" +
+            " on" +
+            "   opr.INFO_PKID=eci.PKID" +
+            " where " +
+            "   opr.INFO_TYPE=#{strInfoType}" +
+            " and" +
+            "   opr.OPER_PKID=#{strOperPkid}")
+    List<OperResShow> getInfoListByOperPkid(@Param("strInfoType") String strInfoType,
+                                            @Param("strOperPkid") String strOperPkid);
+
+    @Select(" select" +
             "    t.pkid as pkid," +
             "    t.ctt_type as cttType," +
             "    t.parent_pkid as parentPkid," +
