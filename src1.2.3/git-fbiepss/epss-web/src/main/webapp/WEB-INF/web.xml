@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         version="3.0"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+                      http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+
+    <session-config>
+        <session-timeout>360</session-timeout>
+    </session-config>
+
+    <!--fileupload filter-->
+    <filter>
+        <filter-name>Character Encoding Filter</filter-name>
+        <filter-class>skyline.util.CharacterEncodingFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>Character Encoding Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>LoginCheckFilter</filter-name>
+        <filter-class>
+            skyline.security.LoginCheckFilter
+        </filter-class>
+        <init-param>
+            <param-name>loginPage</param-name>
+            <param-value>/pages/security/timeout.jsp</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>LoginCheckFilter</filter-name>
+        <url-pattern>*.jsp</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>LoginCheckFilter</filter-name>
+        <url-pattern>*.xhtml</url-pattern>
+    </filter-mapping>
+
+
+    <!--primefaces-->
+    <context-param>
+        <param-name>com.sun.faces.allowTextChildren</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <!--<param-value>aristo</param-value>-->
+        <param-value>hot-sneaks</param-value>
+    </context-param>
+
+    <!--EL-->
+    <!--
+        <context-param>
+            <param-name>com.sun.faces.expressionFactory</param-name>
+            <param-value>com.sun.el.ExpressionFactoryImpl</param-value>
+        </context-param>
+    -->
+
+    <!--JSF2 配置-->
+    <context-param>
+        <param-name>javax.faces.FACELETS_SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>javax.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+        <!--<param-value>Production</param-value>-->
+    </context-param>
+    <context-param>
+        <param-name>javax.faces.CONFIG_FILES</param-name>
+        <param-value>/WEB-INF/faces-config.xml</param-value>
+    </context-param>
+
+    <!--groovy 2-->
+    <context-param>
+        <param-name>com.sun.faces.enableGroovyScripting</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>Faces Servlet</servlet-name>
+        <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!-- 加载Spring配置文件 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:applicationContext.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+<!--
+    <listener>
+        <listener-class>
+            org.springframework.web.context.request.RequestContextListener
+        </listener-class>
+    </listener>
+-->
+
+
+    <servlet>
+        <servlet-name>ImgServlet</servlet-name>
+        <servlet-class>skyline.platform.security.ImgServlet</servlet-class>
+    </servlet>
+
+    <!--<servlet>-->
+    <!--<servlet-name>login</servlet-name>-->
+    <!--<jsp-file>/index.jsp</jsp-file>-->
+    <!--</servlet>-->
+
+    <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>skyline.platform.security.AdminServlet</servlet-class>
+    </servlet>
+
+    <!--JSF2 mapping-->
+    <servlet-mapping>
+        <servlet-name>Faces Servlet</servlet-name>
+        <!--<url-pattern>/faces/*</url-pattern>-->
+        <url-pattern>*.xhtml</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>ImgServlet</servlet-name>
+        <url-pattern>/signjpg</url-pattern>
+    </servlet-mapping>
+
+    <!-- Action Servlet Mapping -->
+    <servlet-mapping>
+        <servlet-name>AdminServlet</servlet-name>
+        <!--<url-pattern>index.html</url-pattern>-->
+        <url-pattern>*.login</url-pattern>
+    </servlet-mapping>
+
+    <mime-mapping>
+        <extension>xls</extension>
+        <mime-type>application/vnd.ms-excel</mime-type>
+    </mime-mapping>
+
+    <welcome-file-list>
+        <welcome-file>index.login</welcome-file>
+    </welcome-file-list>
+
+    <listener>
+        <listener-class>skyline.security.OperOnLineSessionListener</listener-class>
+    </listener>
+
+</web-app>

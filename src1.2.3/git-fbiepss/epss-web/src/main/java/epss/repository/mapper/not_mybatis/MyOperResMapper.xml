@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="epss.repository.dao.not_mybatis.MyOperResMapper">
+    <resultMap id="BaseResultMapOperRes" type="epss.repository.model.model_show.OperResShow">
+        <result column="PKID" jdbcType="VARCHAR" property="pkid" />
+        <result column="TID" jdbcType="VARCHAR" property="tid" />
+        <result column="OPER_PKID" jdbcType="VARCHAR" property="operPkid" />
+        <result column="OPER_NAME" jdbcType="VARCHAR" property="operName" />
+        <result column="FLOW_STATUS" jdbcType="CHAR" property="flowStatus" />
+        <result column="INFO_TYPE" jdbcType="CHAR" property="infoType" />
+        <result column="INFO_PKID" jdbcType="VARCHAR" property="infoPkid" />
+        <result column="INFO_PKID_NAME" jdbcType="VARCHAR" property="infoPkidName" />
+        <result column="ARCHIVED_FLAG" jdbcType="CHAR" property="archivedFlag" />
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+        <result column="CREATED_BY_NAME" jdbcType="VARCHAR" property="createdByName" />
+        <result column="CREATED_TIME" jdbcType="VARCHAR" property="createdTime" />
+        <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
+        <result column="LAST_UPD_BY_NAME" jdbcType="VARCHAR" property="lastUpdByName" />
+        <result column="LAST_UPD_TIME" jdbcType="VARCHAR" property="lastUpdTime" />
+        <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+        <result column="RECVERSION" jdbcType="DECIMAL" property="recversion" />
+    </resultMap>
+    <select id="selectOperaResRecordsByModelShow" parameterType="epss.repository.model.model_show.OperResShow"
+            resultMap="BaseResultMapOperRes">
+        <![CDATA[
+            select
+                t.PKID,
+                t.TID,
+                t.OPER_PKID,
+                (select opername from ptoper where operid=t.OPER_PKID) as OPER_NAME,
+                t.FLOW_STATUS,
+                t.INFO_TYPE,
+                t.INFO_PKID,
+                (select name from es_ctt_info where pkid=t.INFO_PKID ) as INFO_PKID_NAME,
+                t.ARCHIVED_FLAG,
+                t.CREATED_BY,
+                (select opername from ptoper where operid=t.CREATED_BY) as CREATED_BY_NAME,
+                t.CREATED_TIME,
+                t.LAST_UPD_BY,
+                (select opername from ptoper where operid=t.LAST_UPD_BY) as LAST_UPD_BY_NAME,
+                t.LAST_UPD_TIME,
+                t.REMARK,
+                t.RECVERSION
+            from
+                OPER_RES t
+            where
+               1=1
+        ]]>
+        <if test="tid != null and tid != ''">
+            and t.TID=#{tid}
+        </if>
+        <if test="operPkid != null and operPkid != ''">
+            and t.OPER_PKID=#{operPkid}
+        </if>
+        <if test="infoType != null and infoType != ''">
+            and t.INFO_TYPE=#{infoType}
+        </if>
+        <if test="infoPkid != null and infoPkid != ''">
+            and t.INFO_PKID=#{infoPkid}
+        </if>
+        <if test="flowStatus != null and flowStatus != ''">
+            and t.flow_status=#{flowStatus}
+        </if>
+        order by
+            t.flow_status,t.info_type
+    </select>
+</mapper>
