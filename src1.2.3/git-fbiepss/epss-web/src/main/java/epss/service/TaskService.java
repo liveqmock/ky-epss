@@ -51,7 +51,7 @@ public class TaskService {
                     String strTypeName=ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle();
                     detailTaskShowUnit.setId("("+strTypeName+")"+detailTaskShowUnit.getId());
                     String strDetailTaskShowUnitTemp =
-                            ESEnumPreStatusFlag.getValueByKey(detailTaskShowUnit.getPreFlowStatus()).getTitle();
+                            ESEnumPreStatusFlag.getValueByKey(ToolUtil.getStrIgnoreNull(detailTaskShowUnit.getPreFlowStatus())).getTitle();
                     detailTaskShowUnit.setPreFlowStatusName(strDetailTaskShowUnitTemp);
 
                     //ÑÕÉ«Çø·Ö
@@ -73,11 +73,11 @@ public class TaskService {
                     taskShowTempList.add(detailTaskShowUnit);
                 }
             }
+            String strFlowStatusNameUnit = ESEnumStatusFlag.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle();
+            taskShowGroupUnit.setFlowStatusName(strFlowStatusNameUnit);
+            taskShowGroupUnit.setFlowStatusName(taskShowGroupUnit.getFlowStatusName()+"("+taskShowTempList.size()+")");
+            taskShowList.add(taskShowGroupUnit);
             if(taskShowTempList.size()>0) {
-                String strFlowStatusNameUnit = ESEnumStatusFlag.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle();
-                taskShowGroupUnit.setFlowStatusName(strFlowStatusNameUnit);
-                taskShowGroupUnit.setFlowStatusName(taskShowGroupUnit.getFlowStatusName()+"("+taskShowTempList.size()+")");
-                taskShowList.add(taskShowGroupUnit);
                 taskShowList.addAll(taskShowTempList);
                 taskShowTempList.clear();
             }

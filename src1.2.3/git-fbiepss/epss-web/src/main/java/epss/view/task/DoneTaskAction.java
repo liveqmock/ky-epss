@@ -1,13 +1,9 @@
 package epss.view.task;
 
-import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.TaskShow;
-import epss.service.OperResService;
 import epss.service.TaskService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import skyline.util.ToolUtil;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -25,8 +21,8 @@ import java.util.List;
  */
 @ManagedBean
 @ViewScoped
-public class EsInitTaskAction {
-    private static final Logger logger = LoggerFactory.getLogger(EsInitTaskAction.class);
+public class DoneTaskAction {
+    private static final Logger logger = LoggerFactory.getLogger(DoneTaskAction.class);
     @ManagedProperty(value = "#{taskService}")
     private TaskService taskService;
 

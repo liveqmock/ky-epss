@@ -1,0 +1,169 @@
+﻿<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+        <link type="text/css" href="#{request.contextPath}/UI/epss/epss.css" rel="stylesheet"/>
+        <script type="text/javascript" src="#{request.contextPath}/UI/support/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            function actSelect(infoType,flowStatus,infoPkid) {
+                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
+                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
+                var arg = new Object();
+                arg.doType = "select";
+                if (infoType == '0') {// 总包合同
+                    if(flowStatus=="") { // 录入
+                        var rtn = dialog("../item/itemMng_Tkctt.xhtml?strFlowType=Mng&amp;strTkcttInfoPkid=" +infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=="0") { // 录入
+                        var rtn = dialog("../item/itemMng_Tkctt.xhtml?strFlowType=Mng&amp;strTkcttInfoPkid=" +infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='1') { // 审核
+                        var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Check&amp;strTkcttInfoPkid=" + infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='2') { // 复核
+                        var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=DoubleCheck&amp;strTkcttInfoPkid=" + infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='3') { // 批准
+                        var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Approve&amp;strTkcttInfoPkid=" + infoPkid, arg, sfeature);
+                    }
+                }else
+                if (infoType == '1') {// 成本计划
+                    if(flowStatus=="") { // 录入
+                        var rtn = dialog("../item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCstplInfoPkid=" +infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=="0") { // 录入
+                        var rtn = dialog("../item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCstplInfoPkid=" +infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='1') { // 审核
+                        var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=Check&amp;strCstplInfoPkid=" + infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='2') { // 复核
+                        var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=DoubleCheck&amp;strCstplInfoPkid=" + infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='3') { // 批准
+                        var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=Approve&amp;strCstplInfoPkid=" + infoPkid, arg, sfeature);
+                    }
+                }else
+                if (infoType == '2') {// 分包合同
+                    if(flowStatus=="") { // 录入
+                        var rtn = dialog("../item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strSubcttInfoPkid=" +infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=="0") { // 录入
+                        var rtn = dialog("../item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strSubcttInfoPkid=" +infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='1') { // 审核
+                        var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=Check&amp;strSubcttInfoPkid=" + infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='2') { // 复核
+                        var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=DoubleCheck&amp;strSubcttInfoPkid=" + infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='3') { // 批准
+                        var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=Approve&amp;strSubcttInfoPkid=" + infoPkid, arg, sfeature);
+                    }
+                }else
+                if (infoType == '3') {// 分包数量结算
+                    if(flowStatus=="") { // 录入
+                        var rtn = dialog("../item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strProgWorkqtyInfoPkid=" +infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=="0") { // 录入
+                        var rtn = dialog("../item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strProgWorkqtyInfoPkid=" +infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='1') { // 审核
+                        var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=Check&amp;strProgWorkqtyInfoPkid=" + infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='2') { // 复核
+                        var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=DoubleCheck&amp;strProgWorkqtyInfoPkid=" + infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='3') { // 批准
+                        var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=Approve&amp;strProgWorkqtyInfoPkid=" + infoPkid, arg, sfeature);
+                    }
+                }else
+                if (infoType == '4') {// 分包材料结算
+                    if(flowStatus=="") { // 录入
+                        var rtn = dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strProgMatqtyInfoPkid=" +infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=="0") { // 录入
+                        var rtn = dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strProgMatqtyInfoPkid=" +infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='1') { // 审核
+                        var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=Check&amp;strProgMatqtyInfoPkid=" + infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='2') { // 复核
+                        var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=DoubleCheck&amp;strProgMatqtyInfoPkid=" + infoPkid, arg, sfeature);
+                    }else
+                    if(flowStatus=='3') { // 批准
+                        var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=Approve&amp;strProgMatqtyInfoPkid=" + infoPkid, arg, sfeature);
+                    }
+                }else
+                if (infoType == '5') {// 分包价格结算
+                    if(flowStatus=="" ||flowStatus=='2') { // 批准
+                        var rtn = dialog("../item/itemMng_SubcttPStl.xhtml?strEsInitStlPkid=" + infoPkid, arg, sfeature);
+                    }
+                }
+                document.getElementById("form:qryBtn").click();
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form" enctype="multipart/form-data">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:commandButton id="qryBtn" value="查询"
+                             action="#{todoTaskAction.init()}"
+                             update="pdt,msgs"
+                             rendered="false">
+            </p:commandButton>
+            <!--列表维护-->
+            <p:panel>
+                <div style="height:20px;
+                         vertical-align: bottom;
+                         font-family: verdana;
+                         FONT-SIZE:10pt;
+                         text-align: left;">
+                    <h:outputLabel value="待处理:" style="font-weight:normal"/>
+                    <h:outputLabel value="下级已通过" style="background-color: yellowgreen;"/>
+                    <h:outputLabel value="上级未通过" style="background-color: red"/>
+                </div>
+                <p:dataTable id="pdt"
+                             value="#{todoTaskAction.taskShowList}"
+                             var="record"
+                             rowIndexVar="row"
+                             rowKey="#{row + 1}"
+                             emptyMessage="数据记录为空..."
+                             rowStyleClass="#{record.type eq null?'rowDoneStyle':
+                             record.strColorType eq '2'?'rowDoneStyle2':'rowDoneStyle1'}"
+                             scrollable="true"
+                             scrollHeight="442">
+                    <p:column headerText="操作" style="width:30px;text-align: center;">
+                        <p:commandButton icon="ui-icon-triangle-1-e"
+                                         style="height:16px;width:30px;"
+                                         rendered="#{record.type eq null?'false':'true'}"
+                                         onclick="actSelect('#{record.type}','#{record.flowStatus}','#{record.pkid}')">
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="序号" style="width:30px">
+                        <h:outputText value="#{row + 1}"/>
+                    </p:column>
+                    <p:column headerText="任务类别" style="width:100px;text-align:left;">
+                        <h:outputText value="#{record.flowStatusName}" escape="false"/>
+                    </p:column>
+                    <p:column headerText="待处理任务ID" style="width:150px;text-align:left;">
+                        <h:outputText value="#{record.id}"/>
+                    </p:column>
+                    <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
+                        <h:outputText value="#{record.name}"/>
+                    </p:column>
+                    <p:column headerText="期数" style="width:100px;text-align:left;">
+                        <h:outputText value="#{record.periodNo}"/>
+                    </p:column>
+                    <p:column headerText="状态原因" style="width:100px;text-align:center;">
+                        <h:outputText value="#{record.preFlowStatusName}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

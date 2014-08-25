@@ -247,7 +247,7 @@
                                 </div>
                             </div>
                             <iframe id="workFrame" name="workFrame"
-                                    src="<%=contextPath%>/UI/epss/task/task.xhtml"
+                                    src="<%=contextPath%>/UI/epss/task/task.todoTask.xhtml"
                                     width="100%" height="100%"
                                     frameborder="no"
                                     border="0"
