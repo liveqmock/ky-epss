@@ -4,16 +4,12 @@ import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.dao.not_mybatis.MyTaskMapper;
-import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.TaskShow;
-import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import skyline.repository.dao.not_mybatis.PtCommonMapper;
-import skyline.repository.model.Ptmenu;
 import skyline.util.ToolUtil;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +37,7 @@ public class TaskService {
 
     public List<TaskShow> initTaskShowList(String strActionType){
         List<TaskShow> taskShowList = new ArrayList<TaskShow>();
+        List<TaskShow> taskShowTempList = new ArrayList<TaskShow>();
         //通过OperatorManager获取相应权限下菜单列表
         String strOperIdTemp = ToolUtil.getOperatorManager().getOperatorId();
         // 以合同类型和状态为分组,取得各组的数量
@@ -48,20 +45,9 @@ public class TaskService {
         // 获得详细任务列表
         List<TaskShow> detailTaskShowListTemp = getDetailTaskShowList(strOperIdTemp);
         for (TaskShow taskShowGroupUnit : taskFlowGroupListTemp) {
-            String strFlowStatusNameUnit = ESEnumStatusFlag.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle();
-            taskShowGroupUnit.setFlowStatusName(strFlowStatusNameUnit);
-            taskShowList.add(taskShowGroupUnit);
-            int intHasRecordCount=0;
             for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
-                if (taskShowGroupUnit.getFlowStatus().equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())
-                        &&detailTaskShowUnit.getFlowStatus()==null){
-                    intHasRecordCount++;
-                    String strTypeName=ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle();
-                    detailTaskShowUnit.setId("("+strTypeName+")"+detailTaskShowUnit.getId());
-                    taskShowList.add(detailTaskShowUnit);
-                }else
-                if (taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getFlowStatus())){
-                    intHasRecordCount++;
+                if ((int)(Integer.parseInt(taskShowGroupUnit.getFlowStatus()))
+                        ==(int)(Integer.parseInt(detailTaskShowUnit.getFlowStatus()))+1){
                     String strTypeName=ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle();
                     detailTaskShowUnit.setId("("+strTypeName+")"+detailTaskShowUnit.getId());
                     String strDetailTaskShowUnitTemp =
@@ -84,11 +70,16 @@ public class TaskService {
                             }
                         }
                     }
-                    taskShowList.add(detailTaskShowUnit);
+                    taskShowTempList.add(detailTaskShowUnit);
                 }
             }
-            if(intHasRecordCount>0) {
-                taskShowGroupUnit.setFlowStatusName(taskShowGroupUnit.getFlowStatusName()+"("+intHasRecordCount+")");
+            if(taskShowTempList.size()>0) {
+                String strFlowStatusNameUnit = ESEnumStatusFlag.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle();
+                taskShowGroupUnit.setFlowStatusName(strFlowStatusNameUnit);
+                taskShowGroupUnit.setFlowStatusName(taskShowGroupUnit.getFlowStatusName()+"("+taskShowTempList.size()+")");
+                taskShowList.add(taskShowGroupUnit);
+                taskShowList.addAll(taskShowTempList);
+                taskShowTempList.clear();
             }
         }
         return taskShowList;
