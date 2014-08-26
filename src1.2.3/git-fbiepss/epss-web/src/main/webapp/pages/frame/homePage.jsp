@@ -63,7 +63,6 @@
         <script src="../../dhtmlx/dhtmlxTabbar/codebase/dhtmlxtabbar.js" type="text/javascript"></script>
         <script type="text/javascript" src="homePage_layout.js"></script>
         <script type="text/javascript" src="homePage_tab.js"></script>
-        <script type="text/javascript" src="myAjax.js"></script>
         <LINK href="<%=contextPath%>/css/diytabbar.css" type="text/css" rel="stylesheet">
         <style type="text/css">
             html, body {
@@ -151,13 +150,14 @@
             var defaultMenuStr = '<%=jsonDefaultMenu%>';
             var systemMenuStr = '<%=jsonSystemMenu%>';
               function doOnLoad() {
-                bizdhxLayout = new dhtmlXLayoutObject("bizlayout", "2U", "dhx_skyblue");
-                doBizLoad();
+                /*donetaskdhxLayout = new dhtmlXLayoutObject("donetasklayout", "2U", "dhx_skyblue");
+                doDonetaskLoad();*/
                 sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
                 doSysLoad();
-                tabbarhide("tasklayout");
-                document.getElementById("task").setAttribute("active", "true");
-                document.getElementById("task").className = "tabs-item-active";
+                tabbarhide("todotasklayout");
+                //tabbarhide("donetasklayout");
+                document.getElementById("todotask").setAttribute("active", "true");
+                document.getElementById("todotask").className = "tabs-item-active";
             }
             function relogin() {
                 parent.window.reload = "true";
@@ -168,7 +168,7 @@
             function subSomething() {
                 if (document.readyState == "complete" &&
                         window.parent.frames["scrollInfoWorkFrame"].document.readyState == "complete") {
-                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('todoloading').style.display = 'none';
                 }
             }
         </script>
@@ -195,14 +195,14 @@
                 </tr>
                 <tr style="width:100%; height:25px">
                     <td colspan="5" style="height:25px;">
-                        <div onclick="tabbarclk(this);" active="true" id="task" class="tabs-item-active"
+                        <div onclick="tabbarclk(this);" active="true" id="todotask" class="tabs-item-active"
                              style="float:left;width:80px;margin-left:12px;">
                             <span style="width:100%;">待办业务</span>
                         </div>
                         <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
+                        <div onclick="tabbarclk(this);" active="false" id="donetask" class="tabs-item"
                              style="float:left;width:80px;">
-                            <span style="width:100%;">业务操作</span>
+                            <span style="width:100%;">已办业务</span>
                         </div>
                         <div style="float:left;width:2px;"></div>
                         <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
@@ -215,10 +215,8 @@
                             <span style="width:100%;">操作帮助</span>
                         </div>
                         <div style="float:left;width:2px;"></div>
-                        <%--TODO (add by yxy,2014-08-17,*start)--%>
                         <div style="float:left;width:2px;"></div>
-                        <div id="dynamicInfo"
-                             style="float:right;width:838px;">
+                        <div id="dynamicInfo" style="float:right;width:838px;">
                             <iframe id="scrollInfoWorkFrame"
                                     src="<%=contextPath%>/UI/epss/scrollInfo/scrollInfo.xhtml"
                                     width="100%"
@@ -237,17 +235,16 @@
                 </tr>
                 <tr style="width:100%">
                     <td width="100%" colspan="4">
-                        <%--TODO (add by yxy,2014-08-02,Total:18 line)--%>
-                        <div class="divlayout" id="tasklayout">
-                            <div class="divlayout" id="loading">
+                        <div class="divlayout" id="todotasklayout">
+                            <div class="divlayout" id="todoloading">
                                 <div style="position:absolute;top:30%;left: 40%;text-align: center;">
                                     <img src="<%=contextPath%>/images/ajaxloadingbar.gif"/>
                                     <br>
                                     <span>页面正在加载中...</span>
                                 </div>
                             </div>
-                            <iframe id="workFrame" name="workFrame"
-                                    src="<%=contextPath%>/UI/epss/task/task.todoTask.xhtml"
+                            <iframe id="todoWorkFrame"
+                                    src="<%=contextPath%>/UI/epss/task/todoTask.xhtml"
                                     width="100%" height="100%"
                                     frameborder="no"
                                     border="0"
@@ -255,7 +252,23 @@
                                     scrolling="no">
                             </iframe>
                         </div>
-                        <div class="divlayout" id="bizlayout"></div>
+                        <div class="divlayout" id="donetasklayout">
+                            <div class="divlayout" id="donetaskloading">
+                                <div style="position:absolute;top:30%;left: 40%;text-align: center;">
+                                    <img src="<%=contextPath%>/images/ajaxloadingbar.gif"/>
+                                    <br>
+                                    <span>页面正在加载中...</span>
+                                </div>
+                            </div>
+                            <iframe id="donetaskworkFrame" name="workFrame"
+                                    src="<%=contextPath%>/UI/epss/task/doneTask.xhtml"
+                                    width="100%" height="100%"
+                                    frameborder="no"
+                                    border="0"
+                                    marginwidth="0" marginheight="0"
+                                    scrolling="no">
+                            </iframe>
+                        </div>
                         <div class="divlayout" id="syslayout"></div>
                         <div class="divlayout" id="helplayout">
                             <br/>系统帮助信息...

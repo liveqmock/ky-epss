@@ -31,8 +31,8 @@ public class TodoTaskAction {
     @PostConstruct
     public void init() {
         //整个任务列表
-        taskShowList = new ArrayList<TaskShow>();
-        taskShowList=taskService.initTaskShowList("EsInitTask");
+        taskShowList = new ArrayList<>();
+        taskShowList=taskService.initTodoTaskShowList();
     }
 
     public List<TaskShow> getTaskShowList() {

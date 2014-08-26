@@ -36,10 +36,7 @@ public class ScrollInfoAction implements Serializable {
     }
 
     public void getViewMsg() {
-        getViewMsgFromTaskAction();
-    }
-    private void getViewMsgFromTaskAction(){
-        List<TaskShow> taskShowTempList =taskService.initTaskShowList("ScrollInfo");
+        List<TaskShow> taskShowTempList =taskService.initTodoTaskShowList();
         if (taskShowTempList != null) {
             String strViewMngTemp="待处理任务：";
             for (TaskShow taskShowItem : taskShowTempList) {
