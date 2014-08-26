@@ -585,19 +585,7 @@ function getAbsPosition(obj, offsetObj){
 	}
 	return ([x, y]);
 }
-//formSubmit
-function formSubmit(type,url,infoNo){
-	if(type=="info"){
-		parent.window.frmContainerInfo.responseFrame.location.replace(url+"?UserCardID="+infoNo);
-		divParent="parent.window";
-		window.clearTimeout();
-		window.setTimeout('setActiveTabIndex(parent.window.userinforTabpage,"0")',1500);
-		window.clearTimeout();
-	}
-	if(type=="req"){
-		parent.window.frmContainerInfo.requestFrame.location.replace(url+"?UserCardID="+infoNo);
-	}
-}
+
 //////////初始化界面信息/////////////////////////////////////
 function body_init(formelement,querybutton){
 	for (var i=0; i< formelement.length; i++)	{

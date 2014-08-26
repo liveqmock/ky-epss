@@ -314,24 +314,7 @@ public abstract class AbstractFormComponent {
 
     static {
         components = new HashMap();
-        components.put(new Integer(ComponentType.BOOLEAN_TYPE), "zt.platform.form.component.DbBoolean");
-        components.put(new Integer(ComponentType.ENUMERATION_TYPE), "zt.platform.form.component.DbEnumeration");
-        components.put(new Integer(ComponentType.REFERENCE_TEXT_TYPE), "zt.platform.form.component.DbRefText");
-        components.put(new Integer(ComponentType.TEXT_TYPE), "zt.platform.form.component.DbText");
-        components.put(new Integer(ComponentType.BUTTON_TYPE), "zt.platform.form.component.FormButton");
 
-        components.put(new Integer(ComponentType.CHECKBOX_TYPE), "zt.platform.form.component.FormCheckBox");
-        components.put(new Integer(ComponentType.HIDDEN_TYPE), "zt.platform.form.component.FormHidden");
-        components.put(new Integer(ComponentType.JAVASCIPT_TYPE), "zt.platform.form.component.FormJavaScript");
-        components.put(new Integer(ComponentType.LABEL_TYPE), "zt.platform.form.component.FormLabel");
-        components.put(new Integer(ComponentType.LIST_TYPE), "zt.platform.form.component.FormList");
-
-        components.put(new Integer(ComponentType.PASSWORD_TYPE), "zt.platform.form.component.FormPassword");
-        components.put(new Integer(ComponentType.RADIO_TYPE), "zt.platform.form.component.FormRadio");
-        components.put(new Integer(ComponentType.RESET_TYPE), "zt.platform.form.component.FormReset");
-        components.put(new Integer(ComponentType.SUBMIT_TYPE), "zt.platform.form.component.FormSubmit");
-        components.put(new Integer(ComponentType.TEXTAREA_TYPE), "zt.platform.form.component.FormTextArea");
-        components.put(new Integer(ComponentType.DATE_TYPE), "zt.platform.form.component.FormDate");
 
     }
 

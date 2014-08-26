@@ -14,7 +14,6 @@ import java.util.*;
  */
 
 public  class Log {
-
     public static final int OFF = 0;
     public static final int FATAL = 1;
     public static final int ERROR = 2;
@@ -24,26 +23,18 @@ public  class Log {
     public static final int ALL = 6;
 
     private static Logger logger = null;
-
     private static final String  fileName="/log4j.properties";
-
-
 
     private void getlog(){
         //初始化Log4j配置信息
         try {
            //构建配置文件输入流
            InputStream input = getClass().getResourceAsStream(fileName);
-
            Properties props = new Properties();
-
             props.load(input);
             input.close();
-
             PropertyConfigurator.configure(props);
             logger = Logger.getRootLogger();
-
-
        } catch (Exception ex) {
            // 加载日志文件出错时不能用日志类进行日志输出
            if (fileName.indexOf("log") > 0) {
@@ -52,7 +43,6 @@ public  class Log {
                getLogger().error("读取" + fileName + "配置文件出错！", ex);
            }
        }
-
     }
 
     /**
@@ -62,7 +52,6 @@ public  class Log {
     public  Logger getLogger() {
          if (logger ==null)
               getlog();
-
         return logger;
     }
 
@@ -74,46 +63,35 @@ public  class Log {
         return logger.getLevel().toString();
     }
 
-
     /**
      * 设置日志级别
      * @param level
      */
     public static void setLevel(int level) {
         switch (level) {
-
         case OFF:
             logger.setLevel(Level.OFF);
             break;
-
         case FATAL:
             logger.setLevel(Level.FATAL);
             break;
-
         case ERROR:
             logger.setLevel(Level.ERROR);
             break;
-
         case WARN:
             logger.setLevel(Level.WARN);
             break;
-
         case INFO:
             logger.setLevel(Level.INFO);
             break;
-
         case DEBUG:
             logger.setLevel(Level.DEBUG);
             break;
-
         case ALL:
             logger.setLevel(Level.ALL);
             break;
-
         default:
             break;
         }
     }
-
-
 }

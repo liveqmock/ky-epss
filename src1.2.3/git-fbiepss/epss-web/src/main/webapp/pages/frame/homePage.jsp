@@ -149,13 +149,10 @@
             var contextPath = '<%=contextPath%>';
             var defaultMenuStr = '<%=jsonDefaultMenu%>';
             var systemMenuStr = '<%=jsonSystemMenu%>';
-              function doOnLoad() {
-                /*donetaskdhxLayout = new dhtmlXLayoutObject("donetasklayout", "2U", "dhx_skyblue");
-                doDonetaskLoad();*/
+            function doOnLoad() {
                 sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
                 doSysLoad();
                 tabbarhide("todotasklayout");
-                //tabbarhide("donetasklayout");
                 document.getElementById("todotask").setAttribute("active", "true");
                 document.getElementById("todotask").className = "tabs-item-active";
             }
@@ -167,7 +164,7 @@
             document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
             function subSomething() {
                 if (document.readyState == "complete" &&
-                        window.parent.frames["todoWorkFrame"].document.readyState == "complete") {
+                    window.parent.frames["todoWorkFrame"].document.readyState == "complete") {
                     document.getElementById('todoloading').style.display = 'none';
                 }
             }

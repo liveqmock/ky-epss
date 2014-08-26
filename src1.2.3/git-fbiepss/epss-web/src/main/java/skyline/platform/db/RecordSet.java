@@ -23,10 +23,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 
-import skyline.platform.form.config.DBConfig;
-
-//import com.zt.trace.Debug;
-
 /**
  * 结果集
  *
@@ -229,7 +225,7 @@ public class RecordSet {
 
     /**
      * 返回结果集的列数量 （zhouwei add on 2004-01-13）
-     * @param idx
+     * @param
      * @return com.zt.db.RecordMetaData
      * @roseuid 3E5D800400FF
      */
@@ -984,14 +980,9 @@ public class RecordSet {
 
        while (rs.next()) {
             ArrayList record = new ArrayList();
-            if ( !DBConfig.config() ) {
-                 count = 1;
-            }
             for (int i = 1; i <= count; i++) {
                 String name = (String)fieldNames.get(i-1);
                 RecordMetaData rmd = (RecordMetaData) metadata.get(name);
-
-                //System.out.println(rmd.getType());
 
                 switch (rmd.getType()) {
                     case MetaDataTypes.BIGDECIMAL_TP:

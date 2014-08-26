@@ -125,7 +125,6 @@ public class JavaBeanGenerator {
                generateUtilMethod(className); //zw changed 20050127
                ConnectionManager cm = ConnectionManager.getInstance();
                DatabaseConnection dc = cm.get();
-               //fos.write(("private SQLMaker sqlMaker = new SQLMaker();\n").getBytes());
                String sql = " select case coltype " +
                                " when 'NUMBER' then " +
                                     " case when scale > 0 then " +
