@@ -172,7 +172,7 @@ public class DatabaseConnection {
         isAuto = true;
       } catch (java.sql.SQLException sqle) {
       }
-    } // if
+    }
   }
 
   /**
@@ -221,8 +221,6 @@ public class DatabaseConnection {
       logger.error("DatabaseConnection.executeQuery's sql parameter is null!!!");
       return null;
     }
-
-    // ////////打印sql
     printsql(sql);
 
     try {
@@ -246,10 +244,8 @@ public class DatabaseConnection {
       logger.error("DatabaseConnection.executeQuery's sql parameter is null!!!");
       return null;
     }
-
-    // ////////打印sql
+    //打印sql
     printsql(sql);
-
     try {
       Statement st = connect.createStatement();
       ResultSet rs = st.executeQuery(sql);
@@ -273,28 +269,23 @@ public class DatabaseConnection {
    * @return Description of the Return Value
    */
   public RecordSet executeQuery(String sql, int beginIndex, int resultNo) {
-
     if (sql == null || sql.trim().length() == 0) {
       logger.error("DatabaseConnection.executeQuery's sql parameter is null!!!");
       return new RecordSet();
     }
-
-    // ////////打印sql
+    //打印sql
     printsql(sql);
 
     try {
       String pageSql = "";
-
       Statement st = connect.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
       if (Basic.getDbType().equals("DB2")) {
         pageSql = " select * from (SELECT ta.*, ROWNUMBER() OVER ()  rn FROM ( " + sql + ") ta FETCH FIRST "
             + (beginIndex - 1 + resultNo) + " ROW ONLY) tb where tb.rn>" + (beginIndex - 1);
-
       } else
         pageSql = " select * from ( select t1.*, rownum rnum from ( " + sql + " ) t1 where rownum<= "
             + (beginIndex - 1 + resultNo) + " ) t2 where t2.rnum> " + (beginIndex - 1);
-
-      // //////// 打印sql
+      // 打印sql
       printsql("page sql:" + pageSql);
       ResultSet rs = st.executeQuery(pageSql);
       RecordSet records = new RecordSet(rs);

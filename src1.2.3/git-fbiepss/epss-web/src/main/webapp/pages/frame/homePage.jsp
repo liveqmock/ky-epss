@@ -16,26 +16,11 @@
     } catch (Exception e) {
         System.out.println("jsp" + e + "\n");
     }
-    String operid = "";
-    String rolesall = null;
-
+    String operid = null;
     if (om != null) {
         if (om.getOperator() != null) {
             username = om.getOperatorName();
             operid = om.getOperator().getOperid();
-
-            //角色
-            List roles = new ArrayList();
-            DatabaseConnection conn = ConnectionManager.getInstance().get();
-            RecordSet rs = conn.executeQuery("select a.roledesc from ptoperrole b right join ptrole a on b.roleid = a.roleid  where b.operid='" + operid + "'");
-            while (rs.next()) {
-                roles.add(rs.getString("roledesc"));
-            }
-            ConnectionManager.getInstance().release();
-            rolesall = " ";
-            for (int i = 0; i < roles.size(); i++) {
-                rolesall += roles.get(i) + " ";
-            }
         }
     }
 %>
@@ -184,8 +169,7 @@
                         <img src="../../images/epss_title.png" height="50px" style="margin-left: 5px">
                     </td>
                     <td style="text-align:right" class="headfont">
-                        <span>您好,<%=username%>! </span>
-                        <span><%= " | [" + rolesall + "] |" %></span>
+                        <span>您好,<%=operid%>[<%=username%>]! </span>
                         <span onclick="changepwd()" onMouseOver="this.style.cursor='hand'">修改密码</span>
                         <span onclick="relogin()" onMouseOver="this.style.cursor='hand'">| 退出&nbsp;&nbsp;</span>
                     </td>

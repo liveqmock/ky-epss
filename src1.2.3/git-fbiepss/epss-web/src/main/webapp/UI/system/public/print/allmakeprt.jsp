@@ -13,7 +13,7 @@
 			<fieldset style="PADDING-RIGHT: 5px; PADDING-LEFT: 5px; FONT-SIZE: 12px; Z-INDEX: 103; LEFT: 16px; PADDING-BOTTOM: 5px; WIDTH: 492px; PADDING-TOP: 5px; POSITION: absolute; TOP: 7px; HEIGHT: 20px"><legend>打印主题</legend>
           		<table style="width:100%;height:20px">
                     	<tr>
-                              <td>打印主题 &nbsp; &nbsp;&nbsp;&nbsp;      <input id="prttitle" style="width:350" value="打印列表"></td>
+                              <td>打印主题 &nbsp; &nbsp;&nbsp;&nbsp; <input id="prttitle" style="width:350" value="打印列表"></td>
                     	</tr>
 
                     </table>
