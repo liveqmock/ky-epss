@@ -167,7 +167,7 @@
             document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
             function subSomething() {
                 if (document.readyState == "complete" &&
-                        window.parent.frames["scrollInfoWorkFrame"].document.readyState == "complete") {
+                        window.parent.frames["todoWorkFrame"].document.readyState == "complete") {
                     document.getElementById('todoloading').style.display = 'none';
                 }
             }
@@ -195,12 +195,12 @@
                 </tr>
                 <tr style="width:100%; height:25px">
                     <td colspan="5" style="height:25px;">
-                        <div onclick="tabbarclk(this);" active="true" id="todotask" class="tabs-item-active"
+                        <div onclick="tabbarclk(this);document.frames('todoWorkFrame').location.href='<%=contextPath%>/UI/epss/task/todoTask.xhtml;'" active="true" id="todotask" class="tabs-item-active"
                              style="float:left;width:80px;margin-left:12px;">
                             <span style="width:100%;">待办业务</span>
                         </div>
                         <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="donetask" class="tabs-item"
+                        <div onclick="document.frames('donetaskworkFrame').location.href='<%=contextPath%>/UI/epss/task/doneTask.xhtml';tabbarclk(this);" active="false" id="donetask" class="tabs-item"
                              style="float:left;width:80px;">
                             <span style="width:100%;">已办业务</span>
                         </div>
@@ -253,13 +253,6 @@
                             </iframe>
                         </div>
                         <div class="divlayout" id="donetasklayout">
-                            <div class="divlayout" id="donetaskloading">
-                                <div style="position:absolute;top:30%;left: 40%;text-align: center;">
-                                    <img src="<%=contextPath%>/images/ajaxloadingbar.gif"/>
-                                    <br>
-                                    <span>页面正在加载中...</span>
-                                </div>
-                            </div>
                             <iframe id="donetaskworkFrame" name="workFrame"
                                     src="<%=contextPath%>/UI/epss/task/doneTask.xhtml"
                                     width="100%" height="100%"

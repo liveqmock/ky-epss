@@ -7,7 +7,6 @@ import epss.repository.dao.not_mybatis.MyTaskMapper;
 import epss.repository.model.model_show.TaskShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import skyline.repository.dao.not_mybatis.PtCommonMapper;
 import skyline.util.ToolUtil;
 
 import java.util.ArrayList;
@@ -96,6 +95,14 @@ public class TaskService {
         List<TaskShow> detailTaskShowListTemp = getDetailDoneTaskShowList(strOperIdTemp);
         for (TaskShow taskShowGroupUnit : taskFlowGroupListTemp) {
             for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
+                if (taskShowGroupUnit.getFlowStatus().equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())
+                        &&detailTaskShowUnit.getFlowStatus()==null){
+                    String strTypeName=ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle();
+                    detailTaskShowUnit.setId("("+strTypeName+")"+detailTaskShowUnit.getId());
+                    detailTaskShowUnit.setPreFlowStatusName("");
+                    taskShowTempList.add(detailTaskShowUnit);
+                    continue;
+                }
                 if ((int)(Integer.parseInt(taskShowGroupUnit.getFlowStatus()))
                         ==(int)(Integer.parseInt(detailTaskShowUnit.getFlowStatus()))+1){
                     String strTypeName=ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle();

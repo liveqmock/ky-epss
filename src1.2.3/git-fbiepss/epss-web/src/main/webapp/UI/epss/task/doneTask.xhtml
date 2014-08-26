@@ -118,23 +118,13 @@
             </p:commandButton>
             <!--列表维护-->
             <p:panel>
-                <div style="height:20px;
-                         vertical-align: bottom;
-                         font-family: verdana;
-                         FONT-SIZE:10pt;
-                         text-align: left;">
-                    <h:outputLabel value="待处理:" style="font-weight:normal"/>
-                    <h:outputLabel value="下级已通过" style="background-color: yellowgreen;"/>
-                    <h:outputLabel value="上级未通过" style="background-color: red"/>
-                </div>
                 <p:dataTable id="pdt"
                              value="#{doneTaskAction.taskShowList}"
                              var="record"
                              rowIndexVar="row"
                              rowKey="#{row + 1}"
                              emptyMessage="数据记录为空..."
-                             rowStyleClass="#{record.type eq null?'rowDoneStyle':
-                             record.strColorType eq '2'?'rowDoneStyle2':'rowDoneStyle1'}"
+                             rowStyleClass="#{record.type eq null?'rowDoneStyle':null}"
                              scrollable="true"
                              scrollHeight="442">
                     <p:column headerText="操作" style="width:30px;text-align: center;">
