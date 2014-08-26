@@ -150,8 +150,8 @@
             var defaultMenuStr = '<%=jsonDefaultMenu%>';
             var systemMenuStr = '<%=jsonSystemMenu%>';
             function doOnLoad() {
-                sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
-                doSysLoad();
+                bizdhxLayout = new dhtmlXLayoutObject("bizlayout", "2U", "dhx_skyblue");
+                doBizLoad();
                 tabbarhide("todotasklayout");
                 document.getElementById("todotask").setAttribute("active", "true");
                 document.getElementById("todotask").className = "tabs-item-active";
@@ -202,7 +202,7 @@
                             <span style="width:100%;">已办业务</span>
                         </div>
                         <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
+                        <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
                              style="float:left;width:80px;">
                             <span style="width:100%;">系统管理</span>
                         </div>
@@ -259,7 +259,7 @@
                                     scrolling="no">
                             </iframe>
                         </div>
-                        <div class="divlayout" id="syslayout"></div>
+                        <div class="divlayout" id="bizlayout"></div>
                         <div class="divlayout" id="helplayout">
                             <br/>系统帮助信息...
                         </div>

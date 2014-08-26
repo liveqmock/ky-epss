@@ -35,17 +35,18 @@ public class EsFlowService {
     public List<CttInfoShow> selectCttByStatusFlagBegin_End(CttInfoShow cttInfoShowPara){
         OperRes operResTemp=new OperRes();
         operResTemp.setOperPkid(ToolUtil.getOperatorManager().getOperatorId());
-        List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
+        //List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
         List<CttInfoShow> cttInfoShowListTemp= myFlowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
         List<CttInfoShow> cttInfoShowList=new ArrayList<>();
-        for(CttInfoShow cttInfoShowUnit:cttInfoShowListTemp){
+        /*for(CttInfoShow cttInfoShowUnit:cttInfoShowListTemp){
             for(OperResShow operResShowUnit:operResShowListTemp){
                 if(cttInfoShowUnit.getCttType().equals(operResShowUnit.getInfoType())&&
                         cttInfoShowUnit.getPkid().equals(operResShowUnit.getInfoPkid())) {
                     cttInfoShowList.add(cttInfoShowUnit);
                 }
             }
-        }
+        }*/
+        cttInfoShowList.addAll(cttInfoShowListTemp);
         return cttInfoShowList;
     }
 

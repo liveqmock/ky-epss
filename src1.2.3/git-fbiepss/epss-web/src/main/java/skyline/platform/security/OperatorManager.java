@@ -9,14 +9,11 @@ import skyline.platform.db.DatabaseConnection;
 import skyline.platform.system.manage.dao.PtDeptBean;
 import skyline.platform.system.manage.dao.PtOperBean;
 import skyline.platform.utils.BusinessDate;
-import skyline.platform.utils.ImgSign;
-
 import java.io.File;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 
 /**
  * <p>
@@ -36,23 +33,13 @@ import java.util.Map;
  * @version 1.6 $ UpdateDate: Y-M-D-H-M: 2003-12-02-09-50 2004-03-01-20-35 $
  */
 public class OperatorManager implements Serializable {
-
     private static final Logger logger = LoggerFactory.getLogger(OperatorManager.class);
     /**
      * operatorid是从login(operatorid, password)中得到的。
      */
     private String fimgSign = "";
 
-    private String operatorname = null;
-
     private String operatorid = null;
-
-    //当前权限下的菜单项（不包含子菜单）
-    private String xmlString = null;
-
-    //当前权限下的全部菜单
-    private String jsonString = null;
-
     /*
     20100820 zhanrui
     当前权限下的按照targetmachine分类的菜单项
@@ -61,10 +48,6 @@ public class OperatorManager implements Serializable {
     2、system：主要是系统管理相关菜单
      */
     private Map jsonMap = new HashMap();
-
-    private Resources resources;
-
-    private String[] roles = new String[] {};
 
     private MenuBean mb;
 
@@ -80,22 +63,9 @@ public class OperatorManager implements Serializable {
 
     private boolean isLogin = false;
 
-    private String filePath = "";
-
-    private String safySign = "";
-
     public OperatorManager() {
-
         // //创建图片标示
         createImgSign();
-    }
-
-    /**
-     *
-     * @return
-     */
-    public String getXmlString() {
-        return (this.xmlString);
     }
 
     /**
@@ -106,10 +76,6 @@ public class OperatorManager implements Serializable {
      */
     public PtOperBean getOperator() {
         return operator;
-    }
-
-    public String filePath() {
-        return filePath;
     }
 
     /**
@@ -139,13 +105,8 @@ public class OperatorManager implements Serializable {
      * @roseuid 3F80B6360281
      */
     public boolean login(String operid, String password) {
-
         ConnectionManager cm = ConnectionManager.getInstance();
-        DatabaseConnection dc = cm.get();
-        //SqlSession session = IbatisFactory.ORACLE.getInstance().openSession();
         try {
-            //String loginWhere = "where operid='" + operid
-            //		+ "' and operpasswd ='" + password + "'and operenabled='1'";
             String loginWhere = "where operid='" + operid
                     + "' and operpasswd ='" + MD5Helper.getMD5String(password) + "'and operenabled='1'";
             this.operatorid = operid;
@@ -160,39 +121,20 @@ public class OperatorManager implements Serializable {
                     + " 机器名称 : " + remoteHost;
 
             operator.setFillstr600(sss);
-
             PtDeptBean ptpdet = new PtDeptBean();
-
             operator.setPtDeptBean((PtDeptBean) ptpdet
                     .findFirstByWhere("where deptid='" + operator.getDeptid()
                             + "'"));
-
-            this.operatorname = operator.getOpername();
             isLogin = true;
-            // 取得该操作员的所有角色。dep
-            // PtOperRoleBean porb = new PtOperRoleBean();
-            // List porbs = porb.findByWhere("where operid='"+operid+"'");
-            // roles = new String[porbs.size()];
-            // for ( int i = 0 ; i < porbs.size() ; i++ ) {
-            // roles[i] = ((PtOperRoleBean)porbs.get(i)).getRoleid();
-            // }
-            // 初始化资源列表。
-            resources = new Resources(operid);
             // 初始化菜单。
             try {
                 mb = new MenuBean();
-
-                //this.xmlString = mb.generateStream(operid);
-                //this.jsonString = mb.generateJsonStream(operid);
-                this.jsonMap.put("default", mb.generateJsonStream(operid, "default"));
-                this.jsonMap.put("system", mb.generateJsonStream(operid, "system"));
-
+                this.jsonMap.put("default", mb.generateJsonStream("default"));
             } catch (Exception ex3) {
                 ex3.printStackTrace();
                 System.err.println("Wrong when getting menus of operator: [ "
                         + ex3 + "]");
             }
-
             return isLogin;
         } catch (Exception e) {
             logger.error("获取登录信息错误！", e);
@@ -201,7 +143,6 @@ public class OperatorManager implements Serializable {
             cm.release();
             //session.close();
         }
-
     }
 
     /**
@@ -221,31 +162,13 @@ public class OperatorManager implements Serializable {
     }
 
     /**
-     * 检验权限 1。取到合法资源标识 2。使用Resources的checkPermission方法校验
-     *
-     * @param resource
-     * @return boolean
-     * @roseuid 3F80B8590151
-     */
-    public boolean checkPermission(String resource, int type, String url) {
-        boolean permit = resources.checkPermission(resource, type, url);
-        return permit;
-    }
-
-    /**
      * 签退
      */
     public void logout() {
-
         isLogin = false;
-        resources = null;
         operator = null;
-        operatorname = null;
         operatorid = null;
-        roles = null;
         mb = null;
-        xmlString = null;
-        jsonString = null;
         remoteHost = null;
         remoteAddr = null;
         loginTime = null;
@@ -259,79 +182,9 @@ public class OperatorManager implements Serializable {
         this.remoteHost = remoteHost;
     }
 
-    public void createImgSign2() {
-
-        try {
-            String deptfillstr100 = PropertyManager.getProperty("cims");
-            deptfillstr100 = new String(deptfillstr100.getBytes(), "GBK");
-            String lastFile = System.currentTimeMillis() + "";
-
-            ImgSign imgSign = new ImgSign();
-            filePath = "/images/" + lastFile + ".jpg";
-            safySign = imgSign.creatImgSign(deptfillstr100 + filePath);
-
-        } catch (Exception e) {
-        }
-
-		/*
-		 * try { String deptfillstr100 = PropertyManager.getProperty("cims");
-		 * deptfillstr100 = new String(deptfillstr100.getBytes(), "GBK"); String
-		 * lastFile = System.currentTimeMillis() + "";
-		 *
-		 * File file = new File(deptfillstr100 + "/images"); if (!file.exists()) {
-		 * file.mkdir(); }
-		 *
-		 * File f = new File(deptfillstr100 + "/images"); File[] files =
-		 * f.listFiles(); for (int i = 0; i < files.length; i++) { if
-		 * (files[i].isFile() && files[i].exists()) {
-		 *
-		 * if (Integer.parseInt((System.currentTimeMillis() + "") .substring(0,
-		 * 5)) - Integer.parseInt(Util.strtoint(files[i].getName() .substring(0,
-		 * 5))) > 0) files[i].delete();
-		 *  } }
-		 *
-		 * ImgSign imgSign = new ImgSign(); filePath = "/images/" + lastFile +
-		 * ".jpg"; safySign = imgSign.creatImgSign(deptfillstr100 + filePath);
-		 *  } catch (Exception e) {
-		 *  }
-		 */
-
-    }
-
-    public boolean ImgSign(String sign) {
-        boolean retbool = false;
-
-        try {
-            ImgSignDel();
-
-            if (sign.equals(safySign))
-                retbool = true;
-
-            return retbool;
-        } catch (Exception e) {
-            return retbool;
-        }
-
-    }
-
-    public void ImgSignDel() {
-        try {
-            String deptfillstr100 = PropertyManager.getProperty("cims");
-            deptfillstr100 = new String(deptfillstr100.getBytes(), "GBK");
-            File f = new File(deptfillstr100 + filePath);
-            if (f.exists())
-                f.delete();
-
-        } catch (Exception e) {
-
-        }
-    }
-
     private void createImgSign() {
         fimgSign = "";
-
         try {
-
             int rad = (int) Math.round(Math.random() * 10);
             if (rad == 10)
                 rad = 9;
@@ -351,23 +204,12 @@ public class OperatorManager implements Serializable {
             if (rad == 10)
                 rad = 9;
             fimgSign += rad;
-
         } catch (Exception e) {
 
         }
     }
 
-    public String getImgSign() {
-
-        return fimgSign;
-    }
-
-    public String getJsonString(){
-        return jsonString;
-    }
-
     public String getJsonString(String target){
         return (String)this.jsonMap.get(target);
     }
-
 }

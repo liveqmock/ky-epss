@@ -1,13 +1,14 @@
 package epss.service;
 
-import skyline.util.ToolUtil;
 import epss.repository.dao.EsCttInfoMapper;
 import epss.repository.dao.not_mybatis.MyCttInfoMapper;
+import epss.repository.model.EsCttInfo;
+import epss.repository.model.EsCttInfoExample;
 import epss.repository.model.model_show.CttInfoShow;
-import epss.repository.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+import skyline.util.ToolUtil;
+
 import java.util.List;
 
 /**
