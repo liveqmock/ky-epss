@@ -1,9 +1,11 @@
 package skyline.platform.system.manage.dao;
 
-import java.util.*;
+import skyline.platform.db.AbstractBasicBean;
+import skyline.platform.db.RecordSet;
+import skyline.platform.utils.ActionRequest;
+import skyline.platform.utils.Field;
 
-import skyline.platform.db.*;
-import skyline.platform.utils.*;
+import java.util.List;
 
 
 public class PtOperBean extends AbstractBasicBean implements Cloneable {
@@ -66,6 +68,7 @@ public class PtOperBean extends AbstractBasicBean implements Cloneable {
 	double filldbl2;
 
 	double filldbl3;
+	String sessionKey;
 
 	public static final String TABLENAME = "ptoper";
 
@@ -832,4 +835,12 @@ public class PtOperBean extends AbstractBasicBean implements Cloneable {
 
 		return true;
 	}
+
+    public String getSessionKey() {
+        return sessionKey;
+    }
+
+    public void setSessionKey(String sessionKey) {
+        this.sessionKey = sessionKey;
+    }
 }

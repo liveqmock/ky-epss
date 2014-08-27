@@ -5,6 +5,7 @@
 <%@ page import="skyline.platform.security.OperatorManager" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.HashMap" %>
 <%
     String path = request.getContextPath();
     String username = request.getParameter("username");
@@ -48,12 +49,14 @@
 %>
 
 <%
-    OperatorManager om = (OperatorManager) session.getAttribute(SystemAttributeNames.USER_INFO_NAME);
+    /*OperatorManager om = (OperatorManager) session.getAttribute(SystemAttributeNames.USER_INFO_NAME);
 
     if (om == null) {
         om = new OperatorManager();
         session.setAttribute(SystemAttributeNames.USER_INFO_NAME, om);
-    }
+    }*/
+    OperatorManager om = new OperatorManager();
+    session.setAttribute(SystemAttributeNames.USER_INFO_NAME, om);
     //String imgsign = request.getParameter("imgsign");
     boolean isLogin = false;
     om.setRemoteAddr(request.getRemoteAddr());
@@ -65,8 +68,11 @@
         if (!OnLineOpersManager.isHasUserList(application)) {
             OnLineOpersManager.setUserListToServer(application);
             OnLineOpersManager.addOperToServer(session.getId() + username, om, application);
+            application.setAttribute("sessions",new HashMap<String, HttpSession>());
+            ((HashMap<String, HttpSession>)application.getAttribute("sessions")).put(session.getId(),session);
         } else {
             OnLineOpersManager.addOperToServer(session.getId() + username, om, application);
+            ((HashMap<String, HttpSession>)application.getAttribute("sessions")).put(session.getId(),session);
         }
     }
 %>
