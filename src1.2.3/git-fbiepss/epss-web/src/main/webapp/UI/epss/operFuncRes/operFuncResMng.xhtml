@@ -1,0 +1,209 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <link type="text/css" href="#{request.contextPath}/UI/epss/epss.css" rel="stylesheet"/>
+        <script type="text/javascript" src="#{request.contextPath}/UI/support/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true" />
+            <h:panelGrid id="pdQry" columns="1">
+                <p:commandButton value="导出到EXCEL"
+                                 action="#{operFuncResAction.onExportExcel}"
+                                 update="msgs"
+                                 ajax="false">
+                </p:commandButton>
+                <p:treeTable id="resTreeTable"
+                             value="#{operFuncResAction.resRoot}"
+                             var="document"
+                             emptyMessage="数据记录为空..."
+                             scrollable="true"
+                             scrollHeight="500">
+                    <p:column headerText="名称" style="width:400px;">
+                        <h:outputText value="#{document.resName}"/>
+                    </p:column>
+                    <p:column headerText="录入" style="width:100px;">
+                        <h:outputText value="#{document.inputOperName}"/>
+                    </p:column>
+                    <p:column headerText="审核" style="width:100px;">
+                        <h:outputText value="#{document.checkOperName}"/>
+                    </p:column>
+                    <p:column headerText="复核" style="width:100px;">
+                        <h:outputText value="#{document.doubleCheckOperName}"/>
+                    </p:column>
+                    <p:column headerText="批准" style="width:100px;">
+                        <h:outputText value="#{document.approveOperName}"/>
+                    </p:column>
+                    <p:column headerText="记账" style="width:100px;">
+                        <h:outputText value="#{document.accountOperName}"/>
+                    </p:column>
+                    <p:column headerText="归档" style="width:100px;">
+                        <h:outputText value="#{document.placeOnFileOperName}"/>
+                    </p:column>
+                    <p:column headerText="操作" style="width:85px;">
+                        <p:commandButton
+                                         icon="ui-icon-plus"
+                                         style="height:18px;width:18px"
+                                         action="#{operFuncResAction.selectRecordAction('Add',document)}"
+                                         rendered="#{document.resType eq null ? 'true':
+                                                        document.resType eq '0' ? 'true':
+	                                                    document.resType eq '1' ? 'true':'false'}"
+                                         update=":form:pgViewForAdd,:form:msgs"
+                                         onclick="PF('wVDlgViewForAdd').show()">
+                        </p:commandButton>
+                        <p:commandButton
+                                         icon="ui-icon-pencil"
+                                         style="height:18px;width:18px"
+                                         action="#{operFuncResAction.selectRecordAction('Upd',document)}"
+                                         rendered="#{document.resPkid eq 'ROOT'?'false':'true'}"
+                                         update=":form:pgViewForUpd,:form:msgs"
+                                         onclick="PF('wVDlgViewForUpd').show()">
+                        </p:commandButton>
+                        <p:commandButton
+                                         icon="ui-icon-trash"
+                                         style="height:18px;width:18px"
+                                         action="#{operFuncResAction.selectRecordAction('Del',document)}"
+                                         rendered="#{document.resPkid eq 'ROOT'?'false':'true'}"
+                                         update=":form:pgViewForDel,:form:msgs"
+                                         onclick="PF('wVDlgViewForDel').show()">
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-search"
+                                         style="height:18px;width:18px"
+                                         action="#{operFuncResAction.selectRecordAction('Sel',document)}"
+                                         update=":form:pgViewForDel,:form:msgs"
+                                         onclick="wVDlgViewForPower.show()"
+                                         title="View">
+                        </p:commandButton>
+                    </p:column>
+                </p:treeTable>
+            </h:panelGrid>
+            <p:dialog id="dlgViewForAdd" header="资源增加" widgetVar="wVDlgViewForAdd"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgViewForAdd" style="width: 100%">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="名称：" for="nameForAdd"/>
+                        <p:inputText id="nameForAdd"
+                                     value="#{operFuncResAction.cttInfoShowAdd.name}"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="pgOperBtnForAdd" columns="2">
+                        <p:commandButton id="submitBtnForAdd"
+                                         value="提交"
+                                         action="#{operFuncResAction.onClickForMngAction('Add')}"
+                                         update=":form:resTreeTable,msgs,pgOperBtnForAdd">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtnForAdd" value="重置"
+                                         type="reset"
+                                         update="pgViewForAdd">
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog id="dlgViewForUpd" header="资源更新" widgetVar="wVDlgViewForUpd"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgViewForUpd" style="width: 100%">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="名称：" for="nameForUpd"/>
+                        <p:inputText id="nameForUpd"
+                                       value="#{operFuncResAction.cttInfoShowUpd.name}"
+                                       style="width:400px;"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="pgOperBtnForUpd" columns="2">
+                        <p:commandButton id="submitBtnForUpd"
+                                         value="提交"
+                                         action="#{operFuncResAction.onClickForMngAction('Upd')}"
+                                         update=":form:resTreeTable,msgs,pgOperBtnForUpd"
+                                         oncomplete="wVDlgViewForUpd.hide()">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtnForUpd" value="重置"
+                                         type="reset"
+                                         update="pgViewForUpd">
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog id="dlgViewForDel" header="资源删除" widgetVar="wVDlgViewForDel"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgViewForDel">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="名称：" for="nameForDel"/>
+                        <p:inputText id="nameForDel" value="#{operFuncResAction.cttInfoShowDel.name}"
+                                     style="width:400px;background-color:gainsboro;" readonly="true"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="pgOperBtnForDel">
+                        <p:commandButton id="submitBtnForDel"
+                                         value="提交"
+                                         action="#{operFuncResAction.onClickForMngAction('Del')}"
+                                         update=":form:resTreeTable,msgs,pgOperBtnForDel"
+                                         oncomplete="wVDlgViewForDel.hide()">
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog id="dlgViewForPower" header="权限指派" widgetVar="wVDlgViewForPower"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgViewForPower" style="width: 100%" columns="2">
+                    <h:panelGrid>
+                        <p:panel header="功能列表" style="height: 330px">
+                            <p:selectOneRadio id="grid"
+                                                  value="#{operFuncResAction.taskFunctionSeled}"
+                                                  layout="grid"
+                                                  columns="1">
+                                <f:selectItems value="#{operFuncResAction.taskFunctionList}"
+                                               var="taskRecord"
+                                               itemValue="#{taskRecord.value}"
+                                               itemLabel="#{taskRecord.label}"/>
+                            </p:selectOneRadio>
+                        </p:panel>
+                        <p:commandButton id="submitBtnForPower"
+                                         value="提交"
+                                         action="#{operFuncResAction.onClickForMngAction('Power')}"
+                                         update=":form:resTreeTable,msgs"
+                                         oncomplete="wVDlgViewForPower.hide()">
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <p:panel header="人员列表">
+                        <p:treeTable id="operTreeTable"
+                                     value="#{operFuncResAction.operRoot}"
+                                     var="node"
+                                     dynamic="true"
+                                     cache="false"
+                                     rowStyleClass="#{node.type  eq '0' ? '0':'rowDoneStyle'}"
+                                     scrollable="true"
+                                     scrollHeight="300">
+                            <p:column headerText="编号" style="width:200px;text-align:left">
+                                <h:outputText value="#{node.type eq '1' ? node.name:''}" />
+                            </p:column>
+                            <p:column headerText="名称" style="width:120px;text-align:center">
+                                <h:outputText value="#{node.type eq '0' ? node.name:''}" />
+                            </p:column>
+                            <p:column headerText="选择" style="width:30px;text-align:center">
+                                <p:selectBooleanCheckbox value="#{node.isSeled}"
+                                    rendered="#{node.type  eq '0' ? true:false}">
+                                    <p:ajax  listener="#{operFuncResAction.selOperRecordAction(node)}"/>
+                                </p:selectBooleanCheckbox>
+                            </p:column>
+                        </p:treeTable>
+                    </p:panel>
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
