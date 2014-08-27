@@ -1,14 +1,14 @@
 package skyline.service;
 
+import epss.repository.model.PtenudetailExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import skyline.repository.dao.PtenudetailMapper;
-import skyline.repository.model.Ptenudetail;
-import skyline.repository.model.PtenudetailExample;
 
 import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.List;
+import epss.repository.dao.PtenudetailMapper;
+import epss.repository.model.Ptenudetail;
 
 /**
  * Created by IntelliJ IDEA.

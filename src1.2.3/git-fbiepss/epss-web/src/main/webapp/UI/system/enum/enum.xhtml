@@ -1,0 +1,379 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+<ui:define name="head">
+    <script type="text/javascript" src="#{request.contextPath}/UI/support/pub.js"/>
+    <script type="text/javascript" language="javascript">
+        document.onkeydown = function TabReplace() {
+            if (event.keyCode == 13) {
+                if (event.srcElement.tagName != 'BUTTON')
+                    event.keyCode = 9;
+                else
+                    event.srcElement.click();
+            }
+        }
+    </script>
+</ui:define>
+<ui:define name="content">
+<h:form id="form">
+<p:growl id="msgs" showDetail="true"/>
+<p:panel>
+    <p:focus for="enuname"/>
+    <p:panel>
+        <h:panelGrid id="pdQry" columns="2" style="width: 100%">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="枚举名称：" for="enuname"/>
+                <p:inputText id="enuname" value="#{enumAction.enumainQry.enuname}"
+                             style="width: 300px"/>
+            </h:panelGrid>
+            <h:panelGrid columns="3">
+                <p:commandButton id="qryBtn" value="查询"
+                                 action="#{enumAction.onQueryAction('main')}"
+                                 update=":form:pdtMain,:form:msgs,:form:pdQry">
+                </p:commandButton>
+                <p:commandButton id="resetBtn" value="重置"
+                                 type="reset"
+                                 update=":form:pdQry,:form:msgs">
+                </p:commandButton>
+                <p:ajaxStatus style="width:16px;height:16px;">
+                    <f:facet name="start">
+                        <h:graphicImage value="/images/ajaxloading.gif"/>
+                    </f:facet>
+                    <f:facet name="complete">
+                        <h:outputText value=""/>
+                    </f:facet>
+                </p:ajaxStatus>
+            </h:panelGrid>
+        </h:panelGrid>
+    </p:panel>
+    <p:commandButton id="addBtn"
+                     value="增加" icon="ui-icon-plus"
+                     action="#{enumAction.resetActionForAdd()}"
+                     update=":form:pdtMain,:form:msgs,:form:pgViewForAdd"
+                     onclick="PF('wVDlgViewForAdd').show()"/>
+    <p:dataTable id="pdtMain" style="width:100%;"
+                 value="#{enumAction.enumainList}"
+                 var="record"
+                 rowKey="#{record.enutype}"
+                 selectionMode="single"
+                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 paginator="true"
+                 paginatorPosition="bottom"
+                 rows="15"
+                 rowIndexVar="row"
+                 rowsPerPageTemplate="200,100,50,40,30,20,15"
+                 emptyMessage="数据记录为空..."
+                 scrollable="true">
+        <p:column headerText="操作" style="width:45px">
+            <p:commandButton icon="ui-icon-pencil"
+                             style="height:18px;width:18px"
+                             action="#{enumAction.selectMainRecordAction('Upd',record)}"
+                             update=":form:pdtMain,:form:pgViewForUpd,:form:msgs"
+                             onclick="PF('wVDlgViewForUpd').show()">
+            </p:commandButton>
+            <p:commandButton icon="ui-icon-trash"
+                             style="height:18px;width:18px"
+                             action="#{enumAction.selectMainRecordAction('Del',record)}"
+                             update=":form:pdtMain,:form:pgViewForDel,:form:msgs"
+                             onclick="PF('wVDlgViewForDel').show()">
+            </p:commandButton>
+        </p:column>
+        <p:column headerText="序号" style="width:30px">
+            <h:outputText value="#{row + 1}"/>
+        </p:column>
+        <p:column headerText="枚举ID" style="width:160px;text-align:center">
+            <h:outputText value="#{record.enutype}"/>
+        </p:column>
+        <p:column headerText="枚举名称" style="width:300px;text-align:left">
+            <h:outputText value="#{record.enuname}"/>
+        </p:column>
+        <p:column headerText="值类型" style="width:80px;text-align:center">
+            <h:outputText value="#{record.valuetype}"/>
+        </p:column>
+        <p:column headerText="描述" style="width:150px;text-align:center">
+            <h:outputText value="#{record.enudesc}"/>
+        </p:column>
+    </p:dataTable>
+</p:panel>
+<p:dialog id="dlgViewForAdd" header="枚举增加信息" widgetVar="wVDlgViewForAdd"
+          resizable="false" modal="true"
+          showEffect="clip" hideEffect="fold">
+    <h:panelGrid id="pgViewForAdd">
+        <h:panelGrid columns="4">
+            <p:outputLabel value="枚举ID：" for="mainIdForAdd"/>
+            <p:inputText id="mainIdForAdd" value="#{enumAction.enumainAdd.enutype}"/>
+            <p:outputLabel value="枚举名称：" for="mainNameForAdd"/>
+            <p:inputText id="mainNameForAdd" value="#{enumAction.enumainAdd.enuname}"
+                         style="width:328px;"/>
+            <p:outputLabel value="值类型：" for="mainValueForAdd"/>
+            <p:inputText id="mainValueForAdd" value="#{enumAction.enumainAdd.valuetype}"/>
+            <p:outputLabel value="描述：" for="mainDescForAdd"/>
+            <p:inputText id="mainDescForAdd" value="#{enumAction.enumainAdd.enudesc}"/>
+        </h:panelGrid>
+        <h:panelGrid id="pgOperBtnForAdd" columns="4">
+            <p:commandButton id="submitBtnForAdd"
+                             value="提交（增加）"
+                             action="#{enumAction.submitThisRecordAction('main','Add')}"
+                             update=":form:pdtMain,:form:msgs,:form:pgViewForAdd">
+            </p:commandButton>
+            <p:commandButton id="resetBtnForAdd" value="重置"
+                             type="reset"
+                             update=":form:pgViewForAdd">
+            </p:commandButton>
+        </h:panelGrid>
+    </h:panelGrid>
+</p:dialog>
+<p:dialog id="dlgViewForUpd" header="枚举更新信息" widgetVar="wVDlgViewForUpd"
+          resizable="false" modal="true"
+          showEffect="clip" hideEffect="fold">
+    <h:panelGrid id="pgViewForUpd">
+        <h:panelGrid columns="4">
+            <p:outputLabel value="枚举ID：" for="mainIdForUpd"/>
+            <p:inputText id="mainIdForUpd" value="#{enumAction.enumainUpd.enutype}"/>
+            <p:outputLabel value="枚举名称：" for="mainNameForUpd"/>
+            <p:inputText id="mainNameForUpd" value="#{enumAction.enumainUpd.enuname}"
+                         style="width:328px;"/>
+            <p:outputLabel value="值类型：" for="mainValueForUpd"/>
+            <p:inputText id="mainValueForUpd" value="#{enumAction.enumainUpd.valuetype}"/>
+            <p:outputLabel value="描述：" for="mainDescForUpd"/>
+            <p:inputText id="mainDescForUpd" value="#{enumAction.enumainUpd.enudesc}"/>
+        </h:panelGrid>
+        <h:panelGrid id="pgOperBtnForUpd" columns="4">
+            <p:commandButton id="submitBtnForUpd"
+                             value="提交（更新）"
+                             action="#{enumAction.submitThisRecordAction('main','Upd')}"
+                             update=":form:pdtMain,:form:msgs,:form:pgViewForUpd"
+                             oncomplete="wVDlgViewForUpd.hide()">
+            </p:commandButton>
+            <p:commandButton id="resetBtnForUpd" value="重置"
+                             type="reset"
+                             update="pgViewForUpd">
+            </p:commandButton>
+        </h:panelGrid>
+    </h:panelGrid>
+</p:dialog>
+<p:dialog id="dlgViewForDel" header="枚举删除信息" widgetVar="wVDlgViewForDel"
+          resizable="false" modal="true"
+          showEffect="clip" hideEffect="fold">
+    <h:panelGrid id="pgViewForDel">
+        <h:panelGrid columns="4">
+            <p:outputLabel value="枚举ID：" for="mainIdForDel"/>
+            <p:inputText id="mainIdForDel" value="#{enumAction.enumainDel.enutype}"
+                         readonly="true"
+                         style="background-color:gainsboro;"/>
+            <p:outputLabel value="枚举名称：" for="mainNameForDel"/>
+            <p:inputText id="mainNameForDel" value="#{enumAction.enumainDel.enuname}"
+                         readonly="true"
+                         style="background-color:gainsboro;width:328px;"/>
+            <p:outputLabel value="值类型：" for="mainValueForDel"/>
+            <p:inputText id="mainValueForDel" value="#{enumAction.enumainDel.valuetype}"
+                         readonly="true"
+                         style="background-color:gainsboro;"/>
+            <p:outputLabel value="描述：" for="mainDescForDel"/>
+            <p:inputText id="mainDescForDel" value="#{enumAction.enumainDel.enudesc}"
+                         readonly="true"
+                         style="background-color:gainsboro;"/>
+        </h:panelGrid>
+        <h:panelGrid id="pgOperBtnForDel">
+            <p:commandButton id="submitBtnForDel"
+                             value="提交（删除）"
+                             action="#{enumAction.submitThisRecordAction('main','Del')}"
+                             update=":form:pdtMain,:form:msgs,:form:pgViewForDel"
+                             oncomplete="wVDlgViewForDel.hide()">
+            </p:commandButton>
+        </h:panelGrid>
+    </h:panelGrid>
+</p:dialog>
+<p:panel>
+    <p:focus for="enuitemlabel"/>
+    <p:panel>
+        <h:panelGrid id="pdQryDetail" columns="2" style="width: 100%">
+            <h:panelGrid columns="2">
+                <p:outputLabel value="枚举元素标题：" for="enuitemlabel"/>
+                <p:inputText id="enuitemlabel" value="#{enumAction.enudetailQry.enuitemlabel}"
+                             style="width: 300px"/>
+            </h:panelGrid>
+            <h:panelGrid columns="3">
+                <p:commandButton id="qryBtnDetail" value="查询"
+                                 action="#{enumAction.onQueryAction('detail')}"
+                                 update=":form:pdtDetail,:form:msgs,:form:pdQryDetail">
+                </p:commandButton>
+                <p:commandButton id="resetBtnDetail" value="重置"
+                                 type="reset"
+                                 update=":form:pdQryDetail,:form:msgs">
+                </p:commandButton>
+                <p:ajaxStatus style="width:16px;height:16px;">
+                    <f:facet name="start">
+                        <h:graphicImage value="/images/ajaxloading.gif"/>
+                    </f:facet>
+                    <f:facet name="complete">
+                        <h:outputText value=""/>
+                    </f:facet>
+                </p:ajaxStatus>
+            </h:panelGrid>
+        </h:panelGrid>
+    </p:panel>
+    <p:commandButton id="addBtnDetail"
+                     value="增加" icon="ui-icon-plus"
+                     action="#{enumAction.resetActionForAdd()}"
+                     update=":form:pdtDetail,:form:msgs,:form:pgViewForAddDetail"
+                     onclick="PF('wVDlgViewForAddDetail').show()"/>
+    <p:dataTable id="pdtDetail" style="width:100%;"
+                 value="#{enumAction.enudetailList}"
+                 var="recordDetail"
+                 rowKey="#{recordDetail.enutype}"
+                 selectionMode="single"
+                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                 paginator="true"
+                 paginatorPosition="bottom"
+                 rows="15"
+                 rowIndexVar="row"
+                 rowsPerPageTemplate="200,100,50,40,30,20,15"
+                 emptyMessage="数据记录为空..."
+                 scrollable="true">
+        <p:column headerText="操作" style="width:45px">
+            <p:commandButton icon="ui-icon-pencil"
+                             style="height:18px;width:18px"
+                             action="#{enumAction.selectDetailRecordAction('Upd',recordDetail)}"
+                             update=":form:pdtDetail,:form:pgViewForUpdDetail,:form:msgs"
+                             onclick="PF('wVDlgViewForUpdDetail').show()">
+            </p:commandButton>
+            <p:commandButton icon="ui-icon-trash"
+                             style="height:18px;width:18px"
+                             action="#{enumAction.selectDetailRecordAction('Del',recordDetail)}"
+                             update=":form:pdtDetail,:form:pgViewForDelDetail,:form:msgs"
+                             onclick="PF('wVDlgViewForDelDetail').show()">
+            </p:commandButton>
+        </p:column>
+        <p:column headerText="序号" style="width:30px">
+            <h:outputText value="#{row + 1}"/>
+        </p:column>
+        <p:column headerText="枚举类型代码" style="width:120px;text-align:center">
+            <h:outputText value="#{recordDetail.enutype}"/>
+        </p:column>
+        <p:column headerText="枚举元素值" style="width:180px;text-align:left">
+            <h:outputText value="#{recordDetail.enuitemvalue}"/>
+        </p:column>
+        <p:column headerText="枚举元素标题" style="width:80px;text-align:center">
+            <h:outputText value="#{recordDetail.enuitemlabel}"/>
+        </p:column>
+        <p:column headerText="枚举元素描述" style="width:100px;text-align:center">
+            <h:outputText value="#{recordDetail.enuitemdesc}"/>
+        </p:column>
+        <p:column headerText="显示顺序" style="width:60px;text-align:center">
+            <h:outputText value="#{recordDetail.dispno}"/>
+        </p:column>
+        <p:column headerText="扩展描述" style="width:150px;text-align:center">
+            <h:outputText value="#{recordDetail.enuitemexpand}"/>
+        </p:column>
+    </p:dataTable>
+</p:panel>
+<p:dialog id="dlgViewForAddDetail" header="枚举详细内容增加信息" widgetVar="wVDlgViewForAddDetail"
+          resizable="false" modal="true"
+          showEffect="clip" hideEffect="fold">
+    <h:panelGrid id="pgViewForAddDetail">
+        <h:panelGrid columns="4">
+            <p:outputLabel value="枚举类型代码：" for="enutypeForAddDetail"/>
+            <p:inputText id="enutypeForAddDetail" value="#{enumAction.enudetailAdd.enutype}"/>
+            <p:outputLabel value="枚举元素值：" for="enunameForAddDetail"/>
+            <p:inputText id="enunameForAddDetail" value="#{enumAction.enudetailAdd.enuitemvalue}"
+                         style="width:328px;"/>
+            <p:outputLabel value="枚举元素标题：" for="enuitemlabelForAddDetail"/>
+            <p:inputText id="enuitemlabelForAddDetail" value="#{enumAction.enudetailAdd.enuitemlabel}"/>
+            <p:outputLabel value="描述：" for="enuitemdescForAddDetail"/>
+            <p:inputText id="enuitemdescForAddDetail" value="#{enumAction.enudetailAdd.enuitemdesc}"/>
+            <p:outputLabel value="显示顺序：" for="dispnoForAddDetail"/>
+            <p:inputText id="dispnoForAddDetail" value="#{enumAction.enudetailAdd.dispno}"/>
+            <p:outputLabel value="扩展描述：" for="enuitemexpandForAddDetail"/>
+            <p:inputText id="enuitemexpandForAddDetail" value="#{enumAction.enudetailAdd.enuitemexpand}"/>
+        </h:panelGrid>
+        <h:panelGrid id="pgOperBtnForAddDetail" columns="4">
+            <p:commandButton id="submitBtnForAddDetail"
+                             value="提交（增加）"
+                             action="#{enumAction.submitThisRecordAction('detail','Add')}"
+                             update=":form:pdtDetail,:form:msgs,:form:pgViewForAddDetail">
+            </p:commandButton>
+            <p:commandButton id="resetBtnForAddDetail" value="重置"
+                             type="reset"
+                             update=":form:pgViewForAddDetail">
+            </p:commandButton>
+        </h:panelGrid>
+    </h:panelGrid>
+</p:dialog>
+<p:dialog id="dlgViewForUpdDetail" header="枚举详细内容更新信息" widgetVar="wVDlgViewForUpdDetail"
+          resizable="false" modal="true"
+          showEffect="clip" hideEffect="fold">
+    <h:panelGrid id="pgViewForUpdDetail">
+        <h:panelGrid columns="4">
+            <p:outputLabel value="枚举类型代码：" for="enutypeForUpdDetail"/>
+            <p:inputText id="enutypeForUpdDetail" value="#{enumAction.enudetailUpd.enutype}"/>
+            <p:outputLabel value="枚举元素值：" for="enuitemvalueForUpdDetail"/>
+            <p:inputText id="enuitemvalueForUpdDetail" value="#{enumAction.enudetailUpd.enuitemvalue}"
+                         style="width:328px;"/>
+            <p:outputLabel value="枚举元素标题：" for="enuitemlabelForUpdDetail"/>
+            <p:inputText id="enuitemlabelForUpdDetail" value="#{enumAction.enudetailUpd.enuitemlabel}"/>
+            <p:outputLabel value="枚举元素描述：" for="enuitemdescForUpdDetail"/>
+            <p:inputText id="enuitemdescForUpdDetail" value="#{enumAction.enudetailUpd.enuitemdesc}"/>
+            <p:outputLabel value="显示顺序：" for="dispnoForUpdDetail"/>
+            <p:inputText id="dispnoForUpdDetail" value="#{enumAction.enudetailUpd.dispno}"/>
+            <p:outputLabel value="扩展描述：" for="enuitemexpandForUpdDetail"/>
+            <p:inputText id="enuitemexpandForUpdDetail" value="#{enumAction.enudetailUpd.enuitemexpand}"/>
+        </h:panelGrid>
+        <h:panelGrid id="pgOperBtnForUpdDetail" columns="4">
+            <p:commandButton id="submitBtnForUpdDetail"
+                             value="提交（更新）"
+                             action="#{enumAction.submitThisRecordAction('detail','Upd')}"
+                             update=":form:pdtDetail,:form:msgs,:form:pgViewForUpdDetail"
+                             oncomplete="wVDlgViewForUpdDetail.hide()">
+            </p:commandButton>
+            <p:commandButton id="resetBtnForUpdDetail" value="重置"
+                             type="reset"
+                             update=":form:pgViewForUpdDetail">
+            </p:commandButton>
+        </h:panelGrid>
+    </h:panelGrid>
+</p:dialog>
+<p:dialog id="dlgViewForDelDetail" header="枚举详细内容删除信息" widgetVar="wVDlgViewForDelDetail"
+          resizable="false" modal="true"
+          showEffect="clip" hideEffect="fold">
+    <h:panelGrid id="pgViewForDelDetail">
+        <h:panelGrid columns="4">
+            <p:outputLabel value="枚举类型代码：" for="enutypeForDelDetail"/>
+            <p:inputText id="enutypeForDelDetail" value="#{enumAction.enudetailDel.enutype}"
+                         readonly="true"
+                         style="background-color:gainsboro;"/>
+            <p:outputLabel value="枚举元素值：" for="enuitemvalueForDelDetail"/>
+            <p:inputText id="enuitemvalueForDelDetail" value="#{enumAction.enudetailDel.enuitemvalue}"
+                         readonly="true"
+                         style="background-color:gainsboro;width:328px;"/>
+            <p:outputLabel value="枚举元素标题：" for="enuitemlabelForDelDetail"/>
+            <p:inputText id="enuitemlabelForDelDetail" value="#{enumAction.enudetailDel.enuitemlabel}"
+                         readonly="true"
+                         style="background-color:gainsboro;"/>
+            <p:outputLabel value="枚举元素描述：" for="enuitemdescForDelDetail"/>
+            <p:inputText id="enuitemdescForDelDetail" value="#{enumAction.enudetailDel.enuitemdesc}"
+                         readonly="true"
+                         style="background-color:gainsboro;"/>
+            <p:outputLabel value="显示顺序：" for="dispnoForDelDetail"/>
+            <p:inputText id="dispnoForDelDetail" value="#{enumAction.enudetailDel.dispno}"/>
+            <p:outputLabel value="扩展描述：" for="enuitemexpandForDelDetail"/>
+            <p:inputText id="enuitemexpandForDelDetail" value="#{enumAction.enudetailDel.enuitemexpand}"/>
+        </h:panelGrid>
+        <h:panelGrid id="pgOperBtnForDelDetail">
+            <p:commandButton id="submitBtnForDelDetail"
+                             value="提交（删除）"
+                             action="#{enumAction.submitThisRecordAction('detail','Del')}"
+                             update=":form:pdtDetail,:form:msgs,:form:pgViewForDelDetail"
+                             oncomplete="wVDlgViewForDelDetail.hide()">
+            </p:commandButton>
+        </h:panelGrid>
+    </h:panelGrid>
+</p:dialog>
+</h:form>
+</ui:define>
+</ui:composition>
