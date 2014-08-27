@@ -24,7 +24,6 @@
     }
 %>
 
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title>ÓÃ»§µÇÂ¼</title>
@@ -38,7 +37,6 @@
             window.open('', '_parent', '');
             window.close();
         }
-
     </script>
     <META http-equiv=Content-Type content="text/html; charset=UTF-8">
     <META content="MSHTML 6.00.6000.16674" name=GENERATOR>
@@ -46,7 +44,6 @@
 <body id="userlogin_body" onLoad="FocusUsername();">
 <DIV id="user_login">
     <form action="<%=contextPath%>/pages/frame/homePage.jsp" method="post" name="winform" onSubmit="return false;">
-
         <DL>
             <DD id="user_top">
                 <UL>
@@ -105,7 +102,6 @@
                     <LI class="user_bottom_r"></LI>
                 </UL>
             </DD>
-
         </DL>
     </form>
 </DIV>

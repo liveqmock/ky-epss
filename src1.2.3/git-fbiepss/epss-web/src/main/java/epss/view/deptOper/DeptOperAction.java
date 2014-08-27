@@ -38,8 +38,6 @@ public class DeptOperAction implements Serializable {
     private TreeNode lastSelectedNode;
     private String strSubmitType;
     private String strType;
-    private String strRendered0;
-    private String strRendered1;
     private Dept deptAdd;
     private Dept deptUpd;
     private Dept deptDel;
@@ -59,8 +57,6 @@ public class DeptOperAction implements Serializable {
 
     private void initVariables() {
         strType = "";
-        strRendered0 = "false";
-        strRendered1 = "false";
         deptAdd = new Dept();
         deptUpd = new Dept();
         deptDel = new Dept();
@@ -124,12 +120,8 @@ public class DeptOperAction implements Serializable {
                 if ("0".equals(deptOperShowSel.getType())) {
                     if (strSubmitTypePara.equals("Add")) {
                         strType = "";
-                        strRendered0 = "false";
-                        strRendered1 = "false";
                         deptAdd = new Dept();
                     } else {
-                        strRendered0 = "true";
-                        strRendered1 = "false";
                         if (strSubmitTypePara.equals("Upd")) {
                             deptUpd = new Dept();
                             deptUpd = (Dept) deptOperService.selectRecordByPkid(deptOperShowPara);
@@ -139,8 +131,6 @@ public class DeptOperAction implements Serializable {
                         }
                     }
                 } else {
-                    strRendered0 = "false";
-                    strRendered1 = "true";
                     if (strSubmitTypePara.equals("Upd")) {
                         operUpd = new Oper();
                         operUpd = (Oper) deptOperService.selectRecordByPkid(deptOperShowPara);
@@ -288,21 +278,6 @@ public class DeptOperAction implements Serializable {
         }
     }
 
-    public void viewByType() {
-        if ("".equals(strType)) {
-            strRendered0 = "false";
-            strRendered1 = "false";
-        } else {
-            if ("0".equals(strType)) {
-                strRendered0 = "true";
-                strRendered1 = "false";
-            } else if ("1".equals(strType)) {
-                strRendered0 = "false";
-                strRendered1 = "true";
-            }
-        }
-    }
-
     public void onNodeSelect(NodeSelectEvent event) {
         currentSelectedNode=event.getTreeNode();
         if (lastSelectedNode==null){
@@ -315,7 +290,6 @@ public class DeptOperAction implements Serializable {
     }
 
     /*ÖÇÄÜ×Ö¶Î Start*/
-
     public TreeNode getDeptRoot() {
         return deptRoot;
     }
@@ -330,22 +304,6 @@ public class DeptOperAction implements Serializable {
 
     public void setDeptOperService(DeptOperService deptOperService) {
         this.deptOperService = deptOperService;
-    }
-
-    public String getStrRendered0() {
-        return strRendered0;
-    }
-
-    public void setStrRendered0(String strRendered0) {
-        this.strRendered0 = strRendered0;
-    }
-
-    public String getStrRendered1() {
-        return strRendered1;
-    }
-
-    public void setStrRendered1(String strRendered1) {
-        this.strRendered1 = strRendered1;
     }
 
     public Dept getDeptAdd() {

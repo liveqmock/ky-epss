@@ -79,20 +79,20 @@
                          scrollable="true">
                 <p:column headerText="操作" style="width:65px">
                     <p:commandButton icon="ui-icon-pencil"
-                                     style="height:20px;width:20px"
+                                     style="height:18px;width:18px"
                                      action="#{tkcttInfoAction.selectRecordAction('Mng','Upd',record)}"
                                      update="pdt,:form:pgViewForUpd,:form:msgs"
                                      onclick="PF('wVDlgViewForUpd').show()">
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-document"
-                                     style="height:20px;width:20px"
+                                     style="height:18px;width:18px"
                                      action="#{tkcttInfoAction.attachmentStrToList()}"
                                      update="pdt,:form:pgAttachmentView,:form:msgs"
                                      onclick="PF('wvAttachmentList').show()">
                         <f:setPropertyActionListener value="#{record}" target="#{tkcttInfoAction.cttInfoShowAttachment}"/>
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-triangle-1-e"
-                                     style="height:20px;width:20px"
+                                     style="height:18px;width:18px"
                                      onclick="actSelect('#{record.pkid}')">
                     </p:commandButton>
                 </p:column>
@@ -170,7 +170,7 @@
                         <p:column headerText="预览">
                             <p:commandButton icon="ui-icon-search"
                                              id="selectButton" update=":form:imageShow"
-                                             style="height:20px;width:20px"
+                                             style="height:18px;width:18px"
                                              action="#{tkcttInfoAction.onViewAttachment(recordAttachment)}"
                                              oncomplete="dlgWvView.show()"
                                              title="View">
@@ -178,13 +178,13 @@
                         </p:column>
                         <p:column headerText="操作" style="width:62px">
                             <p:commandButton icon="ui-icon-arrowrefresh-1-w"
-                                             style="height:20px;width:20px"
+                                             style="height:18px;width:18px"
                                              ajax="false"
                                              actionListener="#{tkcttInfoAction.download(recordAttachment.COLUMN_PATH)}">
                                 <p:fileDownload value="#{tkcttInfoAction.downloadFile}"/>
                             </p:commandButton>
                             <p:commandButton icon="ui-icon-trash"
-                                             style="height:20px;width:20px"
+                                             style="height:18px;width:18px"
                                              action="#{tkcttInfoAction.delAttachmentRecordAction(recordAttachment)}"
                                              update=":form:pgAttachmentView,:form:msgs">
                             </p:commandButton>

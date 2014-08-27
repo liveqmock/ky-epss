@@ -80,20 +80,20 @@
                          scrollable="true">
                 <p:column headerText="操作" style="width:65px">
                     <p:commandButton icon="ui-icon-search"
-                                     style="height:20px;width:20px"
+                                     style="height:18px;width:18px"
                                      action="#{cstplInfoAction.selectRecordAction('Qry','',record)}"
                                      update="pdt,:form:pgView,:form:msgs"
                                      onclick="PF('wVDlgView').show()">
                     </p:commandButton>
                     <p:commandButton  icon="ui-icon-document"
-                                      style="height:20px;width:20px"
+                                      style="height:18px;width:18px"
                                       action="#{cstplInfoAction.attachmentStrToList()}"
                                       update="pdt,:form:pgAttachmentView,:form:msgs"
                                       onclick="PF('wvAttachmentList').show()">
                         <f:setPropertyActionListener value="#{record}" target="#{cstplInfoAction.cttInfoShowAttachment}"/>
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-triangle-1-e"
-                                     style="height:20px;width:20px"
+                                     style="height:18px;width:18px"
                                      oncomplete="actSelect('#{record.pkid}')">
                     </p:commandButton>
                 </p:column>
@@ -161,13 +161,13 @@
                         </p:column>
                         <p:column headerText="操作" style="width:62px">
                             <p:commandButton icon="ui-icon-arrowrefresh-1-w"
-                                             style="height:20px;width:20px"
+                                             style="height:18px;width:18px"
                                              ajax="false"
                                              actionListener="#{cstplInfoAction.download(recordAttachment.COLUMN_PATH)}">
                                 <p:fileDownload value="#{cstplInfoAction.downloadFile}"/>
                             </p:commandButton>
                             <p:commandButton icon="ui-icon-trash"
-                                             style="height:20px;width:20px"
+                                             style="height:18px;width:18px"
                                              action="#{cstplInfoAction.delAttachmentRecordAction(recordAttachment)}"
                                              update=":form:pgAttachmentView,:form:msgs">
                             </p:commandButton>
