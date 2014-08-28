@@ -196,7 +196,6 @@ tr {
 
 }
 
-
 /** 鼠标覆盖时，光标变为手的形状，按钮区域呈整体凸起效果。 */
 .buttonGrooveActive {
 
@@ -212,8 +211,6 @@ tr {
 	color: black;
 }
 
-/** ************************Frame**************************************************************** */
-	/** ***************************************dropdown**************************************************************** */
 .dropDownTable {
 	background-color: #d4d0c8;
 	border-color: #919190;
@@ -226,49 +223,6 @@ tr {
 
 .dropDownHead TD {
 	background-image: url(buttonimg.gif);
-}
-
-/** ***************************************dropdown**************************************************************** */
-.quickControlCell {
-	padding: 0px;
-	margin: 0px;
-	height: 24;
-	align: right;
-}
-
-.cellForText /** 一个td空间，即一个cell，用于承载文本内容。 */ {
-	padding-top: 5px;
-	padding-bottom: 5px;
-	padding-left: 5px;
-	padding-right: 5px;
-	height: 20px;
-}
-
-.cellForControlGBR /** 一个td空间，即一个cell，用于承载control元素，比如下拉框、按钮等。 */ {
-	padding-top: 0px;
-	padding-bottom: 0px;
-	padding-left: 5px;
-	padding-right: 5px;
-	height: 20px;
-	border-bottom-style: groove;
-	border-right-style: groove;
-	border-width: 2px;
-}
-
-.cellForDataGridBTR {
-	
-}
-
-.cellForControlGBTR /** 一个td空间，即一个cell，用于承载control元素，比如下拉框、按钮等。 */ {
-	padding-top: 0px;
-	padding-bottom: 0px;
-	padding-left: 5px;
-	padding-right: 5px;
-	height: 20px;
-	border-bottom-style: groove;
-	border-right-style: groove;
-	border-top-style: groove;
-	border-width: 2px;
 }
 
 .shellPane /** 工作台区域的最外层边框。 */ {
@@ -312,65 +266,6 @@ tr {
 	border-color: #919190;
 	border-left-style: groove;
 	border-width: 1px;
-}
-
-.borderGrooveR /** 用于在表框等地方产生刻线边框的效果，这种是只右边。 */ {
-	border-color: #919190;
-	border-right-style: groove;
-	border-width: 1px;
-}
-
-.borderGrooveRL /** 用于在表框等地方产生刻线边框的效果，这种是只右边。 */ {
-	border-color: #919190;
-	border-left-style: groove;
-	border-right-style: groove;
-	border-width: 1px;
-}
-
-.borderGrooveTL /** 用于在表框等地方产生刻线边框的效果，这种是只上边和左边。 */ {
-	border-color: #919190;
-	border-top-style: groove;
-	border-left-style: groove;
-	border-width: 1px;
-}
-
-.borderGrooveBR /** 用于在表框等地方产生刻线边框的效果，这种是下边和右边。 */ {
-	border-color: #919190;
-	border-bottom-style: groove;
-	border-right-style: groove;
-	border-width: 1px;
-}
-
-.borderGrooveBTR /** 用于在表框等地方产生刻线边框的效果，这种是下边和右边。 */ {
-	border-color: #919190;
-	border-bottom-style: groove;
-	border-right-style: groove;
-	border-top-style: groove;
-	border-width: 1px;
-}
-
-.borderGrooveBRL /** 用于在表框等地方产生刻线边框的效果，这种是下边和右边和左边。 */ {
-	/*border-color:#919190;*/
-	border-color: #cddcf0;
-	/*border-bottom-style: groove;*/
-	border-right-style: solid;
-	/*border-left-style: groove;*/
-	border-width: 1px;
-}
-
-.borderGrooveTRL /** 用于在表框等地方产生刻线边框的效果，这种是上边和右边和左边。 */ {
-	border-color: #919190;
-	border-top-style: groove;
-	border-right-style: groove;
-	border-left-style: groove;
-	border-width: 1px;
-}
-
-.borderNoneCheckbox /** 用于消除checkbox的系统默认存在的外层边框，从而保持Delphi的风格。 */ {
-	border-top-style: none;
-	border-right-style: none;
-	border-left-style: none;
-	border-bottom-style: none;
 }
 
 .borderNone /** 无框。 */ {
@@ -481,96 +376,6 @@ tr {
 	width: 100%;
 }
 
-h3 {
-	font-size: 12pt;
-}
-
-
-
-/** 界面使用 */
-.wstz {
-	font-family: "宋体";
-	font-size: 12px;
-	line-height: 16px;
-}
-
-.kk {
-	font-family: "宋体";
-	font-size: 12px;
-	border: 1px solid #F0EBF1;
-	background-color: #FFFFFF;
-}
-
-.jg {
-	font-family: "宋体";
-	font-size: 9px;
-}
-
-.style3 {
-	font-size: 12px;
-	color: #ffffff;
-	background: #7d99ff;
-	border: 3px double #7d99ff;
-	width: auto;
-	height: 21px;
-	left: 1px;
-	top: 1px;
-	right: 1px;
-	bottom: 1px;
-	padding: 1px;
-	margin: 3px;
-}
-
-.style4 {
-	font-size: 12px;
-	color: #ffffff;
-	background: #1f4eff repeat-x;
-	border: 3px double #1f4eff;
-	width: auto;
-	height: 21px;
-	margin: 3px;
-	padding: 1px;
-	left: 1px;
-	top: 1px;
-	right: 1px;
-	bottom: 1px;
-}
-
-.style5 {
-	font-size: 12px;
-	color: #ffffff;
-	background: #7d99ff;
-	border: 3px double #7d99ff;
-	width: auto;
-	height: 21px;
-	left: 1px;
-	top: 1px;
-	right: 1px;
-	bottom: 1px;
-	padding: 1px;
-	margin: 3px;
-}
-
-.style6 {
-	font-size: 12px;
-	color: #ffffff;
-	background: #1f4eff repeat-x;
-	border: 3px double #1f4eff;
-	width: auto;
-	height: 21px;
-	margin: 3px;
-	padding: 1px;
-	left: 1px;
-	top: 1px;
-	right: 1px;
-	bottom: 1px;
-}
-
-.f14 {
-	font-family: "宋体";
-	font-size: 14px;
-}
-
 .bg {
 	background-repeat: repeat-y;
 }
@@ -582,21 +387,6 @@ a {
 
 a:hover {
 	color: Blue;
-}
-
-.tablefill {
-	width: 720px;
-	align: center
-}
-
-.tdfill {
-	height: 300px
-}
-
-/* BODY 画面全体の色、マージン、幅 */
-.Bodydefault { /*background-color: #EDF0F4; /* 背景色： (薄い黄色) */
-	margin: 0px; /* マージン：0px */
-	width: 100%; /* 横幅：100％ */
 }
 
 .lbl_right_padding { /*width: 180px; /* 横幅：180ピクセル */
@@ -653,36 +443,7 @@ TD.dt_right_padding {
 	color: #FF0000
 }
 
-.inputHighlighted { /* Highlighting style */
-	background-color: #317082;
-	color: #FFF;
-	width: 300px;
-	border: 1px solid #000;
-}
-
 .inputReadonly { /* Highlighting style */
 	background-color: #F5F5F5;
 	color: black;
 }
-
-.queryPanalDiv {
-    width: 100%;
-    margin: 5px auto;
-    padding: 2px, 20px, 2px, 20px;
-    text-align: center; /*border: 1px #1E7ACE solid;*/
-}
-
-.queryDiv {
-    width: 90%;
-    margin: 0px auto;
-    padding: 2px, 1px, 1px, 1px;
-    text-align: center; /*border: 1px #1E7ACE solid;*/
-}
-
-.queryButtonDiv {
-    width: 100%;
-    margin: 5px auto;
-    padding: 10px, 5px, 2px, 2px;
-    text-align: center; /*border: 1px #1E7ACE solid;*/
-}
-

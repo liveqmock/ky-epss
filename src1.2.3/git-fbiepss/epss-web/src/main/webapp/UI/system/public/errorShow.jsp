@@ -29,8 +29,8 @@
                     node = node.nextSibling;
                 }
             }
-             window.dialogHeight ="137px";
-             document.all["errorclose"].focus();
+            window.dialogHeight ="137px";
+            document.all["errorclose"].focus();
         }
         function hiddenmsg(){
             if (window.dialogHeight =="272px"){
@@ -54,7 +54,9 @@
                 </tr>
 
                  <tr>
-                     <td colspan="2" align="right"><input id="hiddbut" type="button" value="显示详细信息" onmouseover="button_onmouseover()" onmouseout="button_onmouseout()"  onclick="hiddenmsg()">
+                     <td colspan="2" align="right">
+                         <input id="hiddbut" type="button" value="显示详细信息"
+                               onmouseover="button_onmouseover()" onmouseout="button_onmouseout()"  onclick="hiddenmsg()">
                          <input id="errorclose" type="button" value="    关闭    " width="60px"
                            onmouseover="button_onmouseover()" onmouseout="button_onmouseout()" onclick="window.close()">
                     </td>

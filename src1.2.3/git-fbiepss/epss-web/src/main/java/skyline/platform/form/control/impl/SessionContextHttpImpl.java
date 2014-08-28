@@ -44,8 +44,7 @@ public class SessionContextHttpImpl
      * @param request
      * @roseuid 3F7EAAF2034A
      */
-    public SessionContextHttpImpl(HttpServletRequest request,HttpServletResponse response)
-    {
+    public SessionContextHttpImpl(HttpServletRequest request,HttpServletResponse response){
         this.request = request;
         this.response = response;
         try {
@@ -62,8 +61,7 @@ public class SessionContextHttpImpl
      * @param value
      * @roseuid 3F73AAE60130
      */
-    public void setAttribute(String name, Object value)
-    {
+    public void setAttribute(String name, Object value){
         if (name != null && value != null)
             session.setAttribute(name, value);
     }

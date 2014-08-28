@@ -40,14 +40,12 @@ table.dhtmlxLayoutPolyContainer_dhx_black div.dhxcont_content_blocker {
 	background-color: #93C0E7;
 }
 
-
 /* infobar */
 table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhtmlxPolyInfoBar {
 	position: relative;
 	font-family: Tahoma;
 	font-size: 2px;
 	height: 31px;
-	height=33px;
 	margin-bottom: 1px;
 	background-image: url("../imgs/dhxlayout_dhx_black/dhxlayout_bg.gif");
 	background-repeat: repeat-x;
@@ -190,7 +188,6 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhtmlxPo
 table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhtmlxPolyInfoBarCollapsedHor div.dhtmlxInfoBarButtonsFake {
 	border: 1px solid #333333;
 	height: 16px;
-	height=18px;
 	left: 0px;
 	position: relative;
 	top: 0px;
@@ -237,8 +234,6 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhtmlxPo
 	height: 100%;
 	width: 16px;
 	bottom: 0px;
-	height=100%;
-	width=18px;
 	background-image: url("../imgs/dhxlayout_dhx_black/dhxlayout_collapsedver.gif");
 	background-repeat: repeat-y;
 }
@@ -247,7 +242,6 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhtmlxPo
 	position: absolute;
 	width: 100%;
 	bottom: 1px;
-	bottom=-1px;
 	border-bottom: 1px solid #333333;
 }
 /* inner objects */
@@ -418,7 +412,7 @@ div.dhxLayout_Cover_dhx_black {
 	amargin-right: 1px;
 }
 .dhtmlxMenu_dhx_black_bottom_border {
-	height=25;
+	height:25;
 	border-bottom: #C2D5DC 1px solid;
 }
 .dhtmlxToolbar_dhx_black_bottom_top {
@@ -507,7 +501,6 @@ table.dhtmlxLayoutPolyContainer_dhx_black td.dhtmlxLayoutSinglePoly div.dhxcont_
 	border: #000000 1px solid;
 	background-color: #FFFFFF;
 }
-
 
 /* skin detect, dhx_black */
 div.dhxlayout_skin_detect {

@@ -58,7 +58,6 @@ public class BusinessDate {
           java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyyMMdd");
           Calendar cl = new GregorianCalendar();
           try {
-//               return sdf.format(CMCodeManager.getDate("KEY_D1_1_1")) ;
                return sdf.format(cl.getTime());
           } catch(Exception ex) {
                return null;
@@ -69,16 +68,10 @@ public class BusinessDate {
           java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HHmmss");
           Calendar cl = new GregorianCalendar();
           try {
-
                 return sdf.format(cl.getTime());
          } catch (Exception ex) {
               return null ;
          }
-
-
-          //Calendar cl = new GregorianCalendar();
-          //return cl.get(Calendar.HOUR_OF_DAY)+""+cl.get(Calendar.MINUTE)+""+cl.get(Calendar.SECOND)+"";
-
      }
 
      public static String getYear() {
@@ -156,8 +149,6 @@ public class BusinessDate {
                retarray[0] =  BusinessDate.getStrByCalendar(caletoday) + " " + CMCodeManager.getString("KEY_dt_1_1")+":00";
                retarray[1] =  BusinessDate.getStrByCalendar(caletomm) + " " + CMCodeManager.getString("KEY_dt_1_1")+":00";
           }
-
-
           return retarray;
      }
 
@@ -211,6 +202,4 @@ public class BusinessDate {
           Calendar cl = new GregorianCalendar(year,month,day);
           return cl.get(Calendar.YEAR)+"Äê"+(cl.get(Calendar.MONTH)+1)+"ÔÂ"+cl.get(Calendar.DATE)+"ÈÕ";
      }
-
-
 }

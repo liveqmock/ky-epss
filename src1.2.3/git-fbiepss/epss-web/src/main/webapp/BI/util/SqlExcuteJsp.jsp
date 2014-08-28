@@ -11,7 +11,5 @@
     sp.proxyService(request,response);
     SessionContext sc = (SessionContext)session.getAttribute(SessionAttributes.SESSION_CONTEXT_NAME);
     SQLResponse sqlReq = (SQLResponse)sc.getRequestAttribute(NewActionController.RESPONSE_XML_NAME);
-   // System.out.println(request.getParameter("sys_request_xml"));
-//System.out.println(sqlReq.getXmlStr());
 %>
 <%=sqlReq.getXmlStr()%>

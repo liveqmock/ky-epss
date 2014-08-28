@@ -58,7 +58,6 @@ import java.io.*;
  *@created    2003年10月11日
  */
 public class PropertyManager {
-
      private static PropertyManager manager = null;
      private static Object managerLock = new Object();
      private static String propsName = "/prjcfg.properties";
@@ -85,13 +84,6 @@ public class PropertyManager {
           String props = manager.getProp(name);
           if(props == null)
                return null;
-/*
-          try {
-               props = new String(props.getBytes("ISO-8859-1"));
-          } catch(Exception e) {
-
-          }
-*/
           return props;
      }
 
@@ -184,11 +176,8 @@ public class PropertyManager {
       *@return       The prop value
       */
      public String getProp(String name) {
-          //If properties aren't loaded yet. We also need to make this thread
-          //safe, so synchronize...
           if(properties == null) {
                synchronized(propertiesLock) {
-                    //Need an additional check
                     if(properties == null) {
                          loadProps();
                     }
@@ -210,16 +199,11 @@ public class PropertyManager {
       *@param  value  The new prop value
       */
      public void setProp(String name, String value) {
-          //Only one thread should be writing to the file system at once.
           synchronized(propertiesLock) {
-               //Create the properties object if necessary.
                if(properties == null) {
                     loadProps();
                }
                properties.setProperty(name, value);
-               //Now, save the properties to disk. In order for this to work, the user
-               //needs to have set the path field in the properties file. Trim
-               //the String to make sure there are no extra spaces.
                String path = properties.getProperty("path").trim();
                OutputStream out = null;
                try {
@@ -305,7 +289,6 @@ public class PropertyManager {
           String path = getProp("path");
           File file = new File(path);
           if(file.isFile()) {
-               //See if we can write to the file
                if(file.canWrite()) {
                     return true;
                } else {
@@ -448,7 +431,6 @@ public class PropertyManager {
                }
           }
 
-          //String src = key;//测试用
           String dot = "%s";
           String sup = ""; //末尾是分隔符时要追加的字符
           if(src.endsWith(dot)) {
@@ -475,22 +457,6 @@ public class PropertyManager {
      }
 
      public static void main(String[] args) {
-//      //测试split
-//      String test="%sdsasl;kgjidsfgoqeir%sjclkjsdifgjeworjioasdf%j ikertkfdgn dfa%s%%s";
-//      String[] temp=test.split("%");
-//      System.out.println("begin");
-//      for(int i=0;i<temp.length;i++){
-//        System.out.println("|"+temp[i]);
-//      }
-//      System.out.println("end");
-//      //测试getProperty
-//      String[] arr=new String[4];
-//      arr[0]="0";
-//      arr[1]="1";
-//      arr[2]="2";
-//      arr[3]="3";
-//      System.out.println(getProperty(test,arr));
           System.out.println(getProperty("-101"));
      }
-
 }

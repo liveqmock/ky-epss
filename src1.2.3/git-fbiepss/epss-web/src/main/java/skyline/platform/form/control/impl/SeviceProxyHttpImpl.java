@@ -1,5 +1,3 @@
-//Source file: D:\\zt\\platform\\form\\control\\impl\\SeviceProxyHttpImpl.java
-
 package skyline.platform.form.control.impl;
 
 import skyline.platform.form.control.ActionController;

@@ -261,7 +261,6 @@ function dbGridSelectedCallback(tr, arg) {
 
 function setRowHighlight(tr, bHighlight) {
     resetTRStyle(tr);
-
     if (bHighlight) {
         tr.oldClass = tr.className;
         tr.className = "gridSelectedHighlight";
@@ -670,15 +669,8 @@ function Table_Refresh(id, ishint, bodyReload, empty_title, login) {
 
 // ///////同步刷新数据
 function Table_Refresh_asy(id) {
-
-    // ///////////////////////判断是否超时
-    // if (!checkLogin())
-    // return false;
-
     var xmlDoc = createDomDocument("<root/>");
-
     var tab = document.all[id];
-
     var div_table = document.all["div_" + id];
     var divfd_table = document.all["divfd_" + id];
 
@@ -687,32 +679,25 @@ function Table_Refresh_asy(id) {
     document.EDITMETHOD_NAME = tab.getAttribute("editmethodname");
     document.DELMETHOD_NAME = tab.getAttribute("delmethodname");
     document.POSEDELETE = tab.getAttribute("posedelete");
-
     document.dbformname = tab.getAttribute("dbformname");
 
     var rootNode = xmlDoc.documentElement;
-
     var childNode = appendNode(xmlDoc, xmlDoc.documentElement, "field");
 
     appendAttri(xmlDoc, childNode, "id", id);
     appendAttri(xmlDoc, childNode, "gridType", tab.getAttribute("gridType"));
     appendAttri(xmlDoc, childNode, "SQLStr", tab.getAttribute("SQLStr"));
     appendAttri(xmlDoc, childNode, "fieldtype", tab.getAttribute("fieldtype"));
-
     appendAttri(xmlDoc, childNode, "fieldCN", tab.getAttribute("fieldCN"));
     appendAttri(xmlDoc, childNode, "enumType", tab.getAttribute("enumType"));
     appendAttri(xmlDoc, childNode, "visible", tab.getAttribute("visible"));
     appendAttri(xmlDoc, childNode, "fieldname", tab.getAttribute("fieldname"));
-
     appendAttri(xmlDoc, childNode, "pageSize", tab.getAttribute("pageSize"));
     appendAttri(xmlDoc, childNode, "AbsolutePage", tab.getAttribute("AbsolutePage"));
     appendAttri(xmlDoc, childNode, "countSQL", tab.getAttribute("countSQL"));
-
     appendAttri(xmlDoc, childNode, "RecordCount", tab.getAttribute("RecordCount"));
     appendAttri(xmlDoc, childNode, "tralign", tab.getAttribute("tralign"));
-
     appendAttri(xmlDoc, childNode, "checkbl", tab.getAttribute("checkbl"));
-
     appendAttri(xmlDoc, childNode, "whereStr", encode(decode(tab.getAttribute("whereStr"))));
     appendAttri(xmlDoc, childNode, "fieldwidth", tab.getAttribute("fieldwidth"));
     appendAttri(xmlDoc, childNode, "fieldCheck", tab.getAttribute("fieldCheck"));
@@ -720,7 +705,6 @@ function Table_Refresh_asy(id) {
     appendAttri(xmlDoc, childNode, "isTotal", tab.getAttribute("isTotal"));
 
     rootNode.appendChild(childNode);
-
     var tmpHTML = ExecServerPrgm(g_jsContextPath + "/BI/util/DataTableJsp.jsp", "POST", "tabStr=" + encode(xmlDoc.xml));
 
     if (document.all["div_" + id]) {
@@ -728,15 +712,12 @@ function Table_Refresh_asy(id) {
 
         document.all[id].whereStr = tab.getAttribute("whereStr");
     }
-
     document.all["div_" + id].style.width = div_table.style.width;
     document.all["div_" + id].style.height = div_table.style.height;
-
     document.all["divfd_" + id].style.width = divfd_table.style.width;
     document.all["divfd_" + id].style.height = divfd_table.style.height;
 
     document.all[id].fdwidth = tab.fdwidth;
-
     compentHidden(document.all[id]);
 
     document.all[id].actionname = document.ACTION_NAME;
@@ -744,15 +725,11 @@ function Table_Refresh_asy(id) {
     document.all[id].editmethodname = document.EDITMETHOD_NAME;
     document.all[id].delmethodname = document.DELMETHOD_NAME;
     document.all[id].posedelete = document.POSEDELETE;
-
     document.all[id].dbformname = document.dbformname;
 
     reLoadCount = 0;
-
     initDBGrid(id);
-
     xmlDoc.free;
-
 }
 
 // /////刷新数据
@@ -894,20 +871,6 @@ function Covert_Click(TableID, buttonID, textID) {
 
 }
 
-function onKeyPressCovertInputInteger(el) {
-    var nKey = window.event.keyCode;
-
-    if (nKey == 13) {
-        Covert_Click(el.tableid, el.buttonid, el.id);
-    }
-
-    if (nKey < 48 || nKey > 57) {
-
-        window.event.keyCode = 0;
-    }
-
-}
-
 // ////TR单击事件
 function TR_click() {
 
@@ -943,7 +906,6 @@ function TR_click() {
 
 }
 
-// //////////Gride_OnMouseUp
 function Gride_OnMouseUp(el) {
 
     if (event.button == 2) {
@@ -970,7 +932,6 @@ function Gride_OnMouseUp(el) {
 }
 
 function checkClick(fromName) {
-
     var nameArr = fromName.split("_");
     if (nameArr[0] != "child") {
 
@@ -986,10 +947,8 @@ function checkClick(fromName) {
             }
         }
     }
-
     if (isfireuserEvent(nameArr[1] + "_afterChecked"))
         fireUserEvent("dbgrid_afterChecked", [ fromName ]);
-
 }
 
 function dbgrid_afterChecked(fromName) {
@@ -1015,8 +974,6 @@ function dbgrid_afterChecked(fromName) {
     }
 
 }
-
-// ////////////////////////////////////////////datapilot_function/////////////////////////////////////////
 
 // 移动第一页
 function moveFirst(tab) {
@@ -1719,13 +1676,11 @@ function checkTDValue(element) {
 }
 
 function editTable(tab) {
-
     for (var i = 0; i < tab.rows.length; i++) {
 
         tab.rows[i].edit = "true";
 
     }
-
 }
 
 // ///从数据表格按钮条的单击事件

@@ -2,14 +2,11 @@ package skyline.platform.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.security.MD5Helper;
-import skyline.platform.advance.utils.PropertyManager;
 import skyline.platform.db.ConnectionManager;
-import skyline.platform.db.DatabaseConnection;
 import skyline.platform.system.manage.dao.PtDeptBean;
 import skyline.platform.system.manage.dao.PtOperBean;
 import skyline.platform.utils.BusinessDate;
-import java.io.File;
+import skyline.security.MD5Helper;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;

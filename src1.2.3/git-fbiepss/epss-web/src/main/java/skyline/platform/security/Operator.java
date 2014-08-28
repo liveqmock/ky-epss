@@ -63,7 +63,6 @@ public class Operator implements Serializable,Comparator  {
      /**
       * Getter methods
       */
-
      public String getOperatorId() {
           return operatorId;
      }
