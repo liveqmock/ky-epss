@@ -45,7 +45,6 @@ import java.util.Properties;
  * SBS返回Form号对应的信息回显
  */
 public class MessagePropertyManager {
-
     private static MessagePropertyManager manager = null;
     private static Object managerLock = new Object();
     private static String propsName = "/messages.properties";

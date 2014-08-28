@@ -1,5 +1,6 @@
 package skyline.platform.db;
 
+import skyline.util.ToolUtil;
 import jxl.Workbook;
 import jxl.format.Alignment;
 import jxl.format.Border;
@@ -11,8 +12,6 @@ import skyline.platform.advance.utils.PropertyManager;
 import skyline.platform.form.config.EnumerationBean;
 import skyline.platform.form.config.EnumerationType;
 import skyline.platform.utils.Basic;
-import skyline.platform.utils.Util;
-
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -439,15 +438,12 @@ public class DBTable {
             File[] files = f.listFiles();
             for (int i = 0; i < files.length; i++) {
                 if (files[i].isFile() && files[i].exists()) {
-                    //System.out.println("File" + Integer.parseInt(Util.strtoint(files[i].getName().substring(0, 5))));
-
-                    if (Integer.parseInt(lastFile) - Integer.parseInt(Util.strtoint(files[i].getName().substring(0, 5))) > 0)
+                    if (Integer.parseInt(lastFile) - Integer.parseInt(ToolUtil.strtoint(files[i].getName().substring(0, 5))) > 0)
                         files[i].delete();
-
                 }
             }
 
-            savefile = Util.inttostr(System.currentTimeMillis() + "") + ".xls";
+            savefile = ToolUtil.inttostr(System.currentTimeMillis() + "") + ".xls";
 
             WritableWorkbook book = Workbook.createWorkbook(new File(deptfillstr100 + "/temp/" + savefile));
 

@@ -22,8 +22,6 @@ public class ProgSubstlItemService {
     @Resource
     private EsItemStlSubcttEngPMapper esItemStlSubcttEngPMapper;
     @Resource
-    private EsCommonService esCommonService;
-    @Resource
     private MyQueryMapper myQueryMapper;
 
     public EsItemStlSubcttEngP selectRecordsByDetailPrimaryKey(String strPkId){
@@ -63,10 +61,10 @@ public class ProgSubstlItemService {
 
     public void insertRecordDetail(ProgSubstlItemShow progSubstlItemShowPara){
         progSubstlItemShowPara.setEngPMng_CreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        progSubstlItemShowPara.setEngPMng_CreatedByName(esCommonService.getOperNameByOperId(ToolUtil.getOperatorManager().getOperatorId()));
+        progSubstlItemShowPara.setEngPMng_CreatedByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperatorId()));
         progSubstlItemShowPara.setEngPMng_CreatedDate(ToolUtil.getStrLastUpdDate());
         progSubstlItemShowPara.setEngPMng_LastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progSubstlItemShowPara.setEngPMng_LastUpdByName(esCommonService.getOperNameByOperId(ToolUtil.getOperatorManager().getOperatorId()));
+        progSubstlItemShowPara.setEngPMng_LastUpdByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperatorId()));
         progSubstlItemShowPara.setEngPMng_LastUpdDate(ToolUtil.getStrLastUpdDate());
         esItemStlSubcttEngPMapper.insert(fromModelShowToModel(progSubstlItemShowPara));
     }

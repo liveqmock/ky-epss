@@ -227,7 +227,7 @@ public class ProgSubstlItemAction {
         beansMap.put("esInitPowerHisForSubcttStlPFile", esInitPowerHis);
         List<EsInitPowerHis> esInitPowerHisForSubcttStlList = flowCtrlHisService.getMngFromPowerHisForSubcttStlList(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
         for (EsInitPowerHis esInitPowerHisTemp : esInitPowerHisForSubcttStlList) {
-            esInitPowerHisTemp.setCreatedBy(esCommon.getOperNameByOperId(ToolUtil.getStrIgnoreNull(esInitPowerHisTemp.getCreatedBy())));
+            esInitPowerHisTemp.setCreatedBy(ToolUtil.getUserName(ToolUtil.getStrIgnoreNull(esInitPowerHisTemp.getCreatedBy())));
             if (ESEnum.ITEMTYPE3.getCode().equals(esInitPowerHisTemp.getPowerType())) {
                 if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
                     beansMap.put("esInitPowerHisForSubcttStlQMng", esInitPowerHisTemp);

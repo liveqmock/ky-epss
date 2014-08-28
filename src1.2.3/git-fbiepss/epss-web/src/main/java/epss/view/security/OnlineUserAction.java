@@ -15,8 +15,6 @@ import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.*;
 
-;
-
 /**
  * Created by XIANGYANG on 2014/8/11.
  */

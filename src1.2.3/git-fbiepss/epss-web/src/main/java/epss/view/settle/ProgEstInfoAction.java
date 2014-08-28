@@ -189,8 +189,8 @@ public class ProgEstInfoAction {
             strSubmitType=strSubmitTypePara;
             String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowPara.getStatusFlag());
             String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getStatusFlag());
-            progInfoShowPara.setCreatedByName(esCommon.getOperNameByOperId(progInfoShowPara.getCreatedBy()));
-            progInfoShowPara.setLastUpdByName(esCommon.getOperNameByOperId(progInfoShowPara.getLastUpdBy()));
+            progInfoShowPara.setCreatedByName(ToolUtil.getUserName(progInfoShowPara.getCreatedBy()));
+            progInfoShowPara.setLastUpdByName(ToolUtil.getUserName(progInfoShowPara.getLastUpdBy()));
             // ≤È—Ø
             if(strPowerTypePara.equals("Qry")){
                 progInfoShowSel =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);

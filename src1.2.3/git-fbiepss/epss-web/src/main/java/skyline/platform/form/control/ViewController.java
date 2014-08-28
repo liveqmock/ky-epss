@@ -1,5 +1,3 @@
-//Source file: D:\\zt\\platform\\form\\control\\ViewController.java
-
 package skyline.platform.form.control;
 
 import skyline.platform.form.config.*;
@@ -33,13 +31,12 @@ public class ViewController {
      * 7、其他的调用PageGenerator.run()产生脚本
      * @param ctx
      * @param event
-     * @param msg
+     * @param msgs
      * @param result
      * @return String
      * @roseuid 3F722D6E0372
      */
-    public static String[] process(SessionContext ctx, Event event, ErrorMessages msgs, int result)
-    {
+    public static String[] process(SessionContext ctx, Event event, ErrorMessages msgs, int result){
         String[] rtnMsg = new String[2];
         if (event.getType() == EventType.REFERENCE_FIELD_EVENT_TYPE) {
             return ReferenceGenerator.run(ctx, event, msgs, result);
@@ -47,9 +44,7 @@ public class ViewController {
         FormInstanceManager fiManager = (FormInstanceManager) ctx.getAttribute(SessionAttributes.
             SESSION_FORM_INSTANCE_MANAGER_NAME);
         String instanceid = event.getId();
-
         FormInstance fi = fiManager.getFormInstance(instanceid);
-
         FormBean fb = FormBeanManager.getForm(fi.getFormid());
         if (fb.getType() == fb.LIST_TYPE && event.getType() == EventType.FIND_EVENT_TYPE) {
             if (result < 0) {
@@ -66,8 +61,7 @@ public class ViewController {
         }
     }
 
-    public static String printErrorMsgs(ErrorMessages msgs,int result)
-    {
+    public static String printErrorMsgs(ErrorMessages msgs,int result){
         return PageGenerator.getErrorString(msgs,result);
     }
 }

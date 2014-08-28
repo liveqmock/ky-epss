@@ -412,8 +412,8 @@ public class TkMeaCSubStlQItemAction {
         // 通过父层id查找它的孩子
         List<EsCttItem> subEsCttItemList =getEsItemListByLevelParentPkid(strLevelParentId, esCttItemListPara);
         for(EsCttItem itemUnit: subEsCttItemList){
-            String strCreatedByName= esCommon.getOperNameByOperId(itemUnit.getCreatedBy());
-            String strLastUpdByName= esCommon.getOperNameByOperId(itemUnit.getLastUpdBy());
+            String strCreatedByName= ToolUtil.getUserName(itemUnit.getCreatedBy());
+            String strLastUpdByName= ToolUtil.getUserName(itemUnit.getLastUpdBy());
             CttItemShow cttItemShowTemp = new CttItemShow(
                 itemUnit.getPkid(),
                 itemUnit.getBelongToType(),

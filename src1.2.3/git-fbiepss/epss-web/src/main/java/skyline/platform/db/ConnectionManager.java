@@ -176,11 +176,8 @@ public class ConnectionManager {
         DatabaseConnection dc = (DatabaseConnection) conns.get(id);
         dc.close();
         conns.remove(id);
-
         logger.debug("关闭数据库链接：" + dc);
-
       }
-
     } catch (Exception e) {
       logger.error(e);
     }
@@ -212,10 +209,10 @@ public class ConnectionManager {
     DatabaseConnection con = null;
     try {
       con = new DatabaseConnection();
-    } catch (NoAvailableResourceException ex) {
+    } catch (Exception ex) {
       try {
         con = new DatabaseConnection(sDBDriver, sConnStr, user, passwd);
-      } catch (NoAvailableResourceException ex1) {
+      } catch (Exception ex1) {
         ex1.printStackTrace();
       }
     }
@@ -230,13 +227,6 @@ public class ConnectionManager {
     ConnectionManager cm = ConnectionManager.getInstance();
     DatabaseConnection dc = cm.getConnection();
     Date date = new Date(104, 03, 1);
-
-    // String dateStr = "insert into
-    // testtype(chty,ch2ty,lgty,flty,intty,daty)values('ddddddd','dsafsdfsda',33333,33.444,3333,'"+DBUtil.formatWithSql92Date(date)+"')";
-
-    // System.out.print(dateStr);
-    // dc.executeUpdate("insert into
-    // testtype(chty,ch2ty,lgty,flty,intty,daty)values('ddddddd','dsafsdfsda',33333,33.444,3333,"+DBUtil.formatWithSql92Date(date)+")");
     RecordSet rs = dc.executeQuery("select * from testtype");
     while (rs.next()) {
       System.out.println(rs.getString("test"));

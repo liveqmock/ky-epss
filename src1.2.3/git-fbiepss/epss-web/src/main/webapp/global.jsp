@@ -8,7 +8,7 @@
     String contextPath = request.getContextPath();
 %>
 
-<LINK href="<%=contextPath %>/css/ccb.css" type="text/css" rel="stylesheet">
+<LINK href="<%=contextPath %>/css/epss.css" type="text/css" rel="stylesheet">
 <%@ page import="skyline.platform.db.*" %>
 <%@ page import="skyline.platform.html.*" %>
 <%@ page import="skyline.platform.form.config.EnumerationType" %>

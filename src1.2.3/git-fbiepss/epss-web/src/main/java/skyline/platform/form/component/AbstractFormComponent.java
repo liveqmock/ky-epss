@@ -31,103 +31,6 @@ public abstract class AbstractFormComponent {
      *@since     2003年10月11日
      */
     public static Logger logger = Logger.getLogger("zt.platform.form.component.AbstractComponent");
-
-
-
-    /**
-     *  FORM几种组件
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_BUTTON = "page_form_button_active";
-
-    /**
-     *  Description of the Field
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_REFBUTTON = "page_form_refbutton";
-    /**
-     *  FORM几种组件
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_SELECT = "page_form_select";
-    /**
-     *  FORM几种组件
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_RADIO = "page_form_radio";
-    /**
-     *  FORM几种组件
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_CHECKBOX = "page_form_checkbox";
-    /**
-     *  FORM几种组件
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_LABEL = "page_form_label";
-    /**
-     *  FORM几种组件
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_TEXT = "page_form_text";
-    /**
-     *  FORM几种组件
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_TEXTFIELD = "page_form_textfield";
-    /**
-     *  FORM几种组件
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_PASSWORD = "page_form_password";
-    /**
-     *  FORM几种组件
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_SUBMIT = "page_form_button_active";
-    /**
-     *  FORM几种组件
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_RESET = "page_form_button_active";
-
-    /**
-     *  Page FORM
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_TABLE = "page_form_table";
-
-    /**
-     *  Page FORM
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_TABLE_TR = "page_form_tr";
     /**
      *  Page FORM
      *
@@ -142,56 +45,7 @@ public abstract class AbstractFormComponent {
      *@since     2003年10月11日
      */
     public final static String CSS_PAGE_FORM_TABLE_TITLE_TD = "page_form_title_td";
-
-    /**
-     *  按钮面板的Table Table的class为page_form_button_table
-     *  Tr的class为page_form_button_tr Td的class为page_form_button_td
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_BUTTON_TABLE = "page_form_button_table";
-    /**
-     *  Description of the Field
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_PAGE_FORM_BUTTON_TR = "page_form_button_tr";
-
-    /**
-     *  List FORM Table 的class 为 list_form_table Tr的class为list_form_tr
-     *  Td的class为list_form_td 特列：标题的td为list_form_title_td
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_LIST_FORM_TABLE = "list_form_table";
-    /**
-     *  Description of the Field
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_LIST_FORM_TD = "list_form_td";
-
-    /**
-     *  Description of the Field
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_LIST_FORM_TITLE_TD = "list_form_title_td";
-    /**
-     *  Description of the Field
-     *
-     *@author    sun
-     *@since     2003年10月11日
-     */
-    public final static String CSS_LIST_FORM_TR = "list_form_tr";
-
     ElementBean element = null;
-
 
     /**
      *  Constructor for the AbstractFormComponent object
@@ -207,7 +61,6 @@ public abstract class AbstractFormComponent {
             this.initValues();
         }
     }
-
 
     /**
      *  Description of the Method
@@ -309,7 +162,6 @@ public abstract class AbstractFormComponent {
         }
     }
 
-
     private static Map components;
 
     static {
@@ -409,12 +261,6 @@ public abstract class AbstractFormComponent {
      */
     private String[] value;
 
-//
-
-//    /**
-//     * 是否选中，用于checkbox和radio
-//     */
-//    protected boolean checked;
     /**
      *  Description of the Field
      *
@@ -426,70 +272,6 @@ public abstract class AbstractFormComponent {
     private String instanceId;
     private boolean changeEvent;
 
-
-//
-
-//    /**
-//     * 是否可见，不可见一律转换成hidden标签
-//     */
-//    protected boolean visible;
-//
-//    /**
-//     * 是否失效
-//     */
-//    protected boolean disabled;
-//
-//    /**
-//     * 尺寸大小
-//     */
-//    protected int size;
-//
-//    /**
-//     * 最小长度
-//     */
-//    protected int minlength;
-//
-//    /**
-//     * 最大长度
-//     */
-//    protected int maxlength;
-//
-//    /**
-//     * 行号
-//     */
-//    protected int rows;
-//
-//    /**
-//     * 列号
-//     */
-//    protected int cols;
-//
-//    /**
-//     * 是否允许多选
-//     */
-//    protected boolean multiple;
-//
-//    /**
-//     * 头部微调符号
-//     */
-//    protected String headstr;
-//
-//    /**
-//     * 中间微调符号
-//     */
-//    protected String middlestr;
-//
-//    /**
-//     * 尾部微调符号
-//     */
-//    protected String afterstr;
-//
-//    /**
-//     * 其他属性，其格式为
-//     * a1=1|a2=2|a3=3，使用时必须将其拆开
-//     */
-//    protected String others;
-
     /**
      *@return     String
      *@roseuid    3F738709032D
@@ -498,7 +280,6 @@ public abstract class AbstractFormComponent {
         return "error";
     }
 
-
     /**
      *  初始化 根据e的相关属性初始化类属性
      *
@@ -506,7 +287,6 @@ public abstract class AbstractFormComponent {
      *@roseuid    3F7EA0DD0366
      */
     protected void init(ElementBean e) { }
-
 
     /**
      *  根据ElementBean的实例e构造一个AbstarctFormComponent实例，它的具体类型包括枚举（e
@@ -540,7 +320,6 @@ public abstract class AbstractFormComponent {
         return null;
     }
 
-
     /**
      *  Gets the value attribute of the AbstractFormComponent object
      *
@@ -560,7 +339,6 @@ public abstract class AbstractFormComponent {
         return value;
     }
 
-
     /**
      *  Sets the value attribute of the AbstractFormComponent object
      *
@@ -569,7 +347,6 @@ public abstract class AbstractFormComponent {
     public void setValues(String[] value) {
         this.value = value;
     }
-
 
     /**
      *  Gets the valueset attribute of the AbstractFormComponent object
@@ -580,7 +357,6 @@ public abstract class AbstractFormComponent {
         return valueset;
     }
 
-
     /**
      *  Sets the valueset attribute of the AbstractFormComponent object
      *
@@ -589,7 +365,6 @@ public abstract class AbstractFormComponent {
     public void setValueset(String[] valueset) {
         this.valueset = valueset;
     }
-
 
     /**
      *  Gets the nameset attribute of the AbstractFormComponent object
@@ -600,7 +375,6 @@ public abstract class AbstractFormComponent {
         return nameset;
     }
 
-
     /**
      *  Sets the nameset attribute of the AbstractFormComponent object
      *
@@ -609,7 +383,6 @@ public abstract class AbstractFormComponent {
     public void setNameset(String[] nameset) {
         this.nameset = nameset;
     }
-
 
     /**
      *  Gets the readonly attribute of the AbstractFormComponent object
@@ -620,7 +393,6 @@ public abstract class AbstractFormComponent {
         return readonly;
     }
 
-
     /**
      *  Sets the readonly attribute of the AbstractFormComponent object
      *
@@ -629,7 +401,6 @@ public abstract class AbstractFormComponent {
     public void setReadonly(boolean readonly) {
         this.readonly = readonly;
     }
-
 
     /**
      *  Description of the Method
@@ -643,7 +414,6 @@ public abstract class AbstractFormComponent {
             return PropertyManager.getProperty("zt.platform.component.TdSeparatorIsUsed").equals("true");
         }
     }
-
 
     /**
      *  Gets the header attribute of the AbstractFormComponent object
@@ -667,65 +437,6 @@ public abstract class AbstractFormComponent {
         }
     }
 
-
-    /**
-     *  Description of the Method
-     *
-     *@return    Description of the Return Value
-     */
-    protected String GetFooter() {
-        String footer = element.getAfterstr() + "</td>";
-        return footer;
-    }
-
-
-    /**
-     *  Description of the Method
-     *
-     *@return    Description of the Return Value
-     */
-    public String otherStr() {
-        String onClick = "";
-        String onChange = "";
-        String onSubmit = "";
-        String readOnly = "";
-        if (element.getOnclick() != null && !element.getOnclick().equals("")) {
-            onClick = " onclick=\"" + element.getOnclick() + "\"";
-        }
-
-        String changeEvent = "";
-        if (isChangeEvent()) {
-            changeEvent = "changeFunc()";
-        }
-        if (element.getOnchange() != null && !element.getOnchange().equals("")) {
-            onChange = " onchange=\"" + element.getOnchange() + ";" + changeEvent + "\"";
-        } else if (!changeEvent.equals("")) {
-            onChange = " onchange=\"" + changeEvent + "\"";
-        }
-        //if (isReadonly() || (!isReadonly() && element.isReadonly())) {
-        if (isReadonly()) {
-            readOnly = " readonly ";
-        }
-
-        String others = element.getOthers();
-        String otherStr = "";
-        if (others != null && !others.equals("")) {
-            String other[] = others.split("\\|");
-            if (other.length != 0) {
-                for (int i = 0; i < other.length; i++) {
-                    String[] nameAndValue = other[i].split(":");
-                    if (nameAndValue.length != 2) {
-                        logger.warning("Invalid name and value of " + other[i] + ",ignored! others str");
-                    } else {
-                        otherStr = otherStr + " " + nameAndValue[0] + "=" + "\"" + nameAndValue[1] + "\"";
-                    }
-                }
-            }
-        }
-        return onClick + onChange + readOnly + otherStr;
-    }
-
-
     /**
      *  Gets the ctx attribute of the AbstractFormComponent object
      *
@@ -734,7 +445,6 @@ public abstract class AbstractFormComponent {
     public skyline.platform.form.control.SessionContext getCtx() {
         return ctx;
     }
-
 
     /**
      *  Sets the ctx attribute of the AbstractFormComponent object
@@ -745,7 +455,6 @@ public abstract class AbstractFormComponent {
         this.ctx = ctx;
     }
 
-
     /**
      *  Gets the instanceId attribute of the AbstractFormComponent object
      *
@@ -754,7 +463,6 @@ public abstract class AbstractFormComponent {
     public String getInstanceId() {
         return instanceId;
     }
-
 
     /**
      *  Sets the instanceId attribute of the AbstractFormComponent object
@@ -765,7 +473,6 @@ public abstract class AbstractFormComponent {
         this.instanceId = instanceId;
     }
 
-
     /**
      *  Gets the changeEvent attribute of the AbstractFormComponent object
      *
@@ -774,7 +481,6 @@ public abstract class AbstractFormComponent {
     public boolean isChangeEvent() {
         return changeEvent;
     }
-
 
     /**
      *  Sets the changeEvent attribute of the AbstractFormComponent object

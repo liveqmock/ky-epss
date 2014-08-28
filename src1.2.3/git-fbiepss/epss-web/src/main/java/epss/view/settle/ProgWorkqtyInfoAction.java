@@ -2,8 +2,6 @@ package epss.view.settle;
 
 import epss.common.enums.*;
 import epss.repository.model.EsCttInfo;
-import epss.repository.model.OperRes;
-import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import skyline.util.StyleModel;
@@ -195,8 +193,8 @@ public class ProgWorkqtyInfoAction {
             strSubmitType = strSubmitTypePara;
             String strStatusFlagCode = ToolUtil.getStrIgnoreNull(progInfoShowPara.getStatusFlag());
             String strStatusFlagName = esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getStatusFlag());
-            progInfoShowPara.setCreatedByName(esCommon.getOperNameByOperId(progInfoShowPara.getCreatedBy()));
-            progInfoShowPara.setLastUpdByName(esCommon.getOperNameByOperId(progInfoShowPara.getLastUpdBy()));
+            progInfoShowPara.setCreatedByName(ToolUtil.getUserName(progInfoShowPara.getCreatedBy()));
+            progInfoShowPara.setLastUpdByName(ToolUtil.getUserName(progInfoShowPara.getLastUpdBy()));
             // ≤È—Ø
             // ≤È—Ø
             if (strPowerTypePara.equals("Qry")) {

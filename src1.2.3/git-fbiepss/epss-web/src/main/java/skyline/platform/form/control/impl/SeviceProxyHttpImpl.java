@@ -5,7 +5,6 @@ import skyline.platform.form.control.NewActionController;
 import skyline.platform.form.control.ServiceProxy;
 import skyline.platform.form.control.SessionContext;
 import skyline.platform.form.util.SessionAttributes;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,8 +13,7 @@ import javax.servlet.http.HttpSession;
  * @author ÇëÌæ»»
  * @version 1.0
  */
-public class SeviceProxyHttpImpl
-    implements ServiceProxy {
+public class SeviceProxyHttpImpl implements ServiceProxy {
     private String head;
     private String body;
     private String tail;

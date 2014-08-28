@@ -12,15 +12,12 @@ import epss.repository.model.model_show.FlowCtrlShow;
 import epss.service.EsFlowService;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.service.EsCommonService;
 import epss.service.SignPartService;
 import epss.service.FlowCtrlService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.platform.utils.Util;
-import skyline.service.ToolsService;
-
+import epss.service.ToolsService;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -47,18 +44,14 @@ public class EsFlowControl implements Serializable {
     private ToolsService toolsService;
     @ManagedProperty(value = "#{signPartService}")
     private SignPartService signPartService;
-    @ManagedProperty(value = "#{esCommonService}")
-    private EsCommonService esCommonService;
     @ManagedProperty(value = "#{flowCtrlService}")
     private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
 
     private List<SelectItem> statusFlagFromDBList;
-
     private List<SelectItem> preStatusFlagList;
     private List<SelectItem> preStatusFlagFromDBList;
-
     private List<SelectItem> deleteFlagList;
     private List<SelectItem> endFlagList;
 
@@ -68,10 +61,6 @@ public class EsFlowControl implements Serializable {
         this.preStatusFlagFromDBList= toolsService.getEnuSelectItemList("PRESTATUS_FLAG", false, false);
         this.deleteFlagList = toolsService.getEnuSelectItemList("DELETED_FLAG", true, false);
         this.endFlagList = toolsService.getEnuSelectItemList("END_FLAG", true, false);
-    }
-
-    public String getOperNameByOperId(String strOperId){
-        return Util.getUserName(strOperId);
     }
 
     public String getLabelByValueInStatusFlaglist(String strValue){
@@ -97,8 +86,7 @@ public class EsFlowControl implements Serializable {
     }
 
     public List<SelectItem> getBackToStatusFlagList(String strFlowStatusPara){
-        List<SelectItem> statusFlagListTemp=new ArrayList<SelectItem>();
-
+        List<SelectItem> statusFlagListTemp=new ArrayList<>();
         if(strFlowStatusPara.equals("Qry")){
             statusFlagListTemp.addAll(statusFlagFromDBList);
             statusFlagListTemp.add(0,siAllForSelect);
@@ -181,14 +169,6 @@ public class EsFlowControl implements Serializable {
 
     public void setSignPartService(SignPartService signPartService) {
         this.signPartService = signPartService;
-    }
-
-    public EsCommonService getEsCommonService() {
-        return esCommonService;
-    }
-
-    public void setEsCommonService(EsCommonService esCommonService) {
-        this.esCommonService = esCommonService;
     }
 
     public List<SelectItem> getDeleteFlagList() {

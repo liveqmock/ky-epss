@@ -5,11 +5,9 @@ import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitPowerHis;
 import epss.service.CttInfoService;
 import epss.service.FlowCtrlHisService;
-import epss.service.EsCommonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.util.MessageUtil;;
-
+import skyline.util.MessageUtil;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -32,9 +30,6 @@ public class FlowCtrlHisAction {
 
     @ManagedProperty(value = "#{flowCtrlHisService}")
     private FlowCtrlHisService flowCtrlHisService;
-    @ManagedProperty(value = "#{esCommonService}")
-    private EsCommonService esCommonService;
-
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
 
@@ -213,14 +208,6 @@ public class FlowCtrlHisAction {
 
     public void setCttInfoService(CttInfoService cttInfoService) {
         this.cttInfoService = cttInfoService;
-    }
-
-    public EsCommonService getEsCommonService() {
-        return esCommonService;
-    }
-
-    public void setEsCommonService(EsCommonService esCommonService) {
-        this.esCommonService = esCommonService;
     }
 
     public String getStrTkcttCstplSelected() {

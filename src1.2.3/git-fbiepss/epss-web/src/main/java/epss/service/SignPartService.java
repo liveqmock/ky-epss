@@ -8,7 +8,7 @@ import epss.repository.model.EsInitCustExample;
 import epss.repository.model.model_show.SignPartShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import javax.annotation.Resource;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,8 +25,6 @@ public class SignPartService {
     private MySignPartMapper mySignPartMapper;
     @Autowired
     private EsInitCustMapper esInitCustMapper;
-    @Resource
-    private EsCommonService esCommonService;
 
     public List<SignPartShow> selectListByModel(SignPartShow signPartShowPara) {
         EsInitCustExample example= new EsInitCustExample();
@@ -43,8 +41,8 @@ public class SignPartService {
         for(EsInitCust itemUnit:esInitCustListTemp){
             SignPartShow signPartShowTemp=new SignPartShow();
             signPartShowTemp=fromModelToShow(itemUnit);
-            signPartShowTemp.setCreatedByName(esCommonService.getOperNameByOperId(itemUnit.getCreatedBy()));
-            signPartShowTemp.setLastUpdByName(esCommonService.getOperNameByOperId(itemUnit.getLastUpdBy()));
+            signPartShowTemp.setCreatedByName(ToolUtil.getUserName(itemUnit.getCreatedBy()));
+            signPartShowTemp.setLastUpdByName(ToolUtil.getUserName(itemUnit.getLastUpdBy()));
             signPartShowListTemp.add(signPartShowTemp) ;
         }
         return signPartShowListTemp;

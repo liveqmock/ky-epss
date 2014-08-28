@@ -125,8 +125,7 @@ public class ActionController {
      * @return int
      * @roseuid 3F7226D502D3
      */
-    public int run()
-    {
+    public int run(){
         try {
             //1.获得FormInstance管理器
             FormInstanceManager fiManager = (FormInstanceManager) ctx.getAttribute(

@@ -183,8 +183,8 @@ public class CstplInfoAction {
                                    CttInfoShow cttInfoShowSelected) {
         try {
             strSubmitType = strSubmitTypePara;
-            cttInfoShowSelected.setCreatedByName(esCommon.getOperNameByOperId(cttInfoShowSelected.getCreatedBy()));
-            cttInfoShowSelected.setLastUpdByName(esCommon.getOperNameByOperId(cttInfoShowSelected.getLastUpdBy()));
+            cttInfoShowSelected.setCreatedByName(ToolUtil.getUserName(cttInfoShowSelected.getCreatedBy()));
+            cttInfoShowSelected.setLastUpdByName(ToolUtil.getUserName(cttInfoShowSelected.getLastUpdBy()));
             // ≤È—Ø
             if (strPowerTypePara.equals("Qry")) {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);

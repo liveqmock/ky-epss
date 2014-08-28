@@ -324,8 +324,8 @@ public class ProgMeaItemAction {
                     progMeaItemService.selectRecordsByKeyExample(esItemStlTkcttEngMea);
             if(esItemStlTkcttEngMeaList.size()>0){
                 esItemStlTkcttEngMea= esItemStlTkcttEngMeaList.get(0);
-                String strCreatedByName= esCommon.getOperNameByOperId(esItemStlTkcttEngMea.getCreatedBy());
-                String strLastUpdByName= esCommon.getOperNameByOperId(esItemStlTkcttEngMea.getLastUpdBy());
+                String strCreatedByName= ToolUtil.getUserName(esItemStlTkcttEngMea.getCreatedBy());
+                String strLastUpdByName= ToolUtil.getUserName(esItemStlTkcttEngMea.getLastUpdBy());
                 progMeaItemShowTemp.setEng_Pkid(esItemStlTkcttEngMea.getPkid());
                 progMeaItemShowTemp.setEng_PeriodNo(esItemStlTkcttEngMea.getPeriodNo());
                 progMeaItemShowTemp.setEng_TkcttPkid(esItemStlTkcttEngMea.getTkcttPkid());

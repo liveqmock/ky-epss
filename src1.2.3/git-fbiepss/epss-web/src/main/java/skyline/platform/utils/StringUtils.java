@@ -43,38 +43,6 @@ import skyline.platform.db.DBUtil;
 public class StringUtils {
 
   /**
-   * 获得String数组的调试字符串
-   * 
-   * @param debugArray
-   * @return
-   */
-  public static String arryToDebugString(String[] debugArray) {
-    StringBuffer temp = new StringBuffer();
-
-    for (int i = 0; i < debugArray.length; i++) {
-      temp.append(i).append("=").append(debugArray[i]).append("\n");
-    }
-
-    return temp.toString();
-  }
-
-  /**
-   * 将Object的Array数组转化成同长度的String数组
-   * 
-   * @param objArray
-   * @return
-   */
-  public static String[] objectArrayToString(Object[] objArray) {
-    String[] rtn = new String[objArray.length];
-
-    for (int i = 0; i < objArray.length; i++) {
-      rtn[i] = (String) objArray[i];
-    }
-
-    return rtn;
-  }
-
-  /**
    * 根据指定得编码格式转码
    */
   public static String convertCharset(String content, String from, String to) {
@@ -101,14 +69,6 @@ public class StringUtils {
     }
 
     String[] strResult = strInput.split(comma);
-    // StringTokenizer st = new StringTokenizer( strInput , comma );
-    // int iCount = 0;
-    // String[] strResult = new String[ st.countTokens() ];
-    // while ( st.hasMoreTokens() )
-    // {
-    // strResult[ iCount ] = st.nextToken();
-    // iCount++;
-    // }
     return strResult;
   }
 
@@ -138,12 +98,10 @@ public class StringUtils {
     }
 
     String[] strResult = strInput.split(comma);
-
     Vector vv = new Vector();
     for (int i = 0; i < strResult.length; i++) {
       vv.add(strResult[i]);
     }
-
     return vv;
   }
 
@@ -158,7 +116,7 @@ public class StringUtils {
   }
 
   /**
-   * 将时间按照指定的模式格式化 如： StringUtil.toDateFormat(new Date(),"yyyy-MM-dd hh:mm:ss")
+   * 将时间按照指定的模式格式化
    * 
    * @param date
    * @param datepatern
@@ -173,7 +131,7 @@ public class StringUtils {
   }
 
   /**
-   * 将时间按照指定的模式格式化 如： StringUtil.toDateFormat(new String,"yyyy-MM-dd hh:mm:ss")
+   * 将时间按照指定的模式格式化 如：toDateFormat(new String,"yyyy-MM-dd hh:mm:ss")
    * 
    * @param date
    * @param datepatern
@@ -191,132 +149,9 @@ public class StringUtils {
       return "";
   }
 
-  /**
-   * 判断checkbox是否选中
-   * 
-   * @param field
-   *          -- 域
-   * @param value
-   *          -- 值
-   * @return
-   */
-  public static String isCbSelected(String fields, String value) {
-    boolean found = false;
-    String[] field = commaToArray(fields);
-    for (int i = 0; i < field.length; i++) {
-      if (field[i].equals(value)) {
-        found = true;
-        break;
-      }
-    }
-    if (found)
-      return "checked";
-    return "";
-  }
-
-  /**
-   * 判断radiobutton是否选中
-   * 
-   * @param field
-   *          -- 域
-   * @param value
-   *          -- 值
-   * @return
-   */
-  public static String isRbSelected(String field, String value) {
-    return (field.equals(value)) ? "checked" : "";
-  }
-
-  /**
-   * 判断select-option是否选中
-   * 
-   * @param field
-   *          -- 域
-   * @param value
-   *          -- 值
-   * @return
-   */
-  public static String isSoSelected(String field, String value) {
-    return (field.equals(value)) ? "selected" : "";
-  }
-
-  public static String doPreProcess(String strValue) {
-    if (strValue == null || strValue.equalsIgnoreCase("null")) {
-      return "";
-    } else {
-      return strValue.trim();
-    }
-  }
-
-  public static String getChineseDate(String date) {
-    return "to_char(" + date + ",'YYYY')||'年'||" + "to_char(" + date + ",'MM')||'月'||" + "to_char(" + date
-        + ",'DD')||'日 '||" + "to_char(" + date + ",'HH24')||'时'||" + "to_char(" + date + ",'MI')||'分'||" + "to_char("
-        + date + ",'SS')||'秒'";
-  }
-
-  public static String getSimpleChineseDate(String date) {
-    return "to_char(" + date + ",'YYYY')||'年'||" + "to_char(" + date + ",'MM')||'月'||" + "to_char(" + date
-        + ",'DD')||'日'";
-  }
-
-  /**
-   * 得到完整的时间字符串
-   * 
-   * @param vday
-   *          String
-   * @param vhour
-   *          String
-   * @param vmi
-   *          String
-   * @return String
-   */
-  public static String getDateTime(String vday, String vhour, String vmi, String vmm) {
-    String dtstr = "";
-    if (vday != null && !vday.equals(""))
-      if (vhour != null && !vhour.equals(""))
-        if (vmi != null && !vmi.equals(""))
-          if (vmm != null && !vmm.equals(""))
-            dtstr = vday + " " + vhour + ":" + vmi + ":" + vmm;
-          else
-            dtstr = vday + " " + vhour + ":" + vmi;
-        else
-          dtstr = vday + " " + vhour;
-      else
-        dtstr = vday;
-    else
-      throw new IllegalArgumentException("日期参数错误！");
-
-    return dtstr;
-  }
-
-  /**
-   * 辅助函数，按照日期格式拆分日期字符串，并返回Calendar对象
-   * 
-   * @param bussDate
-   *          String
-   * @return Calendar
-   */
-  public static Calendar getBussCalendar(String bussDate) {
-    // 按照日期编码规则，拆分日期的各个域
-    String[] dd = delimitedListToStringArray(bussDate, "-");
-    if (dd.length != 3) {
-      throw new java.lang.IllegalArgumentException("非法的日期参数");
-    }
-    String year = dd[0];
-    String month = dd[1];
-    String day = dd[2];
-
-    // 得到当前日历函数
-    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("Asia/Shanghai"), Locale.CHINA);
-    calendar.set(Integer.parseInt(year), Integer.parseInt(month) - 1, Integer.parseInt(day));
-
-    return calendar;
-  }
-
   private static final String FOLDER_SEPARATOR = "/"; // folder separator
 
   private static final String WINDOWS_FOLDER_SEPARATOR = "\\"; // Windows folder
-  // separator
 
   private static final String TOP_PATH = ".."; // top folder
 
@@ -325,25 +160,6 @@ public class StringUtils {
   // ---------------------------------------------------------------------
   // General convenience methods for working with Strings
   // ---------------------------------------------------------------------
-
-  /**
-   * Check if a String has length.
-   * <p>
-   * 
-   * <pre>
-   * StringUtils.hasLength(null) = false
-   * StringUtils.hasLength(&quot;&quot;) = false
-   * StringUtils.hasLength(&quot; &quot;) = true
-   * StringUtils.hasLength(&quot;Hello&quot;) = true
-   * </pre>
-   * 
-   * @param str
-   *          the String to check, may be null
-   * @return <code>true</code> if the String is not null and has length
-   */
-  public static boolean hasLength(String str) {
-    return (str != null && str.length() > 0);
-  }
 
   /**
    * Check if a String has text. More specifically, returns <code>true</code> if
@@ -376,89 +192,6 @@ public class StringUtils {
       }
     }
     return false;
-  }
-
-  /**
-   * Trim leading whitespace from the given String.
-   * 
-   * @param str
-   *          the String to check
-   * @return the trimmed String
-   * @see java.lang.Character#isWhitespace
-   */
-  public static String trimLeadingWhitespace(String str) {
-    if (str.length() == 0) {
-      return str;
-    }
-    StringBuffer buf = new StringBuffer(str);
-    while (buf.length() > 0 && Character.isWhitespace(buf.charAt(0))) {
-      buf.deleteCharAt(0);
-    }
-    return buf.toString();
-  }
-
-  /**
-   * Trim trailing whitespace from the given String.
-   * 
-   * @param str
-   *          the String to check
-   * @return the trimmed String
-   * @see java.lang.Character#isWhitespace
-   */
-  public static String trimTrailingWhitespace(String str) {
-    if (str.length() == 0) {
-      return str;
-    }
-    StringBuffer buf = new StringBuffer(str);
-    while (buf.length() > 0 && Character.isWhitespace(buf.charAt(buf.length() - 1))) {
-      buf.deleteCharAt(buf.length() - 1);
-    }
-    return buf.toString();
-  }
-
-  /**
-   * Test if the given String starts with the specified prefix, ignoring
-   * upper/lower case.
-   * 
-   * @param str
-   *          the String to check
-   * @param prefix
-   *          the prefix to look for
-   * @see java.lang.String#startsWith
-   */
-  public static boolean startsWithIgnoreCase(String str, String prefix) {
-    if (str == null || prefix == null) {
-      return false;
-    }
-    if (str.startsWith(prefix)) {
-      return true;
-    }
-    if (str.length() < prefix.length()) {
-      return false;
-    }
-    String lcStr = str.substring(0, prefix.length()).toLowerCase();
-    String lcPrefix = prefix.toLowerCase();
-    return lcStr.equals(lcPrefix);
-  }
-
-  /**
-   * Count the occurrences of the substring in string s.
-   * 
-   * @param str
-   *          string to search in. Return 0 if this is null.
-   * @param sub
-   *          string to search for. Return 0 if this is null.
-   */
-  public static int countOccurrencesOf(String str, String sub) {
-    if (str == null || sub == null || str.length() == 0 || sub.length() == 0) {
-      return 0;
-    }
-    int count = 0, pos = 0, idx = 0;
-    while ((idx = str.indexOf(sub, pos)) != -1) {
-      ++count;
-      pos = idx + sub.length();
-    }
-    return count;
   }
 
   /**
@@ -529,34 +262,6 @@ public class StringUtils {
     return out.toString();
   }
 
-  // ---------------------------------------------------------------------
-  // Convenience methods for working with formatted Strings
-  // ---------------------------------------------------------------------
-
-  /**
-   * Unqualify a string qualified by a '.' dot character. For example,
-   * "this.name.is.qualified", returns "qualified".
-   * 
-   * @param qualifiedName
-   *          the qualified name
-   */
-  public static String unqualify(String qualifiedName) {
-    return unqualify(qualifiedName, '.');
-  }
-
-  /**
-   * Unqualify a string qualified by a separator character. For example,
-   * "this:name:is:qualified" returns "qualified" if using a ':' separator.
-   * 
-   * @param qualifiedName
-   *          the qualified name
-   * @param separator
-   *          the separator
-   */
-  public static String unqualify(String qualifiedName, char separator) {
-    return qualifiedName.substring(qualifiedName.lastIndexOf(separator) + 1);
-  }
-
   /**
    * Capitalize a <code>String</code>, changing the first letter to upper case
    * as per {@link Character#toUpperCase(char)}. No other letters are changed.
@@ -576,37 +281,6 @@ public class StringUtils {
     } else {
       return "";
     }
-  }
-
-  public static String getNoInjectPara(HttpServletRequest req, String paraName) {
-    String temp = getPara(req, paraName);
-
-    if (temp.equals(""))
-      return temp;
-
-    String reg = "(or |=|'|delete|update|select|drop|all|OR|DELETE|AND|UPDATE|SELECT|DROP|TRUNCATE|truncate)";
-
-    Pattern pattern = Pattern.compile(reg);
-    Matcher matcher = pattern.matcher(temp);
-
-    if (matcher.find()) {
-      System.out.print(temp);
-      throw new IllegalArgumentException("您提交的数据中含有非法的字符，请修改后重新提交！！！");
-    }
-
-    return temp;
-  }
-
-  /**
-   * Uncapitalize a <code>String</code>, changing the first letter to lower case
-   * as per {@link Character#toLowerCase(char)}. No other letters are changed.
-   * 
-   * @param str
-   *          the String to uncapitalize, may be null
-   * @return the uncapitalized String, <code>null</code> if null
-   */
-  public static String uncapitalize(String str) {
-    return changeFirstCharacterCase(str, false);
   }
 
   private static String changeFirstCharacterCase(String str, boolean capitalize) {
@@ -634,29 +308,6 @@ public class StringUtils {
   public static String getFilename(String path) {
     int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR);
     return (separatorIndex != -1 ? path.substring(separatorIndex + 1) : path);
-  }
-
-  /**
-   * Apply the given relative path to the given path, assuming standard Java
-   * folder separation (i.e. "/" separators);
-   * 
-   * @param path
-   *          the path to start from (usually a full file path)
-   * @param relativePath
-   *          the relative path to apply (relative to the full file path above)
-   * @return the full file path that results from applying the relative path
-   */
-  public static String applyRelativePath(String path, String relativePath) {
-    int separatorIndex = path.lastIndexOf(FOLDER_SEPARATOR);
-    if (separatorIndex != -1) {
-      String newPath = path.substring(0, separatorIndex);
-      if (!relativePath.startsWith("/")) {
-        newPath += "/";
-      }
-      return newPath + relativePath;
-    } else {
-      return relativePath;
-    }
   }
 
   /**
@@ -689,73 +340,6 @@ public class StringUtils {
       }
     }
     return collectionToDelimitedString(pathElements, FOLDER_SEPARATOR);
-  }
-
-  /**
-   * Compare two paths after normalization of them.
-   * 
-   * @param path1
-   *          First path for comparizon
-   * @param path2
-   *          Second path for comparizon
-   * @return True if the two paths are equivalent after normalization
-   */
-  public static boolean pathEquals(String path1, String path2) {
-    return cleanPath(path1).equals(cleanPath(path2));
-  }
-
-  /**
-   * Parse the given locale string into a <code>java.util.Locale</code>. This is
-   * the inverse operation of Locale's <code>toString</code>.
-   * 
-   * @param localeString
-   *          the locale string, following <code>java.util.Locale</code>'s
-   *          toString format ("en", "en_UK", etc). Also accepts spaces as
-   *          separators, as alternative to underscores.
-   * @return a corresponding Locale instance
-   */
-  public static Locale parseLocaleString(String localeString) {
-    String[] parts = tokenizeToStringArray(localeString, "_ ", false, false);
-    String language = parts.length > 0 ? parts[0] : "";
-    String country = parts.length > 1 ? parts[1] : "";
-    String variant = parts.length > 2 ? parts[2] : "";
-    return (language.length() > 0 ? new Locale(language, country, variant) : null);
-  }
-
-  // ---------------------------------------------------------------------
-  // Convenience methods for working with String arrays
-  // ---------------------------------------------------------------------
-
-  /**
-   * Append the given String to the given String array, returning a new array
-   * consisting of the input array contents plus the given String.
-   * 
-   * @param arr
-   *          the array to append to
-   * @param str
-   *          the String to append
-   * @return the new array
-   */
-  public static String[] addStringToArray(String[] arr, String str) {
-    String[] newArr = new String[arr.length + 1];
-    System.arraycopy(arr, 0, newArr, 0, arr.length);
-    newArr[arr.length] = str;
-    return newArr;
-  }
-
-  /**
-   * Turn given source String array into sorted array.
-   * 
-   * @param source
-   *          the source array
-   * @return the sorted array (never null)
-   */
-  public static String[] sortStringArray(String[] source) {
-    if (source == null) {
-      return new String[0];
-    }
-    Arrays.sort(source);
-    return source;
   }
 
   /**
@@ -1146,18 +730,5 @@ public class StringUtils {
   }
 
   public static void main(String[] args) {
-    // System.out.println(StringUtil.arrayToComma(new String[]{"a","b","c"}));
-    // System.out.println(StringUtil.commaToArray("a|b|c")[0]);
-    // System.out.println(StringUtil.commaToArray("a|b|c")[1]);
-    // System.out.println(StringUtil.commaToArray("a|b|c")[2]);
-    // System.out.println(StringUtil.toDateFormat("2003-09-18 09:18:18","yyyy-MM-dd hh:mm"));
-    // String[] ddd = StringUtils.commaToArray("1,2,,,5",",");
-
-    // System.out.print(ddd.length);
-    // System.out.println(StringUtils.getDateTime("2004-09-13","13","34",null));
-
-    // System.out.println(ddd.length);
-
   }
-
 }

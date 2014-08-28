@@ -139,8 +139,8 @@ public class TkcttItemAction {
         subEsCttItemList = getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
         for (EsCttItem itemUnit : subEsCttItemList) {
             CttItemShow cttItemShowTemp = null;
-            String strCreatedByName = esCommon.getOperNameByOperId(itemUnit.getCreatedBy());
-            String strLastUpdByName = esCommon.getOperNameByOperId(itemUnit.getLastUpdBy());
+            String strCreatedByName = ToolUtil.getUserName(itemUnit.getCreatedBy());
+            String strLastUpdByName = ToolUtil.getUserName(itemUnit.getLastUpdBy());
             // ²ã¼¶Ïî
             cttItemShowTemp = new CttItemShow(
                     itemUnit.getPkid(),

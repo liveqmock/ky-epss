@@ -33,7 +33,6 @@ public class DeptOperAction implements Serializable {
     private DeptOperService deptOperService;
 
     private TreeNode deptRoot;
-    private TreeNode deptRootSeled;
     private TreeNode currentSelectedNode;
     private TreeNode lastSelectedNode;
     private String strSubmitType;

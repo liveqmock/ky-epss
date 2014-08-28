@@ -6,7 +6,7 @@
 <generatorConfiguration>
     <classPathEntry location="/workspace/svn-fbiepss/lib/ojdbc6.jar"/>
 
-    <!--信息 -->
+    <!--信息-->
     <context id="AllInfo" targetRuntime="MyBatis3">
         <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
                         connectionURL="jdbc:oracle:thin:@localhost:1521:orcl"
@@ -18,16 +18,16 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="epss.repository.model" targetProject="main/java">
+        <javaModelGenerator targetPackage="epss.repository.model" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="epss.repository.mapper" targetProject="main/java">
+        <sqlMapGenerator targetPackage="epss.repository.mapper" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="epss.repository.dao" targetProject="main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="epss.repository.dao" targetProject="src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
@@ -40,7 +40,7 @@
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-       <!-- <table schema="epss" tableName="oper_res">
+        <table schema="epss" tableName="oper_res">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
@@ -117,7 +117,22 @@
         <table schema="epss" tableName="es_item_stl_tkctt_eng_mea">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>-->
-        <!--<table tableName="all_tab_columns"/>-->
+        </table>
+        <table tableName="all_tab_columns"/>
+
+        <!--平台类 -->
+        <table tableName="ptdept"/>
+        <table tableName="ptenudetail"/>
+        <table tableName="ptenumain"/>
+        <table tableName="pterror"/>
+        <table tableName="ptlogicact"/>
+        <table tableName="ptmenu"/>
+        <table tableName="ptoper"/>
+        <table tableName="ptoperrole"/>
+        <table tableName="ptresource"/>
+        <table tableName="ptrole"/>
+        <table tableName="ptroleres"/>
+        <table tableName="sys_lock"/>
+
     </context>
 </generatorConfiguration>

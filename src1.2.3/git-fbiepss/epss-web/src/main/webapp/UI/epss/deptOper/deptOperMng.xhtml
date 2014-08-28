@@ -188,6 +188,7 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:dialog>
+
             <p:dialog id="dlgViewForOperUpd" header="更新人员信息" widgetVar="wVDlgViewForOperUpd"
                       esizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">
@@ -196,11 +197,12 @@
                         <p:outputLabel value="操作员号*  ：" for="operIdForOperUpd"/>
                         <p:inputText id="operIdForOperUpd" value="#{deptOperAction.operUpd.id}" />
                         <p:outputLabel value="操作员密码*：" for="operPasswdForOperUpd"/>
-                        <p:inputText id="operPasswdForOperUpd" type="password" value="#{deptOperAction.operUpd.passwd}"/>
+                        <p:inputText id="operPasswdForOperUpd" type="password"
+                                     value="#{deptOperAction.operUpd.passwd}"/>
                         <p:outputLabel value="操作员姓名*：" for="operNameForOperUpd"/>
                         <p:inputText id="operNameForOperUpd" value="#{deptOperAction.operUpd.name}"/>
                         <p:outputLabel value="性别：" for="operSexForOperUpd"/>
-                        <p:selectOneMenu id="operSexForUpd" value="#{deptOperAction.operUpd.sex}">
+                        <p:selectOneMenu id="operSexForOperUpd" value="#{deptOperAction.operUpd.sex}">
                             <f:selectItems value="#{deptOperAction.operSexList}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="电子邮件：" for="operEmailForOperUpd"/>
@@ -285,7 +287,7 @@
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="是否领导：" for="operIsSuperForOperDel"/>
-                            <p:inputText id="operIsSuperForDel" value="#{deptOperAction.operDel.issuper eq '0'?'否':'是'}"
+                            <p:inputText id="operIsSuperForOperDel" value="#{deptOperAction.operDel.issuper eq '0'?'否':'是'}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="备注：" for="operRemarkForOperDel"/>

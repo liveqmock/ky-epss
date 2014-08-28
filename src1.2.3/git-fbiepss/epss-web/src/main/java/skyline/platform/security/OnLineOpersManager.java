@@ -28,26 +28,6 @@ public class OnLineOpersManager {
         application.setAttribute(ONLINE_USERS, new HashMap<String, OperatorManager>());
     }
 
-    /*public static synchronized boolean isUserOnline(String oper, ServletContext application) {
-        boolean isOn = false;
-        HashMap<String, OperatorManager> userMaps = ((HashMap<String, OperatorManager>) application.getAttribute(ONLINE_USERS));
-        if (userMaps != null) {
-            Iterator it = userMaps.values().iterator();
-            while (it.hasNext()) {
-                if (((OperatorManager) it.next()).getOperator().getOperid().equals(oper)) {
-                    isOn = true;
-                    break;
-                }
-            }
-        }
-        return isOn;
-    }*/
-
-   /* public static synchronized boolean isSessionOnline(String sessionId, ServletContext application) {
-        HashMap<String, OperatorManager> userMaps = ((HashMap<String, OperatorManager>) application.getAttribute(ONLINE_USERS));
-        return (userMaps != null) ? userMaps.containsKey(sessionId) : false;
-    }*/
-
     public static synchronized void addOperToServer(String sessionKey, OperatorManager oper, ServletContext application) {
         ((HashMap<String, OperatorManager>) application.getAttribute(ONLINE_USERS)).put(sessionKey, oper);
     }
@@ -73,5 +53,4 @@ public class OnLineOpersManager {
     public static HashMap<String, OperatorManager> getAllOperMaps(ServletContext application) {
         return (HashMap<String, OperatorManager>) application.getAttribute(ONLINE_USERS);
     }
-
 }

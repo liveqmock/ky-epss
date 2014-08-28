@@ -9,16 +9,14 @@ package epss.view.flow;
  */
 
 import skyline.util.ToolUtil;
-import skyline.platform.utils.Util;
 import epss.repository.model.EsInitCust;
-import epss.service.EsCommonService;
 import epss.service.SignPartService;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.service.ToolsService;
+import epss.service.ToolsService;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -27,7 +25,6 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.model.SelectItem;
 import java.io.*;
-import java.math.BigDecimal;
 import java.util.*;
 
 /**
@@ -45,8 +42,6 @@ public class EsCommon implements Serializable {
     private ToolsService toolsService;
     @ManagedProperty(value = "#{signPartService}")
     private SignPartService signPartService;
-    @ManagedProperty(value = "#{esCommonService}")
-    private EsCommonService esCommonService;
 
     private HtmlGraphicImage image;
 
@@ -103,7 +98,7 @@ public class EsCommon implements Serializable {
     }
 
     public String getOperNameByOperId(String strOperId){
-        return Util.getUserName(strOperId);
+        return ToolUtil.getUserName(strOperId);
     }
 
     public String originFlagListValueOfAlias(String strValue){
@@ -224,14 +219,6 @@ public class EsCommon implements Serializable {
 
     public void setSignPartService(SignPartService signPartService) {
         this.signPartService = signPartService;
-    }
-
-    public EsCommonService getEsCommonService() {
-        return esCommonService;
-    }
-
-    public void setEsCommonService(EsCommonService esCommonService) {
-        this.esCommonService = esCommonService;
     }
 
     public HtmlGraphicImage getImage() {

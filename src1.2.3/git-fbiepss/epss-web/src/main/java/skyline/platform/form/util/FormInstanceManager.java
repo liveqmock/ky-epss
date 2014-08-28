@@ -37,11 +37,10 @@ public class FormInstanceManager
      * 实例化FormInstanceManager管理器
      *
      * maxSize:实例池的大小
-     * @param maxSize
+     * @param p_maxSize
      * @roseuid 3F7215D90371
      */
-    public FormInstanceManager(int p_maxSize)
-    {
+    public FormInstanceManager(int p_maxSize){
         this.maxSize = p_maxSize;
         sequencer = new InstanceSequencer();
     }

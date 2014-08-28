@@ -201,8 +201,8 @@ public class SubcttInfoAction {
                                      CttInfoShow cttInfoShowPara) {
         try {
             strSubmitType = strSubmitTypePara;
-            cttInfoShowPara.setCreatedByName(esCommon.getOperNameByOperId(cttInfoShowPara.getCreatedBy()));
-            cttInfoShowPara.setLastUpdByName(esCommon.getOperNameByOperId(cttInfoShowPara.getLastUpdBy()));
+            cttInfoShowPara.setCreatedByName(ToolUtil.getUserName(cttInfoShowPara.getCreatedBy()));
+            cttInfoShowPara.setLastUpdByName(ToolUtil.getUserName(cttInfoShowPara.getLastUpdBy()));
             // ≤È—Ø
             if (strPowerTypePara.equals("Qry")) {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);

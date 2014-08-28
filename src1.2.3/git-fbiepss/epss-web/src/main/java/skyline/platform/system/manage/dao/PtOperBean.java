@@ -6,8 +6,6 @@ import skyline.platform.utils.ActionRequest;
 import skyline.platform.utils.Field;
 
 import java.util.List;
-
-
 public class PtOperBean extends AbstractBasicBean implements Cloneable {
 	String deptid;
 

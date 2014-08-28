@@ -324,8 +324,8 @@ public class ProgEstItemAction {
                     progEstItemService.selectRecordsByExample(esItemStlTkcttEngSta);
             if(esItemStlTkcttEngStaList.size()>0){
                 esItemStlTkcttEngSta= esItemStlTkcttEngStaList.get(0);
-                String strCreatedByName= esCommon.getOperNameByOperId(esItemStlTkcttEngSta.getCreatedBy());
-                String strLastUpdByName= esCommon.getOperNameByOperId(esItemStlTkcttEngSta.getLastUpdBy());
+                String strCreatedByName= ToolUtil.getUserName(esItemStlTkcttEngSta.getCreatedBy());
+                String strLastUpdByName= ToolUtil.getUserName(esItemStlTkcttEngSta.getLastUpdBy());
                 progEstItemShowTemp.setEng_Pkid(esItemStlTkcttEngSta.getPkid());
                 progEstItemShowTemp.setEng_PeriodNo(esItemStlTkcttEngSta.getPeriodNo());
                 progEstItemShowTemp.setEng_TkcttPkid(esItemStlTkcttEngSta.getTkcttPkid());

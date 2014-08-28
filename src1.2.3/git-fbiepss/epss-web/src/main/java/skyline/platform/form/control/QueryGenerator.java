@@ -228,21 +228,14 @@ public class QueryGenerator {
 
         boolean useDelete = fb.isUseDelete();
         boolean useAdd    = fb.isUseAdd();
-//控制无记录时不显示菜单
-//        if ( iPageCount == 0 && !useDelete ) {
-//            return body;
-//        }
         //2003-11-5
         body += "<form id='listform' method='post' action='" + ctx.getUrl(TARGET_TEMPLATE) + "'>";
         body += commText;
         body += "<input type='hidden' name='" + SessionAttributes.REQUEST_LIST_PAGENO_NAME + "' value=''>";
         body += "<input type='hidden' name='" + SessionAttributes.REQUEST_LIST_PAGECOUNT_NAME + "' value=''>";
         body += "</form>";
-        //2003-11-5
-//        body += "<table class='blank_table'></table>";
         body += "<table class='list_button_tbl'>";
         body += "<tr class='list_button_tbl_tr'>";
-
         body += "<td class='list_button_tbl_td'>";
         body += "<input type=\"button\" name=\"submit6\" class=\"list_button_active\" value=\"上一步\" onClick=\"history.go(-1);\">";
         body += "</td>";
@@ -290,7 +283,6 @@ public class QueryGenerator {
         else {
             body += "<input type=\"button\" name=\"submit1\" class=\"list_button_active\" value=\" 首页 \" onClick=\"buttonClick('0','"+iPageCount+"');\">";
         }
-
         body += "</td>";
 
         //生成上一页按钮
@@ -310,7 +302,6 @@ public class QueryGenerator {
         else {
             body += "<input type=\"button\" name=\"submit3\" class=\"list_button_active\" value=\"下一页\" onClick=\"buttonClick('"+(iPageno + 1)+"','"+iPageCount+"');\">";
         }
-
         body += "</td>";
         //生成尾页按钮
         body += "<td class='list_button_tbl_td'>";
@@ -320,240 +311,19 @@ public class QueryGenerator {
         else {
             body += "<input type=\"button\" name=\"submit4\" class=\"list_button_active\" value=\" 尾页 \" onClick=\"buttonClick('" + iPageCount +"','" + iPageCount + "');\">";
         }
-
         body += "</td>";
-
         body += "<td class='list_button_tbl_td'>";
-//        body += "<input type=\"button\" name=\"submit5\" class=\"list_button_active\" value=\" 刷新 \" onClick=\"window.location.reload();\">";
         body += "<input type=\"button\" name=\"submit5\" class=\"list_button_active\" value=\" 刷新 \" onClick=\"buttonClick('"+iPageno+"','"+iPageCount+"');\">";
-
         body += "</td>";
-
         body += "</td>";
-
         body += "<td class='list_button_tbl_td'>";
         body += "<input type=\"button\" name=\"submit7\" class=\"list_button_active\" value=\" 返回 \" onClick=\"window.close();\">";
-
         body += "</td>";
-
-
-
-        //生成到多少页按钮
-/*
-        body += "<td class='list_button_tbl_td'>";
-        body += "<form id='winform5' method='post' action='" + ctx.getUrl(TARGET_TEMPLATE) + "'>";
-        body += commText;
-        body += "<input type='hidden' name='" + SessionAttributes.REQUEST_LIST_PAGECOUNT_NAME +
-            "' value='" + iPageCount + "'>";
-        body += commText;
-        body += "到第<input type='text' name='" + SessionAttributes.REQUEST_LIST_PAGENO_NAME +
-            "' value='" + (iPageno + 1) + "' size='3'>页"+(iPageno + 1)+"/"+(iPageCount+1)+"页";
-        body += "<input class='list_button_submit' type='submit' name='submit' class='list_button_go' value=' G O '>";
-
-        body += "</form>";
-
-        body += "</td>";
-*/
-
         body += "</tr>";
         body += "</table>";
-
         return body;
     }
-/*
-    private static String getQueryForm(SessionContext ctx,FormBean fb,FormInstance fi) {
-        String body = "";
 
-        String action = fb.getUrl();
-        if ( action == null ) {
-            action = PageGenerator.DEFAULT_URL_LOCATE;
-        }
-        try {
-            body += "<table><tr><td>";
-            String onclick = "if ( filter.style.visibility == 'hidden' ) { filter.style.visibility ='';} else { filter.style.visibility = 'hidden';}";
-            body += "<a href=\"#\" onClick=\""+onclick+"\">查询</a>";
-            body += "</td></tr></table>";
-
-            body += "<form id='winform' method='post' action='" + ctx.getUrl(action) + "'>";
-            body += "<div id='filter' style='visibility:hidden'>";
-            body += "<table class='query_table'>";
-            body += "<tr class='query_tr'>";
-            body += "<td class='query_td'>";
-            List queryFlds = fb.getQueryField();
-            int rows = 0;
-
-            if (queryFlds.size() > 0) {
-                body += "<table class='query_form_table'>";
-                int i = 0;
-                for (; i < queryFlds.size(); i++) {
-                    ElementBean ebt = (ElementBean) queryFlds.get(i);
-//                    if (i % 2 == 0) {
-                    body += "<tr class='query_form_tr' nowrap>";
-                    rows++;
-//                    }
-                    try {
-                        FormElementValue fev = fi.getValue(ebt.getName());
-                        ebt = (ElementBean) ebt.clone();
-//                        ebt.setIsnull(true);
-//                        body += PageGenerator.getElemetScript(ctx, fi.getInstanceid(), ebt, fev, false, false);
-                        if (ebt.getComponetTp() == ComponentType.HIDDEN_TYPE) {
-                            if (ebt != null) {
-                                ebt.setComponetTp(ComponentType.TEXT_TYPE);
-                            }
-                            else {
-                                ebt = fb.getElement(ebt.getName());
-                            }
-                        }
-                        ebt.setDefaultValue("");
-                        ebt.setIsnull(true);
-                        ebt.setVisible(true);
-
-                        ebt.setReadonly(false);
-
-                        body += PageGenerator.getViewElemetScript(ctx, fi.getInstanceid(), ebt, fev, false, false);
-                        if ( ebt.getComponetTp() == ComponentType.TEXT_TYPE || ebt.getComponetTp() == ComponentType.DATE_TYPE ||
-                             ebt.getComponetTp() == ComponentType.REFERENCE_TEXT_TYPE ) {
-                            ebt.setName(ebt.getName()+"large");
-                            ebt.setCaption(" 至 ");
-                            body += PageGenerator.getViewElemetScript(ctx, fi.getInstanceid(), ebt, fev, false, false);
-                        }
-
-                    }
-                    catch (Exception e) {
-                        e.printStackTrace();
-                    }
-//                    if (i % 2 == 1)
-                        body += "</tr>";
-                }
-//                if (i % 2 == 1) {
-//                    body += "<td>&nbsp;</td><td>&nbsp;</td></tr>";
-//                }
-                List queryHiddens = fb.getQueryHiddenFlds();
-                for (i = 0; i < queryHiddens.size(); i++) {
-                    ElementBean ebt = (ElementBean) queryHiddens.get(i);
-                    FormElementValue fev = fi.getValue(ebt.getName());
-                    String[] values = fev.getValueArray();
-                    if (values != null && values.length > 0) {
-                        body += "<input type='hidden' name='" + ebt.getName() + "' value='" +
-                            values[0] +
-                            "'>";
-                    }
-                    else {
-                        body += "<input type='hidden' name='" + ebt.getName() + "' value=''>";
-                    }
-                }
-                body += "<input type='hidden' name='" + SessionAttributes.REQUEST_INSATNCE_ID_NAME +
-                    "' value='" + fi.getInstanceid() + "'>";
-
-                body += "<input type='hidden' name='" + SessionAttributes.REQUEST_EVENT_ID_NAME +
-                    "' value='" + EventType.FIND_EVENT_TYPE + "'>";
-
-                body += "</table>";
-                body += "</td>";
-                body += "<td class='query_td'>";
-                body += "<table class='page_form_button_table'>";
-                body += "<tr>";
-                body += "<td nowrap valign='top'>";
-                body += "<input type='submit' class='query_button' name='submit' value=' 检 索 '>";
-                body += "</td>";
-                body += "</tr>";
-                body += "<tr>";
-                body += "<td nowrap valign='top'>";
-                body += "<input type='reset' class='query_button' name='reset' value=' 重 置 '>";
-                body += "</td>";
-                body += "</tr>";
-
-                body += "</table>";
-            }
-            else {
-                queryFlds = fb.getSearchKeys();
-                if (queryFlds.size() > 0) {
-                    body += "<table class='query_form_table'>";
-                    int i = 0;
-                    for (; i < queryFlds.size(); i++) {
-                        ElementBean ebt = (ElementBean) queryFlds.get(i);
-//                        if (i % 2 == 0) {
-                            body += "<tr class='query_form_tr' nowrap>";
-                            rows++;
-//                        }
-                        try {
-                            FormElementValue fev = fi.getValue(ebt.getName());
-                            ebt = (ElementBean) ebt.clone();
-                            ebt.setIsnull(true);
-                            ebt.setVisible(true);
-                            if (ebt.getComponetTp() == ComponentType.HIDDEN_TYPE)
-                                ebt.setComponetTp(ComponentType.TEXT_TYPE);
-                            body += PageGenerator.getElemetScript(ctx, fi.getInstanceid(), ebt, fev, false, false);
-                            if ( ebt.getComponetTp() == ComponentType.TEXT_TYPE || ebt.getComponetTp() == ComponentType.DATE_TYPE ||
-                                 ebt.getComponetTp() == ComponentType.REFERENCE_TEXT_TYPE ) {
-                                ebt.setName(ebt.getName()+"large");
-                                ebt.setCaption(" 至 ");
-                                body += PageGenerator.getViewElemetScript(ctx, fi.getInstanceid(), ebt, fev, false, false);
-                            }
-                        }
-                        catch (Exception e) {
-                            e.printStackTrace();
-                        }
-//                        if (i % 2 == 1)
-                            body += "</tr>";
-                    }
-//                    if (i % 2 == 1) {
-//                        body += "<td>&nbsp;</td><td>&nbsp;</td></tr>";
-//                    }
-                    List queryHiddens = fb.getQueryHiddenFlds();
-                    for (i = 0; i < queryHiddens.size(); i++) {
-                        ElementBean ebt = (ElementBean) queryHiddens.get(i);
-                        if (ebt.isIsSearchKey())
-                            continue;
-                        FormElementValue fev = fi.getValue(ebt.getName());
-                        String[] values = fev.getValueArray();
-                        if (values != null && values.length > 0) {
-                            body += "<input type='hidden' name='" + ebt.getName() + "' value='" +
-                                values[0] +
-                                "'>";
-                        }
-                        else {
-                            body += "<input type='hidden' name='" + ebt.getName() + "' value=''>";
-                        }
-                    }
-                    body += "<input type='hidden' name='" +
-                        SessionAttributes.REQUEST_INSATNCE_ID_NAME +
-                        "' value='" + fi.getInstanceid() + "'>";
-
-                    body += "<input type='hidden' name='" + SessionAttributes.REQUEST_EVENT_ID_NAME +
-                        "' value='" + EventType.FIND_EVENT_TYPE + "'>";
-
-                    body += "</table>";
-                    body += "</td>";
-                    body += "<td class='query_td'>";
-                    body += "<table class='page_form_button_table'>";
-                    body += "<tr>";
-                    body += "<td nowrap valign='top'>";
-                    body +=
-                        "<input type='submit' class='query_button' name='submit' value=' 检 索 '>";
-                    body += "</td>";
-                    body += "</tr>";
-                    body += "<tr>";
-                    body += "<td nowrap valign='top'>";
-                    body += "<input type='reset' class='query_button' name='reset' value=' 重 置 '>";
-                    body += "</td>";
-                    body += "</tr>";
-
-                    body += "</table>";
-                }
-            }
-
-            body += "</td>";
-            body += "</tr>";
-            body += "</table>";
-            body += "</div>";
-            body += "</form>";
-        } catch ( Exception e ) {
-            e.printStackTrace();
-        }
-
-        return body;
-    }*/
     private static String getQueryForm(SessionContext ctx,FormBean fb,FormInstance fi) {
         String body = "";
         String queryStr = "";

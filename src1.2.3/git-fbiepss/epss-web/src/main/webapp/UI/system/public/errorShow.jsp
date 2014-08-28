@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>错误信息提示</title>
-    <link href="<%=contextPath%>/css/ccb.css" type="text/css" rel="stylesheet">
+    <link href="<%=contextPath%>/css/epss.css" type="text/css" rel="stylesheet">
         <script language="javascript" src="<%=contextPath%>/js/basic.js"></script>
         <script language="javascript" src="<%=contextPath%>/js/xmlHttp.js"></script>
         <script language="javascript" src="<%=contextPath%>/js/dropdownData.js"></script>

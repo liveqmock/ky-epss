@@ -4,7 +4,6 @@
  *  File:DatabaseConnection.java Date Author Changes March 5 2003 wangdeliang
  *  Created
  */
-
 package skyline.platform.db;
 
 import java.sql.Connection;
@@ -14,14 +13,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Hashtable;
-
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import skyline.platform.deb.BussDebug;
 import skyline.platform.deb.DebugInfo;
 import skyline.platform.utils.*;
@@ -30,17 +26,11 @@ import skyline.platform.utils.*;
  * 负责访问数据库
  * 
  */
-
 public class DatabaseConnection {
   private static final Log logger = LogFactory.getLog(DatabaseConnection.class);
 
   // 获得出错时的例外
   protected Exception errorException;
-
-  /**
-   * 数据源默认的名字
-   */
-  public final static String DEFAULT_ENV_CONTEXT_URL = "java:comp/env";
 
   /**
    * Description of the Field
@@ -63,26 +53,22 @@ public class DatabaseConnection {
   /**
    * 申请连接，失败则抛出例外NoAvailableResourceException
    * 
-   * @exception NoAvailableResourceException
-   *              Description of the Exception
+   * @exception
+   *
    * @roseuid 3E5B223E0372
    */
-  public DatabaseConnection() throws NoAvailableResourceException {
-    try {
-      Hashtable prop = new Hashtable();
-      // prop.put(Context.PROVIDER_URL,"t3://172.1.1.16:7001");
-      Context initCtx = new InitialContext(prop);
-      // Context envCtx = (Context) initCtx.lookup(DEFAULT_ENV_CONTEXT_URL);
-      DataSource ds = (DataSource) initCtx.lookup(DEFAULT_DATASOURCE_URL);
-
-      connect = ds.getConnection();
-      // 记录申请连接
-      this.register();
-
-    } catch (Exception e) {
-      errorException = e;
-      throw new NoAvailableResourceException(e.getMessage());
-    }
+  public DatabaseConnection() throws Exception {
+      try {
+          Hashtable prop = new Hashtable();
+          Context initCtx = new InitialContext(prop);
+          DataSource ds = (DataSource) initCtx.lookup(DEFAULT_DATASOURCE_URL);
+          connect = ds.getConnection();
+          // 记录申请连接
+          this.register();
+      } catch (Exception e) {
+          errorException = e;
+          throw e;
+      }
   }
 
   /**
@@ -96,29 +82,25 @@ public class DatabaseConnection {
    *          Description of the Parameter
    * @param passwd
    *          Description of the Parameter
-   * @exception NoAvailableResourceException
-   *              Description of the Exception
+   * @exception
+   *
    */
-
   public DatabaseConnection(String sDBDriver, String sConnStr, String user, String passwd)
-      throws NoAvailableResourceException {
-    try {
-      Class.forName(sDBDriver).newInstance();
-
-    } catch (Exception ex) {
-      errorException = ex;
-      ex.printStackTrace();
-    }
-
-    try {
-      connect = DriverManager.getConnection(sConnStr, user, passwd);
-      // 记录申请连接
-      this.register();
-
-    } catch (SQLException ex) {
-      errorException = ex;
-      ex.printStackTrace();
-    }
+      throws Exception {
+      try {
+          Class.forName(sDBDriver).newInstance();
+      } catch (Exception ex) {
+          errorException = ex;
+          ex.printStackTrace();
+      }
+      try {
+          connect = DriverManager.getConnection(sConnStr, user, passwd);
+          // 记录申请连接
+          this.register();
+      } catch (SQLException ex) {
+          errorException = ex;
+          ex.printStackTrace();
+      }
   }
 
   /**
@@ -395,9 +377,7 @@ public class DatabaseConnection {
     }
     try {
       ResultSet rs = pst.executeQuery();
-      ConnectionHealth.end(this);
       RecordSet records = new RecordSet(rs);
-
       pst.close();
       return records;
     } catch (SQLException sqle) {

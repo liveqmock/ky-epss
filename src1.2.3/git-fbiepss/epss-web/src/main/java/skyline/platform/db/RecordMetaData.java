@@ -29,7 +29,7 @@ public class RecordMetaData {
      *
      * @param name 字段的名字
      * @param typeName 字段类型的名字
-     * @param type 字段的类型
+     * @param seqno 字段的类型
      * @param caption 字段标题/注释
      * @roseuid 3E5D81390135
      */

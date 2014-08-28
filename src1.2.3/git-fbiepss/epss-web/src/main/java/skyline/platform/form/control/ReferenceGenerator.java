@@ -1,5 +1,3 @@
-//Source file: D:\\zt\\platform\\form\\control\\ReferenceGenerator.java
-
 package skyline.platform.form.control;
 
 import java.util.StringTokenizer;
@@ -18,10 +16,8 @@ import skyline.platform.form.util.event.*;
  * @version 1.0
  */
 public class ReferenceGenerator {
-
     public static final String TARGET_TEMPLATE = "/templates/ref.jsp";
     public static final String TARGET_JAVASCRIPT = "/js/ref.js";
-
     /**
      * 1、取得参考性查询结果ctx.getRequestAttribute(SessionAttribute.REQUEST_REFERENCE_
      * RESULT_NAME)
@@ -39,8 +35,7 @@ public class ReferenceGenerator {
      * @return String
      * @roseuid 3F7F3D4C03E7
      */
-    public static String[] run(SessionContext ctx, Event event, ErrorMessages msgs, int result)
-    {
+    public static String[] run(SessionContext ctx, Event event, ErrorMessages msgs, int result){
         RecordSet rs = (RecordSet)ctx.getRequestAttribute(SessionAttributes.REQUEST_REF_RESULT_NAME);
         String pageno = (String)ctx.getRequestAttribute(SessionAttributes.REQUEST_LIST_PAGENO_NAME);
         String pagecount = (String)ctx.getRequestAttribute(SessionAttributes.REQUEST_LIST_PAGECOUNT_NAME);
@@ -102,11 +97,8 @@ public class ReferenceGenerator {
                     refnames = new String[1];
                     refnames[0] = refname;
                 }
-
-
                 String refvalue = field.getRefvaluefld();
                 //2.获得参考字段
-
                 TableBean tb1 = TableBeanManager.getTable(reftbl);
                 if (tb1 == null) {
                     rtnMsg[0] = "参考表定义错误[" + reftbl + "]";
@@ -137,13 +129,10 @@ public class ReferenceGenerator {
                             if (e.getComponetTp() == ComponentType.HIDDEN_TYPE) {
                                 e.setComponetTp(ComponentType.TEXT_TYPE);
                             }
-
                             e.setDefaultValue("");
                             e.setIsnull(true);
                             e.setVisible(true);
-
                             e.setReadonly(false);
-
                             AbstractFormComponent afc = AbstractFormComponent.getInstance(e);
                             if (value != null) {
                                 for (int j = 0; j < value.length; j++) {
@@ -177,7 +166,6 @@ public class ReferenceGenerator {
                         catch (Exception e) {
                             e.printStackTrace();
                         }
-
                     }
                 }
 
@@ -212,7 +200,6 @@ public class ReferenceGenerator {
                     }
                 }
                 catch (Exception e) {
-
                 }
                 body += "</table>";
 
@@ -251,7 +238,6 @@ public class ReferenceGenerator {
             rtnMsg[0] = body;
             rtnMsg[1] = sysButton;
         }
-
         return rtnMsg;
     }
 
@@ -338,7 +324,6 @@ public class ReferenceGenerator {
             body += "</table>";
             body += "</div>";
         }
-
         return body;
     }
 }

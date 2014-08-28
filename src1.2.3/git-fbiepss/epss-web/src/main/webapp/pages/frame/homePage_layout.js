@@ -66,6 +66,6 @@ var tabbarary = new Array('todotask', 'donetask', 'biz', 'help');
 
 function changepwd() {
     var sfeature = "dialogwidth:400px; dialogheight:200px;center:yes;help:no;resizable:no;scroll:no;status:no";
-    window.showModalDialog(contextPath + "/UI/system/deptUser/passwordEdit.jsp", "test", sfeature);
+    window.showModalDialog(contextPath + "/UI/epss/deptOper/passwordEdit.jsp", "test", sfeature);
 }
 
