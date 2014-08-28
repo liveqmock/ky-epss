@@ -38,20 +38,14 @@ public class DBXML {
         String outstr = "";
         Document doc;
         Element rootNode, child;
-
         ConnectionManager cm = ConnectionManager.getInstance();
-
         try {
             cm.get();
-
             Reader reader = new StringReader(xmlStr);
             SAXBuilder ss = new SAXBuilder();
             doc = ss.build(reader);
-
             rootNode = doc.getRootElement();
-
             List list = rootNode.getChildren();
-
             Element childRoot = (Element) list.get(0);
 
             DBGrid dbGrid = new DBGrid();
@@ -72,67 +66,24 @@ public class DBXML {
             dbGrid.setRecordCount(Integer.parseInt(childRoot.getAttributeValue("RecordCount")));
             dbGrid.setCheck(childRoot.getAttributeValue("checkbl").toLowerCase().trim().equals("true"));
             dbGrid.setAlign(childRoot.getAttributeValue("tralign"));
-
-/*
-      if (childRoot.getAttributeValue("bottomVisible").toLowerCase().equals("true"))
-        dbGrid.setGridBottomVisible(true);
-      else
-        dbGrid.setGridBottomVisible(false);
-*/
-        //zr
       if (childRoot.getAttributeValue("bottomVisible").toLowerCase().equals("true")){
             dbGrid.setGridBottomVisible(true);
-//            dbGrid.setSumfield(childRoot.getAttributeValue("sumfield"));
       }else
-        dbGrid.setGridBottomVisible(false);
-
+            dbGrid.setGridBottomVisible(false);
             dbGrid.setWhereStr(Basic.decode(childRoot.getAttributeValue("whereStr")));
-
             outstr = dbGrid.getEditDataTable();
-            // System.out.println(outstr);
-
-        } catch (JDOMException ex) {
+      } catch (JDOMException ex) {
             System.out.print(ex.getMessage());
-
         } finally {
             cm.release();
         }
         return outstr;
     }
 
-    public String getUserSerial(String operID) {
-
-        ConnectionManager cm = ConnectionManager.getInstance();
-
-        String userSerial = Util.getUserSerial(cm.getConnection(), operID);
-
-        StringBuffer StrBuf = new StringBuffer();
-
-        StrBuf.append("<root>");
-        StrBuf.append("<action type=\"1\" result=\"true\">");
-
-        StrBuf.append("<record> ");
-
-        StrBuf.append("<field ");
-        StrBuf.append(" name =\"userserial\"");
-        StrBuf.append(" type =\"text\"");
-        StrBuf.append("  value =\"" + userSerial + "\"");
-        StrBuf.append(" />");
-        StrBuf.append("</record>");
-        StrBuf.append("</action>");
-
-        StrBuf.append("</root>");
-
-        cm.release();
-        return StrBuf.toString();
-
-    }
-
     public String getDropDownXML(String xmlStr) {
         String outstr = "";
         Document doc;
         Element rootNode, child;
-        // System.out.println(xmlStr);
 
         try {
             Reader reader = new StringReader(xmlStr);
@@ -144,7 +95,6 @@ public class DBXML {
             if (rootNode.getAttributeValue("type").equals("lp")) {
                 return getloadspell(rootNode.getText());
             }
-
             if (rootNode.getAttributeValue("type").equals("lm")) {
                 return getLoadName(rootNode.getText());
             }

@@ -18,9 +18,7 @@
  ******************************************************************************/
 
 function CreateText(el) {
-
     var pos = getAbsPosition(el);
-
     if (typeof (_TableInput_Text) == "undefined") {
         parentHTML = "<INPUT type=\"text\" id=\"_TableInput_Text\" ";
 
@@ -36,35 +34,24 @@ function CreateText(el) {
             + ";width:"
             + (el.offsetWidth - 1)
             + ";FONT-SIZE:12;BORDER-RIGHT: medium none; BORDER-TOP: medium none;BORDER-LEFT: medium none;BORDER-BOTTOM: medium none\" onKeyPress=\"onKeyPressInput(this)\"  onblur=\"TextInit()\">";
-
         obj = document.createElement(parentHTML);
-
         document.body.appendChild(obj);
-
     } else {
         var _TD = _TableInput_Text.getAttribute("_TD");
-
         _TD.innerText = _TableInput_Text.value;
-
         if (el.textLength != undefined) {
             _TableInput_Text.maxLength = el.textLength;
         }
-
         _TableInput_Text.style.left = pos[0] - 1;
         _TableInput_Text.style.top = pos[1];
         _TableInput_Text.style.height = el.offsetHeight - 2;
         _TableInput_Text.style.width = el.offsetWidth - 1;
         _TableInput_Text.style.visibility = "";
     }
-
     _TableInput_Text.setAttribute("_TD", el);
-
     _TableInput_Text.value = el.innerText;
-
     _TableInput_Text.select();
-
     return _TableInput_Text;
-
 }
 var tabElement;
 var trElement;
@@ -73,9 +60,7 @@ function onKeyPressInput(el) {
     el.getAttribute("_TD").innerText = el.value;
     if (el.attr != undefined)
         el.getAttribute("_TD").attr = el.attr;
-
     enterMove(el.getAttribute("_TD"));
-
 }
 function enterMove(tdElement) {
     tabElement = getOwnerTable(tdElement);
@@ -578,13 +563,9 @@ function isAutoBuildRow(oTR) {
 }
 
 function changeGridRowOddEvenColor(oTable) {
-
     if (typeof (oTable) == "object") {
         if (oTable.rows.length == 0)
             return;
-
-        // oTable.rows[0].className = "gridHead";
-
         for (var i = 0; i < oTable.rows.length; i++) {
             var oRow = oTable.rows[i];
 
@@ -597,7 +578,6 @@ function changeGridRowOddEvenColor(oTable) {
                     oRow.className = "gridEvenRow";
                     oRow.oldClassName = "gridEvenRow";
                 }
-
                 oRow.oldClassName = oRow.className;
             }
 
@@ -605,42 +585,21 @@ function changeGridRowOddEvenColor(oTable) {
     }
 }
 
-// ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-function button_onmousedown() {
-    var button = event.srcElement;
-    var menu = button.getAttribute("menu");
-    if (menu) {
-        if (isPopupMenuVisible())
-            hide_popupMenu();
-
-        show_popupMenu(menu, button);
-    }
-}
-
 function TRMove(el) {
-
     var oTable = getOwnerTable(el);
-
     if (oTable.gridType.toLowerCase() == "color") {
         for (var i = 0; i < oTable.rows.length; i++) {
-
             oTable.rows[i].className = "";
             oTable.rows[i].bgColor = oTable.rows[i].oldclass;
         }
         oTable.activeIndex = el.rowIndex;
-
         oTable.rows[oTable.activeIndex].bgColor = "#cccccc";
     } else {
         if (oTable.activeIndex / 1 > -1)
             oTable.rows[oTable.activeIndex].className = "gridEvenRow";
-
         oTable.activeIndex = el.rowIndex;
-
         el.className = "gridSelectedHighlight";
-
     }
-
 }
 
 var retbodyReload;
@@ -656,31 +615,14 @@ document.DELMETHOD_NAME = "";
 
 // ///////同步刷新数据
 function Table_Refresh(id, ishint, bodyReload, empty_title, login) {
-
-    // ///////////////////////判断是否超时
-
-    // if(login){//alert("1")
-    // }
-    // else{
-    // alert("2");
-    // if (!checkLogin())
-    // return false;
-    // }
-
-    // retbodyReload = undefined;
     empty_ishint = true;
-
     if (arguments.length >= 2)
         empty_ishint = ishint;
-
     if (arguments.length >= 3)
         retbodyReload = bodyReload;
-
     if (arguments.length == 4)
         query_empty_title = empty_title;
-
     var xmlDoc = createDomDocument("<root/>");
-
     var tab = document.all[id];
 
     document.ACTION_NAME = tab.getAttribute("actionname");
@@ -699,37 +641,26 @@ function Table_Refresh(id, ishint, bodyReload, empty_title, login) {
     appendAttri(xmlDoc, childNode, "gridType", tab.getAttribute("gridType"));
     appendAttri(xmlDoc, childNode, "SQLStr", tab.getAttribute("SQLStr"));
     appendAttri(xmlDoc, childNode, "fieldtype", tab.getAttribute("fieldtype"));
-
     appendAttri(xmlDoc, childNode, "fieldCN", tab.getAttribute("fieldCN"));
     appendAttri(xmlDoc, childNode, "enumType", tab.getAttribute("enumType"));
     appendAttri(xmlDoc, childNode, "visible", tab.getAttribute("visible"));
     appendAttri(xmlDoc, childNode, "fieldname", tab.getAttribute("fieldname"));
-
     appendAttri(xmlDoc, childNode, "pageSize", tab.getAttribute("pageSize"));
     appendAttri(xmlDoc, childNode, "AbsolutePage", tab.getAttribute("AbsolutePage"));
     appendAttri(xmlDoc, childNode, "countSQL", tab.getAttribute("countSQL"));
-
     appendAttri(xmlDoc, childNode, "RecordCount", tab.getAttribute("RecordCount"));
     appendAttri(xmlDoc, childNode, "tralign", tab.getAttribute("tralign"));
-
     appendAttri(xmlDoc, childNode, "checkbl", tab.getAttribute("checkbl"));
-
     appendAttri(xmlDoc, childNode, "whereStr", encode(decode(tab.getAttribute("whereStr"))));
     appendAttri(xmlDoc, childNode, "fieldwidth", tab.getAttribute("fieldwidth"));
     appendAttri(xmlDoc, childNode, "fieldCheck", tab.getAttribute("fieldCheck"));
     appendAttri(xmlDoc, childNode, "bottomVisible", tab.getAttribute("bottomVisible"));
     appendAttri(xmlDoc, childNode, "isTotal", tab.getAttribute("isTotal"));
-
-    // zr
     appendAttri(xmlDoc, childNode, "sumfield", tab.getAttribute("sumfield"));
 
     rootNode.appendChild(childNode);
 
     show_status_label(window, "正在查询数据...", true);
-
-    //alert(xmlDoc.xml);
-    // return;
-
     var tmpHTML = ExecServerPrgm_synsh(g_jsContextPath + "/BI/util/DataTableJsp.jsp", "POST", "tabStr=" + encode(xmlDoc.xml), "", "", id,
         Table_Refresh_Date);
 

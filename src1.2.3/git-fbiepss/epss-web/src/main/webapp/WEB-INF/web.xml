@@ -37,8 +37,6 @@
         <filter-name>LoginCheckFilter</filter-name>
         <url-pattern>*.xhtml</url-pattern>
     </filter-mapping>
-
-
     <!--primefaces-->
     <context-param>
         <param-name>com.sun.faces.allowTextChildren</param-name>
@@ -46,17 +44,8 @@
     </context-param>
     <context-param>
         <param-name>primefaces.THEME</param-name>
-        <!--<param-value>aristo</param-value>-->
         <param-value>hot-sneaks</param-value>
     </context-param>
-
-    <!--EL-->
-    <!--
-        <context-param>
-            <param-name>com.sun.faces.expressionFactory</param-name>
-            <param-value>com.sun.el.ExpressionFactoryImpl</param-value>
-        </context-param>
-    -->
 
     <!--JSF2 配置-->
     <context-param>
@@ -67,7 +56,6 @@
     <context-param>
         <param-name>javax.faces.PROJECT_STAGE</param-name>
         <param-value>Development</param-value>
-        <!--<param-value>Production</param-value>-->
     </context-param>
     <context-param>
         <param-name>javax.faces.CONFIG_FILES</param-name>
@@ -94,24 +82,11 @@
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
-<!--
-    <listener>
-        <listener-class>
-            org.springframework.web.context.request.RequestContextListener
-        </listener-class>
-    </listener>
--->
-
 
     <servlet>
         <servlet-name>ImgServlet</servlet-name>
         <servlet-class>skyline.platform.security.ImgServlet</servlet-class>
     </servlet>
-
-    <!--<servlet>-->
-    <!--<servlet-name>login</servlet-name>-->
-    <!--<jsp-file>/index.jsp</jsp-file>-->
-    <!--</servlet>-->
 
     <servlet>
         <servlet-name>AdminServlet</servlet-name>
@@ -121,7 +96,6 @@
     <!--JSF2 mapping-->
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <!--<url-pattern>/faces/*</url-pattern>-->
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
 
@@ -133,7 +107,6 @@
     <!-- Action Servlet Mapping -->
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
-        <!--<url-pattern>index.html</url-pattern>-->
         <url-pattern>*.login</url-pattern>
     </servlet-mapping>
 

@@ -44,48 +44,7 @@ public class Util
 
         return getFieldMax(dc,Keyfield,tableName,"");
     }
-    
-    public static String getUserSerial(String operID){
-    	
-    	ConnectionManager cm  = ConnectionManager.getInstance();
-        DatabaseConnection dc = cm.get();
-    	String serial ="1";
-         try{
-              String SQLStr = "select FILLINT6 as serial from PTOPER  where OPERID='"+operID+"'";
 
-              RecordSet rs = dc.executeQuery(SQLStr);
-              if(rs.next())
-              	serial = rs.getString(0);
-
-              if(serial == null)
-              	serial = "null";
-         }catch(Exception e){
-             // e.printStackTrace();
-         }
-        // cm.release();
-    	return serial;
-    }
-    
-    
-    public static String getUserSerial(DatabaseConnection dc,String operID){
-    	
-    	 String serial ="1";
-         try{
-              String SQLStr = "select FILLINT6 as serial from PTOPER  where OPERID='"+operID+"'";
-
-              RecordSet rs = dc.executeQuery(SQLStr);
-              if(rs.next())
-              	serial = rs.getString(0);
-
-              if(serial == null)
-              	serial = "null";
-         }catch(Exception e){
-             // e.printStackTrace();
-         }
-
-    	return serial;
-    }
-    
     public static String getUserName(String operID){
     	 ConnectionManager cm  = ConnectionManager.getInstance();
          DatabaseConnection dc = cm.get();

@@ -171,47 +171,6 @@ function onKeyPressInputInteger(){
 		window.event.keyCode = 0;
 	}
 }
-
-//如果某个输入域为实数，那么过滤掉所有非数字字符（包含小数点）
-function onKeyPressInputFloat(){
-	var nKey = window.event.keyCode;
-	if (nKey > 57 || (nKey != 46 && nKey != 45 && nKey < 48))
-		window.event.keyCode = 0;
-}
-///输入正确的日期
-function onKeyPressCalendar(){
-	var nKey = window.event.keyCode;
-	if (nKey > 57 || (nKey != 45 && nKey < 48))
-		window.event.keyCode = 0;
-	CalendarMaker(event.srcElement);
-}
-
-///过滤所有的非电话输入项
-function onKeyPressPhone(){
-	var nKey = window.event.keyCode;
-}
-
-//比较两个时间短
-function comparDate(Date1,Date2){
-	var DateArr1= Date1.split("-");
-	var DateArr2= Date2.split("-");
-	if (DateArr1[0]/1 > DateArr2[0]/1)
-		return true;
-	else if (DateArr1[0]/1  < DateArr2[0]/1)
-		return false;
-	else {
-		if (DateArr1[1]/1 > DateArr2[1]/1)
-			return true;
-		else if (DateArr1[1]/1 < DateArr2[1]/1)
-			return false;
-		else {
-			if (DateArr1[2]/1 <= DateArr2[2]/1)
-				return false;
-			else
-				return true;
-		}
-	}
-}
 //控件按钮鼠标移进
 function button_onmouseover(){
 	try{
@@ -360,7 +319,7 @@ function checkTDfloatLength(element,IntLength,floatLength){
 }
 
 //检查email输入信息
-function  checkTDemail(element){
+function checkTDemail(element){
 	var nPointIndex = -1;
 	var value = RTrim(element.innerText);
 	if(value=="")
@@ -585,60 +544,6 @@ function getAbsPosition(obj, offsetObj){
 	}
 	return ([x, y]);
 }
-
-//////////初始化界面信息/////////////////////////////////////
-function body_init(formelement,querybutton){
-	for (var i=0; i< formelement.length; i++)	{
-		var element= formelement.item(i);
-	   if ( element.type != "button" && element.type !="submit" && element.type !="reset" ) {
-		    if(element.tabIndex != undefined){
-				if (arguments.length== 2){
-					element.buttonid=querybutton;
-				}
-			    element.onkeydown=enterToTab;
-		    }
-	    } else {
-		   element.onkeydown = enterToClick;
-	    }
-	}
-     onbodyprivateenvent();     
-}
-
-function text_onmouseover(){
-    try{
-    }catch(e)
-    {}
-}
-
-function text_onfocus(){
-    try{
-vent.srcElement.className ="active_editor";}
-catch(e){}}
-
-function enterToClick(){
-	var nKey = window.event.keyCode;
-	if (nKey == 13) {
-	    try {
-		  if ( window.event.srcElement.onenterdown == "true" ) {
-			 eval(window.event.srcElement.onclick());
-		  }
-	   } catch ( Exception ) {
-	   }
-	}
-}
-//////////////从enter转向tab////////////
-function enterToTab(){
-	var nKey = window.event.keyCode;
-	var element = window.event.srcElement;
-	if (nKey == 13){
-		body_Click();
-		 if(element.buttonid == undefined)
-			 window.event.keyCode = 9;
-		 else {
-			 document.all(element.buttonid).focus();
-		}
-	}
-}
 function get_status_label(text){
 	if (!text) text="正在下载数据...";
 	if (typeof(_status_label)=="undefined"){
@@ -686,7 +591,6 @@ function locate_status_label(x, y){
 	_status_label.style.posLeft=posX;
 	_status_label.style.posTop=posY;
 }
-///////////////////////////打印gride列表
 function print_DBGrid(id){
 	var tab = document.all(id);
 	if (tab.RecordCount/1==0)	{
@@ -710,123 +614,6 @@ function print_DBGrid(id){
 	arg.printtitle  = tab.printtitle;
     var  dd = window.showModalDialog(arguments, arg, dialogArg);
 }
-
-///////////////////////////打印gride列表(包括打印隐藏域)
-function allprint_DBGrid(id){
-	var tab = document.all(id);
-	if (tab.RecordCount/1==0)	{
-		alert("请先查询!");
-		return;
-	}
-	 var arguments = g_jsContextPath+"/UI/system/public/print/allmakeprt.jsp";
-    var dialogArg = "dialogwidth:550px; Dialogheight:450px;center:yes;help:no;resizable:no;scroll:no;status:no";
-	var arg = new Object();
-	arg.fieldcn = encode(tab.fieldCN);
-	arg.visible = encode(tab.visible);
-	arg.filedwidth = encode(tab.fieldwidth);
-	arg.align = encode(tab.tralign);
-	arg.sqlstr = encode(tab.printSQL);
-	arg.wherestr = tab.whereStr;
-	arg.ischeck  = tab.checkbl;
-	arg.printtitle  = tab.printtitle;
-    var  dd    = window.showModalDialog(arguments, arg, dialogArg);
-}
-function  refresh_select(selectId,refSql,defaultValue,defaultTitle){
-     if (document.all[selectId] == undefined)
-     	return;
-     var xmlDoc = createDomDocument("<root/>");
-     var rootNode = xmlDoc.documentElement;
-     var actionNode = appendNode(xmlDoc, xmlDoc.documentElement, "action");
-     appendAttri(xmlDoc, actionNode, "actionname","sm0083");
-     var recNode = appendNode(xmlDoc, xmlDoc.documentElement, "recorder");
-     appendAttri(xmlDoc, recNode, "type", "select");
-	 var fieldNode = createFieldNode(xmlDoc,"selectsql","text",encode(refSql));
-     recNode.appendChild(fieldNode);
-     actionNode.appendChild(recNode);
-     rootNode.appendChild(actionNode);
-     var retStr = ExecServerPrgm(g_jsContextPath+"/BI/util/SqlSelectJsp.jsp","POST","sys_request_xml="+xmlDoc.xml);
-     var xmlDoc = createDomDocument();
-     xmlDoc.loadXML(analyzeReturnXML(retStr));
-     var rootNode = xmlDoc.documentElement;
-     var obj = document.all[selectId];
-     for ( i= obj.options.length -1;i >-1; i--){
-          obj.options.remove(i);
-     }
-     if (rootNode.getAttribute("result") =="true"){
-		  if (rootNode.childNodes.length >0 && arguments.length == 4 && defaultTitle!=undefined){
-                 var opt = document.createElement("OPTION");
-		  		 opt.setAttribute("first","defaultTitle");
-                 obj.add(opt);
-		  }
-          for (var i=0; i< rootNode.childNodes.length; i++){
-             var opt = document.createElement("OPTION");
-              for (var j=0; j< rootNode.childNodes[i].childNodes.length; j++){
-                    var node =rootNode.childNodes[i].childNodes[j];
-                     opt.setAttribute(node.getAttribute("name"),decode(node.getAttribute("value")));
-               }
-                obj.add(opt);
-          }
-     }
-     if (arguments.length > 2){
-     	for (i=0;i<obj.options.length ; i++){
-     		if (arguments.length ==4 && defaultValue==""){
-     			if (obj.item(i).value=="first")
-             		obj.selectedIndex =i;
-     		}else{
-     			if (obj.item(i).value==defaultValue)
-             		obj.selectedIndex =i;
-     		}
-     	}
-     }
-}
-function  aicRefresh_select(selectId,refSql,defaultValue,defaultTitle){
-     if (document.all[selectId] == undefined)
-     	return;
-     var xmlDoc = createDomDocument("<root/>");
-     var rootNode = xmlDoc.documentElement;
-     var actionNode = appendNode(xmlDoc, xmlDoc.documentElement, "action");
-     appendAttri(xmlDoc, actionNode, "actionname","sm0083");
-     var recNode = appendNode(xmlDoc, xmlDoc.documentElement, "recorder");
-     appendAttri(xmlDoc, recNode, "type", "select");
-	 var fieldNode = createFieldNode(xmlDoc,"selectsql","text",encode(refSql));
-     recNode.appendChild(fieldNode);
-     actionNode.appendChild(recNode);
-     rootNode.appendChild(actionNode);
-     var retStr = ExecServerPrgm(g_jsContextPath+"/BI/util/AicSqlSelectJsp.jsp","POST","sys_request_xml="+xmlDoc.xml);
-     var xmlDoc = createDomDocument();
-     xmlDoc.loadXML(analyzeReturnXML(retStr));
-     var rootNode = xmlDoc.documentElement;
-     var obj = document.all[selectId];
-     for ( i= obj.options.length -1;i >-1; i--){
-          obj.options.remove(i);
-     }
-     if (rootNode.getAttribute("result") =="true"){
-		  if (rootNode.childNodes.length >0 && arguments.length == 4 && defaultTitle!=undefined){
-                 var opt = document.createElement("OPTION");
-		  		 opt.setAttribute("first","defaultTitle");
-                 obj.add(opt);
-		  }
-          for (var i=0; i< rootNode.childNodes.length; i++){
-             var opt = document.createElement("OPTION");
-              for (var j=0; j< rootNode.childNodes[i].childNodes.length; j++){
-                    var node =rootNode.childNodes[i].childNodes[j];
-                     opt.setAttribute(node.getAttribute("name"),decode(node.getAttribute("value")));
-               }
-                obj.add(opt);
-          }
-     }
-     if (arguments.length > 2){
-     	for (i=0;i<obj.options.length ; i++){
-     		if (arguments.length ==4 && defaultValue==""){
-     			if (obj.item(i).value=="first")
-             		obj.selectedIndex =i;
-     		}else{
-     			if (obj.item(i).value==defaultValue)
-             		obj.selectedIndex =i;
-     		}
-     	}
-     }
-}
 function  getUserSerial (operID){
      var xmlDoc = createDomDocument("<root/>");
      var rootNode = xmlDoc.documentElement;
@@ -843,7 +630,6 @@ function  getUserSerial (operID){
     var userSerial =analyzeReturnXML(retStr);
     return userSerial;
 }
-/////////////////////////触发事件
 function fireUserEvent(function_name, param){
 	var result;
     var paramstr="";
@@ -1073,9 +859,9 @@ function Validate(nType,strField){
                                           }
                                    }
                                    else{//平年2月
-                                          if ((parseInt(strDate) > 28)) {
-                                                 return "";
-                                          }
+                                      if ((parseInt(strDate) > 28)) {
+                                             return "";
+                                      }
                                    }
                                 }
                                 break;
@@ -1085,16 +871,9 @@ function Validate(nType,strField){
                      break;
        }//switch1
 }
-function oncontmenu(){
-	event.returnValue=false;
-}
 function onbodyprivateenvent(){
  	if (document.body != null&& typeof(document.body.onload)=="function"){
 	}
-}
-function body_onkeypress(){
-	if (event.ctrlKey )
-     	event.keyCode="0";
 }
 function checkLogin(){
 	return;
@@ -1113,72 +892,10 @@ function checkLogin(){
    }
 	return true;
 }
-function killSession(){
-   if (parent.window.reload =="true")
-      return;
-	var auth = new ActiveXObject("Msxml2.XMLHTTP") ;
-	auth.open("POST","/pages/security/killlineuser.jsp",false) ;
-	var xmlstr="<root><action></action></root>";		
-	auth.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	auth.send(xmlstr);
-}
-function DelImgSign(){
-	var auth = new ActiveXObject("Msxml2.XMLHTTP") ;
-	auth.open("POST","/pages/security/killImgSign.jsp",false) ;
-	var xmlstr="<root><action></action></root>";		
-	auth.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	auth.send(xmlstr);
-}
-function CalendarMaker(el){
-	if (el.value.length>1){
-		if(el.value.substr(0,2)/1 < 19 || el.value.substr(0,2)/1 > 30)
-			window.event.keyCode = 0;
-	}
-	if (el.value.length ==4){
-		el.value = el.value+"-";	
-	}
-	if (el.value.length ==6){
-		if(el.value.substr(5,1)/1 >1)
-			window.event.keyCode = 0;
-	}
-	if (el.value.length ==7){
-		if(el.value.substr(5,2)/1 >12)
-			window.event.keyCode = 0;
-		else
-			el.value = el.value+"-";
-	}
-	if (el.value.length ==9){
-		if(el.value.substr(8,1)/1 >3)
-			window.event.keyCode = 0;
-	}
-	if (el.value.length ==9){
-		if(el.value.substr(8,1)/1 ==3)
-			if (window.event.keyCode !=48 && window.event.keyCode !=49)
-				window.event.keyCode =0;
-	}
-	if (el.value.length>9){
-		window.event.keyCode = 0;
-	}
-}
-
-function CalendarAnytoMaker(el){
-}
-/////////////替换";"
 function valuereplase(strValue,oldrp,newrp){
 	try {
 		strValue = strValue +"";
 		var rpvalue = strValue.replace(/;/g,newrp);
-		return rpvalue;
-	} catch ( Exception ) {
-			return strValue;
-	}
-}
-/////////////替换","
-function valueComma(strValue){
-	try {
-		strValue = strValue +"";
-		var rpvalue = strValue.replace(/,/g,"，");
-		rpvalue = valuereplase(rpvalue,"","；")
 		return rpvalue;
 	} catch ( Exception ) {
 			return strValue;

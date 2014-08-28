@@ -53,39 +53,17 @@ select {
 	border-left: #999999 1px solid;
 	border-bottom: #c4c4c4 1px solid;
 	background-color: white;
-	/**	height:23px; */
 }
 
 /** input的风格控制，消除系统默认的边框，从而保持统一的Delphi风格。 */
 input {
 	font-family: verdana;
 	font-size: 9pt;
-	/*border: #9AB8DA 1px solid;	*/
 }
 
 textArea {
 	font-family: verdana;
 	font-size: 9pt;
-	/*border: #9AB8DA 1px solid;	*/
-}
-
-/* 激活的编辑框 */
-.active_editor {
-	FONT-FAMILY: Verdana;
-	FONT-SIZE: 9pt;
-	BORDER-RIGHT: #3672B6 1px solid;
-	BORDER-TOP: #3672B6 1px solid;
-	BORDER-LEFT: #3672B6 1px solid;
-	BORDER-BOTTOM: #3672B6 1px solid;
-	SCROLLBAR-ARROW-COLOR: dimgray;
-	SCROLLBAR-FACE-COLOR: #D4E2F6;
-	SCROLLBAR-HIGHLIGHT-COLOR: #3672B6;
-	SCROLLBAR-SHADOW-COLOR: #3672B6;
-	SCROLLBAR-3DLIGHT-COLOR: #e9e9e9;
-	SCROLLBAR-DARKSHADOW-COLOR: #e9e9e9;
-	BACKGROUND-COLOR: #d1dffe;
-	/***  added by jdh at 20040210 ***/
-	scrollbar-track-color: #eff4fb;
 }
 
 /* 激活的编辑框 */
@@ -100,12 +78,7 @@ textArea {
 	scrollbar-face-color: #F6F9FE;
 	scrollbar-highlight-color: white;
 	scrollbar-shadow-color: #C3D3EA;
-	/***  added by jdh at 20040210 ***/
 	scrollbar-track-color: #eff4fb;
-}
-
-.error_activeSelect {
-	background-color: #C3D3EA;
 }
 
 .checkbox {
@@ -118,28 +91,8 @@ textArea {
 	border-width: 0px;
 }
 
-fieldset { /*
-	 border-bottom-style: groove;
-	 border-right-style: groove;
-	 border-top-style: groove;
-	 border-left-style: groove;
-	 border-width: 2px;
-	 padding:0px;	 	 
-	 margin-bottom:0px;	
-	 margin-top:4px;
-	 */
-	padding-top: 6px;
-	margin-left: 8px;
-	margin-right: 8px;
-}
-
 .text {
 	width: 100px;
-}
-
-legend {
-	color: blue;
-	font-size: 12px;
 }
 
 tr {
@@ -147,7 +100,6 @@ tr {
 }
 
 .divToucss TABLE {
-	/*background-color: #d4d0c8;*/
 	background-color: #697D96;
 	TABLE-LAYOUT: fixed;
 }
@@ -155,39 +107,6 @@ tr {
 .divToucss TD {
 	OVERFLOW: hidden;
 	WHITE-SPACE: nowrap;
-}
-
-.divToucss SPAN {
-	BORDER-RIGHT: #C3D3EA 0px solid;
-	/*BORDER-TOP: #C3D3EA 1px solid;*/
-	BORDER-TOP: #697D96 1px solid;
-	/*FILTER: Alpha(Opacity=60, FinishOpacity=100, Style=1, StartX=0, StartY=0, FinishX=0, FinishY=50);*/
-    FILTER: progid:DXImageTransform.Microsoft.Gradient(startColorStr = #697D96 , endColorStr = #91A6C1);
-	BORDER-LEFT: #C3D3EA 0px solid;
-	COLOR: #000000;
-	PADDING-TOP: 3px;
-	BORDER-BOTTOM: #C3D3EA 2px solid;
-	WHITE-SPACE: nowrap;
-	overflow: hidden;
-	VERTICAL-ALIGN: center;
-	BACKGROUND-COLOR: #7387A0;
-	OVERFLOW: hidden;
-	color: White;
-}
-
-.divToucssNofix SPAN {
-	BORDER-RIGHT: #ca0000 0px solid;
-	BORDER-TOP: #ca0000 1px solid;
-	FILTER: Alpha(Opacity = 40, FinishOpacity = 100, Style = 1, StartX = 0, StartY =
-		0, FinishX = 0, FinishY = 50);
-	BORDER-LEFT: #ca0000 1px solid;
-	COLOR: #000000;
-	PADDING-TOP: 3px;
-	BORDER-BOTTOM: #ca0000 2px solid;
-	WHITE-SPACE: nowrap;
-	overflow: hidden;
-	VERTICAL-ALIGN: center;
-	BACKGROUND-COLOR: #ca0000
 }
 
 .divTiSkin {
@@ -211,17 +130,6 @@ tr {
 .divBottom {
 	OVERFLOW: hidden;
 	WIDTH: 100%;
-	/*
-	border-color:#919190;
-	border-bottom-style: groove;
-	border-width: 1px;
-	*/
-}
-
-.divBottom TABLE {
-	WIDTH: 100%;
-	height: 100%;
-	background-image: url(gridbottom.gif);
 }
 
 .Covert_Button {
@@ -253,13 +161,10 @@ tr {
 }
 
 .gridSelectedHighlight {
-	/*background-color: #e4ebfd;*/
     background-color: #FFFF99;
 }
 
-/** ************************Frame**************************************************************** */
 .topPage {
-	
 }
 
 .bottomPage {
@@ -279,20 +184,6 @@ tr {
 	border-width: 2px;
 }
 
-.dockPage {
-	background-image: url(splite.gif);
-}
-
-.roofPage {
-	background-image: url(Index_1.gif);
-	width: 100%;
-}
-
-.roofbottomPage {
-	background-image: url(Index_2.gif);
-}
-
-/** ************************Frame**************************************************************** */
 .borderDataPilot {
 	
 }
@@ -302,49 +193,15 @@ tr {
 }
 
 .borderDataPilot input {
-	/*
-	border-right: #c4c4c4 0px solid;
-	border-top: #999999 0px solid;
-	border-left: #999999 0px solid;
-	border-bottom: #c4c4c4 0px solid;
-	padding-left: 0px;
-	padding-right: 0px;
-	padding-top: 0px;
-	padding-bottom: 0px;
-	height: 22px;
-	background-image: url(buttonimg.gif);
-	*/
+
 }
 
-.buttonbgborder {
-	border-right: #c4c4c4 0px solid;
-	border-top: #999999 0px solid;
-	border-left: #999999 0px solid;
-	border-bottom: #c4c4c4 0px solid;
-	padding-left: 3px;
-	padding-right: 3px;
-	padding-top: 5px;
-	padding-bottom: 3px;
-	height: 22px;
-	background-image: url(buttonimg.gif);
-}
 
 /** 鼠标覆盖时，光标变为手的形状，按钮区域呈整体凸起效果。 */
-.buttonGrooveActive { /*
-	 border-bottom-style: outset;
-	 border-right-style: outset;
-	 border-top-style: outset;
-	 border-left-style: outset;
-	 border-left-color: white;
-	 border-top-color: white;
-	 border-width: 1px;
-	 cursor: hand;
-	 */
-	
+.buttonGrooveActive {
+
 }
 
-
-/** ***************************************Tree**************************************************************** */
 .activeTree {
 	background-color: #459ae0;
 	color: white;
@@ -566,16 +423,7 @@ tr {
 }
 
 /** 鼠标覆盖时，光标变为手的形状，按钮区域呈整体凸起效果。 */
-.buttonGrooveActive { /*
-	 border-bottom-style: outset;
-	 border-right-style: outset;
-	 border-top-style: outset;
-	 border-left-style: outset;
-	 border-left-color: white;
-	 border-top-color: white;
-	 border-width: 1px;
-	 cursor: hand;
-	 */
+.buttonGrooveActive {
 	height: 22px;
 	width:80px;	
 }
@@ -598,57 +446,6 @@ tr {
 	padding-left: 5px;
 }
 
-.textfieldReadonly {
-	background-color: #ca0000;
-}
-
-.calenderPane {
-	font-size: 8;
-	font-family: Verdana;
-	font-weight: lighter;
-	background-color: #f1f5fe;
-	height: 120px;
-	width: 160px;
-}
-
-.calenderButton {
-	font-size: 8;
-	font-family: Webdings;
-	height: 20px;
-	width: 15px;
-}
-
-.calenderGridHighlight {
-	background-color: Gray;
-	border-color: #919190;
-	border-bottom-style: groove;
-	border-right-style: groove;
-	border-width: 1px;
-}
-
-.calenderGrid {
-	border-color: #919190;
-	border-bottom-style: groove;
-	border-right-style: groove;
-	border-width: 1px;
-}
-
-.monthPane {
-	font-size: 8;
-	font-family: Verdana;
-	font-weight: lighter;
-	background-color: #d4d0c8;
-	height: 20px;
-	width: 150px;
-}
-
-.loginTitle {
-	color: Gray;
-	font-size: 40;
-	font-weight: bold;
-}
-
-/** TabPage ****************************************************************** */
 .tabTD {
 	background-color: #ca0000;
 	border-top: black 1px solid;

@@ -7,8 +7,6 @@
  * 时间：2004年3月10日
  *****/
 var debug = false;
-
-
 function HttpCom() {
     //类的属性
     HttpCom.prototype.url           = null;
@@ -18,7 +16,6 @@ function HttpCom() {
     HttpCom.prototype.success       = false;
     HttpCom.prototype.userid        = "";
     HttpCom.prototype.passwd        = null;
-
     HttpCom.prototype.STATIC_URL          = g_jsContextPath+"/BI/util/SqlExcuteJsp.jsp";
     HttpCom.prototype.STATIC_METHOD       = "POST";
     HttpCom.prototype.STATIC_CONTENT_NAME = "sys_request_xml";
@@ -28,18 +25,13 @@ function HttpCom() {
     HttpCom.prototype.send          = httpCom_send;
     HttpCom.prototype.setSendMethod = httpCom_setSendMethod;
     HttpCom.prototype.getSendMethod = httpCom_getSendMethod;
-
     HttpCom.prototype.setRequest    = httpCom_setRequest;
     HttpCom.prototype.getRequest    = httpCom_getRequest;
-
     HttpCom.prototype.setResponse   = httpCom_setResponse;
     HttpCom.prototype.getResponse   = httpCom_getResponse;
-
     HttpCom.prototype.isSuccess     = httpCom_isSuccess;
-
     HttpCom.prototype.setUserid     = httpCom_setUserId;
     HttpCom.prototype.getUserid     = httpCom_getUserId;
-
     HttpCom.prototype.setPasswd     = httpCom_setPasswd;
     HttpCom.prototype.getPasswd     = httpCom_getPasswd;
 }
@@ -135,7 +127,7 @@ function DataPacket() {
         this.responseXml = new ActiveXObject("Msxml.DOMDocument");
     }
 
-    this.xmlData.async                   = false;
+    this.xmlData.async = false;
     //类属性
     DataPacket.prototype.xmlData;
     DataPacket.prototype.curNode;//当前节点
@@ -180,7 +172,6 @@ function DP_init(initXML,actionname,methodname) {
         this.xmlData.loadXML();
     }
     var root = this.xmlData.documentElement;
-
     this.curNode  = root;
     if ( actionname != undefined ) {
         this.init();
@@ -193,36 +184,33 @@ function DP_init(initXML,actionname,methodname) {
 function DP_packTagForm(tag,formId,recordType,m_objParam) {
     this.addRecorder();
     this.addRecorderProp("type",formId+"_"+recordType);
-
     var packForm = tag.document.all[formId];
     for (var i = 0 ; i < packForm.length ; i++ ) {
         var formElement = packForm.item(i);
-
         if( formElement.tagName.toUpperCase() == "INPUT"){
-        		if (formElement.type=="text" || formElement.type=="hidden" || formElement.type=="password"){
-        			if (formElement.fieldtype !="select")
-        	   			this.addField(formElement.id,formElement.value,"text",formElement.oldvalue);
-        	   		else
-        	   			this.addField(formElement.id,formElement.attr,"text",formElement.oldvalue);
-        		}
-                if(formElement.type=="radio"){
-                	if (formElement.checked)
-                     	this.addField(formElement.id,"1","text",formElement.oldvalue);
-
-                }
-                 if(formElement.type=="checkbox"){
-                	if (formElement.checked)
-                     	this.addField(formElement.id,"1","text",formElement.oldvalue);
-                    else
-                    	this.addField(formElement.id,"0","text",formElement.oldvalue);
-                }
+            if (formElement.type=="text" || formElement.type=="hidden" || formElement.type=="password"){
+                if (formElement.fieldtype !="select")
+                    this.addField(formElement.id,formElement.value,"text",formElement.oldvalue);
+                else
+                    this.addField(formElement.id,formElement.attr,"text",formElement.oldvalue);
+            }
+            if(formElement.type=="radio"){
+                if (formElement.checked)
+                    this.addField(formElement.id,"1","text",formElement.oldvalue);
+            }
+             if(formElement.type=="checkbox"){
+                if (formElement.checked)
+                    this.addField(formElement.id,"1","text",formElement.oldvalue);
+                else
+                    this.addField(formElement.id,"0","text",formElement.oldvalue);
+            }
         }
         if( formElement.tagName.toUpperCase() == "TEXTAREA"){
-        		this.addField(formElement.id,formElement.value,"text",formElement.oldvalue);
-       }
-       if( formElement.tagName.toUpperCase() == "SELECT"){
-        		this.addField(formElement.id,formElement.value,"text",formElement.oldvalue);
-       }
+            this.addField(formElement.id,formElement.value,"text",formElement.oldvalue);
+        }
+        if( formElement.tagName.toUpperCase() == "SELECT"){
+            this.addField(formElement.id,formElement.value,"text",formElement.oldvalue);
+        }
     }
 }
 function DP_packTagGrid(tag,gridId,recordType,m_objParam) {
@@ -235,19 +223,12 @@ function DP_packTagGrid(tag,gridId,recordType,m_objParam) {
 
 function DP_packTagGridSingle(tag,gridId,recordType,m_objParam) {
     var grid = tag.document.all[gridId];
-
 	for (var i = 0; i < grid.rows.length; i++) {
 	    if ( grid.rows[i].operate =="update" || grid.rows[i].operate =="insert" || grid.rows[i].operate =="delete") {
             this.addRecorder();
 	        this.addRecorderProp("type",gridId+"_"+recordType+"_"+grid.rows[i].operate);
-
-
-
              for(var j=0;j<grid.rows[i].cells.length;j++ ) {
                     if ((grid.rows[i].cells[j].fieldname !=undefined )&&(grid.rows[i].cells[j].fieldtype !=undefined)){
-                         //if(checkTDValue(grid.rows[i].cells[j])=="false") {
-                         //	return false;
-                         //}
                          if (grid.rows[i].cells[j].fieldtype.toLowerCase() =="dropdown"){
                               if(grid.rows[i].cells[j].attr !=undefined){
                                   this.addField(grid.rows[i].cells[j].fieldname,grid.rows[i].cells[j].attr,grid.rows[i].cells[j].fieldtype,grid.rows[i].cells[j].oldvalue);
@@ -260,8 +241,7 @@ function DP_packTagGridSingle(tag,gridId,recordType,m_objParam) {
                              this.addField(grid.rows[i].cells[j].fieldname,grid.rows[i].cells[j].innerText,grid.rows[i].cells[j].fieldtype,grid.rows[i].cells[j].oldvalue);
                          }
                     }
-               }
-
+             }
 			if ((grid.rows[i].whStr !=undefined)&&(grid.rows[i].whStr!=""))	{
 				var whereSArr =grid.rows[i].whStr.split("*");
 				for (var j=0; j< whereSArr.length; j++)	{
@@ -286,36 +266,28 @@ function DP_packTagGridSingle(tag,gridId,recordType,m_objParam) {
 }
 function DP_packTagGridFrom(tag,gridId,recordType,m_objParam) {
      var grid = tag.document.all[gridId];
-
      var elementobj= undefined;
-
      var filednamearr  = grid.fieldname.split(",");
      var fieldCheckArr = grid.fieldCheck.split(";");
      var filedcn       = grid.fieldCN.split(",");
 
 	 for (var i = 0; i < grid.rows.length; i++) {
-	    if ( grid.rows[i].operate =="update" || grid.rows[i].operate =="insert" || grid.rows[i].operate =="delete") {
-            if (grid.rows[i].ValueStr ==undefined)
-               	continue;
-          	var filedvaluearr = grid.rows[i].ValueStr.split(";");
-               if (grid.rows[i].OldValueStr != undefined){
-               	var filedoldvaluearr = grid.rows[i].OldValueStr.split(";");
-               }else{
-               	var filedoldvaluearr = new Array(filednamearr.length);
-
-               }
-
-            grid.activeIndex= i;
-
-            gridfillform(grid, tag.document.all(grid.dbformname));
-
-            this.addRecorder();
-	        this.addRecorderProp("type",gridId+"_"+recordType+"_"+grid.rows[i].operate);
-
-
-            for (var j=0; j < filednamearr.length; j++){
-                elementobj= undefined;
-                for (var k=0; k< tag.document.all(grid.dbformname).length;k++) {
+	     if ( grid.rows[i].operate =="update" || grid.rows[i].operate =="insert" || grid.rows[i].operate =="delete") {
+             if (grid.rows[i].ValueStr ==undefined)
+               	 continue;
+          	 var filedvaluearr = grid.rows[i].ValueStr.split(";");
+             if (grid.rows[i].OldValueStr != undefined){
+                 var filedoldvaluearr = grid.rows[i].OldValueStr.split(";");
+             }else{
+                 var filedoldvaluearr = new Array(filednamearr.length);
+             }
+             grid.activeIndex= i;
+             gridfillform(grid, tag.document.all(grid.dbformname));
+             this.addRecorder();
+	         this.addRecorderProp("type",gridId+"_"+recordType+"_"+grid.rows[i].operate);
+             for (var j=0; j < filednamearr.length; j++){
+                 elementobj= undefined;
+                 for (var k=0; k< tag.document.all(grid.dbformname).length;k++) {
                      if (filednamearr[j].toUpperCase()== tag.document.all(grid.dbformname).item(k).id.toUpperCase()){
                          var elementobj= tag.document.all(grid.dbformname).item(k);
                          break;
@@ -325,56 +297,50 @@ function DP_packTagGridFrom(tag,gridId,recordType,m_objParam) {
                      elementobj.alertTitle =filedcn[j];
                      var fieldOneCheckArr = fieldCheckArr[j].split(",");
                      for(var k=0 ;k< fieldOneCheckArr.length; k++){
-                          if(fieldOneCheckArr[k].length > 0){
-                               var fieldValueCheckArr = fieldOneCheckArr[k].split("=");
-
-                               if(fieldValueCheckArr[0]=="isNull")
-                                    elementobj.isNull =  fieldValueCheckArr[1];
-                               else if(fieldValueCheckArr[0]=="textLength")
-                                    elementobj.textLength =  fieldValueCheckArr[1];
-                               else if(fieldValueCheckArr[0]=="intLength")
-                                    elementobj.intLength =  fieldValueCheckArr[1];
-                               else if(fieldValueCheckArr[0]=="floatLength")
-                                    elementobj.floatLength =  fieldValueCheckArr[1];
-                               else if(fieldValueCheckArr[0]=="eMail")
-                                    elementobj.eMail =  fieldValueCheckArr[1];
-                          }
-
+                         if(fieldOneCheckArr[k].length > 0){
+                             var fieldValueCheckArr = fieldOneCheckArr[k].split("=");
+                             if(fieldValueCheckArr[0]=="isNull")
+                                  elementobj.isNull =  fieldValueCheckArr[1];
+                             else if(fieldValueCheckArr[0]=="textLength")
+                                  elementobj.textLength =  fieldValueCheckArr[1];
+                             else if(fieldValueCheckArr[0]=="intLength")
+                                  elementobj.intLength =  fieldValueCheckArr[1];
+                             else if(fieldValueCheckArr[0]=="floatLength")
+                                  elementobj.floatLength =  fieldValueCheckArr[1];
+                             else if(fieldValueCheckArr[0]=="eMail")
+                                  elementobj.eMail =  fieldValueCheckArr[1];
+                         }
                      }
-//                               if ( checkInputValue(elementobj) =="false")
-//                                      return false;
                  }
-
                  if (filedoldvaluearr[j] == undefined || filedoldvaluearr[j] == null)
-                    filedoldvaluearr[j] ="";
-
+                     filedoldvaluearr[j] ="";
                  if ( filedvaluearr[j] != null && filedvaluearr[j] != " " ) {
-                    this.addField(filednamearr[j],filedvaluearr[j],"text",filedoldvaluearr[j]);
+                     this.addField(filednamearr[j],filedvaluearr[j],"text",filedoldvaluearr[j]);
                  } else
-                    this.addField(filednamearr[j],"","text",filedoldvaluearr[j]);
-            }
+                     this.addField(filednamearr[j],"","text",filedoldvaluearr[j]);
+             }
 
              if ((grid.rows[i].whStr !=undefined)&&(grid.rows[i].whStr!=""))	{
-				var whereSArr =grid.rows[i].whStr.split("*");
-				for (var j=0; j< whereSArr.length; j++)	{
-					if (whereSArr[j]!=undefined){
-						var whArr = whereSArr[j].split("&");
-						this.addField(whArr[0],whArr[2],whArr[1]);
-					}
-				}
-			}
-			if(m_objParam !="" ){
-				var paramSArr =m_objParam.split("*");
-				for (var j=0; j< paramSArr.length; j++)	{
-					if ((paramSArr[j]!=undefined)&&(paramSArr[j] !="")){
-					    var whArr = paramSArr[j].split("&");
-						this.addField(whArr[0],whArr[2],whArr[1]);
-					}
-				}
-			}
-		}
-	}
-	return true;
+				 var whereSArr =grid.rows[i].whStr.split("*");
+				 for (var j=0; j< whereSArr.length; j++)	{
+					 if (whereSArr[j]!=undefined){
+						 var whArr = whereSArr[j].split("&");
+						 this.addField(whArr[0],whArr[2],whArr[1]);
+					 }
+				 }
+			 }
+			 if(m_objParam !="" ){
+				 var paramSArr =m_objParam.split("*");
+				 for (var j=0; j< paramSArr.length; j++)	{
+					 if ((paramSArr[j]!=undefined)&&(paramSArr[j] !="")){
+					     var whArr = paramSArr[j].split("&");
+						 this.addField(whArr[0],whArr[2],whArr[1]);
+					 }
+				 }
+			 }
+		 }
+	 }
+	 return true;
 }
 
 function DP_AddAction() {
@@ -419,7 +385,6 @@ function DP_Private_AddProp(xmlData,node,name,value) {
         return;
     var attr = xmlData.createAttribute(name);
     attr.value = value;
-
     node.attributes.setNamedItem(attr);
 }
 
@@ -427,28 +392,19 @@ function DP_send() {
     this.success   = false;
     this.message   = "";
     this.messageTp = 0;
-
     var httpCom = new HttpCom();
     httpCom.setUrl(httpCom.STATIC_URL);
     httpCom.setSendMethod(httpCom.STATIC_METHOD);
     httpCom.setRequest(this.xmlData.xml);
-
     httpCom.send();
-
-    if ( httpCom.isSuccess() ) {
-
-
+    if ( httpCom.isSuccess()) {
          var retvalue =   analyzeReturnXML(httpCom.getResponse());
          if (retvalue =="false")
          		this.success = false;
           else
           	this.success = true;
-
-        //return;
         this.responseXml.loadXML(httpCom.getResponse());
-
         var rootNode = this.responseXml.documentElement.firstChild;
-
         if ( rootNode.getAttribute("type") == "1" ) { //返回XML数据
             this.messageTp = 2;
             if ( rootNode.getAttribute("result") == "true" ) {
@@ -459,7 +415,6 @@ function DP_send() {
             this.messageTp = 2;
             this.responseXml.loadXML(rootNode.xml);
         } else if ( rootNode.getAttribute("type") == "2" ) {//返回HTML数据
-
             if (  rootNode.getAttribute("result") == "true" ) {
                 this.success = true;
             } else {
@@ -471,9 +426,7 @@ function DP_send() {
                 this.messageTp = 3;
                 this.message   = decode(rootNode.xml);
             }
-
         } else if ( rootNode.getAttribute("type") == "3" ) {//返回自定义数据
-
             if (  rootNode.getAttribute("result") == "true" ) {
                 this.success = true;
             } else {
@@ -485,7 +438,6 @@ function DP_send() {
                 this.messageTp = 4;
                 this.message   = decode(rootNode.xml);
             }
-
         } else {
             if (  rootNode.getAttribute("result") == "true" ) {
                 this.success = true;
@@ -538,7 +490,6 @@ function DP_packetForm(packForm,actionName,actionPropName,actionPropValue,record
 
     for (var i = 0 ; i < packForm.length ; i++ ) {
         var formElement = packForm.item(i);
-
         if( formElement.tagName.toUpperCase() == "INPUT"){
         		if (formElement.type=="text" || formElement.type=="hidden" || formElement.type=="password"){
         	   		this.addField(formElement.id,formElement.value,"text");
@@ -553,12 +504,11 @@ function DP_packetForm(packForm,actionName,actionPropName,actionPropValue,record
         if( formElement.tagName.toUpperCase() == "TEXTAREA"){
         		this.addField(formElement.id,formElement.value,"text");
 
-       }
-       if( formElement.tagName.toUpperCase() == "SELECT"){
+        }
+        if( formElement.tagName.toUpperCase() == "SELECT"){
         		this.addField(formElement.id,formElement.value,"text");
 
-       }
-
+        }
     }
 }
 
@@ -577,7 +527,7 @@ function DP_mapForm() {
                     if ( curElement.length == undefined ) {
                         curElement.value   = fieldvalue;
                     } else {
-                        curElement.item(0) = fieldvalue;
+                        curElement.item(0).value = fieldvalue;
                     }
                 } else if ( fieldtype == "checkbox" ) {
                     if ( curElement.length == undefined ) {
@@ -720,33 +670,26 @@ function BusinessControllor() {
     BusinessControllor.prototype.actprop      = "type";
     BusinessControllor.prototype.actpropvalue = "ccc";
     BusinessControllor.prototype.recordtype   = "query";
-
-
     BusinessControllor.prototype.printVoucher = false; //打印业务凭单
     BusinessControllor.prototype.printInvoice = false; //打印发票
     BusinessControllor.prototype.printCard    = false; //打印用户证
     BusinessControllor.prototype.askCombine   = false; //是否提示进行复合业务
-
 }
 
 function BC_run() {
-    //try {
-        if ( this.init() ) {
-            if ( this.preInput() ) {
-                if ( this.check() ) {
-                    this.ask();
-                    if ( this.pack() ) {
-                        if ( this.send() ) {
-                            this.output();
-                        }
+    if ( this.init() ) {
+        if ( this.preInput() ) {
+            if ( this.check() ) {
+                this.ask();
+                if ( this.pack() ) {
+                    if ( this.send() ) {
+                        this.output();
                     }
                 }
-                this.finalize();
             }
+            this.finalize();
         }
-    //} catch ( Exception ) {
-      //  alert("程序发生例外！");
-    //}
+    }
 }
 
 function BC_init() {
@@ -787,273 +730,6 @@ function BC_output() {
 function BC_finalize() {
     return true;
 }
-
-
-function prototype_ask() {
-    this.isMulti     = "0";
-    this.isPrintCard = "0";
-    if ( this.askCombine ) {
-        if ( confirm("是否复合业务？") ) {
-            this.isMulti = "1";
-        } else {
-            //if ( confirm("是否打印用户证？") ) {
-                this.isPrintCard = "1";
-            //}
-        }
-    }
-}
-
-function prototype_pack() {
-    this.dp.init("<root/>");
-    this.dp.packForm(document.all.winform,this.actionname,this.actprop,this.actpropvalue,this.recordtype);
-    for ( var i = 0 ; i < this.params.getCount() ; i++ ) {
-        var param = this.params.getIndexedParam(i);
-
-
-        this.dp.addField(param.getName(),param.getValue(),param.getType());
-    }
-    this.dp.addField("isMulti",this.isMulti,"text");
-    this.dp.addField("isPrintCard",this.isPrintCard,"text");
-
-    if ( debug )
-        alert(this.dp.xmlData.xml);
-    return true;
-}
-
-function prototype_output() {
-    if ( this.dp.isSuccess() ) {
-        window.returnValue = true;
-
-
-        if ( this.dp.getMessageTp() == 1 ) {
-            alert(this.dp.getMessage());
-            window.close();
-            return;
-        } else if ( this.dp.getMessageTp() == 2 ) {
-            if ( this.isMulti == "1" ) {
-                alert(this.dp.getMessage());
-                window.close();
-                return;
-            }
-        } else if ( this.dp.getMessageTp() == 3 ) {
-            if ( this.isMulti == "1" ) {
-                alert(this.dp.getMessage());
-                window.close();
-                return;
-            }
-            //6.打印业务受理回执单
-            var message  = this.dp.getMessage();
-            alert(message);
-            var xmlDoc   = new ActiveXObject("Msxml2.DOMDocument");
-            var objNodeList;
-            xmlDoc.async = false;
-            xmlDoc.resolveExternals = false;
-            xmlDoc.loadXML(message);
-
-            objNodeList       = xmlDoc.getElementsByTagName("bussNo");
-
-            var businessLogNo = objNodeList.item(0).text;
-
-            objNodeList       = xmlDoc.getElementsByTagName("userNo");
-            var userNo        = objNodeList.item(0).text;
-            objNodeList       = xmlDoc.getElementsByTagName("isPrtCard");
-            var prtCard       = objNodeList.item(0).text;
-            objNodeList       = xmlDoc.getElementsByTagName("isMulti");
-            var isMulti       = objNodeList.item(0).text;
-
-            if ( (this.printVoucher == true) && confirm("业务处理成功，是否打印业务受理回执单？") ) {
-                do {
-                    alert("请将业务受理回执单插入打印机，然后点击确定！");
-                    argument = "tw003.jsp?busniessLogNo="+businessLogNo;
-                    if ( debug )
-                        alert(argument);
-                    this.params.clear();
-
-                    var  dd = window.showModalDialog(argument,this.params,"Dialogheight:400px;Dialogwidth:800px;menubar:yes;status:no;toolbar:yes;scrollbars:no;resizable:no;");
-                } while ( !confirm("回执单打印是否成功？") );
-            }
-            //7.打印用户证
-            if ( this.isPrintCard ) {
-                if ( (this.printCard == true) && confirm("是否打印用户证？") ) {
-                    do {
-                        alert("请将用户证插入打印机，然后点击确定！");
-                        argument = "/jsp/report/ucPrint.jsp?USERNO="+userNo;
-                        this.params.clear();
-                        var  dd = window.showModalDialog(argument,this.params,"Dialogheight:400px;Dialogwidth:800px;menubar:yes;status:no;toolbar:yes;scrollbars:no;resizable:no;");
-                    } while ( !confirm("用户证打印是否成功？") );
-                    var dp = new DataPacket();
-                    dp.init("<root/>");
-                    dp.addAction();
-                    dp.addActionProp("actionname","cp001");
-                    dp.addActionProp("type","update");
-                    dp.addRecorder();
-                    dp.addRecorderProp("type","update");
-                    dp.addField("userNo",userNo,"text");
-                    dp.addField("result","1","text");
-                    dp.send();
-                    dp.isSuccess();
-                }
-            }
-            //8、打印发票
-            if ( (this.printInvoice == true) && confirm("是否打印发票?") ) {
-                do {
-				var modalFeature = "Dialogheight:600px;Dialogwidth:800px;menubar:yes;status:no;toolbar:no;help:no;scrollbars:no;resizable:no;";
-          		this.params.clear();
-          		//添加需要传递的参数
-          		this.params.add(new Param("USERNO",userNo,"1"));
-               	this.params.add(new Param("ISCOMPLEX",isMulti,"1"));
-                    this.params.add(new Param("BUSSSEQ",businessLogNo,"1"));
-                    //配置需要转向到的JSP页面。注意：这个Param对象的名称必须为"action"
-          		this.params.add(new Param("action","/jsp/invoice/invoiceInput.jsp","1"));
-               	this.params.add(new Param("title","发票录入","1"));
-          		var dd = window.showModalDialog("/html/parentFrame.html",this.params,modalFeature);
-                    if ( dd == true ) {
-
-                    	var modalFeature = "Dialogheight:500px;Dialogwidth:800px;menubar:yes;status:no;toolbar:no;help:no;scrollbars:no;resizable:no;";
-                         window.showModalDialog("/html/parentFrame.html",this.params,modalFeature);
-                    } else {
-                        break;
-                    }
-
-                } while (  !confirm("发票打印是否成功？") );
-            }
-            alert("业务办理完毕！");
-            window.close();
-        } else if ( this.dp.getMessageTp() == 4 ) {
-            if ( this.isMulti == "1" ) {
-                alert(this.dp.getMessage());
-                window.close();
-                return;
-            }
-            //6.打印业务受理回执单
-            var message  = this.dp.getMessage();
-
-            var xmlDoc   = new ActiveXObject("Msxml2.DOMDocument");
-            var objNodeList;
-            xmlDoc.async = false;
-            xmlDoc.resolveExternals = false;
-            xmlDoc.loadXML(message);
-
-            objNodeList       = xmlDoc.getElementsByTagName("bussNo");
-
-            var businessLogNo = objNodeList.item(0).text;
-
-            objNodeList       = xmlDoc.getElementsByTagName("userNo");
-            var userNo        = objNodeList.item(0).text;
-            objNodeList       = xmlDoc.getElementsByTagName("isPrtCard");
-            var prtCard       = objNodeList.item(0).text;
-            objNodeList       = xmlDoc.getElementsByTagName("isMulti");
-            var isMulti       = objNodeList.item(0).text;
-		//alert(userNo+"="+businessLogNo+"="+prtCard+"="+isMulti);
-            if ( (this.printVoucher == true) && confirm("业务处理成功，是否打印业务受理回执单？") ) {
-                do {
-                    alert("请将业务受理回执单插入打印机，然后点击确定！");
-                    var userNos = userNo.split(",");
-                    argument = "/jsp/report/backHoldPrint.jsp?USERNO="+userNos[0]+"&ISCOMPLEX="+isMulti+"&BUSSSEQ="+businessLogNo;
-                    if ( debug )
-                        alert(argument);
-                    this.params.clear();
-
-                    var  dd = window.showModalDialog(argument,this.params,"Dialogheight:600px;Dialogwidth:800px;menubar:yes;status:no;toolbar:yes;scrollbars:no;resizable:no;");
-                } while ( !confirm("回执单打印是否成功？") );
-            }
-            //7.打印用户证
-            if ( this.isPrintCard ) {
-                if ( !isprintcard(userNo) ) {
-                      if ( (this.printCard == true) && confirm("是否打印用户证？") ) {
-                          do {
-                              alert("请将用户证插入打印机，然后点击确定！");
-                              argument = "/jsp/report/ucPrint.jsp?USERNO="+userNo;
-                              this.params.clear();
-                              var  dd = window.showModalDialog(argument,this.params,"Dialogheight:400px;Dialogwidth:800px;menubar:yes;status:no;toolbar:yes;scrollbars:no;resizable:no;");
-                          } while ( !confirm("用户证打印是否成功？") );
-                          var dp = new DataPacket();
-                          dp.init("<root/>");
-                          dp.addAction();
-                          dp.addActionProp("actionname","cp001");
-                          dp.addActionProp("type","update");
-                          dp.addRecorder();
-                          dp.addRecorderProp("type","update");
-                          dp.addField("userNo",userNo,"text");
-                          dp.addField("result","1","text");
-                          dp.send();
-                          dp.isSuccess();
-                      }
-                }
-            }
-            //8、打印发票
-//            var _operno = "";
-//            var _bussseq = "";
-//            var _iscomplex = "";
-			var isFirstPrint = true;
-			try {
-			    var userNos = userNo.split(",");
-			    userNo = userNos[0];
-		    } catch ( Exception ) {}
-            if ( (this.printInvoice == true) && (hasFeeAvailable(userNo,businessLogNo,isMulti) == true)) {
-                do {
-				if(!isFirstPrint){
-                    	if(!rejectAndUpdateInvDetail(userNos[0],businessLogNo,isMulti)){
-                         	alert('作废发票失败(发票打印失败后,作废已达发票!');
-                         	return ;
-                    	}
-				}
-
-				var modalFeature = "Dialogheight:600px;Dialogwidth:800px;menubar:yes;status:no;toolbar:no;help:no;scrollbars:no;resizable:no;";
-          		this.params.clear();
-          		//添加需要传递的参数
-                    var userNos = userNo.split(",");
-          		this.params.add(new Param("USERNO",userNos[0],"1"));
-               	this.params.add(new Param("ISCOMPLEX",isMulti,"1"));
-                    this.params.add(new Param("BUSSSEQ",businessLogNo,"1"));
-                    //配置需要转向到的JSP页面。注意：这个Param对象的名称必须为"action"
-          		this.params.add(new Param("action","/jsp/invoice/invoiceInput.jsp","1"));
-               	this.params.add(new Param("title","发票录入","1"));
-          		var dd = window.showModalDialog("/html/parentFrame.html",this.params,modalFeature);
-                    if ( dd == true ) {
-
-                         if(this.params.getNamedParamValue("ISAUTO") != null){
-                              //alert(this.params.getNamedParamValue("ISAUTO").getValue());
-                         	if(this.params.getNamedParamValue("ISAUTO").getValue() == '0'){
-                          		break;
-                         	}
-                         }
-                    	var modalFeature = "Dialogheight:500px;Dialogwidth:800px;menubar:yes;status:no;toolbar:no;help:no;scrollbars:no;resizable:no;";
-                         window.showModalDialog("/html/parentFrame.html",this.params,modalFeature);
-                    	isFirstPrint = false;
-                    	if(confirm("发票打印是否成功？")){
-                           break;
-                    	}else{
-                              continue;
-                    	}
-                    } else {
-                         if(this.params.getNamedParamValue("error") != null){
-                         	if(this.params.getNamedParamValue("error").getValue() == '-1000'){
-                         		alert('由于您登录超时，请到发票补打模块补打本次业务的发票，谢谢！');
-                          		break;
-                         	}else if(this.params.getNamedParamValue("error").getValue() == '-2000'){
-                              	break;
-                         	}
-                         }
-                    	isFirstPrint = true;
-               		continue;
-                    }
-
-                } while ( true );
-            }
-            alert("业务办理完毕！");
-
-            window.close();
-        } else {
-            window.close();
-        }
-
-    } else {
-        alert(this.dp.getMessage());
-        return;
-    }
-}
-
 //num1>num2 返回1 num1=num2 返回0 num1<num2 -1
 function compare(num1,num2) {
     try {
@@ -1103,113 +779,6 @@ function compare(num1,num2) {
         alert("输入中存在非法数字，请检查！");
     }
 }
-/*********************************************************************************************
- *
- *   测试
- *
- *
- *************************************/
-
-function testParams() {
-    var params = new Params();
-    params.add(new Param("name","wdl","1"));
-    params.add(new Param("sex","男","1"));
-    params.add(new Param("age","26","1"));
-    params.add(new Param("salary","1000","1"));
-    alert(params.getCount());
-    var  dd = window.showModalDialog("test3.htm",params,"menubar=yes,status=yes,toolbar=yes,scrollbars=yes,resizable=yes");
-    alert(dd);
-    alert(params.getCount());
-
-    for ( var i = 0 ; i < params.getCount();i++ ) {
-        var p = params.getIndexedParam(i);
-        alert(p);
-        document.all(p.getName()).value = p.getValue();
-    }
-}
-
-function testModal() {
-    var params = window.dialogArguments;
-
-    for ( var i = 0 ; i < params.getCount() ; i++ ) {
-        var p = params.getIndexedParam(i);
-
-        document.all(p.getName()).value = p.getValue();
-    }
-}
-function testReturnValue() {
-    var params = window.dialogArguments;
-    params.clear();
-    params.addNew("name","cyn","1");
-    window.returnValue = true;
-    window.close();
-}
-
-function test_packform() {
-    var dp = new DataPacket();
-
-    dp.init("<root/>");
-    dp.packForm(document.all("testform"),"e001","type","ccc","add");
-
-    dp.addAction();
-    dp.addActionProp("actionname","wdl");
-    dp.addRecorder();
-    dp.addRecorderProp("type","del");
-
-    dp.addField("aa","111","2222");
-    dp.addField("a2","111","2222");
-    dp.addField("a3","111","2222");
-
-    dp.packForm(document.all("testform"),"e001","type","ccc","add");
-
-    alert(dp.xmlData.xml);
-    dp.send();
-    alert(dp.isSuccess());
-    alert(dp.getMessageTp());
-    alert(dp.getMessage());
-    if ( dp.isSuccess() ) {
-        if ( dp.getMessageTp() == 2 ) {
-            var xmlDoc = dp.getResponseXml();
-        } else {
-            alert(dp.getMessage());
-        }
-    }
-}
-
-function test_main() {
-    var httpCom = new HttpCom();
-    httpCom.setUrl("tw001.jsp");
-    httpCom.setSendMethod("POST");
-
-    httpCom.setRequest('<root><action actionName="1111">cccc</action></root>');
-
-    httpCom.send();
-
-    alert(httpCom.isSuccess());
-    alert(httpCom.getResponse());
-
-    var dp = new DataPacket();
-    dp.init("<root/>");
-    dp.addAction();
-    dp.addActionProp("actionname","ac001");
-    dp.addActionProp("type","insert");
-    dp.addRecorder();
-    dp.addRecorderProp("type","delete");
-    dp.addField("username","0010","text");
-    dp.addField("passwd","111111","text");
-    dp.addAction();
-    dp.addActionProp("actionname","ad001");
-    dp.addActionProp("type","insert");
-    dp.addRecorder();
-    dp.addRecorderProp("type","add");
-    dp.addField("ccccc","0010","text");
-    dp.addField("ddddd","111111","text");
-
-    alert(dp.xmlData.xml);
-    alert(send(dp));
-}
-
-
 /*
    发送数据
    DataPacket: request
@@ -1219,7 +788,6 @@ function send(request) {
     httpCom.setUrl(httpCom.STATIC_URL);
     httpCom.setSendMethod(httpCom.STATIC_METHOD);
     httpCom.setRequest(request.xmlData.xml);
-
     httpCom.send();
     var response = new DataPacket();
     response.init(httpCom.getResponse());
@@ -1237,7 +805,6 @@ function rejectAndUpdateInvDetail(operno,bussseq,iscomplex){
     	dp.addField("USERNO",operno,"text");
     	dp.addField("BUSSSEQ",bussseq,"text");
 	dp.addField("ISCOMPLEX",iscomplex,"text");
-	//alert(operno+':'+bussseq+':'+iscomplex);
      dp.send();
      if ( dp.isSuccess()) {
           return true;
@@ -1246,61 +813,4 @@ function rejectAndUpdateInvDetail(operno,bussseq,iscomplex){
           return false;
      }
 	return true;
-}
-
-function hasFeeAvailable(usernos,bussseqs,ismulti){
-	var dp = new DataPacket();
-    	dp.init("<root/>");
-    	dp.addAction();
-    	dp.addActionProp("actionname","hasfee");
-    	dp.addActionProp("type","insert");
-    	dp.addRecorder();
-    	dp.addRecorderProp("type","delete");
-    	dp.addField("USERNO",usernos,"text");
-    	dp.addField("BUSSSEQ",bussseqs,"text");
-    	dp.addField("ISMULTI",ismulti,"text");
-
-     dp.send();
-     if ( trimStr(dp.getMessage())=='1') {
-          return true;
-     }else{
-          if(dp.getMessage().indexOf('超时')> -1){
-           	alert('由于您登录超时，请到发票补打模块补打本次业务的发票，谢谢！');
-          }
-          return false;
-     }
-}
-function isprintcard(userno){
-
-	var XMLStr = createselectArrNOCheck("userno","text",userno,"sc0604");
-
-	var xmlDoc = createDomDocument();
-	xmlDoc.loadXML(XMLStr);
-
-
-	var rootNode = xmlDoc.documentElement.firstChild;
-
-	if (rootNode.text =="1")
-		    return false;
-    else
-            return true;
-
-}
-function checkSteal(userNo) {
-    var dp = new DataPacket();
-    dp.init("<root/>");
-    dp.addAction();
-    dp.addActionProp("actionname","chkstl");
-    dp.addActionProp("type","query");
-    dp.addRecorder();
-    dp.addRecorderProp("type","query");
-    dp.addField("userNo",userNo,"text");
-
-
-    dp.send();
-    if ( !dp.isSuccess() ) {
-        if ( !confirm(dp.getMessage()+"，是否继续？") ) {
-           window.close();
-        }
-    }
 }

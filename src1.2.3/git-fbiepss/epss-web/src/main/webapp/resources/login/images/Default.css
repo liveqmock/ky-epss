@@ -130,9 +130,7 @@ TH {
 .modalPopup {
 	BORDER-RIGHT: gray 3px solid; PADDING-RIGHT: 3px; BORDER-TOP: gray 3px solid; PADDING-LEFT: 3px; PADDING-BOTTOM: 3px; BORDER-LEFT: gray 3px solid; PADDING-TOP: 3px; BORDER-BOTTOM: gray 3px solid; BACKGROUND-COLOR: #ddddff
 }
-.modalBackground {
-	FILTER: alpha(opacity=70); BACKGROUND-COLOR: gray; opacity: 0.7
-}
+
 .RomNumber {
 	FONT-WEIGHT: bold; FONT-SIZE: 12px; OVERFLOW: hidden; CURSOR: default; COLOR: highlighttext; FONT-FAMILY: tahoma; HEIGHT: 365px; BACKGROUND-COLOR: highlight; TEXT-ALIGN: right; BORDER-RIGHT-WIDTH: 0px
 }
