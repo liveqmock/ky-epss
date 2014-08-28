@@ -1,5 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-
 <%@ page import="skyline.platform.form.control.*"%>
 <%@ page import="skyline.platform.form.control.impl.*"%>
 <%@ page import="skyline.platform.form.util.SessionAttributes"%>

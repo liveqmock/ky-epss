@@ -6,7 +6,5 @@
     DBXML  testxml =  new DBXML();
     String xmnlStr = request.getParameter("tabStr");
     String rexml = testxml.getDataTableXML(Basic.decode(xmnlStr));
-
 %>
-
 <%=rexml%>

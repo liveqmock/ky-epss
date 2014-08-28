@@ -44,28 +44,27 @@
     </script>
     <body bgcolor="#ffffff" onload="feeeditinit()">
         <table style="position:absolute;top:10;width:100%"  >
-                <tr>
-                    <td  align="center" width="60px">
-                        <img   src="<%=contextPath%>/images/Warning.GIF">
-                        </td></td>
-                    <td  align="left"noWrap width="400px">
-                         <textarea id="errormsg"  rows="5" cols="60" STYLE="overflow:hidden" disabled="disabled" ></textarea>
-                    </td>
-                </tr>
-
-                 <tr>
-                     <td colspan="2" align="right">
-                         <input id="hiddbut" type="button" value="显示详细信息"
-                               onmouseover="button_onmouseover()" onmouseout="button_onmouseout()"  onclick="hiddenmsg()">
-                         <input id="errorclose" type="button" value="    关闭    " width="60px"
-                           onmouseover="button_onmouseover()" onmouseout="button_onmouseout()" onclick="window.close()">
-                    </td>
-                </tr>
-                <tr>
-                    <td colspan="2" align="center">
-                       <textarea id="expmsg"  rows="8" cols="65" disabled="disabled" ></textarea>
-                    </td>
-                </tr>
-            </table>
+            <tr>
+                <td  align="center" width="60px">
+                    <img   src="<%=contextPath%>/images/Warning.GIF">
+                    </td></td>
+                <td  align="left"noWrap width="400px">
+                     <textarea id="errormsg"  rows="5" cols="60" STYLE="overflow:hidden" disabled="disabled" ></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="right">
+                    <input id="hiddbut" type="button" value="显示详细信息"
+                          onmouseover="button_onmouseover()" onmouseout="button_onmouseout()"  onclick="hiddenmsg()">
+                    <input id="errorclose" type="button" value="    关闭    " width="60px"
+                      onmouseover="button_onmouseover()" onmouseout="button_onmouseout()" onclick="window.close()">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                   <textarea id="expmsg"  rows="8" cols="65" disabled="disabled" ></textarea>
+                </td>
+            </tr>
+        </table>
     </body>
 </html>

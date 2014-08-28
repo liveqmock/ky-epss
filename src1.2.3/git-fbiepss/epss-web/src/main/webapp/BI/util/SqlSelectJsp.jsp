@@ -3,7 +3,6 @@
 <%@ page import="skyline.platform.form.control.impl.*"%>
 <%@ page import="skyline.platform.form.util.SessionAttributes"%>
 <%@ page import="skyline.platform.utils.*"%>
-
 <%
 	request.setCharacterEncoding("GBK");
     ServiceProxy sp = new SeviceProxyHttpImpl();

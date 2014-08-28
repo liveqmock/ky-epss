@@ -17,7 +17,7 @@ function initFormElement(elename,elevalue) {
         } else if ( formElement.type == "password") {
             initInput(elename,eleval);
         //多选框数据
-        }        //多行文本框数据
+        }//多行文本框数据
         else if ( formElement.type == "textarea") {
             initInput(elename,eleval);
         //多选框数据

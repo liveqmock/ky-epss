@@ -55,11 +55,9 @@ div.dhx_acc_base_dhx_black div.dhx_acc_item div.dhx_acc_item_label img.dhx_acc_i
 	top: 4px;
 }
 
-/* ?? accordion attached to window */
 .dhtmlxAccordionAttached {
 	border: none !important;
 }
-
 
 /* tabbar */
 div.dhx_acc_base_dhx_black div.dhx_acc_item div.dhx_tabbar_row {
