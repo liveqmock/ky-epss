@@ -2,7 +2,6 @@ package skyline.platform.utils;
 
 import java.util.*;
 
-import skyline.platform.advance.utils.PropertyManager;
 /**
  * <p>Title: </p>
  * <p>Description: </p>

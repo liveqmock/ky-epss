@@ -409,7 +409,7 @@ div.dhxLayout_Cover_dhx_terrace {
 	amargin-right: 1px;
 }
 .dhtmlxMenu_dhx_terrace_bottom_border {
-	height=25;
+	height:25;
 	border-bottom: #C2D5DC 1px solid;
 }
 .dhtmlxToolbar_dhx_terrace_bottom_top {
@@ -501,31 +501,7 @@ table.dhtmlxLayoutPolyContainer_dhx_terrace div.dhxcont_sb_container_layoutcell 
 	vertical-align: middle;
 	color: #666666;
 }
-/*
-table.dhtmlxLayoutPolyContainer_dhx_terrace div.dhxcont_statusbar {
-	position: absolute;
-	width: 100%;
-	bottom: 0px;
-	background: none;
-	_bottom: -1px;
-	background-image: url("../imgs/dhxlayout_dhx_terrace/dhxlayout_bg_sb.gif");
-	background-repeat: repeat-x;
-	overflow: hidden;
-	font-family: Tahoma;
-	font-size: 11px;
-	color: #7393ae;
-	vertical-align: middle;
-	line-height: 20px;
-	height: 20px;
-	-webkit-user-select: none;
-	-khtml-user-select: none;
-	-moz-user-select: none;
-	-o-user-select: none;
-	user-select: none;
-	cursor: default;
-	padding-left: 4px;
-}
-*/
+
 /* dhxcont cells in layout */
 table.dhtmlxLayoutPolyContainer_dhx_terrace td.dhtmlxLayoutSinglePoly div.dhxcont_global_content_area {
 	position: absolute;

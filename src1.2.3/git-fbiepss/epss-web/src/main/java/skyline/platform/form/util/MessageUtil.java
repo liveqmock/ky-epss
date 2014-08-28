@@ -1,7 +1,7 @@
 
 package skyline.platform.form.util;
 
-import skyline.platform.advance.utils.PropertyManager;
+import skyline.platform.utils.PropertyManager;
 import skyline.platform.form.util.event.ErrorMessage;
 /**
  * 消息处理工具

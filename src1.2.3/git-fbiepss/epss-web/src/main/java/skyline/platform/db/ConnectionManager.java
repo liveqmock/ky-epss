@@ -16,7 +16,7 @@ import org.apache.commons.logging.LogFactory;
 
 import zt.concurrent.concurrent.ConcurrentHashMap;
 
-import skyline.platform.advance.utils.PropertyManager;
+import skyline.platform.utils.PropertyManager;
 
 /**
  * 数据库管理器

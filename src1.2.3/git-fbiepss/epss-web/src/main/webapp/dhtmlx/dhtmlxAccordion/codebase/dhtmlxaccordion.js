@@ -1,11 +1,8 @@
-//v.3.5 build 120822
-
 /*
  Copyright DHTMLX LTD. http://www.dhtmlx.com
  You allowed to use this component or parts of it under GPL terms
  To use it on other terms or get Professional edition of the component please contact us at sales@dhtmlx.com
  */
-function dhtmlXAccordionItem() {}
 function dhtmlXAccordion(f, i) {
     if (window.dhtmlXContainer) {
         var d = this;
@@ -620,9 +617,6 @@ dhtmlXAccordion.prototype.loadXML = function(f, i) {
             d = i = null
         })
 };
-
-//v.3.5 build 120822
-
 /*
  Copyright DHTMLX LTD. http://www.dhtmlx.com
  You allowed to use this component or parts of it under GPL terms

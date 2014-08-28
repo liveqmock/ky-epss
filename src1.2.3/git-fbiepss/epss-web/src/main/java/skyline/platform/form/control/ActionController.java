@@ -1,7 +1,7 @@
 
 package skyline.platform.form.control;
 
-import skyline.platform.advance.utils.PropertyManager;
+import skyline.platform.utils.PropertyManager;
 import skyline.platform.db.ConnectionManager;
 import skyline.platform.db.DatabaseConnection;
 import skyline.platform.form.config.FormBean;

@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.logging.Logger;
 
-import skyline.platform.advance.utils.PropertyManager;
+import skyline.platform.utils.PropertyManager;
 import skyline.platform.db.ConnectionManager;
 import skyline.platform.db.DBUtil;
 import skyline.platform.db.DatabaseConnection;

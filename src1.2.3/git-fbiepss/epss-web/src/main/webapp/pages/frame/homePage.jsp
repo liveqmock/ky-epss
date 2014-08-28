@@ -46,9 +46,10 @@
 
         <link rel="stylesheet" type="text/css" href="../../dhtmlx/dhtmlxTabbar/codebase/dhtmlxtabbar.css"/>
         <script src="../../dhtmlx/dhtmlxTabbar/codebase/dhtmlxtabbar.js" type="text/javascript"></script>
+
         <script type="text/javascript" src="homePage_layout.js"></script>
         <script type="text/javascript" src="homePage_tab.js"></script>
-        <LINK href="<%=contextPath%>/css/diytabbar.css" type="text/css" rel="stylesheet">
+        <link href="<%=contextPath%>/css/diytabbar.css" type="text/css" rel="stylesheet">
         <style type="text/css">
             html, body {
                 margin: 0px;

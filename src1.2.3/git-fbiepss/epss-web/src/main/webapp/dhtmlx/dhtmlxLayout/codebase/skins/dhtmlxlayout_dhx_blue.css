@@ -46,7 +46,7 @@ table.dhtmlxLayoutPolyContainer_dhx_blue td.dhtmlxLayoutSinglePoly div.dhtmlxPol
 	font-family: Tahoma;
 	font-size: 2px;
 	height: 31px;
-	height=33px;
+	height:33px;
 	amargin-bottom: 1px;
 	background-image: url("../imgs/dhxlayout_dhx_blue/dhxlayout_bg.gif");
 	background-repeat: repeat-x;
@@ -189,7 +189,7 @@ table.dhtmlxLayoutPolyContainer_dhx_blue td.dhtmlxLayoutSinglePoly div.dhtmlxPol
 table.dhtmlxLayoutPolyContainer_dhx_blue td.dhtmlxLayoutSinglePoly div.dhtmlxPolyInfoBarCollapsedHor div.dhtmlxInfoBarButtonsFake {
 	border: 1px solid #C2D5DC;
 	height: 16px;
-	height=18px;
+	height:18px;
 	left: 0px;
 	position: relative;
 	top: 0px;
@@ -236,8 +236,8 @@ table.dhtmlxLayoutPolyContainer_dhx_blue td.dhtmlxLayoutSinglePoly div.dhtmlxPol
 	height: 100%;
 	width: 16px;
 	bottom: 0px;
-	height=100%;
-	width=18px;
+	height:100%;
+	width:18px;
 	background-image: url("../imgs/dhxlayout_dhx_blue/dhxlayout_collapsedver.gif");
 	background-repeat: repeat-y;
 }
@@ -246,7 +246,7 @@ table.dhtmlxLayoutPolyContainer_dhx_blue td.dhtmlxLayoutSinglePoly div.dhtmlxPol
 	position: absolute;
 	width: 100%;
 	bottom: 1px;
-	bottom=-1px;
+	bottom:-1px;
 	border-bottom: 1px solid #C2D5DC;
 }
 /* inner objects */
@@ -417,7 +417,7 @@ div.dhxLayout_Cover_dhx_blue {
 	amargin-right: 1px;
 }
 .dhtmlxMenu_dhx_blue_bottom_border {
-	height=25;
+	height:25;
 	border-bottom: #C2D5DC 1px solid;
 }
 .dhtmlxToolbar_dhx_blue_bottom_top {
@@ -498,7 +498,6 @@ table.dhtmlxLayoutPolyContainer_dhx_blue div.dhxcont_statusbar, table.dhtmlxLayo
 	cursor: default;
 	padding-left: 4px;
 }
-
  
 /* dhxcont cells in layout */
 table.dhtmlxLayoutPolyContainer_dhx_blue td.dhtmlxLayoutSinglePoly div.dhxcont_global_content_area {

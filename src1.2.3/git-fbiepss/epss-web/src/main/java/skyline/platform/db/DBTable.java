@@ -8,7 +8,7 @@ import jxl.format.BorderLineStyle;
 import jxl.format.*;
 import jxl.format.VerticalAlignment;
 import jxl.write.*;
-import skyline.platform.advance.utils.PropertyManager;
+import skyline.platform.utils.PropertyManager;
 import skyline.platform.form.config.EnumerationBean;
 import skyline.platform.form.config.EnumerationType;
 import skyline.platform.utils.Basic;

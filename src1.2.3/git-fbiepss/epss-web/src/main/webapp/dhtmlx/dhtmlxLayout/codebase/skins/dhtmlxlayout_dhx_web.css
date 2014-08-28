@@ -399,7 +399,7 @@ div.dhxLayout_Cover_dhx_web {
 	amargin-right: 1px;
 }
 .dhtmlxMenu_dhx_web_bottom_border {
-	height=25;
+	height:25;
 	border-bottom: #C2D5DC 1px solid;
 }
 .dhtmlxToolbar_dhx_web_bottom_top {

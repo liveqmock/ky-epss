@@ -1,6 +1,6 @@
 package skyline.platform.security;
 
-import skyline.platform.advance.utils.PropertyManager;
+import skyline.platform.utils.PropertyManager;
 
 import java.io.Serializable;
 

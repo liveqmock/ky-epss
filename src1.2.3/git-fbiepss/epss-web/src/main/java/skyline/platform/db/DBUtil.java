@@ -11,7 +11,7 @@
 
 package skyline.platform.db;
 
-import skyline.platform.advance.utils.PropertyManager;
+import skyline.platform.utils.PropertyManager;
 import skyline.platform.form.config.SystemAttributeNames;
 
 import java.text.SimpleDateFormat;
