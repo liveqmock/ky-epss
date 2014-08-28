@@ -132,6 +132,12 @@ public class EnuAction {
             else if(strSubmitType.equals("Upd")){
                 updMainRecordAction(enumainUpd);
             }else if(strSubmitType.equals("Del")){
+                Ptenudetail ptenudetailTemp=new Ptenudetail();
+                ptenudetailTemp.setEnutype(enumainDel.getEnutype());
+                if(enuService.detailRelateIsExistInDb(ptenudetailTemp)){
+                    MessageUtil.addWarn("该记录下有详细内容，删除失败！");
+                    return;
+                }
                 deleteMainRecordAction(enumainDel);
             }
             onQueryAction("main","false");
