@@ -5,10 +5,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import epss.repository.model.Ptenumain;
-import epss.repository.model.PtenumainExample;
 import epss.repository.model.Ptenudetail;
-import epss.repository.model.PtenudetailExample;
-import epss.repository.model.PtenudetailKey;
 import skyline.util.MessageUtil;
 import skyline.util.StyleModel;
 
@@ -30,8 +27,8 @@ import java.util.List;
  */
 @ManagedBean
 @ViewScoped
-public class EnumAction {
-    private static final Logger logger = LoggerFactory.getLogger(EnumAction.class);
+public class EnuAction {
+    private static final Logger logger = LoggerFactory.getLogger(EnuAction.class);
     @ManagedProperty(value = "#{enumService}")
     private EnumService enumService;
     private Ptenumain enumainQry;
