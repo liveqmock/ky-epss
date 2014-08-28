@@ -1,5 +1,5 @@
 package epss.view.enu;
-import epss.service.EnumService;
+import epss.service.EnuService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -16,8 +16,6 @@ import javax.faces.bean.ViewScoped;
 import java.util.ArrayList;
 import java.util.List;
 
-;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Think
@@ -29,8 +27,8 @@ import java.util.List;
 @ViewScoped
 public class EnuAction {
     private static final Logger logger = LoggerFactory.getLogger(EnuAction.class);
-    @ManagedProperty(value = "#{enumService}")
-    private EnumService enumService;
+    @ManagedProperty(value = "#{enuService}")
+    private EnuService enuService;
     private Ptenumain enumainQry;
     private Ptenumain enumainAdd;
     private Ptenumain enumainUpd;
@@ -77,6 +75,7 @@ public class EnuAction {
     public void resetActionForAdd(){
         enumainAdd=new Ptenumain();
         enudetailAdd=new Ptenudetail();
+        enudetailAdd.setEnutype(enudetailQry.getEnutype());
         strSubmitType="Add";
     }
 
@@ -84,15 +83,16 @@ public class EnuAction {
         try {
              if (enutypePara.equals("main")){
                  this.enumainList.clear();
-                 enumainList = enumService.selectMainListByModel(enumainQry);
+                 enumainList = enuService.selectMainListByModel(enumainQry);
                  if(strQryMsgOutPara.equals("true")) {
                      if (enumainList.isEmpty()) {
                          MessageUtil.addWarn("没有查询到数据。");
                      }
                  }
-             }else if(enutypePara.equals("detail")){
+             }else if(enutypePara.equals("detailSel")){
                  this.enudetailList.clear();
-                 enudetailList = enumService.selectDetailListByModel(enudetailQry);
+                 enudetailQry.setEnutype(enumainSel.getEnutype());
+                 enudetailList = enuService.selectDetailListByModel(enudetailQry);
                  if(strQryMsgOutPara.equals("true")) {
                      if (enudetailList.isEmpty()) {
                          MessageUtil.addWarn("没有查询到数据。");
@@ -122,7 +122,7 @@ public class EnuAction {
     public void submitThisRecordAction(String enutypePara,String strSubmitType){
         if(enutypePara.equals("main")){
             if(strSubmitType.equals("Add")){
-                if(enumService.mainIsExistInDb(enumainAdd)) {
+                if(enuService.mainIsExistInDb(enumainAdd)) {
                     MessageUtil.addError("该记录已存在，请重新录入！");
                 }else {
                     addMainRecordAction(enumainAdd);
@@ -137,7 +137,7 @@ public class EnuAction {
             onQueryAction("main","false");
         }else if(enutypePara.equals("detail")){
             if(strSubmitType.equals("Add")){
-                if(enumService.detailIsExistInDb(enudetailAdd)) {
+                if(enuService.detailIsExistInDb(enudetailAdd)) {
                     MessageUtil.addError("该记录已存在，请重新录入！");
                 }else {
                     addDetailRecordAction(enudetailAdd);
@@ -149,13 +149,13 @@ public class EnuAction {
             }else if(strSubmitType.equals("Del")){
                 deleteDetailRecordAction(enudetailDel);
             }
-            onQueryAction("detail","false");
+            onQueryAction("detailSel","false");
         }
     }
     public void addMainRecordAction(Ptenumain enumainPara){
         try {
             if(unableNullCheck(enumainPara)){
-                enumService.insertMainRecord(enumainPara) ;
+                enuService.insertMainRecord(enumainPara) ;
                 MessageUtil.addInfo("新增数据完成。");
             }
         } catch (Exception e) {
@@ -165,7 +165,7 @@ public class EnuAction {
     }
     public void updMainRecordAction(Ptenumain enumainPara){
         try {
-            enumService.updateMainRecord(enumainPara) ;
+            enuService.updateMainRecord(enumainPara) ;
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
@@ -174,7 +174,7 @@ public class EnuAction {
     }
     public void deleteMainRecordAction(Ptenumain enumainPara){
         try {
-            int deleteRecordNum= enumService.deleteMainByPrimaryKey(enumainPara.getEnutype()) ;
+            int deleteRecordNum= enuService.deleteMainByPrimaryKey(enumainPara.getEnutype()) ;
             if (deleteRecordNum<=0){
                 MessageUtil.addInfo("该记录已删除。");
                 return;
@@ -214,7 +214,7 @@ public class EnuAction {
             MessageUtil.addError("请输入枚举元素值！");
             return false;
         }else if (StringUtils.isEmpty(Ptenudetail.getEnuitemlabel())) {
-            MessageUtil.addError("请输入枚举元素标签！");
+            MessageUtil.addError("请输入枚举元素标题！");
             return false;
         }else if (StringUtils.isEmpty(Ptenudetail.getDispno().toString())) {
             MessageUtil.addError("请输入显示顺序！");
@@ -225,7 +225,7 @@ public class EnuAction {
     public void addDetailRecordAction(Ptenudetail enudetailPara){
         try {
             if(detailUnableNullCheck(enudetailPara)){
-                enumService.insertDetailRecord(enudetailPara) ;
+                enuService.insertDetailRecord(enudetailPara) ;
                 MessageUtil.addInfo("新增数据完成。");
             }
         } catch (Exception e) {
@@ -235,7 +235,7 @@ public class EnuAction {
     }
     public void updDetailRecordAction(Ptenudetail enudetailPara){
         try {
-            enumService.updateDetailRecord(enudetailPara) ;
+            enuService.updateDetailRecord(enudetailPara) ;
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
@@ -244,7 +244,7 @@ public class EnuAction {
     }
     public void deleteDetailRecordAction(Ptenudetail enudetailPara){
         try {
-            int deleteRecordNum= enumService.deleteDetailByPrimaryKey(enudetailPara) ;
+            int deleteRecordNum= enuService.deleteDetailByPrimaryKey(enudetailPara) ;
             if (deleteRecordNum<=0){
                 MessageUtil.addInfo("该记录已删除。");
                 return;
@@ -272,13 +272,12 @@ public class EnuAction {
             MessageUtil.addError(e.getMessage());
         }
     }
-
-    public EnumService getEnumService() {
-        return enumService;
+    public EnuService getEnuService() {
+        return enuService;
     }
 
-    public void setEnumService(EnumService enumService) {
-        this.enumService = enumService;
+    public void setEnuService(EnuService enuService) {
+        this.enuService = enuService;
     }
 
     public Ptenumain getEnumainQry() {

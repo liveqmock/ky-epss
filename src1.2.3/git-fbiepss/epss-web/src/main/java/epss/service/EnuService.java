@@ -16,7 +16,7 @@ import java.util.List;
  * Created by Administrator on 2014/8/27.
  */
 @Service
-public class EnumService {
+public class EnuService {
     @Autowired
     private PtenudetailMapper enudetailMapper;
     @Autowired
@@ -55,14 +55,18 @@ public class EnumService {
 
     public List<Ptenudetail> selectDetailListByModel(Ptenudetail enudetailPara) {
         PtenudetailExample example= new PtenudetailExample();
-        example.createCriteria().andEnuitemlabelLike("%"+ stringIgnoreNull(enudetailPara.getEnuitemlabel())+"%");
+        example.createCriteria()
+                .andEnutypeLike("%" + stringIgnoreNull(enudetailPara.getEnutype()) + "%")
+                .andEnuitemlabelLike("%" + stringIgnoreNull(enudetailPara.getEnuitemlabel()) + "%");
         example.setOrderByClause(" dispno ");
         List<Ptenudetail> enudetailTemp=enudetailMapper.selectByExample(example);
         return enudetailTemp;
     }
     public boolean detailIsExistInDb(Ptenudetail enudetailPara) {
         PtenudetailExample example = new PtenudetailExample();
-        example.createCriteria().andEnutypeEqualTo(enudetailPara.getEnutype());
+        example.createCriteria()
+                .andEnutypeEqualTo(enudetailPara.getEnutype())
+                .andEnuitemvalueEqualTo(enudetailPara.getEnuitemvalue());
         return enudetailMapper .countByExample(example) >= 1;
     }
     public void insertDetailRecord(Ptenudetail enudetailPara) {
