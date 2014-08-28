@@ -83,19 +83,23 @@ public class EnumAction {
         strSubmitType="Add";
     }
 
-    public void onQueryAction(String enutypePara) {
+    public void onQueryAction(String enutypePara,String strQryMsgOutPara) {
         try {
              if (enutypePara.equals("main")){
                  this.enumainList.clear();
                  enumainList = enumService.selectMainListByModel(enumainQry);
-                 if (enumainList.isEmpty()) {
-                     MessageUtil.addWarn("没有查询到数据。");
+                 if(strQryMsgOutPara.equals("true")) {
+                     if (enumainList.isEmpty()) {
+                         MessageUtil.addWarn("没有查询到数据。");
+                     }
                  }
              }else if(enutypePara.equals("detail")){
                  this.enudetailList.clear();
                  enudetailList = enumService.selectDetailListByModel(enudetailQry);
-                 if (enudetailList.isEmpty()) {
-                     MessageUtil.addWarn("没有查询到数据。");
+                 if(strQryMsgOutPara.equals("true")) {
+                     if (enudetailList.isEmpty()) {
+                         MessageUtil.addWarn("没有查询到数据。");
+                     }
                  }
              }
         } catch (Exception e) {
@@ -133,7 +137,7 @@ public class EnumAction {
             }else if(strSubmitType.equals("Del")){
                 deleteMainRecordAction(enumainDel);
             }
-            onQueryAction("main");
+            onQueryAction("main","false");
         }else if(enutypePara.equals("detail")){
             if(strSubmitType.equals("Add")){
                 if(enumService.detailIsExistInDb(enudetailAdd)) {
@@ -148,7 +152,7 @@ public class EnumAction {
             }else if(strSubmitType.equals("Del")){
                 deleteDetailRecordAction(enudetailDel);
             }
-            onQueryAction("detail");
+            onQueryAction("detail","false");
         }
     }
     public void addMainRecordAction(Ptenumain enumainPara){

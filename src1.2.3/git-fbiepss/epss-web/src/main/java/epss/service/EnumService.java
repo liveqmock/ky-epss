@@ -55,9 +55,7 @@ public class EnumService {
 
     public List<Ptenudetail> selectDetailListByModel(Ptenudetail enudetailPara) {
         PtenudetailExample example= new PtenudetailExample();
-        PtenudetailExample.Criteria criteria = example.createCriteria();
-        criteria.andEnutypeLike("%" + stringIgnoreNull(enudetailPara.getEnutype()) + "%")
-                .andEnuitemvalueLike("%" + stringIgnoreNull(enudetailPara.getEnuitemvalue()) + "%");
+        example.createCriteria().andEnuitemlabelLike("%"+ stringIgnoreNull(enudetailPara.getEnuitemlabel())+"%");
         example.setOrderByClause(" dispno ");
         List<Ptenudetail> enudetailTemp=enudetailMapper.selectByExample(example);
         return enudetailTemp;
