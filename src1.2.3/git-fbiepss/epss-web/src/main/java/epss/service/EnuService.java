@@ -69,6 +69,12 @@ public class EnuService {
                 .andEnuitemvalueEqualTo(enudetailPara.getEnuitemvalue());
         return enudetailMapper .countByExample(example) >= 1;
     }
+    public boolean detailRelateIsExistInDb(Ptenudetail enudetailPara) {
+        PtenudetailExample example = new PtenudetailExample();
+        example.createCriteria()
+                .andEnutypeEqualTo(enudetailPara.getEnutype());
+        return enudetailMapper .countByExample(example) >= 1;
+    }
     public void insertDetailRecord(Ptenudetail enudetailPara) {
         enudetailMapper.insertSelective(enudetailPara);
     }
