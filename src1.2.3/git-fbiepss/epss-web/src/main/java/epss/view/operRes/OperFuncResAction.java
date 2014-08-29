@@ -72,7 +72,6 @@ public class OperFuncResAction implements Serializable{
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
-
         cttInfoShowAdd=new CttInfoShow();
         cttInfoShowUpd=new CttInfoShow();
         cttInfoShowDel=new CttInfoShow();
@@ -125,7 +124,7 @@ public class OperFuncResAction implements Serializable{
         deptOperShowTemp.setName("人员信息");
         operRoot = new DefaultTreeNode("ROOT", null);
         TreeNode node0 = new DefaultTreeNode(deptOperShowTemp, operRoot);
-        recursiveOperTreeNode("0", node0);
+        recursiveOperTreeNode("ROOT", node0);
         node0.setExpanded(true);
     }
     private void recursiveResTreeNode(String parentPkidPara,TreeNode parentNode) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {

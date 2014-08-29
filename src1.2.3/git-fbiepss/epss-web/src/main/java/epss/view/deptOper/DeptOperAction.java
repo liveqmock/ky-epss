@@ -81,11 +81,11 @@ public class DeptOperAction implements Serializable {
     private void initDept() {
         deptRoot = new DefaultTreeNode("Root", null);
         DeptOperShow deptOperShowTemp = new DeptOperShow();
-        deptOperShowTemp.setPkid("root");
+        deptOperShowTemp.setPkid("ROOT");
         deptOperShowTemp.setName("机构人员信息");
         deptOperShowTemp.setType("0");
         TreeNode node0 = new DefaultTreeNode(deptOperShowTemp, deptRoot);
-        recursiveTreeNode("root", node0);
+        recursiveTreeNode("ROOT", node0);
         node0.setExpanded(true);
     }
 
@@ -105,7 +105,7 @@ public class DeptOperAction implements Serializable {
                     }
                 }
             }
-            recursiveTreeNode(deptOperShowTempList.get(i).getPkid(), childNode);
+            recursiveTreeNode(deptOperShowTempList.get(i).getId(), childNode);
         }
     }
 

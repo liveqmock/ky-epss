@@ -41,24 +41,26 @@
                                          style="height:18px;width:18px"
                                          action="#{deptOperAction.selectRecordAction('Mng','Add',node)}"
                                          update=":form:pgViewForDeptAdd,:form:msgs"
-                                         onclick="PF('wVDlgViewForDeptAdd').show()">
+                                         onclick="PF('wVDlgViewForDeptAdd').show()"
+                                         rendered="#{node.type eq '0'?'true':'false'}">
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-pencil"
                                          style="height:18px;width:18px"
                                          action="#{deptOperAction.selectRecordAction('Mng','Upd',node)}"
                                          update=":form:pgViewForDeptUpd,:form:msgs"
                                          onclick="PF('wVDlgViewForDeptUpd').show()"
-                                         rendered="#{node.name eq '机构人员信息'?'false':'true'}"
-                                         disabled="#{node.isDisabled eq 'false'?'false':'true'}">
+                                         rendered="#{node.type eq '1'?'false':node.pkid eq 'ROOT'?'false':'true'}">
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-trash"
                                          style="height:18px;width:18px"
                                          action="#{deptOperAction.selectRecordAction('Mng','Del',node)}"
                                          update=":form:pgViewForDeptDel,:form:msgs"
                                          onclick="PF('wVDlgViewForDeptDel').show()"
-                                         rendered="#{node.name eq '机构人员信息'?'false':'true'}"
-                                         disabled="#{node.isDisabled eq 'false'?'false':'true'}">
+                                         rendered="#{node.type eq '1'?'false':node.pkid eq 'ROOT'?'false':'true'}">
                         </p:commandButton>
+                    </p:column>
+                    <p:column headerText="人员名称" style="width:120px;text-align:left">
+                        <h:outputText value="#{node.type eq '1'?node.id:''}"/>
                     </p:column>
                     <p:column headerText="人员名称" style="width:120px;text-align:left">
                         <h:outputText value="#{node.type eq '1'?node.name:''}"/>
@@ -68,23 +70,22 @@
                                          style="height:18px;width:18px"
                                          action="#{deptOperAction.selectRecordAction('Mng','Add',node)}"
                                          update=":form:pgViewForOperAdd,:form:msgs"
-                                         onclick="PF('wVDlgViewForOperAdd').show()">
+                                         onclick="PF('wVDlgViewForOperAdd').show()"
+                                         rendered="#{node.type eq '0'?'true':'false'}">
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-pencil"
                                          style="height:18px;width:18px"
                                          action="#{deptOperAction.selectRecordAction('Mng','Upd',node)}"
                                          update=":form:pgViewForOperUpd,:form:msgs"
                                          onclick="PF('wVDlgViewForOperUpd').show()"
-                                         rendered="#{node.name eq '机构人员信息'?'false':'true'}"
-                                         disabled="#{node.isDisabled eq 'false'?'false':'true'}">
+                                         rendered="#{node.type eq '0'?'false':'true'}">
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-trash"
                                          style="height:18px;width:18px"
                                          action="#{deptOperAction.selectRecordAction('Mng','Del',node)}"
                                          update=":form:pgViewForOperDel,:form:msgs"
                                          onclick="PF('wVDlgViewForOperDel').show()"
-                                         rendered="#{node.name eq '机构人员信息'?'false':'true'}"
-                                         disabled="#{node.isDisabled eq 'false'?'false':'true'}">
+                                         rendered="#{node.type eq '0'?'false':'true'}">
                         </p:commandButton>
                     </p:column>
                 </p:treeTable>
