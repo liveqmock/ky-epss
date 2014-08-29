@@ -195,7 +195,7 @@ public class Oper extends AbstractBasicBean implements Cloneable {
         Oper abb = new Oper();
         abb.pkid = rs.getString("pkid");
         abb.tid = rs.getString("tid");
-        abb.deptPkid = rs.getString("deptPkid");
+        abb.deptPkid = rs.getString("dept_pkid");
         abb.id = rs.getString("id");
         abb.name = rs.getString("name");
         abb.passwd = rs.getString("passwd");
@@ -208,11 +208,11 @@ public class Oper extends AbstractBasicBean implements Cloneable {
         abb.phone = rs.getString("phone");
         abb.otherphone = rs.getString("otherphone");
         abb.enabled = rs.getString("enabled");
-        abb.archivedFlag = rs.getString("archivedFlag");
-        abb.createdBy = rs.getString("createdBy");
-        abb.createdTime = rs.getString("createdTime");
-        abb.lastUpdBy = rs.getString("lastUpdBy");
-        abb.lastUpdTime = rs.getString("lastUpdTime");
+        abb.archivedFlag = rs.getString("archived_flag");
+        abb.createdBy = rs.getString("created_by");
+        abb.createdTime = rs.getString("created_time");
+        abb.lastUpdBy = rs.getString("last_up_dBy");
+        abb.lastUpdTime = rs.getString("last_upd_time");
         abb.remark = rs.getString("remark");
         abb.recversion = rs.getInt("recversion");
         list.add(abb);

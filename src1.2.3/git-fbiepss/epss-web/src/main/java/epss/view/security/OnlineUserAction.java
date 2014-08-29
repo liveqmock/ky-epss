@@ -36,6 +36,7 @@ public class OnlineUserAction implements Serializable {
             Map.Entry<String, OperatorManager> entry = (Map.Entry<String, OperatorManager>) iter.next();
             OperatorManager om = entry.getValue();
             Oper onLineOper = om.getOperator();
+            onLineOper.setSessionKey(entry.getKey());
             operList.add(onLineOper);
         }
         onlineUserNum=operList.size()+"";

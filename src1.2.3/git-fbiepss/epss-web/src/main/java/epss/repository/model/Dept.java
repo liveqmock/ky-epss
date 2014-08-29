@@ -146,10 +146,10 @@ public class Dept
         abb.status = rs.getString("status");
         abb.isdummy = rs.getString("isdummy");
         abb.archivedFlag = rs.getString("archivedFlag");
-        abb.createdBy = rs.getString("createdBy");
-        abb.createdTime = rs.getString("createdTime");
-        abb.lastUpdBy = rs.getString("lastUpdBy");
-        abb.lastUpdTime = rs.getString("lastUpdBy");
+        abb.createdBy = rs.getString("created_by");
+        abb.createdTime = rs.getString("created_time");
+        abb.lastUpdBy = rs.getString("last_upd_by");
+        abb.lastUpdTime = rs.getString("last_upd_by");
         abb.remark = rs.getString("remark");
         abb.recversion = rs.getInt("recversion");
 
