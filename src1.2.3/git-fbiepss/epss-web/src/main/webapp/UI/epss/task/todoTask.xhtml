@@ -133,14 +133,14 @@
                              rowIndexVar="row"
                              rowKey="#{row + 1}"
                              emptyMessage="数据记录为空..."
-                             rowStyleClass="#{record.type eq null?'rowDoneStyle':
+                             rowStyleClass="#{record.id eq null?'rowDoneStyle':
                              record.strColorType eq '2'?'rowDoneStyle2':'rowDoneStyle1'}"
                              scrollable="true"
                              scrollHeight="442">
                     <p:column headerText="操作" style="width:30px;text-align: center;">
                         <p:commandButton icon="ui-icon-triangle-1-e"
                                          style="height:16px;width:30px;"
-                                         rendered="#{record.type eq null?'false':'true'}"
+                                         rendered="#{record.id eq null?'false':'true'}"
                                          onclick="actSelect('#{record.type}','#{record.flowStatus}','#{record.pkid}')">
                         </p:commandButton>
                     </p:column>
@@ -148,7 +148,7 @@
                         <h:outputText value="#{row + 1}"/>
                     </p:column>
                     <p:column headerText="任务类别" style="width:100px;text-align:left;">
-                        <h:outputText value="#{record.flowStatusName}" escape="false"/>
+                        <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
                     </p:column>
                     <p:column headerText="待处理任务ID" style="width:150px;text-align:left;">
                         <h:outputText value="#{record.id}"/>

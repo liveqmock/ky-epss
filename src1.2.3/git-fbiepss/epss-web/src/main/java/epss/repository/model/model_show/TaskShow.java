@@ -13,6 +13,8 @@ public class TaskShow {
     private String preFlowStatus;
     private String preFlowStatusName;
     private String strColorType;
+    private String operResFlowStatus;
+    private String operResFlowStatusName;
 
     public String getType() {
         return type;
@@ -92,5 +94,21 @@ public class TaskShow {
 
     public void setStrColorType(String strColorType) {
         this.strColorType = strColorType;
+    }
+
+    public String getOperResFlowStatus() {
+        return operResFlowStatus;
+    }
+
+    public void setOperResFlowStatus(String operResFlowStatus) {
+        this.operResFlowStatus = operResFlowStatus;
+    }
+
+    public String getOperResFlowStatusName() {
+        return operResFlowStatusName;
+    }
+
+    public void setOperResFlowStatusName(String operResFlowStatusName) {
+        this.operResFlowStatusName = operResFlowStatusName;
     }
 }
