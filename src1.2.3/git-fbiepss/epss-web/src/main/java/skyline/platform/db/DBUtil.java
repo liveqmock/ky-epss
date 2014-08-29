@@ -243,9 +243,7 @@ public class DBUtil {
         DatabaseConnection con = manager.getConnection();
         try {
             System.out.println(getSpell(con, "ÍõÄË¹§"));
-
         } catch (Exception e) {
-
         } finally {
             manager.releaseConnection(con);
         }

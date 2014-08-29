@@ -1,5 +1,5 @@
 package skyline.platform.utils;
-import skyline.platform.system.manage.dao.*;
+import epss.repository.model.Pterror;
 
 public class LogManager {
      public static final String  ERR_TYPE_HINT = "0";///////信息提示
@@ -57,8 +57,8 @@ public class LogManager {
           else if (errorindex == null && errorindex.equals(""))
               message ="没赋错误编码！";
           else{
-               PterrorBean pterror = new PterrorBean();
-               pterror = (PterrorBean)pterror.findFirstByWhere(" where MOUDLEID = '"+moudleID+"' and ERRORTYPE= '"+errorType+"' and ERRORINDEX ='"+errorindex+"'");
+               Pterror pterror = new Pterror();
+               pterror = (Pterror)pterror.findFirstByWhere(" where MOUDLEID = '"+moudleID+"' and ERRORTYPE= '"+errorType+"' and ERRORINDEX ='"+errorindex+"'");
                if (pterror != null)
                     message = pterror.getMessage();
                else
