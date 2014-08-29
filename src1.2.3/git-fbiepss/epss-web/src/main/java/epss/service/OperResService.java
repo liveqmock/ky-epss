@@ -22,12 +22,12 @@ public class OperResService {
     @Resource
     private OperResMapper operResMapper;
 
-    public List<OperResShow> selectOperaRoleRecords(String parentDeptid){
-        return myOperResMapper.selectOperaRoleRecords(parentDeptid);
+    public List<OperResShow> selectOperaRoleRecords(String parentPkid){
+        return myOperResMapper.selectOperaRoleRecords(parentPkid);
     }
 
-    public List<DeptOperShow> getOperList(String parentDeptid){
-        return myOperResMapper.getOperList(parentDeptid);
+    public List<DeptOperShow> getOperList(String parentPkid){
+        return myOperResMapper.getOperList(parentPkid);
     }
 
     public List<OperResShow> selectOperaResRecords(){

@@ -31,20 +31,20 @@ public interface MyOperResMapper {
             "     from " +
             "        oper " +
             "     where " +
-            "        DEPT_PKID=#{parentDeptid} " +
+            "        DEPT_PKID=#{parentpkid} " +
             "     union " +
             "     select " +
             "       id as pkid , " +
             "       name as name, " +
             "       1 as type , " +
-            "       (select count(id) as a from dept  where parentdeptid=ta.id) as countnumer " +
+            "       (select count(id) as a from dept  where parentpkid=ta.id) as countnumer " +
             "     from " +
             "       dept ta " +
             "     where " +
-            "       parentdeptid=#{parentDeptid} " +
+            "       parentpkid=#{parentpkid} " +
             "      ) ss " +
             "  order by type ")
-    List<DeptOperShow> getOperList(@Param("parentDeptid") String parentDeptid);
+    List<DeptOperShow> getOperList(@Param("parentpkid") String parentpkid);
     @Select("select " +
             "    operPkid, " +
             "    operName, " +
@@ -58,21 +58,21 @@ public interface MyOperResMapper {
             "     from " +
             "        oper " +
             "     where " +
-            "        id=#{parentDeptid} " +
+            "        id=#{parentpkid} " +
             "     union " +
             "     select " +
             "       id as operPkid , " +
             "       name as operName, " +
             "       1 as infoType , " +
-            "       (select  count(id) as a from dept  where parentdeptid=ta.id) as countnumer " +
+            "       (select  count(id) as a from dept  where parentpkid=ta.id) as countnumer " +
             "     from " +
             "       dept ta " +
             "     where " +
-            "       parentdeptid=#{parentDeptid} " +
+            "       parentpkid=#{parentpkid} " +
             "      ) ss " +
             "  order by  " +
             "  infoType")
-    List<OperResShow> selectOperaRoleRecords(@Param("parentDeptid") String parentDeptid);
+    List<OperResShow> selectOperaRoleRecords(@Param("parentpkid") String parentpkid);
     @Select("select " +
             " t.pkid, " +
             " t.tid,  " +

@@ -157,7 +157,7 @@ public class Dept
         DatabaseConnection dc = cm.get();
 
         try {
-            RecordSet chrs = dc.executeQuery("select dqdm,deptname from " + TABLENAME +" where parentdeptid='ROOT'" );
+            RecordSet chrs = dc.executeQuery("select name from " + TABLENAME +" where parentpkid='ROOT'" );
         } catch ( Exception e ) {
             e.printStackTrace();
         } finally {
