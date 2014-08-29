@@ -124,7 +124,8 @@
                              rowIndexVar="row"
                              rowKey="#{row + 1}"
                              emptyMessage="数据记录为空..."
-                             rowStyleClass="#{record.id eq null?'rowDoneStyle':null}"
+                             rowStyleClass="#{record.id eq null?'rowDoneStyle':
+                                              record.flowStatus eq record.operResFlowStatus?null:'rowDoneStyle1'}"
                              scrollable="true"
                              scrollHeight="442">
                     <p:column headerText="操作" style="width:30px;text-align: center;">
