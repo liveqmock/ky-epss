@@ -16,7 +16,6 @@ function ValidateLength() {
 		document.winform.password.select();
 		return false;
 	}
-	
 	return true;
 }
 function submitViaEnter(evt,Location) {
@@ -44,15 +43,6 @@ function focusNext(form, elemName, evt) {
     return true;
 }
 function plogin_onclick(Location) {
-
-	//document.execCommand("ClearAuthenticationCache","false");
-	//alert(document.all.winform.password.value )
-    //if (document.all.winform.password.value == "privatepass*")
-    //{
-	//	return true;
-    //}
-	//alert(document.all.winform.password.value )
-
 	var flag=true;
 	return true;
 	try {
@@ -60,25 +50,14 @@ function plogin_onclick(Location) {
 	    if ( Location==undefined ) {
 	        Location="http://192.168.4.29";
 	    }
-
 	    var Location="http://192.168.4.29/jinhong";
-
 	    auth.open("get",Location,false, "weboa\\"+document.all.winform.username.value,document.all.winform.password.value )  ;
-
 	    auth.send("");
-
-
 		auth.open("POST",Location+"/getAdStr.aspx",false) ;
-
 	    var xmlstr="<root><action>"+document.all.winform.username.value+"</action></root>";
-		
 		auth.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-	 
 	    auth.send(xmlstr);
-
-
 	  switch(auth.status){
-
 		    case 200:
 		        if (auth.responseText =="false"){
 					 flag=false;
@@ -90,13 +69,10 @@ function plogin_onclick(Location) {
 		        alert("输入密码有误！");
 		        break;
 		    default:
-
 		        flag=false;
 		        alert("对不起，服务器发生错误，请稍后再试！");
 	    }
 	} catch ( Exception ) {
-
 	}
-
 	return flag;
 }

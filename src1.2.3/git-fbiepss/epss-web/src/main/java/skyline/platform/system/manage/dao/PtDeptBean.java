@@ -34,8 +34,6 @@ public class PtDeptBean
 
      String superdqdm;
      String superdqmc;
-
-
      public static final String TABLENAME = "ptdept";
      public String getTableName() {
           return TABLENAME;
@@ -84,12 +82,8 @@ public class PtDeptBean
                     cm.release();
 
           }
-
-
-
           list.add(abb);
      }
-
 
      public String getSuperdqdm() {
          if(this.superdqdm == null) {
@@ -104,9 +98,6 @@ public class PtDeptBean
          }
          return this.superdqmc;
     }
-
-
-
 
      public String getDeptid() {
           if(this.deptid == null) {

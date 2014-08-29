@@ -1,12 +1,3 @@
-<%@ page import="skyline.platform.security.OnLineOpersManager" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Administrator
-  Date: 2010-11-19
-  Time: 14:55:37
-  To change this template use File | Settings | File Templates.
---%>
-<%--<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3c.org/TR/1999/REC-html401-19991224/loose.dtd">--%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <%@ page contentType="text/html;charset=GBK" language="java" %>
 
@@ -106,10 +97,10 @@
     </form>
 </DIV>
 
-<SPAN id="ValrUserName" style="DISPLAY: none; COLOR: red"></SPAN>
-<SPAN id="ValrPassword" style="DISPLAY: none; COLOR: red"></SPAN>
-<SPAN id="ValrValidateCode" style="DISPLAY: none; COLOR: red"></SPAN>
+<span id="ValrUserName" style="DISPLAY: none; COLOR: red"></span>
+<span id="ValrPassword" style="DISPLAY: none; COLOR: red"></span>
+<span id="ValrValidateCode" style="DISPLAY: none; COLOR: red"></span>
 
-<DIV id="ValidationSummary1" style="DISPLAY: none; COLOR: red"></DIV>
+<div id="ValidationSummary1" style="DISPLAY: none; COLOR: red"></div>
 </body>
 </html>

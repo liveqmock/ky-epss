@@ -3,8 +3,7 @@ package skyline.platform.security;
 import java.util.Map;
 import java.io.Serializable;
 import java.util.Comparator;
-
-import skyline.platform.utils.BusinessDate;
+import skyline.util.ToolUtil;
 
 /**
  * <p>Title: Operator.java</p>
@@ -37,7 +36,7 @@ public class Operator implements Serializable,Comparator  {
      private String isCombined;
      private String remoteAddr;
      private String remoteHost;
-     private String loginTime = BusinessDate.getTodaytime();
+     private String loginTime = ToolUtil.getStrLastUpdTime();
 
      /**
       * 操作员数据库代表，数据库操作都在其中进行。
@@ -117,7 +116,7 @@ public class Operator implements Serializable,Comparator  {
 
      /**
       * 初始化，将属于该操作员的所有基本信息取出。
-      * @param username
+      * @param operatorId
       * @roseuid 3F80BB050281
       */
      private void init(String operatorId) {

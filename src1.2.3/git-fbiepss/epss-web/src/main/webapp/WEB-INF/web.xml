@@ -84,11 +84,6 @@
     </listener>
 
     <servlet>
-        <servlet-name>ImgServlet</servlet-name>
-        <servlet-class>skyline.platform.security.ImgServlet</servlet-class>
-    </servlet>
-
-    <servlet>
         <servlet-name>AdminServlet</servlet-name>
         <servlet-class>skyline.platform.security.AdminServlet</servlet-class>
     </servlet>
@@ -97,11 +92,6 @@
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
-    </servlet-mapping>
-
-    <servlet-mapping>
-        <servlet-name>ImgServlet</servlet-name>
-        <url-pattern>/signjpg</url-pattern>
     </servlet-mapping>
 
     <!-- Action Servlet Mapping -->

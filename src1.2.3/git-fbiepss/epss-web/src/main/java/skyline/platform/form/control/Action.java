@@ -25,14 +25,12 @@ public class Action {
 	 protected PtDeptBean dept;
 	 protected LogManager logMamager;
 	 protected String reqxml;
-	 static  Vector PARAM_MOTHOD = new Vector();;
+	 static  Vector PARAM_MOTHOD = new Vector();
 
 	 public Action() {
 	 }
 	 public int execute(ActionRequest req, SQLResponse res) {
 		  this.req = req;
-
-
 		  this.res = res;
 		  int result = 0;
 		  ConnectionManager cm = ConnectionManager.getInstance();

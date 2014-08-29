@@ -15,7 +15,6 @@ import java.util.List;
  */
 public class MenuBean
         implements Serializable {
-
     private transient DatabaseAgent database;
 
     /**

@@ -5,8 +5,9 @@ import org.slf4j.LoggerFactory;
 import skyline.platform.db.ConnectionManager;
 import skyline.platform.system.manage.dao.PtDeptBean;
 import skyline.platform.system.manage.dao.PtOperBean;
-import skyline.platform.utils.BusinessDate;
 import skyline.security.MD5Helper;
+import skyline.util.ToolUtil;
+
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +57,7 @@ public class OperatorManager implements Serializable {
 
     private String remoteHost = null;
 
-    private String loginTime = BusinessDate.getTodaytime();
+    private String loginTime = ToolUtil.getStrLastUpdTime();
 
     private boolean isLogin = false;
 
