@@ -20,7 +20,7 @@
     if (om != null) {
         if (om.getOperator() != null) {
             username = om.getOperatorName();
-            operid = om.getOperator().getOperid();
+            operid = om.getOperator().getId();
         }
     }
 %>

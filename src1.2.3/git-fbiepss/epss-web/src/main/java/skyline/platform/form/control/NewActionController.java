@@ -61,7 +61,7 @@ public class NewActionController {
                 act.setReqXml(reqXml);
                 if(om!=null){
                 	if(om.getOperator()!=null)
-                		act.setDept(om.getOperator().getPtDeptBean());
+                		act.setDept(om.getOperator().getDept());
                 }
                 act.execute(sqlReq.getActionRequest(i), sqlRes);
             } catch (Exception e) {

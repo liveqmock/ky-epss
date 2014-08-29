@@ -24,22 +24,22 @@ public interface MyOperResMapper {
             "    type " +
             " from " +
             "    (select " +
-            "       operid as pkid , " +
-            "       opername as name , " +
+            "       id as pkid , " +
+            "       name as name , " +
             "       0 as type, " +
             "       0 as countnumer " +
             "     from " +
-            "        ptoper " +
+            "        oper " +
             "     where " +
-            "        deptid=#{parentDeptid} " +
+            "        DEPT_PKID=#{parentDeptid} " +
             "     union " +
             "     select " +
-            "       deptid as pkid , " +
-            "       deptname as name, " +
+            "       id as pkid , " +
+            "       name as name, " +
             "       1 as type , " +
-            "       (select  count(deptid) as a from ptdept  where parentdeptid=ta.deptid) as countnumer " +
+            "       (select count(id) as a from dept  where parentdeptid=ta.id) as countnumer " +
             "     from " +
-            "       ptdept ta " +
+            "       dept ta " +
             "     where " +
             "       parentdeptid=#{parentDeptid} " +
             "      ) ss " +
@@ -51,22 +51,22 @@ public interface MyOperResMapper {
             "    infoType " +
             " from " +
             "    (select " +
-            "       operid as operPkid , " +
-            "       opername as operName , " +
+            "       id as operPkid , " +
+            "       name as operName , " +
             "       0 as infoType, " +
             "       0 as countnumer " +
             "     from " +
-            "        ptoper " +
+            "        oper " +
             "     where " +
-            "        deptid=#{parentDeptid} " +
+            "        id=#{parentDeptid} " +
             "     union " +
             "     select " +
-            "       deptid as operPkid , " +
-            "       deptname as operName, " +
+            "       id as operPkid , " +
+            "       name as operName, " +
             "       1 as infoType , " +
-            "       (select  count(deptid) as a from ptdept  where parentdeptid=ta.deptid) as countnumer " +
+            "       (select  count(id) as a from dept  where parentdeptid=ta.id) as countnumer " +
             "     from " +
-            "       ptdept ta " +
+            "       dept ta " +
             "     where " +
             "       parentdeptid=#{parentDeptid} " +
             "      ) ss " +
@@ -77,17 +77,17 @@ public interface MyOperResMapper {
             " t.pkid, " +
             " t.tid,  " +
             " t.oper_pkid as operPkid, " +
-            " (select opername from ptoper where operid=t.oper_pkid) as operName, " +
+            " (select name from oper where id=t.oper_pkid) as operName, " +
             " t.flow_status as flowStatus, " +
             " t.info_type as infoType, " +
             " t.info_pkid as infoPkid, " +
             " (select name from es_ctt_info where pkid=t.info_pkid ) as infoPkidName, " +
             " t.archived_flag as archivedFlag, " +
             " t.created_by as createdBy, " +
-            " (select opername from ptoper where operid=t.created_by) as createdByName, " +
+            " (select name from oper where id=t.created_by) as createdByName, " +
             " t.created_time as createdTime, " +
             " t.last_upd_by as lastUpdBy, " +
-            " (select opername from ptoper where operid=t.last_upd_by) as lastUpdByName,  " +
+            " (select name from oper where id=t.last_upd_by) as lastUpdByName,  " +
             " t.last_upd_time as lastUpdTime, " +
             " t.remark as remark, " +
             " t.recversion as recversion " +
@@ -122,7 +122,7 @@ public interface MyOperResMapper {
             "    t.note as note," +
             "    t.end_flag as endFlag," +
             "    t.created_by as createdBy," +
-            "    (select opername from ptoper where operid=t.created_by) as createdByName," +
+            "    (select name from oper where id=t.created_by) as createdByName," +
             "    t.created_date as createdDate " +
             " from" +
             "    ES_CTT_INFO t" +

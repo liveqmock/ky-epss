@@ -24,7 +24,7 @@
             <p:panel header="在线用户列表">
                 <h:outputText id="onlineUserNum" value="在线人数：#{onlineUserAction.onlineUserNum}" style="text-align: left"/>
                 <p:dataTable id="pdt" style="width:100%;"
-                             value="#{onlineUserAction.ptOperBeanList}"
+                             value="#{onlineUserAction.operList}"
                              var="record"
                              rowKey="#{record.sessionKey}"
                              rowIndexVar="row"
@@ -32,16 +32,16 @@
                              widgetVar="DtInitTkcttList"
                              scrollable="true">
                     <p:column headerText="所属部门" width="13%" style="text-align: center">
-                        <h:outputText value="#{record.ptDeptBean.deptname}"/>
+                        <h:outputText value="#{record.dept.name}"/>
                     </p:column>
                     <p:column headerText="操作员姓名" width="10%" style="text-align:center">
-                        <h:outputText value="#{record.opername}"/>
+                        <h:outputText value="#{record.name}"/>
                     </p:column>
                     <p:column headerText="操作员标识" width="10%" style="text-align:center">
-                        <h:outputText value="#{record.operid}"/>
+                        <h:outputText value="#{record.id}"/>
                     </p:column>
                     <p:column headerText="登录信息" width="35%" style="text-align:center">
-                        <h:outputText value="#{record.fillstr600}"/>
+                        <h:outputText value="#{record.onlineSituation}"/>
                     </p:column>
                     <p:column headerText="SessionUser" width="22%" style="text-align:left">
                         <h:outputText value="#{record.sessionKey}"/>

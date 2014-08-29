@@ -185,7 +185,6 @@ public class ToolUtil {
     public static String operID="";
     //取出某表某字段的最大值
     public static String  getFieldMax(DatabaseConnection dc,String Keyfield,String tableName,String whereStr){
-
         String maxcount ="1";
         try{
             String SQLStr = "select max(to_number(" + Keyfield + "))as maxcount from  " + tableName + " " +whereStr ;
@@ -193,103 +192,46 @@ public class ToolUtil {
             RecordSet rs = dc.executeQuery(SQLStr);
             if(rs.next())
                 maxcount = rs.getString(0);
-
             if(maxcount == null )
                 maxcount = "1";
             else
                 maxcount = "" + (Integer.parseInt(maxcount) +1);
         }catch(Exception e){
-            // e.printStackTrace();
         }
-
         return maxcount;
-
-
     }
     //取出某表某字段的最大值
     public static String  getFieldMax(DatabaseConnection dc,String Keyfield,String tableName){
-
         return getFieldMax(dc,Keyfield,tableName,"");
     }
 
     public static String getUserName(String operID){
         ConnectionManager cm  = ConnectionManager.getInstance();
         DatabaseConnection dc = cm.get();
-
         String username ="";
         try{
-            String SQLStr = "select OPERNAME as username from PTOPER  where OPERID='"+operID+"'";
-
+            String SQLStr = "select NAME as username from OPER  where ID='"+operID+"'";
             RecordSet rs = dc.executeQuery(SQLStr);
             if(rs.next())
                 username = rs.getString(0);
-
             if(username == null)
                 username = "";
         }catch(Exception e){
-            // e.printStackTrace();
         }
-        // cm.release();
-
         return username;
     }
 
     public static String getUserName(DatabaseConnection dc,String operID){
-
         String username ="";
         try{
-            String SQLStr = "select OPERNAME as username from PTOPER  where OPERID='"+operID+"'";
-
+            String SQLStr = "select NAME as username from OPER  where ID='"+operID+"'";
             RecordSet rs = dc.executeQuery(SQLStr);
             if(rs.next())
                 username = rs.getString(0);
-
             if(username == null)
                 username = "";
         }catch(Exception e){
-            // e.printStackTrace();
         }
-
-        return username;
-    }
-
-    public static String getUserNamefromSerial(String SerialID){
-        ConnectionManager cm  = ConnectionManager.getInstance();
-        DatabaseConnection dc = cm.get();
-
-        String username ="";
-        try{
-            String SQLStr = "select OPERNAME as username from PTOPER  where FILLINT6="+SerialID;
-
-            RecordSet rs = dc.executeQuery(SQLStr);
-            if(rs.next())
-                username = rs.getString(0);
-
-            if(username == null)
-                username = "";
-        }catch(Exception e){
-            // e.printStackTrace();
-        }
-        //cm.release();
-        return username;
-    }
-
-    public static String getUserNamefromSerial(DatabaseConnection dc,String SerialID){
-
-        String username ="";
-        try{
-            String SQLStr = "select OPERNAME as username from PTOPER  where FILLINT6="+SerialID;
-
-            RecordSet rs = dc.executeQuery(SQLStr);
-            if(rs.next())
-                username = rs.getString(0);
-
-            if(username == null)
-                username = "";
-        }catch(Exception e){
-            // e.printStackTrace();
-        }
-
         return username;
     }
     // 生成添加语句
@@ -299,16 +241,12 @@ public class ToolUtil {
         String fieldvalue ="";
 
         List listchild = insertElement.getChildren();
-
         for (int j=0; j< listchild.size();j++){
             Element childnode = (Element)listchild.get(j);
-
             if (!fieldname.equals(""))
                 fieldname +="," ;
             if (!fieldvalue.equals(""))
                 fieldvalue +="," ;
-
-
             if (childnode.getAttributeValue("type").equals("text")){
                 fieldname += childnode.getAttributeValue("name");
                 fieldvalue+="'" + childnode.getAttributeValue("value")+"'";
@@ -330,19 +268,15 @@ public class ToolUtil {
                 fieldname  += childnode.getAttributeValue("name");
                 fieldvalue += childnode.getAttributeValue("value");
             }
-
         }
 
         String[] recoderS = fieldStr.split(";");
-
         for (int i=0; i< recoderS.length;i++){
             if (!fieldname.equals(""))
                 fieldname +="," ;
             if (!fieldvalue.equals(""))
                 fieldvalue +="," ;
-
             String[] fields = recoderS[i].split("&");
-
             if (fields[2].equals("text")){
                 fieldname += fields[0];
                 fieldvalue+="'" + fields[1]+"'";
@@ -351,17 +285,14 @@ public class ToolUtil {
                 fieldname += fields[0];
                 fieldvalue+=DBUtil.formatDateTime(fields[1]);
             }
-
             if (fields[2].equals("int")){
                 fieldname += fields[0];
                 fieldvalue+= fields[1];
             }
-
         }
         sqlstr += fieldname +" ) " + "values( "+ fieldvalue+" )";
         System.out.print(sqlstr);
         return sqlstr;
-
     }
     ///生成更新语句
     public String createupdateSQL(String fieldStr,Element updateElement,String tablename,String whereStr){
@@ -404,7 +335,6 @@ public class ToolUtil {
                 }
             }
         }
-
         Element childRoot = (Element) listchild.get(listchild.size()-1);
         //添加更新条件
         sqlstr += updatevalue +" where (1=1)";
@@ -467,7 +397,6 @@ public class ToolUtil {
     public static String getDateString(String date) {
         if ( date == null )
             return date;
-
         String[] dates = date.split("-");
         if ( dates.length >= 2 ) {
             return dates[0] + "年" + dates[1] + "月";
@@ -478,9 +407,7 @@ public class ToolUtil {
     public static String getChnDate(String date) {
         if ( date == null )
             return date;
-
         String[] dates = date.split("-");
-
         return dates[0]+"年"+dates[1]+"月"+dates[2]+"日";
     }
     public static String inttostr(String intStr){
@@ -490,22 +417,18 @@ public class ToolUtil {
                 returnStr +="a";
             if ( String.valueOf(intStr.charAt(i)).equals("2"))
                 returnStr +="b";
-
             if ( String.valueOf(intStr.charAt(i)).equals("3"))
                 returnStr +="c";
             if ( String.valueOf(intStr.charAt(i)).equals("4"))
                 returnStr +="d";
-
             if ( String.valueOf(intStr.charAt(i)).equals("5"))
                 returnStr +="e";
             if ( String.valueOf(intStr.charAt(i)).equals("6"))
                 returnStr +="f";
-
             if ( String.valueOf(intStr.charAt(i)).equals("7"))
                 returnStr +="g";
             if ( String.valueOf(intStr.charAt(i)).equals("8"))
                 returnStr +="h";
-
             if ( String.valueOf(intStr.charAt(i)).equals("9"))
                 returnStr +="i";
             if ( String.valueOf(intStr.charAt(i)).equals("0"))
@@ -521,22 +444,18 @@ public class ToolUtil {
                 returnStr +="1";
             if ( String.valueOf(intStr.charAt(i)).equals("b"))
                 returnStr +="2";
-
             if ( String.valueOf(intStr.charAt(i)).equals("c"))
                 returnStr +="3";
             if ( String.valueOf(intStr.charAt(i)).equals("d"))
                 returnStr +="4";
-
             if ( String.valueOf(intStr.charAt(i)).equals("e"))
                 returnStr +="5";
             if ( String.valueOf(intStr.charAt(i)).equals("f"))
                 returnStr +="6";
-
             if ( String.valueOf(intStr.charAt(i)).equals("g"))
                 returnStr +="7";
             if ( String.valueOf(intStr.charAt(i)).equals("h"))
                 returnStr +="8";
-
             if ( String.valueOf(intStr.charAt(i)).equals("i"))
                 returnStr +="9";
             if ( String.valueOf(intStr.charAt(i)).equals("j"))

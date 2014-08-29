@@ -62,23 +62,6 @@ public class DBUtil {
      * @return
      */
     public static String toDB(String content, String fromEncoding, String toEncoding) {
-        // if ( content == null )
-        // return null;
-        // try {
-        // byte[] tt;
-        // if ( fromEncoding == null ) {
-        // tt = content.getBytes();
-        // } else {
-        // //logger.info("formEncoding is "+fromEncoding);
-        // tt = content.getBytes(fromEncoding);
-        // }
-        // if ( toEncoding == null )
-        // return new String(tt);
-        // return new String(tt,toEncoding);
-        // } catch ( Exception e ) {
-        // return content;
-        // }
-
         return content;
     }
 
@@ -137,7 +120,6 @@ public class DBUtil {
         p_str = p_str.replaceAll(">", "&gt;");
         p_str = p_str.replaceAll("&", "&amp;");
         p_str = p_str.replaceAll("\"", "&quot;");
-        // p_str=p_str.replaceAll("\r","<br>");
         return p_str;
     }
 
@@ -262,25 +244,6 @@ public class DBUtil {
         try {
             System.out.println(getSpell(con, "ÍõÄË¹§"));
 
-        } catch (Exception e) {
-
-        } finally {
-            manager.releaseConnection(con);
-        }
-    }
-
-    public static void main2(String[] args) {
-        ConnectionManager manager = ConnectionManager.getInstance();
-        DatabaseConnection con = manager.getConnection();
-        try {
-            RecordSet rs = con.executeQuery("select opername,operid from ptoper");
-            while (rs.next()) {
-                // System.out.println(getSpell(con, "ÍõÄË¹§"));
-                String spell = getSpell(con, rs.getString("opername"));
-                con.executeUpdate("update ptoper set operid='" + spell + ".qd' where operid='" + rs.getString("operid")
-                        + "'");
-                // System.out.println(spell);
-            }
         } catch (Exception e) {
 
         } finally {

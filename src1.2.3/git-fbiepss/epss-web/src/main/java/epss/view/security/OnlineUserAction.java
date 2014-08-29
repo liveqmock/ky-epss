@@ -1,11 +1,10 @@
 package epss.view.security;
 
+import epss.repository.model.Oper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.platform.security.OnLineOpersManager;
 import skyline.platform.security.OperatorManager;
-import skyline.platform.system.manage.dao.PtOperBean;
-
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -23,32 +22,33 @@ import java.util.*;
 public class OnlineUserAction implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(OnlineUserAction.class);
 
-    private List<PtOperBean> ptOperBeanList;
+    private List<Oper> operList;
     private String onlineUserNum;
 
     @PostConstruct
     public void init() {
-        ptOperBeanList=new ArrayList<PtOperBean>();
-        HashMap<String,OperatorManager> operMaps = OnLineOpersManager.getAllOperMaps((ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext());
+        operList=new ArrayList<Oper>();
+        ServletContext servletContext=
+                (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+        HashMap<String,OperatorManager> operMaps = OnLineOpersManager.getAllOperMaps(servletContext);
         Iterator iter = operMaps.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry<String, OperatorManager> entry = (Map.Entry<String, OperatorManager>) iter.next();
             OperatorManager om = entry.getValue();
-            PtOperBean onLineOper = om.getOperator();
-            onLineOper.setSessionKey(entry.getKey());
-            ptOperBeanList.add(onLineOper);
+            Oper onLineOper = om.getOperator();
+            operList.add(onLineOper);
         }
-        onlineUserNum=ptOperBeanList.size()+"";
+        onlineUserNum=operList.size()+"";
     }
 
-    public void killLineUser(PtOperBean ptOperBeanPara){
+    public void killLineUser(Oper operShowPara){
         try {
             ServletContext application=(ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-            OnLineOpersManager.removeOperFromServer(ptOperBeanPara.getSessionKey(), application);
+            OnLineOpersManager.removeOperFromServer(operShowPara.getSessionKey(), application);
             HttpSession session= (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
             if(session!=null){
-                String strSessionKey=ptOperBeanPara.getSessionKey().substring(0,
-                        ptOperBeanPara.getSessionKey().length() - ptOperBeanPara.getOperid().length());
+                String strSessionKey=operShowPara.getSessionKey().substring(0,
+                        operShowPara.getSessionKey().length() - operShowPara.getId().length());
                 HashMap<String, HttpSession> sessions=(HashMap<String, HttpSession>)application.getAttribute("sessions");
                 if (sessions.containsKey(strSessionKey)){
                     sessions.get(strSessionKey).invalidate();
@@ -60,12 +60,12 @@ public class OnlineUserAction implements Serializable {
         }
     }
 
-    public List<PtOperBean> getPtOperBeanList() {
-        return ptOperBeanList;
+    public List<Oper> getOperList() {
+        return operList;
     }
 
-    public void setPtOperBeanList(List<PtOperBean> ptOperBeanList) {
-        this.ptOperBeanList = ptOperBeanList;
+    public void setOperList(List<Oper> operList) {
+        this.operList = operList;
     }
 
     public String getOnlineUserNum() {

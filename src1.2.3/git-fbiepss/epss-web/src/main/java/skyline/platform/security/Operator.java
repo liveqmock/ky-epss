@@ -195,7 +195,6 @@ public class Operator implements Serializable,Comparator  {
                     return 1;
                }
           }
-
           return 0;
      }
 }

@@ -3,14 +3,13 @@ package skyline.platform.form.control;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Vector;
-
+import epss.repository.model.Dept;
+import epss.repository.model.Oper;
 import skyline.platform.db.ConnectionManager;
 import skyline.platform.db.DatabaseConnection;
 import skyline.platform.db.RecordSet;
 import skyline.platform.deb.DebugInfo;
 import skyline.platform.form.util.event.LogAssistor;
-import skyline.platform.system.manage.dao.PtDeptBean;
-import skyline.platform.system.manage.dao.PtOperBean;
 import skyline.platform.utils.ActionRequest;
 import skyline.platform.utils.LogManager;
 import skyline.platform.utils.SQLResponse;
@@ -21,8 +20,8 @@ public class Action {
 	 protected ActionRequest req;
 	 protected DatabaseConnection dc;
 	 protected SessionContext sc;
-	 protected PtOperBean operator;
-	 protected PtDeptBean dept;
+	 protected Oper operator;
+	 protected Dept dept;
 	 protected LogManager logMamager;
 	 protected String reqxml;
 	 static  Vector PARAM_MOTHOD = new Vector();
@@ -85,27 +84,28 @@ public class Action {
 		  this.sc = sc;
 	 }
 
-	 public void setOperator(PtOperBean operator) {
-		  this.operator = operator;
-	 }
+    public Oper getOperator() {
+        return operator;
+    }
 
-	 public DatabaseConnection getDatabaseConnection()
+    public void setOperator(Oper operator) {
+        this.operator = operator;
+    }
+
+    public DatabaseConnection getDatabaseConnection()
 	 {
 		 return dc;
 	 }
 
-	 public PtOperBean getOperator() {
-		  return operator;
-	 }
-	 public void setDept(PtDeptBean dept) {
-		this.dept = dept;
-	}
+    public Dept getDept() {
+        return dept;
+    }
 
-	public PtDeptBean getDept() {
-		return dept;
-	}
+    public void setDept(Dept dept) {
+        this.dept = dept;
+    }
 
-	 public void setError(String message) {
+    public void setError(String message) {
 		  setData(false, res.MESSAGE_TYPE, message);
 	 }
 

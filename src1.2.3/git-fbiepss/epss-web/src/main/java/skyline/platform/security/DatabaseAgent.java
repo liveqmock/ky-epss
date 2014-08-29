@@ -41,8 +41,8 @@ public class DatabaseAgent {
 
         String SQL_getBasicOfOperator = "" +
                 "SELECT * " +
-                "FROM ptoper " +
-                "WHERE operid = '" + operatorId + "'";
+                "FROM oper " +
+                "WHERE id = '" + operatorId + "'";
 
         ConnectionManager cm = null;
         DatabaseConnection dc = null;
@@ -52,7 +52,7 @@ public class DatabaseAgent {
             dc = cm.getConnection();
             rs = dc.executeQuery(SQL_getBasicOfOperator);
         } catch (Exception ex) {
-            System.err.println("Wrong, when data retrieving.   Place zt.platform.security.DatabaseAgent.getBasicOfOperator(String operid).    [" + ex + "] ");
+            System.err.println(" [" + ex + "] ");
         }
 
         String nameOfOperator = null;
@@ -78,13 +78,13 @@ public class DatabaseAgent {
             return null;
         } else {
             try {
-                if (rs.getString("opername") != null) {
-                    nameOfOperator = rs.getString("opername").trim();
+                if (rs.getString("name") != null) {
+                    nameOfOperator = rs.getString("name").trim();
                 } else {
                     nameOfOperator = "";
                 }
-                if (rs.getString("operid") != null) {
-                    idOfOperator = rs.getString("operid").trim();
+                if (rs.getString("id") != null) {
+                    idOfOperator = rs.getString("id").trim();
                 } else {
                     idOfOperator = "";
                 }
@@ -146,7 +146,7 @@ public class DatabaseAgent {
 
                 cm.releaseConnection(dc);
             } catch (Exception ex1) {
-                System.err.println("Wrong, when getting data from RecordSet.   Place zt.platform.security.DatabaseAgent.getBasicOfOperator(String operid).    [" + ex1 + "] ");
+                System.err.println("[" + ex1 + "] ");
             }
 
             Map basicInfo = new HashMap();
@@ -284,7 +284,7 @@ public class DatabaseAgent {
                 listTemp.add(new MenuItemBean(menuItemId, menuItemPId, menuLevel, menuItemLabel, menuItemIsLeaf, menuItemUrl, menuItemDescription, menuItemOpenWindow, menuItemWindowWidth, menuItemWindowHeight, targetmachine, childcount));
             }
         } catch (Exception ex) {
-            System.err.println("Wrong, when data retrieving.   Place zt.platform.security.DatabaseAgent.getMenuItems(String operid, int menuItemsLevel).    [" + ex + "] ");
+            System.err.println("[" + ex + "] ");
         }
         return listTemp;
     }

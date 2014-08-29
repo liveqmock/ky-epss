@@ -1,13 +1,12 @@
 package skyline.platform.security;
 
+import epss.repository.model.Dept;
+import epss.repository.model.Oper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.platform.db.ConnectionManager;
-import skyline.platform.system.manage.dao.PtDeptBean;
-import skyline.platform.system.manage.dao.PtOperBean;
 import skyline.security.MD5Helper;
 import skyline.util.ToolUtil;
-
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
@@ -18,7 +17,7 @@ import java.util.Map;
  * Title: OperatorManager.java
  * </p>
  * <p>
- * Description: This class includes the basic behaviors of operator.
+ * Description: This class includes the basic behaviors of oper.
  * </p>
  * <p>
  * Copyright: Copyright (c) 2003
@@ -51,7 +50,7 @@ public class OperatorManager implements Serializable {
 
     private List jsplist = null;
 
-    private PtOperBean operator;
+    private Oper oper;
 
     private String remoteAddr = null;
 
@@ -67,13 +66,13 @@ public class OperatorManager implements Serializable {
     }
 
     /**
-     * 返回一个Operator Object。这个Ojbect中包含该操作员的基本信息，包括：operid, email, enabled, sex,
+     * 返回一个Operator Object。这个Ojbect中包含该操作员的基本信息，包括：id, email, enabled, sex,
      * status, opername。
      *
      * @return Operator Ojbect.
      */
-    public PtOperBean getOperator() {
-        return operator;
+    public Oper getOperator() {
+        return oper;
     }
 
     /**
@@ -82,7 +81,7 @@ public class OperatorManager implements Serializable {
      * @return
      */
     public String getOperatorName() {
-        return operator.getOpername();
+        return oper.getName();
     }
 
     /**
@@ -105,12 +104,12 @@ public class OperatorManager implements Serializable {
     public boolean login(String operid, String password) {
         ConnectionManager cm = ConnectionManager.getInstance();
         try {
-            String loginWhere = "where operid='" + operid
-                    + "' and operpasswd ='" + MD5Helper.getMD5String(password) + "'and operenabled='1'";
+            String loginWhere = "where id='" + operid
+                    + "' and passwd ='" + MD5Helper.getMD5String(password) + "'and enabled='1'";
             this.operatorid = operid;
-            operator = new PtOperBean();
-            operator = (PtOperBean) operator.findFirstByWhere(loginWhere);
-            if (operator == null) {
+            oper = new Oper();
+            oper = (Oper) oper.findFirstByWhere(loginWhere);
+            if (oper == null) {
                 isLogin = false;
                 return false;
             }
@@ -118,11 +117,10 @@ public class OperatorManager implements Serializable {
             String sss = "登录时间 :" + loginTime + " IP: " + remoteAddr
                     + " 机器名称 : " + remoteHost;
 
-            operator.setFillstr600(sss);
-            PtDeptBean ptpdet = new PtDeptBean();
-            operator.setPtDeptBean((PtDeptBean) ptpdet
-                    .findFirstByWhere("where deptid='" + operator.getDeptid()
-                            + "'"));
+            oper.setOnlineSituation(sss);
+            Dept ptpdet = new Dept();
+            oper.setDept((Dept) ptpdet
+                    .findFirstByWhere("where id='" + oper.getDeptPkid() + "'"));
             isLogin = true;
             // 初始化菜单。
             try {
@@ -130,7 +128,7 @@ public class OperatorManager implements Serializable {
                 this.jsonMap.put("default", mb.generateJsonStream("default"));
             } catch (Exception ex3) {
                 ex3.printStackTrace();
-                System.err.println("Wrong when getting menus of operator: [ "
+                System.err.println("Wrong when getting menus of oper: [ "
                         + ex3 + "]");
             }
             return isLogin;
@@ -164,7 +162,7 @@ public class OperatorManager implements Serializable {
      */
     public void logout() {
         isLogin = false;
-        operator = null;
+        oper = null;
         operatorid = null;
         mb = null;
         remoteHost = null;
