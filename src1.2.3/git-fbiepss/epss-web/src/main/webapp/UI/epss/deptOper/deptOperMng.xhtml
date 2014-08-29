@@ -39,21 +39,21 @@
                     <p:column headerText="机构操作" style="width:40px;text-align:left">
                         <p:commandButton icon="ui-icon-plus"
                                          style="height:18px;width:18px"
-                                         action="#{deptOperAction.selectRecordAction('Mng','Add',node)}"
+                                         action="#{deptOperAction.selectRecordAction('DeptAdd',node)}"
                                          update=":form:pgViewForDeptAdd,:form:msgs"
                                          onclick="PF('wVDlgViewForDeptAdd').show()"
                                          rendered="#{node.type eq '0'?'true':'false'}">
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-pencil"
                                          style="height:18px;width:18px"
-                                         action="#{deptOperAction.selectRecordAction('Mng','Upd',node)}"
+                                         action="#{deptOperAction.selectRecordAction('DeptUpd',node)}"
                                          update=":form:pgViewForDeptUpd,:form:msgs"
                                          onclick="PF('wVDlgViewForDeptUpd').show()"
                                          rendered="#{node.type eq '1'?'false':node.pkid eq 'ROOT'?'false':'true'}">
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-trash"
                                          style="height:18px;width:18px"
-                                         action="#{deptOperAction.selectRecordAction('Mng','Del',node)}"
+                                         action="#{deptOperAction.selectRecordAction('DeptDel',node)}"
                                          update=":form:pgViewForDeptDel,:form:msgs"
                                          onclick="PF('wVDlgViewForDeptDel').show()"
                                          rendered="#{node.type eq '1'?'false':node.pkid eq 'ROOT'?'false':'true'}">
@@ -68,21 +68,21 @@
                     <p:column headerText="人员操作" style="width:40px;text-align:left">
                         <p:commandButton icon="ui-icon-plus"
                                          style="height:18px;width:18px"
-                                         action="#{deptOperAction.selectRecordAction('Mng','Add',node)}"
+                                         action="#{deptOperAction.selectRecordAction('OperAdd',node)}"
                                          update=":form:pgViewForOperAdd,:form:msgs"
                                          onclick="PF('wVDlgViewForOperAdd').show()"
                                          rendered="#{node.type eq '0'?'true':'false'}">
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-pencil"
                                          style="height:18px;width:18px"
-                                         action="#{deptOperAction.selectRecordAction('Mng','Upd',node)}"
+                                         action="#{deptOperAction.selectRecordAction('OperUpd',node)}"
                                          update=":form:pgViewForOperUpd,:form:msgs"
                                          onclick="PF('wVDlgViewForOperUpd').show()"
                                          rendered="#{node.type eq '0'?'false':'true'}">
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-trash"
                                          style="height:18px;width:18px"
-                                         action="#{deptOperAction.selectRecordAction('Mng','Del',node)}"
+                                         action="#{deptOperAction.selectRecordAction('OperDel',node)}"
                                          update=":form:pgViewForOperDel,:form:msgs"
                                          onclick="PF('wVDlgViewForOperDel').show()"
                                          rendered="#{node.type eq '0'?'false':'true'}">
@@ -142,6 +142,10 @@
                             <p:outputLabel value="是否领导：" for="operIsSuperForOperAdd"/>
                             <p:selectOneMenu id="operIsSuperForOperAdd" value="#{deptOperAction.operAdd.issuper}">
                                 <f:selectItems value="#{deptOperAction.operIsSuperList}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="是否可用：" for="operIsEnableForOperAdd"/>
+                            <p:selectOneMenu id="operIsEnableForOperAdd" value="#{deptOperAction.operAdd.enabled}">
+                                <f:selectItems value="#{deptOperAction.enableList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="备注：" for="operRemarkForOperAdd"/>
                             <p:inputText id="operRemarkForOperAdd" value="#{deptOperAction.operAdd.remark}"/>
@@ -213,6 +217,10 @@
                         <p:outputLabel value="是否领导：" for="operIsSuperForOperUpd"/>
                         <p:selectOneMenu id="operIsSuperForOperUpd" value="#{deptOperAction.operUpd.issuper}">
                             <f:selectItems value="#{deptOperAction.operIsSuperList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="是否可用：" for="operIsEnableForOperUpd"/>
+                        <p:selectOneMenu id="operIsEnableForOperUpd" value="#{deptOperAction.operAdd.enabled}">
+                            <f:selectItems value="#{deptOperAction.enableList}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="备注：" for="operRemarkForOperUpd"/>
                         <p:inputText id="operRemarkForOperUpd" value="#{deptOperAction.operUpd.remark}"/>

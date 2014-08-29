@@ -30,22 +30,16 @@ public class DeptOperService {
         return myDeptAndOperMapper.selectDeptAndOperRecords(parentPkidPara);
     }
 
-    public boolean findChildRecordsByPkid(DeptOperShow deptOperShowPara) {
+    public boolean findChildRecordsByPkid(String strDeptOperPkidPara) {
         DeptExample example = new DeptExample();
         example.createCriteria()
-                .andParentpkidEqualTo(deptOperShowPara.getPkid());
+                .andParentpkidEqualTo(strDeptOperPkidPara);
         OperExample operExample=new OperExample();
         operExample.createCriteria()
-                .andDeptPkidEqualTo(deptOperShowPara.getPkid());
+                .andDeptPkidEqualTo(strDeptOperPkidPara);
         return (deptMapper.selectByExample(example).size()>0||operMapper.selectByExample(operExample).size()>0);
     }
-    public int deleteByPkid(DeptOperShow deptOperShowPara) {
-        if ("1".equals(deptOperShowPara.getType())){
-            return deptMapper.deleteByPrimaryKey(deptOperShowPara.getPkid());
-        }else {
-            return operMapper.deleteByPrimaryKey(deptOperShowPara.getPkid());
-        }
-    }
+
     public Object selectRecordByPkid(DeptOperShow deptOperShowPara) {
         if ("0".equals(deptOperShowPara.getType())){
             return deptMapper.selectByPrimaryKey(deptOperShowPara.getPkid());
@@ -53,51 +47,45 @@ public class DeptOperService {
             return operMapper.selectByPrimaryKey(deptOperShowPara.getPkid());
         }
     }
-    public boolean isExistInDb(Object objectPara,String strTypePara) {
-        if ("0".equals(strTypePara)){
+
+    public boolean isExistInDeptDb(Dept deptPara) {
             DeptExample deptExample=new DeptExample();
             deptExample.createCriteria()
-                    .andIdEqualTo(((Dept)objectPara).getId());
+                    .andIdEqualTo(deptPara.getId());
             return deptMapper.selectByExample(deptExample).size()>0;
-        }else {
-            OperExample operExample=new OperExample();
-            operExample.createCriteria()
-                    .andIdEqualTo(((Oper) objectPara).getId());
-            return operMapper.selectByExample(operExample).size()>0;
-
-        }
     }
-    public void insertRecord(Object objectPara,String strTypePara){
-        if ("0".equals(strTypePara)){
-            Dept dept=(Dept) objectPara;
-            dept.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-            dept.setCreatedTime(ToolUtil.getStrLastUpdDate());
-            deptMapper.insert(dept);
-        }else {
-            Oper oper=(Oper) objectPara;
-            oper.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-            oper.setCreatedTime(ToolUtil.getStrLastUpdDate());
-            operMapper.insert(oper);
-        }
+    public boolean isExistInOperDb(Oper operPara) {
+        OperExample operExample=new OperExample();
+        operExample.createCriteria()
+                .andIdEqualTo(operPara.getId());
+        return operMapper.selectByExample(operExample).size()>0;
     }
-    public void updateRecord(Object objectPara,String strTypePara) {
-        if ("0".equals(strTypePara)){
-            Dept dept=(Dept) objectPara;
-            dept.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-            dept.setLastUpdTime(ToolUtil.getStrLastUpdDate());
-            deptMapper.updateByPrimaryKey(dept);
-        }else {
-            Oper oper=(Oper) objectPara;
-            oper.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-            oper.setLastUpdTime(ToolUtil.getStrLastUpdDate());
-            operMapper.updateByPrimaryKey(oper);
-        }
+    public void insertDeptRecord(Dept deptPara){
+        deptPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        deptPara.setCreatedTime(ToolUtil.getStrLastUpdTime());
+        deptMapper.insert(deptPara);
     }
-    public void deleteRecord(Object objectPara,String strTypePara) {
-        if ("0".equals(strTypePara)){
-            deptMapper.deleteByPrimaryKey(((Dept) objectPara).getPkid());
-        }else {
-            operMapper.deleteByPrimaryKey(((Oper) objectPara).getPkid());
-        }
+    public void insertOperRecord(Oper operPara){
+        operPara.setArchivedFlag("0");
+        operPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        operPara.setCreatedTime(ToolUtil.getStrLastUpdTime());
+        operMapper.insert(operPara);
+    }
+    public void updateDeptRecord(Dept deptPara){
+        deptPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        deptPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
+        deptMapper.updateByPrimaryKey(deptPara);
+    }
+    public void updateOperRecord(Oper operPara){
+        operPara.setArchivedFlag("0");
+        operPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        operPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
+        operMapper.updateByPrimaryKey(operPara);
+    }
+    public void deleteDeptRecord(Dept deptPara){
+        deptMapper.deleteByPrimaryKey(deptPara.getPkid());
+    }
+    public void deleteOperRecord(Oper operPara){
+        operMapper.deleteByPrimaryKey(operPara.getPkid());
     }
 }

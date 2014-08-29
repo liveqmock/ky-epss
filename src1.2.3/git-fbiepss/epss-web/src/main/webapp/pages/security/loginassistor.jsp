@@ -49,15 +49,8 @@
 %>
 
 <%
-    /*OperatorManager om = (OperatorManager) session.getAttribute(SystemAttributeNames.USER_INFO_NAME);
-
-    if (om == null) {
-        om = new OperatorManager();
-        session.setAttribute(SystemAttributeNames.USER_INFO_NAME, om);
-    }*/
     OperatorManager om = new OperatorManager();
     session.setAttribute(SystemAttributeNames.USER_INFO_NAME, om);
-    //String imgsign = request.getParameter("imgsign");
     boolean isLogin = false;
     om.setRemoteAddr(request.getRemoteAddr());
     om.setRemoteHost(request.getRemoteHost());

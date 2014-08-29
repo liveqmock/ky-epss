@@ -1,6 +1,3 @@
-<%@ page import="skyline.platform.db.ConnectionManager" %>
-<%@ page import="skyline.platform.db.DatabaseConnection" %>
-<%@ page import="skyline.platform.db.RecordSet" %>
 <%@ page contentType="text/html; charset=GBK" %>
 <%@ include file="/pages/security/loginassistor.jsp" %>
 <%
