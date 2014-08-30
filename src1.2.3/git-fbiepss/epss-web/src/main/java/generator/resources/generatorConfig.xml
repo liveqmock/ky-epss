@@ -32,7 +32,7 @@
         </javaClientGenerator>
 
         <!--业务类例子 -->
-        <table schema="epss" tableName="oper_res">
+      <!--  <table schema="epss" tableName="oper_res">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
@@ -110,14 +110,18 @@
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <table tableName="all_tab_columns"/>
+        <table tableName="all_tab_columns"/>-->
 
         <!--平台类 -->
-        <table tableName="ptenudetail"/>
+        <!--<table tableName="ptenudetail"/>
         <table tableName="ptenumain"/>
         <table tableName="ptlogicact"/>
         <table tableName="ptmenu"/>
-        <table tableName="sys_lock"/>
+        <table tableName="sys_lock"/>-->
+        <table schema="epss" tableName="oper">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
+        </table>
         <!--<table schema="epss" tableName="dept">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>

@@ -23,12 +23,12 @@
             <p:growl id="msgs" showDetail="true" />
             <h:panelGrid id="pdQry" columns="1">
                 <p:commandButton value="导出到EXCEL"
-                                 action="#{operFuncResAction.onExportExcel}"
+                                 action="#{operFuncResMngAction.onExportExcel}"
                                  update="msgs"
                                  ajax="false">
                 </p:commandButton>
                 <p:treeTable id="resTreeTable"
-                             value="#{operFuncResAction.resRoot}"
+                             value="#{operFuncResMngAction.resRoot}"
                              var="document"
                              emptyMessage="数据记录为空..."
                              scrollable="true"
@@ -40,7 +40,7 @@
                         <p:commandButton
                                 icon="ui-icon-plus"
                                 style="height:18px;width:18px"
-                                action="#{operFuncResAction.selectRecordAction('Add',document)}"
+                                action="#{operFuncResMngAction.selectRecordAction('Add',document)}"
                                 rendered="#{document.resType eq null ? 'true':
                                                         document.resType eq '0' ? 'true':
 	                                                    document.resType eq '1' ? 'true':'false'}"
@@ -50,7 +50,7 @@
                         <p:commandButton
                                 icon="ui-icon-pencil"
                                 style="height:18px;width:18px"
-                                action="#{operFuncResAction.selectRecordAction('Upd',document)}"
+                                action="#{operFuncResMngAction.selectRecordAction('Upd',document)}"
                                 rendered="#{document.resPkid eq 'ROOT'?'false':'true'}"
                                 update=":form:pgViewForUpd,:form:msgs"
                                 onclick="PF('wVDlgViewForUpd').show()">
@@ -58,14 +58,14 @@
                         <p:commandButton
                                 icon="ui-icon-trash"
                                 style="height:18px;width:18px"
-                                action="#{operFuncResAction.selectRecordAction('Del',document)}"
+                                action="#{operFuncResMngAction.selectRecordAction('Del',document)}"
                                 rendered="#{document.resPkid eq 'ROOT'?'false':'true'}"
                                 update=":form:pgViewForDel,:form:msgs"
                                 onclick="PF('wVDlgViewForDel').show()">
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-search"
                                          style="height:18px;width:18px"
-                                         action="#{operFuncResAction.selectRecordAction('Sel',document)}"
+                                         action="#{operFuncResMngAction.selectRecordAction('Sel',document)}"
                                          update=":form:pgViewForDel,:form:msgs"
                                          onclick="wVDlgViewForPower.show()"
                                          title="View">
@@ -98,12 +98,12 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel value="名称：" for="nameForAdd"/>
                         <p:inputText id="nameForAdd"
-                                     value="#{operFuncResAction.cttInfoShowAdd.name}"/>
+                                     value="#{operFuncResMngAction.cttInfoShowAdd.name}"/>
                     </h:panelGrid>
                     <h:panelGrid id="pgOperBtnForAdd" columns="2">
                         <p:commandButton id="submitBtnForAdd"
                                          value="提交"
-                                         action="#{operFuncResAction.onClickForMngAction('Add')}"
+                                         action="#{operFuncResMngAction.onClickForMngAction('Add')}"
                                          update=":form:resTreeTable,msgs,pgOperBtnForAdd">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForAdd" value="重置"
@@ -120,13 +120,13 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel value="名称：" for="nameForUpd"/>
                         <p:inputText id="nameForUpd"
-                                       value="#{operFuncResAction.cttInfoShowUpd.name}"
+                                       value="#{operFuncResMngAction.cttInfoShowUpd.name}"
                                        style="width:400px;"/>
                     </h:panelGrid>
                     <h:panelGrid id="pgOperBtnForUpd" columns="2">
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交"
-                                         action="#{operFuncResAction.onClickForMngAction('Upd')}"
+                                         action="#{operFuncResMngAction.onClickForMngAction('Upd')}"
                                          update=":form:resTreeTable,msgs,pgOperBtnForUpd"
                                          oncomplete="wVDlgViewForUpd.hide()">
                         </p:commandButton>
@@ -143,13 +143,13 @@
                 <h:panelGrid id="pgViewForDel">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="名称：" for="nameForDel"/>
-                        <p:inputText id="nameForDel" value="#{operFuncResAction.cttInfoShowDel.name}"
+                        <p:inputText id="nameForDel" value="#{operFuncResMngAction.cttInfoShowDel.name}"
                                      style="width:400px;background-color:gainsboro;" readonly="true"/>
                     </h:panelGrid>
                     <h:panelGrid id="pgOperBtnForDel">
                         <p:commandButton id="submitBtnForDel"
                                          value="提交"
-                                         action="#{operFuncResAction.onClickForMngAction('Del')}"
+                                         action="#{operFuncResMngAction.onClickForMngAction('Del')}"
                                          update=":form:resTreeTable,msgs,pgOperBtnForDel"
                                          oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
@@ -163,10 +163,10 @@
                     <h:panelGrid>
                         <p:panel header="功能列表" style="height: 330px">
                             <p:selectOneRadio id="grid"
-                                                  value="#{operFuncResAction.taskFunctionSeled}"
+                                                  value="#{operFuncResMngAction.taskFunctionSeled}"
                                                   layout="grid"
                                                   columns="1">
-                                <f:selectItems value="#{operFuncResAction.taskFunctionList}"
+                                <f:selectItems value="#{operFuncResMngAction.taskFunctionList}"
                                                var="taskRecord"
                                                itemValue="#{taskRecord.value}"
                                                itemLabel="#{taskRecord.label}"/>
@@ -174,18 +174,18 @@
                         </p:panel>
                         <p:commandButton id="submitBtnForPower"
                                          value="提交"
-                                         action="#{operFuncResAction.onClickForMngAction('Power')}"
+                                         action="#{operFuncResMngAction.onClickForMngAction('Power')}"
                                          update=":form:resTreeTable,msgs"
                                          oncomplete="wVDlgViewForPower.hide()">
                         </p:commandButton>
                     </h:panelGrid>
                     <p:panel header="人员列表">
                         <p:treeTable id="operTreeTable"
-                                     value="#{operFuncResAction.operRoot}"
+                                     value="#{operFuncResMngAction.deptOperRoot}"
                                      var="node"
                                      dynamic="true"
                                      cache="false"
-                                     rowStyleClass="#{node.type  eq '0' ? '0':'rowDoneStyle'}"
+                                     rowStyleClass="#{node.type  eq '1' ? null:'rowDoneStyle'}"
                                      scrollable="true"
                                      scrollHeight="300">
                             <p:column headerText="编号" style="width:200px;text-align:left">
@@ -196,8 +196,8 @@
                             </p:column>
                             <p:column headerText="选择" style="width:30px;text-align:center">
                                 <p:selectBooleanCheckbox value="#{node.isSeled}"
-                                    rendered="#{node.type  eq '0' ? true:false}">
-                                    <p:ajax  listener="#{operFuncResAction.selOperRecordAction(node)}"/>
+                                     rendered="#{node.type eq '0'?'false':node.pkid eq 'ROOT'?'false':'true'}">
+                                    <p:ajax  listener="#{operFuncResMngAction.selOperRecordAction(node)}"/>
                                 </p:selectBooleanCheckbox>
                             </p:column>
                         </p:treeTable>

@@ -101,12 +101,12 @@ public class OperatorManager implements Serializable {
      * @return boolean
      * @roseuid 3F80B6360281
      */
-    public boolean login(String operid, String password) {
+    public boolean login(String idPara, String passwordPara) {
         ConnectionManager cm = ConnectionManager.getInstance();
         try {
-            String loginWhere = "where id='" + operid
-                    + "' and passwd ='" + MD5Helper.getMD5String(password) + "'and enabled='1'";
-            this.operatorid = operid;
+            String loginWhere = "where id='" + idPara
+                    + "' and passwd ='" + MD5Helper.getMD5String(passwordPara) + "'and enabled='1'";
+            this.operatorid = idPara;
             oper = new Oper();
             oper = (Oper) oper.findFirstByWhere(loginWhere);
             if (oper == null) {

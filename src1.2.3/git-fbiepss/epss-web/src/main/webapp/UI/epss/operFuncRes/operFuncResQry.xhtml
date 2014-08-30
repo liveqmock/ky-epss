@@ -21,22 +21,22 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
-            <p:panel header="权限追加信息查询">
+            <p:panel header="权限信息查询">
                 <h:panelGrid id="pdQry" columns="2" style="width: 100%">
                     <h:panelGrid columns="6">
                         <p:outputLabel value="资源名称：" for="resourceId"/>
-                        <p:inputText id="resourceId" value="#{operResAction.operResShowQry.infoPkidName}"/>
+                        <p:inputText id="resourceId" value="#{operFuncResQryAction.operResShowQry.infoPkidName}"/>
                         <p:outputLabel value="功能名称：" for="functionId"/>
-                        <p:selectOneMenu id="functionId" value="#{operResAction.operResShowQry.flowStatus}">
-                            <f:selectItems value="#{operResAction.taskFunctionList}"/>
+                        <p:selectOneMenu id="functionId" value="#{operFuncResQryAction.operResShowQry.flowStatus}">
+                            <f:selectItems value="#{operFuncResQryAction.taskFunctionList}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="人员编号：" for="persionId"/>
-                        <p:inputText id="persionId" value="#{operResAction.operResShowQry.operPkid}"/>
+                        <p:inputText id="persionId" value="#{operFuncResQryAction.operResShowQry.operPkid}"/>
                     </h:panelGrid>
                     <h:panelGrid columns="2">
                         <h:panelGrid columns="2">
                             <p:commandButton id="qryBtn" value="查询"
-                                             action="#{operResAction.onQueryAction()}"
+                                             action="#{operFuncResQryAction.onQueryAction()}"
                                              update="pdt,msgs">
                             </p:commandButton>
                             <p:commandButton id="resetBtn" value="重置"
@@ -56,7 +56,7 @@
                 </h:panelGrid>
             </p:panel>
             <p:dataTable id="pdt" style="width:100%;"
-                         value="#{operResAction.operResShowQryList}"
+                         value="#{operFuncResQryAction.operResShowQryList}"
                          var="record"
                          rowKey="#{row + 1}"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
@@ -72,7 +72,7 @@
                 <p:column headerText="操作" style="width:10px">
                     <p:commandButton  icon="ui-icon-search"
                                       style="height:18px;width:18px"
-                                      action="#{operResAction.selectRecordAction(record)}"
+                                      action="#{operFuncResQryAction.selectRecordAction(record)}"
                                       update="pdt,:form:pgView,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
                     </p:commandButton>
@@ -102,54 +102,54 @@
                 <h:panelGrid id="pgView">
                     <h:panelGrid columns="2">
                         <p:outputLabel value="资源名称：" for="resourceNameSel"/>
-                        <p:inputText id="resourceNameSel" value="#{operResAction.operResShowSel.infoPkidName}"
+                        <p:inputText id="resourceNameSel" value="#{operFuncResQryAction.operResShowSel.infoPkidName}"
                                      readonly="true"
                                      style="background-color:gainsboro;width:328px;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel for="persionIdSel" value="人员编号：" />
                         <h:inputText id="persionIdSel"
-                                     value="#{operResAction.operResShowSel.operPkid}"
+                                     value="#{operFuncResQryAction.operResShowSel.operPkid}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="persionNameSel" value="人员名称：" />
                         <h:inputText id="persionNameSel"
-                                     value="#{operResAction.operResShowSel.operName}"
+                                     value="#{operFuncResQryAction.operResShowSel.operName}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel value="功能名称：" for="funcNameSel"/>
-                        <p:inputText id="funcNameSel" value="#{operResAction.operResShowSel.flowStatusName}"
+                        <p:inputText id="funcNameSel" value="#{operFuncResQryAction.operResShowSel.flowStatusName}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                         <p:outputLabel value="所属区域：" for="tidSel"/>
-                        <p:inputText id="tidSel" value="#{operResAction.operResShowSel.tid}"
+                        <p:inputText id="tidSel" value="#{operFuncResQryAction.operResShowSel.tid}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel for="createdByNameSel" value="创建人：" />
                         <h:inputText id="createdByNameSel"
-                                     value="#{operResAction.operResShowSel.createdByName}"
+                                     value="#{operFuncResQryAction.operResShowSel.createdByName}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="createdDateSel" value="创建时间：" />
                         <h:inputText id="createdDateSel"
-                                     value="#{operResAction.operResShowSel.createdTime}"
+                                     value="#{operFuncResQryAction.operResShowSel.createdTime}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="lastUpdByNameSel" value="修改人：" />
                         <h:inputText id="lastUpdByNameSel"
-                                     value="#{operResAction.operResShowSel.lastUpdByName}"
+                                     value="#{operFuncResQryAction.operResShowSel.lastUpdByName}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="lastUpdDateSel" value="修改时间：" />
                         <h:inputText id="lastUpdDateSel"
-                                     value="#{operResAction.operResShowSel.createdTime}"
+                                     value="#{operFuncResQryAction.operResShowSel.createdTime}"
                                      style="background-color:gainsboro" readonly="true"/>
                         <p:outputLabel for="modificationNumSel" value="修改次数：" />
                         <h:inputText id="modificationNumSel"
-                                     value="#{operResAction.operResShowSel.recversion}"
+                                     value="#{operFuncResQryAction.operResShowSel.recversion}"
                                      style="background-color:gainsboro;text-align:right;" readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                         </h:inputText>
                         <p:outputLabel for="archivedFlagSel" value="废止标志：" />
                         <h:inputText id="archivedFlagSel"
-                                     value="#{operResAction.operResShowSel.archivedFlag}"
+                                     value="#{operFuncResQryAction.operResShowSel.archivedFlag}"
                                      style="background-color:gainsboro;text-align:right;" readonly="true">
                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                         </h:inputText>

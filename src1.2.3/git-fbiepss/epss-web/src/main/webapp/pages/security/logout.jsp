@@ -1,9 +1,8 @@
 <%@ page contentType="text/html; charset=GBK" %>
-<%@ page import="skyline.platform.security.OperatorManager" %>
 <%@ page import="skyline.platform.form.config.SystemAttributeNames" %>
-<%@page import="java.util.Enumeration" %>
-<%@ page import="java.util.List" %>
 <%@ page import="skyline.platform.security.OnLineOpersManager" %>
+<%@page import="skyline.platform.security.OperatorManager" %>
+<%@ page import="java.util.Enumeration" %>
 
 <html>
 <head>
@@ -16,7 +15,7 @@
             <%
                 OperatorManager om = (OperatorManager) session.getAttribute(SystemAttributeNames.USER_INFO_NAME);
                 if (om != null) {
-                    OnLineOpersManager.removeOperFromServer(session.getId()+om.getOperator().getOperid(),application);
+                    OnLineOpersManager.removeOperFromServer(session.getId()+om.getOperator().getId(),application);
                     om.logout();
                 }
                 Enumeration p_enum = session.getAttributeNames();
@@ -24,10 +23,6 @@
                     String removeStr = (String) p_enum.nextElement();
                     session.removeAttribute(removeStr);
                 }
-               /* if(session != null){
-                    session.invalidate();
-                }*/
-
             %>
             <%
                 String isClose = request.getParameter("isclose");

@@ -33,9 +33,7 @@ public class DeptOperAction implements Serializable {
     @ManagedProperty(value = "#{deptOperService}")
     private DeptOperService deptOperService;
 
-    private TreeNode deptRoot;
-    private TreeNode currentSelectedNode;
-    private TreeNode lastSelectedNode;
+    private TreeNode deptOperRoot;
     private String strSubmitType;
     private Dept deptAdd;
     private Dept deptUpd;
@@ -76,34 +74,24 @@ public class DeptOperAction implements Serializable {
         enableList= new ArrayList<SelectItem>();
         enableList.add(new SelectItem("1", "可用"));
         enableList.add(new SelectItem("0", "不可用"));
-        initDept();
+        initDeptOper();
     }
 
-    private void initDept() {
-        deptRoot = new DefaultTreeNode("ROOT", null);
+    private void initDeptOper() {
+        deptOperRoot = new DefaultTreeNode("ROOT", null);
         DeptOperShow deptOperShowTemp = new DeptOperShow();
         deptOperShowTemp.setPkid("ROOT");
         deptOperShowTemp.setName("机构人员信息");
         deptOperShowTemp.setType("0");
-        TreeNode node0 = new DefaultTreeNode(deptOperShowTemp, deptRoot);
+        TreeNode node0 = new DefaultTreeNode(deptOperShowTemp, deptOperRoot);
         recursiveTreeNode("ROOT", node0);
         node0.setExpanded(true);
     }
 
-    private void recursiveTreeNode(String strParentPkid, TreeNode parentNode) {
-        List<DeptOperShow> deptOperShowTempList= deptOperService.selectDeptAndOperRecords(strParentPkid);
+    private void recursiveTreeNode(String strParentPkidPara, TreeNode parentNode) {
+        List<DeptOperShow> deptOperShowTempList= deptOperService.selectDeptAndOperRecords(strParentPkidPara);
         for (int i = 0; i < deptOperShowTempList.size(); i++) {
             TreeNode childNode = new DefaultTreeNode(deptOperShowTempList.get(i), parentNode);
-            if (currentSelectedNode!=null){
-                if (((DeptOperShow)currentSelectedNode.getData()).getPkid()
-                        .equals(((DeptOperShow)childNode.getData()).getPkid())){
-                    TreeNode treeNodeTemp=childNode;
-                    while (!(((DeptOperShow)treeNodeTemp.getData()).getPkid().equals("root"))){
-                        treeNodeTemp.setExpanded(true);
-                        treeNodeTemp=treeNodeTemp.getParent();
-                    }
-                }
-            }
             recursiveTreeNode(deptOperShowTempList.get(i).getId(), childNode);
         }
     }
@@ -134,7 +122,6 @@ public class DeptOperAction implements Serializable {
                     operUpd = (Oper) deptOperService.selectRecordByPkid(deptOperShowPara);
                     operUpd.setPasswd(MD5Helper.getMD5String(operUpd.getPasswd()));
                 } else if (strSubmitTypePara.contains("Del")) {
-                    currentSelectedNode=currentSelectedNode.getParent();
                     operDel = new Oper();
                     operDel = (Oper) deptOperService.selectRecordByPkid(deptOperShowPara);
                     operUpd.setPasswd(MD5Helper.getMD5String(operUpd.getPasswd()));
@@ -227,24 +214,14 @@ public class DeptOperAction implements Serializable {
         return true;
     }
 
-    public void onNodeSelect(NodeSelectEvent event) {
-        currentSelectedNode=event.getTreeNode();
-        if (lastSelectedNode==null){
-            lastSelectedNode=currentSelectedNode;
-        }else {
-            ((DeptOperShow)lastSelectedNode.getData()).setIsDisabled("true");
-            lastSelectedNode=currentSelectedNode;
-        }
-        ((DeptOperShow)currentSelectedNode.getData()).setIsDisabled("false");
-    }
-
     /*智能字段 Start*/
-    public TreeNode getDeptRoot() {
-        return deptRoot;
+
+    public TreeNode getDeptOperRoot() {
+        return deptOperRoot;
     }
 
-    public void setDeptRoot(TreeNode deptRoot) {
-        this.deptRoot = deptRoot;
+    public void setDeptOperRoot(TreeNode deptOperRoot) {
+        this.deptOperRoot = deptOperRoot;
     }
 
     public DeptOperService getDeptOperService() {

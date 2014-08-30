@@ -22,18 +22,6 @@ public class OperResService {
     @Resource
     private OperResMapper operResMapper;
 
-    public List<OperResShow> selectOperaRoleRecords(String parentPkid){
-        return myOperResMapper.selectOperaRoleRecords(parentPkid);
-    }
-
-    public List<DeptOperShow> getOperList(String parentPkid){
-        return myOperResMapper.getOperList(parentPkid);
-    }
-
-    public List<OperResShow> selectOperaResRecords(){
-        return myOperResMapper.selectOperaResRecords();
-    }
-
     public List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara){
         return myOperResMapper.selectOperaResRecordsByModelShow(operResShowPara);
     }
