@@ -6,7 +6,8 @@ public class TaskShow {
     private String id;
     private String name;
     private String periodNo;
-
+    private String flowStatus;
+    private String flowStatusName;
     private String preFlowStatus;
     private String preFlowStatusName;
     private String strColorType;
