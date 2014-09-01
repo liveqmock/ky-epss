@@ -1,0 +1,286 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:focus for="menuid"/>
+            <p:panel>
+                <h:panelGrid id="pdQry" columns="2" style="width: 100%">
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="资源编号：" for="menuid"
+                                       style="width: 200px"/>
+                        <p:inputText id="menuid" value="#{menuAction.ptmenuQry.menuid}"/>
+                        <p:outputLabel value="资源名称：" for="menulabel"/>
+                        <p:inputText id="menulabel" value="#{menuAction.ptmenuQry.menulabel}"
+                                     style="width: 360px"/>
+                        <p:outputLabel value="资源类型：" for="targetmachine"/>
+                        <p:selectOneMenu id="targetmachine" value="#{menuAction.ptmenuQry.targetmachine}">
+                            <f:selectItems value="#{menuAction.targetMachineList}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <p:commandButton id="qryBtn" value="查询"
+                                         action="#{menuAction.onQueryAction('true')}"
+                                         update="pdt,msgs,pdQry">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtn" value="重置"
+                                         type="reset"
+                                         update="pdQry,msgs">
+                        </p:commandButton>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <p:commandButton id="addBtn"
+                             value="增加" icon="ui-icon-plus"
+                             action="#{menuAction.resetActionForAdd()}"
+                             update="pdt,msgs,pgViewForAdd"
+                             onclick="PF('wVDlgViewForAdd').show()"/>
+            <p:dataTable id="pdt" style="width:100%;"
+                         value="#{menuAction.ptmenuList}"
+                         var="record"
+                         rowKey="#{record.menuid}"
+                         selectionMode="single"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="15"
+                         rowIndexVar="row"
+                         rowsPerPageTemplate="200,100,50,40,30,20,15"
+                         emptyMessage="数据记录为空..."
+                         scrollable="true">
+                <p:column headerText="操作" style="width:45px">
+                    <p:commandButton  icon="ui-icon-pencil"
+                                      style="height:18px;width:18px"
+                                      action="#{menuAction.selectRecordAction('Upd',record)}"
+                                      update="pdt,:form:pgViewForUpd,:form:msgs"
+                                      onclick="PF('wVDlgViewForUpd').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-trash"
+                                      style="height:18px;width:18px"
+                                      action="#{menuAction.selectRecordAction('Del',record)}"
+                                      update="pdt,:form:pgViewForDel,:form:msgs"
+                                      onclick="PF('wVDlgViewForDel').show()">
+                    </p:commandButton>
+                </p:column>
+                <p:column headerText="序号" style="width:30px">
+                    <h:outputText value="#{row + 1}"/>
+                </p:column>
+                <p:column headerText="资源编号" style="width:80px;text-align:center">
+                    <h:outputText value="#{record.menuid}"/>
+                </p:column>
+                <p:column headerText="父资源编号" style="width:80px;text-align:center">
+                    <h:outputText value="#{record.parentmenuid}"/>
+                </p:column>
+                <p:column headerText="资源名称" style="width:200px;text-align:left">
+                    <h:outputText value="#{record.menulabel}"/>
+                </p:column>
+                <p:column headerText="资源功能" style="width:300px;text-align:left">
+                    <h:outputText value="#{record.menuaction}"/>
+                </p:column>
+                <p:column headerText="资源序号" style="width:80px;text-align:center">
+                    <h:outputText value="#{record.levelidx}"/>
+                </p:column>
+                <p:column headerText="是否基层" style="width:80px;text-align:center">
+                    <h:outputText value="#{record.isleaf}"/>
+                </p:column>
+                <p:column headerText="是否打开" style="width:80px;text-align:center">
+                    <h:outputText value="#{record.openwindow}"/>
+                </p:column>
+                <p:column headerText="描述内容" style="width:300px;text-align:left">
+                    <h:outputText value="#{record.menudesc}"/>
+                </p:column>
+            </p:dataTable>
+            <p:dialog id="dlgViewForAdd" header="系统资源增加信息" widgetVar="wVDlgViewForAdd"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgViewForAdd">
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="父资源号：" for="parentmenuidAdd"/>
+                        <p:inputText id="parentmenuidAdd" value="#{menuAction.ptmenuAdd.parentmenuid}"/>
+                        <p:outputLabel value="（根目录时，父资源号为0）" for="parentmenuidAdd"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="资源编号：" for="menuidAdd"/>
+                        <p:inputText id="menuidAdd" value="#{menuAction.ptmenuAdd.menuid}"/>
+                        <p:outputLabel value="资源名称：" for="menulabelAdd"/>
+                        <p:inputText id="menulabelAdd" value="#{menuAction.ptmenuAdd.menulabel}"/>
+                        <p:outputLabel value="是否基层：" for="isleafAdd"/>
+                        <p:selectOneMenu id="isleafAdd" value="#{menuAction.ptmenuAdd.isleaf}">
+                            <f:selectItems value="#{menuAction.isLeafList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="是否打开：" for="openwindowAdd"/>
+                        <p:selectOneMenu id="openwindowAdd" value="#{menuAction.ptmenuAdd.openwindow}">
+                            <f:selectItems value="#{menuAction.openWindowList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="资源类型：" for="targetmachineAdd"/>
+                        <p:selectOneMenu id="targetmachineAdd" value="#{menuAction.ptmenuAdd.targetmachine}">
+                            <f:selectItems value="#{menuAction.targetMachineList}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="资源序号：" for="levelidxAdd"/>
+                        <p:inputText id="levelidxAdd" value="#{menuAction.ptmenuAdd.levelidx}"/>
+                        <p:commandButton id="autoSetIdBtnAdd" icon="ui-icon-plus"
+                                         action="#{menuAction.setMaxIdxPlusOne()}"
+                                         update="levelidxAdd"
+                                         style="height:20px">
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="资源描述：" for="menudescAdd"/>
+                        <p:inputText id="menudescAdd" value="#{menuAction.ptmenuAdd.menudesc}"
+                                     style="width:316px;"/>
+                        <p:outputLabel value="资源功能：" for="menuactionAdd"/>
+                        <p:inputText id="menuactionAdd" value="#{menuAction.ptmenuAdd.menuaction}"
+                                     style="width:316px;"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="pgOperBtnForAdd" columns="4">
+                        <p:commandButton id="submitBtnForAdd"
+                                         value="提交（增加）"
+                                         action="#{menuAction.submitThisRecordAction}"
+                                         update="pdt,msgs,pgViewForAdd">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtnForAdd" value="重置"
+                                         type="reset"
+                                         update="pgViewForAdd">
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog id="dlgViewForUpd" header="系统资源更新信息" widgetVar="wVDlgViewForUpd"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgViewForUpd">
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="父资源号：" for="parentmenuidUpd"/>
+                        <p:inputText id="parentmenuidUpd" value="#{menuAction.ptmenuUpd.parentmenuid}"/>
+                        <p:outputLabel value="（根目录时，父资源号为0）" for="parentmenuidUpd"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="资源编号：" for="menuidUpd"/>
+                        <p:inputText id="menuidUpd" value="#{menuAction.ptmenuUpd.menuid}"/>
+                        <p:outputLabel value="资源名称：" for="nameForUpd"/>
+                        <p:inputText id="nameForUpd" value="#{menuAction.ptmenuUpd.menulabel}"/>
+                        <p:outputLabel value="是否基层：" for="isleafUpd"/>
+                        <p:selectOneMenu id="isleafUpd" value="#{menuAction.ptmenuUpd.isleaf}">
+                            <f:selectItems value="#{menuAction.isLeafList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="是否打开：" for="openwindowUpd"/>
+                        <p:selectOneMenu id="openwindowUpd" value="#{menuAction.ptmenuUpd.openwindow}">
+                            <f:selectItems value="#{menuAction.openWindowList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="资源类型：" for="targetmachineUpd"/>
+                        <p:selectOneMenu id="targetmachineUpd" value="#{menuAction.ptmenuUpd.targetmachine}">
+                            <f:selectItems value="#{menuAction.targetMachineList}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="资源序号：" for="levelidxUpd"/>
+                        <p:inputText id="levelidxUpd" value="#{menuAction.ptmenuUpd.levelidx}"/>
+                        <p:commandButton id="autoSetIdBtnUpd" icon="ui-icon-plus"
+                                         action="#{menuAction.setMaxIdxPlusOne()}"
+                                         update="levelidxUpd"
+                                         style="height:20px">
+                        </p:commandButton>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="资源描述：" for="menudescUpd"/>
+                        <p:inputText id="menudescUpd" value="#{menuAction.ptmenuUpd.menudesc}"
+                                     style="width:316px;"/>
+                        <p:outputLabel value="资源功能：" for="menuactionUpd"/>
+                        <p:inputText id="menuactionUpd" value="#{menuAction.ptmenuUpd.menuaction}"
+                                     style="width:316px;"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="pgOperBtnForUpd" columns="4">
+                        <p:commandButton id="submitBtnForUpd"
+                                         value="提交（更新）"
+                                         action="#{menuAction.submitThisRecordAction}"
+                                         update="pdt,msgs,pgViewForUpd"
+                                         oncomplete="wVDlgViewForUpd.hide()">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtnForUpd" value="重置"
+                                         type="reset"
+                                         update="pgViewForUpd">
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+            <p:dialog id="dlgViewForDel" header="系统资源删除信息" widgetVar="wVDlgViewForDel"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgViewForDel">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="父资源号：" for="parentmenuidDel"/>
+                        <p:inputText id="parentmenuidDel" value="#{menuAction.ptmenuDel.parentmenuid}"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="资源编号：" for="idForDel"/>
+                        <p:inputText id="idForDel" value="#{menuAction.ptmenuDel.menuid}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="资源名称：" for="nameForDel"/>
+                        <p:inputText id="nameForDel" value="#{menuAction.ptmenuDel.menulabel}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="是否基层：" for="isleafDel"/>
+                        <p:inputText id="isleafDel" value="#{menuAction.ptmenuDel.isleaf}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="是否打开：" for="openwindowDel"/>
+                        <p:inputText id="openwindowDel" value="#{menuAction.ptmenuDel.openwindow}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="资源序号：" for="levelidxDel"/>
+                        <p:inputText id="levelidxDel" value="#{menuAction.ptmenuUpd.levelidx}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="资源描述：" for="menudescDel"/>
+                        <p:inputText id="menudescDel" value="#{menuAction.ptmenuDel.menudesc}"
+                                     readonly="true"
+                                     style="width:316px;background-color:gainsboro;"/>
+                        <p:outputLabel value="资源功能：" for="menuactionDel"/>
+                        <p:inputText id="menuactionDel" value="#{menuAction.ptmenuDel.menuaction}"
+                                     readonly="true"
+                                     style="width:316px;background-color:gainsboro;"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="pgOperBtnForDel">
+                        <p:commandButton id="submitBtnForDel"
+                                         value="提交（删除）"
+                                         action="#{menuAction.submitThisRecordAction}"
+                                         update="pdt,msgs,pgViewForDel"
+                                         oncomplete="wVDlgViewForDel.hide()">
+                        </p:commandButton>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

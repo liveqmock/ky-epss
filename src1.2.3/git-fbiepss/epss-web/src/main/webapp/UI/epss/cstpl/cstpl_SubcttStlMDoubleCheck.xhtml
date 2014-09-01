@@ -1,0 +1,162 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+        <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+            function actSelect(obj) {
+                var pkid=obj;
+                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
+                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
+                var arg = new Object();
+                arg.doType = "select";
+                // 分包合同
+                var strCallPageNameFlag="SubcttStlEngMDoubleCheck";
+                var rtn =dialog("../subctt/subctt_MDoubleCheck.xhtml?strCallPageNameFlag="+strCallPageNameFlag+
+                        "&amp;strCstplInfoPkid="+pkid,arg,sfeature);
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <p:growl id="msgs" showDetail="true"/>
+            <p:focus for="id"/>
+            <p:panel>
+                <h:panelGrid id="pdQry" columns="2" style="width: 100%">
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="计划编号：" for="id"/>
+                        <p:inputText id="id" value="#{cstplInfoAction.cttInfoShowQry.id}"/>
+                        <p:outputLabel value="计划名称：" for="cstplName"/>
+                        <p:inputText id="cstplName" value="#{cstplInfoAction.cttInfoShowQry.name}"
+                                     style="width: 328px"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="3">
+                        <p:commandButton id="qryBtn" value="查询"
+                                         action="#{cstplInfoAction.onQueryAction('ApprovedQry','true')}"
+                                         update="pdt,msgs">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtn" value="重置"
+                                         type="reset"
+                                         update="pdQry,msgs">
+                        </p:commandButton>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
+            <p:dataTable id="pdt" style="width:100%;"
+                         value="#{cstplInfoAction.cttInfoShowList}"
+                         var="record"
+                         rowKey="#{record.pkid}"
+                         selection="#{cstplInfoAction.cttInfoShowSelected}"
+                         selectionMode="single"
+                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         paginator="true"
+                         paginatorPosition="bottom"
+                         rows="15"
+                         rowIndexVar="row"
+                         rowsPerPageTemplate="500,200,100,45,30,15"
+                         emptyMessage="数据记录为空..."
+                         widgetVar="DtInitCstplList"
+                         scrollable="true">
+                <p:column headerText="操作" style="width:40px" >
+                    <p:commandButton   icon="ui-icon-search"
+                                       style="height:18px;width:18px"
+                                       actionListener="#{cstplInfoAction.selectRecordAction('Qry','',record)}"
+                                       update=":form:pdt,:form:pgView,:form:msgs"
+                                       onclick="PF('wVDlgView').show()">
+                    </p:commandButton>
+                    <p:commandButton  icon="ui-icon-triangle-1-e"
+                                      style="height:18px;width:18px"
+                                      oncomplete="actSelect('#{record.pkid}')">
+                    </p:commandButton>
+                </p:column>
+                <p:column headerText="序号" style="width:30px">
+                    <h:outputText value="#{row + 1}"/>
+                </p:column>
+                <p:column headerText="成本计划号" style="width:140px;text-align:center">
+                    <h:outputText value="#{record.id}"/>
+                </p:column>
+                <p:column headerText="成本计划名" style="width:300px;text-align:left">
+                    <h:outputText value="#{record.name}"/>
+                </p:column>
+                <p:column headerText="制定日期" style="width:66px;text-align:center">
+                    <h:outputText value="#{record.signDate}"/>
+                </p:column>
+                <p:column headerText="备注内容" style="width:200px;text-align:center">
+                    <h:outputText value="#{record.note}"/>
+                </p:column>
+            </p:dataTable>
+            <p:dialog id="dlgView" header="成本计划信息" widgetVar="wVDlgView"
+                      resizable="false" modal="true"
+                      showEffect="clip" hideEffect="fold">
+                <h:panelGrid id="pgView">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="计划编号：" for="idForDlg"/>
+                        <p:inputText id="idForDlg" value="#{cstplInfoAction.cttInfoShowSel.id}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="计划名称：" for="cstplNameForDlg"/>
+                        <p:inputText id="cstplNameForDlg" value="#{cstplInfoAction.cttInfoShowSel.name}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;width:328px"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+                        <p:outputLabel value="制定日期：" for="signDateForDlg"/>
+                        <p:inputText id="signDateForDlg" value="#{cstplInfoAction.cttInfoShowSel.signDate}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="备注内容：" for="noteForDlg"/>
+                        <p:inputText id="noteForDlg" value="#{cstplInfoAction.cttInfoShowSel.note}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="4">
+                        <p:outputLabel for="createdByNameSel" value="创建人：" />
+                        <h:inputText id="createdByNameSel"
+                                     value="#{cstplInfoAction.cttInfoShowSel.createdByName}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="createdDateSel" value="创建时间：" />
+                        <h:inputText id="createdDateSel"
+                                     value="#{cstplInfoAction.cttInfoShowSel.createdDate}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="lastUpdByNameSel" value="修改人：" />
+                        <h:inputText id="lastUpdByNameSel"
+                                     value="#{cstplInfoAction.cttInfoShowSel.lastUpdByName}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="lastUpdDateSel" value="修改时间：" />
+                        <h:inputText id="lastUpdDateSel"
+                                     value="#{cstplInfoAction.cttInfoShowSel.lastUpdDate}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="modificationNumSel" value="修改次数：" />
+                        <h:inputText id="modificationNumSel"
+                                     value="#{cstplInfoAction.cttInfoShowSel.modificationNum}"
+                                     style="background-color:gainsboro;text-align:right;" readonly="true">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                        </h:inputText>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
