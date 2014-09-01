@@ -54,11 +54,13 @@ public class DeptOperService {
                     .andIdEqualTo(deptPara.getId());
             return deptMapper.selectByExample(deptExample).size()>0;
     }
-    public boolean isExistInOperDb(Oper operPara) {
+    public int existRecordCountsInOperDb(Oper operPara) {
         OperExample operExample=new OperExample();
-        operExample.createCriteria()
-                .andIdEqualTo(operPara.getId());
-        return operMapper.selectByExample(operExample).size()>0;
+        if(ToolUtil.getStrIgnoreNull(operPara.getId()).length()>0) {
+            operExample.createCriteria()
+                    .andIdEqualTo(operPara.getId());
+        }
+        return operMapper.selectByExample(operExample).size();
     }
     public void insertDeptRecord(Dept deptPara){
         deptPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());

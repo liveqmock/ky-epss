@@ -9,6 +9,7 @@ import epss.repository.model.PtenumainExample;
 import epss.repository.model.Ptenudetail;
 import epss.repository.model.PtenudetailExample;
 import epss.repository.model.PtenudetailKey;
+import skyline.util.ToolUtil;
 
 import java.util.List;
 
@@ -22,18 +23,10 @@ public class EnuService {
     @Autowired
     private PtenumainMapper enumainMapper;
 
-    private String stringIgnoreNull(String strOriginal){
-        if(strOriginal ==null){
-            return "";
-        }
-        else {
-            return strOriginal;
-        }
-    }
     public List<Ptenumain> selectMainListByModel(Ptenumain ptenumainPara) {
         PtenumainExample example= new PtenumainExample();
         example.createCriteria()
-                .andEnunameLike("%"+ stringIgnoreNull(ptenumainPara.getEnuname())+"%");
+                .andEnunameLike("%"+ ToolUtil.getStrIgnoreNull(ptenumainPara.getEnuname())+"%");
         example.setOrderByClause(" ENUNAME ASC ") ;
         List<Ptenumain> enumainTemp=enumainMapper.selectByExample(example);
         return enumainTemp;
@@ -56,8 +49,8 @@ public class EnuService {
     public List<Ptenudetail> selectDetailListByModel(Ptenudetail enudetailPara) {
         PtenudetailExample example= new PtenudetailExample();
         example.createCriteria()
-                .andEnutypeLike("%" + stringIgnoreNull(enudetailPara.getEnutype()) + "%")
-                .andEnuitemlabelLike("%" + stringIgnoreNull(enudetailPara.getEnuitemlabel()) + "%");
+                .andEnutypeLike("%" + ToolUtil.getStrIgnoreNull(enudetailPara.getEnutype()) + "%")
+                .andEnuitemlabelLike("%" + ToolUtil.getStrIgnoreNull(enudetailPara.getEnuitemlabel()) + "%");
         example.setOrderByClause(" dispno ");
         List<Ptenudetail> enudetailTemp=enudetailMapper.selectByExample(example);
         return enudetailTemp;

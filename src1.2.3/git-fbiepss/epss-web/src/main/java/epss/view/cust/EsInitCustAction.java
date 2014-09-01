@@ -10,7 +10,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.util.MessageUtil;;
+import skyline.util.MessageUtil;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -32,11 +32,6 @@ public class EsInitCustAction {
     private static final Logger logger = LoggerFactory.getLogger(EsInitCustAction.class);
     @ManagedProperty(value = "#{signPartService}")
     private SignPartService signPartService;
-    @ManagedProperty(value = "#{esFlowControl}")
-    private EsFlowControl esFlowControl;
-    @ManagedProperty(value = "#{esCommon}")
-    private EsCommon esCommon;
-
     private SignPartShow signPartShowQry;
     private SignPartShow signPartShowAdd;
     private SignPartShow signPartShowUpd;
@@ -203,22 +198,6 @@ public class EsInitCustAction {
 
     public void setSignPartService(SignPartService signPartService) {
         this.signPartService = signPartService;
-    }
-
-    public EsFlowControl getEsFlowControl() {
-        return esFlowControl;
-    }
-
-    public void setEsFlowControl(EsFlowControl esFlowControl) {
-        this.esFlowControl = esFlowControl;
-    }
-
-    public EsCommon getEsCommon() {
-        return esCommon;
-    }
-
-    public void setEsCommon(EsCommon esCommon) {
-        this.esCommon = esCommon;
     }
 
     public SignPartShow getSignPartShowQry() {

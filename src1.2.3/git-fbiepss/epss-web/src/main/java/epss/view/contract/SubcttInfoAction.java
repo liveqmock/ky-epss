@@ -131,7 +131,7 @@ public class SubcttInfoAction {
         }
     }
 
-    public void setMaxNoPlusOne() {
+    public void setMaxNoPlusOne(String strQryTypePara) {
         try {
             Integer intTemp;
             String strMaxId = cttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE2.getCode());
@@ -148,6 +148,11 @@ public class SubcttInfoAction {
                         strMaxId += "001";
                     }
                 }
+            }
+            if (strQryTypePara.equals("Qry")) {
+                cttInfoShowQry.setId(strMaxId);
+            }else if (strQryTypePara.equals("Upd")) {
+                cttInfoShowUpd.setId(strMaxId);
             }
             cttInfoShowUpd.setId(strMaxId);
         } catch (Exception e) {

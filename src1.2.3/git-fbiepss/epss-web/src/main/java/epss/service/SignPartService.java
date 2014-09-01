@@ -29,10 +29,10 @@ public class SignPartService {
     public List<SignPartShow> selectListByModel(SignPartShow signPartShowPara) {
         EsInitCustExample example= new EsInitCustExample();
         EsInitCustExample.Criteria criteria = example.createCriteria();
-        criteria.andIdLike("%" + stringIgnoreNull(signPartShowPara.getId()) + "%")
-                .andNameLike("%" + stringIgnoreNull(signPartShowPara.getName()) + "%")
-                .andDeletedFlagLike("%" + stringIgnoreNull(signPartShowPara.getDeletedFlag()) + "%");
-        if (!stringIgnoreNull(signPartShowPara.getNote()).equals("")){
+        criteria.andIdLike("%" + ToolUtil.getStrIgnoreNull(signPartShowPara.getId()) + "%")
+                .andNameLike("%" + ToolUtil.getStrIgnoreNull(signPartShowPara.getName()) + "%")
+                .andDeletedFlagLike("%" + ToolUtil.getStrIgnoreNull(signPartShowPara.getDeletedFlag()) + "%");
+        if (!ToolUtil.getStrIgnoreNull(signPartShowPara.getNote()).equals("")){
             criteria.andNoteLike("%"+signPartShowPara .getNote()+"%");
         }
         example.setOrderByClause("ID ASC") ;
@@ -59,15 +59,6 @@ public class SignPartService {
         EsInitCustExample example= new EsInitCustExample();
         example .createCriteria().andIdLike("%" + strId + "%") ;
         return esInitCustMapper.selectByExample(example);
-    }
-
-    private String stringIgnoreNull(String strOriginal){
-        if(strOriginal ==null){
-            return "";
-        }
-        else {
-            return strOriginal;
-        }
     }
 
     public EsInitCust getEsInitCustByPkid(String strPkid){

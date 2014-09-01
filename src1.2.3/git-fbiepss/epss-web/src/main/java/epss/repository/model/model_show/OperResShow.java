@@ -20,6 +20,7 @@ public class OperResShow {
     private String remark;
     private Integer recversion;
     private Boolean isSel;
+    private String type;
     public String getPkid() {
         return pkid;
     }
@@ -145,5 +146,13 @@ public class OperResShow {
 
     public void setIsSel(Boolean isSel) {
         this.isSel = isSel;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

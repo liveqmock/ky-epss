@@ -182,7 +182,6 @@ public class ToolUtil {
         return formatter.format(date);
     }
 
-    public static String operID="";
     //取出某表某字段的最大值
     public static String  getFieldMax(DatabaseConnection dc,String Keyfield,String tableName,String whereStr){
         String maxcount ="1";

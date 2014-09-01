@@ -21,19 +21,32 @@ public interface MyTaskMapper {
             " from" +
             "   OPER_RES opr" +
             " where" +
-            "   opr.OPER_PKID=#{strOperPkid}" +
+            "   opr.TYPE='business'" +
             " order by" +
             "   opr.FLOW_STATUS")
-    List<TaskShow> getTaskFlowGroup(@Param("strOperPkid") String strOperPkid);
+    List<TaskShow> getTaskFlowGroup();
+
+    @Select(" select " +
+            "   distinct opr.FLOW_STATUS as flowStatus" +
+            " from" +
+            "   OPER_RES opr" +
+            " where" +
+            "   opr.OPER_PKID=#{strOperPkid}" +
+            " and " +
+            "   opr.TYPE='business'" +
+            " order by" +
+            "   opr.FLOW_STATUS")
+    List<TaskShow> getOwnTaskFlowGroup(@Param("strOperPkid") String strOperPkid);
 
     @Select("(select  " +
-            "                cttofoper.INFO_TYPE as type,  " +
-            "                cttofoper.INFO_PKID as pkid,  " +
-            "                cttofoper.ID as id,  " +
-            "                cttofoper.NAME as name,  " +
-            "                cttofoper.flow_status as operResFlowStatus,  " +
-            "                eip.STATUS_FLAG as flowStatus,  " +
-            "                eip.PRE_STATUS_FLAG as preFlowStatus  " +
+            "                cttofoper.INFO_TYPE as type," +
+            "                cttofoper.INFO_PKID as pkid," +
+            "                cttofoper.ID as id," +
+            "                cttofoper.NAME as name," +
+            "                cttofoper.flow_status as operResFlowStatus," +
+            "                '' as periodNo," +
+            "                eip.STATUS_FLAG as flowStatus," +
+            "                eip.PRE_STATUS_FLAG as preFlowStatus" +
             "             from  " +
             "               (select  " +
             "                  distinct  " +
@@ -52,6 +65,8 @@ public interface MyTaskMapper {
             "                  opr.INFO_PKID=eci.PKID  " +
             "                where  " +
             "                  opr.OPER_PKID=#{strOperPkid} " +
+            "                and" +
+            "                  opr.TYPE='business'" +
             "                )cttofoper                 " +
             "             left join    " +
             "                ES_INIT_POWER eip   " +
@@ -62,31 +77,37 @@ public interface MyTaskMapper {
             ") " +
             "union " +
             "(select  " +
-            "                stlofoper.INFO_TYPE as type,  " +
-            "                stlofoper.INFO_PKID as pkid,  " +
-            "                stlofoper.ID as id,  " +
-            "                stlofoper.NAME as name,  " +
-            "                stlofoper.flow_status as operResFlowStatus,  " +
-            "                eip.STATUS_FLAG as flowStatus,  " +
-            "                eip.PRE_STATUS_FLAG as preFlowStatus  " +
+            "                stlofoper.INFO_TYPE as type," +
+            "                stlofoper.PKID as pkid," +
+            "                stlofoper.ID as id," +
+            "                stlofoper.NAME as name," +
+            "                stlofoper.flow_status as operResFlowStatus," +
+            "                stlofoper.PERIOD_NO as periodNo," +
+            "                eip.STATUS_FLAG as flowStatus," +
+            "                eip.PRE_STATUS_FLAG as preFlowStatus" +
             "             from  " +
-            "               (select  " +
-            "                  distinct  " +
-            "                  opr.INFO_TYPE,  " +
-            "                  opr.INFO_PKID,  " +
-            "                  opr.flow_status, " +
-            "                  stl.ID as ID,  " +
-            "                  (select name from ES_CTT_INFO where pkid=stl.stl_pkid) as NAME    " +
-            "                from  " +
-            "                  OPER_RES opr  " +
-            "                inner join  " +
-            "                  ES_INIT_STL stl   " +
-            "                on  " +
-            "                  opr.INFO_TYPE=stl.stl_type " +
-            "                and  " +
-            "                  opr.INFO_PKID=stl.stl_pkid  " +
-            "                where  " +
-            "                  opr.OPER_PKID=#{strOperPkid} " +
+            "               (" +
+            "                   select" +
+            "                     distinct  " +
+            "                     opr.INFO_TYPE,  " +
+            "                     opr.INFO_PKID,  " +
+            "                     stl.PKID," +
+            "                     opr.flow_status, " +
+            "                     stl.ID as ID,  " +
+            "                     (select name from ES_CTT_INFO where pkid=stl.stl_pkid) as NAME," +
+            "                     stl.PERIOD_NO" +
+            "                   from  " +
+            "                     OPER_RES opr  " +
+            "                   inner join  " +
+            "                     ES_INIT_STL stl" +
+            "                   on  " +
+            "                     opr.INFO_TYPE=stl.stl_type " +
+            "                   and  " +
+            "                     opr.INFO_PKID=stl.stl_pkid  " +
+            "                   where  " +
+            "                     opr.OPER_PKID=#{strOperPkid}" +
+            "                   and " +
+            "                     opr.TYPE='business' " +
             "                )stlofoper                 " +
             "             left join    " +
             "                ES_INIT_POWER eip   " +

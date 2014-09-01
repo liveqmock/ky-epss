@@ -111,18 +111,21 @@
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
         <table tableName="all_tab_columns"/>-->
-
+        <table schema="epss" tableName="tidkeys">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
+        </table>
         <!--平台类 -->
         <!--<table tableName="ptenudetail"/>
         <table tableName="ptenumain"/>
         <table tableName="ptlogicact"/>
         <table tableName="ptmenu"/>
         <table tableName="sys_lock"/>-->
-        <table schema="epss" tableName="oper">
+        <!--<table schema="epss" tableName="oper">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <!--<table schema="epss" tableName="dept">
+        <table schema="epss" tableName="dept">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>

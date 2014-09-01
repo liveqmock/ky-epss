@@ -1,9 +1,6 @@
 package epss.repository.model.model_show;
 
 public class TaskShow {
-    private String flowStatus;
-    private String flowStatusName;
-
     private String type;
     private String pkid;
     private String id;

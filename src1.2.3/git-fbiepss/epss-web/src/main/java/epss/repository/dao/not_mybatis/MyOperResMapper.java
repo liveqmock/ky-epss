@@ -35,6 +35,24 @@ public interface MyOperResMapper {
             "   opr.OPER_PKID=#{strOperPkid}")
     List<OperResShow> getInfoListByOperPkid(@Param("strInfoType") String strInfoType,
                                             @Param("strOperPkid") String strOperPkid);
+    @Select("select distinct" +
+            "   opr.INFO_PKID as infoPkid, " +
+            "   eci.NAME as infoPkidName" +
+            " from " +
+            "   OPER_RES opr" +
+            " left join" +
+            "   ES_CTT_INFO eci" +
+            " on" +
+            "   opr.INFO_PKID=eci.PKID" +
+            " where " +
+            "   opr.INFO_TYPE=#{strInfoType}" +
+            " and" +
+            "   opr.FLOW_STATUS=#{strFlowStatus}"+
+            " and" +
+            "   opr.OPER_PKID=#{strOperPkid}")
+    List<OperResShow> getInfoListByOperFlowPkid(@Param("strInfoType") String strInfoType,
+                                                @Param("strFlowStatus") String strFlowStatus,
+                                                @Param("strOperPkid") String strOperPkid);
 
     @Select(" select" +
             "    t.pkid as pkid," +

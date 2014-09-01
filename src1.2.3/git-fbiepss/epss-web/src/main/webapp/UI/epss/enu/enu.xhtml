@@ -105,6 +105,7 @@
         </p:column>
     </p:dataTable>
 </p:panel>
+
 <p:dialog id="dlgViewForAdd" header="枚举增加信息" widgetVar="wVDlgViewForAdd"
           resizable="false" modal="true"
           showEffect="clip" hideEffect="fold">
@@ -113,8 +114,7 @@
             <p:outputLabel value="枚举ID：" for="mainIdForAdd"/>
             <p:inputText id="mainIdForAdd" value="#{enuAction.enumainAdd.enutype}"/>
             <p:outputLabel value="枚举名称：" for="mainNameForAdd"/>
-            <p:inputText id="mainNameForAdd" value="#{enuAction.enumainAdd.enuname}"
-                         style="width:328px;"/>
+            <p:inputText id="mainNameForAdd" value="#{enuAction.enumainAdd.enuname}"/>
             <p:outputLabel value="值类型：" for="mainValueForAdd"/>
             <p:inputText id="mainValueForAdd" value="#{enuAction.enumainAdd.valuetype}"/>
             <p:outputLabel value="描述：" for="mainDescForAdd"/>
@@ -141,8 +141,7 @@
             <p:outputLabel value="枚举ID：" for="mainIdForUpd"/>
             <p:inputText id="mainIdForUpd" value="#{enuAction.enumainUpd.enutype}"/>
             <p:outputLabel value="枚举名称：" for="mainNameForUpd"/>
-            <p:inputText id="mainNameForUpd" value="#{enuAction.enumainUpd.enuname}"
-                         style="width:328px;"/>
+            <p:inputText id="mainNameForUpd" value="#{enuAction.enumainUpd.enuname}"/>
             <p:outputLabel value="值类型：" for="mainValueForUpd"/>
             <p:inputText id="mainValueForUpd" value="#{enuAction.enumainUpd.valuetype}"/>
             <p:outputLabel value="描述：" for="mainDescForUpd"/>
@@ -174,15 +173,13 @@
             <p:outputLabel value="枚举名称：" for="mainNameForDel"/>
             <p:inputText id="mainNameForDel" value="#{enuAction.enumainDel.enuname}"
                          readonly="true"
-                         style="background-color:gainsboro;width:328px;"/>
+                         style="background-color:gainsboro;"/>
             <p:outputLabel value="值类型：" for="mainValueForDel"/>
             <p:inputText id="mainValueForDel" value="#{enuAction.enumainDel.valuetype}"
                          readonly="true"
                          style="background-color:gainsboro;"/>
             <p:outputLabel value="描述：" for="mainDescForDel"/>
-            <p:inputText id="mainDescForDel" value="#{enuAction.enumainDel.enudesc}"
-                         readonly="true"
-                         style="background-color:gainsboro;"/>
+            <p:inputText id="mainDescForDel" value="#{enuAction.enumainDel.enudesc}"/>
         </h:panelGrid>
         <h:panelGrid id="pgOperBtnForDel">
             <p:commandButton id="submitBtnForDel"
@@ -194,6 +191,7 @@
         </h:panelGrid>
     </h:panelGrid>
 </p:dialog>
+
 <p:panel>
     <p:panel header="枚举信息详细">
         <p:ajaxStatus>
@@ -272,8 +270,7 @@
                          readonly="true"
                          style="background-color:gainsboro;"/>
             <p:outputLabel value="枚举元素值：" for="enunameForAddDetail"/>
-            <p:inputText id="enunameForAddDetail" value="#{enuAction.enudetailAdd.enuitemvalue}"
-                         style="width:328px;"/>
+            <p:inputText id="enunameForAddDetail" value="#{enuAction.enudetailAdd.enuitemvalue}"/>
             <p:outputLabel value="枚举元素标题：" for="enuitemlabelForAddDetail"/>
             <p:inputText id="enuitemlabelForAddDetail" value="#{enuAction.enudetailAdd.enuitemlabel}"/>
             <p:outputLabel value="描述：" for="enuitemdescForAddDetail"/>
@@ -307,8 +304,7 @@
                          readonly="true"
                          style="background-color:gainsboro;"/>
             <p:outputLabel value="枚举元素值：" for="enuitemvalueForUpdDetail"/>
-            <p:inputText id="enuitemvalueForUpdDetail" value="#{enuAction.enudetailUpd.enuitemvalue}"
-                         style="width:328px;"/>
+            <p:inputText id="enuitemvalueForUpdDetail" value="#{enuAction.enudetailUpd.enuitemvalue}"/>
             <p:outputLabel value="枚举元素标题：" for="enuitemlabelForUpdDetail"/>
             <p:inputText id="enuitemlabelForUpdDetail" value="#{enuAction.enudetailUpd.enuitemlabel}"/>
             <p:outputLabel value="枚举元素描述：" for="enuitemdescForUpdDetail"/>
@@ -344,7 +340,7 @@
             <p:outputLabel value="枚举元素值：" for="enuitemvalueForDelDetail"/>
             <p:inputText id="enuitemvalueForDelDetail" value="#{enuAction.enudetailDel.enuitemvalue}"
                          readonly="true"
-                         style="background-color:gainsboro;width:328px;"/>
+                         style="background-color:gainsboro;"/>
             <p:outputLabel value="枚举元素标题：" for="enuitemlabelForDelDetail"/>
             <p:inputText id="enuitemlabelForDelDetail" value="#{enuAction.enudetailDel.enuitemlabel}"
                          readonly="true"
@@ -354,7 +350,9 @@
                          readonly="true"
                          style="background-color:gainsboro;"/>
             <p:outputLabel value="显示顺序：" for="dispnoForDelDetail"/>
-            <p:inputText id="dispnoForDelDetail" value="#{enuAction.enudetailDel.dispno}"/>
+            <p:inputText id="dispnoForDelDetail" value="#{enuAction.enudetailDel.dispno}"
+                         readonly="true"
+                         style="background-color:gainsboro;"/>
             <p:outputLabel value="扩展描述：" for="enuitemexpandForDelDetail"/>
             <p:inputText id="enuitemexpandForDelDetail" value="#{enuAction.enudetailDel.enuitemexpand}"/>
         </h:panelGrid>

@@ -2,6 +2,7 @@ package epss.view.settle;
 
 import epss.common.enums.*;
 import epss.repository.model.EsCttInfo;
+import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import skyline.util.StyleModel;
@@ -63,7 +64,7 @@ public class ProgWorkqtyInfoAction {
     private ProgInfoShow progInfoShowDel;
 
     private List<ProgInfoShow> progInfoShowList;
-
+    //在某一成本计划下的分包合同
     private List<SelectItem> subcttList;
 
     private String strSubmitType;
@@ -74,27 +75,28 @@ public class ProgWorkqtyInfoAction {
     @PostConstruct
     public void init() {
         this.progInfoShowList = new ArrayList<ProgInfoShow>();
-        String strCstplPkid = "";
+        String strCstplInfoPkid = "";
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if (parammap.containsKey("strCstplInfoPkid")) {
-            strCstplPkid = parammap.get("strCstplInfoPkid").toString();
+            strCstplInfoPkid = parammap.get("strCstplInfoPkid").toString();
         }
         strStlType = ESEnum.ITEMTYPE3.getCode();
 
         resetAction();
-
-        List<OperResShow> operResShowListTemp=
-                operResService.getInfoListByOperPkid(
-                        ESEnum.ITEMTYPE3.getCode(),
-                        ToolUtil.getOperatorManager().getOperatorId());
+        //在某一成本计划下的分包合同
+        List<CttInfoShow> cttInfoShowList =
+                cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
+                        ESEnum.ITEMTYPE2.getCode()
+                        , strCstplInfoPkid
+                        , ESEnumStatusFlag.STATUS_FLAG3.getCode());
         subcttList = new ArrayList<SelectItem>();
-        if (operResShowListTemp.size() > 0) {
+        if (cttInfoShowList.size() > 0) {
             SelectItem selectItem = new SelectItem("", "全部");
             subcttList.add(selectItem);
-            for(OperResShow operResShowUnit : operResShowListTemp) {
+            for (CttInfoShow itemUnit : cttInfoShowList) {
                 selectItem = new SelectItem();
-                selectItem.setValue(operResShowUnit.getInfoPkid());
-                selectItem.setLabel(operResShowUnit.getInfoPkidName());
+                selectItem.setValue(itemUnit.getPkid());
+                selectItem.setLabel(itemUnit.getName());
                 subcttList.add(selectItem);
             }
         }
@@ -117,7 +119,7 @@ public class ProgWorkqtyInfoAction {
         strSubmitType = "Add";
     }
 
-    public void setMaxNoPlusOne() {
+    public void setMaxNoPlusOne(String strQryTypePara) {
         try {
             Integer intTemp;
             String strMaxId = progStlInfoService.getStrMaxStlId(strStlType);
@@ -135,8 +137,13 @@ public class ProgWorkqtyInfoAction {
                     }
                 }
             }
-            progInfoShowAdd.setId(strMaxId);
-            progInfoShowUpd.setId(strMaxId);
+            if (strQryTypePara.equals("Qry")) {
+                progInfoShowQry.setId(strMaxId);
+            }else if (strQryTypePara.equals("Add")) {
+                progInfoShowAdd.setId(strMaxId);
+            }else if (strQryTypePara.equals("Upd")) {
+                progInfoShowUpd.setId(strMaxId);
+            }
         } catch (Exception e) {
             logger.error("结算信息查询失败", e);
             MessageUtil.addError("结算信息查询失败");
@@ -538,14 +545,6 @@ public class ProgWorkqtyInfoAction {
 
     public void setProgMatqtyItemService(ProgMatqtyItemService progMatqtyItemService) {
         this.progMatqtyItemService = progMatqtyItemService;
-    }
-
-    public OperResService getOperResService() {
-        return operResService;
-    }
-
-    public void setOperResService(OperResService operResService) {
-        this.operResService = operResService;
     }
     /*智能字段End*/
 }

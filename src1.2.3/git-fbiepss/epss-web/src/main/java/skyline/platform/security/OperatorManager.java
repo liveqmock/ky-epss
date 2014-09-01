@@ -96,8 +96,8 @@ public class OperatorManager implements Serializable {
      * 操作员签到，验证operid+passwd是否正确 签到成功后 1.isLogin=true 2.取得该操作员相关的所有角色 3.初始化资源列表
      * 4.取得操作员的菜单
      *
-     * @param operid
-     * @param password
+     * @param idPara
+     * @param passwordPara
      * @return boolean
      * @roseuid 3F80B6360281
      */
@@ -125,7 +125,8 @@ public class OperatorManager implements Serializable {
             // 初始化菜单。
             try {
                 mb = new MenuBean();
-                this.jsonMap.put("default", mb.generateJsonStream("default"));
+                this.jsonMap.put("default", mb.generateJsonStream(idPara,"default"));
+                this.jsonMap.put("system", mb.generateJsonStream(idPara,"system"));
             } catch (Exception ex3) {
                 ex3.printStackTrace();
                 System.err.println("Wrong when getting menus of oper: [ "
@@ -137,7 +138,6 @@ public class OperatorManager implements Serializable {
             return false;
         } finally {
             cm.release();
-            //session.close();
         }
     }
 

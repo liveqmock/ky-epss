@@ -2,14 +2,11 @@ package epss.view.settle;
 
 import epss.common.enums.*;
 import epss.repository.model.model_show.CttInfoShow;
+import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.ProgInfoShow;
+import epss.service.*;
 import skyline.util.StyleModel;
 import skyline.util.ToolUtil;
-import epss.service.CttInfoService;
-import epss.service.FlowCtrlService;
-import epss.service.ProgStlInfoService;
-import epss.service.ProgWorkqtyItemService;
-import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
@@ -49,7 +46,6 @@ public class ProgSubstlInfoAction {
     private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
-
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{esCommon}")
@@ -88,17 +84,18 @@ public class ProgSubstlInfoAction {
         strStlType =ESEnum.ITEMTYPE5.getCode();
         resetAction();
 
+        //在某一成本计划下的分包合同
         List<CttInfoShow> cttInfoShowList =
                 cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
                         ESEnum.ITEMTYPE2.getCode()
-                        ,strCstplInfoPkid
-                        ,ESEnumStatusFlag.STATUS_FLAG3.getCode());
-        subcttList=new ArrayList<SelectItem>();
-        if(cttInfoShowList.size()>0){
-            SelectItem selectItem=new SelectItem("","全部");
+                        , strCstplInfoPkid
+                        , ESEnumStatusFlag.STATUS_FLAG3.getCode());
+        subcttList = new ArrayList<SelectItem>();
+        if (cttInfoShowList.size() > 0) {
+            SelectItem selectItem = new SelectItem("", "全部");
             subcttList.add(selectItem);
-            for(CttInfoShow itemUnit: cttInfoShowList){
-                selectItem=new SelectItem();
+            for (CttInfoShow itemUnit : cttInfoShowList) {
+                selectItem = new SelectItem();
                 selectItem.setValue(itemUnit.getPkid());
                 selectItem.setLabel(itemUnit.getName());
                 subcttList.add(selectItem);
@@ -464,6 +461,5 @@ public class ProgSubstlInfoAction {
     public void setProgInfoShowDel(ProgInfoShow progInfoShowDel) {
         this.progInfoShowDel = progInfoShowDel;
     }
-
-    /*智能字段End*/
+/*智能字段End*/
 }

@@ -31,27 +31,40 @@ public class OperResService {
     public List<OperResShow> getInfoListByOperPkid(String strInfoTypePara,String strOperPkidPara){
         return myOperResMapper.getInfoListByOperPkid(strInfoTypePara,strOperPkidPara);
     }
+    public List<OperResShow> getInfoListByOperFlowPkid(String strInfoTypePara,String strFlowStatusPara,String strOperPkidPara){
+        return myOperResMapper.getInfoListByOperFlowPkid(strInfoTypePara,strFlowStatusPara,strOperPkidPara);
+    }
 	public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara){
         return  myOperResMapper.selectRecordsFromCtt(parentPkidPara);
     }
-    public void insertRecord(OperResShow record){
-        operResMapper.insert(fromOperShowToModel(record));
+    public void insertRecord(OperResShow operResShowPara){
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTime=ToolUtil.getStrLastUpdTime();
+        operResShowPara.setCreatedBy(strOperatorIdTemp);
+        operResShowPara.setCreatedTime(strLastUpdTime);
+        operResShowPara.setLastUpdBy(strOperatorIdTemp);
+        operResShowPara.setLastUpdTime(strLastUpdTime);
+        operResMapper.insert(fromOperShowToModel(operResShowPara));
     }
     public void insertRecord(OperRes operResPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTime=ToolUtil.getStrLastUpdTime();
         operResPara.setCreatedBy(strOperatorIdTemp);
+        operResPara.setCreatedTime(strLastUpdTime);
+        operResPara.setLastUpdBy(strOperatorIdTemp);
         operResPara.setLastUpdTime(strLastUpdTime);
-        operResPara.setCreatedBy(strOperatorIdTemp);
-        operResPara.setLastUpdTime(strLastUpdTime);
-        operResMapper.insert(operResPara);
+        operResMapper.insertSelective(operResPara);
     }
     public void deleteRecord(OperRes operResPara){
         OperResExample example =new OperResExample();
         OperResExample.Criteria criteria = example.createCriteria();
-        criteria.andInfoTypeEqualTo(operResPara.getInfoType())
-                .andInfoPkidEqualTo(operResPara.getInfoPkid())
-                .andFlowStatusEqualTo(operResPara.getFlowStatus());
+        if(!ToolUtil.getStrIgnoreNull(operResPara.getInfoType()).equals("")){
+            criteria.andInfoTypeEqualTo(operResPara.getInfoType());
+        }
+        if(!ToolUtil.getStrIgnoreNull(operResPara.getFlowStatus()).equals("")){
+            criteria.andFlowStatusEqualTo(operResPara.getFlowStatus());
+        }
+        criteria.andInfoPkidEqualTo(operResPara.getInfoPkid());
         operResMapper.deleteByExample(example);
     }
     private OperRes fromOperShowToModel(OperResShow record) {
@@ -84,6 +97,7 @@ public class OperResService {
         operResShowTemp.setLastUpdTime(operResPara.getLastUpdTime());
         operResShowTemp.setRemark(operResPara.getRemark());
         operResShowTemp.setRecversion( ToolUtil.getIntIgnoreNull(operResPara.getRecversion()));
+        operResShowTemp.setType(operResPara.getType());
         return operResShowTemp;
     }
 }

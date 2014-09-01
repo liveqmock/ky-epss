@@ -28,27 +28,27 @@ public class CttInfoService {
     public List<EsCttInfo> selectListByModel(CttInfoShow cttInfoShowPara) {
         EsCttInfoExample example= new EsCttInfoExample();
         EsCttInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andCttTypeEqualTo(stringIgnoreNull(cttInfoShowPara.getCttType()))
-                .andIdLike("%" + stringIgnoreNull(cttInfoShowPara.getId()) + "%")
-                .andNameLike("%" + stringIgnoreNull(cttInfoShowPara.getName()) + "%");
+        criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttType()))
+                .andIdLike("%" + ToolUtil.getStrIgnoreNull(cttInfoShowPara.getId()) + "%")
+                .andNameLike("%" + ToolUtil.getStrIgnoreNull(cttInfoShowPara.getName()) + "%");
         //可以为NULL的项
-        if(!stringIgnoreNull(cttInfoShowPara.getParentPkid()).equals("")){
-            criteria.andParentPkidLike(stringIgnoreNull(cttInfoShowPara.getParentPkid()));
+        if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getParentPkid()).equals("")){
+            criteria.andParentPkidLike(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getParentPkid()));
         }
-        if(!stringIgnoreNull(cttInfoShowPara.getSignDate()).equals("")){
-            criteria.andSignDateLike(stringIgnoreNull(cttInfoShowPara.getSignDate()));
+        if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getSignDate()).equals("")){
+            criteria.andSignDateLike(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getSignDate()));
         }
-        if(!stringIgnoreNull(cttInfoShowPara.getSignPartA()).equals("")){
-            criteria.andSignPartALike(stringIgnoreNull(cttInfoShowPara.getSignPartA()));
+        if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getSignPartA()).equals("")){
+            criteria.andSignPartALike(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getSignPartA()));
         }
-        if(!stringIgnoreNull(cttInfoShowPara.getSignPartB()).equals("")){
-            criteria.andSignPartBLike(stringIgnoreNull(cttInfoShowPara.getSignPartB()));
+        if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getSignPartB()).equals("")){
+            criteria.andSignPartBLike(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getSignPartB()));
         }
-        if(!stringIgnoreNull(cttInfoShowPara.getCttStartDate()).equals("")){
-            criteria.andCttStartDateLike(stringIgnoreNull(cttInfoShowPara.getCttStartDate()));
+        if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttStartDate()).equals("")){
+            criteria.andCttStartDateLike(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttStartDate()));
         }
-        if(!stringIgnoreNull(cttInfoShowPara.getCttEndDate()).equals("")){
-            criteria.andCttEndDateLike(stringIgnoreNull(cttInfoShowPara.getCttEndDate()));
+        if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttEndDate()).equals("")){
+            criteria.andCttEndDateLike(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttEndDate()));
         }
         example.setOrderByClause("ID ASC") ;
         return esCttInfoMapper.selectByExample(example);
@@ -71,8 +71,8 @@ public class CttInfoService {
     public List<EsCttInfo> getEsInitCttByCttTypeAndBelongToPkId(String strCttType,String strBelongToPkid) {
         EsCttInfoExample example= new EsCttInfoExample();
         EsCttInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andCttTypeEqualTo(stringIgnoreNull(strCttType))
-                .andParentPkidEqualTo(stringIgnoreNull(strBelongToPkid));
+        criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(strCttType))
+                .andParentPkidEqualTo(ToolUtil.getStrIgnoreNull(strBelongToPkid));
         example.setOrderByClause("ID ASC") ;
         return esCttInfoMapper.selectByExample(example);
     }
@@ -80,22 +80,13 @@ public class CttInfoService {
     public List<EsCttInfo> getEsInitCttListByCttType(String strCttType) {
         EsCttInfoExample example= new EsCttInfoExample();
         EsCttInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andCttTypeEqualTo(stringIgnoreNull(strCttType));
+        criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(strCttType));
         example.setOrderByClause("ID ASC") ;
         return esCttInfoMapper.selectByExample(example);
     }
 
     public EsCttInfo getCttInfoByPkId(String strPkid) {
         return esCttInfoMapper.selectByPrimaryKey(strPkid);
-    }
-
-    private String stringIgnoreNull(String strOriginal){
-        if(strOriginal ==null){
-            return "";
-        }
-        else {
-            return strOriginal;
-        }
     }
 
     /**
@@ -129,9 +120,9 @@ public class CttInfoService {
     public void insertRecord(CttInfoShow cttInfoShowPara) {
         cttInfoShowPara.setDeletedFlag("0");
         cttInfoShowPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        cttInfoShowPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        cttInfoShowPara.setCreatedDate(ToolUtil.getStrLastUpdTime());
         cttInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
         esCttInfoMapper.insertSelective(fromModelShowToModel(cttInfoShowPara));
     }
 
@@ -140,7 +131,7 @@ public class CttInfoService {
                 ToolUtil.getIntIgnoreNull(esCttInfoPara.getModificationNum())+1);
         esCttInfoPara.setDeletedFlag("0");
         esCttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esCttInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        esCttInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
         esCttInfoMapper.updateByPrimaryKey(esCttInfoPara);
     }
     public void updateRecord(CttInfoShow cttInfoShowPara){
@@ -148,7 +139,7 @@ public class CttInfoService {
                 ToolUtil.getIntIgnoreNull(cttInfoShowPara.getModificationNum())+1);
         cttInfoShowPara.setDeletedFlag("0");
         cttInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
         esCttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
     }
 

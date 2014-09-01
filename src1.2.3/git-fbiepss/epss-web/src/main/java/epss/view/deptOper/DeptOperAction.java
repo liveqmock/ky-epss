@@ -1,5 +1,6 @@
 package epss.view.deptOper;
 
+import epss.service.TidkeysService;
 import skyline.security.MD5Helper;
 import skyline.util.MessageUtil;;
 import epss.repository.model.Dept;
@@ -32,6 +33,8 @@ public class DeptOperAction implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(DeptOperAction.class);
     @ManagedProperty(value = "#{deptOperService}")
     private DeptOperService deptOperService;
+    @ManagedProperty(value = "#{tidkeysService}")
+    private TidkeysService tidkeysService;
 
     private TreeNode deptOperRoot;
     private String strSubmitType;
@@ -45,6 +48,7 @@ public class DeptOperAction implements Serializable {
     private List<SelectItem> operIsSuperList;
     private List<SelectItem> typeList;
     private List<SelectItem> enableList;
+    private String strConfirmPasswd;
 
     @PostConstruct
     public void init() {
@@ -162,7 +166,16 @@ public class DeptOperAction implements Serializable {
                     if (!submitOperPreCheck(operAdd)) {
                         return;
                     }
-                    if (deptOperService.isExistInOperDb(operAdd)) {
+                    //String md5=MD5Helper.getMD5String(tidkeysService.getTidkeysList("126").getKey());
+                    int intUsersCounts=Integer.parseInt(tidkeysService.getTidkeysList("126").getKey());
+                    Oper operTemp=new Oper();
+                    int intExistRecordCountsInOperDb=deptOperService.existRecordCountsInOperDb(operTemp);
+                    if (intExistRecordCountsInOperDb>=intUsersCounts) {
+                        MessageUtil.addError("系统限制用户数["+intUsersCounts+"]，实际用户数["
+                                +intExistRecordCountsInOperDb+"],您将无法继续添加用户！");
+                        return;
+                    }
+                    if (deptOperService.existRecordCountsInOperDb(operAdd)>0) {
                         MessageUtil.addError("该编号用户已存在，请重新录入！");
                         return;
                     }
@@ -215,6 +228,14 @@ public class DeptOperAction implements Serializable {
     }
 
     /*智能字段 Start*/
+
+    public TidkeysService getTidkeysService() {
+        return tidkeysService;
+    }
+
+    public void setTidkeysService(TidkeysService tidkeysService) {
+        this.tidkeysService = tidkeysService;
+    }
 
     public TreeNode getDeptOperRoot() {
         return deptOperRoot;
@@ -310,5 +331,13 @@ public class DeptOperAction implements Serializable {
 
     public void setEnableList(List<SelectItem> enableList) {
         this.enableList = enableList;
+    }
+
+    public String getStrConfirmPasswd() {
+        return strConfirmPasswd;
+    }
+
+    public void setStrConfirmPasswd(String strConfirmPasswd) {
+        this.strConfirmPasswd = strConfirmPasswd;
     }
 }

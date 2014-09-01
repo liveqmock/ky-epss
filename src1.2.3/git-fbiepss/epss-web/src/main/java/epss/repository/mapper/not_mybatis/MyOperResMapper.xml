@@ -59,7 +59,10 @@
             and t.INFO_PKID=#{infoPkid}
         </if>
         <if test="flowStatus != null and flowStatus != ''">
-            and t.flow_status=#{flowStatus}
+            and t.FLOW_STATUS=#{flowStatus}
+        </if>
+        <if test="type != null and type != ''">
+            and t.TYPE=#{type}
         </if>
         order by
             t.flow_status,t.info_type

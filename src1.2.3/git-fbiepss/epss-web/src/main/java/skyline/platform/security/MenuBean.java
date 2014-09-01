@@ -20,14 +20,14 @@ public class MenuBean
     /**
      * 20100820 zhanrui
      *
-     * @param target
+     * @param targetPara
      * @return
      * @throws Exception
      */
-    public String generateJsonStream(String target)
+    public String generateJsonStream(String operatorIdPara, String targetPara)
             throws Exception {
         database = new DatabaseAgent();
-        List<MenuItemBean> menuItems = database.getMenuItems(target);
+        List<MenuItemBean> menuItems = database.getMenuItems(operatorIdPara,targetPara);
         TreeNode treenode = new TreeNode();
         treenode.setId("0");
         assembleTreeNode(treenode, menuItems);
@@ -57,7 +57,7 @@ public class MenuBean
     public static void main(String argv[]) {
         try {
             MenuBean mb = new MenuBean();
-            System.out.println(mb.generateJsonStream( "default"));
+            System.out.println(mb.generateJsonStream("9999", "default"));
         } catch (Exception e) {
             e.printStackTrace();
         }

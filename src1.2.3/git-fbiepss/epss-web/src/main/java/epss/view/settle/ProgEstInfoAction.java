@@ -112,7 +112,7 @@ public class ProgEstInfoAction {
         strSubmitType="Add";
     }
 
-    public void setMaxNoPlusOne(){
+    public void setMaxNoPlusOne(String strQryTypePara){
         try {
             Integer intTemp;
             String strMaxId= progStlInfoService.getStrMaxStlId(strStlType);
@@ -131,8 +131,13 @@ public class ProgEstInfoAction {
                     }
                 }
             }
-            progInfoShowAdd.setId(strMaxId);
-            progInfoShowUpd.setId(strMaxId);
+            if (strQryTypePara.equals("Qry")) {
+                progInfoShowQry.setId(strMaxId);
+            }else if (strQryTypePara.equals("Add")) {
+                progInfoShowAdd.setId(strMaxId);
+            }else if (strQryTypePara.equals("Upd")) {
+                progInfoShowUpd.setId(strMaxId);
+            }
         } catch (Exception e) {
             logger.error("结算信息查询失败", e);
             MessageUtil.addError("结算信息查询失败");

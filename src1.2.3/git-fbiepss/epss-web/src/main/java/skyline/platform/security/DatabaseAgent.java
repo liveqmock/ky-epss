@@ -171,11 +171,11 @@ public class DatabaseAgent {
     /**
      * 20100820 zhanrui   取得某操作员所有菜单项
      *
-     * @param operatorId
+     * @param targetMachinePara
      * @return
      * @throws Exception
      */
-    public List<MenuItemBean> getMenuItems(String targetMachine) throws Exception {
+    public List<MenuItemBean> getMenuItems(String operatorIdPara,String targetMachinePara) throws Exception {
         String SQL_GetMenuItemsForAnOperator = "" +
                 " SELECT DISTINCT m.menuid            AS menuItemId," +
                 "                 m.parentmenuid      AS menuItemPId," +
@@ -189,9 +189,18 @@ public class DatabaseAgent {
                 "                 m.WindowHeight      AS menuItemWindowHeight," +
                 "                 m.Levelidx," +
                 "                 m.targetmachine" +
-                " FROM   " +
+                " FROM" +
+                "       OPER_RES r" +
+                " INNER JOIN" +
                 "       PTMENU m" +
-                " WHERE m.targetmachine = '" + targetMachine + "' " +
+                " ON" +
+                "       r.TYPE='system'" +
+                " and" +
+                "       r.OPER_PKID='" + operatorIdPara + "' " +
+                " and" +
+                "       r.INFO_PKID=m.PKID" +
+                " and" +
+                "       m.targetmachine = '" + targetMachinePara + "' " +
                 " ORDER BY m.menuLevel," +
                 "          m.Levelidx ";
         ConnectionManager cm = null;

@@ -135,6 +135,8 @@
             function doOnLoad() {
                 bizdhxLayout = new dhtmlXLayoutObject("bizlayout", "2U", "dhx_skyblue");
                 doBizLoad();
+                sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
+                doSysLoad();
                 tabbarhide("todotasklayout");
                 document.getElementById("todotask").setAttribute("active", "true");
                 document.getElementById("todotask").className = "tabs-item-active";
@@ -186,12 +188,12 @@
                         <div style="float:left;width:2px;"></div>
                         <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
                              style="float:left;width:80px;">
-                            <span style="width:100%;">系统管理</span>
+                            <span style="width:100%;">业务管理</span>
                         </div>
                         <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="help" class="tabs-item"
+                        <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
                              style="float:left;width:80px;">
-                            <span style="width:100%;">操作帮助</span>
+                            <span style="width:100%;">系统管理</span>
                         </div>
                         <div style="float:left;width:2px;"></div>
                         <div style="float:left;width:2px;"></div>
@@ -201,7 +203,6 @@
                                     width="100%"
                                     height="25px;"
                                     frameborder="no"
-                                    border="0"
                                     marginwidth="0" marginheight="8"
                                     scrolling="no"
                                     allowtransparency="true">
@@ -242,7 +243,7 @@
                             </iframe>
                         </div>
                         <div class="divlayout" id="bizlayout"></div>
-                        <div class="divlayout" id="helplayout">
+                        <div class="divlayout" id="syslayout">
                             <br/>系统帮助信息...
                         </div>
                     </td>

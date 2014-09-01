@@ -10,11 +10,6 @@
         <phase-listener>
             skyline.security.DebugPhaseListener
         </phase-listener>
-        <!--
-                <phase-listener>
-                    pub.auth.SecurityPhaseListener
-                </phase-listener>
-        -->
     </lifecycle>
 
     <application>

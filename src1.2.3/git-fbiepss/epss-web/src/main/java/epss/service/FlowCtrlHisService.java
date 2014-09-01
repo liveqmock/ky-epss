@@ -6,6 +6,7 @@ import epss.repository.model.EsInitPowerHis;
 import epss.repository.model.EsInitPowerHisExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import skyline.util.ToolUtil;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,36 +28,28 @@ public class FlowCtrlHisService {
     public List<EsInitPowerHis> selectListByModel(EsInitPowerHis esInitPowerHis) {
         EsInitPowerHisExample example= new EsInitPowerHisExample();
         EsInitPowerHisExample.Criteria criteria = example.createCriteria();
-        criteria.andPowerTypeLike("%" + stringIgnoreNull(esInitPowerHis.getPowerType()) + "%")
-                .andPowerPkidLike("%" + stringIgnoreNull(esInitPowerHis.getPowerPkid()) + "%")
-                .andPeriodNoLike("%" + stringIgnoreNull(esInitPowerHis.getPeriodNo()) + "%");
-        if (!stringIgnoreNull(esInitPowerHis.getStatusFlag()).equals("")){
+        criteria.andPowerTypeLike("%" + ToolUtil.getStrIgnoreNull(esInitPowerHis.getPowerType()) + "%")
+                .andPowerPkidLike("%" + ToolUtil.getStrIgnoreNull(esInitPowerHis.getPowerPkid()) + "%")
+                .andPeriodNoLike("%" + ToolUtil.getStrIgnoreNull(esInitPowerHis.getPeriodNo()) + "%");
+        if (!ToolUtil.getStrIgnoreNull(esInitPowerHis.getStatusFlag()).equals("")){
             criteria.andStatusFlagLike("%"+esInitPowerHis .getStatusFlag()+"%");
         }
-        if (!stringIgnoreNull(esInitPowerHis.getPreStatusFlag()).equals("")){
+        if (!ToolUtil.getStrIgnoreNull(esInitPowerHis.getPreStatusFlag()).equals("")){
             criteria.andPreStatusFlagLike("%"+esInitPowerHis .getPreStatusFlag()+"%");
         }
-        if (!stringIgnoreNull(esInitPowerHis.getCreatedBy()).equals("")){
+        if (!ToolUtil.getStrIgnoreNull(esInitPowerHis.getCreatedBy()).equals("")){
             criteria.andCreatedByLike("%"+esInitPowerHis .getCreatedBy()+"%");
         }
-        if (!stringIgnoreNull(esInitPowerHis.getCreatedDate()).equals("")){
+        if (!ToolUtil.getStrIgnoreNull(esInitPowerHis.getCreatedDate()).equals("")){
             criteria.andCreatedDateLike("%"+esInitPowerHis .getCreatedDate()+"%");
         }
-        if (!stringIgnoreNull(esInitPowerHis.getSpareField()).equals("")){
+        if (!ToolUtil.getStrIgnoreNull(esInitPowerHis.getSpareField()).equals("")){
             criteria.andSpareFieldLike("%"+esInitPowerHis .getSpareField()+"%");
         }
         example.setOrderByClause("POWER_TYPE ASC,POWER_PKID ASC,PERIOD_NO ASC,STATUS_FLAG ASC,CREATED_DATE ASC") ;
         return esInitPowerHisMapper.selectByExample(example);
     }
 
-    private String stringIgnoreNull(String strOriginal){
-        if(strOriginal ==null){
-            return "";
-        }
-        else {
-            return strOriginal;
-        }
-    }
     public List<EsInitPowerHis> getMngFromPowerHisForSubcttStlList(String powerPkid,String periodNo){
         return myFlowMapper.getMngFromPowerHisForSubcttStlList(powerPkid,periodNo);
     }
