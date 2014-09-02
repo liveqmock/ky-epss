@@ -91,29 +91,38 @@
                 <p:column headerText="序号" style="width:30px">
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
-                <p:column headerText="资源编号" style="width:80px;text-align:center">
+                <p:column headerText="资源编号" style="width:60px;text-align:center">
                     <h:outputText value="#{record.menuid}"/>
                 </p:column>
-                <p:column headerText="父资源编号" style="width:80px;text-align:center">
+                <p:column headerText="父资源编号" style="width:70px;text-align:center">
                     <h:outputText value="#{record.parentmenuid}"/>
                 </p:column>
-                <p:column headerText="资源名称" style="width:200px;text-align:left">
+                <p:column headerText="资源名称" style="width:150px;text-align:left">
                     <h:outputText value="#{record.menulabel}"/>
                 </p:column>
                 <p:column headerText="资源功能" style="width:300px;text-align:left">
                     <h:outputText value="#{record.menuaction}"/>
                 </p:column>
-                <p:column headerText="资源序号" style="width:80px;text-align:center">
-                    <h:outputText value="#{record.levelidx}"/>
+                <p:column headerText="资源类型" style="width:60px;text-align:center">
+                    <h:outputText value="#{record.infotype}"/>
                 </p:column>
-                <p:column headerText="是否基层" style="width:80px;text-align:center">
-                    <h:outputText value="#{record.isleaf}"/>
+                <p:column headerText="功能分类" style="width:60px;text-align:center">
+                    <h:outputText value="#{record.flowstatus}"/>
                 </p:column>
-                <p:column headerText="是否打开" style="width:80px;text-align:center">
-                    <h:outputText value="#{record.openwindow}"/>
+                <p:column headerText="系统类型" style="width:60px;text-align:center">
+                    <h:outputText value="#{record.targetmachine}"/>
                 </p:column>
                 <p:column headerText="描述内容" style="width:300px;text-align:left">
                     <h:outputText value="#{record.menudesc}"/>
+                </p:column>
+                <p:column headerText="是否基层" style="width:60px;text-align:center">
+                    <h:outputText value="#{record.isleaf}"/>
+                </p:column>
+                <p:column headerText="是否打开" style="width:60px;text-align:center">
+                    <h:outputText value="#{record.openwindow}"/>
+                </p:column>
+                <p:column headerText="资源序号" style="width:60px;text-align:center">
+                    <h:outputText value="#{record.levelidx}"/>
                 </p:column>
             </p:dataTable>
             <p:dialog id="dlgViewForAdd" header="系统资源增加信息" widgetVar="wVDlgViewForAdd"
@@ -138,7 +147,15 @@
                         <p:selectOneMenu id="openwindowAdd" value="#{menuAction.ptmenuAdd.openwindow}">
                             <f:selectItems value="#{menuAction.openWindowList}"/>
                         </p:selectOneMenu>
-                        <p:outputLabel value="资源类型：" for="targetmachineAdd"/>
+                        <p:outputLabel value="资源分类：" for="infotypeAdd"/>
+                        <p:selectOneMenu id="infotypeAdd" value="#{menuAction.ptmenuAdd.infotype}">
+                            <f:selectItems value="#{esCommon.itemTypeList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="功能类型：" for="flowstatusAdd"/>
+                        <p:selectOneMenu id="flowstatusAdd" value="#{menuAction.ptmenuAdd.flowstatus}">
+                            <f:selectItems value="#{esCommon.statusFlagList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="系统类型：" for="targetmachineAdd"/>
                         <p:selectOneMenu id="targetmachineAdd" value="#{menuAction.ptmenuAdd.targetmachine}">
                             <f:selectItems value="#{menuAction.targetMachineList}"/>
                         </p:selectOneMenu>
@@ -195,7 +212,15 @@
                         <p:selectOneMenu id="openwindowUpd" value="#{menuAction.ptmenuUpd.openwindow}">
                             <f:selectItems value="#{menuAction.openWindowList}"/>
                         </p:selectOneMenu>
-                        <p:outputLabel value="资源类型：" for="targetmachineUpd"/>
+                        <p:outputLabel value="资源分类：" for="infotypeUpd"/>
+                        <p:selectOneMenu id="infotypeUpd" value="#{menuAction.ptmenuUpd.infotype}">
+                            <f:selectItems value="#{esCommon.itemTypeList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="功能类型：" for="flowstatusUpd"/>
+                        <p:selectOneMenu id="flowstatusUpd" value="#{menuAction.ptmenuUpd.flowstatus}">
+                            <f:selectItems value="#{esCommon.statusFlagList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="系统类型：" for="targetmachineUpd"/>
                         <p:selectOneMenu id="targetmachineUpd" value="#{menuAction.ptmenuUpd.targetmachine}">
                             <f:selectItems value="#{menuAction.targetMachineList}"/>
                         </p:selectOneMenu>
@@ -256,8 +281,20 @@
                         <p:inputText id="openwindowDel" value="#{menuAction.ptmenuDel.openwindow}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
+                        <p:outputLabel value="资源分类：" for="infotypeUpd"/>
+                        <p:inputText id="infotypeDel" value="#{menuAction.ptmenuDel.infotype}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="功能类型：" for="flowstatusUpd"/>
+                        <p:inputText id="flowstatusDel" value="#{menuAction.ptmenuDel.flowstatus}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="系统类型：" for="targetmachineUpd"/>
+                        <p:inputText id="targetmachineDel" value="#{menuAction.ptmenuDel.targetmachine}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
                         <p:outputLabel value="资源序号：" for="levelidxDel"/>
-                        <p:inputText id="levelidxDel" value="#{menuAction.ptmenuUpd.levelidx}"
+                        <p:inputText id="levelidxDel" value="#{menuAction.ptmenuDel.levelidx}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
                     </h:panelGrid>

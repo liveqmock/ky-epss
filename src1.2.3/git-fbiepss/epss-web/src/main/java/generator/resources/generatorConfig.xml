@@ -18,16 +18,16 @@
             <property name="forceBigDecimals" value="false"/>
         </javaTypeResolver>
 
-        <javaModelGenerator targetPackage="epss.repository.model" targetProject="src/main/java">
+        <javaModelGenerator targetPackage="epss.repository.model" targetProject="main/java">
             <property name="enableSubPackages" value="true"/>
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="epss.repository.mapper" targetProject="src/main/java">
+        <sqlMapGenerator targetPackage="epss.repository.mapper" targetProject="main/java">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
-        <javaClientGenerator type="XMLMAPPER" targetPackage="epss.repository.dao" targetProject="src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="epss.repository.dao" targetProject="main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
@@ -110,8 +110,13 @@
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <table tableName="all_tab_columns"/>-->
+        <table tableName="all_tab_columns"/>
         <table schema="epss" tableName="tidkeys">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
+        </table>
+        -->
+        <table schema="epss" tableName="ptmenu">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>

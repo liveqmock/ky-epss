@@ -158,10 +158,11 @@
                             </p:column>
                             <p:column headerText="预览">
                                 <p:commandButton icon="ui-icon-search"
-                                                 id="selectButton" update=":form:imageShow"
+                                                 id="selectButton"
+                                                 update=":form:pgImageShow"
                                                  style="height:18px;width:18px"
                                                  action="#{tkcttItemAction.onViewAttachment(recordAttachment)}"
-                                                 oncomplete="dlgWvView.show()"
+                                                 onclick="dlgWvView.show()"
                                                  title="View">
                                 </p:commandButton>
                             </p:column>
@@ -179,9 +180,12 @@
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
-                        <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
-                            <h:graphicImage binding="#{tkcttItemAction.image}"/>
-                        </p:dialog>
+                    </h:panelGrid>
+                </p:dialog>
+                <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="true"
+                          showEffect="clip" hideEffect="fold">
+                    <h:panelGrid id="pgImageShow">
+                        <p:graphicImage binding="#{tkcttItemAction.image}"/>
                     </h:panelGrid>
                 </p:dialog>
                 <p:dialog id="dlgViewForAdd" header="总包合同内容增加信息" widgetVar="wVDlgViewForAdd"

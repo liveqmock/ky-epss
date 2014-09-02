@@ -189,6 +189,30 @@ public class DatabaseAgent {
                 "                 m.WindowHeight      AS menuItemWindowHeight," +
                 "                 m.Levelidx," +
                 "                 m.targetmachine" +
+                // 付完权限自动调用画面
+                /*" FROM" +
+                "       (" +
+                "           SELECT" +
+                "                 r.INFO_TYPE," +
+                "                 r.FLOW_STATUS" +
+                "           FROM" +
+                "                 OPER_RES r" +
+                "           WHERE" +
+                "                 r.OPER_PKID='" + operatorIdPara + "' " +
+                "           GROUP BY " +
+                "                 r.INFO_TYPE,r.FLOW_STATUS" +
+                "        )orf" +
+                " INNER JOIN" +
+                "       PTMENU m" +
+                " ON" +
+                "       m.targetmachine = '" + targetMachinePara + "' " +
+                " AND" +
+                "       orf.INFO_TYPE=m.INFOTYPE" +
+                " AND" +
+                "       orf.FLOW_STATUS=m.FLOWSTATUS" +
+                " ORDER BY m.menuLevel," +
+                "          m.Levelidx ";*/
+                //人工指派资源
                 " FROM" +
                 "       OPER_RES r" +
                 " INNER JOIN" +
