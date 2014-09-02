@@ -46,6 +46,7 @@
 
         <script type="text/javascript" src="homePage_layout.js"></script>
         <script type="text/javascript" src="homePage_tab.js"></script>
+        <script type="text/javascript" src="myAjax.js"></script>
         <link href="<%=contextPath%>/css/diytabbar.css" type="text/css" rel="stylesheet">
         <style type="text/css">
             html, body {
@@ -153,6 +154,25 @@
                     document.getElementById('todoloading').style.display = 'none';
                 }
             }
+            function myRequest() {
+                var url = "ajaxRequest.do?time=" + Math.random();
+                //要提交到服务器的数据
+                var content = "userName=ni";
+                //调用异常请求提交的函数
+                sendRequest("POST", url, content, "TEXT", myProcessResponse);
+            }
+            function myProcessResponse() {
+                // 请求已完成
+                if (http_request.readyState == 4) {
+                    // 信息已经成功返回，开始处理信息
+                    if (http_request.status == 200) {
+                        //返回的是文本格式信息
+                        myDoBizLoad(http_request.responseText);
+                    } else { //页面不正常
+                        //"您所请求的页面有异常"
+                    }
+                }
+            }
         </script>
     </head>
     <body onload="doOnLoad()">
@@ -186,7 +206,7 @@
                             <span style="width:100%;">已办业务</span>
                         </div>
                         <div style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="biz" class="tabs-item"
+                        <div onclick="myRequest();tabbarclk(this);" active="false" id="biz" class="tabs-item"
                              style="float:left;width:80px;">
                             <span style="width:100%;">业务管理</span>
                         </div>
