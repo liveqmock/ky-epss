@@ -93,6 +93,9 @@ public class TkcttItemAction {
     private Map beansMap;
     @PostConstruct
     public void init() {
+        esCttItemList =new ArrayList<>();
+        cttItemShowList =new ArrayList<>();
+        attachmentList=new ArrayList<>();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         beansMap = new HashMap();
         strBelongToType = ESEnum.ITEMTYPE0.getCode();
@@ -119,27 +122,29 @@ public class TkcttItemAction {
     private void initData() {
         /*形成关系树*/
         try {
-            esCttItemList =new ArrayList<>();
-            cttItemShowList =new ArrayList<>();
-            attachmentList=new ArrayList<>();
         /*初始化流程状态列表*/
-            esFlowControl.getBackToStatusFlagList(strFlowType);
-            tkcttInfo = cttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
-            beansMap.put("tkcttInfo", tkcttInfo);
-            esCttItemList = cttItemService.getEsItemList(
-                    strBelongToType, strTkcttInfoPkid);
-            recursiveDataTable("root", esCttItemList);
-            cttItemShowList = getTkcttItemList_DoFromatNo(cttItemShowList);
-            cttItemShowListExcel =new ArrayList<CttItemShow>();
-            for(CttItemShow itemUnit: cttItemShowList){
-                CttItemShow itemUnitTemp= (CttItemShow) BeanUtils.cloneBean(itemUnit);
-                itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
-                cttItemShowListExcel.add(itemUnitTemp);
+            if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
+                    ToolUtil.getStrIgnoreNull(strTkcttInfoPkid).length()!=0) {
+                esFlowControl.getBackToStatusFlagList(strFlowType);
+                tkcttInfo = cttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
+                // 附件记录变成List
+                attachmentList=attachmentStrToList(tkcttInfo.getAttachment());
+                // 输出Excel表头
+                beansMap.put("tkcttInfo", tkcttInfo);
+                esCttItemList = cttItemService.getEsItemList(
+                        strBelongToType, strTkcttInfoPkid);
+                recursiveDataTable("root", esCttItemList);
+                cttItemShowList = getTkcttItemList_DoFromatNo(cttItemShowList);
+                cttItemShowListExcel = new ArrayList<CttItemShow>();
+                for (CttItemShow itemUnit : cttItemShowList) {
+                    CttItemShow itemUnitTemp = (CttItemShow) BeanUtils.cloneBean(itemUnit);
+                    itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
+                    cttItemShowListExcel.add(itemUnitTemp);
+                }
+                beansMap.put("cttItemShowListExcel", cttItemShowListExcel);
+                setTkcttItemList_AddTotal();
+                beansMap.put("cttItemShowList", cttItemShowList);
             }
-            beansMap.put("cttItemShowListExcel", cttItemShowListExcel);
-            setTkcttItemList_AddTotal();
-            beansMap.put("cttItemShowList", cttItemShowList);
-
         }catch (Exception e){
             logger.error("初始化失败", e);
             MessageUtil.addError("初始化失败");

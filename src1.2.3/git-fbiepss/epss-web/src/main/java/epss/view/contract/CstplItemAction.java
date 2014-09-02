@@ -7,6 +7,11 @@ package epss.view.contract;
  * Time: 下午1:53
  * To change this template use File | Settings | File Templates.
  */
+import epss.repository.model.model_show.AttachmentModel;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import skyline.util.JxlsManager;
 import skyline.util.StyleModel;
 import skyline.util.ToolUtil;
@@ -30,12 +35,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.util.MessageUtil;;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -82,13 +89,23 @@ public class CstplItemAction {
     /*控制控件在画面上的可用与现实End*/
     private List<CstplItemShow> cstplItemShowListExcel;
     private Map beansMap;
+
+    //附件
+    private List<AttachmentModel> attachmentList;
+    private HtmlGraphicImage image;
+    //上传下载文件
+    private StreamedContent downloadFile;
+    private UploadedFile uploadedFile;
+
     @PostConstruct
     public void init() {
+        this.attachmentList=new ArrayList<AttachmentModel>();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         beansMap = new HashMap();
         strBelongToType=ESEnum.ITEMTYPE1.getCode();
-        strCstplInfoPkid=parammap.get("strCstplInfoPkid").toString();
-
+        if (parammap.containsKey("strCstplInfoPkid")) {
+            strCstplInfoPkid = parammap.get("strCstplInfoPkid").toString();
+        }
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
         }
@@ -544,141 +561,146 @@ public class CstplItemAction {
 
     private void initData() {
         try {
-             /*初始化流程状态列表*/
-            esFlowControl.getBackToStatusFlagList(strFlowType);
         /*总包合同列表*/
             List<EsCttItem> esCttItemListTkctt =new ArrayList<EsCttItem>();
-            cstplInfo = cttInfoService.getCttInfoByPkId(strCstplInfoPkid);
-            beansMap.put("cstplInfo", cstplInfo);
-            String strTkcttPkidInCstpl= cstplInfo.getParentPkid();
-            esCttItemListTkctt =
-                    cttItemService.getEsItemList(ESEnum.ITEMTYPE0.getCode(), strTkcttPkidInCstpl);
-            List<CttItemShow> cttItemShowListTkctt =new ArrayList<>();
-            recursiveDataTable("root", esCttItemListTkctt, cttItemShowListTkctt);
-            cttItemShowListTkctt =getCstplItemList_DoFromatNo(cttItemShowListTkctt);
+            if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
+                    ToolUtil.getStrIgnoreNull(strCstplInfoPkid).length()!=0) {
+                             /*初始化流程状态列表*/
+                esFlowControl.getBackToStatusFlagList(strFlowType);
+                cstplInfo = cttInfoService.getCttInfoByPkId(strCstplInfoPkid);
+                // 附件记录变成List
+                attachmentList=attachmentStrToList(cstplInfo.getAttachment());
+
+                beansMap.put("cstplInfo", cstplInfo);
+                String strTkcttPkidInCstpl = cstplInfo.getParentPkid();
+                esCttItemListTkctt =
+                        cttItemService.getEsItemList(ESEnum.ITEMTYPE0.getCode(), strTkcttPkidInCstpl);
+                List<CttItemShow> cttItemShowListTkctt = new ArrayList<>();
+                recursiveDataTable("root", esCttItemListTkctt, cttItemShowListTkctt);
+                cttItemShowListTkctt = getCstplItemList_DoFromatNo(cttItemShowListTkctt);
 
         /*成本计划列表*/
-            List<EsCttItem> esCttItemListCstpl = cttItemService.getEsItemList(
-                    strBelongToType, strCstplInfoPkid);
+                List<EsCttItem> esCttItemListCstpl = cttItemService.getEsItemList(
+                        strBelongToType, strCstplInfoPkid);
 
-            List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();
-            recursiveDataTable("root", esCttItemListCstpl, cttItemShowListCstpl);
-            cttItemShowListCstpl =getCstplItemList_DoFromatNo(
-                    cttItemShowListCstpl) ;
+                List<CttItemShow> cttItemShowListCstpl = new ArrayList<>();
+                recursiveDataTable("root", esCttItemListCstpl, cttItemShowListCstpl);
+                cttItemShowListCstpl = getCstplItemList_DoFromatNo(
+                        cttItemShowListCstpl);
 
         /*拼装列表*/
-            List<CstplItemShow> cstplItemShowList_ForSort =new ArrayList<>();
+                List<CstplItemShow> cstplItemShowList_ForSort = new ArrayList<>();
 
-            for(CttItemShow itemTkctt: cttItemShowListTkctt){
-                Boolean insertedFlag=false ;
-                for(CttItemShow itemCstpl: cttItemShowListCstpl){
-                    CstplItemShow itemTkcttInsertItem=getCstplItem(itemTkctt,"Tkctt");
-                    if(itemTkctt.getPkid().equals(itemCstpl.getCorrespondingPkid())){
-                        //总包合同
-                        if(insertedFlag.equals(true)){
-                            itemTkcttInsertItem.setPkid(null);
-                            itemTkcttInsertItem.setStrNo(null) ;
-                            itemTkcttInsertItem.setName(null) ;
-                            itemTkcttInsertItem.setNote(null) ;
-                            itemTkcttInsertItem.setUnit(null);
-                            itemTkcttInsertItem.setContractUnitPrice(null) ;
-                            itemTkcttInsertItem.setContractQuantity(null) ;
-                            itemTkcttInsertItem.setContractAmount(null);
-                            itemTkcttInsertItem.setBelongToType(null) ;
-                            itemTkcttInsertItem.setBelongToPkid(null) ;
-                            itemTkcttInsertItem.setParentPkid(null);
-                            itemTkcttInsertItem.setGrade(null);
-                            itemTkcttInsertItem.setOrderid(null) ;
-                            itemTkcttInsertItem.setSignPartAPrice(null) ;
-                            itemTkcttInsertItem.setDeletedFlag(null);
-                            itemTkcttInsertItem.setOriginFlag(null) ;
-                            itemTkcttInsertItem.setCreatedBy(null);
-                            itemTkcttInsertItem.setCreatedDate(null);
-                            itemTkcttInsertItem.setLastUpdBy(null);
-                            itemTkcttInsertItem.setLastUpdDate(null);
-                            itemTkcttInsertItem.setModificationNum(null);
-                            itemTkcttInsertItem.setCorrespondingPkid(null);
-                        }else
-                        //成本计划
-                        itemTkcttInsertItem.setStrNoContrast(itemCstpl.getStrNo()) ;
-                        itemTkcttInsertItem.setPkidContrast(itemCstpl.getPkid());
-                        itemTkcttInsertItem.setBelongToTypeContrast(itemCstpl.getBelongToType());
-                        itemTkcttInsertItem.setBelongToPkidContrast(itemCstpl.getBelongToPkid());
-                        itemTkcttInsertItem.setParentPkidContrast(itemCstpl.getParentPkid());
-                        itemTkcttInsertItem.setGradeContrast(itemCstpl.getGrade());
-                        itemTkcttInsertItem.setOrderidContrast(itemCstpl.getOrderid()) ;
-                        itemTkcttInsertItem.setNameContrast(itemCstpl.getName());
-                        itemTkcttInsertItem.setNoteContrast(itemCstpl.getNote());
-                        itemTkcttInsertItem.setUnitContrast(itemCstpl.getUnit());
-                        itemTkcttInsertItem.setContractUnitPriceContrast(itemCstpl.getContractUnitPrice()) ;
-                        itemTkcttInsertItem.setContractQuantityContrast(itemCstpl.getContractQuantity()) ;
-                        itemTkcttInsertItem.setContractAmountContrast(itemCstpl.getContractAmount()) ;
-                        itemTkcttInsertItem.setSignPartAPriceContrast(itemCstpl.getSignPartAPrice()) ;
-                        itemTkcttInsertItem.setDeletedFlagContrast(itemCstpl.getDeletedFlag());
-                        itemTkcttInsertItem.setOriginFlagContrast(itemCstpl.getOriginFlag()) ;
-                        itemTkcttInsertItem.setCreatedByContrast(itemCstpl.getCreatedBy());
-                        itemTkcttInsertItem.setCreatedDateContrast(itemCstpl.getCreatedDate());
-                        itemTkcttInsertItem.setLastUpdByContrast(itemCstpl.getLastUpdBy());
-                        itemTkcttInsertItem.setLastUpdDateContrast(itemCstpl.getLastUpdDate());
-                        itemTkcttInsertItem.setModificationNumContrast(itemCstpl.getModificationNum());
-                        itemTkcttInsertItem.setCorrespondingPkidContrast(itemCstpl.getCorrespondingPkid());
-                        if(itemTkcttInsertItem.getPkid() ==null||itemTkcttInsertItem.getPkid().equals("")){
-                            itemTkcttInsertItem.setPkid(cstplItemShowList_ForSort.size() +"");
+                for (CttItemShow itemTkctt : cttItemShowListTkctt) {
+                    Boolean insertedFlag = false;
+                    for (CttItemShow itemCstpl : cttItemShowListCstpl) {
+                        CstplItemShow itemTkcttInsertItem = getCstplItem(itemTkctt, "Tkctt");
+                        if (itemTkctt.getPkid().equals(itemCstpl.getCorrespondingPkid())) {
+                            //总包合同
+                            if (insertedFlag.equals(true)) {
+                                itemTkcttInsertItem.setPkid(null);
+                                itemTkcttInsertItem.setStrNo(null);
+                                itemTkcttInsertItem.setName(null);
+                                itemTkcttInsertItem.setNote(null);
+                                itemTkcttInsertItem.setUnit(null);
+                                itemTkcttInsertItem.setContractUnitPrice(null);
+                                itemTkcttInsertItem.setContractQuantity(null);
+                                itemTkcttInsertItem.setContractAmount(null);
+                                itemTkcttInsertItem.setBelongToType(null);
+                                itemTkcttInsertItem.setBelongToPkid(null);
+                                itemTkcttInsertItem.setParentPkid(null);
+                                itemTkcttInsertItem.setGrade(null);
+                                itemTkcttInsertItem.setOrderid(null);
+                                itemTkcttInsertItem.setSignPartAPrice(null);
+                                itemTkcttInsertItem.setDeletedFlag(null);
+                                itemTkcttInsertItem.setOriginFlag(null);
+                                itemTkcttInsertItem.setCreatedBy(null);
+                                itemTkcttInsertItem.setCreatedDate(null);
+                                itemTkcttInsertItem.setLastUpdBy(null);
+                                itemTkcttInsertItem.setLastUpdDate(null);
+                                itemTkcttInsertItem.setModificationNum(null);
+                                itemTkcttInsertItem.setCorrespondingPkid(null);
+                            } else
+                                //成本计划
+                                itemTkcttInsertItem.setStrNoContrast(itemCstpl.getStrNo());
+                            itemTkcttInsertItem.setPkidContrast(itemCstpl.getPkid());
+                            itemTkcttInsertItem.setBelongToTypeContrast(itemCstpl.getBelongToType());
+                            itemTkcttInsertItem.setBelongToPkidContrast(itemCstpl.getBelongToPkid());
+                            itemTkcttInsertItem.setParentPkidContrast(itemCstpl.getParentPkid());
+                            itemTkcttInsertItem.setGradeContrast(itemCstpl.getGrade());
+                            itemTkcttInsertItem.setOrderidContrast(itemCstpl.getOrderid());
+                            itemTkcttInsertItem.setNameContrast(itemCstpl.getName());
+                            itemTkcttInsertItem.setNoteContrast(itemCstpl.getNote());
+                            itemTkcttInsertItem.setUnitContrast(itemCstpl.getUnit());
+                            itemTkcttInsertItem.setContractUnitPriceContrast(itemCstpl.getContractUnitPrice());
+                            itemTkcttInsertItem.setContractQuantityContrast(itemCstpl.getContractQuantity());
+                            itemTkcttInsertItem.setContractAmountContrast(itemCstpl.getContractAmount());
+                            itemTkcttInsertItem.setSignPartAPriceContrast(itemCstpl.getSignPartAPrice());
+                            itemTkcttInsertItem.setDeletedFlagContrast(itemCstpl.getDeletedFlag());
+                            itemTkcttInsertItem.setOriginFlagContrast(itemCstpl.getOriginFlag());
+                            itemTkcttInsertItem.setCreatedByContrast(itemCstpl.getCreatedBy());
+                            itemTkcttInsertItem.setCreatedDateContrast(itemCstpl.getCreatedDate());
+                            itemTkcttInsertItem.setLastUpdByContrast(itemCstpl.getLastUpdBy());
+                            itemTkcttInsertItem.setLastUpdDateContrast(itemCstpl.getLastUpdDate());
+                            itemTkcttInsertItem.setModificationNumContrast(itemCstpl.getModificationNum());
+                            itemTkcttInsertItem.setCorrespondingPkidContrast(itemCstpl.getCorrespondingPkid());
+                            if (itemTkcttInsertItem.getPkid() == null || itemTkcttInsertItem.getPkid().equals("")) {
+                                itemTkcttInsertItem.setPkid(cstplItemShowList_ForSort.size() + "");
+                            }
+                            insertedFlag = true;
+                            cstplItemShowList_ForSort.add(itemTkcttInsertItem);
                         }
-                        insertedFlag=true ;
+                    }
+                    if (insertedFlag.equals(false)) {
+                        CstplItemShow itemTkcttInsertItem = getCstplItem(itemTkctt, "Tkctt");
                         cstplItemShowList_ForSort.add(itemTkcttInsertItem);
                     }
                 }
-                if (insertedFlag.equals(false)){
-                    CstplItemShow itemTkcttInsertItem=getCstplItem(itemTkctt,"Tkctt");
-                    cstplItemShowList_ForSort.add(itemTkcttInsertItem);
-                }
-            }
 
-            for(CttItemShow itemCstpl: cttItemShowListCstpl){
-                Boolean insertedFlag=false ;
-                for(CttItemShow itemTkctt: cttItemShowListTkctt){
-                    if(itemTkctt.getPkid().equals(itemCstpl.getCorrespondingPkid())){
-                        insertedFlag=true;
-                        break;
+                for (CttItemShow itemCstpl : cttItemShowListCstpl) {
+                    Boolean insertedFlag = false;
+                    for (CttItemShow itemTkctt : cttItemShowListTkctt) {
+                        if (itemTkctt.getPkid().equals(itemCstpl.getCorrespondingPkid())) {
+                            insertedFlag = true;
+                            break;
+                        }
+                    }
+                    if (insertedFlag.equals(false)) {
+                        CstplItemShow itemTkcttInsertItem = getCstplItem(itemCstpl, "Cstpl");
+                        if (itemTkcttInsertItem.getPkid() == null || itemTkcttInsertItem.getPkid().equals("")) {
+                            itemTkcttInsertItem.setPkid(cstplItemShowList_ForSort.size() + "");
+                        }
+                        cstplItemShowList_ForSort.add(itemTkcttInsertItem);
                     }
                 }
-                if(insertedFlag.equals(false)){
-                    CstplItemShow itemTkcttInsertItem=getCstplItem(itemCstpl,"Cstpl");
-                    if (itemTkcttInsertItem.getPkid() == null||itemTkcttInsertItem.getPkid().equals("")){
-                        itemTkcttInsertItem.setPkid(cstplItemShowList_ForSort.size() +"");
-                    }
-                    cstplItemShowList_ForSort.add(itemTkcttInsertItem);
-                }
-            }
 
-            for(CstplItemShow itemUnit: cstplItemShowList_ForSort){
-                if(itemUnit.getStrNoContrast()!=null){
-                    String correspondingItemNoContrast=itemUnit.getCorrespondingPkidContrast()==null?"":itemUnit.getCorrespondingPkidContrast();
-                    CstplItemShow cstplItemShowTemp =
-                            getItemOfTkcttAndCstplByPkid(correspondingItemNoContrast, cstplItemShowList_ForSort, "Tkctt");
-                    if(cstplItemShowTemp !=null){
-                        itemUnit.setCorrespondingItemNoContrast(cstplItemShowTemp.getStrNo());
+                for (CstplItemShow itemUnit : cstplItemShowList_ForSort) {
+                    if (itemUnit.getStrNoContrast() != null) {
+                        String correspondingItemNoContrast = itemUnit.getCorrespondingPkidContrast() == null ? "" : itemUnit.getCorrespondingPkidContrast();
+                        CstplItemShow cstplItemShowTemp =
+                                getItemOfTkcttAndCstplByPkid(correspondingItemNoContrast, cstplItemShowList_ForSort, "Tkctt");
+                        if (cstplItemShowTemp != null) {
+                            itemUnit.setCorrespondingItemNoContrast(cstplItemShowTemp.getStrNo());
+                        }
+                    } else {
+                        itemUnit.setCorrespondingItemNoContrast(itemUnit.getStrNo());
                     }
-                } else{
-                    itemUnit.setCorrespondingItemNoContrast(itemUnit.getStrNo());
                 }
+                cstplItemShowList = new ArrayList<CstplItemShow>();
+                cstplItemShowList.addAll(cstplItemShowList_ForSort);
+                cstplItemShowListExcel = new ArrayList<CstplItemShow>();
+                for (CstplItemShow itemUnit : cstplItemShowList) {
+                    CstplItemShow itemUnitTemp = (CstplItemShow) BeanUtils.cloneBean(itemUnit);
+                    itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
+                    itemUnitTemp.setStrNoContrast(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNoContrast()));
+                    cstplItemShowListExcel.add(itemUnitTemp);
+                }
+                beansMap.put("cstplItemShowListExcel", cstplItemShowListExcel);
+                // 添加合计
+                setCstplItemList_AddTotal();
+                beansMap.put("cstplItemShowList", cstplItemShowList);
+                resetActionForAdd();
             }
-            cstplItemShowList =new ArrayList<CstplItemShow>();
-            cstplItemShowList.addAll(cstplItemShowList_ForSort);
-            cstplItemShowListExcel =new ArrayList<CstplItemShow>();
-            for(CstplItemShow itemUnit: cstplItemShowList){
-                CstplItemShow itemUnitTemp= (CstplItemShow) BeanUtils.cloneBean(itemUnit);
-                itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
-                itemUnitTemp.setStrNoContrast(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNoContrast()));
-                cstplItemShowListExcel.add(itemUnitTemp);
-            }
-            beansMap.put("cstplItemShowListExcel", cstplItemShowListExcel);
-            //cstplItemShowList =getItemOfTkcttAndCstplListSorted(cstplItemShowList_ForSort,0);
-            // 添加合计
-            setCstplItemList_AddTotal();
-            beansMap.put("cstplItemShowList", cstplItemShowList);
-            resetActionForAdd();
         }catch (Exception e) {
             logger.error("初始化失败", e);
             MessageUtil.addError("初始化失败");
@@ -921,7 +943,7 @@ public class CstplItemAction {
     }
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
     private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
-                                                                   List<EsCttItem> esCttItemListPara) {
+                                                          List<EsCttItem> esCttItemListPara) {
         List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
         /*避开重复链接数据库*/
         for(EsCttItem itemUnit: esCttItemListPara){
@@ -932,8 +954,9 @@ public class CstplItemAction {
         return tempEsCttItemList;
     }
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<CstplItemShow> getItemOfTkcttAndCstplByLevelParentPkid(String strLevelParentPkid,
-                                                                        List<CstplItemShow> esCstplItemShowListPara,String strTkcttOrCstpl) {
+    private List<CstplItemShow> getItemOfTkcttAndCstplByLevelParentPkid(
+            String strLevelParentPkid,
+            List<CstplItemShow> esCstplItemShowListPara,String strTkcttOrCstpl) {
         List<CstplItemShow> cstplItemShowListTemp =new ArrayList<CstplItemShow>();
         /*避开重复链接数据库*/
         try{
@@ -959,8 +982,9 @@ public class CstplItemAction {
         return cstplItemShowListTemp;
     }
     /*通过编号得到该项*/
-    private CstplItemShow getItemOfTkcttAndCstplByStrNo(String strNo,
-                                                        List<CstplItemShow> cstplItemShowListPara,String strTkcttOrCstpl){
+    private CstplItemShow getItemOfTkcttAndCstplByStrNo(
+            String strNo,
+            List<CstplItemShow> cstplItemShowListPara,String strTkcttOrCstpl){
         CstplItemShow cstplItemShowTemp =null;
         try{
             if(strTkcttOrCstpl .equals("Tkctt")){
@@ -985,8 +1009,9 @@ public class CstplItemAction {
         return cstplItemShowTemp;
     }
     /*通过Pkid得到该项*/
-    private CstplItemShow getItemOfTkcttAndCstplByPkid(String strPkid,
-                                                       List<CstplItemShow> cstplItemShowListPara,String strTkcttOrCstpl){
+    private CstplItemShow getItemOfTkcttAndCstplByPkid(
+            String strPkid,
+            List<CstplItemShow> cstplItemShowListPara,String strTkcttOrCstpl){
         CstplItemShow cstplItemShowTemp =null;
         try{
             if(strTkcttOrCstpl .equals("Tkctt")){
@@ -1182,6 +1207,125 @@ public class CstplItemAction {
         return null;
     }
 
+    //附件相关方法
+    public List<AttachmentModel> attachmentStrToList(String strAttachmentPara){
+        List<AttachmentModel> attachmentListTemp=new ArrayList<>();
+        if(strAttachmentPara!=null){
+            attachmentListTemp.clear();
+            if (!StringUtils.isEmpty(strAttachmentPara)) {
+                String strTemps[] = strAttachmentPara.split(";");
+                for (int i = 0; i < strTemps.length; i++) {
+                    AttachmentModel attachmentModelTemp = new AttachmentModel(i + "", strTemps[i], strTemps[i]);
+                    attachmentListTemp.add(attachmentModelTemp);
+                }
+            }
+        }
+        return attachmentListTemp;
+    }
+
+    public void onViewAttachment(AttachmentModel attachmentModelPara) {
+        image.setValue("/upload/" + attachmentModelPara.getCOLUMN_NAME());
+    }
+
+    public void delAttachmentRecordAction(AttachmentModel attachmentModelPara){
+        try {
+            File deletingFile = new File(attachmentModelPara.getCOLUMN_PATH());
+            deletingFile.delete();
+            attachmentList.remove(attachmentModelPara) ;
+            StringBuffer sbTemp = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sbTemp.append(item.getCOLUMN_PATH() + ";");
+            }
+
+            cstplInfo.setAttachment(sbTemp.toString());
+            cttInfoService.updateRecord(cstplInfo);
+        } catch (Exception e) {
+            logger.error("删除数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+
+    public void download(String strAttachment){
+        try{
+            if(StringUtils .isEmpty(strAttachment) ){
+                MessageUtil.addError("路径为空，无法下载！");
+                logger.error("路径为空，无法下载！");
+            }
+            else {
+                String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload")+"/"+strAttachment;
+                File file = new File(fileName);
+                InputStream stream = new FileInputStream(fileName);
+                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), new String(strAttachment.getBytes("gbk"),"iso8859-1"));
+            }
+        } catch (Exception e) {
+            logger.error("下载文件失败", e);
+            MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
+        }
+    }
+
+    public void upload(FileUploadEvent event) {
+        BufferedInputStream inStream = null;
+        FileOutputStream fileOutputStream = null;
+        UploadedFile uploadedFile = event.getFile();
+        AttachmentModel attachmentModel = new AttachmentModel();
+        if (uploadedFile != null) {
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload");
+            File superFile = new File(path);
+            if (!superFile.exists()) {
+                superFile.mkdirs();
+            }
+            File descFile = new File(superFile, uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_ID(ToolUtil.getIntIgnoreNull(attachmentList.size()) + "");
+            attachmentModel.setCOLUMN_NAME(uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_PATH(descFile.getAbsolutePath());
+            for (AttachmentModel item : attachmentList){
+                if (item.getCOLUMN_NAME().equals(attachmentModel.getCOLUMN_NAME())) {
+                    MessageUtil.addError("附件已存在！");
+                    return;
+                }
+            }
+
+            attachmentList.add(attachmentModel);
+
+            StringBuffer sb = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sb.append(item.getCOLUMN_NAME() + ";");
+            }
+            if(sb.length()>4000){
+                MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
+                return;
+            }
+            cstplInfo.setAttachment(sb.toString());
+            cttInfoService.updateRecord(cstplInfo);
+            try {
+                inStream = new BufferedInputStream(uploadedFile.getInputstream());
+                fileOutputStream = new FileOutputStream(descFile);
+                byte[] buf = new byte[1024];
+                int num;
+                while ((num = inStream.read(buf)) != -1) {
+                    fileOutputStream.write(buf, 0, num);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (inStream != null) {
+                    try {
+                        inStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
     /*智能字段Start*/
     public EsCttInfo getCstplInfo() {
         return cstplInfo;
@@ -1307,7 +1451,6 @@ public class CstplItemAction {
     public void setStrFlowType(String strFlowType) {
         this.strFlowType = strFlowType;
     }
-/*智能字段End*/
 
     public List<CstplItemShow> getCstplItemShowListExcel() {
         return cstplItemShowListExcel;
@@ -1316,4 +1459,38 @@ public class CstplItemAction {
     public void setCstplItemShowListExcel(List<CstplItemShow> cstplItemShowListExcel) {
         this.cstplItemShowListExcel = cstplItemShowListExcel;
     }
+
+    public List<AttachmentModel> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public void setAttachmentList(List<AttachmentModel> attachmentList) {
+        this.attachmentList = attachmentList;
+    }
+
+    public HtmlGraphicImage getImage() {
+        return image;
+    }
+
+    public void setImage(HtmlGraphicImage image) {
+        this.image = image;
+    }
+
+    public StreamedContent getDownloadFile() {
+        return downloadFile;
+    }
+
+    public void setDownloadFile(StreamedContent downloadFile) {
+        this.downloadFile = downloadFile;
+    }
+
+    public UploadedFile getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(UploadedFile uploadedFile) {
+        this.uploadedFile = uploadedFile;
+    }
+
+    /*智能字段End*/
 }

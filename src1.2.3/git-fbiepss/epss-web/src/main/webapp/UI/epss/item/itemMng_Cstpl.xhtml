@@ -47,13 +47,18 @@
                                      ajax="false">
                     </p:commandButton>
                 </h:panelGrid>
-                <h:panelGrid columns="4">
+                <h:panelGrid columns="5">
                     <p:outputLabel value="成本计划编号：" for="id"/>
                     <p:inputText id="id" value="#{cstplItemAction.cstplInfo.id}"
                                  readonly="true" style="background-color:gainsboro;"/>
                     <p:outputLabel value="成本计划名称：" for="cttName"/>
                     <p:inputText id="cttName" value="#{cstplItemAction.cstplInfo.name}"
                                  readonly="true" style="width:400px;background-color:gainsboro;"/>
+                    <p:commandButton icon="ui-icon-document"
+                                     style="height:18px;width:18px"
+                                     update=":form:msgs"
+                                     onclick="PF('wvAttachmentList').show()">
+                    </p:commandButton>
                 </h:panelGrid>
                 <p:dataTable id="pdt" style="width:100%;"
                              value="#{cstplItemAction.cstplItemShowList}"
@@ -154,6 +159,68 @@
                         <h:outputText value="#{record.noteContrast}" />
                     </p:column>
                 </p:dataTable>
+                <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
+                          showEffect="clip" hideEffect="fold" header="附件列表">
+                    <p:growl id="messages" showDetail="true"/>
+                    <h:panelGrid id="pgAttachmentView">
+                        <p:fileUpload id="attachmentName" fileUploadListener="#{cstplItemAction.upload}"
+                                      mode="advanced"
+                                      sizeLimit="1000000"
+                                      multiple="true"
+                                      label="选择" showButtons="true"
+                                      cancelLabel="全部取消" uploadLabel="全部上传" process="@this"
+                                      allowTypes="/(\.|\/)(gif|jpe?g|png|xls|xlsx|doc|docx)$/"
+                                      update="pdtAttachmentList,attachmentName">
+                        </p:fileUpload>
+                        <p:dataTable id="pdtAttachmentList" style="width:100%;"
+                                     value="#{cstplItemAction.attachmentList}"
+                                     var="recordAttachment"
+                                     rowKey="#{recordAttachment.COLUMN_NAME}"
+                                     selectionMode="single"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     rows="5"
+                                     rowsPerPageTemplate="100,50,30,15,5"
+                                     emptyMessage="数据记录为空...">
+                            <p:column headerText="附件ID" style="text-align:left">
+                                <h:outputText value="#{recordAttachment.COLUMN_ID}"/>
+                            </p:column>
+                            <p:column headerText="附件名" style="text-align:left">
+                                <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
+                            </p:column>
+                            <p:column headerText="缩略图" style="text-align:center" rendered="false">
+                                <h:graphicImage value="/upload/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
+                            </p:column>
+                            <p:column headerText="预览">
+                                <p:commandButton icon="ui-icon-search"
+                                                 id="selectButton" update=":form:imageShow"
+                                                 style="height:18px;width:18px"
+                                                 action="#{cstplItemAction.onViewAttachment(recordAttachment)}"
+                                                 oncomplete="dlgWvView.show()"
+                                                 title="View">
+                                </p:commandButton>
+                            </p:column>
+                            <p:column headerText="操作" style="width:62px">
+                                <p:commandButton icon="ui-icon-arrowrefresh-1-w"
+                                                 style="height:18px;width:18px"
+                                                 ajax="false"
+                                                 actionListener="#{cstplItemAction.download(recordAttachment.COLUMN_PATH)}">
+                                    <p:fileDownload value="#{cstplItemAction.downloadFile}"/>
+                                </p:commandButton>
+                                <p:commandButton icon="ui-icon-trash"
+                                                 style="height:18px;width:18px"
+                                                 action="#{cstplItemAction.delAttachmentRecordAction(recordAttachment)}"
+                                                 update=":form:pgAttachmentView,:form:msgs">
+                                </p:commandButton>
+                            </p:column>
+                        </p:dataTable>
+                        <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
+                            <h:graphicImage binding="#{cstplItemAction.image}"/>
+                        </p:dialog>
+                    </h:panelGrid>
+                </p:dialog>
                 <p:dialog id="dlgViewForAdd" header="成本计划内容增加信息" widgetVar="wVDlgViewForAdd"
                           resizable="false" modal="true"
                           showEffect="clip" hideEffect="fold">

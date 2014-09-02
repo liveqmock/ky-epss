@@ -7,6 +7,11 @@ package epss.view.contract;
  * Time: 下午1:53
  * To change this template use File | Settings | File Templates.
  */
+import epss.repository.model.model_show.AttachmentModel;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import skyline.util.JxlsManager;
 import skyline.util.StyleModel;
 import skyline.util.ToolUtil;
@@ -25,12 +30,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.util.MessageUtil;;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -87,8 +94,18 @@ public class SubcttItemAction {
     /*控制控件在画面上的可用与现实End*/
     private Map beansMap;
     private List<CttItemShow> cttItemShowListExcel;
+
+    //附件
+    private CttInfoShow cttInfoShowAttachment;
+    private List<AttachmentModel> attachmentList;
+    private HtmlGraphicImage image;
+    //上传下载文件
+    private StreamedContent downloadFile;
+    private UploadedFile uploadedFile;
+
     @PostConstruct
     public void init() {
+        this.attachmentList=new ArrayList<>();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         beansMap = new HashMap();
         strBelongToType=ESEnum.ITEMTYPE2.getCode();
@@ -109,47 +126,52 @@ public class SubcttItemAction {
     /*初始化操作*/
     private void initData() {
         try{
+            cttItemShowList_Cstpl =new ArrayList<>();
+            if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
+                    ToolUtil.getStrIgnoreNull(strSubcttInfoPkid).length()!=0) {
             /*初始化流程状态列表*/
-            esFlowControl.getBackToStatusFlagList(strFlowType);
+                esFlowControl.getBackToStatusFlagList(strFlowType);
         /*分包合同*/
-            cttItemShowList_Cstpl =new ArrayList<CttItemShow>();
-            subcttInfo = cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
-            beansMap.put("subcttInfo", subcttInfo);
+                subcttInfo = cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
+                // 附件记录变成List
+                attachmentList = attachmentStrToList(subcttInfo.getAttachment());
+                beansMap.put("subcttInfo", subcttInfo);
         /*成本计划*/
-            String strCstplPkidInInitCtt= subcttInfo.getParentPkid() ;
-            esCttItemList = cttItemService.getEsItemList(
-                    ESEnum.ITEMTYPE1.getCode(), strCstplPkidInInitCtt);
-            recursiveDataTable("root", esCttItemList, cttItemShowList_Cstpl);
-            cttItemShowList_Cstpl =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList_Cstpl);
+                String strCstplPkidInInitCtt = subcttInfo.getParentPkid();
+                esCttItemList = cttItemService.getEsItemList(
+                        ESEnum.ITEMTYPE1.getCode(), strCstplPkidInInitCtt);
+                recursiveDataTable("root", esCttItemList, cttItemShowList_Cstpl);
+                cttItemShowList_Cstpl = getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList_Cstpl);
         /*分包合同*/
-            esCttItemList =new ArrayList<EsCttItem>();
-            cttItemShowList =new ArrayList<CttItemShow>();
-            esCttItemList = cttItemService.getEsItemList(
-                    strBelongToType, strSubcttInfoPkid);
-            cttItemShowList.clear();
-            recursiveDataTable("root", esCttItemList, cttItemShowList);
-            cttItemShowList =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList);
+                esCttItemList = new ArrayList<EsCttItem>();
+                cttItemShowList = new ArrayList<CttItemShow>();
+                esCttItemList = cttItemService.getEsItemList(
+                        strBelongToType, strSubcttInfoPkid);
+                cttItemShowList.clear();
+                recursiveDataTable("root", esCttItemList, cttItemShowList);
+                cttItemShowList = getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList);
         /*分包合同对应成本计划中的项*/
-            for(CttItemShow itemUnit: cttItemShowList){
-                for(CttItemShow itemUnitCstpl: cttItemShowList_Cstpl){
-                    if(itemUnit.getCorrespondingPkid()!=null&&
-                            itemUnit.getCorrespondingPkid().equals(itemUnitCstpl .getPkid())){
-                        itemUnit.setStrCorrespondingItemNo(itemUnitCstpl.getStrNo());
-                        itemUnit.setStrCorrespondingItemName(itemUnitCstpl .getName());
+                for (CttItemShow itemUnit : cttItemShowList) {
+                    for (CttItemShow itemUnitCstpl : cttItemShowList_Cstpl) {
+                        if (itemUnit.getCorrespondingPkid() != null &&
+                                itemUnit.getCorrespondingPkid().equals(itemUnitCstpl.getPkid())) {
+                            itemUnit.setStrCorrespondingItemNo(itemUnitCstpl.getStrNo());
+                            itemUnit.setStrCorrespondingItemName(itemUnitCstpl.getName());
+                        }
                     }
                 }
+                cttItemShowListExcel = new ArrayList<CttItemShow>();
+                for (CttItemShow itemUnit : cttItemShowList) {
+                    CttItemShow itemUnitTemp = (CttItemShow) BeanUtils.cloneBean(itemUnit);
+                    itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
+                    itemUnitTemp.setStrCorrespondingItemNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrCorrespondingItemNo()));
+                    cttItemShowListExcel.add(itemUnitTemp);
+                }
+                beansMap.put("cttItemShowListExcel", cttItemShowListExcel);
+                beansMap.put("cttItemShowList", cttItemShowList);
+                // 添加合计
+                setItemOfCstplAndSubcttList_AddTotal();
             }
-            cttItemShowListExcel =new ArrayList<CttItemShow>();
-            for(CttItemShow itemUnit: cttItemShowList){
-                CttItemShow itemUnitTemp= (CttItemShow) BeanUtils.cloneBean(itemUnit);
-                itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
-                itemUnitTemp.setStrCorrespondingItemNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrCorrespondingItemNo()));
-                cttItemShowListExcel.add(itemUnitTemp);
-            }
-            beansMap.put("cttItemShowListExcel", cttItemShowListExcel);
-            beansMap.put("cttItemShowList", cttItemShowList);
-            // 添加合计
-            setItemOfCstplAndSubcttList_AddTotal();
         }catch (Exception e){
             logger.error("初始化失败", e);
             MessageUtil.addError("初始化失败");
@@ -838,6 +860,126 @@ public class SubcttItemAction {
         }
         return null;
     }
+
+    //附件相关方法
+    public List<AttachmentModel> attachmentStrToList(String strAttachmentPara){
+        List<AttachmentModel> attachmentListTemp=new ArrayList<>();
+        if(strAttachmentPara!=null){
+            attachmentListTemp.clear();
+            if (!StringUtils.isEmpty(strAttachmentPara)) {
+                String strTemps[] = strAttachmentPara.split(";");
+                for (int i = 0; i < strTemps.length; i++) {
+                    AttachmentModel attachmentModelTemp = new AttachmentModel(i + "", strTemps[i], strTemps[i]);
+                    attachmentListTemp.add(attachmentModelTemp);
+                }
+            }
+        }
+        return attachmentListTemp;
+    }
+
+    public void onViewAttachment(AttachmentModel attachmentModelPara) {
+        image.setValue("/upload/" + attachmentModelPara.getCOLUMN_NAME());
+    }
+
+    public void delAttachmentRecordAction(AttachmentModel attachmentModelPara){
+        try {
+            File deletingFile = new File(attachmentModelPara.getCOLUMN_PATH());
+            deletingFile.delete();
+            attachmentList.remove(attachmentModelPara) ;
+            StringBuffer sbTemp = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sbTemp.append(item.getCOLUMN_PATH() + ";");
+            }
+
+            subcttInfo.setAttachment(sbTemp.toString());
+            cttInfoService.updateRecord(subcttInfo);
+        } catch (Exception e) {
+            logger.error("删除数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+
+    public void download(String strAttachment){
+        try{
+            if(StringUtils .isEmpty(strAttachment) ){
+                MessageUtil.addError("路径为空，无法下载！");
+                logger.error("路径为空，无法下载！");
+            }
+            else {
+                String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload")+"/"+strAttachment;
+                File file = new File(fileName);
+                InputStream stream = new FileInputStream(fileName);
+                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), new String(strAttachment.getBytes("gbk"),"iso8859-1"));
+            }
+        } catch (Exception e) {
+            logger.error("下载文件失败", e);
+            MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
+        }
+    }
+
+    public void upload(FileUploadEvent event) {
+        BufferedInputStream inStream = null;
+        FileOutputStream fileOutputStream = null;
+        UploadedFile uploadedFile = event.getFile();
+        AttachmentModel attachmentModel = new AttachmentModel();
+        if (uploadedFile != null) {
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload");
+            File superFile = new File(path);
+            if (!superFile.exists()) {
+                superFile.mkdirs();
+            }
+            File descFile = new File(superFile, uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_ID(ToolUtil.getIntIgnoreNull(attachmentList.size()) + "");
+            attachmentModel.setCOLUMN_NAME(uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_PATH(descFile.getAbsolutePath());
+            for (AttachmentModel item : attachmentList){
+                if (item.getCOLUMN_NAME().equals(attachmentModel.getCOLUMN_NAME())) {
+                    MessageUtil.addError("附件已存在！");
+                    return;
+                }
+            }
+
+            attachmentList.add(attachmentModel);
+
+            StringBuffer sb = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sb.append(item.getCOLUMN_NAME() + ";");
+            }
+            if(sb.length()>4000){
+                MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
+                return;
+            }
+            subcttInfo.setAttachment(sb.toString());
+            cttInfoService.updateRecord(subcttInfo);
+            try {
+                inStream = new BufferedInputStream(uploadedFile.getInputstream());
+                fileOutputStream = new FileOutputStream(descFile);
+                byte[] buf = new byte[1024];
+                int num;
+                while ((num = inStream.read(buf)) != -1) {
+                    fileOutputStream.write(buf, 0, num);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (inStream != null) {
+                    try {
+                        inStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
     /*智能字段Start*/
     public CttItemService getCttItemService() {
         return cttItemService;
@@ -1010,8 +1152,6 @@ public class SubcttItemAction {
         this.subcttInfo = subcttInfo;
     }
 
-    /*智能字段End*/
-
     public List<CttItemShow> getCttItemShowListExcel() {
         return cttItemShowListExcel;
     }
@@ -1019,4 +1159,33 @@ public class SubcttItemAction {
     public void setCttItemShowListExcel(List<CttItemShow> cttItemShowListExcel) {
         this.cttItemShowListExcel = cttItemShowListExcel;
     }
+
+    public CttInfoShow getCttInfoShowAttachment() {
+        return cttInfoShowAttachment;
+    }
+
+    public void setCttInfoShowAttachment(CttInfoShow cttInfoShowAttachment) {
+        this.cttInfoShowAttachment = cttInfoShowAttachment;
+    }
+
+    public List<AttachmentModel> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public HtmlGraphicImage getImage() {
+        return image;
+    }
+
+    public StreamedContent getDownloadFile() {
+        return downloadFile;
+    }
+
+    public UploadedFile getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setImage(HtmlGraphicImage image) {
+        this.image = image;
+    }
+    /*智能字段End*/
 }
