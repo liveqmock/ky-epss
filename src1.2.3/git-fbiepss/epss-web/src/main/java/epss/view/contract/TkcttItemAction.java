@@ -8,6 +8,11 @@ package epss.view.contract;
  * To change this template use File | Settings | File Templates.
  */
 
+import epss.repository.model.model_show.AttachmentModel;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import skyline.util.JxlsManager;
 import skyline.util.StyleModel;
 import skyline.util.ToolUtil;
@@ -24,14 +29,15 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.util.MessageUtil;;
-
+import skyline.util.MessageUtil;
+import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -59,6 +65,13 @@ public class TkcttItemAction {
     private CttItemShow cttItemShowDel;
     private List<EsCttItem> esCttItemList;
     private List<CttItemShow> cttItemShowList;
+
+    //附件
+    private List<AttachmentModel> attachmentList;
+    private HtmlGraphicImage image;
+    //上传下载文件
+    private StreamedContent downloadFile;
+    private UploadedFile uploadedFile;
 
     /*所属类型*/
     private String strBelongToType;
@@ -106,8 +119,9 @@ public class TkcttItemAction {
     private void initData() {
         /*形成关系树*/
         try {
-            esCttItemList =new ArrayList<EsCttItem>();
-            cttItemShowList =new ArrayList<CttItemShow>();
+            esCttItemList =new ArrayList<>();
+            cttItemShowList =new ArrayList<>();
+            attachmentList=new ArrayList<>();
         /*初始化流程状态列表*/
             esFlowControl.getBackToStatusFlagList(strFlowType);
             tkcttInfo = cttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
@@ -125,6 +139,7 @@ public class TkcttItemAction {
             beansMap.put("cttItemShowListExcel", cttItemShowListExcel);
             setTkcttItemList_AddTotal();
             beansMap.put("cttItemShowList", cttItemShowList);
+
         }catch (Exception e){
             logger.error("初始化失败", e);
             MessageUtil.addError("初始化失败");
@@ -489,7 +504,6 @@ public class TkcttItemAction {
                 }
                 MessageUtil.addInfo("提交数据完成。");
                 initData();
-
             }
         } catch (Exception e) {
             checkForUpd = false;
@@ -551,20 +565,6 @@ public class TkcttItemAction {
 
             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
-                   /* int Orderid=esCttItemService.getMaxOrderidInEsCttItemList(strBelongToType,strTkcttInfoPkid, "root",1);
-                    EsCttItem esCttItemTemp=new EsCttItem();
-                    esCttItemTemp.setBelongToType(strBelongToType);
-                    esCttItemTemp.setBelongToPkid(strTkcttInfoPkid);
-                    esCttItemTemp.setParentPkid("root");
-                    esCttItemTemp.setGrade(1);
-                    esCttItemTemp.setName("(其它)");
-                    esCttItemTemp.setSpareField("ForCstplItemNullCorresponding");
-                    if(!esCttItemService.isExistSameNameNodeInDb(esCttItemTemp)){
-                        esCttItemTemp.setOrderid(Orderid+1);
-                        esCttItemService.insertRecord(esCttItemTemp);
-                        initData();
-                    }*/
-
                     esFlowControl.mngFinishAction(
                             cttInfoShowSel.getCttType(),
                             cttInfoShowSel.getPkid(),
@@ -671,6 +671,124 @@ public class TkcttItemAction {
         return null;
     }
 
+    // 附件
+    public List<AttachmentModel> attachmentStrToList(String strAttachmentPara){
+        List<AttachmentModel> attachmentListTemp=new ArrayList<>();
+        if(strAttachmentPara!=null){
+            attachmentListTemp.clear();
+            if (!StringUtils.isEmpty(strAttachmentPara)) {
+                String strTemps[] = strAttachmentPara.split(";");
+                for (int i = 0; i < strTemps.length; i++) {
+                    AttachmentModel attachmentModelTemp = new AttachmentModel(i + "", strTemps[i], strTemps[i]);
+                    attachmentListTemp.add(attachmentModelTemp);
+                }
+            }
+        }
+        return attachmentListTemp;
+    }
+
+    public void onViewAttachment(AttachmentModel attachmentModelPara) {
+        image.setValue("/upload/" + attachmentModelPara.getCOLUMN_NAME());
+    }
+
+    public void delAttachmentRecordAction(AttachmentModel attachmentModelPara){
+        try {
+            File deletingFile = new File(attachmentModelPara.getCOLUMN_PATH());
+            deletingFile.delete();
+            attachmentList.remove(attachmentModelPara) ;
+            StringBuffer sbTemp = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sbTemp.append(item.getCOLUMN_PATH() + ";");
+            }
+            tkcttInfo.setAttachment(sbTemp.toString());
+            cttInfoService.updateRecord(tkcttInfo);
+        } catch (Exception e) {
+            logger.error("删除数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+
+    public void download(String strAttachment){
+        try{
+            if(StringUtils .isEmpty(strAttachment) ){
+                MessageUtil.addError("路径为空，无法下载！");
+                logger.error("路径为空，无法下载！");
+            }
+            else {
+                String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload")+"/"+strAttachment;
+                File file = new File(fileName);
+                InputStream stream = new FileInputStream(fileName);
+                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), new String(strAttachment.getBytes("gbk"),"iso8859-1"));
+            }
+        } catch (Exception e) {
+            logger.error("下载文件失败", e);
+            MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
+        }
+    }
+
+    public void upload(FileUploadEvent event) {
+        BufferedInputStream inStream = null;
+        FileOutputStream fileOutputStream = null;
+        UploadedFile uploadedFile = event.getFile();
+        AttachmentModel attachmentModel = new AttachmentModel();
+        if (uploadedFile != null) {
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload");
+            File superFile = new File(path);
+            if (!superFile.exists()) {
+                superFile.mkdirs();
+            }
+            File descFile = new File(superFile, uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_ID(ToolUtil.getIntIgnoreNull(attachmentList.size()) + "");
+            attachmentModel.setCOLUMN_NAME(uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_PATH(descFile.getAbsolutePath());
+            for (AttachmentModel item : attachmentList){
+                if (item.getCOLUMN_NAME().equals(attachmentModel.getCOLUMN_NAME())) {
+                    MessageUtil.addError("附件已存在！");
+                    return;
+                }
+            }
+
+            attachmentList.add(attachmentModel);
+
+            StringBuffer sb = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sb.append(item.getCOLUMN_NAME() + ";");
+            }
+            if(sb.length()>4000){
+                MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
+                return;
+            }
+            tkcttInfo.setAttachment(sb.toString());
+            cttInfoService.updateRecord(tkcttInfo);
+            try {
+                inStream = new BufferedInputStream(uploadedFile.getInputstream());
+                fileOutputStream = new FileOutputStream(descFile);
+                byte[] buf = new byte[1024];
+                int num;
+                while ((num = inStream.read(buf)) != -1) {
+                    fileOutputStream.write(buf, 0, num);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (inStream != null) {
+                    try {
+                        inStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
     /*智能字段Start*/
     public CttItemService getCttItemService() {
         return cttItemService;
@@ -684,18 +802,15 @@ public class TkcttItemAction {
     public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
         this.flowCtrlService = flowCtrlService;
     }
-
     public EsCommon getEsCommon() {
         return esCommon;
     }
     public void setEsCommon(EsCommon esCommon) {
         this.esCommon = esCommon;
     }
-
     public CttItemShow getCttItemShowSel() {
         return cttItemShowSel;
     }
-
     public void setCttItemShowSel(CttItemShow cttItemShowSel) {
         this.cttItemShowSel = cttItemShowSel;
     }
@@ -717,7 +832,6 @@ public class TkcttItemAction {
     public void setEsFlowControl(EsFlowControl esFlowControl) {
         this.esFlowControl = esFlowControl;
     }
-
     public String getStrSubmitType() {
         return strSubmitType;
     }
@@ -727,81 +841,87 @@ public class TkcttItemAction {
     public StyleModel getStyleModel() {
         return styleModel;
     }
-
     public String getStrPassFlag() {
         return strPassFlag;
     }
-
     public CttItemShow getCttItemShowAdd() {
         return cttItemShowAdd;
     }
-
     public void setCttItemShowAdd(CttItemShow cttItemShowAdd) {
         this.cttItemShowAdd = cttItemShowAdd;
     }
-
     public CttItemShow getCttItemShowDel() {
         return cttItemShowDel;
     }
-
     public void setCttItemShowDel(CttItemShow cttItemShowDel) {
         this.cttItemShowDel = cttItemShowDel;
     }
-
     public CttItemShow getCttItemShowUpd() {
         return cttItemShowUpd;
     }
-
     public void setCttItemShowUpd(CttItemShow cttItemShowUpd) {
         this.cttItemShowUpd = cttItemShowUpd;
     }
-
     public EsFlowService getEsFlowService() {
         return esFlowService;
     }
-
     public void setEsFlowService(EsFlowService esFlowService) {
         this.esFlowService = esFlowService;
     }
-
     public String getStrNotPassToStatus() {
         return strNotPassToStatus;
     }
-
     public void setStrNotPassToStatus(String strNotPassToStatus) {
         this.strNotPassToStatus = strNotPassToStatus;
     }
-
     public String getStrFlowType() {
         return strFlowType;
     }
-
     public void setStrFlowType(String strFlowType) {
         this.strFlowType = strFlowType;
     }
-
     public EsCttInfo getTkcttInfo() {
         return tkcttInfo;
     }
-
     public CttInfoService getCttInfoService() {
         return cttInfoService;
     }
-
     public void setCttInfoService(CttInfoService cttInfoService) {
         this.cttInfoService = cttInfoService;
     }
-
     public Boolean getCheckForUpd() {
         return checkForUpd;
     }
-
     public List<CttItemShow> getCttItemShowListExcel() {
         return cttItemShowListExcel;
     }
-
     public void setCttItemShowListExcel(List<CttItemShow> cttItemShowListExcel) {
         this.cttItemShowListExcel = cttItemShowListExcel;
     }
-	/*智能字段End*/
+    //文件
+    public List<AttachmentModel> getAttachmentList() {
+        return attachmentList;
+    }
+    public void setAttachmentList(List<AttachmentModel> attachmentList) {
+        this.attachmentList = attachmentList;
+    }
+    public HtmlGraphicImage getImage() {
+        return image;
+    }
+    public void setImage(HtmlGraphicImage image) {
+        this.image = image;
+    }
+    public StreamedContent getDownloadFile() {
+        return downloadFile;
+    }
+    public void setDownloadFile(StreamedContent downloadFile) {
+        this.downloadFile = downloadFile;
+    }
+    public UploadedFile getUploadedFile() {
+        return uploadedFile;
+    }
+    public void setUploadedFile(UploadedFile uploadedFile) {
+        this.uploadedFile = uploadedFile;
+    }
+    /*智能字段End*/
 }

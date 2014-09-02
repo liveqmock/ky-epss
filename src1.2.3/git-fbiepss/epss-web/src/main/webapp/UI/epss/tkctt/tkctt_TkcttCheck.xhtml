@@ -78,19 +78,12 @@
                          widgetVar="DtInitTkcttList"
                          rowStyleClass="#{record.statusFlag eq '0' ? null : 'rowDoneStyle'}"
                          scrollable="true">
-                <p:column headerText="操作" style="width:65px">
+                <p:column headerText="操作" style="width:40px">
                     <p:commandButton  icon="ui-icon-search"
                                       style="height:18px;width:18px"
                                       action="#{tkcttInfoAction.selectRecordAction('Qry','',record)}"
                                       update="pdt,:form:pgView,:form:msgs"
                                       onclick="PF('wVDlgView').show()">
-                    </p:commandButton>
-                    <p:commandButton  icon="ui-icon-document"
-                                      style="height:18px;width:18px"
-                                      action="#{tkcttInfoAction.attachmentStrToList()}"
-                                      update="pdt,:form:pgAttachmentView,:form:msgs"
-                                      onclick="PF('wvAttachmentList').show()">
-                        <f:setPropertyActionListener value="#{record}" target="#{tkcttInfoAction.cttInfoShowAttachment}" />
                     </p:commandButton>
                     <p:commandButton icon="ui-icon-triangle-1-e"
                                      style="height:18px;width:18px"
@@ -128,53 +121,6 @@
                     <h:outputText value="#{record.signDate}"/>
                 </p:column>
             </p:dataTable>
-            <!--附件列表查询-->
-            <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
-                      showEffect="clip" hideEffect="fold" header="附件列表">
-                <p:growl id="messages" showDetail="true" />
-                <h:panelGrid id="pgAttachmentView">
-                    <p:dataTable id="pdtAttachmentList" style="width:100%;"
-                                 value="#{tkcttInfoAction.attachmentList}"
-                                 var="recordAttachment"
-                                 rowKey="#{recordAttachment.COLUMN_NAME}"
-                                 selectionMode="single"
-                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                                 {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 paginator="true"
-                                 paginatorPosition="bottom"
-                                 rows="5"
-                                 rowsPerPageTemplate="100,50,30,15,5"
-                                 emptyMessage="数据记录为空..."
-                                 widgetVar="WvPdtAttachmentList">
-                        <p:column headerText="附件ID" style="text-align:left">
-                            <h:outputText value="#{recordAttachment.COLUMN_ID}"/>
-                        </p:column>
-                        <p:column headerText="附件名" style="text-align:left">
-                            <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
-                        </p:column>
-                        <p:column headerText="缩略图" style="text-align:center" rendered="false">
-                            <h:graphicImage value="/upload/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
-                        </p:column>
-                        <p:column headerText="预览">
-                            <p:commandButton id="selectButton" update=":form:imageShow"
-                                             action="#{tkcttInfoAction.onViewAttachment(recordAttachment)}"
-                                             oncomplete="dlgWvView.show()"
-                                             icon="ui-icon-search" title="View">
-                            </p:commandButton>
-                        </p:column>
-                        <p:column headerText="操作" style="width:30px">
-                            <p:commandButton  icon="ui-icon-arrowrefresh-1-w"
-                                              ajax="false"
-                                              actionListener="#{tkcttInfoAction.download(recordAttachment.COLUMN_PATH)}">
-                                <p:fileDownload value="#{tkcttInfoAction.downloadFile}"/>
-                            </p:commandButton>
-                        </p:column>
-                    </p:dataTable>
-                    <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
-                        <h:graphicImage binding="#{tkcttInfoAction.image}"/>
-                    </p:dialog>
-                </h:panelGrid>
-            </p:dialog>
             <p:dialog id="dlgView" header="总包合同信息" widgetVar="wVDlgView"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">

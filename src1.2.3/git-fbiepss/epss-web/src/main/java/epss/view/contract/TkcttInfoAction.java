@@ -58,14 +58,7 @@ public class TkcttInfoAction {
     private CttInfoShow cttInfoShowQry;
     private CttInfoShow cttInfoShowSel;
     private CttInfoShow cttInfoShowUpd;
-    private CttInfoShow cttInfoShowAttachment;
     private List<CttInfoShow> cttInfoShowList;
-
-    private List<AttachmentModel> attachmentList;
-    private HtmlGraphicImage image;
-    //上传下载文件
-    private StreamedContent downloadFile;
-    private UploadedFile uploadedFile;
 
     private String strSubmitType;
     /*控制维护画面层级部分的显示*/
@@ -76,7 +69,6 @@ public class TkcttInfoAction {
         initData();
     }
     public void initData() {
-        this.attachmentList=new ArrayList<AttachmentModel>();
         this.cttInfoShowList = new ArrayList<CttInfoShow>();
         cttInfoShowQry = new CttInfoShow();
         cttInfoShowQry.setCttType(ESEnum.ITEMTYPE0.getCode());
@@ -212,125 +204,6 @@ public class TkcttInfoAction {
         }
         return true;
     }
-    public void attachmentStrToList(){
-
-        String strAttachmentTemp=cttInfoShowAttachment.getAttachment();
-        if(strAttachmentTemp!=null){
-            attachmentList.clear();
-            if (!StringUtils.isEmpty(strAttachmentTemp)) {
-                String strTemps[] = strAttachmentTemp.split(";");
-                for (int i = 0; i < strTemps.length; i++) {
-                AttachmentModel attachmentModelTemp = new AttachmentModel(i + "", strTemps[i], strTemps[i]);
-                    attachmentList.add(attachmentModelTemp);
-                }
-            }
-        }else{
-            attachmentList.clear();
-        }
-    }
-
-    public void onViewAttachment(AttachmentModel attachmentModelPara) {
-        image.setValue("/upload/" + attachmentModelPara.getCOLUMN_NAME());
-    }
-
-    public void delAttachmentRecordAction(AttachmentModel attachmentModelPara){
-        try {
-            File deletingFile = new File(attachmentModelPara.getCOLUMN_PATH());
-            deletingFile.delete();
-            attachmentList.remove(attachmentModelPara) ;
-            StringBuffer sbTemp = new StringBuffer();
-            for (AttachmentModel item : attachmentList) {
-                sbTemp.append(item.getCOLUMN_PATH() + ";");
-            }
-            cttInfoShowAttachment.setAttachment(sbTemp.toString());
-            updRecordAction(cttInfoShowAttachment);
-        } catch (Exception e) {
-            logger.error("删除数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-
-    public void download(String strAttachment){
-        try{
-            if(StringUtils .isEmpty(strAttachment) ){
-                MessageUtil.addError("路径为空，无法下载！");
-                logger.error("路径为空，无法下载！");
-            }
-            else {
-                String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload")+"/"+strAttachment;
-                File file = new File(fileName);
-                InputStream stream = new FileInputStream(fileName);
-                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), new String(strAttachment.getBytes("gbk"),"iso8859-1"));
-            }
-        } catch (Exception e) {
-            logger.error("下载文件失败", e);
-            MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
-        }
-    }
-
-    public void upload(FileUploadEvent event) {
-        BufferedInputStream inStream = null;
-        FileOutputStream fileOutputStream = null;
-        UploadedFile uploadedFile = event.getFile();
-        AttachmentModel attachmentModel = new AttachmentModel();
-        if (uploadedFile != null) {
-            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload");
-            File superFile = new File(path);
-            if (!superFile.exists()) {
-                superFile.mkdirs();
-            }
-            File descFile = new File(superFile, uploadedFile.getFileName());
-            attachmentModel.setCOLUMN_ID(ToolUtil.getIntIgnoreNull(attachmentList.size()) + "");
-            attachmentModel.setCOLUMN_NAME(uploadedFile.getFileName());
-            attachmentModel.setCOLUMN_PATH(descFile.getAbsolutePath());
-            for (AttachmentModel item : attachmentList){
-                if (item.getCOLUMN_NAME().equals(attachmentModel.getCOLUMN_NAME())) {
-                    MessageUtil.addError("附件已存在！");
-                    return;
-                }
-            }
-
-            attachmentList.add(attachmentModel);
-
-            StringBuffer sb = new StringBuffer();
-            for (AttachmentModel item : attachmentList) {
-                sb.append(item.getCOLUMN_NAME() + ";");
-            }
-            if(sb.length()>4000){
-                MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
-                return;
-            }
-            cttInfoShowAttachment.setAttachment(sb.toString());
-            updRecordAction(cttInfoShowAttachment);
-            try {
-                inStream = new BufferedInputStream(uploadedFile.getInputstream());
-                fileOutputStream = new FileOutputStream(descFile);
-                byte[] buf = new byte[1024];
-                int num;
-                while ((num = inStream.read(buf)) != -1) {
-                    fileOutputStream.write(buf, 0, num);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (inStream != null) {
-                    try {
-                        inStream.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-                if (fileOutputStream != null) {
-                    try {
-                        fileOutputStream.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-            }
-        }
-    }
-
     /**
      * 提交维护权限
      *
@@ -362,38 +235,6 @@ public class TkcttInfoAction {
 
     public void setCttItemService(CttItemService cttItemService) {
         this.cttItemService = cttItemService;
-    }
-
-    public List<AttachmentModel> getAttachmentList() {
-        return attachmentList;
-    }
-
-    public void setAttachmentList(List<AttachmentModel> attachmentList) {
-        this.attachmentList = attachmentList;
-    }
-
-    public HtmlGraphicImage getImage() {
-        return image;
-    }
-
-    public void setImage(HtmlGraphicImage image) {
-        this.image = image;
-    }
-
-    public StreamedContent getDownloadFile() {
-        return downloadFile;
-    }
-
-    public void setDownloadFile(StreamedContent downloadFile) {
-        this.downloadFile = downloadFile;
-    }
-
-    public UploadedFile getUploadedFile() {
-        return uploadedFile;
-    }
-
-    public void setUploadedFile(UploadedFile uploadedFile) {
-        this.uploadedFile = uploadedFile;
     }
 
     public CttInfoService getCttInfoService() {
@@ -470,14 +311,6 @@ public class TkcttInfoAction {
 
     public void setCttInfoShowSel(CttInfoShow cttInfoShowSel) {
         this.cttInfoShowSel = cttInfoShowSel;
-    }
-
-    public CttInfoShow getCttInfoShowAttachment() {
-        return cttInfoShowAttachment;
-    }
-
-    public void setCttInfoShowAttachment(CttInfoShow cttInfoShowAttachment) {
-        this.cttInfoShowAttachment = cttInfoShowAttachment;
     }
 
     public OperResService getOperResService() {

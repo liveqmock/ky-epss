@@ -78,25 +78,17 @@
                      widgetVar="DtInitSubcttList"
                      rowStyleClass="#{record.statusFlag eq '0'? null :'rowDoneStyle'}"
                      scrollable="true">
-            <p:column headerText="操作" style="width:65px" >
+            <p:column headerText="操作" style="width:40px" >
                 <p:commandButton   icon="ui-icon-search"
                                    style="height:18px;width:18px"
                                    action="#{subcttInfoAction.selectRecordAction('Qry','',record)}"
                                    update="pdt,:form:pgView,:form:msgs"
                                   onclick="PF('wVDlgView').show()">
                 </p:commandButton>
-                    <p:commandButton  icon="ui-icon-document"
-                                      style="height:18px;width:18px"
-                                      action="#{subcttInfoAction.attachmentStrToList()}"
-                                      update="pdt,:form:pgAttachmentView,:form:msgs"
-                                      onclick="PF('wvAttachmentList').show()">
-                        <f:setPropertyActionListener value="#{record}"
-                                      target="#{subcttInfoAction.cttInfoShowAttachment}"/>
-                    </p:commandButton>
-                    <p:commandButton icon="ui-icon-triangle-1-e"
-                                     style="height:18px;width:18px"
-                                     oncomplete="actSelect('#{record.pkid}')">
-                    </p:commandButton>
+                <p:commandButton icon="ui-icon-triangle-1-e"
+                                 style="height:18px;width:18px"
+                                 onclick="actSelect('#{record.pkid}')">
+                </p:commandButton>
             </p:column>
             <p:column headerText="序号" style="width:30px">
                 <h:outputText value="#{row + 1}"/>
