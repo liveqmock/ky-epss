@@ -131,7 +131,7 @@
                         <p:commandButton icon="ui-icon-triangle-1-e"
                                          style="height:16px;width:30px;"
                                          rendered="#{record.id eq null?'false':
-                                         record.flowStatus eq record.operResFlowStatus?'true':'false'}"
+                                                     record.isOwnTaskFlowFlag eq 'true'?'true':'false'}"
                                          onclick="actSelect('#{record.type}','#{record.flowStatus}','#{record.pkid}')">
                         </p:commandButton>
                     </p:column>

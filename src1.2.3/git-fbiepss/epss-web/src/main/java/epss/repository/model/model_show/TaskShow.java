@@ -13,6 +13,7 @@ public class TaskShow {
     private String strColorType;
     private String operResFlowStatus;
     private String operResFlowStatusName;
+    private String isOwnTaskFlowFlag;
 
     public String getType() {
         return type;
@@ -109,4 +110,13 @@ public class TaskShow {
     public void setOperResFlowStatusName(String operResFlowStatusName) {
         this.operResFlowStatusName = operResFlowStatusName;
     }
+
+    public String getIsOwnTaskFlowFlag() {
+        return isOwnTaskFlowFlag;
+    }
+
+    public void setIsOwnTaskFlowFlag(String isOwnTaskFlowFlag) {
+        this.isOwnTaskFlowFlag = isOwnTaskFlowFlag;
+    }
+
 }

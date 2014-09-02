@@ -57,6 +57,7 @@ public class TaskService {
                         detailTaskShowUnit.setId(
                                 "("+ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+detailTaskShowUnit.getId());
                         taskShowList.add(detailTaskShowUnit);
+                        continue;
                     }
                     if (detailTaskShowUnit.getFlowStatus() != null) {
                         if (taskShowGroupUnit.getFlowStatus().compareTo(detailTaskShowUnit.getFlowStatus())==1){
@@ -95,7 +96,6 @@ public class TaskService {
         List<TaskShow> taskShowList = new ArrayList<TaskShow>();
         // 以合同类型和状态为分组,取得各组的数量
         List<TaskShow> taskFlowGroupListTemp = getTaskFlowGroup();
-
         //通过OperatorManager获取相应权限下资源列表
         String strOperIdTemp = ToolUtil.getOperatorManager().getOperatorId();
         // 获取登录者的权限分组
@@ -108,6 +108,12 @@ public class TaskService {
                     ESEnumStatusFlag.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
             taskShowList.add(taskShowGroupUnit);
             int intHasRecordCount=0;
+            for(TaskShow taskShowOwnUnit : ownTaskFlowGroupListTemp){
+                if (taskShowGroupUnit.getFlowStatus().equals(taskShowOwnUnit.getFlowStatus())){
+                    taskShowGroupUnit.setIsOwnTaskFlowFlag("true");
+                    break;
+                }
+            }
             for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
                 if (detailTaskShowUnit.getFlowStatus()==null){
                     continue;
@@ -120,6 +126,9 @@ public class TaskService {
                             ESEnumStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatus()).getTitle());
                     detailTaskShowUnit.setPreFlowStatusName(
                             ESEnumPreStatusFlag.getValueByKey(detailTaskShowUnit.getPreFlowStatus()).getTitle());
+                    if ("true".equals(taskShowGroupUnit.getIsOwnTaskFlowFlag())){
+                        detailTaskShowUnit.setIsOwnTaskFlowFlag("true");
+                    }
                     taskShowList.add(detailTaskShowUnit);
                 }
             }

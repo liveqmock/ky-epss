@@ -32,13 +32,11 @@
                     </p:commandButton>
                     <p:commandButton id="endInputBtn" value="录入完成"
                                      action="#{tkcttItemAction.onClickForPowerAction('Pass')}"
-                                     rendered='#{tkcttItemAction.strPassFlag}'
                                      update="msgs,pgCondition,pdt"
                                      oncomplete="window.close()">
                     </p:commandButton>
                     <p:commandButton id="startInputBtn" value="录入未完"
                                      action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
-                                     rendered='#{!tkcttItemAction.strPassFlag}'
                                      update="msgs,pgCondition,pdt"
                                      oncomplete="window.close()">
                     </p:commandButton>
