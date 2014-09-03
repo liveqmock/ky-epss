@@ -99,7 +99,6 @@ public class CttInfoService {
         EsCttInfoExample example = new EsCttInfoExample();
         EsCttInfoExample.Criteria criteria = example.createCriteria();
         criteria.andCttTypeEqualTo(cttInfoShowPara.getCttType())
-                .andIdEqualTo(cttInfoShowPara.getId())
                 .andNameEqualTo(cttInfoShowPara.getName());
         return esCttInfoMapper.countByExample(example) >= 1;
     }

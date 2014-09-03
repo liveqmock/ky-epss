@@ -3,6 +3,7 @@ package epss.view.operRes;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumDeletedFlag;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.repository.model.EsInitStl;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
@@ -579,6 +580,11 @@ public class OperFuncBusiResMngAction implements Serializable{
                     return;
                 } else {
                     cttInfoService.insertRecord(cttInfoShowAdd);
+                    if(cttInfoShowAdd.getCttType().equals(ESEnum.ITEMTYPE0.getCode())){
+                        EsInitStl esInitStlEst=new EsInitStl();
+                        esInitStlEst.setStlType(ESEnum.ITEMTYPE6.getCode());
+                        esInitStlEst.setStlPkid(cttInfoShowAdd.getPkid());
+                    }
                     MessageUtil.addInfo("新增数据完成。");
                     cttInfoShowAdd = new CttInfoShow();
                 }
