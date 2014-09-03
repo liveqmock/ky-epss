@@ -103,6 +103,14 @@ public class CttInfoService {
                 .andNameEqualTo(cttInfoShowPara.getName());
         return esCttInfoMapper.countByExample(example) >= 1;
     }
+    public boolean isExistInDb(EsCttInfo esCttInfoPara) {
+        EsCttInfoExample example = new EsCttInfoExample();
+        EsCttInfoExample.Criteria criteria = example.createCriteria();
+        criteria.andCttTypeEqualTo(esCttInfoPara.getCttType())
+                .andIdEqualTo(esCttInfoPara.getId())
+                .andNameEqualTo(esCttInfoPara.getName());
+        return esCttInfoMapper.countByExample(example) >= 1;
+    }
     //验证合同编号和名称是否已存在
     public boolean IdisExistInDb(CttInfoShow cttInfoShowPara) {
         EsCttInfoExample example = new EsCttInfoExample();
