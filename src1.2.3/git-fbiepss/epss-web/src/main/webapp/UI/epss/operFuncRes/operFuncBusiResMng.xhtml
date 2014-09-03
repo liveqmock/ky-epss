@@ -161,9 +161,9 @@
             <p:dialog id="dlgViewForPower" header="权限指派" widgetVar="wVDlgViewForPower"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">
-                <h:panelGrid id="pgViewForPower" style="width: 100%" columns="2">
-                    <h:panelGrid>
-                        <p:panel header="功能列表" style="height: 330px">
+                <h:panelGrid id="pgViewForPower" style="width: 100%">
+                    <h:panelGrid columns="2">
+                        <p:panel header="功能列表" style="height: 262px">
                             <p:selectOneRadio id="grid"
                                                   value="#{operFuncBusiResMngAction.taskFunctionSeled}"
                                                   layout="grid"
@@ -174,36 +174,39 @@
                                                itemLabel="#{taskRecord.label}"/>
                             </p:selectOneRadio>
                         </p:panel>
+                        <p:panel header="人员列表">
+                            <p:treeTable id="operTreeTable"
+                                         value="#{operFuncBusiResMngAction.deptOperRoot}"
+                                         var="node"
+                                         dynamic="true"
+                                         cache="false"
+                                         rowStyleClass="#{node.type  eq '1' ? null:'rowDoneStyle'}"
+                                         scrollable="true"
+                                         scrollHeight="200">
+                                <p:column headerText="机构" style="width:200px;text-align:left">
+                                    <h:outputText value="#{node.type eq '0' ? node.name:''}" />
+                                </p:column>
+                                <p:column headerText="人员" style="width:120px;text-align:center">
+                                    <h:outputText value="#{node.type eq '1' ? node.name:''}" />
+                                </p:column>
+                                <p:column headerText="选择" style="width:30px;text-align:center">
+                                    <p:selectBooleanCheckbox value="#{node.isSeled}"
+                                         rendered="#{node.type eq '0'?'false':node.pkid eq 'ROOT'?'false':'true'}">
+                                        <p:ajax  listener="#{operFuncBusiResMngAction.selOperRecordAction(node)}"/>
+                                    </p:selectBooleanCheckbox>
+                                </p:column>
+                            </p:treeTable>
+                        </p:panel>
+                    </h:panelGrid>
+                    <h:panelGrid columns="2">
                         <p:commandButton id="submitBtnForPower"
                                          value="提交"
                                          action="#{operFuncBusiResMngAction.onClickForMngAction('Power')}"
                                          update=":form:resTreeTable,msgs"
                                          oncomplete="wVDlgViewForPower.hide()">
                         </p:commandButton>
+                        <p:outputLabel value="(不选人员,直接点击[提交]按钮,即为删除该权限下的人员指派。)"/>
                     </h:panelGrid>
-                    <p:panel header="人员列表">
-                        <p:treeTable id="operTreeTable"
-                                     value="#{operFuncBusiResMngAction.deptOperRoot}"
-                                     var="node"
-                                     dynamic="true"
-                                     cache="false"
-                                     rowStyleClass="#{node.type  eq '1' ? null:'rowDoneStyle'}"
-                                     scrollable="true"
-                                     scrollHeight="300">
-                            <p:column headerText="机构" style="width:200px;text-align:left">
-                                <h:outputText value="#{node.type eq '0' ? node.name:''}" />
-                            </p:column>
-                            <p:column headerText="人员" style="width:120px;text-align:center">
-                                <h:outputText value="#{node.type eq '1' ? node.name:''}" />
-                            </p:column>
-                            <p:column headerText="选择" style="width:30px;text-align:center">
-                                <p:selectBooleanCheckbox value="#{node.isSeled}"
-                                     rendered="#{node.type eq '0'?'false':node.pkid eq 'ROOT'?'false':'true'}">
-                                    <p:ajax  listener="#{operFuncBusiResMngAction.selOperRecordAction(node)}"/>
-                                </p:selectBooleanCheckbox>
-                            </p:column>
-                        </p:treeTable>
-                    </p:panel>
                 </h:panelGrid>
             </p:dialog>
         </h:form>

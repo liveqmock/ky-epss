@@ -27,16 +27,22 @@ public class TodoTaskAction {
     private TaskService taskService;
 
     private List<TaskShow> taskShowList;
+    private List<TaskShow> taskShowRecentlyPowerList;
 
     @PostConstruct
     public void init() {
         //整个任务列表
         taskShowList = new ArrayList<>();
         taskShowList=taskService.initTodoTaskShowList();
+        taskShowRecentlyPowerList=taskService.initRecentlyPowerTaskShowList();
     }
 
     public List<TaskShow> getTaskShowList() {
         return taskShowList;
+    }
+
+    public List<TaskShow> getTaskShowRecentlyPowerList() {
+        return taskShowRecentlyPowerList;
     }
 
     public TaskService getTaskService() {
