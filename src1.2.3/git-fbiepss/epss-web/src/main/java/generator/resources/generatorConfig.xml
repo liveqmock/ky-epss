@@ -116,7 +116,7 @@
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
         -->
-        <table schema="epss" tableName="oper_res_task">
+        <table schema="epss" tableName="es_ctt_info">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
