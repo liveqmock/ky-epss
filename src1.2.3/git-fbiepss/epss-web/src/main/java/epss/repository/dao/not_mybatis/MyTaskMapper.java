@@ -52,7 +52,7 @@ public interface MyTaskMapper {
             "   opr.FLOW_STATUS")
     List<TaskShow> getOwnTaskFlowGroup(@Param("strOperPkid") String strOperPkid);
 
-    @Select(" (" +
+    /*@Select(" (" +
             "      select" +
             "            cttopr.type," +
             "            cttopr.pkid," +
@@ -165,7 +165,18 @@ public interface MyTaskMapper {
             "          stlopr.flowStatus is null" +
             ")                 " +
             "order by  " +
-            "  flowStatus,TYPE,preFlowStatus")
+            "  flowStatus,TYPE,preFlowStatus")*/
+        @Select(
+            " select" +
+            "     opr.INFO_TYPE as type," +
+            "     opr.INFO_PKID as pkid," +
+            "     opr.INFO_NAME as name" +
+            " from  " +
+            "     OPER_RES_TASK opr" +
+            " where" +
+            "     opr.OPER_PKID=#{strOperPkid}" +
+            "order by  " +
+            "     type")
     List<TaskShow> getRencentlyPowerDetailTaskShowList(@Param("strOperPkid") String strOperPkid);
 
     @Select(" (" +

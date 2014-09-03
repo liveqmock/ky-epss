@@ -58,31 +58,13 @@ public class TaskService {
             taskShowList.add(taskShowGroupUnit);
             int intHasRecordCount=0;
             for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
-                if (taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getOperResFlowStatus())){
-                    if (taskShowGroupUnit.getFlowStatus().equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())
-                            &&detailTaskShowUnit.getFlowStatus()==null){
-                        intHasRecordCount++;
-                        detailTaskShowUnit.setId(
-                                "("+ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+detailTaskShowUnit.getId());
-                        taskShowList.add(detailTaskShowUnit);
-                        continue;
-                    }
-                    if (detailTaskShowUnit.getFlowStatus() != null) {
-                        if (taskShowGroupUnit.getFlowStatus().compareTo(detailTaskShowUnit.getFlowStatus())==1){
-                            intHasRecordCount++;
-                            detailTaskShowUnit.setId(
-                                    "("+ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+detailTaskShowUnit.getId());
-                            detailTaskShowUnit.setFlowStatusName(
-                                    ESEnumStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatus()).getTitle());
-                            detailTaskShowUnit.setPreFlowStatusName(
-                                    ESEnumPreStatusFlag.getValueByKey(detailTaskShowUnit.getPreFlowStatus()).getTitle());
-                            taskShowList.add(detailTaskShowUnit);
-                        }
-                    }
-                }
+                intHasRecordCount++;
+                detailTaskShowUnit.setId(
+                        "("+ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+detailTaskShowUnit.getId());
+                detailTaskShowUnit.setFlowStatusName("ÊÚÈ¨");
+                taskShowList.add(detailTaskShowUnit);
             }
-            taskShowGroupUnit.setOperResFlowStatusName(
-                    taskShowGroupUnit.getOperResFlowStatusName()+"("+intHasRecordCount+")");
+            taskShowGroupUnit.setOperResFlowStatusName("´ýÂ¼Èë("+intHasRecordCount+")");
         }
         return taskShowList;
     }

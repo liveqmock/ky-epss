@@ -133,6 +133,14 @@ public class CttInfoService {
         cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
         esCttInfoMapper.insertSelective(fromModelShowToModel(cttInfoShowPara));
     }
+    public void insertRecord(EsCttInfo esCttInfoPara) {
+        esCttInfoPara.setDeletedFlag("0");
+        esCttInfoPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esCttInfoPara.setCreatedDate(ToolUtil.getStrLastUpdTime());
+        esCttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esCttInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
+        esCttInfoMapper.insertSelective(esCttInfoPara);
+    }
 
     public void updateRecord(EsCttInfo esCttInfoPara){
         esCttInfoPara.setModificationNum(
