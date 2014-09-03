@@ -107,7 +107,7 @@ public class DeptOperAction implements Serializable {
             if (strSubmitTypePara.contains("Dept")) {
                 if (strSubmitTypePara.contains("Add")) {
                     deptAdd = new Dept();
-                    deptAdd.setParentpkid(deptOperShowPara.getPkid());
+                    deptAdd.setParentpkid(deptOperShowPara.getId());
                 } else {
                     if (strSubmitTypePara.contains("Upd")) {
                         deptUpd = new Dept();
@@ -155,8 +155,8 @@ public class DeptOperAction implements Serializable {
                     }
                     deptOperService.updateDeptRecord(deptUpd);
                 } else if (strSubmitType.contains("Del")) {
-                    if (deptOperService.findChildRecordsByPkid(deptDel.getPkid())) {
-                        MessageUtil.addInfo("该部门有员工，无法删除。");
+                    if (deptOperService.findChildRecordsByPkid(deptDel.getId())) {
+                        MessageUtil.addInfo("该部门下有分支机构或员工，无法删除。");
                         return;
                     }
                     deptOperService.deleteDeptRecord(deptDel);
