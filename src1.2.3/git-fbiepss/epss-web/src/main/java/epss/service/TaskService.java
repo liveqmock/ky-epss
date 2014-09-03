@@ -61,7 +61,7 @@ public class TaskService {
                 intHasRecordCount++;
                 detailTaskShowUnit.setId(
                         "("+ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+detailTaskShowUnit.getId());
-                detailTaskShowUnit.setFlowStatusName("授权");
+                detailTaskShowUnit.setFlowStatusName("已授权");
                 taskShowList.add(detailTaskShowUnit);
             }
             taskShowGroupUnit.setOperResFlowStatusName("待录入("+intHasRecordCount+")");

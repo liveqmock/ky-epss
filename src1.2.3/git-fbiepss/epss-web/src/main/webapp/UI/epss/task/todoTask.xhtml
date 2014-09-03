@@ -106,7 +106,6 @@
             <p:panel header="待处理任务">
                 <div style="height:20px;
                          vertical-align: bottom;
-                         font-family: verdana;
                          FONT-SIZE:10pt;
                          text-align: left;">
                     <h:outputLabel value="待处理:" style="font-weight:normal"/>
@@ -172,6 +171,9 @@
                     </p:column>
                     <p:column headerText="任务类别" style="width:100px;text-align:left;">
                         <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
+                    </p:column>
+                    <p:column headerText="待处理任务ID" style="width:150px;text-align:left;">
+                        <h:outputText value="#{record.id}"/>
                     </p:column>
                     <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
                         <h:outputText value="#{record.name}"/>

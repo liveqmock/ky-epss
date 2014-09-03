@@ -3,8 +3,6 @@ package epss.view.operRes;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumDeletedFlag;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.repository.model.EsCttInfo;
-import epss.repository.model.OperResTask;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
@@ -38,8 +36,6 @@ public class OperFuncBusiResMngAction implements Serializable{
     private static final Logger logger = LoggerFactory.getLogger(OperFuncBusiResMngAction.class);
     @ManagedProperty(value = "#{operResService}")
     private OperResService operResService;
-    @ManagedProperty(value = "#{operResTaskService}")
-    private OperResTaskService operResTaskService;
     @ManagedProperty(value = "#{deptOperService}")
     private DeptOperService deptOperService;
     @ManagedProperty(value = "#{cttInfoService}")
@@ -56,24 +52,24 @@ public class OperFuncBusiResMngAction implements Serializable{
     private List<OperFuncResShow> operFuncResShowFowExcelList;
     private Map beansMap;
 
-    private OperResTask operResTaskSel;
-    private OperResTask operResTaskAdd;
-    private OperResTask operResTaskUpd;
-    private OperResTask operResTaskDel;
+    private CttInfoShow cttInfoShowSel;
+    private CttInfoShow cttInfoShowAdd;
+    private CttInfoShow cttInfoShowUpd;
+    private CttInfoShow cttInfoShowDel;
 
     private List<SelectItem> esInitCttList;
-    private List<OperResTask> operResTaskList;
+    private List<CttInfoShow> cttInfoShowList;
     //ctt tree
     private TreeNode resRoot;
     private TreeNode deptOperRoot;
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
-        operResTaskAdd=new OperResTask();
-        operResTaskUpd=new OperResTask();
-        operResTaskDel=new OperResTask();
+        cttInfoShowAdd=new CttInfoShow();
+        cttInfoShowUpd=new CttInfoShow();
+        cttInfoShowDel=new CttInfoShow();
         esInitCttList = new ArrayList<>();
-        operResTaskList = new ArrayList<>();
+        cttInfoShowList = new ArrayList<>();
         taskFunctionList = new ArrayList<>();
         deptOperShowSeledList = new ArrayList<>();
         operFuncResShowFowExcelList= new ArrayList<>();
@@ -535,23 +531,24 @@ public class OperFuncBusiResMngAction implements Serializable{
     public void selectRecordAction(String strSubmitTypePara,OperFuncResShow operFuncResShowPara) {
         try {
             if (strSubmitTypePara.equals("Add")) {
-                operResTaskAdd = new OperResTask();
+                cttInfoShowAdd = new CttInfoShow();
                 if(operFuncResShowPara.getResPkid().equals("ROOT")) {
-                    operResTaskAdd.setInfoType(ESEnum.ITEMTYPE0.getCode());
-                    operResTaskAdd.setParentInfoPkid("ROOT");
+                    cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE0.getCode());
+                    cttInfoShowAdd.setParentPkid("ROOT");
                 }else if(operFuncResShowPara.getResType().equals(ESEnum.ITEMTYPE0.getCode())) {
-                    operResTaskAdd.setInfoType(ESEnum.ITEMTYPE1.getCode());
-                    operResTaskAdd.setParentInfoPkid(operFuncResShowPara.getResPkid());
+                    cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE1.getCode());
+                    cttInfoShowAdd.setParentPkid(operFuncResShowPara.getResPkid());
                 }else if(operFuncResShowPara.getResType().equals(ESEnum.ITEMTYPE1.getCode())) {
-                    operResTaskAdd.setInfoType(ESEnum.ITEMTYPE2.getCode());
-                    operResTaskAdd.setParentInfoPkid(operFuncResShowPara.getResPkid());
+                    cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE2.getCode());
+                    cttInfoShowAdd.setParentPkid(operFuncResShowPara.getResPkid());
                 }
+                cttInfoShowAdd.setId(cttInfoService.getStrMaxCttId(cttInfoShowAdd.getCttType()));
             } else if (strSubmitTypePara.equals("Upd")){
-                operResTaskUpd = fromResModelShowToOperResTask(operFuncResShowPara);
+                cttInfoShowUpd = fromResModelShowToCttInfoShow(operFuncResShowPara);
             } else if (strSubmitTypePara.equals("Del")) {
-                operResTaskDel = fromResModelShowToOperResTask(operFuncResShowPara);
+                cttInfoShowDel = fromResModelShowToCttInfoShow(operFuncResShowPara);
             }else if (strSubmitTypePara.equals("Sel")) {
-                operResTaskSel = fromResModelShowToOperResTask(operFuncResShowPara);
+                cttInfoShowSel = fromResModelShowToCttInfoShow(operFuncResShowPara);
                 taskFunctionSeled="";
             }
         } catch (Exception e) {
@@ -574,60 +571,64 @@ public class OperFuncBusiResMngAction implements Serializable{
     public void onClickForMngAction(String strSubmitTypePara) {
         try {
             if (strSubmitTypePara.equals("Add")) {
-                if (!submitPreCheck(operResTaskAdd)) {
+                if (!submitPreCheck(cttInfoShowAdd)) {
                     return;
                 }
-                if (cttInfoService.isExistInDb(fromResModelShowToEsCttInfo(operResTaskAdd))) {
+                if (cttInfoService.isExistInDb(cttInfoShowAdd)) {
                     MessageUtil.addError("该记录已存在，请重新录入！");
                     return;
+                } else {
+                    cttInfoService.insertRecord(cttInfoShowAdd);
+                    MessageUtil.addInfo("新增数据完成。");
+                    cttInfoShowAdd = new CttInfoShow();
                 }
-                if (operResTaskService.selectListByModel(operResTaskAdd).size()>0) {
-                    MessageUtil.addError("该记录已存在，请重新录入！");
-                    return;
-                }
-                operResTaskService.insertRecord(operResTaskAdd);
-                MessageUtil.addInfo("新增数据完成。");
-                operResTaskAdd = new OperResTask();
             } else if (strSubmitTypePara.equals("Upd")) {
                 EsInitPower esInitPowerTemp = new EsInitPower();
-                esInitPowerTemp.setPowerType(operResTaskUpd.getInfoType());
-                esInitPowerTemp.setPowerPkid(operResTaskUpd.getInfoPkid());
+                esInitPowerTemp.setPowerType(cttInfoShowUpd.getCttType());
+                esInitPowerTemp.setPowerPkid(cttInfoShowUpd.getPkid());
                 esInitPowerTemp.setPeriodNo("NULL");
                 if (flowCtrlService.selectListByModel(esInitPowerTemp).size() > 0) {
                     MessageUtil.addInfo("数据已被引用，不可更新！");
                     return;
                 }
-                operResTaskService.updateRecord(operResTaskUpd);
+                cttInfoService.updateRecord(cttInfoShowUpd);
                 MessageUtil.addInfo("更新数据完成。");
             } else if (strSubmitTypePara.equals("Del")) {
                 EsInitPower esInitPowerTemp = new EsInitPower();
-                esInitPowerTemp.setPowerType(operResTaskDel.getInfoType());
-                esInitPowerTemp.setPowerPkid(operResTaskDel.getInfoPkid());
+                esInitPowerTemp.setPowerType(cttInfoShowDel.getCttType());
+                esInitPowerTemp.setPowerPkid(cttInfoShowDel.getPkid());
                 esInitPowerTemp.setPeriodNo("NULL");
                 if (flowCtrlService.selectListByModel(esInitPowerTemp).size() > 0) {
                     MessageUtil.addInfo("数据已被引用，不可删除！");
                     return;
                 }
-                int deleteRecordNumOfCttItem = operResTaskService.deleteRecord(operResTaskDel.getPkid());
-                if (deleteRecordNumOfCttItem <= 0) {
-                    MessageUtil.addInfo("删除数据完成。");
+                int deleteRecordNumOfCttItem = cttItemService.deleteRecord(cttInfoShowDel);
+                int deleteRecordNumOfCtt = cttInfoService.deleteRecord(cttInfoShowDel.getPkid());
+                int deleteRecordNumOfPower = flowCtrlService.deleteRecord(
+                        cttInfoShowDel.getCttType(),
+                        cttInfoShowDel.getPkid(),
+                        "NULL");
+                if (deleteRecordNumOfCtt <= 0 && deleteRecordNumOfPower <= 0 && deleteRecordNumOfCttItem <= 0) {
+                    MessageUtil.addInfo("该记录已删除。");
+                    return;
                 }
+                MessageUtil.addInfo("删除数据完成。");
             } else if (strSubmitTypePara.equals("Power")) {
                 if (taskFunctionSeled.length()==0) {
                     MessageUtil.addError("功能列表不能为空，请选择");
                     return;
                 }
                 OperRes operResTemp = new OperRes();
-                operResTemp.setInfoType(operResTaskSel.getInfoType());
-                operResTemp.setInfoPkid(operResTaskSel.getInfoPkid());
+                operResTemp.setInfoType(cttInfoShowSel.getCttType());
+                operResTemp.setInfoPkid(cttInfoShowSel.getPkid());
                 operResTemp.setFlowStatus(taskFunctionSeled);
                 operResService.deleteRecord(operResTemp);
                 for (DeptOperShow deptOperShowUnit:deptOperShowSeledList) {
                     operResTemp = new OperRes();
                     operResTemp.setOperPkid(deptOperShowUnit.getId());
                     operResTemp.setFlowStatus(taskFunctionSeled);
-                    operResTemp.setInfoType(operResTaskSel.getInfoType());
-                    operResTemp.setInfoPkid(operResTaskSel.getInfoPkid());
+                    operResTemp.setInfoType(cttInfoShowSel.getCttType());
+                    operResTemp.setInfoPkid(cttInfoShowSel.getPkid());
                     operResTemp.setArchivedFlag(ESEnumDeletedFlag.DELETED_FLAG0.getCode());
                     operResTemp.setType("business");
                     operResService.insertRecord(operResTemp);
@@ -642,23 +643,16 @@ public class OperFuncBusiResMngAction implements Serializable{
         }
     }
 
-    private OperResTask fromResModelShowToOperResTask(OperFuncResShow operFuncResShowPara){
-        OperResTask operResTaskTemp=new OperResTask();
-        operResTaskTemp.setInfoType(operFuncResShowPara.getResType());
-        operResTaskTemp.setInfoPkid(operFuncResShowPara.getResPkid());
-        operResTaskTemp.setInfoName(operFuncResShowPara.getResName());
-        return operResTaskTemp;
-    }
-    private EsCttInfo fromResModelShowToEsCttInfo(OperResTask operResTaskPara){
-        EsCttInfo esCttInfoTemp=new EsCttInfo();
-        esCttInfoTemp.setCttType(operResTaskPara.getInfoType());
-        esCttInfoTemp.setPkid(operResTaskPara.getInfoPkid());
-        esCttInfoTemp.setName(operResTaskPara.getInfoName());
-        return esCttInfoTemp;
+    private CttInfoShow fromResModelShowToCttInfoShow(OperFuncResShow operFuncResShowPara){
+        CttInfoShow cttInfoShowTemp=new CttInfoShow();
+        cttInfoShowTemp.setCttType(operFuncResShowPara.getResType());
+        cttInfoShowTemp.setPkid(operFuncResShowPara.getResPkid());
+        cttInfoShowTemp.setName(operFuncResShowPara.getResName());
+        return cttInfoShowTemp;
     }
 
-    private boolean submitPreCheck(OperResTask operResTaskPara) {
-        if ("".equals(ToolUtil.getStrIgnoreNull(operResTaskPara.getInfoName()))){
+    private boolean submitPreCheck(CttInfoShow cttInfoShowPara) {
+        if ("".equals(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getName()))){
             MessageUtil.addError("请输入名称！");
             return false;
         }
@@ -736,12 +730,12 @@ public class OperFuncBusiResMngAction implements Serializable{
         this.esInitCttList = esInitCttList;
     }
 
-    public List<OperResTask> getOperResTaskList() {
-        return operResTaskList;
+    public List<CttInfoShow> getCttInfoShowList() {
+        return cttInfoShowList;
     }
 
-    public void setOperResTaskList(List<OperResTask> operResTaskList) {
-        this.operResTaskList = operResTaskList;
+    public void setCttInfoShowList(List<CttInfoShow> cttInfoShowList) {
+        this.cttInfoShowList = cttInfoShowList;
     }
 
     public TreeNode getResRoot() {
@@ -760,28 +754,28 @@ public class OperFuncBusiResMngAction implements Serializable{
         this.deptOperRoot = deptOperRoot;
     }
 
-    public OperResTask getOperResTaskAdd() {
-        return operResTaskAdd;
+    public CttInfoShow getCttInfoShowAdd() {
+        return cttInfoShowAdd;
     }
 
-    public void setOperResTaskAdd(OperResTask operResTaskAdd) {
-        this.operResTaskAdd = operResTaskAdd;
+    public void setCttInfoShowAdd(CttInfoShow cttInfoShowAdd) {
+        this.cttInfoShowAdd = cttInfoShowAdd;
     }
 
-    public OperResTask getOperResTaskUpd() {
-        return operResTaskUpd;
+    public CttInfoShow getCttInfoShowUpd() {
+        return cttInfoShowUpd;
     }
 
-    public void setOperResTaskUpd(OperResTask operResTaskUpd) {
-        this.operResTaskUpd = operResTaskUpd;
+    public void setCttInfoShowUpd(CttInfoShow cttInfoShowUpd) {
+        this.cttInfoShowUpd = cttInfoShowUpd;
     }
 
-    public OperResTask getOperResTaskDel() {
-        return operResTaskDel;
+    public CttInfoShow getCttInfoShowDel() {
+        return cttInfoShowDel;
     }
 
-    public void setOperResTaskDel(OperResTask operResTaskDel) {
-        this.operResTaskDel = operResTaskDel;
+    public void setCttInfoShowDel(CttInfoShow cttInfoShowDel) {
+        this.cttInfoShowDel = cttInfoShowDel;
     }
 
     public Map getBeansMap() {
@@ -798,13 +792,5 @@ public class OperFuncBusiResMngAction implements Serializable{
 
     public void setDeptOperService(DeptOperService deptOperService) {
         this.deptOperService = deptOperService;
-    }
-
-    public OperResTaskService getOperResTaskService() {
-        return operResTaskService;
-    }
-
-    public void setOperResTaskService(OperResTaskService operResTaskService) {
-        this.operResTaskService = operResTaskService;
     }
 }
