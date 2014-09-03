@@ -3,6 +3,7 @@ package epss.service;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.repository.model.model_show.CttInfoShow;
 import skyline.util.ToolUtil;
 import epss.repository.dao.not_mybatis.MyCttStlMapper;
 import epss.repository.model.model_show.ProgInfoShow;
@@ -94,6 +95,32 @@ public class ProgStlInfoService {
         esInitStlPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
         esInitStlMapper.insert(esInitStlPara) ;
     }
+    public EsInitStl initStlData(String strStlTypePara,EsCttInfo esCttInfoPara){
+        EsInitStl esInitStl=new EsInitStl();
+        esInitStl.setId(getStrMaxStlId(strStlTypePara));
+        esInitStl.setStlType(strStlTypePara);
+        esInitStl.setStlPkid(esCttInfoPara.getPkid());
+        esInitStl.setPeriodNo("NULL");
+        return esInitStl;
+    }
+    @Transactional
+    public void insertRecordForOperRes(EsCttInfo esCttInfoPara) {
+        //结算表根据条件判断插入数据
+        if (esCttInfoPara.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
+            //总包计量
+            insertRecord(initStlData(ESEnum.ITEMTYPE6.getCode(), esCttInfoPara));
+            //总包统计
+            insertRecord(initStlData(ESEnum.ITEMTYPE7.getCode(), esCttInfoPara));
+        } else if (esCttInfoPara.getCttType().equals(ESEnum.ITEMTYPE2.getCode())) {
+            //分包数量结算
+            insertRecord(initStlData(ESEnum.ITEMTYPE3.getCode(), esCttInfoPara));
+            //分包材料结算
+            insertRecord(initStlData(ESEnum.ITEMTYPE4.getCode(), esCttInfoPara));
+            //分包价格结算
+            insertRecord(initStlData(ESEnum.ITEMTYPE5.getCode(), esCttInfoPara));
+        }
+    }
+
     @Transactional
     public void insertStlAndPowerRecord(EsInitStl esInitStlPara){
         esInitStlPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());

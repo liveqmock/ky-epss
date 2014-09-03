@@ -3,6 +3,7 @@ package epss.view.operRes;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumDeletedFlag;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitStl;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
@@ -45,6 +46,8 @@ public class OperFuncBusiResMngAction implements Serializable{
     private CttItemService cttItemService;
     @ManagedProperty(value = "#{flowCtrlService}")
     private FlowCtrlService flowCtrlService;
+    @ManagedProperty(value = "#{progStlInfoService}")
+    private ProgStlInfoService progStlInfoService;
 
     private List<SelectItem> taskFunctionList;
     private String taskFunctionSeled;
@@ -580,10 +583,14 @@ public class OperFuncBusiResMngAction implements Serializable{
                     return;
                 } else {
                     cttInfoService.insertRecord(cttInfoShowAdd);
-                    if(cttInfoShowAdd.getCttType().equals(ESEnum.ITEMTYPE0.getCode())){
-                        EsInitStl esInitStlEst=new EsInitStl();
-                        esInitStlEst.setStlType(ESEnum.ITEMTYPE6.getCode());
-                        esInitStlEst.setStlPkid(cttInfoShowAdd.getPkid());
+                    List<EsCttInfo> esCttInfoList=cttInfoService.selectListByModel(cttInfoShowAdd);
+                    try {
+                        progStlInfoService.insertRecordForOperRes(esCttInfoList.get(0));
+                    }catch (Exception e){
+                        logger.error("插入数据失败", e);
+                        cttInfoService.deleteRecord(esCttInfoList.get(0).getPkid());
+                        MessageUtil.addError(e.getMessage());
+                        return;
                     }
                     MessageUtil.addInfo("新增数据完成。");
                     cttInfoShowAdd = new CttInfoShow();
@@ -798,5 +805,13 @@ public class OperFuncBusiResMngAction implements Serializable{
 
     public void setDeptOperService(DeptOperService deptOperService) {
         this.deptOperService = deptOperService;
+    }
+
+    public ProgStlInfoService getProgStlInfoService() {
+        return progStlInfoService;
+    }
+
+    public void setProgStlInfoService(ProgStlInfoService progStlInfoService) {
+        this.progStlInfoService = progStlInfoService;
     }
 }
