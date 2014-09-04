@@ -2,36 +2,28 @@ package epss.view.contract;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
-import skyline.util.MessageUtil;;
-import skyline.util.StyleModel;
-import skyline.util.ToolUtil;
-import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
 import epss.service.CttInfoService;
 import epss.service.CttItemService;
-import epss.service.FlowCtrlService;
 import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
-import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javax.activation.MimetypesFileTypeMap;
+import skyline.util.MessageUtil;
+import skyline.util.StyleModel;
+import skyline.util.ToolUtil;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
-import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -48,8 +40,6 @@ public class SubcttInfoAction {
     private CttInfoService cttInfoService;
     @ManagedProperty(value = "#{cttItemService}")
     private CttItemService cttItemService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esCommon}")
@@ -97,7 +87,6 @@ public class SubcttInfoAction {
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType = "";
-        esFlowControl.getBackToStatusFlagList("Qry");
         rowSelectedFlag = "false";
     }
 
@@ -280,14 +269,6 @@ public class SubcttInfoAction {
 
     public void setCttInfoService(CttInfoService cttInfoService) {
         this.cttInfoService = cttInfoService;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowService getEsFlowService() {

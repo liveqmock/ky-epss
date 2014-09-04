@@ -98,15 +98,15 @@ public class TaskService {
                                     "("+ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+detailTaskShowUnit.getId());
                             detailTaskShowUnit.setFlowStatusName(
                                     ESEnumStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatus()).getTitle());
-                            detailTaskShowUnit.setPreFlowStatusName(
-                                    ESEnumPreStatusFlag.getValueByKey(detailTaskShowUnit.getPreFlowStatus()).getTitle());
+                            detailTaskShowUnit.setFlowStatusReasonName(
+                                    ESEnumPreStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatusReason()).getTitle());
                             taskShowList.add(detailTaskShowUnit);
                         }
                         //ÑÕÉ«Çø·Ö
-                        if (detailTaskShowUnit.getPreFlowStatus().equals("0")) {
+                        if (detailTaskShowUnit.getFlowStatusReason().equals("0")) {
                             detailTaskShowUnit.setStrColorType("1");
                         } else {
-                            if ((int) (Integer.parseInt(detailTaskShowUnit.getPreFlowStatus()))
+                            if ((int) (Integer.parseInt(detailTaskShowUnit.getFlowStatusReason()))
                                     > 2 * (int) (Integer.parseInt(detailTaskShowUnit.getFlowStatus()))) {
                                 detailTaskShowUnit.setStrColorType("2");
                             } else if (
@@ -151,8 +151,8 @@ public class TaskService {
                                 "(" + ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" + detailTaskShowUnit.getId());
                         detailTaskShowUnit.setFlowStatusName(
                                 ESEnumStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatus()).getTitle());
-                        detailTaskShowUnit.setPreFlowStatusName(
-                                ESEnumPreStatusFlag.getValueByKey(detailTaskShowUnit.getPreFlowStatus()).getTitle());
+                        detailTaskShowUnit.setFlowStatusReasonName(
+                                ESEnumPreStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatusReason()).getTitle());
                         detailTaskShowUnit.setIsOwnTaskFlowFlag("true");
                         taskShowList.add(detailTaskShowUnit);
                     }

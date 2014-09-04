@@ -2,19 +2,13 @@ package epss.view.operRes;
 
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
-import skyline.util.MessageUtil;;
-import skyline.util.ToolUtil;
 import epss.repository.model.model_show.OperResShow;
-import epss.service.CttInfoService;
-import epss.service.CttItemService;
-import epss.service.EsFlowService;
-import epss.service.FlowCtrlService;
 import epss.service.OperResService;
-import epss.view.flow.EsCommon;
-import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skyline.util.MessageUtil;
+import skyline.util.ToolUtil;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -22,7 +16,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.*;
+import java.util.List;
 
 /**
  * Created by XIANGYANG on 2014/7/27.

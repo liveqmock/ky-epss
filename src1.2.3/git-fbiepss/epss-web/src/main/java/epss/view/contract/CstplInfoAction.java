@@ -49,13 +49,12 @@ public class CstplInfoAction {
     private CttInfoService cttInfoService;
     @ManagedProperty(value = "#{cttItemService}")
     private CttItemService cttItemService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
+
     private EsFlowControl esFlowControl;
     private CttInfoShow cttInfoShowQry;
     private String strNotPassToStatus;
@@ -63,15 +62,14 @@ public class CstplInfoAction {
     private CttInfoShow cttInfoShowSel;
     private CttInfoShow cttInfoShowUpd;
     private List<CttInfoShow> cttInfoShowList;
-
     private String strSubmitType;
     private String rowSelectedFlag;
 
     // 画面之间传递过来的参数
     private String strBelongToPkid;
-
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
+
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -95,7 +93,6 @@ public class CstplInfoAction {
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType = "";
-        esFlowControl.getBackToStatusFlagList("Qry");
         rowSelectedFlag = "false";
     }
 
@@ -214,117 +211,6 @@ public class CstplInfoAction {
     }
 
     /**
-     * 根据权限进行审核
-     *
-     * @param strPowerTypePara
-     */
-    public void onClickForPowerAction(String strPowerTypePara) {
-        try {
-            String strPowerTypeTemp="";
-            if (strPowerTypePara.contains("Mng")) {
-                if (strPowerTypePara.equals("MngPass")) {
-                    esFlowControl.mngFinishAction(
-                            cttInfoShowSel.getCttType(),
-                            cttInfoShowSel.getPkid(),
-                            "NULL");
-                    MessageUtil.addInfo("数据录入完成！");
-                } else if (strPowerTypePara.equals("MngFail")) {
-                    esFlowControl.mngNotFinishAction(
-                            cttInfoShowSel.getCttType(),
-                            cttInfoShowSel.getPkid(),
-                            "NULL");
-                    MessageUtil.addInfo("数据录入未完！");
-                }
-            }// 审核
-            else if (strPowerTypePara.contains("Check") && !strPowerTypePara.contains("DoubleCheck")) {
-                if (strPowerTypePara.equals("CheckPass")) {
-                    // 状态标志：审核
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                    // 原因：审核通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
-                    MessageUtil.addInfo("数据审核通过！");
-                } else if (strPowerTypePara.equals("CheckFail")) {
-                    // 状态标志：初始
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-                    // 原因：审核未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
-                    MessageUtil.addInfo("数据审核未过！");
-                }
-                strPowerTypeTemp="Check";
-            } // 复核
-            else if (strPowerTypePara.contains("DoubleCheck")) {
-                if (strPowerTypePara.equals("DoubleCheckPass")) {
-                    // 状态标志：复核
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
-                    // 原因：复核通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
-                    MessageUtil.addInfo("数据复核通过！");
-                } else if (strPowerTypePara.equals("DoubleCheckFail")) {
-                    // 这样写可以实现越级退回
-                    cttInfoShowSel.setStatusFlag(strNotPassToStatus);
-                    // 原因：复核未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
-                    MessageUtil.addInfo("数据复核未过！");
-                }
-                strPowerTypeTemp="DoubleCheck";
-            }// 批准
-            else if (strPowerTypePara.contains("Approve")) {
-                if (strPowerTypePara.equals("ApprovePass")) {
-                    // 状态标志：批准
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                    // 原因：批准通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
-                    MessageUtil.addInfo("数据批准通过！");
-
-                } else if (strPowerTypePara.equals("ApproveFail")) {
-                    // 检查是否被使用
-                    String strCttTypeTemp = "";
-                    if (cttInfoShowSel.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
-                        strCttTypeTemp = ESEnum.ITEMTYPE1.getCode();
-                    } else if (cttInfoShowSel.getCttType().equals(ESEnum.ITEMTYPE1.getCode())) {
-                        strCttTypeTemp = ESEnum.ITEMTYPE2.getCode();
-                    }
-
-                    // 这样写可以实现越级退回
-                    cttInfoShowSel.setStatusFlag(strNotPassToStatus);
-                    // 原因：批准未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
-
-                    List<EsInitStl> esInitStlListTemp =
-                            esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfoShowSel.getPkid());
-                    if (esInitStlListTemp.size() > 0) {
-                        MessageUtil.addInfo("该数据已经被["
-                                + ESEnum.getValueByKey(esInitStlListTemp.get(0).getStlType()).getTitle()
-                                + "]使用，数据批准未过,请慎重编辑！");
-                    } else {
-                        if (esFlowService.getChildrenOfThisRecordInEsInitCtt(strCttTypeTemp,
-                                cttInfoShowSel.getPkid()) > 0) {
-                            MessageUtil.addInfo("该数据已经被[" + ESEnum.getValueByKey(strCttTypeTemp).getTitle()
-                                    + "]使用，数据批准未过,请慎重编辑！");
-                        } else {
-                            MessageUtil.addInfo("数据批准未过！");
-                        }
-                    }
-                }
-                strPowerTypeTemp="Approve";
-            }
-            // 重新查询，已操作的结果
-            onQueryAction(strPowerTypeTemp,"false");
-            rowSelectedFlag="false";
-        } catch (Exception e) {
-            logger.error("数据流程化失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-
-    /**
      * 提交维护权限
      *
      * @param
@@ -362,14 +248,6 @@ public class CstplInfoAction {
 
     public void setCttItemService(CttItemService cttItemService) {
         this.cttItemService = cttItemService;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowService getEsFlowService() {

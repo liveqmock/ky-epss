@@ -16,14 +16,10 @@
         <result column="CTT_END_DATE" jdbcType="VARCHAR" property="cttEndDate" />
         <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment" />
         <result column="NOTE" jdbcType="VARCHAR" property="note" />
-
-        <result column="POWER_TYPE" jdbcType="VARCHAR" property="powerType" />
-        <result column="POWER_PKID" jdbcType="VARCHAR" property="powerPkid" />
-        <result column="PERIOD_NO" jdbcType="VARCHAR" property="periodNo" />
-        <result column="STATUS_FLAG" jdbcType="VARCHAR" property="statusFlag" />
+        <result column="FLOW_STATUS" jdbcType="VARCHAR" property="flowStatus" />
         <result column="STR_STATUS_FLAG_BEGIN" jdbcType="VARCHAR" property="strStatusFlagBegin" />
         <result column="STR_STATUS_FLAG_END" jdbcType="VARCHAR" property="strStatusFlagEnd" />
-        <result column="PRE_STATUS_FLAG" jdbcType="VARCHAR" property="preStatusFlag"/>
+        <result column="FLOW_STATUS_REASON" jdbcType="VARCHAR" property="flowStatusReason"/>
         <result column="END_FLAG" jdbcType="VARCHAR" property="endFlag" />
         <result column="DELETED_FLAG" jdbcType="VARCHAR" property="deletedFlag"/>
         <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
@@ -59,24 +55,13 @@
                 eic.LAST_UPD_BY,
                 eic.LAST_UPD_DATE,
                 eic.MODIFICATION_NUM,
-
-                eip.POWER_TYPE,
-                eip.POWER_PKID,
-                eip.PERIOD_NO,
-                eip.STATUS_FLAG,
+                eic.FLOW_STATUS,
                 '' AS STR_STATUS_FLAG_BEGIN,
                 '' AS STR_STATUS_FLAG_END,
-                eip.PRE_STATUS_FLAG,
-                eip.SPARE_FIELD,
+                eic.FLOW_STATUS_REASON,
                 eic.TYPE
             from
                 ES_CTT_INFO eic
-            left outer join
-                ES_INIT_POWER eip
-            on
-                eic.CTT_TYPE=eip.POWER_TYPE
-            and
-                eic.PKID=eip.POWER_PKID
             where
                 1=1
         ]]>
@@ -125,20 +110,20 @@
 
         <!--<if test='strStatusFlagBegin == null and strStatusFlagEnd == "0"'>-->
         <if test="strStatusFlagBegin == null and strStatusFlagEnd == '0'.toString()">
-            and (eip.status_flag is null
-            or eip.status_flag='0')
+            and (eic.FLOW_STATUS is null
+            or eic.FLOW_STATUS='0')
         </if>
 
         <if test="strStatusFlagBegin != null and strStatusFlagBegin !='' and
                        strStatusFlagEnd != null and strStatusFlagEnd != ''">
-            and eip.status_flag <![CDATA[>=]]> #{strStatusFlagBegin}
-            and eip.status_flag <![CDATA[<=]]> #{strStatusFlagEnd}
+            and eic.FLOW_STATUS <![CDATA[>=]]> #{strStatusFlagBegin}
+            and eic.FLOW_STATUS <![CDATA[<=]]> #{strStatusFlagEnd}
         </if>
 
-        <if test="preStatusFlag != null and preStatusFlag != ''">
-            and eip.pre_status_flag = #{preStatusFlag}
+        <if test="flowStatusReason != null and flowStatusReason != ''">
+            and eic.FLOW_STATUS_REASON = #{flowStatusReason}
         </if>
-        order by eip.status_flag asc,eic.NAME asc 
+        order by eic.FLOW_STATUS asc,eic.NAME asc
     </select>
 
     <resultMap id="BaseResultMapStl" type="epss.repository.model.model_show.ProgInfoShow">
@@ -151,12 +136,8 @@
         <result column="SIGN_PART_B_NAME" jdbcType="VARCHAR" property="signPartBName" />
         <result column="NOTE" jdbcType="VARCHAR" property="note" />
         <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment" />
-
-        <result column="POWER_TYPE" jdbcType="VARCHAR" property="powerType" />
-        <result column="POWER_PKID" jdbcType="VARCHAR" property="powerPkid" />
-        <result column="POWER_PERIOD_NO" jdbcType="VARCHAR" property="powerPeriodNo" />
-        <result column="STATUS_FLAG" jdbcType="CHAR" property="statusFlag" />
-        <result column="PRE_STATUS_FLAG" jdbcType="CHAR" property="preStatusFlag"/>
+        <result column="FLOW_STATUS" jdbcType="CHAR" property="flowStatus" />
+        <result column="FLOW_STATUS_REASON" jdbcType="CHAR" property="flowStatusReason"/>
         <result column="END_FLAG" jdbcType="CHAR" property="endFlag" />
         <result column="DELETED_FLAG" jdbcType="CHAR" property="deletedFlag"/>
         <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
@@ -189,22 +170,10 @@
                 eis.LAST_UPD_DATE,
                 eis.MODIFICATION_NUM,
                 eis.AUTO_LINK_ADD AS autoLinkAdd,
-                eip.POWER_TYPE,
-                eip.POWER_PKID,
-                eip.PERIOD_NO AS POWER_PERIOD_NO,
-                eip.STATUS_FLAG,
-                eip.PRE_STATUS_FLAG,
-                eip.SPARE_FIELD
+                eic.FLOW_STATUS,
+                eic.FLOW_STATUS_REASON,
             from
                 ES_INIT_STL eis
-            left outer join
-                ES_INIT_POWER eip
-            on
-                eis.STL_TYPE=eip.POWER_TYPE
-            and
-                eis.STL_PKID=eip.POWER_PKID
-            and
-                eis.PERIOD_NO=eip.PERIOD_NO
             left outer join
                 ES_CTT_INFO eic
             on
@@ -248,20 +217,20 @@
 
         <!--<if test='strStatusFlagBegin == null and strStatusFlagEnd == "0"'>-->
         <if test="strStatusFlagBegin == null and strStatusFlagEnd == '0'.toString()">
-            and (eip.status_flag is null
-            or eip.status_flag='0')
+            and (eic.FLOW_STATUS is null
+            or eic.FLOW_STATUS='0')
         </if>
 
         <if test="strStatusFlagBegin != null and strStatusFlagBegin !='' and
                        strStatusFlagEnd != null and strStatusFlagEnd != ''">
-            and eip.status_flag <![CDATA[>=]]> #{strStatusFlagBegin}
-            and eip.status_flag <![CDATA[<=]]> #{strStatusFlagEnd}
+            and eic.FLOW_STATUS <![CDATA[>=]]> #{strStatusFlagBegin}
+            and eic.FLOW_STATUS <![CDATA[<=]]> #{strStatusFlagEnd}
         </if>
 
-        <if test="preStatusFlag != null and preStatusFlag != ''">
-            and eip.pre_status_flag = #{preStatusFlag}
+        <if test="flowStatusReason != null and flowStatusReason != ''">
+            and eic.FLOW_STATUS_REASON = #{flowStatusReason}
         </if>
-        order by eip.status_flag asc,eic.ID asc
+        order by eic.FLOW_STATUS asc,eic.ID asc
     </select>
     <select id="selectTkcttStlSMByStatusFlagBegin_End"
             parameterType="epss.repository.model.model_show.ProgInfoShow"
@@ -284,23 +253,10 @@
                 eis.LAST_UPD_BY,
                 eis.LAST_UPD_DATE,
                 eis.MODIFICATION_NUM,
-                eip.POWER_TYPE,
-                eip.POWER_PKID,
-                eip.PERIOD_NO AS POWER_PERIOD_NO,
-                eip.STATUS_FLAG,
-                eip.PRE_STATUS_FLAG,
-                eip.SPARE_FIELD
+                eic.FLOW_STATUS,
+                eic.FLOW_STATUS_REASON
             from
                 ES_INIT_STL eis
-            left outer join
-                ES_INIT_POWER eip
-            on
-                eis.STL_TYPE=eip.POWER_TYPE
-            and
-                eis.STL_PKID=eip.POWER_PKID
-            and
-                eis.PERIOD_NO=eip.PERIOD_NO
-
             left outer join
                 ES_CTT_INFO eic
             on
@@ -344,18 +300,18 @@
 
         <!--<if test='strStatusFlagBegin == null and strStatusFlagEnd == "0"'>-->
         <if test="strStatusFlagBegin == null and strStatusFlagEnd == '0'.toString()">
-            and (eip.status_flag is null
-            or eip.status_flag='0')
+            and (eic.FLOW_STATUS is null
+            or eic.FLOW_STATUS='0')
         </if>
 
         <if test="strStatusFlagBegin != null and strStatusFlagBegin !='' and
                        strStatusFlagEnd != null and strStatusFlagEnd != ''">
-            and eip.status_flag <![CDATA[>=]]> #{strStatusFlagBegin}
-            and eip.status_flag <![CDATA[<=]]> #{strStatusFlagEnd}
+            and eic.FLOW_STATUS <![CDATA[>=]]> #{strStatusFlagBegin}
+            and eic.FLOW_STATUS <![CDATA[<=]]> #{strStatusFlagEnd}
         </if>
-        <if test="preStatusFlag != null and preStatusFlag != ''">
-            and eip.pre_status_flag = #{preStatusFlag}
+        <if test="flowStatusReason != null and flowStatusReason != ''">
+            and eic.FLOW_STATUS_REASON = #{flowStatusReason}
         </if>
-        order by eip.status_flag asc,eic.ID asc
+        order by eic.FLOW_STATUS asc,eic.ID asc
     </select>
 </mapper>

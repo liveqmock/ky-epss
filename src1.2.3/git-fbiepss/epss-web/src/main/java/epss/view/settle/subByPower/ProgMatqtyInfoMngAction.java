@@ -45,8 +45,6 @@ public class ProgMatqtyInfoMngAction {
     private ProgMatqtyItemService progMatqtyItemService;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{progWorkqtyItemService}")
@@ -106,7 +104,6 @@ public class ProgMatqtyInfoMngAction {
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType="Add";
-        esFlowControl.getBackToStatusFlagList("Qry");
     }
     public void resetActionForAdd(){
         progInfoShowAdd =new ProgInfoShow();
@@ -200,8 +197,6 @@ public class ProgMatqtyInfoMngAction {
                     }
                 }
             }else{// 权限控制
-                //根据流程环节,显示不同的退回的状态
-                esFlowControl.getBackToStatusFlagList(strPowerTypePara) ;
                 progInfoShowSel =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                 if(strPowerTypePara.equals("Check")){
                     if(strStatusFlagCode.equals("")){
@@ -297,10 +292,12 @@ public class ProgMatqtyInfoMngAction {
                         esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQryQ);
                 if (progInfoShowConstructsTemp.size()!=0){
                     for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag())))&&(progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag())))&&
+                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
                             MessageUtil.addInfo("该记录已关联分包数量结算，不可删除！");
                             return;
-                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))&&(progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))&&
+                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
                             delQtyRecordAction(esISSOMPCUnit);
                         }
                     }
@@ -353,12 +350,7 @@ public class ProgMatqtyInfoMngAction {
                     progInfoShowPara.getPeriodNo());
             // 删除登记数据
             int deleteRecordOfRegistNum= progStlInfoService.deleteRecord(progInfoShowPara.getPkid()) ;
-            // 删除权限数据
-            int deleteRecordOfPowerNum= flowCtrlService.deleteRecord(
-                    progInfoShowPara.getStlType(),
-                    progInfoShowPara.getStlPkid(),
-                    progInfoShowPara.getPeriodNo());
-            if (deleteItemsByInitStlTkcttEngNum<=0&&deleteRecordOfRegistNum<=0&&deleteRecordOfPowerNum<=0){
+            if (deleteItemsByInitStlTkcttEngNum<=0&&deleteRecordOfRegistNum<=0){
                 MessageUtil.addInfo("该记录已删除。");
                 return;
             }
@@ -377,12 +369,7 @@ public class ProgMatqtyInfoMngAction {
                             progInfoShowPara.getPeriodNo());
             // 删除登记数据
             int deleteRecordOfRegistNum = progStlInfoService.deleteRecord(progInfoShowPara.getPkid());
-            // 删除权限数据
-            int deleteRecordOfPowerNum = flowCtrlService.deleteRecord(
-                    progInfoShowPara.getStlType(),
-                    progInfoShowPara.getStlPkid(),
-                    progInfoShowPara.getPeriodNo());
-            if (deleteItemsByInitStlTkcttEngNum <= 0 && deleteRecordOfRegistNum <= 0 && deleteRecordOfPowerNum <= 0) {
+            if (deleteItemsByInitStlTkcttEngNum <= 0 && deleteRecordOfRegistNum <= 0) {
                 MessageUtil.addInfo("该记录已删除。");
                 return;
             }
@@ -424,14 +411,6 @@ public class ProgMatqtyInfoMngAction {
 
     public void setProgInfoShowList(List<ProgInfoShow> progInfoShowList) {
         this.progInfoShowList = progInfoShowList;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public ProgStlInfoService getProgStlInfoService() {

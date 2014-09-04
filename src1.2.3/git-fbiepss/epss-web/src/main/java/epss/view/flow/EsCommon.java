@@ -72,7 +72,7 @@ public class EsCommon implements Serializable {
         this.subcttItemNamelist= toolsService.getEnuSelectItemList("SUBCTTITEM_NAME", false, false);
 
         this.preStatusFlagList= toolsService.getEnuSelectItemList("PRESTATUS_FLAG", true, false);
-        this.statusFlagList = toolsService.getEnuSelectItemList("STATUS_FLAG", true, false);
+        this.statusFlagList = toolsService.getEnuSelectItemList("FLOW_STATUS", true, false);
         this.deleteFlagList = toolsService.getEnuSelectItemList("DELETED_FLAG", true, false);
         this.endFlagList = toolsService.getEnuSelectItemList("END_FLAG", true, false);
 

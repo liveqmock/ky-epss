@@ -405,72 +405,72 @@ public class EsInitPowerHisExample {
         }
 
         public Criteria andStatusFlagIsNull() {
-            addCriterion("STATUS_FLAG is null");
+            addCriterion("FLOW_STATUS is null");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagIsNotNull() {
-            addCriterion("STATUS_FLAG is not null");
+            addCriterion("FLOW_STATUS is not null");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagEqualTo(String value) {
-            addCriterion("STATUS_FLAG =", value, "statusFlag");
+            addCriterion("FLOW_STATUS =", value, "statusFlag");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagNotEqualTo(String value) {
-            addCriterion("STATUS_FLAG <>", value, "statusFlag");
+            addCriterion("FLOW_STATUS <>", value, "statusFlag");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagGreaterThan(String value) {
-            addCriterion("STATUS_FLAG >", value, "statusFlag");
+            addCriterion("FLOW_STATUS >", value, "statusFlag");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagGreaterThanOrEqualTo(String value) {
-            addCriterion("STATUS_FLAG >=", value, "statusFlag");
+            addCriterion("FLOW_STATUS >=", value, "statusFlag");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagLessThan(String value) {
-            addCriterion("STATUS_FLAG <", value, "statusFlag");
+            addCriterion("FLOW_STATUS <", value, "statusFlag");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagLessThanOrEqualTo(String value) {
-            addCriterion("STATUS_FLAG <=", value, "statusFlag");
+            addCriterion("FLOW_STATUS <=", value, "statusFlag");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagLike(String value) {
-            addCriterion("STATUS_FLAG like", value, "statusFlag");
+            addCriterion("FLOW_STATUS like", value, "statusFlag");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagNotLike(String value) {
-            addCriterion("STATUS_FLAG not like", value, "statusFlag");
+            addCriterion("FLOW_STATUS not like", value, "statusFlag");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagIn(List<String> values) {
-            addCriterion("STATUS_FLAG in", values, "statusFlag");
+            addCriterion("FLOW_STATUS in", values, "statusFlag");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagNotIn(List<String> values) {
-            addCriterion("STATUS_FLAG not in", values, "statusFlag");
+            addCriterion("FLOW_STATUS not in", values, "statusFlag");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagBetween(String value1, String value2) {
-            addCriterion("STATUS_FLAG between", value1, value2, "statusFlag");
+            addCriterion("FLOW_STATUS between", value1, value2, "statusFlag");
             return (Criteria) this;
         }
 
         public Criteria andStatusFlagNotBetween(String value1, String value2) {
-            addCriterion("STATUS_FLAG not between", value1, value2, "statusFlag");
+            addCriterion("FLOW_STATUS not between", value1, value2, "statusFlag");
             return (Criteria) this;
         }
 

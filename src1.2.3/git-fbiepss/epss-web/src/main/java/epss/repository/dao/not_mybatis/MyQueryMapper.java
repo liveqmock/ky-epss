@@ -18,25 +18,25 @@ import java.util.List;
 @Component
 public interface MyQueryMapper {
     @Select("select ecitem.CORRESPONDING_PKID as strCorrespondingPkid," +
-                " max(eicust.NAME) as strName," +
-                " sum(ecitem.Contract_Unit_Price) as bdUnitPrice," +
-                " sum(ecitem.Contract_Quantity) as bdQuantity," +
-                " sum(ecitem.Contract_Amount) as bdAmount" +
+            "     max(eicust.NAME) as strName," +
+            "     sum(ecitem.Contract_Unit_Price) as bdUnitPrice," +
+            "     sum(ecitem.Contract_Quantity) as bdQuantity," +
+            "     sum(ecitem.Contract_Amount) as bdAmount" +
             " from" +
-                " ES_CTT_INFO ecinfo" +
-                " inner join ES_INIT_POWER eip" +
-                " on ecinfo.ctt_type=eip.power_type" +
-                " and ecinfo.pkid=eip.power_pkid" +
-                " and eip.period_no='NULL'" +
-                " and eip.status_flag='3'" +
-                " inner join ES_CTT_ITEM ecitem" +
-                " on ecinfo.PKID=ecitem.BELONG_TO_PKID" +
-                " and ecinfo.CTT_TYPE=ecitem.BELONG_TO_TYPE" +
-                " join ES_INIT_CUST eicust" +
-                " on ecinfo.SIGN_PART_B=eicust.PKID" +
+            "     ES_CTT_INFO ecinfo" +
+            " inner join " +
+            "     ES_CTT_ITEM ecitem" +
+            " on " +
+            "     ecinfo.PKID=ecitem.BELONG_TO_PKID" +
+            " and " +
+            "     ecinfo.CTT_TYPE=ecitem.BELONG_TO_TYPE" +
+            " join " +
+            "     ES_INIT_CUST eicust" +
+            " on " +
+            "     ecinfo.SIGN_PART_B=eicust.PKID" +
             " where"+
-                " ecinfo.CTT_TYPE = #{strCttType}"+
-                " and ecinfo.PARENT_PKID = #{strParentPkid}" +
+            "     ecinfo.CTT_TYPE = #{strCttType}"+
+            "     and ecinfo.PARENT_PKID = #{strParentPkid}" +
             " group by ecitem.CORRESPONDING_PKID,ecinfo.SIGN_PART_B" +
             " order by ecitem.CORRESPONDING_PKID,ecinfo.SIGN_PART_B")
     List<QryShow> getCSList(@Param("strCttType") String strCttType,
@@ -64,32 +64,16 @@ public interface MyQueryMapper {
             "          ES_INIT_CUST eicust" +
             "   on " +
             "          ecinfo.SIGN_PART_B=eicust.PKID" +
-            "   inner join " +
-            "          ES_INIT_POWER eip" +
-            "   on " +
-            "          eip.power_type=ecinfo.ctt_type" +
             "   and " +
-            "          eip.power_pkid=ecinfo.pkid" +
-            "   and " +
-            "          eip.period_no= 'NULL'" +
-            "   and " +
-            "          eip.status_flag='3' " +
+            "          ecinfo.FLOW_STATUS='3' " +
             "   inner join" +
             "          ES_INIT_STL eis" +
             "   on" +
             "          eis.stl_pkid=ecinfo.pkid" +
             "   and" +
             "          eis.stl_type='4'" +
-            "   inner join " +
-            "          ES_INIT_POWER eip2" +
-            "   on " +
-            "          eip2.power_type=eis.stl_type" +
             "   and " +
-            "          eip2.power_pkid=eis.stl_pkid" +
-            "   and " +
-            "          eip2.period_no= eis.period_no" +
-            "   and " +
-            "          eip2.status_flag='3'" +
+            "          eis.FLOW_STATUS='3'" +
             "   where" +
             "          ecinfo.CTT_TYPE = '2'" +
             "   and " +
@@ -148,32 +132,16 @@ public interface MyQueryMapper {
             "          ES_INIT_CUST eicust" +   //连客户信息
             "   on " +
             "          ecinfo.SIGN_PART_B=eicust.PKID" +
-            "   inner join " +                    //已经批准了的分包合同
-            "          ES_INIT_POWER eip" +
-            "   on " +
-            "          eip.power_type=ecinfo.ctt_type" +
-            "   and " +
-            "          eip.power_pkid=ecinfo.pkid" +
-            "   and " +
-            "          eip.period_no= 'NULL'" +
-            "   and " +
-            "          eip.status_flag='3' " +
+            "   and " +                            //已经批准了的分包合同
+            "          ecinfo.FLOW_STATUS='3' " +
             "   inner join" +                    //已经登记了的工程数量结算
             "          ES_INIT_STL eis" +
             "   on" +
-            "          eis.stl_pkid=ecinfo.pkid" +
+            "          eis.STL_PKID=ecinfo.pkid" +
             "   and" +
-            "          eis.stl_type='3'" +
-            "   inner join " +                  //已经批准了的工程数量结算
-            "          ES_INIT_POWER eip2" +
-            "   on " +
-            "          eip2.power_type=eis.stl_type" +
-            "   and " +
-            "          eip2.power_pkid=eis.stl_pkid" +
-            "   and " +
-            "          eip2.period_no= eis.period_no" +
-            "   and " +
-            "          eip2.status_flag='3'" +
+            "          eis.STL_TYPE='3'" +
+            "   and " +                        //已经批准了的工程数量结算
+            "          eis.FLOW_STATUS='3'" +
             "   where" +                       //根据成本计划号得到分包合同列表
             "          ecinfo.CTT_TYPE = '2'" +
             "   and " +
@@ -251,30 +219,20 @@ public interface MyQueryMapper {
             "                                )as SIGN_PART_B_NAME," +
             "                                (" +
             "                                    select " +
-            "                                           max(PERIOD_NO)" +
+            "                                           max(eis.PERIOD_NO)" +
             "                                    from " +
-            "                                       ES_INIT_POWER eip " +
+            "                                       ES_INIT_STL eis " +
             "                                    where " +
-            "                                       eip.POWER_TYPE='5'" +
+            "                                       eis.STL_TYPE='5'" +
             "                                    and " +
-            "                                       eip.POWER_PKID=ecinfo.PKID " +
+            "                                       eis.STL_PKID=ecinfo.PKID " +
             "                                    and " +
-            "                                       eip.STATUS_FLAG>='3'" +
+            "                                       eis.FLOW_STATUS>='3'" +
             "                                    and" +
-            "                                       eip.PERIOD_NO<=#{strPeriodNo}" +
+            "                                       eis.PERIOD_NO<=#{strPeriodNo}" +
             "                                ) as MAX_PERIOD_NO_INP" +
             "                         from " +
             "                                ES_CTT_INFO ecinfo " +
-            "                         inner join " +
-            "                                ES_INIT_POWER eip " +
-            "                         on " +
-            "                                eip.POWER_TYPE=ecinfo.CTT_TYPE " +
-            "                         and " +
-            "                                eip.POWER_PKID=ecinfo.PKID " +
-            "                         and " +
-            "                                eip.PERIOD_NO='NULL' " +
-            "                         and " +
-            "                                eip.STATUS_FLAG='3' " +
             "                         where                       " +
             "                                ecinfo.CTT_TYPE = '2' " +
             "                         and" +

@@ -46,7 +46,7 @@ public class FlowCtrlHisService {
         if (!ToolUtil.getStrIgnoreNull(esInitPowerHis.getSpareField()).equals("")){
             criteria.andSpareFieldLike("%"+esInitPowerHis .getSpareField()+"%");
         }
-        example.setOrderByClause("POWER_TYPE ASC,POWER_PKID ASC,PERIOD_NO ASC,STATUS_FLAG ASC,CREATED_DATE ASC") ;
+        example.setOrderByClause("POWER_TYPE ASC,POWER_PKID ASC,PERIOD_NO ASC,FLOW_STATUS ASC,CREATED_DATE ASC") ;
         return esInitPowerHisMapper.selectByExample(example);
     }
 

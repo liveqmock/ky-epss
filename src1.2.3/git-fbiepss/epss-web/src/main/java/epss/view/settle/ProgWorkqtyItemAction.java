@@ -51,8 +51,6 @@ public class ProgWorkqtyItemAction {
     private ProgStlInfoService progStlInfoService;
     @ManagedProperty(value = "#{progWorkqtyItemService}")
     private ProgWorkqtyItemService progWorkqtyItemService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{signPartService}")
@@ -66,7 +64,7 @@ public class ProgWorkqtyItemAction {
 
     private String strSubmitType;
     private String strSubcttPkid;
-    private EsInitStl progWorkqtyInfo;
+    private EsInitStl esInitStl;
     private ProgInfoShow progWorkqtyInfoShowH;
 
     /*控制维护画面层级部分的显示*/
@@ -84,17 +82,13 @@ public class ProgWorkqtyItemAction {
         }
         if(parammap.containsKey("strProgWorkqtyInfoPkid")){
             String strProgWorkqtyInfoPkidTemp=parammap.get("strProgWorkqtyInfoPkid").toString();
-            progWorkqtyInfo = progStlInfoService.selectRecordsByPrimaryKey(strProgWorkqtyInfoPkidTemp);
-            strSubcttPkid= progWorkqtyInfo.getStlPkid();
+            esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strProgWorkqtyInfoPkidTemp);
+            strSubcttPkid= esInitStl.getStlPkid();
         }
 
-        List<EsInitPower> esInitPowerList=
-                flowCtrlService.selectListByModel(progWorkqtyInfo.getStlType(),progWorkqtyInfo.getStlPkid(),progWorkqtyInfo.getPeriodNo());
         strPassFlag="true";
-        if(esInitPowerList.size()>0){
-            if("Mng".equals(strFlowType)&&ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
-                strPassFlag="false";
-            }
+        if("Mng".equals(strFlowType)&&ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitStl.getFlowStatus())) {
+            strPassFlag="false";
         }
         resetAction();
         initData();
@@ -104,10 +98,10 @@ public class ProgWorkqtyItemAction {
     private void initData() {
         try {
             // 详细页头
-            EsCttInfo esCttInfo_Subctt= cttInfoService.getCttInfoByPkId(progWorkqtyInfo.getStlPkid());
-            progWorkqtyInfoShowH.setId(progWorkqtyInfo.getId());
+            EsCttInfo esCttInfo_Subctt= cttInfoService.getCttInfoByPkId(esInitStl.getStlPkid());
+            progWorkqtyInfoShowH.setId(esInitStl.getId());
             progWorkqtyInfoShowH.setStlName(esCttInfo_Subctt.getName());
-            progWorkqtyInfoShowH.setPeriodNo(progWorkqtyInfo.getPeriodNo());
+            progWorkqtyInfoShowH.setPeriodNo(esInitStl.getPeriodNo());
             progWorkqtyInfoShowH.setSignPartBName(signPartService.getEsInitCustByPkid(esCttInfo_Subctt.getSignPartB()).getName());
             beansMap.put("progWorkqtyInfoShowH", progWorkqtyInfoShowH);
         /*分包合同*/
@@ -120,8 +114,6 @@ public class ProgWorkqtyItemAction {
             progWorkqtyItemShowList =new ArrayList<ProgWorkqtyItemShow>();
             recursiveDataTable("root", esCttItemList, progWorkqtyItemShowList);
             progWorkqtyItemShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progWorkqtyItemShowList);
-            List<EsInitPower> esInitPowerList= flowCtrlService.selectListByModel(ESEnumPower.POWER_TYPE3.getCode(),
-                    strSubcttPkid, ToolUtil.getStrDateThisPeriod());
             progWorkqtyItemShowListExcel =new ArrayList<ProgWorkqtyItemShow>();
             for(ProgWorkqtyItemShow itemUnit: progWorkqtyItemShowList){
                 ProgWorkqtyItemShow itemUnitTemp= (ProgWorkqtyItemShow) BeanUtils.cloneBean(itemUnit);
@@ -166,7 +158,7 @@ public class ProgWorkqtyItemAction {
             EsItemStlSubcttEngQ esItemStlSubcttEngQ=new EsItemStlSubcttEngQ();
             esItemStlSubcttEngQ.setSubcttPkid(strSubcttPkid);
             esItemStlSubcttEngQ.setSubcttItemPkid(itemUnit.getPkid());
-            esItemStlSubcttEngQ.setPeriodNo(progWorkqtyInfo.getPeriodNo());
+            esItemStlSubcttEngQ.setPeriodNo(esInitStl.getPeriodNo());
             List<EsItemStlSubcttEngQ> esItemStlSubcttEngQList =
                     progWorkqtyItemService.selectRecordsByExample(esItemStlSubcttEngQ);
             if(esItemStlSubcttEngQList.size()>0){
@@ -174,9 +166,7 @@ public class ProgWorkqtyItemAction {
                 progWorkqtyItemShowTemp.setEngQMng_Pkid(esItemStlSubcttEngQ.getPkid());
                 progWorkqtyItemShowTemp.setEngQMng_PeriodNo(esItemStlSubcttEngQ.getPeriodNo());
                 progWorkqtyItemShowTemp.setEngQMng_SubcttPkid(esItemStlSubcttEngQ.getSubcttPkid());
-
                 progWorkqtyItemShowTemp.setEngQMng_SubcttItemPkid(esItemStlSubcttEngQ.getSubcttItemPkid());
-
                 progWorkqtyItemShowTemp.setEngQMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngQ.getBeginToCurrentPeriodEQty());
                 progWorkqtyItemShowTemp.setEngQMng_CurrentPeriodEQty(esItemStlSubcttEngQ.getCurrentPeriodEQty());
                 progWorkqtyItemShowTemp.setEngQMng_DeletedFlag(esItemStlSubcttEngQ.getDeleteFlag());
@@ -254,7 +244,7 @@ public class ProgWorkqtyItemAction {
                 if(!blurEngQMng_CurrentPeriodMQty("submit")){
                     return;
                 }
-                progWorkqtyItemShowUpd.setEngQMng_PeriodNo(progWorkqtyInfo.getPeriodNo());
+                progWorkqtyItemShowUpd.setEngQMng_PeriodNo(esInitStl.getPeriodNo());
                 List<EsItemStlSubcttEngQ> esItemStlSubcttEngQListTemp =
                         progWorkqtyItemService.isExistInDb(progWorkqtyItemShowUpd);
                 if (esItemStlSubcttEngQListTemp.size() > 1) {
@@ -371,88 +361,80 @@ public class ProgWorkqtyItemAction {
     public void onClickForPowerAction(String strPowerType) {
         try {
             strPowerType=strFlowType+strPowerType;
-            ProgInfoShow progInfoShowSel=new ProgInfoShow();
-            progInfoShowSel.setStlType(progWorkqtyInfo.getStlType());
-            progInfoShowSel.setStlPkid(progWorkqtyInfo.getStlPkid());
-            progInfoShowSel.setPeriodNo(progWorkqtyInfo.getPeriodNo());
-            progInfoShowSel.setPowerType(progWorkqtyInfo.getStlType());
-            progInfoShowSel.setPowerPkid(progWorkqtyInfo.getStlPkid());
-            progInfoShowSel.setPeriodNo(progWorkqtyInfo.getPeriodNo());
-
             if (strPowerType.contains("Mng")) {
                 if (strPowerType.equals("MngPass")) {
-                        EsCttInfo esCttInfoTemp=cttInfoService.getCttInfoByPkId(progInfoShowSel.getStlPkid());
+                        EsCttInfo esCttInfoTemp=cttInfoService.getCttInfoByPkId(esInitStl.getStlPkid());
                         if (("3").equals(esCttInfoTemp.getType())||("6").equals(esCttInfoTemp.getType())){
                             ProgInfoShow progInfoShowQryM=new ProgInfoShow();
-                            progInfoShowQryM.setStlPkid(progInfoShowSel.getStlPkid());
+                            progInfoShowQryM.setStlPkid(esInitStl.getStlPkid());
                             progInfoShowQryM.setStlType("4");
-                            progInfoShowQryM.setPeriodNo(progInfoShowSel.getPeriodNo());
+                            progInfoShowQryM.setPeriodNo(esInitStl.getPeriodNo());
                             List<ProgInfoShow> progInfoShowConstructsTemp =
                                     esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQryM);
                             if (progInfoShowConstructsTemp.size()==0){
-                                progWorkqtyInfo.setAutoLinkAdd("0");
-                                progStlInfoService.updateRecord(progWorkqtyInfo);
+                                esInitStl.setAutoLinkAdd("0");
+                                progStlInfoService.updateRecord(esInitStl);
                                 progInfoShowQryM.setAutoLinkAdd("1");
                                 progInfoShowQryM.setId(getMaxId( progInfoShowQryM.getStlType()));
                                 progStlInfoService.insertRecord(progInfoShowQryM);
                             }else{
                                 for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
                                     if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))){
-                                        progWorkqtyInfo.setAutoLinkAdd("0");
-                                        progStlInfoService.updateRecord(progWorkqtyInfo);
+                                        esInitStl.setAutoLinkAdd("0");
+                                        progStlInfoService.updateRecord(esInitStl);
                                         progInfoShowQryM.setAutoLinkAdd("1");
                                         progStlInfoService.insertRecord(progInfoShowQryM);
                                     }else{
                                         if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
-                                            progWorkqtyInfo.setAutoLinkAdd("0");
+                                            esInitStl.setAutoLinkAdd("0");
                                         }else{
-                                            progWorkqtyInfo.setAutoLinkAdd("1");
+                                            esInitStl.setAutoLinkAdd("1");
                                         }
-                                        progStlInfoService.updateRecord(progWorkqtyInfo);
+                                        progStlInfoService.updateRecord(esInitStl);
                                     }
                                 }
                             }
                         }
-                    esFlowControl.mngFinishAction(
-                            progInfoShowSel.getStlType(),
-                            progInfoShowSel.getStlPkid(),
-                            progInfoShowSel.getPeriodNo());
+                    // 状态标志：初始
+                    esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    // 原因：录入完毕
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG0.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     strPassFlag="false";
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerType.equals("MngFail")) {
-                    progWorkqtyInfo.setAutoLinkAdd("");
-                    progStlInfoService.updateRecord(progWorkqtyInfo);
-                    esFlowControl.mngNotFinishAction(
-                            progInfoShowSel.getStlType(),
-                            progInfoShowSel.getStlPkid(),
-                            progInfoShowSel.getPeriodNo());
+                    esInitStl.setAutoLinkAdd("");
+                    esInitStl.setAutoLinkAdd("");
+                    esInitStl.setFlowStatus(null);
+                    esInitStl.setFlowStatusReason(null);
+                    progStlInfoService.updateRecord(esInitStl);
                     strPassFlag="true";
                     MessageUtil.addInfo("数据录入未完！");
                 }
             } else if (strPowerType.contains("Check") && !strPowerType.contains("DoubleCheck")) {// 审核
                 if (strPowerType.equals("CheckPass")) {
                     // 状态标志：审核
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+                    esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
                     // 原因：审核通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerType.equals("CheckFail")) {
                     // 状态标志：初始
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
                     // 原因：审核未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     MessageUtil.addInfo("数据审核未过！");
                 }
             } else if (strPowerType.contains("DoubleCheck")) {// 复核
                 if (strPowerType.equals("DoubleCheckPass")) {
                     try {
                         // 状态标志：复核
-                        progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+                        esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG2.getCode());
                         // 原因：复核通过
-                        progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                        flowCtrlService.updateRecordByStl(progInfoShowSel,strPowerType);
+                        esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+                        progStlInfoService.updateRecord(esInitStl);
                         MessageUtil.addInfo("数据复核通过！");
                     }catch (Exception e) {
                         logger.error("复核通过操作失败。", e);
@@ -462,16 +444,16 @@ public class ProgWorkqtyItemAction {
                 } else if (strPowerType.equals("DoubleCheckFail")) {
                     try {
                         String SubcttStlPStatus = ToolUtil.getStrIgnoreNull(
-                                esFlowService.getStatusFlag(ESEnum.ITEMTYPE5.getCode(), progInfoShowSel.getStlPkid(), progInfoShowSel.getPeriodNo()));
+                                esFlowService.getStatusFlag(ESEnum.ITEMTYPE5.getCode(), esInitStl.getStlPkid(), esInitStl.getPeriodNo()));
                         if (!("".equals(SubcttStlPStatus)) && ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlPStatus) < 0) {
                             MessageUtil.addInfo("该数据已被分包价格结算批准，您无权进行操作！");
                             return;
                         }
                         // 这样写可以实现越级退回
-                        progInfoShowSel.setStatusFlag(strNotPassToStatus);
+                        esInitStl.setFlowStatus(strNotPassToStatus);
                         // 原因：复核未过
-                        progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                        flowCtrlService.updateRecordByStl(progInfoShowSel,strPowerType);
+                        esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
+                        progStlInfoService.updateRecord(esInitStl);
                         MessageUtil.addInfo("数据复核未过！");
                     }catch (Exception e) {
                         logger.error("删除数据失败,复核未过操作失败。", e);
@@ -482,18 +464,17 @@ public class ProgWorkqtyItemAction {
             } else if (strPowerType.contains("Approve")) {// 批准
                 if (strPowerType.equals("ApprovePass")) {
                     // 状态标志：批准
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                    esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG3.getCode());
                     // 原因：批准通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerType.equals("ApproveFail")) {
                     // 这样写可以实现越级退回
-                    progInfoShowSel.setStatusFlag(strNotPassToStatus);
+                    esInitStl.setFlowStatus(strNotPassToStatus);
                     // 原因：批准未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
-
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     MessageUtil.addInfo("数据批准未过！");
                 }
             }
@@ -584,14 +565,6 @@ public class ProgWorkqtyItemAction {
 
     public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
         this.progWorkqtyItemService = progWorkqtyItemService;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowService getEsFlowService() {

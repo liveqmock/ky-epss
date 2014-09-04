@@ -8,7 +8,6 @@ import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import skyline.util.ToolUtil;
 import epss.repository.dao.not_mybatis.MyFlowMapper;
-import epss.repository.model.EsInitPower;
 import epss.repository.model.EsInitPowerHis;
 import epss.repository.model.EsInitStl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,19 +111,6 @@ public class EsFlowService {
 
     public String getLatestApprovedPeriodNoByEndPeriod(String strPowerType,String strPowerPkid,String strEndPeriodNo) {
         return myFlowMapper.getLatestApprovedPeriodNoByEndPeriod(strPowerType, strPowerPkid,strEndPeriodNo);
-    }
-
-    private EsInitPowerHis  fromEsInitPowerToEsInitPowerHis(EsInitPower esInitPowerPara,String strOperType){
-        EsInitPowerHis esInitPowerHis =new EsInitPowerHis();
-        esInitPowerHis.setPowerType(esInitPowerPara.getPowerType());
-        esInitPowerHis.setPowerPkid(esInitPowerPara.getPowerPkid());
-        esInitPowerHis.setPeriodNo(esInitPowerPara.getPeriodNo());
-        esInitPowerHis.setStatusFlag(esInitPowerPara.getStatusFlag());
-        esInitPowerHis.setPreStatusFlag(esInitPowerPara.getPreStatusFlag());
-        esInitPowerHis.setCreatedDate(esInitPowerPara.getCreatedDate());
-        esInitPowerHis.setCreatedBy(esInitPowerPara.getCreatedBy());
-        esInitPowerHis.setSpareField(strOperType);
-        return esInitPowerHis;
     }
 
     public Integer getChildrenOfThisRecordInEsInitCtt(String strCttType,String strBelongToPkid){

@@ -20,44 +20,32 @@ public interface MyCttInfoMapper {
     String getStrMaxCttId(@Param("strCttType") String strCttType);
 
     @Select(" select" +
-                 " eic.PKID" +
-                 ",eic.NAME" +
+                 " eci.PKID" +
+                 ",eci.NAME" +
             " from" +
-                 " ES_CTT_INFO eic" +
-            " inner join" +
-                 " ES_INIT_POWER eip" +
-            " on" +
-                 " eic.CTT_TYPE=eip.POWER_TYPE" +
-            " and" +
-                 " eic.PKID=eip.POWER_PKID" +
+                 " ES_CTT_INFO eci" +
             " where" +
-                 " eic.CTT_TYPE = #{strCttType}" +
+                 " eci.CTT_TYPE = #{strCttType}" +
             " and" +
-                 " eip.STATUS_FLAG = #{strStatusFlag}" +
-            " order by eic.NAME ")
+                 " eci.FLOW_STATUS = #{strFlowStatus}" +
+            " order by eci.NAME ")
     List<CttInfoShow> getCttInfoListByCttType_Status(@Param("strCttType") String strCttType,
-                                                     @Param("strStatusFlag") String strStatusFlag);
+                                                     @Param("strFlowStatus") String strFlowStatus);
     @Select(" select" +
-                " eic.PKID" +
-                ",eic.NAME" +
+                " eci.PKID" +
+                ",eci.NAME" +
             " from" +
-                " ES_CTT_INFO eic" +
-            " inner join" +
-                " ES_INIT_POWER eip" +
-            " on" +
-                " eic.CTT_TYPE=eip.POWER_TYPE" +
-            " and" +
-                " eic.PKID=eip.POWER_PKID" +
+                " ES_CTT_INFO eci" +
             " where" +
-                " eic.CTT_TYPE = #{strCttType}" +
+                " eci.CTT_TYPE = #{strCttType}" +
             " and" +
-                " eic.PARENT_PKID = #{strParentPkid}" +
+                " eci.PARENT_PKID = #{strParentPkid}" +
             " and" +
-                " eip.STATUS_FLAG = #{strStatusFlag}" +
+                " eci.FLOW_STATUS = #{strFlowStatus}" +
             " order by " +
-                " eic.NAME ")
+                " eci.NAME ")
     List<CttInfoShow> getCttInfoListByCttType_ParentPkid_Status(@Param("strCttType") String strCttType,
                                                                 @Param("strParentPkid") String strParentPkid,
-                                                                @Param("strStatusFlag") String strStatusFlag);
+                                                                @Param("strFlowStatus") String strFlowStatus);
 
 }

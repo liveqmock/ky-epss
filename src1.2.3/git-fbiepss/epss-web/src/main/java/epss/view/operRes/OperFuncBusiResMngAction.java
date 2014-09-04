@@ -8,7 +8,6 @@ import epss.repository.model.EsInitStl;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
-import epss.repository.model.EsInitPower;
 import epss.repository.model.OperRes;
 import epss.repository.model.model_show.*;
 import epss.service.*;
@@ -44,8 +43,6 @@ public class OperFuncBusiResMngAction implements Serializable{
     private CttInfoService cttInfoService;
     @ManagedProperty(value = "#{cttItemService}")
     private CttItemService cttItemService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
 
@@ -739,14 +736,6 @@ public class OperFuncBusiResMngAction implements Serializable{
 
     public void setCttItemService(CttItemService cttItemService) {
         this.cttItemService = cttItemService;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public String getTaskFunctionSeled() {

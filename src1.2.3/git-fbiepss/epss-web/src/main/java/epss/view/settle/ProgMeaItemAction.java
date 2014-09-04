@@ -52,10 +52,9 @@ public class ProgMeaItemAction {
     private ProgStlInfoService progStlInfoService;
     @ManagedProperty(value = "#{progMeaItemService}")
     private ProgMeaItemService progMeaItemService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
+
     private List<ProgMeaItemShow> progMeaItemShowList;
     private ProgMeaItemShow progMeaItemShowSel;
     private ProgMeaItemShow progMeaItemShowUpd;
@@ -74,7 +73,7 @@ public class ProgMeaItemAction {
     private String strSubmitType;
     private String strPassFlag;
     private String strFlowType;
-    private String strNotPassToStatus;;
+    private String strNotPassToStatus;
 
     private Map beansMap;
     // 画面上控件的显示控制
@@ -94,13 +93,9 @@ public class ProgMeaItemAction {
             strTkcttPkid= this.esInitStl.getStlPkid();
         }
 
-        List<EsInitPower> esInitPowerList=
-                flowCtrlService.selectListByModel(esInitStl.getStlType(),esInitStl.getStlPkid(),esInitStl.getPeriodNo());
         strPassFlag="true";
-        if(esInitPowerList.size()>0){
-            if("Mng".equals(strFlowType) &&ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
-                strPassFlag="false";
-            }
+        if("Mng".equals(strFlowType) &&ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitStl.getFlowStatus())) {
+            strPassFlag="false";
         }
 
         resetAction();
@@ -565,76 +560,68 @@ public class ProgMeaItemAction {
     public void onClickForPowerAction(String strPowerType){
         try {
             strPowerType=strFlowType+strPowerType;
-            ProgInfoShow progInfoShowSel=new ProgInfoShow();
-            progInfoShowSel.setStlType(esInitStl.getStlType());
-            progInfoShowSel.setStlPkid(esInitStl.getStlPkid());
-            progInfoShowSel.setPeriodNo(esInitStl.getPeriodNo());
-            progInfoShowSel.setPowerType(esInitStl.getStlType());
-            progInfoShowSel.setPowerPkid(esInitStl.getStlPkid());
-            progInfoShowSel.setPeriodNo(esInitStl.getPeriodNo());
             if (strPowerType.contains("Mng")) {
                 if (strPowerType.equals("MngPass")) {
-                    esFlowControl.mngFinishAction(
-                            progInfoShowSel.getStlType(),
-                            progInfoShowSel.getStlPkid(),
-                            progInfoShowSel.getPeriodNo());
+                    // 状态标志：初始
+                    esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    // 原因：录入完毕
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG0.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     strPassFlag = "false";
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerType.equals("MngFail")) {
-                    esFlowControl.mngNotFinishAction(
-                            progInfoShowSel.getStlType(),
-                            progInfoShowSel.getStlPkid(),
-                            progInfoShowSel.getPeriodNo());
+                    esInitStl.setFlowStatus(null);
+                    esInitStl.setFlowStatusReason(null);
+                    progStlInfoService.updateRecord(esInitStl);
                     strPassFlag = "true";
                     MessageUtil.addInfo("数据录入未完！");
                 }
             } else if (strPowerType.contains("Check") && !strPowerType.contains("DoubleCheck")) {// 审核
                 if (strPowerType.equals("CheckPass")) {
                     // 状态标志：审核
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+                    esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
                     // 原因：审核通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerType.equals("CheckFail")) {
                     // 状态标志：初始
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
                     // 原因：审核未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     MessageUtil.addInfo("数据审核未过！");
                 }
             } else if (strPowerType.contains("DoubleCheck")) {// 复核
                 if (strPowerType.equals("DoubleCheckPass")) {
                     // 状态标志：复核
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+                    esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG2.getCode());
                     // 原因：复核通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerType.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
-                    progInfoShowSel.setStatusFlag(strNotPassToStatus);
+                    esInitStl.setFlowStatus(strNotPassToStatus);
                     // 原因：复核未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     MessageUtil.addInfo("数据复核未过！");
                 }
             } else if (strPowerType.contains("Approve")) {// 批准
                 if (strPowerType.equals("ApprovePass")) {
                     // 状态标志：批准
-                    progInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                    esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG3.getCode());
                     // 原因：批准通过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerType.equals("ApproveFail")) {
                     // 这样写可以实现越级退回
-                    progInfoShowSel.setStatusFlag(strNotPassToStatus);
+                    esInitStl.setFlowStatus(strNotPassToStatus);
                     // 原因：批准未过
-                    progInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-                    flowCtrlService.updateRecordByStl(progInfoShowSel);
-
+                    esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
+                    progStlInfoService.updateRecord(esInitStl);
                     MessageUtil.addInfo("数据批准未过！");
                 }
             }
@@ -690,14 +677,6 @@ public class ProgMeaItemAction {
 
     public void setProgMeaItemService(ProgMeaItemService ProgMeaItemService) {
         this.progMeaItemService = ProgMeaItemService;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public ProgStlInfoService getProgStlInfoService() {

@@ -44,8 +44,6 @@ public class ProgWorkqtyInfoAction {
     private ProgWorkqtyItemService progWorkqtyItemService;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{progMatqtyItemService}")
@@ -111,7 +109,6 @@ public class ProgWorkqtyInfoAction {
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType = "Add";
-        esFlowControl.getBackToStatusFlagList("Qry");
     }
 
     public void resetActionForAdd() {
@@ -317,10 +314,12 @@ public class ProgWorkqtyInfoAction {
                         esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQryM);
                 if (progInfoShowConstructsTemp.size()!=0){
                     for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag())))&&(progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag())))&&
+                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
                             MessageUtil.addInfo("该记录已关联分包材料结算，不可删除！");
                             return;
-                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))&&(progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))&&
+                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
                             delMatRecordAction(esISSOMPCUnit);
                         }
                     }
@@ -375,12 +374,7 @@ public class ProgWorkqtyInfoAction {
                             progInfoShowPara.getPeriodNo());
             // 删除登记数据
             int deleteRecordOfRegistNum = progStlInfoService.deleteRecord(progInfoShowPara.getPkid());
-            // 删除权限数据
-            int deleteRecordOfPowerNum = flowCtrlService.deleteRecord(
-                    progInfoShowPara.getStlType(),
-                    progInfoShowPara.getStlPkid(),
-                    progInfoShowPara.getPeriodNo());
-            if (deleteItemsByInitStlTkcttEngNum <= 0 && deleteRecordOfRegistNum <= 0 && deleteRecordOfPowerNum <= 0) {
+            if (deleteItemsByInitStlTkcttEngNum <= 0 && deleteRecordOfRegistNum <= 0) {
                 MessageUtil.addInfo("该记录已删除。");
                 return;
             }
@@ -399,12 +393,8 @@ public class ProgWorkqtyInfoAction {
                             progInfoShowPara.getPeriodNo());
             // 删除登记数据
             int deleteRecordOfRegistNum= progStlInfoService.deleteRecord(progInfoShowPara.getPkid()) ;
-            // 删除权限数据
-            int deleteRecordOfPowerNum= flowCtrlService.deleteRecord(
-                    progInfoShowPara.getStlType(),
-                    progInfoShowPara.getStlPkid(),
-                    progInfoShowPara.getPeriodNo());
-            if (deleteItemsByInitStlTkcttEngNum<=0&&deleteRecordOfRegistNum<=0&&deleteRecordOfPowerNum<=0){
+
+            if (deleteItemsByInitStlTkcttEngNum<=0&&deleteRecordOfRegistNum<=0){
                 MessageUtil.addInfo("该记录已删除。");
                 return;
             }
@@ -445,14 +435,6 @@ public class ProgWorkqtyInfoAction {
 
     public void setProgInfoShowList(List<ProgInfoShow> progInfoShowList) {
         this.progInfoShowList = progInfoShowList;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public ProgStlInfoService getProgStlInfoService() {

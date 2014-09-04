@@ -8,8 +8,8 @@ public class TaskShow {
     private String periodNo;
     private String flowStatus;
     private String flowStatusName;
-    private String preFlowStatus;
-    private String preFlowStatusName;
+    private String flowStatusReason;
+    private String flowStatusReasonName;
     private String strColorType;
     private String operResFlowStatus;
     private String operResFlowStatusName;
@@ -71,20 +71,20 @@ public class TaskShow {
         this.flowStatusName = flowStatusName;
     }
 
-    public String getPreFlowStatus() {
-        return preFlowStatus;
+    public String getFlowStatusReasonName() {
+        return flowStatusReasonName;
     }
 
-    public void setPreFlowStatus(String preFlowStatus) {
-        this.preFlowStatus = preFlowStatus;
+    public void setFlowStatusReasonName(String flowStatusReasonName) {
+        this.flowStatusReasonName = flowStatusReasonName;
     }
 
-    public String getPreFlowStatusName() {
-        return preFlowStatusName;
+    public String getFlowStatusReason() {
+        return flowStatusReason;
     }
 
-    public void setPreFlowStatusName(String preFlowStatusName) {
-        this.preFlowStatusName = preFlowStatusName;
+    public void setFlowStatusReason(String flowStatusReason) {
+        this.flowStatusReason = flowStatusReason;
     }
 
     public String getStrColorType() {

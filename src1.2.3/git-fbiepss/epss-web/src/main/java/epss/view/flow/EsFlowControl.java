@@ -13,7 +13,6 @@ import epss.service.EsFlowService;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.service.SignPartService;
-import epss.service.FlowCtrlService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,8 +43,6 @@ public class EsFlowControl implements Serializable {
     private ToolsService toolsService;
     @ManagedProperty(value = "#{signPartService}")
     private SignPartService signPartService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
 
@@ -57,7 +54,7 @@ public class EsFlowControl implements Serializable {
 
     @PostConstruct
     public void init() {
-        this.statusFlagFromDBList = toolsService.getEnuSelectItemList("STATUS_FLAG", false, false);
+        this.statusFlagFromDBList = toolsService.getEnuSelectItemList("FLOW_STATUS", false, false);
         this.preStatusFlagFromDBList= toolsService.getEnuSelectItemList("PRESTATUS_FLAG", false, false);
         this.deleteFlagList = toolsService.getEnuSelectItemList("DELETED_FLAG", true, false);
         this.endFlagList = toolsService.getEnuSelectItemList("END_FLAG", true, false);
@@ -122,39 +119,7 @@ public class EsFlowControl implements Serializable {
         return statusFlagListTemp;
     }
 
-    public void mngFinishAction(String strPowerTypePara,
-                                  String strPowerPkidPara,
-                                  String strPeriodNoPara){
-        try {
-            FlowCtrlShow flowCtrlShowTemp =new FlowCtrlShow();
-            flowCtrlShowTemp.setPowerType(strPowerTypePara);
-            flowCtrlShowTemp.setPowerPkid(strPowerPkidPara);
-            flowCtrlShowTemp.setPeriodNo(strPeriodNoPara);
-            flowCtrlShowTemp.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-            flowCtrlShowTemp.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG0.getCode());
-
-            if(flowCtrlService.selectListByModel(flowCtrlShowTemp.getPowerType(),
-                    flowCtrlShowTemp.getPowerPkid(), flowCtrlShowTemp.getPeriodNo()).size()<=0){
-                flowCtrlService.insertRecord(flowCtrlShowTemp);
-            }else {
-                flowCtrlService.updateRecord(flowCtrlShowTemp);
-            }
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-    public void mngNotFinishAction(String strPowerTypePara,
-                                     String strPowerPkidPara,
-                                     String strPeriodNoPara){
-        try {
-            flowCtrlService.deleteRecord(strPowerTypePara,strPowerPkidPara,strPeriodNoPara);
-        } catch (Exception e) {
-            throw e;
-        }
-    }
-
     /*ÖÇÄÜ×Ö¶Î Start*/
-
     public ToolsService getToolsService() {
         return toolsService;
     }
@@ -193,14 +158,6 @@ public class EsFlowControl implements Serializable {
 
     public void setPreStatusFlagList(List<SelectItem> preStatusFlagList) {
         this.preStatusFlagList = preStatusFlagList;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowService getEsFlowService() {

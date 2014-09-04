@@ -24,15 +24,15 @@ public interface MyProgWorkqtyItemMapper {
                     " from" +
                     "   ES_ITEM_STL_SUBCTT_ENG_Q eisseq" +
                     " inner join" +
-                    "   ES_INIT_POWER eip" +
+                    "   ES_INIT_STL eis" +
                     " on" +
-                    "   eip.POWER_TYPE='3'" +
+                    "   eis.STL_TYPE='3'" +
                     " and" +
-                    "   eip.POWER_PKID=eisseq.subctt_pkid" +
+                    "   eis.STL_PKID=eisseq.subctt_pkid" +
                     " and" +
-                    "   eip.PERIOD_NO=eisseq.period_no" +
+                    "   eis.PERIOD_NO=eisseq.period_no" +
                     " and" +
-                    "   eip.STATUS_FLAG='3'" +
+                    "   eis.FLOW_STATUS='3'" +
                     " where" +
                     "   eisseq.subctt_pkid = #{strSubcttPkid}"+
                     "   and eisseq.period_no >= #{strPeriodNoBegin}"+
@@ -48,15 +48,15 @@ public interface MyProgWorkqtyItemMapper {
             " from" +
             "   ES_ITEM_STL_SUBCTT_ENG_Q eisseq" +
             " inner join" +
-            "   ES_INIT_POWER eip" +
+            "   ES_INIT_STL eis" +
             " on" +
-            "   eip.POWER_TYPE='3'" +
+            "   eis.STL_TYPE='3'" +
             " and" +
-            "   eip.POWER_PKID=eisseq.subctt_pkid" +
+            "   eis.STL_PKID=eisseq.subctt_pkid" +
             " and" +
-            "   eip.PERIOD_NO=eisseq.period_no" +
+            "   eis.PERIOD_NO=eisseq.period_no" +
             " and" +
-            "   eip.STATUS_FLAG='3'" +
+            "   eis.FLOW_STATUS='3'" +
             " where" +
             "   eisseq.subctt_pkid = #{strSubcttPkid}"+
             "   and eisseq.period_no >= #{strPeriodNoBegin}"+

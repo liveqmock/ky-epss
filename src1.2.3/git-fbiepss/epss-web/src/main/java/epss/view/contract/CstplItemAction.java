@@ -22,7 +22,6 @@ import epss.repository.model.EsInitStl;
 import epss.repository.model.model_show.CstplItemShow;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
-import epss.repository.model.EsInitPower;
 import epss.service.*;
 import epss.service.CttInfoService;
 import epss.service.EsFlowService;
@@ -53,8 +52,6 @@ public class CstplItemAction {
     private static final Logger logger = LoggerFactory.getLogger(CstplItemAction.class);
     @ManagedProperty(value = "#{cttItemService}")
     private CttItemService cttItemService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esCommon}")
@@ -64,7 +61,7 @@ public class CstplItemAction {
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
 
-    private EsCttInfo cstplInfo;
+    private EsCttInfo cttInfo;
     private CttItemShow cttItemShowSel;
     private CttItemShow cttItemShowAdd;
     private CttItemShow cttItemShowUpd;
@@ -84,7 +81,6 @@ public class CstplItemAction {
     private String strFlowType;
     /*控制控件在画面上的可用与现实Start*/
     //显示的控制
-    private StyleModel styleModelNo;
     private StyleModel styleModel;
     /*控制控件在画面上的可用与现实End*/
     private List<CstplItemShow> cstplItemShowListExcel;
@@ -105,17 +101,15 @@ public class CstplItemAction {
         strBelongToType=ESEnum.ITEMTYPE1.getCode();
         if (parammap.containsKey("strCstplInfoPkid")) {
             strCstplInfoPkid = parammap.get("strCstplInfoPkid").toString();
+            cttInfo = cttInfoService.getCttInfoByPkId(strCstplInfoPkid);
         }
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
         }
-        List<EsInitPower> esInitPowerList =
-                flowCtrlService.selectListByModel(strBelongToType, strCstplInfoPkid, "NULL");
+
         strPassFlag = "true";
-        if (esInitPowerList.size() > 0) {
-            if ("Mng".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
-                strPassFlag = "false";
-            }
+        if ("Mng".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(cttInfo.getFlowStatus())) {
+            strPassFlag = "false";
         }
 
         resetAction();
@@ -130,95 +124,87 @@ public class CstplItemAction {
     public void onClickForPowerAction(String strPowerTypePara) {
         try {
             strPowerTypePara=strFlowType+strPowerTypePara;
-            CttInfoShow cttInfoShowSel = new CttInfoShow();
-            cttInfoShowSel.setCttType(strBelongToType);
-            cttInfoShowSel.setPkid(strCstplInfoPkid);
-            cttInfoShowSel.setPowerType(strBelongToType);
-            cttInfoShowSel.setPowerPkid(strCstplInfoPkid);
-            cttInfoShowSel.setPeriodNo("NULL");
-
-            if (strPowerTypePara.contains("Mng")) {
+             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
-                    esFlowControl.mngFinishAction(
-                            cttInfoShowSel.getCttType(),
-                            cttInfoShowSel.getPkid(),
-                            "NULL");
+                    // 状态标志：初始
+                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    // 原因：录入完毕
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG0.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
-                    esFlowControl.mngNotFinishAction(
-                            cttInfoShowSel.getCttType(),
-                            cttInfoShowSel.getPkid(),
-                            "NULL");
+                    cttInfo.setFlowStatus(null);
+                    cttInfo.setFlowStatusReason(null);
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }// 审核
             else if (strPowerTypePara.contains("Check") && !strPowerTypePara.contains("DoubleCheck")) {
                 if (strPowerTypePara.equals("CheckPass")) {
                     // 状态标志：审核
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
                     // 原因：审核通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
                     // 状态标志：初始
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
                     // 原因：审核未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据审核未过！");
                 }
             } // 复核
             else if (strPowerTypePara.contains("DoubleCheck")) {
                 if (strPowerTypePara.equals("DoubleCheckPass")) {
                     // 状态标志：复核
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG2.getCode());
                     // 原因：复核通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
-                    cttInfoShowSel.setStatusFlag(strNotPassToStatus);
+                    cttInfo.setFlowStatus(strNotPassToStatus);
                     // 原因：复核未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据复核未过！");
                 }
             }// 批准
             else if (strPowerTypePara.contains("Approve")) {
                 if (strPowerTypePara.equals("ApprovePass")) {
                     // 状态标志：批准
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG3.getCode());
                     // 原因：批准通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerTypePara.equals("ApproveFail")) {
                     // 检查是否被使用
                     String strCttTypeTemp = "";
-                    if (cttInfoShowSel.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
+                    if (cttInfo.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
                         strCttTypeTemp = ESEnum.ITEMTYPE1.getCode();
-                    } else if (cttInfoShowSel.getCttType().equals(ESEnum.ITEMTYPE1.getCode())) {
+                    } else if (cttInfo.getCttType().equals(ESEnum.ITEMTYPE1.getCode())) {
                         strCttTypeTemp = ESEnum.ITEMTYPE2.getCode();
                     }
 
                     // 这样写可以实现越级退回
-                    cttInfoShowSel.setStatusFlag(strNotPassToStatus);
+                    cttInfo.setFlowStatus(strNotPassToStatus);
                     // 原因：批准未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
+                    cttInfoService.updateRecord(cttInfo);
 
                     List<EsInitStl> esInitStlListTemp =
-                            esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfoShowSel.getPkid());
+                            esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfo.getPkid());
                     if (esInitStlListTemp.size() > 0) {
                         MessageUtil.addInfo("该数据已经被["
                                 + ESEnum.getValueByKey(esInitStlListTemp.get(0).getStlType()).getTitle()
                                 + "]使用，数据批准未过,请慎重编辑！");
                     } else {
                         if (esFlowService.getChildrenOfThisRecordInEsInitCtt(strCttTypeTemp,
-                                cttInfoShowSel.getPkid()) > 0) {
+                                cttInfo.getPkid()) > 0) {
                             MessageUtil.addInfo("该数据已经被[" + ESEnum.getValueByKey(strCttTypeTemp).getTitle()
                                     + "]使用，数据批准未过,请慎重编辑！");
                         } else {
@@ -235,8 +221,6 @@ public class CstplItemAction {
 
     public void resetAction(){
         strSubmitType="Add";
-        styleModelNo=new StyleModel();
-        styleModelNo.setDisabled_Flag("false");
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
         cttItemShowSel =new CttItemShow(strBelongToType ,strCstplInfoPkid);
@@ -254,22 +238,11 @@ public class CstplItemAction {
         if(!ToolUtil.getStrIgnoreNull(cttItemShowSel.getName()).equals("")){
             Integer intIndex= esCommon.getIndexOfCstplItemNamelist(cttItemShowSel.getName());
             if(intIndex>=0){
-                if(ToolUtil.getStrIgnoreNull(strSubmitType).equals("Upd")) {
-                    styleModelNo.setDisabled_Flag("true");
-                }else{
-                    styleModelNo.setDisabled_Flag("false");
-                }
                 cttItemShowSel.setUnit(null);
                 cttItemShowSel.setContractUnitPrice(null);
                 cttItemShowSel.setContractQuantity(null);
                 cttItemShowSel.setStrCorrespondingItemNo(null);
                 cttItemShowSel.setCorrespondingPkid(null);
-            }else{
-                if(ToolUtil.getStrIgnoreNull(strSubmitType).equals("Upd")) {
-                    styleModelNo.setDisabled_Flag("true");
-                }else{
-                    styleModelNo.setDisabled_Flag("false");
-                }
             }
         }
         return true;
@@ -565,14 +538,11 @@ public class CstplItemAction {
             List<EsCttItem> esCttItemListTkctt =new ArrayList<EsCttItem>();
             if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
                     ToolUtil.getStrIgnoreNull(strCstplInfoPkid).length()!=0) {
-                             /*初始化流程状态列表*/
-                esFlowControl.getBackToStatusFlagList(strFlowType);
-                cstplInfo = cttInfoService.getCttInfoByPkId(strCstplInfoPkid);
                 // 附件记录变成List
-                attachmentList=attachmentStrToList(cstplInfo.getAttachment());
+                attachmentList=attachmentStrToList(cttInfo.getAttachment());
 
-                beansMap.put("cstplInfo", cstplInfo);
-                String strTkcttPkidInCstpl = cstplInfo.getParentPkid();
+                beansMap.put("cttInfo", cttInfo);
+                String strTkcttPkidInCstpl = cttInfo.getParentPkid();
                 esCttItemListTkctt =
                         cttItemService.getEsItemList(ESEnum.ITEMTYPE0.getCode(), strTkcttPkidInCstpl);
                 List<CttItemShow> cttItemShowListTkctt = new ArrayList<>();
@@ -1237,8 +1207,8 @@ public class CstplItemAction {
                 sbTemp.append(item.getCOLUMN_PATH() + ";");
             }
 
-            cstplInfo.setAttachment(sbTemp.toString());
-            cttInfoService.updateRecord(cstplInfo);
+            cttInfo.setAttachment(sbTemp.toString());
+            cttInfoService.updateRecord(cttInfo);
         } catch (Exception e) {
             logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -1295,8 +1265,8 @@ public class CstplItemAction {
                 MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
                 return;
             }
-            cstplInfo.setAttachment(sb.toString());
-            cttInfoService.updateRecord(cstplInfo);
+            cttInfo.setAttachment(sb.toString());
+            cttInfoService.updateRecord(cttInfo);
             try {
                 inStream = new BufferedInputStream(uploadedFile.getInputstream());
                 fileOutputStream = new FileOutputStream(descFile);
@@ -1328,7 +1298,7 @@ public class CstplItemAction {
 
     /*智能字段Start*/
     public EsCttInfo getCstplInfo() {
-        return cstplInfo;
+        return cttInfo;
     }
 
     public CttItemService getCttItemService() {
@@ -1363,14 +1333,6 @@ public class CstplItemAction {
         this.cstplItemShowList = cstplItemShowList;
     }
 
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
-    }
-
     public EsFlowControl getEsFlowControl() {
         return esFlowControl;
     }
@@ -1381,9 +1343,6 @@ public class CstplItemAction {
 
     public String getStrSubmitType() {
         return strSubmitType;
-    }
-    public StyleModel getStyleModelNo() {
-        return styleModelNo;
     }
     public StyleModel getStyleModel() {
         return styleModel;

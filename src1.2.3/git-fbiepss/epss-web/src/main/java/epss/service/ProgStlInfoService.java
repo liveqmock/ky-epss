@@ -3,7 +3,9 @@ package epss.service;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.repository.dao.EsInitPowerHisMapper;
 import epss.repository.model.model_show.CttInfoShow;
+import org.springframework.beans.factory.annotation.Autowired;
 import skyline.util.ToolUtil;
 import epss.repository.dao.not_mybatis.MyCttStlMapper;
 import epss.repository.model.model_show.ProgInfoShow;
@@ -28,8 +30,8 @@ public class ProgStlInfoService {
     private EsInitStlMapper esInitStlMapper;
     @Resource
     private MyCttStlMapper myCttStlMapper;
-    @Resource
-    private FlowCtrlService flowCtrlService;
+    @Autowired
+    private EsInitPowerHisMapper esInitPowerHisMapper;
     @Resource
     private ProgSubstlItemService progSubstlItemService;
 
@@ -52,6 +54,49 @@ public class ProgStlInfoService {
                 .andStlPkidEqualTo(esInitStlPara.getStlPkid())
                 .andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
         return esInitStlMapper.selectByExample(example);
+    }
+
+    public void accountAction(EsInitStl esInitStlPara) {
+        esInitStlPara.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG4.getCode());
+        esInitStlPara.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG7.getCode());
+        esInitPowerHisMapper.insert(fromInitStlToEsInitPowerHis(esInitStlPara,"update"));
+    }
+
+    private EsInitPowerHis fromCttInfoToEsInitPowerHis(EsCttInfo cttInfoPara,String strOperType){
+        EsInitPowerHis esInitPowerHisTemp =new EsInitPowerHis();
+        esInitPowerHisTemp.setPowerType(cttInfoPara.getCttType());
+        esInitPowerHisTemp.setPowerPkid(cttInfoPara.getPkid());
+        esInitPowerHisTemp.setStatusFlag(cttInfoPara.getFlowStatus());
+        esInitPowerHisTemp.setPreStatusFlag(cttInfoPara.getFlowStatusReason());
+        esInitPowerHisTemp.setCreatedDate(cttInfoPara.getCreatedDate());
+        esInitPowerHisTemp.setCreatedBy(cttInfoPara.getCreatedBy());
+        esInitPowerHisTemp.setSpareField(strOperType);
+        return esInitPowerHisTemp;
+    }
+    private EsInitPowerHis fromCttInfoShowToEsInitPowerHis(CttInfoShow cttInfoShowPara,String strOperType){
+        EsInitPowerHis esInitPowerHisTemp =new EsInitPowerHis();
+        esInitPowerHisTemp.setPowerType(cttInfoShowPara.getCttType());
+        esInitPowerHisTemp.setPowerPkid(cttInfoShowPara.getPkid());
+        esInitPowerHisTemp.setPeriodNo("NULL");
+        esInitPowerHisTemp.setStatusFlag(cttInfoShowPara.getFlowStatus());
+        esInitPowerHisTemp.setPreStatusFlag(cttInfoShowPara.getFlowStatusReason());
+        esInitPowerHisTemp.setCreatedDate(cttInfoShowPara.getCreatedDate());
+        esInitPowerHisTemp.setCreatedBy(cttInfoShowPara.getCreatedBy());
+        esInitPowerHisTemp.setSpareField(strOperType);
+        return esInitPowerHisTemp;
+    }
+
+    private EsInitPowerHis fromInitStlToEsInitPowerHis(EsInitStl esInitStlPara,String strOperType){
+        EsInitPowerHis esInitPowerHis =new EsInitPowerHis();
+        esInitPowerHis.setPowerType(esInitStlPara.getStlType());
+        esInitPowerHis.setPowerPkid(esInitStlPara.getStlPkid());
+        esInitPowerHis.setPeriodNo(esInitStlPara.getPeriodNo());
+        esInitPowerHis.setStatusFlag(esInitStlPara.getFlowStatus());
+        esInitPowerHis.setPreStatusFlag(esInitStlPara.getFlowStatusReason());
+        esInitPowerHis.setCreatedDate(esInitStlPara.getCreatedDate());
+        esInitPowerHis.setCreatedBy(esInitStlPara.getCreatedBy());
+        esInitPowerHis.setSpareField(strOperType);
+        return esInitPowerHis;
     }
 
     private EsInitStl fromModelShowToModel(ProgInfoShow progInfoShowPara){
@@ -126,19 +171,16 @@ public class ProgStlInfoService {
 
     @Transactional
     public void insertStlAndPowerRecord(EsInitStl esInitStlPara){
-        esInitStlPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        esInitStlPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTime=ToolUtil.getStrLastUpdTime();
+        esInitStlPara.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+        esInitStlPara.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+        esInitStlPara.setCreatedBy(strOperatorIdTemp);
+        esInitStlPara.setCreatedDate(strLastUpdTime);
         esInitStlPara.setDeletedFlag("0");
-        esInitStlPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esInitStlPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        esInitStlPara.setLastUpdBy(strOperatorIdTemp);
+        esInitStlPara.setLastUpdDate(strLastUpdTime);
         esInitStlMapper.insert(esInitStlPara) ;
-        EsInitPower esInitPowerTemp=new EsInitPower();
-        esInitPowerTemp.setPowerType(ESEnum.ITEMTYPE5.getCode());
-        esInitPowerTemp.setPowerPkid(esInitStlPara.getStlPkid());
-        esInitPowerTemp.setPeriodNo(esInitStlPara.getPeriodNo());
-        esInitPowerTemp.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
-        esInitPowerTemp.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-        flowCtrlService.insertRecordByStl(esInitPowerTemp);
     }
     @Transactional
     public void updateRecordForSubCttPApprovePass(EsInitStl esInitStlPara,List<ProgSubstlItemShow> progSubstlItemShowListForApprovePara){
@@ -148,15 +190,9 @@ public class ProgStlInfoService {
         esInitStlPara.setDeletedFlag("0");
         esInitStlPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         esInitStlPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        esInitStlPara.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+        esInitStlPara.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
         esInitStlMapper.updateByPrimaryKey(esInitStlPara) ;
-        //Power表更新
-        EsInitPower esInitPowerTemp = new EsInitPower();
-        esInitPowerTemp.setPowerType(esInitStlPara.getStlType());
-        esInitPowerTemp.setPowerPkid(esInitStlPara.getStlPkid());
-        esInitPowerTemp.setPeriodNo(esInitStlPara.getPeriodNo());
-        esInitPowerTemp.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-        esInitPowerTemp.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-        flowCtrlService.updateRecordByStl(esInitPowerTemp);
         //将价格结算的完整数据插入至es_item_stl_subctt_eng_p表
         for (int i=0;i<progSubstlItemShowListForApprovePara.size();i++){
             ProgSubstlItemShow itemUnit=progSubstlItemShowListForApprovePara.get(i);
@@ -188,11 +224,6 @@ public class ProgStlInfoService {
                 .andStlPkidEqualTo(progInfoShowPara.getStlPkid())
                 .andPeriodNoEqualTo(progInfoShowPara.getPeriodNo());
         esInitStlMapper.deleteByExample(example);
-
-        flowCtrlService.deleteRecord(
-                progInfoShowPara.getStlType()
-                , progInfoShowPara.getStlPkid()
-                , progInfoShowPara.getPeriodNo());
     }
     public void deleteRecord(EsInitStl esInitStlPara){
         EsInitStlExample example = new EsInitStlExample();
@@ -201,12 +232,6 @@ public class ProgStlInfoService {
                 .andStlPkidEqualTo(esInitStlPara.getStlPkid())
                 .andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
         esInitStlMapper.deleteByExample(example);
-
-        flowCtrlService.deleteRecord(
-                esInitStlPara.getStlType()
-                , esInitStlPara.getStlPkid()
-                , esInitStlPara.getPeriodNo());
-
     }
     @Transactional
     public void deleteRecordForSubCttPApprovePass(EsInitStl esInitStlPara,String powerType){
@@ -217,33 +242,23 @@ public class ProgStlInfoService {
                 .andStlPkidEqualTo(esInitStlPara.getStlPkid())
                 .andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
         esInitStlMapper.deleteByExample(example);
-        //删除power表中power_type为5的记录
-        flowCtrlService.deleteRecord(
-                esInitStlPara.getStlType()
-                , esInitStlPara.getStlPkid()
-                , esInitStlPara.getPeriodNo());
+
         //更新power表中power_type为3或者4的记录状态为审核状态
-        EsInitPower esInitPowerTemp = new EsInitPower();
-        esInitPowerTemp.setPowerType(powerType);
-        esInitPowerTemp.setPowerPkid(esInitStlPara.getStlPkid());
-        esInitPowerTemp.setPeriodNo(esInitStlPara.getPeriodNo());
-        EsInitPower esInitPower = flowCtrlService.selectByPrimaryKey(esInitPowerTemp);
-        esInitPower.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-        esInitPower.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-        flowCtrlService.updateRecordByPower(esInitPower);
+        example = new EsInitStlExample();
+        example.createCriteria()
+                .andStlTypeEqualTo(powerType)
+                .andStlPkidEqualTo(esInitStlPara.getStlPkid())
+                .andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
+        List<EsInitStl> esInitStlListTemp = esInitStlMapper.selectByExample(example);
+        EsInitStl esInitStlTemp=esInitStlListTemp.get(0);
+        esInitStlTemp.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+        esInitStlTemp.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
+        esInitStlMapper.updateByPrimaryKey(esInitStlTemp);
         //删除es_item_stl_subctt_eng_p表中的相应记录
         progSubstlItemService.deleteRecordByExample(esInitStlPara.getStlPkid(),esInitStlPara.getPeriodNo());
     }
     public int deleteRecord(String strPkId){
         return esInitStlMapper.deleteByPrimaryKey(strPkId);
-    }
-    public int deleteRecordOnly(EsInitStl esInitStlPara) {
-        EsInitStlExample example = new EsInitStlExample();
-        example.createCriteria()
-                .andStlTypeEqualTo(esInitStlPara.getStlType())
-                .andStlPkidEqualTo(esInitStlPara.getStlPkid())
-                .andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
-        return esInitStlMapper.deleteByExample(example);
     }
 
     public String getStrMaxStlId(String strCttType){

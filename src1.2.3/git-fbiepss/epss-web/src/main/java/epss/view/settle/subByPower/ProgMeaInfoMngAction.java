@@ -42,8 +42,6 @@ public class ProgMeaInfoMngAction {
     private ProgMeaItemService progMeaItemService;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{operResService}")
@@ -106,7 +104,6 @@ public class ProgMeaInfoMngAction {
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType="Add";
-        esFlowControl.getBackToStatusFlagList("Qry");
     }
 
     public void resetActionForAdd(){
@@ -298,12 +295,7 @@ public class ProgMeaInfoMngAction {
                     progInfoShowPara.getPeriodNo());
             // 删除登记数据
             int deleteRecordOfRegistNum= progStlInfoService.deleteRecord(progInfoShowDel.getPkid()) ;
-            // 删除权限数据
-            int deleteRecordOfPowerNum= flowCtrlService.deleteRecord(
-                    progInfoShowPara.getStlType(),
-                    progInfoShowPara.getStlPkid(),
-                    progInfoShowPara.getPeriodNo());
-            if (deleteItemsByInitStlTkcttEngNum<=0&&deleteRecordOfRegistNum<=0&&deleteRecordOfPowerNum<=0){
+            if (deleteItemsByInitStlTkcttEngNum<=0&&deleteRecordOfRegistNum<=0){
                 MessageUtil.addInfo("该记录已删除。");
                 return;
             }
@@ -353,14 +345,6 @@ public class ProgMeaInfoMngAction {
 
     public void setEsFlowService(EsFlowService esFlowService) {
         this.esFlowService = esFlowService;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowControl getEsFlowControl() {

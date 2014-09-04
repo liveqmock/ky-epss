@@ -48,8 +48,6 @@ public class SubcttItemAction {
     private static final Logger logger = LoggerFactory.getLogger(SubcttItemAction.class);
     @ManagedProperty(value = "#{cttItemService}")
     private CttItemService cttItemService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
@@ -62,7 +60,7 @@ public class SubcttItemAction {
     private List<CttItemShow> cttItemShowList_Cstpl;
     private CttItemShow cttItemShowSelected_Cstpl;
 
-    private EsCttInfo subcttInfo;
+    private EsCttInfo cttInfo;
     private CttItemShow cttItemShowSel;
     private CttItemShow cttItemShowAdd;
     private CttItemShow cttItemShowUpd;
@@ -86,7 +84,6 @@ public class SubcttItemAction {
 
     /*控制控件在画面上的可用与现实Start*/
     //显示的控制
-	private StyleModel styleModelNo;
     private StyleModel styleModel;
     // 固定项输入时控制控件的可用
     private StyleModel styleModelCttQty;
@@ -109,15 +106,15 @@ public class SubcttItemAction {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         beansMap = new HashMap();
         strBelongToType=ESEnum.ITEMTYPE2.getCode();
-        strSubcttInfoPkid=parammap.get("strSubcttInfoPkid").toString();
+        if (parammap.containsKey("strSubcttInfoPkid")) {
+            strSubcttInfoPkid = parammap.get("strSubcttInfoPkid").toString();
+        }
         strFlowType=parammap.get("strFlowType").toString();
-		List<EsInitPower> esInitPowerList=
-                flowCtrlService.selectListByModel(strBelongToType,strSubcttInfoPkid,"NULL");
+        EsCttInfo esCttInfoTemp=cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
+
         strPassFlag="true";
-        if(esInitPowerList.size()>0){
-            if("Mng".equals(strFlowType)&&ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerList.get(0).getStatusFlag())) {
-                strPassFlag="false";
-            }
+        if("Mng".equals(strFlowType)&&ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esCttInfoTemp.getFlowStatus())) {
+            strPassFlag="false";
         }
         resetAction();
         initData() ;
@@ -129,15 +126,13 @@ public class SubcttItemAction {
             cttItemShowList_Cstpl =new ArrayList<>();
             if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
                     ToolUtil.getStrIgnoreNull(strSubcttInfoPkid).length()!=0) {
-            /*初始化流程状态列表*/
-                esFlowControl.getBackToStatusFlagList(strFlowType);
         /*分包合同*/
-                subcttInfo = cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
+                cttInfo = cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
                 // 附件记录变成List
-                attachmentList = attachmentStrToList(subcttInfo.getAttachment());
-                beansMap.put("subcttInfo", subcttInfo);
+                attachmentList = attachmentStrToList(cttInfo.getAttachment());
+                beansMap.put("subcttInfo", cttInfo);
         /*成本计划*/
-                String strCstplPkidInInitCtt = subcttInfo.getParentPkid();
+                String strCstplPkidInInitCtt = cttInfo.getParentPkid();
                 esCttItemList = cttItemService.getEsItemList(
                         ESEnum.ITEMTYPE1.getCode(), strCstplPkidInInitCtt);
                 recursiveDataTable("root", esCttItemList, cttItemShowList_Cstpl);
@@ -276,8 +271,6 @@ public class SubcttItemAction {
     /*重置*/
     public void resetAction(){
         strSubmitType="Add";
-        styleModelNo=new StyleModel();
-        styleModelNo.setDisabled_Flag("false");
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
         styleModelCttQty=new StyleModel();
@@ -337,11 +330,6 @@ public class SubcttItemAction {
             if(intIndex>=0){
                 styleModelCttQty.setDisabled_Flag("true");
                 styleModelCttAmount.setDisabled_Flag("false");
-                if(strSubmitType!=null && strSubmitType.equals("Upd")) {
-                    styleModelNo.setDisabled_Flag("true");
-                }else{
-                    styleModelNo.setDisabled_Flag("false");
-                }
                 cttItemShowSel.setUnit(null);
                 cttItemShowSel.setContractUnitPrice(null);
                 cttItemShowSel.setContractQuantity(null);
@@ -353,11 +341,6 @@ public class SubcttItemAction {
             else{
                 styleModelCttQty.setDisabled_Flag("false");
                 styleModelCttAmount.setDisabled_Flag("true");
-                if(strSubmitType!=null && strSubmitType.equals("Upd")) {
-                    styleModelNo.setDisabled_Flag("true");
-                }else{
-                    styleModelNo.setDisabled_Flag("false");
-                }
             }
         }
         return true;
@@ -681,15 +664,9 @@ public class SubcttItemAction {
     public void onClickForPowerAction(String strPowerTypePara) {
         try {
             strPowerTypePara=strFlowType+strPowerTypePara;
-            CttInfoShow cttInfoShowSel = new CttInfoShow();
-            cttInfoShowSel.setCttType(strBelongToType);
-            cttInfoShowSel.setPkid(strSubcttInfoPkid);
-            cttInfoShowSel.setPowerType(strBelongToType);
-            cttInfoShowSel.setPowerPkid(strSubcttInfoPkid);
-            cttInfoShowSel.setPeriodNo("NULL");
             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
-                    List<EsCttItem> esCttItemList = cttItemService.getEsItemList(cttInfoShowSel.getCttType(), cttInfoShowSel.getPkid());
+                    List<EsCttItem> esCttItemList = cttItemService.getEsItemList(cttInfo.getCttType(), cttInfo.getPkid());
                     if (esCttItemList.isEmpty()) {
                         MessageUtil.addInfo("无详细内容！");
                         return;
@@ -724,117 +701,113 @@ public class SubcttItemAction {
                         }
                     }
                     if (checkQuantiyZero==1&&checkPriceZero == 0&&checkSecurityZero==0) {
-                        subcttInfo.setType("0");
-                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
-                        cttInfoService.updateByPKid(subcttInfo);
+                        cttInfo.setType("0");
+                        cttInfo.setPkid(cttInfo.getPkid());
+                        cttInfoService.updateByPKid(cttInfo);
                     } else if (checkQuantiyZero==0&&checkPriceZero == 1&&checkSecurityZero==0){
-                        subcttInfo.setType("1");
-                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
-                        cttInfoService.updateByPKid(subcttInfo);
+                        cttInfo.setType("1");
+                        cttInfo.setPkid(cttInfo.getPkid());
+                        cttInfoService.updateByPKid(cttInfo);
                     } else if (checkQuantiyZero==0&&checkPriceZero == 0&&checkSecurityZero==1){
-                        subcttInfo.setType("2");
-                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
-                        cttInfoService.updateByPKid(subcttInfo);
+                        cttInfo.setType("2");
+                        cttInfo.setPkid(cttInfo.getPkid());
+                        cttInfoService.updateByPKid(cttInfo);
                     }else if (checkQuantiyZero==1&&checkPriceZero == 1&&checkSecurityZero==0){
-                        subcttInfo.setType("3");
-                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
-                        cttInfoService.updateByPKid(subcttInfo);
+                        cttInfo.setType("3");
+                        cttInfo.setPkid(cttInfo.getPkid());
+                        cttInfoService.updateByPKid(cttInfo);
                     }else if (checkQuantiyZero==1&&checkPriceZero == 0&&checkSecurityZero==1){
-                        subcttInfo.setType("4");
-                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
-                        cttInfoService.updateByPKid(subcttInfo);
+                        cttInfo.setType("4");
+                        cttInfo.setPkid(cttInfo.getPkid());
+                        cttInfoService.updateByPKid(cttInfo);
                     }else if (checkQuantiyZero==0&&checkPriceZero == 1&&checkSecurityZero==1){
-                        subcttInfo.setType("5");
-                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
-                        cttInfoService.updateByPKid(subcttInfo);
+                        cttInfo.setType("5");
+                        cttInfo.setPkid(cttInfo.getPkid());
+                        cttInfoService.updateByPKid(cttInfo);
                     }else if (checkQuantiyZero==1&&checkPriceZero == 1&&checkSecurityZero==1){
-                        subcttInfo.setType("6");
-                        subcttInfo.setPkid(cttInfoShowSel.getPkid());
-                        cttInfoService.updateByPKid(subcttInfo);
+                        cttInfo.setType("6");
+                        cttInfo.setPkid(cttInfo.getPkid());
+                        cttInfoService.updateByPKid(cttInfo);
                     }
-                    esFlowControl.mngFinishAction(
-                            cttInfoShowSel.getCttType(),
-                            cttInfoShowSel.getPkid(),
-                            "NULL");
+                    // 状态标志：初始
+                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    // 原因：录入完毕
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG0.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
-                    subcttInfo.setType("");
-                    subcttInfo.setPkid(cttInfoShowSel.getPkid());
-                    cttInfoService.updateByPKid(subcttInfo);
-                    esFlowControl.mngNotFinishAction(
-                            cttInfoShowSel.getCttType(),
-                            cttInfoShowSel.getPkid(),
-                            "NULL");
+                    cttInfo.setFlowStatus(null);
+                    cttInfo.setFlowStatusReason(null);
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }// 审核
             else if (strPowerTypePara.contains("Check") && !strPowerTypePara.contains("DoubleCheck")) {
                 if (strPowerTypePara.equals("CheckPass")) {
                     // 状态标志：审核
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
                     // 原因：审核通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
                     // 状态标志：初始
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
                     // 原因：审核未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据审核未过！");
                 }
             } // 复核
             else if (strPowerTypePara.contains("DoubleCheck")) {
                 if (strPowerTypePara.equals("DoubleCheckPass")) {
                     // 状态标志：复核
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG2.getCode());
                     // 原因：复核通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
-                    cttInfoShowSel.setStatusFlag(strNotPassToStatus);
+                    cttInfo.setFlowStatus(strNotPassToStatus);
                     // 原因：复核未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据复核未过！");
                 }
             }// 批准
             else if (strPowerTypePara.contains("Approve")) {
                 if (strPowerTypePara.equals("ApprovePass")) {
                     // 状态标志：批准
-                    cttInfoShowSel.setStatusFlag(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG3.getCode());
                     // 原因：批准通过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据批准通过！");
 
                 } else if (strPowerTypePara.equals("ApproveFail")) {
                     // 检查是否被使用
                     String strCttTypeTemp = "";
-                    if (cttInfoShowSel.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
+                    if (cttInfo.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
                         strCttTypeTemp = ESEnum.ITEMTYPE1.getCode();
-                    } else if (cttInfoShowSel.getCttType().equals(ESEnum.ITEMTYPE1.getCode())) {
+                    } else if (cttInfo.getCttType().equals(ESEnum.ITEMTYPE1.getCode())) {
                         strCttTypeTemp = ESEnum.ITEMTYPE2.getCode();
                     }
                     // 这样写可以实现越级退回
-                    cttInfoShowSel.setStatusFlag(strNotPassToStatus);
+                    cttInfo.setFlowStatus(strNotPassToStatus);
                     // 原因：批准未过
-                    cttInfoShowSel.setPreStatusFlag(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
-
-                    flowCtrlService.updateRecordByCtt(cttInfoShowSel);
+                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
+                    cttInfoService.updateRecord(cttInfo);
 
                     List<EsInitStl> esInitStlListTemp =
-                            esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfoShowSel.getPkid());
+                            esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfo.getPkid());
                     if (esInitStlListTemp.size() > 0) {
                         MessageUtil.addInfo("该数据已经被["
                                 + ESEnum.getValueByKey(esInitStlListTemp.get(0).getStlType()).getTitle()
                                 + "]使用，数据批准未过,请慎重编辑！");
                     } else {
                         if (esFlowService.getChildrenOfThisRecordInEsInitCtt(strCttTypeTemp,
-                                cttInfoShowSel.getPkid()) > 0) {
+                                cttInfo.getPkid()) > 0) {
                             MessageUtil.addInfo("该数据已经被[" + ESEnum.getValueByKey(strCttTypeTemp).getTitle()
                                     + "]使用，数据批准未过,请慎重编辑！");
                         } else {
@@ -891,8 +864,8 @@ public class SubcttItemAction {
                 sbTemp.append(item.getCOLUMN_PATH() + ";");
             }
 
-            subcttInfo.setAttachment(sbTemp.toString());
-            cttInfoService.updateRecord(subcttInfo);
+            cttInfo.setAttachment(sbTemp.toString());
+            cttInfoService.updateRecord(cttInfo);
         } catch (Exception e) {
             logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -949,8 +922,8 @@ public class SubcttItemAction {
                 MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
                 return;
             }
-            subcttInfo.setAttachment(sb.toString());
-            cttInfoService.updateRecord(subcttInfo);
+            cttInfo.setAttachment(sb.toString());
+            cttInfoService.updateRecord(cttInfo);
             try {
                 inStream = new BufferedInputStream(uploadedFile.getInputstream());
                 fileOutputStream = new FileOutputStream(descFile);
@@ -1060,14 +1033,6 @@ public class SubcttItemAction {
         this.cttItemShowSelected_Cstpl = cttItemShowSelected_Cstpl;
     }
 
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
-    }
-
     public EsFlowControl getEsFlowControl() {
         return esFlowControl;
     }
@@ -1082,10 +1047,6 @@ public class SubcttItemAction {
 
     public StyleModel getStyleModel() {
         return styleModel;
-    }
-
-    public StyleModel getStyleModelNo() {
-        return styleModelNo;
     }
 
     public StyleModel getStyleModelCttAmount() {
@@ -1144,12 +1105,12 @@ public class SubcttItemAction {
         this.esFlowService = esFlowService;
     }
 
-    public EsCttInfo getSubcttInfo() {
-        return subcttInfo;
+    public EsCttInfo getCttInfo() {
+        return cttInfo;
     }
 
-    public void setSubcttInfo(EsCttInfo subcttInfo) {
-        this.subcttInfo = subcttInfo;
+    public void setCttInfo(EsCttInfo cttInfo) {
+        this.cttInfo = cttInfo;
     }
 
     public List<CttItemShow> getCttItemShowListExcel() {

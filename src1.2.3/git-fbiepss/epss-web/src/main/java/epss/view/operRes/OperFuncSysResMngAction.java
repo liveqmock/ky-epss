@@ -1,35 +1,24 @@
 package epss.view.operRes;
 
-import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumDeletedFlag;
-import epss.common.enums.ESEnumStatusFlag;
-import epss.repository.model.EsInitPower;
 import epss.repository.model.OperRes;
 import epss.repository.model.Ptmenu;
-import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.DeptOperShow;
 import epss.repository.model.model_show.OperFuncResShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.service.*;
-import jxl.write.WriteException;
-import org.apache.commons.beanutils.BeanUtils;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
-import skyline.util.ToolUtil;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
-import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @ManagedBean

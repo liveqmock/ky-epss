@@ -43,8 +43,6 @@ public class ProgSubstlInfoApproveAction {
     private ProgWorkqtyItemService progWorkqtyItemService;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{operResService}")
@@ -106,7 +104,6 @@ public class ProgSubstlInfoApproveAction {
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType="Add";
-        esFlowControl.getBackToStatusFlagList("Qry");
         strApprovedFlag="false";
         strRowSelectedFlag="false";
     }
@@ -317,14 +314,6 @@ public class ProgSubstlInfoApproveAction {
 
     public void setProgInfoShowList(List<ProgInfoShow> progInfoShowList) {
         this.progInfoShowList = progInfoShowList;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowService getEsFlowService() {

@@ -44,8 +44,6 @@ public class TkcttInfoAction {
     private CttInfoService cttInfoService;
     @ManagedProperty(value = "#{cttItemService}")
     private CttItemService cttItemService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esCommon}")
@@ -79,7 +77,6 @@ public class TkcttInfoAction {
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType = "";
-        esFlowControl.getBackToStatusFlagList("Qry");
     }
 
     public void setMaxNoPlusOne() {
@@ -131,7 +128,6 @@ public class TkcttInfoAction {
                     cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG3.getCode());
                 }
             }
-            cttInfoShowQry.setPeriodNo("NULL");
             this.cttInfoShowList.clear();
             cttInfoShowList = esFlowService.selectCttByStatusFlagBegin_End(cttInfoShowQry);
 
@@ -243,14 +239,6 @@ public class TkcttInfoAction {
 
     public void setCttInfoService(CttInfoService cttInfoService) {
         this.cttInfoService = cttInfoService;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowService getEsFlowService() {

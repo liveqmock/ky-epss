@@ -25,13 +25,10 @@ public class CttInfoShow implements Serializable {
     private String cttEndDate;
     private String attachment;
     private String note;
-    private String powerType;
-    private String powerPkid;
-    private String periodNo;
-    private String statusFlag;
+    private String flowStatus;
     private String strStatusFlagBegin;
     private String strStatusFlagEnd;
-    private String preStatusFlag;
+    private String flowStatusReason;
     private String endFlag;
     private String deletedFlag;
     private String createdBy;
@@ -48,15 +45,16 @@ public class CttInfoShow implements Serializable {
         return pkid;
     }
 
-    public CttInfoShow(String pkid, String id, String cttType, String name, String note, String statusFlag, String preStatusFlag, String endFlag, String lastUpdBy,
+    public CttInfoShow(String pkid, String id, String cttType, String name, String note,
+                       String statusFlag, String preStatusFlag, String endFlag, String lastUpdBy,
                        String lastUpdDate, Integer modificationNum, Boolean isSeled) {
         this.pkid = pkid;
         this.id = id;
         this.cttType=cttType;
         this.name = name;
         this.note = note;
-        this.statusFlag = statusFlag;
-        this.preStatusFlag = preStatusFlag;
+        this.flowStatus = statusFlag;
+        this.flowStatusReason = preStatusFlag;
         this.endFlag = endFlag;
         this.lastUpdBy=lastUpdBy;
         this.lastUpdDate=lastUpdDate;
@@ -64,7 +62,9 @@ public class CttInfoShow implements Serializable {
         this.isSeled=isSeled;
     }
 
-    public CttInfoShow(String id, String name, String note, String signPartAName, String signPartBName, String cttStartDate, String cttEndDate, String statusFlag, String preStatusFlag) {
+    public CttInfoShow(String id, String name, String note, String signPartAName,
+                       String signPartBName, String cttStartDate, String cttEndDate,
+                       String statusFlag, String preStatusFlag) {
         this.id = id;
         this.name = name;
         this.note = note;
@@ -72,8 +72,8 @@ public class CttInfoShow implements Serializable {
         this.signPartBName = signPartBName;
         this.cttStartDate = cttStartDate;
         this.cttEndDate = cttEndDate;
-        this.statusFlag = statusFlag;
-        this.preStatusFlag = preStatusFlag;
+        this.flowStatus = statusFlag;
+        this.flowStatusReason = preStatusFlag;
     }
 
     public CttInfoShow() {
@@ -195,20 +195,20 @@ public class CttInfoShow implements Serializable {
         this.note = note == null ? null : note.trim();
     }
 
-    public String getStatusFlag() {
-        return statusFlag;
+    public String getFlowStatus() {
+        return flowStatus;
     }
 
-    public void setStatusFlag(String statusFlag) {
-        this.statusFlag = statusFlag == null ? null : statusFlag.trim();
+    public void setFlowStatus(String flowStatus) {
+        this.flowStatus = flowStatus;
     }
 
-    public String getPreStatusFlag() {
-        return preStatusFlag;
+    public String getFlowStatusReason() {
+        return flowStatusReason;
     }
 
-    public void setPreStatusFlag(String preStatusFlag) {
-        this.preStatusFlag = preStatusFlag;
+    public void setFlowStatusReason(String flowStatusReason) {
+        this.flowStatusReason = flowStatusReason;
     }
 
     public String getEndFlag() {
@@ -241,30 +241,6 @@ public class CttInfoShow implements Serializable {
 
     public void setStrStatusFlagEnd(String strStatusFlagEnd) {
         this.strStatusFlagEnd = strStatusFlagEnd;
-    }
-
-    public String getPowerType() {
-        return powerType;
-    }
-
-    public void setPowerType(String powerType) {
-        this.powerType = powerType;
-    }
-
-    public String getPowerPkid() {
-        return powerPkid;
-    }
-
-    public void setPowerPkid(String powerPkid) {
-        this.powerPkid = powerPkid;
-    }
-
-    public String getPeriodNo() {
-        return periodNo;
-    }
-
-    public void setPeriodNo(String periodNo) {
-        this.periodNo = periodNo;
     }
 
     public String getCreatedBy() {

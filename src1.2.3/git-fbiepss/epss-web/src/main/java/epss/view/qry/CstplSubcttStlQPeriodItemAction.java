@@ -52,8 +52,6 @@ public class CstplSubcttStlQPeriodItemAction {
     private EsCommon esCommon;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esQueryService}")
@@ -397,14 +395,6 @@ public class CstplSubcttStlQPeriodItemAction {
 
     public void setCttInfoService(CttInfoService cttInfoService) {
         this.cttInfoService = cttInfoService;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public EsFlowService getEsFlowService() {

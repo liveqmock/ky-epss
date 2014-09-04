@@ -45,8 +45,6 @@ public class CstplSubcttItemAction {
     private CttItemService cttItemService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esQueryService}")
@@ -479,14 +477,6 @@ public class CstplSubcttItemAction {
 
     public void setEsCttItem(EsCttItem esCttItem) {
         this.esCttItem = esCttItem;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public List<SelectItem> getCstplList() {

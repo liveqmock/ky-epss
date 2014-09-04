@@ -47,8 +47,6 @@ public class TkMeaCSubStlQItemAction {
     private CttItemService cttItemService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
-    @ManagedProperty(value = "#{flowCtrlService}")
-    private FlowCtrlService flowCtrlService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esQueryService}")
@@ -571,14 +569,6 @@ public class TkMeaCSubStlQItemAction {
 
     public void setStrPeriodNo(String strPeriodNo) {
         this.strPeriodNo = strPeriodNo;
-    }
-
-    public FlowCtrlService getFlowCtrlService() {
-        return flowCtrlService;
-    }
-
-    public void setFlowCtrlService(FlowCtrlService flowCtrlService) {
-        this.flowCtrlService = flowCtrlService;
     }
 
     public List<SelectItem> getTkcttList() {
