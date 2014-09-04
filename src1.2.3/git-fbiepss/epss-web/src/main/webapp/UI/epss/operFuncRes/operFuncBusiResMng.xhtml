@@ -62,7 +62,10 @@
                                 icon="ui-icon-trash"
                                 style="height:18px;width:18px"
                                 action="#{operFuncBusiResMngAction.selectRecordAction('Del',document)}"
-                                rendered="#{document.resPkid eq 'ROOT'?'false':'true'}"
+                                rendered="#{document.resPkid eq 'ROOT'?'false':
+                                                        document.resType eq '0' ? 'true':
+	                                                    document.resType eq '1' ? 'true':
+	                                                    document.resType eq '2' ? 'true':'false'}"
                                 update=":form:pgViewForDel,:form:msgs"
                                 onclick="PF('wVDlgViewForDel').show()">
                         </p:commandButton>

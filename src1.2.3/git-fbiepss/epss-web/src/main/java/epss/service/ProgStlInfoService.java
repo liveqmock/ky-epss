@@ -55,6 +55,12 @@ public class ProgStlInfoService {
                 .andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
         return esInitStlMapper.selectByExample(example);
     }
+    public List<EsInitStl> getInitStlListByModel(EsInitStl esInitStlPara) {
+        EsInitStlExample example = new EsInitStlExample();
+        example.createCriteria().andStlTypeEqualTo(esInitStlPara.getStlType())
+                .andStlPkidEqualTo(esInitStlPara.getStlPkid());
+        return esInitStlMapper.selectByExample(example);
+    }
 
     public void accountAction(EsInitStl esInitStlPara) {
         esInitStlPara.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG4.getCode());

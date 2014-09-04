@@ -194,8 +194,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                 EsInitStl esInitStlTemp=new EsInitStl();
                 esInitStlTemp.setStlType(ESEnum.ITEMTYPE6.getCode());
                 esInitStlTemp.setStlPkid(cttInfoShowTemp.getPkid());
-                esInitStlTemp.setPeriodNo("NULL");
-                List<EsInitStl> esInitStlListTemp = progStlInfoService.getInitStlListByModelShow(esInitStlTemp);
+                List<EsInitStl> esInitStlListTemp = progStlInfoService.getInitStlListByModel(esInitStlTemp);
                 if(esInitStlListTemp.size()>0) {
                     operResShowPara = new OperResShow();
                     operResShowPara.setInfoType(ESEnum.ITEMTYPE6.getCode());
@@ -265,8 +264,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                 esInitStlTemp=new EsInitStl();
                 esInitStlTemp.setStlType(ESEnum.ITEMTYPE7.getCode());
                 esInitStlTemp.setStlPkid(cttInfoShowTemp.getPkid());
-                esInitStlTemp.setPeriodNo("NULL");
-                esInitStlListTemp = progStlInfoService.getInitStlListByModelShow(esInitStlTemp);
+                esInitStlListTemp = progStlInfoService.getInitStlListByModel(esInitStlTemp);
                 if(esInitStlListTemp.size()>0) {
                     operResShowPara = new OperResShow();
                     operResShowPara.setInfoType(ESEnum.ITEMTYPE7.getCode());
@@ -337,9 +335,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                 EsInitStl esInitStlTemp = new EsInitStl();
                 esInitStlTemp.setStlType(ESEnum.ITEMTYPE3.getCode());
                 esInitStlTemp.setStlPkid(cttInfoShowTemp.getPkid());
-                esInitStlTemp.setPeriodNo("NULL");
-                List<EsInitStl> esInitStlListTemp =
-                        progStlInfoService.getInitStlListByModelShow(esInitStlTemp);
+                List<EsInitStl> esInitStlListTemp =progStlInfoService.getInitStlListByModel(esInitStlTemp);
                 if (esInitStlListTemp.size() > 0) {
                     operResShowPara = new OperResShow();
                     operResShowPara.setInfoType(esInitStlTemp.getStlType());
@@ -413,8 +409,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                 esInitStlTemp = new EsInitStl();
                 esInitStlTemp.setStlType(ESEnum.ITEMTYPE4.getCode());
                 esInitStlTemp.setStlPkid(cttInfoShowTemp.getPkid());
-                esInitStlTemp.setPeriodNo("NULL");
-                esInitStlListTemp = progStlInfoService.getInitStlListByModelShow(esInitStlTemp);
+                esInitStlListTemp = progStlInfoService.getInitStlListByModel(esInitStlTemp);
                 if (esInitStlListTemp.size() > 0) {
                     operResShowPara = new OperResShow();
                     operResShowPara.setInfoType(esInitStlTemp.getStlType());
@@ -487,8 +482,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                 esInitStlTemp = new EsInitStl();
                 esInitStlTemp.setStlType(ESEnum.ITEMTYPE5.getCode());
                 esInitStlTemp.setStlPkid(cttInfoShowTemp.getPkid());
-                esInitStlTemp.setPeriodNo("NULL");
-                esInitStlListTemp = progStlInfoService.getInitStlListByModelShow(esInitStlTemp);
+                esInitStlListTemp = progStlInfoService.getInitStlListByModel(esInitStlTemp);
                 if (esInitStlListTemp.size() > 0) {
                     operResShowPara = new OperResShow();
                     operResShowPara.setInfoType(esInitStlTemp.getStlType());
