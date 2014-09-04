@@ -161,6 +161,16 @@ public class CttInfoService {
         cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
         esCttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
     }
+    public void updateRecordForOperRes(CttInfoShow cttInfoShowPara){
+        EsCttInfo esCttInfoTemp = getCttInfoByPkId(cttInfoShowPara.getPkid());
+        esCttInfoTemp.setName(cttInfoShowPara.getName());
+        esCttInfoTemp.setModificationNum(
+                ToolUtil.getIntIgnoreNull(cttInfoShowPara.getModificationNum())+1);
+        esCttInfoTemp.setDeletedFlag("0");
+        esCttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esCttInfoTemp.setLastUpdDate(ToolUtil.getStrLastUpdTime());
+        esCttInfoMapper.updateByPrimaryKey(esCttInfoTemp);
+    }
 
     public int deleteRecord(String strPkId){
         return esCttInfoMapper.deleteByPrimaryKey(strPkId);

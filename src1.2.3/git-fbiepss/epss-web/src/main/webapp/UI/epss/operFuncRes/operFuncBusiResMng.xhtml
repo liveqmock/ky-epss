@@ -51,7 +51,10 @@
                                 icon="ui-icon-pencil"
                                 style="height:18px;width:18px"
                                 action="#{operFuncBusiResMngAction.selectRecordAction('Upd',document)}"
-                                rendered="#{document.resPkid eq 'ROOT'?'false':'true'}"
+                                rendered="#{document.resPkid eq 'ROOT'?'false':
+                                                        document.resType eq '0' ? 'true':
+	                                                    document.resType eq '1' ? 'true':
+	                                                    document.resType eq '2' ? 'true':'false'}"
                                 update=":form:pgViewForUpd,:form:msgs"
                                 onclick="PF('wVDlgViewForUpd').show()">
                         </p:commandButton>

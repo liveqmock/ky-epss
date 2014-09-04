@@ -649,7 +649,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                     MessageUtil.addInfo("数据已被引用，不可更新！");
                     return;
                 }
-                cttInfoService.updateRecord(cttInfoShowUpd);
+                cttInfoService.updateRecordForOperRes(cttInfoShowUpd);
                 MessageUtil.addInfo("更新数据完成。");
             } else if (strSubmitTypePara.equals("Del")) {
                 if (!submitPreCheck(cttInfoShowDel)) {
