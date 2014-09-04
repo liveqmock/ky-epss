@@ -8,7 +8,6 @@ import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import skyline.util.ToolUtil;
 import epss.repository.dao.not_mybatis.MyFlowMapper;
-import epss.repository.model.EsInitPowerHis;
 import epss.repository.model.EsInitStl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

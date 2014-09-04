@@ -208,44 +208,44 @@ public class ProgSubstlItemAction {
         beansMap.put("records0", records0);
         beansMap.put("records1", records1);
         //
-        EsInitPowerHis esInitPowerHis = new EsInitPowerHis();
-        beansMap.put("esInitPowerHisForSubcttStlQMng", esInitPowerHis);
-        beansMap.put("esInitPowerHisForSubcttStlQCheck", esInitPowerHis);
-        beansMap.put("esInitPowerHisForSubcttStlQDoubleCheck", esInitPowerHis);
-        beansMap.put("esInitPowerHisForSubcttStlMMng", esInitPowerHis);
-        beansMap.put("esInitPowerHisForSubcttStlMCheck", esInitPowerHis);
-        beansMap.put("esInitPowerHisForSubcttStlMDoubleCheck", esInitPowerHis);
-        beansMap.put("esInitPowerHisForSubcttStlPApprove", esInitPowerHis);
-        beansMap.put("esInitPowerHisForSubcttStlPAct", esInitPowerHis);
-        beansMap.put("esInitPowerHisForSubcttStlPFile", esInitPowerHis);
-        List<EsInitPowerHis> esInitPowerHisForSubcttStlList =
+        FlowCtrlHis flowCtrlHis = new FlowCtrlHis();
+        beansMap.put("esInitPowerHisForSubcttStlQMng", flowCtrlHis);
+        beansMap.put("esInitPowerHisForSubcttStlQCheck", flowCtrlHis);
+        beansMap.put("esInitPowerHisForSubcttStlQDoubleCheck", flowCtrlHis);
+        beansMap.put("esInitPowerHisForSubcttStlMMng", flowCtrlHis);
+        beansMap.put("esInitPowerHisForSubcttStlMCheck", flowCtrlHis);
+        beansMap.put("esInitPowerHisForSubcttStlMDoubleCheck", flowCtrlHis);
+        beansMap.put("esInitPowerHisForSubcttStlPApprove", flowCtrlHis);
+        beansMap.put("esInitPowerHisForSubcttStlPAct", flowCtrlHis);
+        beansMap.put("esInitPowerHisForSubcttStlPFile", flowCtrlHis);
+        List<FlowCtrlHis> flowCtrlHisForSubcttStlList =
                 flowCtrlHisService.getMngFromPowerHisForSubcttStlList(esInitStl.getStlPkid(), esInitStl.getPeriodNo());
-        for (EsInitPowerHis esInitPowerHisTemp : esInitPowerHisForSubcttStlList) {
-            esInitPowerHisTemp.setCreatedBy(ToolUtil.getUserName(ToolUtil.getStrIgnoreNull(esInitPowerHisTemp.getCreatedBy())));
-            if (ESEnum.ITEMTYPE3.getCode().equals(esInitPowerHisTemp.getPowerType())) {
-                if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
-                    beansMap.put("esInitPowerHisForSubcttStlQMng", esInitPowerHisTemp);
-                } else if (ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
-                    beansMap.put("esInitPowerHisForSubcttStlQCheck", esInitPowerHisTemp);
-                } else if (ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
-                    beansMap.put("esInitPowerHisForSubcttStlQDoubleCheck", esInitPowerHisTemp);
+        for (FlowCtrlHis flowCtrlHisTemp : flowCtrlHisForSubcttStlList) {
+            flowCtrlHisTemp.setCreatedBy(ToolUtil.getUserName(ToolUtil.getStrIgnoreNull(flowCtrlHisTemp.getCreatedBy())));
+            if (ESEnum.ITEMTYPE3.getCode().equals(flowCtrlHisTemp.getInfoType())) {
+                if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                    beansMap.put("esInitPowerHisForSubcttStlQMng", flowCtrlHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                    beansMap.put("esInitPowerHisForSubcttStlQCheck", flowCtrlHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                    beansMap.put("esInitPowerHisForSubcttStlQDoubleCheck", flowCtrlHisTemp);
                 }
-            } else if (ESEnum.ITEMTYPE4.getCode().equals(esInitPowerHisTemp.getPowerType())) {
-                if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
-                    beansMap.put("esInitPowerHisForSubcttStlMMng", esInitPowerHisTemp);
-                } else if (ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
-                    beansMap.put("esInitPowerHisForSubcttStlMCheck", esInitPowerHisTemp);
-                } else if (ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
-                    beansMap.put("esInitPowerHisForSubcttStlMDoubleCheck", esInitPowerHisTemp);
+            } else if (ESEnum.ITEMTYPE4.getCode().equals(flowCtrlHisTemp.getInfoType())) {
+                if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                    beansMap.put("esInitPowerHisForSubcttStlMMng", flowCtrlHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG1.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                    beansMap.put("esInitPowerHisForSubcttStlMCheck", flowCtrlHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                    beansMap.put("esInitPowerHisForSubcttStlMDoubleCheck", flowCtrlHisTemp);
                 }
             } else if (("Account".equals(strSubmitType) || "Qry".equals(strSubmitType)) &&
-                    ESEnum.ITEMTYPE5.getCode().equals(esInitPowerHisTemp.getPowerType())) {
-                if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
-                    beansMap.put("esInitPowerHisForSubcttStlPApprove", esInitPowerHisTemp);
-                } else if (ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
-                    beansMap.put("esInitPowerHisForSubcttStlPAct", esInitPowerHisTemp);
-                } else if (ESEnumStatusFlag.STATUS_FLAG5.getCode().equals(esInitPowerHisTemp.getStatusFlag())) {
-                    beansMap.put("esInitPowerHisForSubcttStlPFile", esInitPowerHisTemp);
+                    ESEnum.ITEMTYPE5.getCode().equals(flowCtrlHisTemp.getInfoType())) {
+                if (ESEnumStatusFlag.STATUS_FLAG3.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                    beansMap.put("esInitPowerHisForSubcttStlPApprove", flowCtrlHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG4.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                    beansMap.put("esInitPowerHisForSubcttStlPAct", flowCtrlHisTemp);
+                } else if (ESEnumStatusFlag.STATUS_FLAG5.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                    beansMap.put("esInitPowerHisForSubcttStlPFile", flowCtrlHisTemp);
                 }
             }
         }

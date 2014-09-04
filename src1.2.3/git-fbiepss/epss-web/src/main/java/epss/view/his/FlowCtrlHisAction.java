@@ -2,7 +2,7 @@ package epss.view.his;
 
 import epss.common.enums.ESEnum;
 import epss.repository.model.EsCttInfo;
-import epss.repository.model.EsInitPowerHis;
+import epss.repository.model.FlowCtrlHis;
 import epss.service.CttInfoService;
 import epss.service.FlowCtrlHisService;
 import org.slf4j.Logger;
@@ -33,8 +33,8 @@ public class FlowCtrlHisAction {
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
 
-    private EsInitPowerHis esInitPowerHis;
-    private List<EsInitPowerHis> esInitPowerHisList;
+    private FlowCtrlHis flowCtrlHis;
+    private List<FlowCtrlHis> flowCtrlHisList;
 
     private String strRendered1;
     private String strRendered2;
@@ -47,7 +47,7 @@ public class FlowCtrlHisAction {
 
     @PostConstruct
     public void init() {
-        this.esInitPowerHisList = new ArrayList<EsInitPowerHis>();
+        this.flowCtrlHisList = new ArrayList<FlowCtrlHis>();
         esInitCtt1List=new ArrayList<SelectItem> ();
         esInitCtt2List=new ArrayList<SelectItem> ();
         strRendered1="false";
@@ -57,9 +57,9 @@ public class FlowCtrlHisAction {
 
     public String onQueryAction(String strQryMsgOutPara) {
         try {
-            this.esInitPowerHisList = flowCtrlHisService.selectListByModel(esInitPowerHis);
+            this.flowCtrlHisList = flowCtrlHisService.selectListByModel(flowCtrlHis);
             if(strQryMsgOutPara.equals("true")){
-                if (esInitPowerHisList.isEmpty()) {
+                if (flowCtrlHisList.isEmpty()) {
                     MessageUtil.addWarn("没有查询到数据。");
                 }
             }
@@ -71,9 +71,9 @@ public class FlowCtrlHisAction {
     }
 
     public void setEsInitPowerHisActionOfPowerPkidAction(){
-        String strCttType=esInitPowerHis.getPowerType();
+        String strCttType= flowCtrlHis.getInfoType();
         if(strCttType.equals("")){
-            esInitPowerHis.setPowerPkid("");
+            flowCtrlHis.setInfoPkid("");
             strRendered1="false";
             strRendered2="false";
             esInitCtt1List=new ArrayList<SelectItem>();
@@ -145,7 +145,7 @@ public class FlowCtrlHisAction {
 
     public void setFromTkAndCttToSStlAction(){
         List<EsCttInfo> esCttInfoListTemp =new ArrayList<EsCttInfo>();
-        String strCttType=esInitPowerHis.getPowerType();
+        String strCttType= flowCtrlHis.getInfoType();
         if(strCttType.equals(ESEnum.ITEMTYPE1.getCode())){
             esCttInfoListTemp = cttInfoService.getEsInitCttByCttTypeAndBelongToPkId(
                     ESEnum.ITEMTYPE1.getCode(),strTkcttCstplSelected);
@@ -167,23 +167,23 @@ public class FlowCtrlHisAction {
     }
 
     public void resetAction(){
-        esInitPowerHis=new EsInitPowerHis() ;
+        flowCtrlHis =new FlowCtrlHis() ;
     }
 
-    public List<EsInitPowerHis> getEsInitPowerHisList() {
-        return esInitPowerHisList;
+    public List<FlowCtrlHis> getFlowCtrlHisList() {
+        return flowCtrlHisList;
     }
 
-    public void setEsInitPowerHisList(List<EsInitPowerHis> esInitPowerHisList) {
-        this.esInitPowerHisList = esInitPowerHisList;
+    public void setFlowCtrlHisList(List<FlowCtrlHis> flowCtrlHisList) {
+        this.flowCtrlHisList = flowCtrlHisList;
     }
 
-    public EsInitPowerHis getEsInitPower() {
-        return esInitPowerHis;
+    public FlowCtrlHis getEsInitPower() {
+        return flowCtrlHis;
     }
 
-    public void setEsInitPower(EsInitPowerHis esInitPowerHis) {
-        this.esInitPowerHis = esInitPowerHis;
+    public void setEsInitPower(FlowCtrlHis flowCtrlHis) {
+        this.flowCtrlHis = flowCtrlHis;
     }
 
     public FlowCtrlHisService getFlowCtrlHisService() {
@@ -194,12 +194,12 @@ public class FlowCtrlHisAction {
         this.flowCtrlHisService = flowCtrlHisService;
     }
 
-    public EsInitPowerHis getEsInitPowerHis() {
-        return esInitPowerHis;
+    public FlowCtrlHis getFlowCtrlHis() {
+        return flowCtrlHis;
     }
 
-    public void setEsInitPowerHis(EsInitPowerHis esInitPowerHis) {
-        this.esInitPowerHis = esInitPowerHis;
+    public void setFlowCtrlHis(FlowCtrlHis flowCtrlHis) {
+        this.flowCtrlHis = flowCtrlHis;
     }
 
     public CttInfoService getCttInfoService() {

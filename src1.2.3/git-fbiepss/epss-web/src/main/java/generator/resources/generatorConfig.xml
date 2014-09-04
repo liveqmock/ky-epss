@@ -113,14 +113,11 @@
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
         -->
-        <table schema="epss" tableName="es_ctt_info">
+        <table schema="epss" tableName="FLOW_CTRL_HIS">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <table schema="epss" tableName="es_init_stl">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
+
         <!--平台类 -->
         <!--<table tableName="ptenudetail"/>
         <table tableName="ptenumain"/>

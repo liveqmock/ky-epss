@@ -3,7 +3,7 @@ package epss.service;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.repository.dao.EsInitPowerHisMapper;
+import epss.repository.dao.FlowCtrlHisMapper;
 import epss.repository.model.model_show.CttInfoShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import skyline.util.ToolUtil;
@@ -31,7 +31,7 @@ public class ProgStlInfoService {
     @Resource
     private MyCttStlMapper myCttStlMapper;
     @Autowired
-    private EsInitPowerHisMapper esInitPowerHisMapper;
+    private FlowCtrlHisMapper flowCtrlHisMapper;
     @Resource
     private ProgSubstlItemService progSubstlItemService;
 
@@ -59,44 +59,44 @@ public class ProgStlInfoService {
     public void accountAction(EsInitStl esInitStlPara) {
         esInitStlPara.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG4.getCode());
         esInitStlPara.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG7.getCode());
-        esInitPowerHisMapper.insert(fromInitStlToEsInitPowerHis(esInitStlPara,"update"));
+        flowCtrlHisMapper.insert(fromInitStlToEsInitPowerHis(esInitStlPara, "update"));
     }
 
-    private EsInitPowerHis fromCttInfoToEsInitPowerHis(EsCttInfo cttInfoPara,String strOperType){
-        EsInitPowerHis esInitPowerHisTemp =new EsInitPowerHis();
-        esInitPowerHisTemp.setPowerType(cttInfoPara.getCttType());
-        esInitPowerHisTemp.setPowerPkid(cttInfoPara.getPkid());
-        esInitPowerHisTemp.setStatusFlag(cttInfoPara.getFlowStatus());
-        esInitPowerHisTemp.setPreStatusFlag(cttInfoPara.getFlowStatusReason());
-        esInitPowerHisTemp.setCreatedDate(cttInfoPara.getCreatedDate());
-        esInitPowerHisTemp.setCreatedBy(cttInfoPara.getCreatedBy());
-        esInitPowerHisTemp.setSpareField(strOperType);
-        return esInitPowerHisTemp;
+    private FlowCtrlHis fromCttInfoToEsInitPowerHis(EsCttInfo cttInfoPara,String strOperType){
+        FlowCtrlHis flowCtrlHisTemp =new FlowCtrlHis();
+        flowCtrlHisTemp.setInfoType(cttInfoPara.getCttType());
+        flowCtrlHisTemp.setInfoPkid(cttInfoPara.getPkid());
+        flowCtrlHisTemp.setFlowStatus(cttInfoPara.getFlowStatus());
+        flowCtrlHisTemp.setFlowStatusRemark(cttInfoPara.getFlowStatusReason());
+        flowCtrlHisTemp.setCreatedTime(cttInfoPara.getCreatedDate());
+        flowCtrlHisTemp.setCreatedBy(cttInfoPara.getCreatedBy());
+        flowCtrlHisTemp.setOperType(strOperType);
+        return flowCtrlHisTemp;
     }
-    private EsInitPowerHis fromCttInfoShowToEsInitPowerHis(CttInfoShow cttInfoShowPara,String strOperType){
-        EsInitPowerHis esInitPowerHisTemp =new EsInitPowerHis();
-        esInitPowerHisTemp.setPowerType(cttInfoShowPara.getCttType());
-        esInitPowerHisTemp.setPowerPkid(cttInfoShowPara.getPkid());
-        esInitPowerHisTemp.setPeriodNo("NULL");
-        esInitPowerHisTemp.setStatusFlag(cttInfoShowPara.getFlowStatus());
-        esInitPowerHisTemp.setPreStatusFlag(cttInfoShowPara.getFlowStatusReason());
-        esInitPowerHisTemp.setCreatedDate(cttInfoShowPara.getCreatedDate());
-        esInitPowerHisTemp.setCreatedBy(cttInfoShowPara.getCreatedBy());
-        esInitPowerHisTemp.setSpareField(strOperType);
-        return esInitPowerHisTemp;
+    private FlowCtrlHis fromCttInfoShowToEsInitPowerHis(CttInfoShow cttInfoShowPara,String strOperType){
+        FlowCtrlHis flowCtrlHisTemp =new FlowCtrlHis();
+        flowCtrlHisTemp.setInfoType(cttInfoShowPara.getCttType());
+        flowCtrlHisTemp.setInfoPkid(cttInfoShowPara.getPkid());
+        flowCtrlHisTemp.setPeriodNo("NULL");
+        flowCtrlHisTemp.setFlowStatus(cttInfoShowPara.getFlowStatus());
+        flowCtrlHisTemp.setFlowStatusRemark(cttInfoShowPara.getFlowStatusReason());
+        flowCtrlHisTemp.setCreatedTime(cttInfoShowPara.getCreatedDate());
+        flowCtrlHisTemp.setCreatedBy(cttInfoShowPara.getCreatedBy());
+        flowCtrlHisTemp.setOperType(strOperType);
+        return flowCtrlHisTemp;
     }
 
-    private EsInitPowerHis fromInitStlToEsInitPowerHis(EsInitStl esInitStlPara,String strOperType){
-        EsInitPowerHis esInitPowerHis =new EsInitPowerHis();
-        esInitPowerHis.setPowerType(esInitStlPara.getStlType());
-        esInitPowerHis.setPowerPkid(esInitStlPara.getStlPkid());
-        esInitPowerHis.setPeriodNo(esInitStlPara.getPeriodNo());
-        esInitPowerHis.setStatusFlag(esInitStlPara.getFlowStatus());
-        esInitPowerHis.setPreStatusFlag(esInitStlPara.getFlowStatusReason());
-        esInitPowerHis.setCreatedDate(esInitStlPara.getCreatedDate());
-        esInitPowerHis.setCreatedBy(esInitStlPara.getCreatedBy());
-        esInitPowerHis.setSpareField(strOperType);
-        return esInitPowerHis;
+    private FlowCtrlHis fromInitStlToEsInitPowerHis(EsInitStl esInitStlPara,String strOperType){
+        FlowCtrlHis flowCtrlHis =new FlowCtrlHis();
+        flowCtrlHis.setInfoType(esInitStlPara.getStlType());
+        flowCtrlHis.setInfoPkid(esInitStlPara.getStlPkid());
+        flowCtrlHis.setPeriodNo(esInitStlPara.getPeriodNo());
+        flowCtrlHis.setFlowStatus(esInitStlPara.getFlowStatus());
+        flowCtrlHis.setFlowStatusRemark(esInitStlPara.getFlowStatusReason());
+        flowCtrlHis.setCreatedTime(esInitStlPara.getCreatedDate());
+        flowCtrlHis.setCreatedBy(esInitStlPara.getCreatedBy());
+        flowCtrlHis.setOperType(strOperType);
+        return flowCtrlHis;
     }
 
     private EsInitStl fromModelShowToModel(ProgInfoShow progInfoShowPara){

@@ -1,6 +1,6 @@
 package epss.repository.dao.not_mybatis;
 
-import epss.repository.model.EsInitPowerHis;
+import epss.repository.model.FlowCtrlHis;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.ProgInfoShow;
 import epss.repository.model.EsInitStl;
@@ -414,6 +414,6 @@ public interface MyFlowMapper {
             "  eipwai.power_pkid=#{powerPkid} " +
             "  and eipwai.period_no=#{periodNo} " +
             "order by eipwai.power_type,eipwai.FLOW_STATUS")
-    List<EsInitPowerHis> getMngFromPowerHisForSubcttStlList(@Param("powerPkid") String powerPkid,
+    List<FlowCtrlHis> getMngFromPowerHisForSubcttStlList(@Param("powerPkid") String powerPkid,
                                                             @Param("periodNo") String periodNo);
 }

@@ -25,8 +25,6 @@ public class OperResService {
     @Resource
     private OperResMapper operResMapper;
     @Resource
-    private FlowCtrlService flowCtrlService;
-    @Resource
     private CttInfoService cttInfoService;
     @Resource
     private CttItemService cttItemService;
@@ -90,22 +88,17 @@ public class OperResService {
         if (ESEnum.ITEMTYPE0.getCode().equals(cttInfoShowPara.getCttType())
                 ||ESEnum.ITEMTYPE1.getCode().equals(cttInfoShowPara.getCttType())
                 ||ESEnum.ITEMTYPE2.getCode().equals(cttInfoShowPara.getCttType())){
-            EsInitPower esInitPowerTemp = new EsInitPower();
-            esInitPowerTemp.setPowerType(cttInfoShowPara.getCttType());
-            esInitPowerTemp.setPowerPkid(cttInfoShowPara.getPkid());
-            esInitPowerTemp.setPeriodNo("NULL");
-            if (cttItemService.getEsItemList(cttInfoShowPara.getCttType(),cttInfoShowPara.getPkid()).size()>0
-                    ||flowCtrlService.selectListByModel(esInitPowerTemp).size() > 0) {
+            if (cttItemService.getEsItemList(cttInfoShowPara.getCttType(),cttInfoShowPara.getPkid()).size()>0) {
                 return "数据已被引用，不可删除！";
             }else {
                 int deleteRecordNumOfCtt = cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
                 if (ESEnum.ITEMTYPE0.getCode().equals(cttInfoShowPara.getCttType())){
-                    progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE6.getCode(),cttInfoShowPara));
-                    progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE7.getCode(),cttInfoShowPara));
+                    //progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE6.getCode(),cttInfoShowPara));
+                    //progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE7.getCode(),cttInfoShowPara));
                 }else if (ESEnum.ITEMTYPE2.getCode().equals(cttInfoShowPara.getCttType())){
-                    progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE3.getCode(),cttInfoShowPara));
+                   /* progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE3.getCode(),cttInfoShowPara));
                     progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE4.getCode(),cttInfoShowPara));
-                    progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE5.getCode(),cttInfoShowPara));
+                    progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE5.getCode(),cttInfoShowPara));*/
                 }
             }
         }else {
@@ -113,7 +106,7 @@ public class OperResService {
                     initStlData(cttInfoShowPara.getCttType(), cttInfoShowPara))==null){
                 return "数据已被引用，不可删除！";
             }else {
-                progStlInfoService.deleteRecordOnly(initStlData(cttInfoShowPara.getCttType(),cttInfoShowPara));
+                /*progStlInfoService.deleteRecordOnly(initStlData(cttInfoShowPara.getCttType(),cttInfoShowPara));*/
             }
         }
         OperResExample example=new OperResExample();
