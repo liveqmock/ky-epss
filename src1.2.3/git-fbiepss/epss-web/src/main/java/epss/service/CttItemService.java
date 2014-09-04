@@ -110,21 +110,26 @@ public class CttItemService {
     }
 
     public void insertRecord(CttItemShow cttItemShowPara) {
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         EsCttItem esCttItemTemp=fromModelShowToModel(cttItemShowPara);
         esCttItemTemp.setDeletedFlag("0");
         esCttItemTemp.setOriginFlag("0");
-        String strOperatorId=ToolUtil.getOperatorManager().getOperatorId();
-        esCttItemTemp.setCreatedBy(strOperatorId);
-        esCttItemTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
-        esCttItemTemp.setLastUpdBy(strOperatorId);
-        esCttItemTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        esCttItemTemp.setCreatedBy(strOperatorIdTemp);
+        esCttItemTemp.setCreatedDate(strLastUpdTimeTemp);
+        esCttItemTemp.setLastUpdBy(strOperatorIdTemp);
+        esCttItemTemp.setLastUpdDate(strLastUpdTimeTemp);
         esCttItemMapper.insertSelective(esCttItemTemp);
     }
     public void insertRecord(EsCttItem esCttItemPara){
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         esCttItemPara.setDeletedFlag("0");
         esCttItemPara.setOriginFlag("0");
-        esCttItemPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        esCttItemPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        esCttItemPara.setCreatedBy(strOperatorIdTemp);
+        esCttItemPara.setCreatedDate(strLastUpdTimeTemp);
+        esCttItemPara.setLastUpdBy(strOperatorIdTemp);
+        esCttItemPara.setLastUpdDate(strLastUpdTimeTemp);
         esCttItemMapper.insert(esCttItemPara);
     }
 
@@ -191,7 +196,6 @@ public class CttItemService {
         return esCttItemMapper.deleteByExample(example);
     }
 
-
     public void setAfterThisOrderidPlusOneByNode(String strBelongToType,
                                                    String strBelongToPkid,
                                                    String strParentPkid,
@@ -215,5 +219,4 @@ public class CttItemService {
                 intGrade,
                 intOrderid);
     }
-
 }

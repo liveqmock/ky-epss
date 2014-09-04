@@ -228,7 +228,7 @@ public class ProgEstInfoMngAction {
                 return;
             }
             List<EsInitStl> esInitStlListTemp =
-                    progStlInfoService.getExistedEsInitStlSubcttEngInDb(progInfoShowAdd);
+                    progStlInfoService.getInitStlListByModelShow(progInfoShowAdd);
             if(esInitStlListTemp.size()>0) {
                 MessageUtil.addError("该记录已存在，请重新录入！");
                 return;

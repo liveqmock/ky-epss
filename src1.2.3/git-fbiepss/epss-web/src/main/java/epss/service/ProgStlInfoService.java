@@ -39,11 +39,18 @@ public class ProgStlInfoService {
      * @param progInfoShowPara
      * @return
      */
-    public List<EsInitStl> getExistedEsInitStlSubcttEngInDb(ProgInfoShow progInfoShowPara) {
+    public List<EsInitStl> getInitStlListByModelShow(ProgInfoShow progInfoShowPara) {
         EsInitStlExample example = new EsInitStlExample();
         example.createCriteria().andStlTypeEqualTo(progInfoShowPara.getStlType())
                                 .andStlPkidEqualTo(progInfoShowPara.getStlPkid())
                                 .andPeriodNoEqualTo(progInfoShowPara.getPeriodNo());
+        return esInitStlMapper.selectByExample(example);
+    }
+    public List<EsInitStl> getInitStlListByModelShow(EsInitStl esInitStlPara) {
+        EsInitStlExample example = new EsInitStlExample();
+        example.createCriteria().andStlTypeEqualTo(esInitStlPara.getStlType())
+                .andStlPkidEqualTo(esInitStlPara.getStlPkid())
+                .andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
         return esInitStlMapper.selectByExample(example);
     }
 
@@ -70,29 +77,25 @@ public class ProgStlInfoService {
     public EsInitStl selectRecordsByPrimaryKey(String strPkId){
         return esInitStlMapper.selectByPrimaryKey(strPkId);
     }
-    public List<EsInitStl> selectRecordsByRecord(EsInitStl esInitStlPara){
-        EsInitStlExample esInitStlExample=new EsInitStlExample();
-        EsInitStlExample.Criteria criteria = esInitStlExample.createCriteria();
-        criteria.andStlTypeEqualTo(esInitStlPara.getStlType()).
-                andStlPkidEqualTo(esInitStlPara.getStlPkid()).
-                andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
-        return esInitStlMapper.selectByExample(esInitStlExample);
-    }
 
     public void insertRecord(ProgInfoShow progInfoShowPara){
-        progInfoShowPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        progInfoShowPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
+        progInfoShowPara.setCreatedBy(strOperatorIdTemp);
+        progInfoShowPara.setCreatedDate(strLastUpdTimeTemp);
         progInfoShowPara.setDeletedFlag("0");
-        progInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progInfoShowPara.setLastUpdBy(strOperatorIdTemp);
+        progInfoShowPara.setLastUpdDate(strLastUpdTimeTemp);
         esInitStlMapper.insert(fromModelShowToModel(progInfoShowPara)) ;
     }
     public void insertRecord(EsInitStl esInitStlPara){
-        esInitStlPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        esInitStlPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
+        esInitStlPara.setCreatedBy(strOperatorIdTemp);
+        esInitStlPara.setCreatedDate(strLastUpdTimeTemp);
         esInitStlPara.setDeletedFlag("0");
-        esInitStlPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esInitStlPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        esInitStlPara.setLastUpdBy(strOperatorIdTemp);
+        esInitStlPara.setLastUpdDate(strLastUpdTimeTemp);
         esInitStlMapper.insert(esInitStlPara) ;
     }
     public EsInitStl initStlData(String strStlTypePara,EsCttInfo esCttInfoPara){

@@ -125,19 +125,23 @@ public class CttInfoService {
     }
 
     public void insertRecord(CttInfoShow cttInfoShowPara) {
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         cttInfoShowPara.setDeletedFlag("0");
-        cttInfoShowPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        cttInfoShowPara.setCreatedDate(ToolUtil.getStrLastUpdTime());
-        cttInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
+        cttInfoShowPara.setCreatedBy(strOperatorIdTemp);
+        cttInfoShowPara.setCreatedDate(strLastUpdTimeTemp);
+        cttInfoShowPara.setLastUpdBy(strOperatorIdTemp);
+        cttInfoShowPara.setLastUpdDate(strLastUpdTimeTemp);
         esCttInfoMapper.insertSelective(fromModelShowToModel(cttInfoShowPara));
     }
     public void insertRecord(EsCttInfo esCttInfoPara) {
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         esCttInfoPara.setDeletedFlag("0");
-        esCttInfoPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        esCttInfoPara.setCreatedDate(ToolUtil.getStrLastUpdTime());
-        esCttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esCttInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
+        esCttInfoPara.setCreatedBy(strOperatorIdTemp);
+        esCttInfoPara.setCreatedDate(strLastUpdTimeTemp);
+        esCttInfoPara.setLastUpdBy(strOperatorIdTemp);
+        esCttInfoPara.setLastUpdDate(strLastUpdTimeTemp);
         esCttInfoMapper.insertSelective(esCttInfoPara);
     }
 
