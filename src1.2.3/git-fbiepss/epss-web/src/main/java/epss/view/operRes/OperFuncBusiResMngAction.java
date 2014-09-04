@@ -591,7 +591,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                 cttInfoShowUpd = fromResModelShowToCttInfoShow(operFuncResShowPara);
             } else if (strSubmitTypePara.equals("Del")) {
                 cttInfoShowDel = fromResModelShowToCttInfoShow(operFuncResShowPara);
-            }else if (strSubmitTypePara.equals("Sel")) {
+            } else if (strSubmitTypePara.equals("Sel")) {
                 cttInfoShowSel = fromResModelShowToCttInfoShow(operFuncResShowPara);
                 taskFunctionSeled="";
             }
@@ -616,6 +616,7 @@ public class OperFuncBusiResMngAction implements Serializable{
         try {
             if (strSubmitTypePara.equals("Add")) {
                 if (!submitPreCheck(cttInfoShowAdd)) {
+                    MessageUtil.addError("请输入名称！");
                     return;
                 }
                 if (cttInfoService.isExistInDb(cttInfoShowAdd)) {
@@ -636,6 +637,10 @@ public class OperFuncBusiResMngAction implements Serializable{
                     cttInfoShowAdd = new CttInfoShow();
                 }
             } else if (strSubmitTypePara.equals("Upd")) {
+                if (!submitPreCheck(cttInfoShowUpd)) {
+                    MessageUtil.addError("请输入名称！");
+                    return;
+                }
                 EsInitPower esInitPowerTemp = new EsInitPower();
                 esInitPowerTemp.setPowerType(cttInfoShowUpd.getCttType());
                 esInitPowerTemp.setPowerPkid(cttInfoShowUpd.getPkid());
@@ -647,25 +652,11 @@ public class OperFuncBusiResMngAction implements Serializable{
                 cttInfoService.updateRecord(cttInfoShowUpd);
                 MessageUtil.addInfo("更新数据完成。");
             } else if (strSubmitTypePara.equals("Del")) {
-                EsInitPower esInitPowerTemp = new EsInitPower();
-                esInitPowerTemp.setPowerType(cttInfoShowDel.getCttType());
-                esInitPowerTemp.setPowerPkid(cttInfoShowDel.getPkid());
-                esInitPowerTemp.setPeriodNo("NULL");
-                if (flowCtrlService.selectListByModel(esInitPowerTemp).size() > 0) {
-                    MessageUtil.addInfo("数据已被引用，不可删除！");
+                if (!submitPreCheck(cttInfoShowDel)) {
+                    MessageUtil.addError("该记录已被删除！");
                     return;
                 }
-                int deleteRecordNumOfCttItem = cttItemService.deleteRecord(cttInfoShowDel);
-                int deleteRecordNumOfCtt = cttInfoService.deleteRecord(cttInfoShowDel.getPkid());
-                int deleteRecordNumOfPower = flowCtrlService.deleteRecord(
-                        cttInfoShowDel.getCttType(),
-                        cttInfoShowDel.getPkid(),
-                        "NULL");
-                if (deleteRecordNumOfCtt <= 0 && deleteRecordNumOfPower <= 0 && deleteRecordNumOfCttItem <= 0) {
-                    MessageUtil.addInfo("该记录已删除。");
-                    return;
-                }
-                MessageUtil.addInfo("删除数据完成。");
+                MessageUtil.addInfo(operResService.deleteResRecord(cttInfoShowDel));
             } else if (strSubmitTypePara.equals("Power")) {
                 if (taskFunctionSeled.length()==0) {
                     MessageUtil.addError("功能列表不能为空，请选择");
@@ -706,7 +697,6 @@ public class OperFuncBusiResMngAction implements Serializable{
 
     private boolean submitPreCheck(CttInfoShow cttInfoShowPara) {
         if ("".equals(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getName()))){
-            MessageUtil.addError("请输入名称！");
             return false;
         }
         return true;

@@ -237,6 +237,14 @@ public class ProgStlInfoService {
     public int deleteRecord(String strPkId){
         return esInitStlMapper.deleteByPrimaryKey(strPkId);
     }
+    public int deleteRecordOnly(EsInitStl esInitStlPara) {
+        EsInitStlExample example = new EsInitStlExample();
+        example.createCriteria()
+                .andStlTypeEqualTo(esInitStlPara.getStlType())
+                .andStlPkidEqualTo(esInitStlPara.getStlPkid())
+                .andPeriodNoEqualTo(esInitStlPara.getPeriodNo());
+        return esInitStlMapper.deleteByExample(example);
+    }
 
     public String getStrMaxStlId(String strCttType){
         return myCttStlMapper.getStrMaxStlId(strCttType) ;

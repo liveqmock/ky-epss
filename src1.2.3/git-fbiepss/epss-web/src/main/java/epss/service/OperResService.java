@@ -1,10 +1,13 @@
 package epss.service;
 
-import epss.repository.model.OperResExample;
+import epss.common.enums.ESEnum;
+import epss.repository.dao.EsCttItemMapper;
+import epss.repository.model.*;
+import org.springframework.transaction.annotation.Transactional;
+import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.repository.dao.OperResMapper;
 import epss.repository.dao.not_mybatis.MyOperResMapper;
-import epss.repository.model.OperRes;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.DeptOperShow;
 import epss.repository.model.model_show.OperResShow;
@@ -21,6 +24,14 @@ public class OperResService {
     private MyOperResMapper myOperResMapper;
     @Resource
     private OperResMapper operResMapper;
+    @Resource
+    private FlowCtrlService flowCtrlService;
+    @Resource
+    private CttInfoService cttInfoService;
+    @Resource
+    private CttItemService cttItemService;
+    @Resource
+    private ProgStlInfoService progStlInfoService;
 
     public List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara){
         return myOperResMapper.selectOperaResRecordsByModelShow(operResShowPara);
@@ -66,6 +77,51 @@ public class OperResService {
         }
         criteria.andInfoPkidEqualTo(operResPara.getInfoPkid());
         operResMapper.deleteByExample(example);
+    }
+    public EsInitStl initStlData(String strStlTypePara,CttInfoShow cttInfoShowPara){
+        EsInitStl esInitStl=new EsInitStl();
+        esInitStl.setStlType(strStlTypePara);
+        esInitStl.setStlPkid(cttInfoShowPara.getPkid());
+        esInitStl.setPeriodNo("NULL");
+        return esInitStl;
+    }
+    @Transactional
+    public String deleteResRecord(CttInfoShow cttInfoShowPara){
+        if (ESEnum.ITEMTYPE0.getCode().equals(cttInfoShowPara.getCttType())
+                ||ESEnum.ITEMTYPE1.getCode().equals(cttInfoShowPara.getCttType())
+                ||ESEnum.ITEMTYPE2.getCode().equals(cttInfoShowPara.getCttType())){
+            EsInitPower esInitPowerTemp = new EsInitPower();
+            esInitPowerTemp.setPowerType(cttInfoShowPara.getCttType());
+            esInitPowerTemp.setPowerPkid(cttInfoShowPara.getPkid());
+            esInitPowerTemp.setPeriodNo("NULL");
+            if (cttItemService.getEsItemList(cttInfoShowPara.getCttType(),cttInfoShowPara.getPkid()).size()>0
+                    ||flowCtrlService.selectListByModel(esInitPowerTemp).size() > 0) {
+                return "数据已被引用，不可删除！";
+            }else {
+                int deleteRecordNumOfCtt = cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
+                if (ESEnum.ITEMTYPE0.getCode().equals(cttInfoShowPara.getCttType())){
+                    progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE6.getCode(),cttInfoShowPara));
+                    progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE7.getCode(),cttInfoShowPara));
+                }else if (ESEnum.ITEMTYPE2.getCode().equals(cttInfoShowPara.getCttType())){
+                    progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE3.getCode(),cttInfoShowPara));
+                    progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE4.getCode(),cttInfoShowPara));
+                    progStlInfoService.deleteRecordOnly(initStlData(ESEnum.ITEMTYPE5.getCode(),cttInfoShowPara));
+                }
+            }
+        }else {
+            if (progStlInfoService.getInitStlListByModelShow(
+                    initStlData(cttInfoShowPara.getCttType(), cttInfoShowPara))==null){
+                return "数据已被引用，不可删除！";
+            }else {
+                progStlInfoService.deleteRecordOnly(initStlData(cttInfoShowPara.getCttType(),cttInfoShowPara));
+            }
+        }
+        OperResExample example=new OperResExample();
+        OperResExample.Criteria criteria = example.createCriteria();
+        criteria.andInfoTypeEqualTo(cttInfoShowPara.getCttType())
+                .andInfoPkidEqualTo(cttInfoShowPara.getPkid());
+        operResMapper.deleteByExample(example);
+        return "删除数据完成。";
     }
     private OperRes fromOperShowToModel(OperResShow record) {
         OperRes operResPara=new OperRes();
