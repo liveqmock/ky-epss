@@ -73,7 +73,7 @@ public class ProgStlInfoService {
         flowCtrlHisTemp.setInfoType(cttInfoPara.getCttType());
         flowCtrlHisTemp.setInfoPkid(cttInfoPara.getPkid());
         flowCtrlHisTemp.setFlowStatus(cttInfoPara.getFlowStatus());
-        flowCtrlHisTemp.setFlowStatusRemark(cttInfoPara.getFlowStatusReason());
+        flowCtrlHisTemp.setFlowStatusReason(cttInfoPara.getFlowStatusReason());
         flowCtrlHisTemp.setCreatedTime(cttInfoPara.getCreatedDate());
         flowCtrlHisTemp.setCreatedBy(cttInfoPara.getCreatedBy());
         flowCtrlHisTemp.setOperType(strOperType);
@@ -85,7 +85,7 @@ public class ProgStlInfoService {
         flowCtrlHisTemp.setInfoPkid(cttInfoShowPara.getPkid());
         flowCtrlHisTemp.setPeriodNo("NULL");
         flowCtrlHisTemp.setFlowStatus(cttInfoShowPara.getFlowStatus());
-        flowCtrlHisTemp.setFlowStatusRemark(cttInfoShowPara.getFlowStatusReason());
+        flowCtrlHisTemp.setFlowStatusReason(cttInfoShowPara.getFlowStatusReason());
         flowCtrlHisTemp.setCreatedTime(cttInfoShowPara.getCreatedDate());
         flowCtrlHisTemp.setCreatedBy(cttInfoShowPara.getCreatedBy());
         flowCtrlHisTemp.setOperType(strOperType);
@@ -98,7 +98,7 @@ public class ProgStlInfoService {
         flowCtrlHis.setInfoPkid(esInitStlPara.getStlPkid());
         flowCtrlHis.setPeriodNo(esInitStlPara.getPeriodNo());
         flowCtrlHis.setFlowStatus(esInitStlPara.getFlowStatus());
-        flowCtrlHis.setFlowStatusRemark(esInitStlPara.getFlowStatusReason());
+        flowCtrlHis.setFlowStatusReason(esInitStlPara.getFlowStatusReason());
         flowCtrlHis.setCreatedTime(esInitStlPara.getCreatedDate());
         flowCtrlHis.setCreatedBy(esInitStlPara.getCreatedBy());
         flowCtrlHis.setOperType(strOperType);

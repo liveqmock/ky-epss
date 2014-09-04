@@ -33,8 +33,8 @@ public class FlowCtrlHisService {
         if (!ToolUtil.getStrIgnoreNull(flowCtrlHis.getFlowStatus()).equals("")){
             criteria.andFlowStatusLike("%"+ flowCtrlHis.getFlowStatus()+"%");
         }
-        if (!ToolUtil.getStrIgnoreNull(flowCtrlHis.getFlowStatusRemark()).equals("")){
-            criteria.andFlowStatusRemarkLike("%"+ flowCtrlHis.getFlowStatusRemark()+"%");
+        if (!ToolUtil.getStrIgnoreNull(flowCtrlHis.getFlowStatusReason()).equals("")){
+            criteria.andFlowStatusReasonLike("%"+ flowCtrlHis.getFlowStatusReason()+"%");
         }
         if (!ToolUtil.getStrIgnoreNull(flowCtrlHis.getCreatedBy()).equals("")){
             criteria.andCreatedByLike("%"+ flowCtrlHis.getCreatedBy()+"%");
