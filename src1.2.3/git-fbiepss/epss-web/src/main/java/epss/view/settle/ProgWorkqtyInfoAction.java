@@ -305,21 +305,26 @@ public class ProgWorkqtyInfoAction {
             progInfoShowDel.setStlType(strStlType);
             //判断是否已关联产生了分包材料结算
             EsCttInfo esCttInfoTemp=cttInfoService.getCttInfoByPkId( progInfoShowDel.getStlPkid());
-            if (("3").equals(esCttInfoTemp.getType())||("6").equals(esCttInfoTemp.getType())){
+            if ((ESEnumSubcttType.TYPE3.getCode()).equals(esCttInfoTemp.getType())
+                    ||(ESEnumSubcttType.TYPE6.getCode()).equals(esCttInfoTemp.getType())){
                 ProgInfoShow progInfoShowQryM=new ProgInfoShow();
                 progInfoShowQryM.setStlPkid( progInfoShowDel.getStlPkid());
-                progInfoShowQryM.setStlType("4");
+                progInfoShowQryM.setStlType(ESEnum.ITEMTYPE4.getCode());
                 progInfoShowQryM.setPeriodNo( progInfoShowDel.getPeriodNo());
                 List<ProgInfoShow> progInfoShowConstructsTemp =
                         esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQryM);
                 if (progInfoShowConstructsTemp.size()!=0){
                     for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
                         if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag())))&&
-                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
+                                &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG1.getCode()).equals(
+                                ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){
                             MessageUtil.addInfo("该记录已关联分包材料结算，不可删除！");
                             return;
                         }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))&&
-                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
+                                &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG0.getCode()).equals(
+                                ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){
                             delMatRecordAction(esISSOMPCUnit);
                         }
                     }

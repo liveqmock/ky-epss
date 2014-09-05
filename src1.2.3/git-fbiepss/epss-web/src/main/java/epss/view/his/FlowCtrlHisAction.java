@@ -64,8 +64,8 @@ public class FlowCtrlHisAction {
                 }
             }
         } catch (Exception e) {
-            logger.error("总包合同信息查询失败", e);
-            MessageUtil.addError("总包合同信息查询失败");
+            logger.error("信息查询失败", e);
+            MessageUtil.addError("信息查询失败");
         }
         return null;
     }

@@ -1,7 +1,9 @@
 package epss.view.settle.subByPower;
 
 import epss.common.enums.ESEnum;
+import epss.common.enums.ESEnumAutoLinkFlag;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.ESEnumSubcttType;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitStl;
 import epss.repository.model.model_show.CttInfoShow;
@@ -283,21 +285,26 @@ public class ProgMatqtyInfoMngAction {
             progInfoShowDel.setStlType(strStlType);
             //判断是否已关联产生了分包数量结算
             EsCttInfo esCttInfoTemp=cttInfoService.getCttInfoByPkId(progInfoShowDel.getStlPkid());
-            if (("3").equals(esCttInfoTemp.getType())||("6").equals(esCttInfoTemp.getType())){
+            if ((ESEnumSubcttType.TYPE3.getCode()).equals(esCttInfoTemp.getType())||
+                    (ESEnumSubcttType.TYPE6.getCode()).equals(esCttInfoTemp.getType())){
                 ProgInfoShow progInfoShowQryQ=new ProgInfoShow();
                 progInfoShowQryQ.setStlPkid(progInfoShowDel.getStlPkid());
-                progInfoShowQryQ.setStlType("3");
+                progInfoShowQryQ.setStlType(ESEnum.ITEMTYPE3.getCode());
                 progInfoShowQryQ.setPeriodNo(progInfoShowDel.getPeriodNo());
                 List<ProgInfoShow> progInfoShowConstructsTemp =
                         esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQryQ);
                 if (progInfoShowConstructsTemp.size()!=0){
                     for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
                         if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag())))&&
-                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
+                                &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG1.getCode()).equals(
+                                ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){
                             MessageUtil.addInfo("该记录已关联分包数量结算，不可删除！");
                             return;
                         }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))&&
-                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
+                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
+                                &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG0.getCode()).equals(
+                                ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){
                             delQtyRecordAction(esISSOMPCUnit);
                         }
                     }

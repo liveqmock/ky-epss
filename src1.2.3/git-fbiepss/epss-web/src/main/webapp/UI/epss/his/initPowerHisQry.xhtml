@@ -21,13 +21,13 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="true"/>
-            <p:focus for="powerType"/>
+            <p:focus for="infoType"/>
             <p:panel>
                 <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
                     <h:panelGrid>
                         <h:panelGrid columns="6">
-                            <p:outputLabel value="所属种类：" for="powerType"/>
-                            <p:selectOneMenu id="powerType" value="#{flowCtrlHisAction.flowCtrlHis.powerType}"
+                            <p:outputLabel value="所属种类：" for="infoType"/>
+                            <p:selectOneMenu id="infoType" value="#{flowCtrlHisAction.flowCtrlHis.infoType}"
                                              style="width:133px">
                                 <f:selectItems value="#{esCommon.itemTypeList}"/>
                                 <p:ajax update="msgs,pgCondition"
@@ -49,7 +49,7 @@
                                            for="subcttStlTkcttMeaSta"
                                            rendered="#{flowCtrlHisAction.strRendered2}"/>
                             <p:selectOneMenu id="subcttStlTkcttMeaSta"
-                                             value="#{flowCtrlHisAction.flowCtrlHis.powerPkid}"
+                                             value="#{flowCtrlHisAction.flowCtrlHis.infoPkid}"
                                              rendered="#{flowCtrlHisAction.strRendered2}">
                                 <f:selectItems value="#{flowCtrlHisAction.esInitCtt2List}"/>
                             </p:selectOneMenu>
@@ -58,11 +58,11 @@
                             <p:outputLabel value="期数编码：" for="pno"/>
                             <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHis.periodNo}"/>
                             <p:outputLabel value="状态标志：" for="sf"/>
-                            <p:selectOneMenu id="sf" value="#{flowCtrlHisAction.flowCtrlHis.statusFlag}">
+                            <p:selectOneMenu id="sf" value="#{flowCtrlHisAction.flowCtrlHis.flowStatus}">
                                 <f:selectItems value="#{esCommon.statusFlagList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="状态原因：" for="preStatusFlag"/>
-                            <p:selectOneMenu id="preStatusFlag" value="#{flowCtrlHisAction.flowCtrlHis.preStatusFlag}">
+                            <p:selectOneMenu id="preStatusFlag" value="#{flowCtrlHisAction.flowCtrlHis.flowStatusReason}">
                                 <f:selectItems value="#{esCommon.preStatusFlagList}"/>
                             </p:selectOneMenu>
                         </h:panelGrid>
@@ -70,7 +70,7 @@
                             <p:outputLabel value="创建人名：" for="createid"/>
                             <p:inputText id="createid" value="#{flowCtrlHisAction.flowCtrlHis.createdBy}"/>
                             <p:outputLabel value="创建时间：" for="createdate"/>
-                            <p:inputText id="createdate" value="#{flowCtrlHisAction.flowCtrlHis.createdDate}"
+                            <p:inputText id="createdate" value="#{flowCtrlHisAction.flowCtrlHis.createdTime}"
                                          onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
                         </h:panelGrid>
                     </h:panelGrid>
@@ -100,7 +100,7 @@
             <p:dataTable id="pdt" style="width:100%;"
                          value="#{flowCtrlHisAction.flowCtrlHisList}"
                          var="record"
-                         rowKey="#{record.powerPkid}"
+                         rowKey="#{record.infoPkid}"
                          selectionMode="single"
                          paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                          {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -115,31 +115,31 @@
                     <h:outputText value="#{row + 1}"/>
                 </p:column>
                 <p:column headerText="pkid" style="display:none;" rendered="false">
-                    <h:outputText id="tetid" value="#{record.powerPkid}"/>
+                    <h:outputText id="tetid" value="#{record.infoPkid}"/>
                 </p:column>
                 <p:column headerText="对象所属" style="text-align:center">
-                    <h:outputText value="#{esCommon.getLabelByValueInItemTypeList(record.powerType)}"/>
+                    <h:outputText value="#{esCommon.getLabelByValueInItemTypeList(record.infoType)}"/>
                 </p:column>
                 <p:column headerText="对象" style="text-align:left">
-                    <h:outputText value="#{tkcttInfoAction.getCttInfoByPkId(record.powerPkid).name}"/>
+                    <h:outputText value="#{tkcttInfoAction.getCttInfoByPkId(record.infoPkid).name}"/>
                 </p:column>
                 <p:column headerText="期数编码" style="text-align:center">
                     <h:outputText value="#{record.periodNo}"/>
                 </p:column>
                 <p:column headerText="状态标志" style="text-align:center">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.statusFlag)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
                 </p:column>
                 <p:column headerText="创建人" style="text-align:center">
                     <h:outputText value="#{record.createdBy}"/>
                 </p:column>
                 <p:column headerText="创建时间" style="text-align:center">
-                    <h:outputText value="#{record.createdDate}"/>
+                    <h:outputText value="#{record.createdTime}"/>
                 </p:column>
                 <p:column headerText="状态原因" style="text-align:center">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.preStatusFlag)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
                 </p:column>
                 <p:column headerText="备注內容" style="text-align:center">
-                    <h:outputText value="#{record.spareField}"/>
+                    <h:outputText value="#{record.remark}"/>
                 </p:column>
             </p:dataTable>
         </h:form>
