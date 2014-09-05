@@ -99,7 +99,7 @@
                          rowStyleClass="#{record.statusFlag eq null? null:'rowDoneStyle'}"
                          scrollable="true">
                 <p:column headerText="操作" style="width:61px">
-                      <p:commandButton  icon="ui-icon-pencil"
+                     <p:commandButton  icon="ui-icon-pencil"
                                         style="height:18px;width:18px"
                                         actionListener="#{progWorkqtyInfoMngAction.selectRecordAction('Mng','Upd',record)}"
                                       update=":form:pdt,:form:pgViewForUpd,:form:msgs"
@@ -141,7 +141,7 @@
                     <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.preStatusFlag)}"/>
                 </p:column>
             </p:dataTable>
-            <p:dialog id="dlgViewForAdd" header="分包合同增加信息" widgetVar="wVDlgViewForAdd"
+            <p:dialog id="dlgViewForAdd" header="分包结算增加信息" widgetVar="wVDlgViewForAdd"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">
                 <h:panelGrid id="pgViewForAdd">
@@ -171,7 +171,7 @@
                     <h:panelGrid id="pgOperBtnForAdd" columns="2">
                         <p:commandButton id="submitBtnForAdd"
                                          value="提交（增加）"
-                                         action="#{progWorkqtyInfoMngAction.onClickForMngAction()}"
+                                         action="#{progWorkqtyInfoMngAction.onClickForMngAction('Add')}"
                                          update="pdt,msgs,pgViewForAdd">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForAdd" value="重置"
@@ -181,7 +181,7 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:dialog>
-            <p:dialog id="dlgViewForUpd" header="分包合同更新信息" widgetVar="wVDlgViewForUpd"
+            <p:dialog id="dlgViewForUpd" header="分包结算更新信息" widgetVar="wVDlgViewForUpd"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">
                 <h:panelGrid id="pgViewForUpd">
@@ -197,12 +197,12 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel value="分包合同：" for="cttNameForUpd"/>
                         <p:inputText id="cttNameForUpd" value="#{progWorkqtyInfoMngAction.progInfoShowUpd.stlName}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;width:328px;"/>
+                                     style="background-color:gainsboro;width:328px;" readonly="true"/>
                     </h:panelGrid>
                     <h:panelGrid columns="4">
                         <p:outputLabel value="期数编码：  " for="periodNoForUpd"/>
                         <p:inputText id="periodNoForUpd" value="#{progWorkqtyInfoMngAction.progInfoShowUpd.periodNo}"
+                                     style="background-color:gainsboro;text-align:right;" readonly="true"
                                      onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         <p:outputLabel value="备注内容：" for="noteForUpd"/>
                         <p:inputText id="noteForUpd" value="#{progWorkqtyInfoMngAction.progInfoShowUpd.note}"/>
@@ -234,7 +234,7 @@
                     <h:panelGrid id="pgOperBtnForUpd" columns="2">
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
-                                         action="#{progWorkqtyInfoMngAction.onClickForMngAction()}"
+                                         action="#{progWorkqtyInfoMngAction.onClickForMngAction('Upd')}"
                                          update="pdt,msgs,pgViewForUpd"
                                          oncomplete="wVDlgViewForUpd.hide()">
                         </p:commandButton>
@@ -245,7 +245,7 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:dialog>
-            <p:dialog id="dlgViewForDel" header="分包合同删除信息" widgetVar="wVDlgViewForDel"
+            <p:dialog id="dlgViewForDel" header="分包结算删除信息" widgetVar="wVDlgViewForDel"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">
                 <h:panelGrid id="pgViewForDel">
@@ -298,7 +298,7 @@
                     <h:panelGrid id="pgOperBtnForDel" columns="2">
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
-                                         action="#{progWorkqtyInfoMngAction.onClickForMngAction()}"
+                                         action="#{progWorkqtyInfoMngAction.onClickForMngAction('Del')}"
                                          update="pdt,msgs,pgViewForDel"
                                          oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>

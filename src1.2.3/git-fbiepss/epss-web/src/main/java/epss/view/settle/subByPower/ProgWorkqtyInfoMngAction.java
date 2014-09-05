@@ -70,7 +70,6 @@ public class ProgWorkqtyInfoMngAction {
     //自己拥有权限的分包合同
     //private List<SelectItem> subcttByPowerList;
 
-    private String strSubmitType;
     private String strStlType;
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
@@ -108,14 +107,10 @@ public class ProgWorkqtyInfoMngAction {
         progInfoShowDel = new ProgInfoShow();
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
-        strSubmitType = "Add";
     }
-
-    public void resetActionForAdd() {
+    public void resetActionForAdd(){
         progInfoShowAdd = new ProgInfoShow();
-        strSubmitType = "Add";
     }
-
     public void setMaxNoPlusOne(String strQryTypePara) {
         try {
             Integer intTemp;
@@ -155,10 +150,14 @@ public class ProgWorkqtyInfoMngAction {
             this.progInfoShowList.clear();
             List<ProgInfoShow> progInfoShowConstructsTemp =
                     esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQry);
-            for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
+            if (progInfoShowQry.getStlPkid()!=null){//有分包合同条件查询
+                progInfoShowList.addAll(progInfoShowConstructsTemp);
+            }else {                                 //无分包合同条件查询
                 for (SelectItem itemUnit : subcttList) {
-                    if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())) {
-                        progInfoShowList.add(esISSOMPCUnit);
+                    for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
+                        if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())) {
+                            progInfoShowList.add(esISSOMPCUnit);
+                        }
                     }
                 }
             }
@@ -177,12 +176,8 @@ public class ProgWorkqtyInfoMngAction {
                                    String strSubmitTypePara,
                                    ProgInfoShow progInfoShowPara) {
         try {
-            strSubmitType = strSubmitTypePara;
-            String strStatusFlagCode = ToolUtil.getStrIgnoreNull(progInfoShowPara.getStatusFlag());
-            String strStatusFlagName = esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getStatusFlag());
             progInfoShowPara.setCreatedByName(ToolUtil.getUserName(progInfoShowPara.getCreatedBy()));
             progInfoShowPara.setLastUpdByName(ToolUtil.getUserName(progInfoShowPara.getLastUpdBy()));
-            // 查询
             // 查询
             if (strPowerTypePara.equals("Qry")) {
                 progInfoShowSel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
@@ -190,45 +185,10 @@ public class ProgWorkqtyInfoMngAction {
                 if (strSubmitTypePara.equals("Sel")) {
                     progInfoShowSel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                 } else if (strSubmitTypePara.equals("Add")) {
-                } else {
-                    if (!strStatusFlagCode.equals("") &&
-                            !strStatusFlagCode.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
-                        MessageUtil.addInfo("数据已经" + strStatusFlagName + "，您无权进行编辑操作！");
-                        return;
-                    }
-                    if (strSubmitTypePara.equals("Upd")) {
-                        progInfoShowUpd = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
-                    } else if (strSubmitTypePara.equals("Del")) {
-                        progInfoShowDel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
-                    }
-                }
-            } else {// 权限控制
-                progInfoShowSel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
-                if (strPowerTypePara.equals("Check")) {
-                    if (strStatusFlagCode.equals("")) {
-                        MessageUtil.addInfo("本期数据还未录入完毕，您暂时不能进行审核操作！");
-                    } else if (!strStatusFlagCode.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode()) && !
-                            strStatusFlagCode.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())) {
-                        MessageUtil.addInfo("本期数据已经" + strStatusFlagName + "，您无权进行编辑操作！");
-                    }
-                } else if (strPowerTypePara.equals("DoubleCheck")) {
-                    if (strStatusFlagCode.equals("")) {
-                        MessageUtil.addInfo("本期数据还未录入完毕，您暂时不能进行复核操作！");
-                    } else if (strStatusFlagCode.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
-                        MessageUtil.addInfo("本期数据刚刚录入，还未审核，您暂时不能进行复核！");
-                    } else if (!strStatusFlagCode.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode()) && !
-                            strStatusFlagCode.equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())) {
-                        MessageUtil.addInfo("本期数据已经" + strStatusFlagName + "，您无权进行编辑操作！");
-                    }
-                } else if (strPowerTypePara.equals("Approve")) {
-                    if (strStatusFlagCode.equals("")) {
-                        MessageUtil.addInfo("本期数据还未录入完毕，您暂时不能进行批准操作！");
-                    } else if (strStatusFlagCode.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
-                        MessageUtil.addInfo("本期数据刚刚录入，还未审核，您暂时不能进行批准！");
-                    } else if (!strStatusFlagCode.equals(ESEnumStatusFlag.STATUS_FLAG2.getCode()) && !
-                            strStatusFlagCode.equals(ESEnumStatusFlag.STATUS_FLAG3.getCode())) {
-                        MessageUtil.addInfo("本期数据已经" + strStatusFlagName + "，您无权进行编辑操作！");
-                    }
+                } else if (strSubmitTypePara.equals("Upd")) {
+                    progInfoShowUpd = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
+                } else if (strSubmitTypePara.equals("Del")) {
+                    progInfoShowDel = (ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                 }
             }
         } catch (Exception e) {
@@ -246,6 +206,9 @@ public class ProgWorkqtyInfoMngAction {
         } else if (StringUtils.isEmpty(progInfoShow.getStlPkid())) {
             MessageUtil.addError("请输入分包合同！");
             return false;
+        }else if (StringUtils.isEmpty(progInfoShow.getPeriodNo())){
+            MessageUtil.addError("请输入期数编码！");
+            return false;
         }
         return true;
     }
@@ -253,15 +216,13 @@ public class ProgWorkqtyInfoMngAction {
     /**
      * 提交维护权限
      */
-    public void onClickForMngAction() {
+    public void onClickForMngAction(String strSubmitType) {
         if (strSubmitType.equals("Add")) {
             progInfoShowAdd.setStlType(strStlType);
             if (!submitPreCheck(progInfoShowAdd)) {
                 return;
             }
-            List<EsInitStl> esInitStlListTemp =
-                    progStlInfoService.getInitStlListByModelShow(progInfoShowAdd);
-            if (esInitStlListTemp.size() > 0) {
+            if (progStlInfoService.getInitStlListByModelShow(progInfoShowAdd).size() > 0) {
                 MessageUtil.addError("该记录已存在，请重新录入！");
                 return;
             }
@@ -278,9 +239,6 @@ public class ProgWorkqtyInfoMngAction {
             }
         } else if (strSubmitType.equals("Upd")) {
             progInfoShowUpd.setStlType(strStlType);
-            if (!submitPreCheck(progInfoShowUpd)) {
-                return;
-            }
             updRecordAction(progInfoShowUpd);
         } else if (strSubmitType.equals("Del")) {
             progInfoShowDel.setStlType(strStlType);
@@ -306,7 +264,7 @@ public class ProgWorkqtyInfoMngAction {
                                 (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
                                 &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG0.getCode()).equals(
                                 ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){
-                            delMatRecordAction(esISSOMPCUnit);
+                            deleteStlMAndItemRecordAction(esISSOMPCUnit);
                         }
                     }
                 }
@@ -319,10 +277,9 @@ public class ProgWorkqtyInfoMngAction {
         progInfoShowTemp.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG0.getCode());
         this.progInfoShowList.clear();
         List<ProgInfoShow> progInfoShowConstructsTemp =
-                esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowTemp);
-
-        for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-            for (SelectItem itemUnit : subcttList) {
+                esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowTemp);                               //无分包合同条件查询
+        for (SelectItem itemUnit : subcttList) {
+            for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
                 if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())) {
                     progInfoShowList.add(esISSOMPCUnit);
                 }
@@ -351,37 +308,15 @@ public class ProgWorkqtyInfoMngAction {
     }
     private void delRecordAction(ProgInfoShow progInfoShowPara) {
         try {
-            // 删除详细数据
-            int deleteItemsByInitStlTkcttEngNum =
-                    progWorkqtyItemService.deleteItemsByInitStlSubcttEng(
-                            progInfoShowPara.getStlPkid(),
-                            progInfoShowPara.getPeriodNo());
-            // 删除登记数据
-            int deleteRecordOfRegistNum = progStlInfoService.deleteRecord(progInfoShowPara.getPkid());
-            if (deleteItemsByInitStlTkcttEngNum <= 0 && deleteRecordOfRegistNum <= 0) {
-                MessageUtil.addInfo("该记录已删除。");
-                return;
-            }
-            MessageUtil.addInfo("删除数据完成。");
+            MessageUtil.addInfo(progStlInfoService.deleteStlQAndItemRecord(progInfoShowPara));
         } catch (Exception e) {
             logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
         }
     }
-    private void delMatRecordAction(ProgInfoShow progInfoShowPara){
+    private void deleteStlMAndItemRecordAction(ProgInfoShow progInfoShowPara){
         try {
-            // 删除详细数据
-            int deleteItemsByInitStlTkcttEngNum=
-                    progMatqtyItemService.deleteItemsByInitStlSubcttEng(
-                            progInfoShowPara.getStlPkid(),
-                            progInfoShowPara.getPeriodNo());
-            // 删除登记数据
-            int deleteRecordOfRegistNum= progStlInfoService.deleteRecord(progInfoShowPara.getPkid()) ;
-            if (deleteItemsByInitStlTkcttEngNum<=0&&deleteRecordOfRegistNum<=0){
-                MessageUtil.addInfo("该记录已删除。");
-                return;
-            }
-            MessageUtil.addInfo("对应材料结算删除数据完成。");
+            progStlInfoService.deleteStlMAndItemRecord(progInfoShowPara);
         } catch (Exception e) {
             logger.error("删除对应材料结算数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -466,10 +401,6 @@ public class ProgWorkqtyInfoMngAction {
 
     public void setSubcttList(List<SelectItem> subcttList) {
         this.subcttList = subcttList;
-    }
-
-    public String getStrSubmitType() {
-        return strSubmitType;
     }
 
     public ProgInfoShow getProgInfoShowQry() {

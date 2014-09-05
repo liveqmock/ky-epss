@@ -31,38 +31,11 @@ public class EsFlowService {
     private OperResService operResService;
 
     public List<CttInfoShow> selectCttByStatusFlagBegin_End(CttInfoShow cttInfoShowPara){
-        OperRes operResTemp=new OperRes();
-        operResTemp.setOperPkid(ToolUtil.getOperatorManager().getOperatorId());
-        //List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
-        List<CttInfoShow> cttInfoShowListTemp= myFlowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
-        List<CttInfoShow> cttInfoShowList=new ArrayList<>();
-        /*for(CttInfoShow cttInfoShowUnit:cttInfoShowListTemp){
-            for(OperResShow operResShowUnit:operResShowListTemp){
-                if(cttInfoShowUnit.getCttType().equals(operResShowUnit.getInfoType())&&
-                        cttInfoShowUnit.getPkid().equals(operResShowUnit.getInfoPkid())) {
-                    cttInfoShowList.add(cttInfoShowUnit);
-                }
-            }
-        }*/
-        cttInfoShowList.addAll(cttInfoShowListTemp);
-        return cttInfoShowList;
+        return myFlowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
     }
 
     public List<ProgInfoShow> selectSubcttStlQMByStatusFlagBegin_End(ProgInfoShow progInfoShowPara){
-        OperRes operResTemp=new OperRes();
-        operResTemp.setOperPkid(ToolUtil.getOperatorManager().getOperatorId());
-        List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
-        List<ProgInfoShow> progInfoShowListTemp= myFlowMapper.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowPara);
-        List<ProgInfoShow> progInfoShowList=new ArrayList<>();
-        for(ProgInfoShow progInfoShowUnit:progInfoShowListTemp){
-            for(OperResShow operResShowUnit:operResShowListTemp){
-                if(progInfoShowUnit.getStlType().equals(operResShowUnit.getInfoType())&&
-                        progInfoShowUnit.getStlPkid().equals(operResShowUnit.getInfoPkid())) {
-                    progInfoShowList.add(progInfoShowUnit);
-                }
-            }
-        }
-        return progInfoShowList;
+        return myFlowMapper.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowPara);
     }
 
     public List<ProgInfoShow> selectNotFormEsInitSubcttStlP(String strParentPkid,

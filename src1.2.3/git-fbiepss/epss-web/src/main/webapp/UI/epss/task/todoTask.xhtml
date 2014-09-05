@@ -9,84 +9,90 @@
         <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
         <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
         <script type="text/javascript" language="javascript">
-            function actSelect(infoType,flowStatus,infoPkid) {
+            function actSelect(taskType,infoType,flowStatus,infoPkid) {
                 var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
                         "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
-                if (infoType == '0') {// 总包合同待处理任务
-                    if(flowStatus=="") { // 录入
-                        var rtn = dialog("../item/itemMng_Tkctt.xhtml?strFlowType=Mng&amp;strTkcttInfoPkid=" +infoPkid, arg, sfeature);
+                if (taskType=='0'){//待处理任务
+                    if (infoType == '0') {// 总包合同待处理任务
+                        if(flowStatus=="") { // 录入
+                            var rtn = dialog("../item/itemMng_Tkctt.xhtml?strFlowType=Mng&amp;strTkcttInfoPkid=" +infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=="0") { // 审核
+                            var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Check&amp;strTkcttInfoPkid=" +infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=='1') { // 复核
+                            var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=DoubleCheck&amp;strTkcttInfoPkid=" + infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=='2') { // 批准
+                            var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Approve&amp;strTkcttInfoPkid=" + infoPkid, arg, sfeature);
+                        }
                     }else
-                    if(flowStatus=="0") { // 审核
-                        var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Check&amp;strTkcttInfoPkid=" +infoPkid, arg, sfeature);
+                    if (infoType == '1') {// 成本计划待处理任务
+                        if(flowStatus=="") { // 录入
+                            var rtn = dialog("../item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCstplInfoPkid=" +infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=="0") { // 审核
+                            var rtn = dialog("../item/itemMng_Cstpl.xhtml?strFlowType=Check&amp;strCstplInfoPkid=" +infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=='1') { // 复核
+                            var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=DoubleCheck&amp;strCstplInfoPkid=" + infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=='2') { // 批准
+                            var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=Approve&amp;strCstplInfoPkid=" + infoPkid, arg, sfeature);
+                        }
                     }else
-                    if(flowStatus=='1') { // 复核
-                        var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=DoubleCheck&amp;strTkcttInfoPkid=" + infoPkid, arg, sfeature);
+                    if (infoType == '2') {// 分包合同待处理任务
+                        if(flowStatus=="") { // 录入
+                            var rtn = dialog("../item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strSubcttInfoPkid=" +infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=="0") { // 审核
+                            var rtn = dialog("../item/itemMng_Subctt.xhtml?strFlowType=Check&amp;strSubcttInfoPkid=" +infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=='1') { // 复核
+                            var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=DoubleCheck&amp;strSubcttInfoPkid=" + infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=='2') { // 批准
+                            var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=Approve&amp;strSubcttInfoPkid=" + infoPkid, arg, sfeature);
+                        }
                     }else
-                    if(flowStatus=='2') { // 批准
-                        var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Approve&amp;strTkcttInfoPkid=" + infoPkid, arg, sfeature);
+                    if (infoType == '3') {// 分包数量结算待处理任务
+                        if(flowStatus=="") { // 录入
+                            var rtn = dialog("../item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strProgWorkqtyInfoPkid=" +infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=="0") { // 审核
+                            var rtn = dialog("../item/itemMng_SubcttQStl.xhtml?strFlowType=Check&amp;strProgWorkqtyInfoPkid=" +infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=='1') { // 复核
+                            var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=DoubleCheck&amp;strProgWorkqtyInfoPkid=" + infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=='2') { // 批准
+                            var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=Approve&amp;strProgWorkqtyInfoPkid=" + infoPkid, arg, sfeature);
+                        }
+                    }else
+                    if (infoType == '4') {// 分包材料结算待处理任务
+                        if(flowStatus=="") { // 录入
+                            var rtn = dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strProgMatqtyInfoPkid=" +infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=="0") { // 审核
+                            var rtn = dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Check&amp;strProgMatqtyInfoPkid=" +infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=='1') { // 复核
+                            var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=DoubleCheck&amp;strProgMatqtyInfoPkid=" + infoPkid, arg, sfeature);
+                        }else
+                        if(flowStatus=='2') { // 批准
+                            var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=Approve&amp;strProgMatqtyInfoPkid=" + infoPkid, arg, sfeature);
+                        }
+                    }else
+                    if (infoType == '5') {// 分包价格结算
+                        if(flowStatus=="" ||flowStatus=='2') { // 批准
+                            var rtn = dialog("../item/itemMng_SubcttPStl.xhtml?strEsInitStlPkid=" + infoPkid, arg, sfeature);
+                        }
                     }
-                }else
-                if (infoType == '1') {// 成本计划待处理任务
-                    if(flowStatus=="") { // 录入
-                        var rtn = dialog("../item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCstplInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=="0") { // 审核
-                        var rtn = dialog("../item/itemMng_Cstpl.xhtml?strFlowType=Check&amp;strCstplInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=='1') { // 复核
-                        var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=DoubleCheck&amp;strCstplInfoPkid=" + infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=='2') { // 批准
-                        var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=Approve&amp;strCstplInfoPkid=" + infoPkid, arg, sfeature);
-                    }
-                }else
-                if (infoType == '2') {// 分包合同待处理任务
-                    if(flowStatus=="") { // 录入
-                        var rtn = dialog("../item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strSubcttInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=="0") { // 审核
-                        var rtn = dialog("../item/itemMng_Subctt.xhtml?strFlowType=Check&amp;strSubcttInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=='1') { // 复核
-                        var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=DoubleCheck&amp;strSubcttInfoPkid=" + infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=='2') { // 批准
-                        var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=Approve&amp;strSubcttInfoPkid=" + infoPkid, arg, sfeature);
-                    }
-                }else
-                if (infoType == '3') {// 分包数量结算待处理任务
-                    if(flowStatus=="") { // 录入
-                        var rtn = dialog("../item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strProgWorkqtyInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=="0") { // 审核
-                        var rtn = dialog("../item/itemMng_SubcttQStl.xhtml?strFlowType=Check&amp;strProgWorkqtyInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=='1') { // 复核
-                        var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=DoubleCheck&amp;strProgWorkqtyInfoPkid=" + infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=='2') { // 批准
-                        var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=Approve&amp;strProgWorkqtyInfoPkid=" + infoPkid, arg, sfeature);
-                    }
-                }else
-                if (infoType == '4') {// 分包材料结算待处理任务
-                    if(flowStatus=="") { // 录入
-                        var rtn = dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strProgMatqtyInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=="0") { // 审核
-                        var rtn = dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Check&amp;strProgMatqtyInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=='1') { // 复核
-                        var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=DoubleCheck&amp;strProgMatqtyInfoPkid=" + infoPkid, arg, sfeature);
-                    }else
-                    if(flowStatus=='2') { // 批准
-                        var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=Approve&amp;strProgMatqtyInfoPkid=" + infoPkid, arg, sfeature);
-                    }
-                }else
-                if (infoType == '5') {// 分包价格结算
-                    if(flowStatus=="" ||flowStatus=='2') { // 批准
-                        var rtn = dialog("../item/itemMng_SubcttPStl.xhtml?strEsInitStlPkid=" + infoPkid, arg, sfeature);
+                }else if(taskType=='1'){//刚被分配录入权限的资源
+                    if (infoType == '2') {// 分包合同
+                        var rtn = dialog("../subctt/subByPower/subctt_Mng.xhtml?strSubCttInfoPkid=" + infoPkid, arg, sfeature);
                     }
                 }
                 document.getElementById("form:qryBtn").click();
@@ -126,7 +132,7 @@
                         <p:commandButton icon="ui-icon-triangle-1-e"
                              style="height:16px;width:30px;"
                              rendered="#{record.id eq null?'false':'true'}"
-                             onclick="actSelect('#{record.type}','#{record.flowStatus}','#{record.pkid}')">
+                             onclick="actSelect('0','#{record.type}','#{record.flowStatus}','#{record.pkid}')">
                         </p:commandButton>
                     </p:column>
                     <p:column headerText="序号" style="width:30px">
@@ -163,7 +169,7 @@
                         <p:commandButton icon="ui-icon-triangle-1-e"
                                          style="height:16px;width:30px;"
                                          rendered="#{record.id eq null?'false':'true'}"
-                                         onclick="actSelect('#{record.type}','#{record.flowStatus}','#{record.pkid}')">
+                                         onclick="actSelect('1','#{record.type}','#{record.flowStatus}','#{record.pkid}')">
                         </p:commandButton>
                     </p:column>
                     <p:column headerText="序号" style="width:30px">

@@ -322,4 +322,6 @@ public class CttInfoShow implements Serializable {
     public void setIsSeled(Boolean isSeled) {
         this.isSeled = isSeled;
     }
+
+
 }

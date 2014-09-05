@@ -33,6 +33,7 @@ public class ProgInfoShow {
     private Integer modificationNum;
     private String type;
     private String autoLinkAdd;
+    private String taskdoneFlag;
 
     public String getPkid() {
         return pkid;
@@ -232,5 +233,13 @@ public class ProgInfoShow {
 
     public void setAutoLinkAdd(String autoLinkAdd) {
         this.autoLinkAdd = autoLinkAdd;
+    }
+
+    public String getTaskdoneFlag() {
+        return taskdoneFlag;
+    }
+
+    public void setTaskdoneFlag(String taskdoneFlag) {
+        this.taskdoneFlag = taskdoneFlag;
     }
 }

@@ -3,6 +3,7 @@ package epss.service;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.ESEnumTaskDoneFlag;
 import epss.repository.dao.FlowCtrlHisMapper;
 import epss.repository.model.model_show.CttInfoShow;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,10 @@ public class ProgStlInfoService {
     private FlowCtrlHisMapper flowCtrlHisMapper;
     @Resource
     private ProgSubstlItemService progSubstlItemService;
+    @Resource
+    private ProgWorkqtyItemService progWorkqtyItemService;
+    @Resource
+    private ProgMatqtyItemService progMatqtyItemService;
 
     /**
      * 判断记录是否已存在
@@ -122,6 +127,7 @@ public class ProgStlInfoService {
         esInitStlTemp.setLastUpdDate(progInfoShowPara.getLastUpdDate());
         esInitStlTemp.setModificationNum(progInfoShowPara.getModificationNum());
         esInitStlTemp.setAutoLinkAdd(progInfoShowPara.getAutoLinkAdd());
+        esInitStlTemp.setTaskdoneFlag(progInfoShowPara.getTaskdoneFlag());
         return esInitStlTemp;
     }
 
@@ -132,6 +138,7 @@ public class ProgStlInfoService {
     public void insertRecord(ProgInfoShow progInfoShowPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
+        progInfoShowPara.setTaskdoneFlag(ESEnumTaskDoneFlag.TASK_DONE_FLAG0.getCode());
         progInfoShowPara.setCreatedBy(strOperatorIdTemp);
         progInfoShowPara.setCreatedDate(strLastUpdTimeTemp);
         progInfoShowPara.setDeletedFlag("0");
@@ -212,7 +219,7 @@ public class ProgStlInfoService {
         progInfoShowPara.setDeletedFlag("0");
         progInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
-        esInitStlMapper.updateByPrimaryKey(fromModelShowToModel(progInfoShowPara)) ;
+        esInitStlMapper.updateByPrimaryKey(fromModelShowToModel(progInfoShowPara));
     }
     public void updateRecord(EsInitStl esInitStlPara){
         esInitStlPara.setModificationNum(
@@ -265,6 +272,34 @@ public class ProgStlInfoService {
     }
     public int deleteRecord(String strPkId){
         return esInitStlMapper.deleteByPrimaryKey(strPkId);
+    }
+    @Transactional
+    public String deleteStlMAndItemRecord(ProgInfoShow progInfoShowPara) {
+        // 删除详细数据
+        int deleteItemsNum =
+                progMatqtyItemService.deleteItemsByInitStlSubcttEng(
+                        progInfoShowPara.getStlPkid(),
+                        progInfoShowPara.getPeriodNo());
+        // 删除登记数据
+        int deleteRecordOfStlMNum = deleteRecord(progInfoShowPara.getPkid());
+        if (deleteItemsNum <= 0 && deleteRecordOfStlMNum <= 0) {
+            return "该记录已删除。";
+        }
+        return "删除数据完成。";
+    }
+
+    public String deleteStlQAndItemRecord(ProgInfoShow progInfoShowPara) {
+        // 删除详细数据
+        int deleteItemsNum =
+                progWorkqtyItemService.deleteItemsByInitStlSubcttEng(
+                        progInfoShowPara.getStlPkid(),
+                        progInfoShowPara.getPeriodNo());
+        // 删除登记数据
+        int deleteRecordOfStlQNum = deleteRecord(progInfoShowPara.getPkid());
+        if (deleteItemsNum <= 0 && deleteRecordOfStlQNum <= 0) {
+            return "该记录已删除。";
+        }
+        return "删除数据完成。";
     }
 
     public String getStrMaxStlId(String strCttType){
