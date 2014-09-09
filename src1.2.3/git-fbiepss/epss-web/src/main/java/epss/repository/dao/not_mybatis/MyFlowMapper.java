@@ -366,20 +366,22 @@ public interface MyFlowMapper {
     @Select("select max(s.period_no)"+
             " from es_init_stl s"+
             " where"+
-            " and (s.FLOW_STATUS <='2' or s.FLOW_STATUS is null)"+
-            " where s.stl_type=#{stlType}"+
-            " and s.stl_pkid=#{subCttPkid}")
+            " s.stl_type=#{stlType}"+
+            " and s.stl_pkid=#{subCttPkid}"+
+            " and s.period_no!='NULL' "+
+            " and s.taskdone_flag='1'")
     String getMaxPeriodNo(@Param("stlType") String stlType,
                           @Param("subCttPkid") String subCttPkid);
 
     @Select("select " +
-            "     p.FLOW_STATUS" +
+            "     FLOW_STATUS" +
             " from " +
             "     es_init_stl s" +
             " where" +
-            " and s.stl_type=#{stlType}" +
+            " s.stl_type=#{stlType}" +
             " and s.stl_pkid=#{subCttPkid}" +
-            " and s.period_no=#{periodNo}")
+            " and s.period_no=#{periodNo}"+
+            " and s.taskdone_flag='1'")
     String getFlowStatus(@Param("stlType") String stlType,
                          @Param("subCttPkid") String subCttPkid,
                          @Param("periodNo") String periodNo);

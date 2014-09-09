@@ -17,10 +17,12 @@ public class ProgInfoShow {
     private String periodNo;
     private String note;
     private String attachment;
-    private String flowStatus;
+    private String statusFlag;
     private String strStatusFlagBegin;
     private String strStatusFlagEnd;
     private String preStatusFlag;
+    private String flowStatus;
+    private String flowStatusReason;
     private String endFlag;
     private String deletedFlag;
     private String createdBy;
@@ -99,12 +101,12 @@ public class ProgInfoShow {
         this.note = note;
     }
 
-    public String getFlowStatus() {
-        return flowStatus;
+    public String getStatusFlag() {
+        return statusFlag;
     }
 
-    public void setFlowStatus(String flowStatus) {
-        this.flowStatus = flowStatus;
+    public void setStatusFlag(String statusFlag) {
+        this.statusFlag = statusFlag;
     }
 
     public String getStrStatusFlagBegin() {
@@ -241,5 +243,21 @@ public class ProgInfoShow {
 
     public void setTaskdoneFlag(String taskdoneFlag) {
         this.taskdoneFlag = taskdoneFlag;
+    }
+
+    public String getFlowStatusReason() {
+        return flowStatusReason;
+    }
+
+    public void setFlowStatusReason(String flowStatusReason) {
+        this.flowStatusReason = flowStatusReason;
+    }
+
+    public String getFlowStatus() {
+        return flowStatus;
+    }
+
+    public void setFlowStatus(String flowStatus) {
+        this.flowStatus = flowStatus;
     }
 }

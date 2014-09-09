@@ -31,38 +31,11 @@ public class EsFlowService {
     private OperResService operResService;
 
     public List<CttInfoShow> selectCttByStatusFlagBegin_End(CttInfoShow cttInfoShowPara){
-        OperRes operResTemp=new OperRes();
-        operResTemp.setOperPkid(ToolUtil.getOperatorManager().getOperatorId());
-        //List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
-        List<CttInfoShow> cttInfoShowListTemp= myFlowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
-        List<CttInfoShow> cttInfoShowList=new ArrayList<>();
-        /*for(CttInfoShow cttInfoShowUnit:cttInfoShowListTemp){
-            for(OperResShow operResShowUnit:operResShowListTemp){
-                if(cttInfoShowUnit.getCttType().equals(operResShowUnit.getInfoType())&&
-                        cttInfoShowUnit.getPkid().equals(operResShowUnit.getInfoPkid())) {
-                    cttInfoShowList.add(cttInfoShowUnit);
-                }
-            }
-        }*/
-        cttInfoShowList.addAll(cttInfoShowListTemp);
-        return cttInfoShowList;
+        return myFlowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
     }
 
     public List<ProgInfoShow> selectSubcttStlQMByStatusFlagBegin_End(ProgInfoShow progInfoShowPara){
-        OperRes operResTemp=new OperRes();
-        operResTemp.setOperPkid(ToolUtil.getOperatorManager().getOperatorId());
-        List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
-        List<ProgInfoShow> progInfoShowListTemp= myFlowMapper.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowPara);
-        List<ProgInfoShow> progInfoShowList=new ArrayList<>();
-        for(ProgInfoShow progInfoShowUnit:progInfoShowListTemp){
-            for(OperResShow operResShowUnit:operResShowListTemp){
-                if(progInfoShowUnit.getStlType().equals(operResShowUnit.getInfoType())&&
-                        progInfoShowUnit.getStlPkid().equals(operResShowUnit.getInfoPkid())) {
-                    progInfoShowList.add(progInfoShowUnit);
-                }
-            }
-        }
-        return progInfoShowList;
+        return myFlowMapper.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowPara);
     }
 
     public List<ProgInfoShow> selectNotFormEsInitSubcttStlP(String strParentPkid,
@@ -133,6 +106,9 @@ public class EsFlowService {
             System.out.println("\n数量结算最大期号对应状态标志："+quantityStatus+"\n材料结算最大期号对应状态标志："+materialStatus);
 
             if (ESEnum.ITEMTYPE3.getCode().equals(stlType)){
+                if ("".equals(quantityMaxPeriod)){
+                    return strReturnTemp;
+                }
                 if (periodNo.compareTo(quantityMaxPeriod)<=0){ //首先和自身比较期号大小，如果比自身小或者等于则不能录入
                     strReturnTemp="应录入大于[" + quantityMaxPeriod + "]期的分包数量结算数据!";
                     return strReturnTemp;
@@ -162,6 +138,9 @@ public class EsFlowService {
                 }
             }
             if (ESEnum.ITEMTYPE4.getCode().equals(stlType)){
+                if ("".equals(materialMaxPeriod)){
+                    return strReturnTemp;
+                }
                 if (periodNo.compareTo(materialMaxPeriod)<=0){ //首先和自身比较期号大小，如果比自身小或者等于则不能录入
                     strReturnTemp="应录入大于["+materialMaxPeriod+"]期的分包材料结算数据!";
                     return strReturnTemp;

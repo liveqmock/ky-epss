@@ -55,7 +55,7 @@ public class TaskService {
         List<TaskShow> ownTaskFlowGroupListTemp = getOwnRencentlyPowerTaskFlowGroup(strOperIdTemp);
         // 获得详细任务列表
         List<TaskShow> detailTaskShowListTemp = getRencentlyPowerDetailTaskShowList(strOperIdTemp);
-        for (TaskShow taskShowGroupUnit : ownTaskFlowGroupListTemp) {
+        /*for (TaskShow taskShowGroupUnit : ownTaskFlowGroupListTemp) {
             taskShowGroupUnit.setOperResFlowStatusName(
                     ESEnumStatusFlag.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
             taskShowList.add(taskShowGroupUnit);
@@ -68,6 +68,16 @@ public class TaskService {
                 taskShowList.add(detailTaskShowUnit);
             }
             taskShowGroupUnit.setOperResFlowStatusName("待录入("+intHasRecordCount+")");
+        }
+        return taskShowList;*/
+        TaskShow taskShowTemp=new TaskShow();
+        taskShowTemp.setOperResFlowStatusName("待录入(" + detailTaskShowListTemp.size() + ")");
+        taskShowList.add(taskShowTemp);
+        for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
+            detailTaskShowUnit.setId(
+                    "(" + ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" + detailTaskShowUnit.getId());
+            detailTaskShowUnit.setFlowStatusName("已授权");
+            taskShowList.add(detailTaskShowUnit);
         }
         return taskShowList;
     }

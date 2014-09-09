@@ -3,7 +3,7 @@ package epss.service;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.common.enums.ESEnumTaskDownFlag;
+import epss.common.enums.ESEnumTaskDoneFlag;
 import epss.repository.dao.FlowCtrlHisMapper;
 import epss.repository.model.model_show.CttInfoShow;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -128,6 +128,8 @@ public class ProgStlInfoService {
         esInitStlTemp.setModificationNum(progInfoShowPara.getModificationNum());
         esInitStlTemp.setAutoLinkAdd(progInfoShowPara.getAutoLinkAdd());
         esInitStlTemp.setTaskdoneFlag(progInfoShowPara.getTaskdoneFlag());
+        esInitStlTemp.setFlowStatus(progInfoShowPara.getFlowStatus());
+        esInitStlTemp.setFlowStatusReason(progInfoShowPara.getFlowStatusReason());
         return esInitStlTemp;
     }
 
@@ -138,7 +140,7 @@ public class ProgStlInfoService {
     public void insertRecord(ProgInfoShow progInfoShowPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
-        progInfoShowPara.setTaskdoneFlag(ESEnumTaskDownFlag.TASK_DONE_FLAG0.getCode());
+        progInfoShowPara.setTaskdoneFlag(ESEnumTaskDoneFlag.TASK_DONE_FLAG1.getCode());
         progInfoShowPara.setCreatedBy(strOperatorIdTemp);
         progInfoShowPara.setCreatedDate(strLastUpdTimeTemp);
         progInfoShowPara.setDeletedFlag("0");
@@ -155,6 +157,18 @@ public class ProgStlInfoService {
         esInitStlPara.setLastUpdBy(strOperatorIdTemp);
         esInitStlPara.setLastUpdDate(strLastUpdTimeTemp);
         esInitStlMapper.insert(esInitStlPara) ;
+    }
+    @Transactional
+    public String insertStlQAndItemRecordAction(ProgInfoShow progInfoShowPara) {
+        insertRecord(progInfoShowPara);
+        progWorkqtyItemService.setFromLastStageApproveDataToThisStageBeginData(progInfoShowPara);
+        return "新增数据完成。";
+    }
+    @Transactional
+    public String insertStlMAndItemRecordAction(ProgInfoShow progInfoShowPara) {
+        insertRecord(progInfoShowPara);
+        progMatqtyItemService.setFromLastStageApproveDataToThisStageBeginData(progInfoShowPara);
+        return "新增数据完成。";
     }
     public EsInitStl initStlData(String strStlTypePara,EsCttInfo esCttInfoPara){
         EsInitStl esInitStl=new EsInitStl();
@@ -199,7 +213,7 @@ public class ProgStlInfoService {
     public void updateRecordForSubCttPApprovePass(EsInitStl esInitStlPara,List<ProgSubstlItemShow> progSubstlItemShowListForApprovePara){
         //结算登记表更新
         esInitStlPara.setModificationNum(
-                ToolUtil.getIntIgnoreNull(esInitStlPara.getModificationNum()) + 1);
+                ToolUtil.getIntIgnoreNull(esInitStlPara.getModificationNum())+1);
         esInitStlPara.setDeletedFlag("0");
         esInitStlPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         esInitStlPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());

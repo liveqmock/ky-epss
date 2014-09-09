@@ -90,18 +90,20 @@
                         }
                     }
                 }else if(taskType=='1'){//刚被分配录入权限的资源
-                    sfeature = "dialogwidth:440px;dialogheight:300px;center:yes;location:no;help:no;" +
+                    var sfeatureCtt = "dialogwidth:440px;dialogheight:300px;center:yes;location:no;help:no;" +
                             "resizable:no;scroll:yes;status:no;minimize:yes;maximize:no;";
+                    var sfeatureStl = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
+                            "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../tkctt/subByPower/tkctt_TkcttMng.xhtml?strTkcttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../tkctt/subByPower/tkctt_TkcttMng.xhtml?strTkcttInfoPkid=" + infoPkid, arg, sfeatureCtt);
                     }else if (infoType == '1') {// 成本计划
-                        var rtn = dialog("../cstpl/subByPower/cstpl_CstplMng.xhtml?strCstplInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../cstpl/subByPower/cstpl_CstplMng.xhtml?strCstplInfoPkid=" + infoPkid, arg, sfeatureCtt);
                     }else if (infoType == '2') {// 分包合同
-                        var rtn = dialog("../subctt/subByPower/subctt_SubcttMng.xhtml?strSubcttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../subctt/subByPower/subctt_SubcttMng.xhtml?strSubcttInfoPkid=" + infoPkid, arg, sfeatureCtt);
                     }else if (infoType == '3') {// 数量结算
-                        var rtn = dialog("../subctt/subByPower/subctt_Mng.xhtml?strSubcttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../subctt/subByPower/subctt_QMng.xhtml?strProgWorkqtyInfoPkid=" + infoPkid, arg, sfeatureStl);
                     }else if (infoType == '4') {// 材料结算
-                        var rtn = dialog("../subctt/subByPower/subctt_Mng.xhtml?strSubcttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../subctt/subByPower/subctt_MMng.xhtml?strProgMatqtyInfoPkid=" + infoPkid, arg, sfeatureStl);
                     }
                 }
                 document.getElementById("form:qryBtn").click();
