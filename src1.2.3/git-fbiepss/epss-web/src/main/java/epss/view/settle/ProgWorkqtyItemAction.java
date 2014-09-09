@@ -421,7 +421,7 @@ public class ProgWorkqtyItemAction {
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerType.equals("CheckFail")) {
                     // 状态标志：初始
-                    esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    esInitStl.setFlowStatus(null);
                     // 原因：审核未过
                     esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
                     progStlInfoService.updateRecord(esInitStl);
@@ -449,8 +449,14 @@ public class ProgWorkqtyItemAction {
                             MessageUtil.addInfo("该数据已被分包价格结算批准，您无权进行操作！");
                             return;
                         }
+
                         // 这样写可以实现越级退回
-                        esInitStl.setFlowStatus(strNotPassToStatus);
+                        if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())) {
+                            esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                        }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
+                            esInitStl.setFlowStatus(null);
+                        }
+
                         // 原因：复核未过
                         esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
                         progStlInfoService.updateRecord(esInitStl);
@@ -471,7 +477,13 @@ public class ProgWorkqtyItemAction {
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerType.equals("ApproveFail")) {
                     // 这样写可以实现越级退回
-                    esInitStl.setFlowStatus(strNotPassToStatus);
+                    if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())) {
+                        esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+                    }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())) {
+                        esInitStl.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
+                        esInitStl.setFlowStatus(null);
+                    }
                     // 原因：批准未过
                     esInitStl.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
                     progStlInfoService.updateRecord(esInitStl);

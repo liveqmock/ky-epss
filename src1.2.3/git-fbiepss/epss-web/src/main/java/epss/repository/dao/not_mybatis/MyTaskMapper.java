@@ -52,7 +52,8 @@ public interface MyTaskMapper {
             "   opr.FLOW_STATUS")
     List<TaskShow> getOwnTaskFlowGroup(@Param("strOperPkid") String strOperPkid);
 
-    @Select("    (" +
+    @Select(
+            /*"    (" +
             "         select" +
             "             opr.INFO_TYPE as type," +
             "             opr.INFO_PKID as pkid," +
@@ -79,7 +80,7 @@ public interface MyTaskMapper {
             "         and" +
             "             opr.TYPE='business'" +
             "    ) " +
-            " union " +
+            " union " +*/
             "    (" +
             "         select" +
             "              distinct  " +
@@ -99,7 +100,7 @@ public interface MyTaskMapper {
             "              opr.INFO_TYPE=stl.stl_type " +
             "         and  " +
             "              opr.INFO_PKID=stl.stl_pkid  " +
-            "         where  " +
+            "         where" +
             "              opr.OPER_PKID=#{strOperPkid}" +
             "         and" +
             "              opr.FLOW_STATUS='0'" +
@@ -132,8 +133,8 @@ public interface MyTaskMapper {
             "            opr.INFO_PKID=eci.PKID" +
             "        where" +
             "            opr.OPER_PKID=#{strOperPkid}" +
-            "        and" +
-            "            eci.FLOW_STATUS is not null" +
+         /*   "        and" +
+            "            eci.FLOW_STATUS is not null" +*/
             "        and" +
             "            opr.TYPE='business'" +
             "    ) " +
@@ -159,8 +160,8 @@ public interface MyTaskMapper {
             "             opr.INFO_PKID=stl.stl_pkid" +
             "         where  " +
             "             opr.OPER_PKID=#{strOperPkid}" +
-            "         and" +
-            "             stl.FLOW_STATUS is not null" +
+          /*  "         and" +
+            "             stl.FLOW_STATUS is not null" +*/
             "         and" +
             "             opr.TYPE='business'" +
             "    )" +

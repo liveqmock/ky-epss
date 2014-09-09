@@ -2,7 +2,6 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:f="http://java.sun.com/jsf/core"
                 template="/templates/ui.xhtml">
 
     <ui:define name="head">
@@ -34,7 +33,7 @@
                             var rtn = dialog("../item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCstplInfoPkid=" +infoPkid, arg, sfeature);
                         }else
                         if(flowStatus=="0") { // 审核
-                            var rtn = dialog("../item/itemMng_Cstpl.xhtml?strFlowType=Check&amp;strCstplInfoPkid=" +infoPkid, arg, sfeature);
+                            var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=Check&amp;strCstplInfoPkid=" +infoPkid, arg, sfeature);
                         }else
                         if(flowStatus=='1') { // 复核
                             var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=DoubleCheck&amp;strCstplInfoPkid=" + infoPkid, arg, sfeature);
@@ -48,7 +47,7 @@
                             var rtn = dialog("../item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strSubcttInfoPkid=" +infoPkid, arg, sfeature);
                         }else
                         if(flowStatus=="0") { // 审核
-                            var rtn = dialog("../item/itemMng_Subctt.xhtml?strFlowType=Check&amp;strSubcttInfoPkid=" +infoPkid, arg, sfeature);
+                            var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=Check&amp;strSubcttInfoPkid=" +infoPkid, arg, sfeature);
                         }else
                         if(flowStatus=='1') { // 复核
                             var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=DoubleCheck&amp;strSubcttInfoPkid=" + infoPkid, arg, sfeature);
@@ -62,7 +61,7 @@
                             var rtn = dialog("../item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strProgWorkqtyInfoPkid=" +infoPkid, arg, sfeature);
                         }else
                         if(flowStatus=="0") { // 审核
-                            var rtn = dialog("../item/itemMng_SubcttQStl.xhtml?strFlowType=Check&amp;strProgWorkqtyInfoPkid=" +infoPkid, arg, sfeature);
+                            var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=Check&amp;strProgWorkqtyInfoPkid=" +infoPkid, arg, sfeature);
                         }else
                         if(flowStatus=='1') { // 复核
                             var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=DoubleCheck&amp;strProgWorkqtyInfoPkid=" + infoPkid, arg, sfeature);
@@ -76,7 +75,7 @@
                             var rtn = dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strProgMatqtyInfoPkid=" +infoPkid, arg, sfeature);
                         }else
                         if(flowStatus=="0") { // 审核
-                            var rtn = dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Check&amp;strProgMatqtyInfoPkid=" +infoPkid, arg, sfeature);
+                            var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=Check&amp;strProgMatqtyInfoPkid=" +infoPkid, arg, sfeature);
                         }else
                         if(flowStatus=='1') { // 复核
                             var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=DoubleCheck&amp;strProgMatqtyInfoPkid=" + infoPkid, arg, sfeature);
@@ -134,7 +133,7 @@
                              rowIndexVar="row"
                              rowKey="#{row + 1}"
                              emptyMessage="数据记录为空..."
-                             rowStyleClass="#{record.id eq null?'rowGreenyellowStyle':
+                             rowStyleClass="#{record.pkid eq null?'rowGrayStyle':
                              record.strColorType eq '2'?'rowRedStyle':'rowGreenyellowStyle'}"
                              scrollable="true"
                              scrollHeight="180">
@@ -151,7 +150,7 @@
                     <p:column headerText="任务类别" style="width:100px;text-align:left;">
                         <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
                     </p:column>
-                    <p:column headerText="待处理任务ID" style="width:150px;text-align:left;">
+                    <p:column headerText="待处理任务ID" style="width:200px;text-align:left;">
                         <h:outputText value="#{record.id}"/>
                     </p:column>
                     <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
@@ -165,7 +164,8 @@
                     </p:column>
                 </p:dataTable>
             </p:panel>
-            <p:panel header="刚被分配录入权限的资源">
+            <p:panel header="刚被分配录入权限的结算资源"
+                     rendered="#{todoTaskAction.strRecentlyPowerVisable}">
                 <p:dataTable id="pdtRecentlyPower"
                              value="#{todoTaskAction.taskShowRecentlyPowerList}"
                              var="record"

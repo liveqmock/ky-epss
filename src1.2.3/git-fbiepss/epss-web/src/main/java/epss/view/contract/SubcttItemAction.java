@@ -29,7 +29,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.util.MessageUtil;
-
 import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -753,7 +752,7 @@ public class SubcttItemAction {
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
                     // 状态标志：初始
-                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    cttInfo.setFlowStatus(null);
                     // 原因：审核未过
                     cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
@@ -770,7 +769,11 @@ public class SubcttItemAction {
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
-                    cttInfo.setFlowStatus(strNotPassToStatus);
+                    if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())) {
+                        cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
+                        cttInfo.setFlowStatus(null);
+                    }
                     // 原因：复核未过
                     cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
@@ -794,8 +797,16 @@ public class SubcttItemAction {
                     } else if (cttInfo.getCttType().equals(ESEnum.ITEMTYPE1.getCode())) {
                         strCttTypeTemp = ESEnum.ITEMTYPE2.getCode();
                     }
+
                     // 这样写可以实现越级退回
-                    cttInfo.setFlowStatus(strNotPassToStatus);
+                    if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())) {
+                        cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+                    }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())) {
+                        cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
+                        cttInfo.setFlowStatus(null);
+                    }
+
                     // 原因：批准未过
                     cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
