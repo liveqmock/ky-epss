@@ -143,10 +143,6 @@ public class TkcttInfoAction {
         return null;
     }
 
-    public EsCttInfo getCttInfoByPkId(String strPkid) {
-        return cttInfoService.getCttInfoByPkId(strPkid);
-    }
-
     public void selectRecordAction(String strPowerTypePara,
                                    String strSubmitTypePara,
                                    CttInfoShow cttInfoShowPara) {

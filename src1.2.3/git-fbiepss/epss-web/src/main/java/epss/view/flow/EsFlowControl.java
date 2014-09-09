@@ -8,7 +8,9 @@ package epss.view.flow;
  * To change this template use File | Settings | File Templates.
  */
 
+import epss.repository.model.EsCttInfo;
 import epss.repository.model.model_show.FlowCtrlShow;
+import epss.service.CttInfoService;
 import epss.service.EsFlowService;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
@@ -45,6 +47,8 @@ public class EsFlowControl implements Serializable {
     private SignPartService signPartService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
+    @ManagedProperty(value = "#{cttInfoService}")
+    private CttInfoService cttInfoService;
 
     private List<SelectItem> statusFlagFromDBList;
     private List<SelectItem> preStatusFlagList;
@@ -69,6 +73,11 @@ public class EsFlowControl implements Serializable {
             }
         }
         return "";
+    }
+
+
+    public EsCttInfo getCttInfoByPkId(String strPkid) {
+        return cttInfoService.getCttInfoByPkId(strPkid);
     }
 
     public String getLabelByValueInPreStatusFlaglist(String strValue){
@@ -166,5 +175,13 @@ public class EsFlowControl implements Serializable {
 
     public void setEsFlowService(EsFlowService esFlowService) {
         this.esFlowService = esFlowService;
+    }
+
+    public CttInfoService getCttInfoService() {
+        return cttInfoService;
+    }
+
+    public void setCttInfoService(CttInfoService cttInfoService) {
+        this.cttInfoService = cttInfoService;
     }
 }

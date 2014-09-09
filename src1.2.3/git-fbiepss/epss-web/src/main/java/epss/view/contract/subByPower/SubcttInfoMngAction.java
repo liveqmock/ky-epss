@@ -1,12 +1,9 @@
 package epss.view.contract.subByPower;
 
 import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumStatusFlag;
+import epss.repository.model.EsCttInfo;
 import epss.repository.model.model_show.CttInfoShow;
-import epss.repository.model.model_show.CttItemShow;
 import epss.service.CttInfoService;
-import epss.service.CttItemService;
-import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
@@ -14,7 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.util.MessageUtil;
-import skyline.util.StyleModel;
 import skyline.util.ToolUtil;
 
 import javax.annotation.PostConstruct;
@@ -22,8 +18,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -39,81 +33,31 @@ public class SubcttInfoMngAction {
     private static final Logger logger = LoggerFactory.getLogger(SubcttInfoMngAction.class);
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
-    @ManagedProperty(value = "#{cttItemService}")
-    private CttItemService cttItemService;
-    @ManagedProperty(value = "#{esFlowService}")
-    private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
-    private CttInfoShow cttInfoShowQry;
-    private String strNotPassToStatus;
-    private CttInfoShow cttInfoShowSel;
+
     private CttInfoShow cttInfoShowUpd;
-    private List<CttInfoShow> cttInfoShowList;
-
-    private String strSubmitType;
-    private String rowSelectedFlag;
-
-    // 画面之间传递过来的参数
-    private String strBelongToPkid;
-
-    /*控制维护画面层级部分的显示*/
-    private StyleModel styleModel;
-    //实现甲供材情况
-    private CttItemShow cttItemShow;
-    //验证分包合同编号和名称是否重复的提示信息
-    String strWarnMsg;
+    private String strSubcttInfoPkid;
 
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        // 从成本计划传递过来的成本计划号
-        if (parammap.containsKey("strCstplInfoPkid")) {
-            strBelongToPkid = parammap.get("strCstplInfoPkid").toString();
-        } else {// 总包合同页面上
-            strBelongToPkid = null;
+
+        if (parammap.containsKey("strSubcttInfoPkid")) {
+            strSubcttInfoPkid = parammap.get("strSubcttInfoPkid").toString();
         }
+
+        cttInfoShowUpd = new CttInfoShow();
         initData();
     }
-
     public void initData() {
-        this.cttInfoShowList = new ArrayList<CttInfoShow>();
-        cttInfoShowQry = new CttInfoShow();
-        cttInfoShowQry.setCttType(ESEnum.ITEMTYPE2.getCode());
-        cttInfoShowQry.setParentPkid(strBelongToPkid);
-        cttInfoShowSel = new CttInfoShow();
-        cttInfoShowUpd = new CttInfoShow();
-        styleModel = new StyleModel();
-        styleModel.setDisabled_Flag("false");
-        strSubmitType = "";
-        rowSelectedFlag = "false";
+        EsCttInfo esCttInfoTemp = cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
+        cttInfoShowUpd=cttInfoService.fromModelToModelShow(esCttInfoTemp);
     }
 
-    //分包合同录入时，验证分包合同编号是否合法重复
-    public void validSubCttId() {
-        strWarnMsg = "";
-        String subCttIdFromPage = cttInfoShowUpd.getId();
-        if (!(subCttIdFromPage.matches("^[a-zA-Z0-9]+$"))) {
-            strWarnMsg = "合同编号应以字母数字开头，请重新输入。";
-        } else {
-            if (cttInfoService.IdisExistInDb(cttInfoShowUpd)) {
-                strWarnMsg = "该合同编号已存在，请重新输入。";
-
-            }
-        }
-    }
-
-    //分包合同录入时，验证分包合同编号是否合法重复
-    public void validSubCttName() {
-        strWarnMsg = "";
-        if (cttInfoService.NameisExistInDb(cttInfoShowUpd)) {
-            strWarnMsg = "该合同编号已存在，请重新输入。";
-        }
-    }
-
-    public void setMaxNoPlusOne(String strQryTypePara) {
+    public void setMaxNoPlusOne() {
         try {
             Integer intTemp;
             String strMaxId = cttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE2.getCode());
@@ -131,11 +75,6 @@ public class SubcttInfoMngAction {
                     }
                 }
             }
-            if (strQryTypePara.equals("Qry")) {
-                cttInfoShowQry.setId(strMaxId);
-            }else if (strQryTypePara.equals("Upd")) {
-                cttInfoShowUpd.setId(strMaxId);
-            }
             cttInfoShowUpd.setId(strMaxId);
         } catch (Exception e) {
             logger.error("总包合同信息查询失败", e);
@@ -143,68 +82,12 @@ public class SubcttInfoMngAction {
         }
     }
 
-    public String onQueryAction(String strQryFlag,String strQryMsgOutPara) {
+    public void selectRecordAction(CttInfoShow cttInfoShowPara) {
         try {
-            if (strQryFlag.equals("Qry")) {
-
-            } else if (strQryFlag.contains("Mng")) {
-                cttInfoShowQry.setStrStatusFlagBegin(null);
-                cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-            } else if (strQryFlag.contains("Check")) {
-                if (strQryFlag.contains("DoubleCheck")) {
-                    cttInfoShowQry.setStrStatusFlagBegin(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                    cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG2.getCode());
-                }else{
-                    cttInfoShowQry.setStrStatusFlagBegin(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-                    cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                }
-            }  else if (strQryFlag.contains("Approve")) {
-                if (strQryFlag.equals("ApprovedQry")) {
-                    cttInfoShowQry.setStrStatusFlagBegin(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                    cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                }else{
-                    cttInfoShowQry.setStrStatusFlagBegin(ESEnumStatusFlag.STATUS_FLAG2.getCode());
-                    cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                }
-            }
-            this.cttInfoShowList.clear();
-            cttInfoShowQry.setParentPkid(strBelongToPkid);
-            cttInfoShowList = esFlowService.selectCttByStatusFlagBegin_End(cttInfoShowQry);
-            if(strQryMsgOutPara.equals("true")){
-                if (cttInfoShowList.isEmpty()) {
-                    MessageUtil.addWarn("没有查询到数据。");
-                }
-            }
-            rowSelectedFlag = "false";
-        } catch (Exception e) {
-            logger.error("合同信息查询失败", e);
-            MessageUtil.addError("合同信息查询失败");
-        }
-        return null;
-    }
-
-    public void selectRecordAction(String strPowerTypePara,
-                                     String strSubmitTypePara,
-                                     CttInfoShow cttInfoShowPara) {
-        try {
-            strSubmitType = strSubmitTypePara;
+            // 查询
             cttInfoShowPara.setCreatedByName(ToolUtil.getUserName(cttInfoShowPara.getCreatedBy()));
             cttInfoShowPara.setLastUpdByName(ToolUtil.getUserName(cttInfoShowPara.getLastUpdBy()));
-            // 查询
-            if (strPowerTypePara.equals("Qry")) {
-                cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
-            } else if (strPowerTypePara.equals("Mng")) { // 维护
-                if (strSubmitTypePara.equals("Sel")) {
-                    cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
-                    rowSelectedFlag = "true";
-                } else if (strSubmitTypePara.equals("Upd")) {
-                        cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
-                        rowSelectedFlag = "false";
-                }
-            } else {
-                cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
-                rowSelectedFlag = "true";
-            }
+            cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
         }
@@ -239,22 +122,22 @@ public class SubcttInfoMngAction {
         }
         return true;
     }
-
     /**
      * 提交维护权限
      *
      * @param
      */
     public void onClickForMngAction() {
-             if (!submitPreCheck(cttInfoShowUpd)) {
-                 return;
-             }
-                 updRecordAction(cttInfoShowUpd);
-                 onQueryAction("Mng","false");
+        if (!submitPreCheck(cttInfoShowUpd)) {
+         return;
+        }
+        updRecordAction(cttInfoShowUpd);
+        MessageUtil.addInfo("更新数据完成。");
+        initData();
     }
+
     private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
-            cttInfoShowPara.setCttType(ESEnum.ITEMTYPE2.getCode());
             cttInfoService.updateRecord(cttInfoShowPara);
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
@@ -262,22 +145,14 @@ public class SubcttInfoMngAction {
             MessageUtil.addError(e.getMessage());
         }
     }
-
     /*智能字段 Start*/
+
     public CttInfoService getCttInfoService() {
         return cttInfoService;
     }
 
     public void setCttInfoService(CttInfoService cttInfoService) {
         this.cttInfoService = cttInfoService;
-    }
-
-    public EsFlowService getEsFlowService() {
-        return esFlowService;
-    }
-
-    public void setEsFlowService(EsFlowService esFlowService) {
-        this.esFlowService = esFlowService;
     }
 
     public EsCommon getEsCommon() {
@@ -296,38 +171,6 @@ public class SubcttInfoMngAction {
         this.esFlowControl = esFlowControl;
     }
 
-    public String getStrNotPassToStatus() {
-        return strNotPassToStatus;
-    }
-
-    public void setStrNotPassToStatus(String strNotPassToStatus) {
-        this.strNotPassToStatus = strNotPassToStatus;
-    }
-
-    public CttInfoShow getCttInfoShowQry() {
-        return cttInfoShowQry;
-    }
-
-    public void setCttInfoShowQry(CttInfoShow cttInfoShowQry) {
-        this.cttInfoShowQry = cttInfoShowQry;
-    }
-
-    public List<CttInfoShow> getCttInfoShowList() {
-        return cttInfoShowList;
-    }
-
-    public String getStrSubmitType() {
-        return strSubmitType;
-    }
-
-    public StyleModel getStyleModel() {
-        return styleModel;
-    }
-
-    public String getRowSelectedFlag() {
-        return rowSelectedFlag;
-    }
-
     public CttInfoShow getCttInfoShowUpd() {
         return cttInfoShowUpd;
     }
@@ -335,46 +178,5 @@ public class SubcttInfoMngAction {
     public void setCttInfoShowUpd(CttInfoShow cttInfoShowUpd) {
         this.cttInfoShowUpd = cttInfoShowUpd;
     }
-
-    public CttInfoShow getCttInfoShowSel() {
-        return cttInfoShowSel;
-    }
-
-    public void setCttInfoShowSel(CttInfoShow cttInfoShowSel) {
-        this.cttInfoShowSel = cttInfoShowSel;
-    }
-
     /*智能字段 End*/
-
-    public CttItemService getCttItemService() {
-        return cttItemService;
-    }
-
-    public void setCttItemService(CttItemService cttItemService) {
-        this.cttItemService = cttItemService;
-    }
-
-    public String getStrBelongToPkid() {
-        return strBelongToPkid;
-    }
-
-    public void setStrBelongToPkid(String strBelongToPkid) {
-        this.strBelongToPkid = strBelongToPkid;
-    }
-
-    public CttItemShow getCttItemShow() {
-        return cttItemShow;
-    }
-
-    public void setCttItemShow(CttItemShow cttItemShow) {
-        this.cttItemShow = cttItemShow;
-    }
-
-    public String getStrWarnMsg() {
-        return strWarnMsg;
-    }
-
-    public void setStrWarnMsg(String strWarnMsg) {
-        this.strWarnMsg = strWarnMsg;
-    }
 }

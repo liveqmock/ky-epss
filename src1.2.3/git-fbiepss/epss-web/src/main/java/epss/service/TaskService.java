@@ -130,8 +130,6 @@ public class TaskService {
         List<TaskShow> taskFlowGroupListTemp = getTaskFlowGroup();
         //通过OperatorManager获取相应权限下资源列表
         String strOperIdTemp = ToolUtil.getOperatorManager().getOperatorId();
-        // 获取登录者的权限分组
-        List<TaskShow> ownTaskFlowGroupListTemp = getOwnTaskFlowGroup(strOperIdTemp);
 
         // 获得详细任务列表
         List<TaskShow> detailTaskShowListTemp = getDetailTaskShowList(strOperIdTemp);
@@ -141,21 +139,20 @@ public class TaskService {
             taskShowList.add(taskShowGroupUnit);
             int intHasRecordCount=0;
             for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
-                if (taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getOperResFlowStatus())) {
-                    if (detailTaskShowUnit.getFlowStatus() == null) {
-                        continue;
-                    }
-                    if (taskShowGroupUnit.getFlowStatus().compareTo(detailTaskShowUnit.getFlowStatus()) == 0) {
-                        intHasRecordCount++;
-                        detailTaskShowUnit.setId(
-                                "(" + ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" + detailTaskShowUnit.getId());
-                        detailTaskShowUnit.setFlowStatusName(
-                                ESEnumStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatus()).getTitle());
-                        detailTaskShowUnit.setFlowStatusReasonName(
-                                ESEnumPreStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatusReason()).getTitle());
+                if (taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getFlowStatus())) {
+                    intHasRecordCount++;
+                    detailTaskShowUnit.setId(
+                            "(" + ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" + detailTaskShowUnit.getId());
+                    detailTaskShowUnit.setFlowStatusName(
+                            ESEnumStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatus()).getTitle());
+                    detailTaskShowUnit.setFlowStatusReasonName(
+                            ESEnumPreStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatusReason()).getTitle());
+                    if(detailTaskShowUnit.getOperResFlowStatus().equals(detailTaskShowUnit.getFlowStatus())) {
                         detailTaskShowUnit.setIsOwnTaskFlowFlag("true");
-                        taskShowList.add(detailTaskShowUnit);
+                    }else{
+                        detailTaskShowUnit.setIsOwnTaskFlowFlag("false");
                     }
+                    taskShowList.add(detailTaskShowUnit);
                 }
             }
             taskShowGroupUnit.setOperResFlowStatusName(

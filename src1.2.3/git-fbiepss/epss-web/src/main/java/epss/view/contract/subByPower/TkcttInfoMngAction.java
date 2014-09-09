@@ -1,13 +1,9 @@
 package epss.view.contract.subByPower;
 
 import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumStatusFlag;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.service.CttInfoService;
-import epss.service.CttItemService;
-import epss.service.EsFlowService;
-import epss.service.OperResService;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
@@ -15,7 +11,6 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.util.MessageUtil;
-import skyline.util.StyleModel;
 import skyline.util.ToolUtil;
 
 import javax.annotation.PostConstruct;
@@ -23,10 +18,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -91,10 +82,6 @@ public class TkcttInfoMngAction {
         }
     }
 
-    public EsCttInfo getCttInfoByPkId(String strPkid) {
-        return cttInfoService.getCttInfoByPkId(strPkid);
-    }
-
     public void selectRecordAction(CttInfoShow cttInfoShowPara) {
         try {
             // 查询
@@ -151,8 +138,8 @@ public class TkcttInfoMngAction {
 
     private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
-            cttInfoShowPara.setCttType(ESEnum.ITEMTYPE0.getCode());
             cttInfoService.updateRecord(cttInfoShowPara);
+            MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
             MessageUtil.addError(e.getMessage());
