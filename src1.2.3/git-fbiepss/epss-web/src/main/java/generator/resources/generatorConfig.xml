@@ -34,6 +34,7 @@
         <!--业务类例子 -->
         <table schema="epss" tableName="flow_ctrl_his">
             <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
         <table schema="epss" tableName="oper_res">
             <property name="ignoreQualifiersAtRuntime" value="true" />

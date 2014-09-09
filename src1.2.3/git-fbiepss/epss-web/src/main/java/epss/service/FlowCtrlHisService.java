@@ -1,9 +1,9 @@
 package epss.service;
 
 import epss.repository.dao.FlowCtrlHisMapper;
+import epss.repository.dao.OperMapper;
 import epss.repository.dao.not_mybatis.MyFlowMapper;
-import epss.repository.model.FlowCtrlHis;
-import epss.repository.model.FlowCtrlHisExample;
+import epss.repository.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import skyline.util.ToolUtil;
@@ -23,6 +23,8 @@ public class FlowCtrlHisService {
     private FlowCtrlHisMapper flowCtrlHisMapper;
     @Resource
     private MyFlowMapper myFlowMapper;
+    @Autowired
+    private OperMapper operMapper;
 
     public List<FlowCtrlHis> selectListByModel(FlowCtrlHis flowCtrlHis) {
         FlowCtrlHisExample example= new FlowCtrlHisExample();
@@ -51,5 +53,25 @@ public class FlowCtrlHisService {
 
     public List<FlowCtrlHis> getMngFromPowerHisForSubcttStlList(String powerPkid,String periodNo){
         return myFlowMapper.getMngFromPowerHisForSubcttStlList(powerPkid,periodNo);
+    }
+
+    public List<FlowCtrlHis> selectListByModel(String strInfoType,String strInfoPkid) {
+        FlowCtrlHisExample example= new FlowCtrlHisExample();
+        FlowCtrlHisExample.Criteria criteria = example.createCriteria();
+        criteria.andInfoTypeLike("%" + strInfoType + "%")
+                .andInfoPkidLike("%" + strInfoPkid + "%");
+        return flowCtrlHisMapper.selectByExample(example);
+    }
+
+    public void insertRecord(FlowCtrlHis flowCtrlHisPara,String strOperType) {
+        flowCtrlHisPara.setOperType(strOperType);
+        flowCtrlHisMapper.insertSelective(flowCtrlHisPara);
+    }
+
+    public List<Oper> selectOperByExample(String strId){
+        OperExample example= new OperExample();
+        OperExample.Criteria criteria = example.createCriteria();
+        criteria.andIdLike("%" + strId + "%");
+        return operMapper.selectByExample(example);
     }
 }
