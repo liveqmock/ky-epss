@@ -28,10 +28,6 @@ public class TaskService {
         return myTaskMapper.getTaskFlowGroup();
     }
 
-    public List<TaskShow> getOwnRencentlyPowerTaskFlowGroup(String strOperPkidPara) {
-        return myTaskMapper.getOwnRencentlyPowerTaskFlowGroup(strOperPkidPara);
-    }
-
     public List<TaskShow> getOwnTaskFlowGroup(String strOperPkidPara) {
         return myTaskMapper.getOwnTaskFlowGroup(strOperPkidPara);
     }
@@ -51,25 +47,8 @@ public class TaskService {
         List<TaskShow> taskShowList = new ArrayList<TaskShow>();
         //通过OperatorManager获取相应权限下菜单列表
         String strOperIdTemp = ToolUtil.getOperatorManager().getOperatorId();
-        // 以合同类型和状态为分组,取得各组的数量
-        List<TaskShow> ownTaskFlowGroupListTemp = getOwnRencentlyPowerTaskFlowGroup(strOperIdTemp);
         // 获得详细任务列表
         List<TaskShow> detailTaskShowListTemp = getRencentlyPowerDetailTaskShowList(strOperIdTemp);
-        /*for (TaskShow taskShowGroupUnit : ownTaskFlowGroupListTemp) {
-            taskShowGroupUnit.setOperResFlowStatusName(
-                    ESEnumStatusFlag.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
-            taskShowList.add(taskShowGroupUnit);
-            int intHasRecordCount=0;
-            for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
-                intHasRecordCount++;
-                detailTaskShowUnit.setId(
-                        "("+ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+detailTaskShowUnit.getId());
-                detailTaskShowUnit.setFlowStatusName("已授权");
-                taskShowList.add(detailTaskShowUnit);
-            }
-            taskShowGroupUnit.setOperResFlowStatusName("待录入("+intHasRecordCount+")");
-        }
-        return taskShowList;*/
         TaskShow taskShowTemp=new TaskShow();
         taskShowTemp.setOperResFlowStatusName("待录入(" + detailTaskShowListTemp.size() + ")");
         taskShowList.add(taskShowTemp);

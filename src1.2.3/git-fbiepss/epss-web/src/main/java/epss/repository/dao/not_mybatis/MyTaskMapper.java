@@ -34,20 +34,6 @@ public interface MyTaskMapper {
             "   opr.OPER_PKID=#{strOperPkid}" +
             " and " +
             "   opr.TYPE='business'" +
-            " and" +
-            "   opr.FLOW_STATUS='0'" +
-            " order by" +
-            "   opr.FLOW_STATUS")
-    List<TaskShow> getOwnRencentlyPowerTaskFlowGroup(@Param("strOperPkid") String strOperPkid);
-
-    @Select(" select " +
-            "   distinct opr.FLOW_STATUS as flowStatus" +
-            " from" +
-            "   OPER_RES opr" +
-            " where" +
-            "   opr.OPER_PKID=#{strOperPkid}" +
-            " and " +
-            "   opr.TYPE='business'" +
             " order by" +
             "   opr.FLOW_STATUS")
     List<TaskShow> getOwnTaskFlowGroup(@Param("strOperPkid") String strOperPkid);
@@ -100,21 +86,15 @@ public interface MyTaskMapper {
             "              opr.INFO_TYPE=stl.stl_type " +
             "         and  " +
             "              opr.INFO_PKID=stl.stl_pkid  " +
-<<<<<<< HEAD
             "         where" +
-=======
-            "         and  " +
-            "              stl.PERIOD_NO='NULL'  " +
-            "         where  " +
->>>>>>> 8d0bffd2662e60aeadd71f5192f5bf06e9ec8d39
-            "              opr.OPER_PKID=#{strOperPkid}" +
+            "              stl.PERIOD_NO='NULL'" +
             "         and" +
-            "              opr.FLOW_STATUS='0'" +
+            "              opr.OPER_PKID=#{strOperPkid}" +
             "         and " +
-            "              opr.TYPE='business' " +
-            "     )" +
+            "              opr.TYPE='business'" +
+            "    )" +
             "order by  " +
-            "     flowStatus,TYPE,flowStatusReason")
+            "    flowStatus,TYPE,flowStatusReason")
     List<TaskShow> getRencentlyPowerDetailTaskShowList(@Param("strOperPkid") String strOperPkid);
 
     @Select(
