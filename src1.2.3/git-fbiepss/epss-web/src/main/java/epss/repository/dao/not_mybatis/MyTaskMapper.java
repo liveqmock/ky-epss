@@ -84,7 +84,7 @@ public interface MyTaskMapper {
             "         select" +
             "              distinct  " +
             "              opr.INFO_TYPE as type," +
-            "              stl.PKID as pkid," +
+            "              opr.INFO_PKID as pkid," +
             "              stl.ID as ID," +
             "              opr.flow_status as operResFlowStatus," +
             "              (select name from ES_CTT_INFO where pkid=stl.stl_pkid) as NAME," +
@@ -99,6 +99,8 @@ public interface MyTaskMapper {
             "              opr.INFO_TYPE=stl.stl_type " +
             "         and  " +
             "              opr.INFO_PKID=stl.stl_pkid  " +
+            "         and  " +
+            "              stl.PERIOD_NO='NULL'  " +
             "         where  " +
             "              opr.OPER_PKID=#{strOperPkid}" +
             "         and" +

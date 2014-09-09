@@ -147,6 +147,7 @@
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
         <result column="MODIFICATION_NUM" jdbcType="DECIMAL" property="modificationNum" />
         <result column="AUTO_LINK_ADD" jdbcType="CHAR" property="autoLinkAdd" />
+        <result column="TASKDONE_FLAG" jdbcType="CHAR" property="taskdoneFlag" />
     </resultMap>
     <select id="selectSubcttStlQMByStatusFlagBegin_End"
             parameterType="epss.repository.model.model_show.ProgInfoShow"
@@ -170,8 +171,9 @@
                 eis.LAST_UPD_DATE,
                 eis.MODIFICATION_NUM,
                 eis.AUTO_LINK_ADD AS autoLinkAdd,
-                eic.FLOW_STATUS,
-                eic.FLOW_STATUS_REASON,
+                eis.FLOW_STATUS,
+                eis.FLOW_STATUS_REASON,
+                eis.TASKDONE_FLAG
             from
                 ES_INIT_STL eis
             left outer join
@@ -253,8 +255,8 @@
                 eis.LAST_UPD_BY,
                 eis.LAST_UPD_DATE,
                 eis.MODIFICATION_NUM,
-                eic.FLOW_STATUS,
-                eic.FLOW_STATUS_REASON
+                eis.FLOW_STATUS,
+                eis.FLOW_STATUS_REASON
             from
                 ES_INIT_STL eis
             left outer join
@@ -300,18 +302,18 @@
 
         <!--<if test='strStatusFlagBegin == null and strStatusFlagEnd == "0"'>-->
         <if test="strStatusFlagBegin == null and strStatusFlagEnd == '0'.toString()">
-            and (eic.FLOW_STATUS is null
-            or eic.FLOW_STATUS='0')
+            and (eis.FLOW_STATUS is null
+            or eis.FLOW_STATUS='0')
         </if>
 
         <if test="strStatusFlagBegin != null and strStatusFlagBegin !='' and
                        strStatusFlagEnd != null and strStatusFlagEnd != ''">
-            and eic.FLOW_STATUS <![CDATA[>=]]> #{strStatusFlagBegin}
-            and eic.FLOW_STATUS <![CDATA[<=]]> #{strStatusFlagEnd}
+            and eis.FLOW_STATUS <![CDATA[>=]]> #{strStatusFlagBegin}
+            and eis.FLOW_STATUS <![CDATA[<=]]> #{strStatusFlagEnd}
         </if>
         <if test="flowStatusReason != null and flowStatusReason != ''">
-            and eic.FLOW_STATUS_REASON = #{flowStatusReason}
+            and eis.FLOW_STATUS_REASON = #{flowStatusReason}
         </if>
-        order by eic.FLOW_STATUS asc,eic.ID asc
+        order by eis.FLOW_STATUS asc,eis.ID asc
     </select>
 </mapper>

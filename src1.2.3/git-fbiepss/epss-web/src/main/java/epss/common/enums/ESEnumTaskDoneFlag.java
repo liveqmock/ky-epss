@@ -9,15 +9,15 @@ import java.util.Hashtable;
  * Time: 9:58:32
  * To change this template use File | Settings | File Templates.
  */
-public enum ESEnumTaskDownFlag {
-    TASK_DONE_FLAG0("0","任务未执行"),
-    TASK_DONE_FLAG1("1","任务已执行");
+public enum ESEnumTaskDoneFlag {
+    TASK_DONE_FLAG0("0","任务未做"),
+    TASK_DONE_FLAG1("1","任务已做");
 
     private String code = null;
     private String title = null;
-    private static Hashtable<String, ESEnumTaskDownFlag> aliasEnums;
+    private static Hashtable<String, ESEnumTaskDoneFlag> aliasEnums;
 
-    ESEnumTaskDownFlag(String code, String title){
+    ESEnumTaskDoneFlag(String code, String title){
         this.init(code, title);
     }
 
@@ -34,7 +34,7 @@ public enum ESEnumTaskDownFlag {
         aliasEnums.put(title, this);
     }
 
-    public static ESEnumTaskDownFlag getValueByKey(String alias) {
+    public static ESEnumTaskDoneFlag getValueByKey(String alias) {
         return aliasEnums.get(alias);
     }
 

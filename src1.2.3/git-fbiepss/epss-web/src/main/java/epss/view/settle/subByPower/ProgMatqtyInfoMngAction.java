@@ -1,9 +1,6 @@
 package epss.view.settle.subByPower;
 
-import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumAutoLinkFlag;
-import epss.common.enums.ESEnumStatusFlag;
-import epss.common.enums.ESEnumSubcttType;
+import epss.common.enums.*;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitStl;
 import epss.repository.model.model_show.CttInfoShow;
@@ -70,13 +67,29 @@ public class ProgMatqtyInfoMngAction {
     private String strStlType;
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
+    private String strProgMatqtyInfoPkid;
 
     @PostConstruct
     public void init() {
+        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        if (parammap.containsKey("strProgMatqtyInfoPkid")) {
+            strProgMatqtyInfoPkid = parammap.get("strProgMatqtyInfoPkid").toString();
+        } else {// 总包合同页面上
+            strProgMatqtyInfoPkid = null;
+        }
+        initData();
+    }
+
+    public void initData(){
+        progInfoShowQry = new ProgInfoShow();
+        progInfoShowSel = new ProgInfoShow();
+        progInfoShowAdd = new ProgInfoShow();
+        progInfoShowUpd = new ProgInfoShow();
+        progInfoShowDel = new ProgInfoShow();
+        styleModel=new StyleModel();
+        styleModel.setDisabled_Flag("false");
         this.progInfoShowList = new ArrayList<ProgInfoShow>();
         strStlType =ESEnum.ITEMTYPE4.getCode();
-
-        resetAction();
         //自己拥有权限的分包合同
         List<OperResShow> operResShowListTemp =
                 operResService.getInfoListByOperFlowPkid(
@@ -94,19 +107,20 @@ public class ProgMatqtyInfoMngAction {
                 subcttList.add(selectItem);
             }
         }
-    }
-
-    public void resetAction(){
-        progInfoShowQry = new ProgInfoShow();
-        progInfoShowSel = new ProgInfoShow();
-        progInfoShowAdd = new ProgInfoShow();
-        progInfoShowUpd = new ProgInfoShow();
-        progInfoShowDel = new ProgInfoShow();
-        styleModel=new StyleModel();
-        styleModel.setDisabled_Flag("false");
+        ProgInfoShow progInfoShowTemp = new ProgInfoShow();
+        progInfoShowTemp.setStlType(strStlType);
+        progInfoShowTemp.setStlPkid(strProgMatqtyInfoPkid);
+        List<ProgInfoShow> progInfoShowConstructsTemp =
+                esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowTemp);
+        for (ProgInfoShow progInfoShowUnit:progInfoShowConstructsTemp){
+            if (!("NULL".equals(progInfoShowUnit.getPeriodNo()))) {
+                progInfoShowList.add(progInfoShowUnit);
+            }
+        }
     }
     public void resetActionForAdd(){
         progInfoShowAdd =new ProgInfoShow();
+        progInfoShowAdd.setStlPkid(strProgMatqtyInfoPkid);
     }
 
     public void setMaxNoPlusOne(String strQryTypePara){
@@ -149,14 +163,19 @@ public class ProgMatqtyInfoMngAction {
             this.progInfoShowList.clear();
             List<ProgInfoShow> progInfoShowConstructsTemp =
                     esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQry);
-            if (progInfoShowQry.getStlPkid() != null) {//有分包合同条件查询
-                progInfoShowList.addAll(progInfoShowConstructsTemp);
-            } else {                                 //无分包合同条件查询
+            if ("".equals(ToolUtil.getStrIgnoreNull(progInfoShowQry.getStlPkid()))){
                 for (SelectItem itemUnit : subcttList) {
                     for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                        if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())) {
+                        if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())
+                                &&!("NULL".equals(esISSOMPCUnit.getPeriodNo()))) {
                             progInfoShowList.add(esISSOMPCUnit);
                         }
+                    }
+                }
+            }else {
+                for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
+                    if (!("NULL".equals(esISSOMPCUnit.getPeriodNo()))){
+                        progInfoShowList.add(esISSOMPCUnit);
                     }
                 }
             }
@@ -258,13 +277,13 @@ public class ProgMatqtyInfoMngAction {
                         esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQryQ);
                 if (progInfoShowConstructsTemp.size()!=0){
                     for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus())))&&
+                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag())))&&
                                 (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
                                 &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG1.getCode()).equals(
                                 ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){
                             MessageUtil.addInfo("该记录已关联分包数量结算，不可删除！");
                             return;
-                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))&&
+                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))&&
                                 (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
                                 &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG0.getCode()).equals(
                                 ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){
@@ -284,7 +303,8 @@ public class ProgMatqtyInfoMngAction {
                 esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowTemp);                               //无分包合同条件查询
         for (SelectItem itemUnit : subcttList) {
             for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())) {
+                if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())
+                        &&!("NULL".equals(esISSOMPCUnit.getPeriodNo()))) {
                     progInfoShowList.add(esISSOMPCUnit);
                 }
             }
@@ -292,9 +312,7 @@ public class ProgMatqtyInfoMngAction {
     }
     private void addRecordAction(ProgInfoShow progInfoShowPara){
         try {
-            progStlInfoService.insertRecord(progInfoShowPara) ;
-            progMatqtyItemService.setFromLastStageApproveDataToThisStageBeginData(progInfoShowPara);
-            MessageUtil.addInfo("新增数据完成。");
+            MessageUtil.addInfo(progStlInfoService.insertStlMAndItemRecordAction(progInfoShowPara));
         } catch (Exception e) {
             logger.error("新增数据失败，", e);
             MessageUtil.addError(e.getMessage());

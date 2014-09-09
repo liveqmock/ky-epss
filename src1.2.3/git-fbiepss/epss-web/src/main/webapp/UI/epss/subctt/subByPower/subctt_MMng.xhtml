@@ -23,7 +23,7 @@
                 var arg = new Object();
                 arg.doType = "select";
 
-                var rtn =dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strProgMatqtyInfoPkid="+pkid+"",arg,sfeature);
+                var rtn =dialog("../../item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strProgMatqtyInfoPkid="+pkid+"",arg,sfeature);
                 document.getElementById("form:qryBtn").click();
             }
         </script>
@@ -35,7 +35,11 @@
             <p:panel>
                 <h:panelGrid id="pdQry" columns="2" style="width: 100%">
                     <h:panelGrid>
-                        <h:panelGrid columns="4">
+                        <h:panelGrid columns="6">
+                            <p:outputLabel value="结算编号：" for="id" />
+                            <p:inputText id="id" value="#{progMatqtyInfoMngAction.progInfoShowQry.id}"
+                                         disabled="#{progMatqtyInfoMngAction.styleModel.disabled_Flag}"
+                                         style="#{progMatqtyInfoMngAction.styleModel.disabled_Style};"/>
                             <p:outputLabel value="分包合同：" for="stlPkid" />
                             <p:selectOneMenu id="stlPkid"
                                              value="#{progMatqtyInfoMngAction.progInfoShowQry.stlPkid}"
@@ -47,18 +51,6 @@
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"
                                          disabled="#{progMatqtyInfoMngAction.styleModel.disabled_Flag}"
                                          style="#{progMatqtyInfoMngAction.styleModel.disabled_Style};width:160px"/>
-                        </h:panelGrid>
-                        <h:panelGrid columns="3">
-                            <p:outputLabel value="结算编号：" for="id" />
-                            <p:inputText id="id" value="#{progMatqtyInfoMngAction.progInfoShowQry.id}"
-                                         disabled="#{progMatqtyInfoMngAction.styleModel.disabled_Flag}"
-                                         style="#{progMatqtyInfoMngAction.styleModel.disabled_Style};"/>
-                            <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
-                                             action="#{progMatqtyInfoMngAction.setMaxNoPlusOne('Qry')}"
-                                             update="id"
-                                             disabled="#{progMatqtyInfoMngAction.styleModel.disabled_Flag}"
-                                             style="#{progMatqtyInfoMngAction.styleModel.disabled_Style};height:20px">
-                            </p:commandButton>
                         </h:panelGrid>
                     </h:panelGrid>
                     <h:panelGrid columns="3">
@@ -103,7 +95,7 @@
                          rowsPerPageTemplate="500,200,100,45,30,15"
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitSubcttList"
-                         rowStyleClass="#{record.flowStatus eq null? null:'rowGrayStyle'}"
+                         rowStyleClass="#{record.statusFlag eq null? null:'rowDoneStyle'}"
                          scrollable="true">
                 <p:column headerText="操作" style="width:61px">
                     <p:commandButton icon="ui-icon-pencil"
@@ -142,10 +134,10 @@
                     <h:outputText value="#{record.autoLinkAdd}"/>
                 </p:column>
                 <p:column headerText="状态" style="text-align:center;width:66px;">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.statusFlag)}"/>
                 </p:column>
                 <p:column headerText="原因" style="text-align:center;width:66px;">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.preStatusFlag)}"/>
                 </p:column>
             </p:dataTable>
             <p:dialog id="dlgViewForAdd" header="分包合同增加信息" widgetVar="wVDlgViewForAdd"
@@ -178,7 +170,7 @@
                     <h:panelGrid id="pgOperBtnForAdd" columns="2">
                         <p:commandButton id="submitBtnForAdd"
                                          value="提交（增加）"
-                                         action="#{progMatqtyInfoMngAction.onClickForMngAction()}"
+                                         action="#{progMatqtyInfoMngAction.onClickForMngAction('Add')}"
                                          update="pdt,msgs,pgViewForAdd">
                         </p:commandButton>
                         <p:commandButton id="resetBtnForAdd" value="重置"
@@ -210,6 +202,7 @@
                     <h:panelGrid columns="4">
                         <p:outputLabel value="期数编码：  " for="periodNoForUpd"/>
                         <p:inputText id="periodNoForUpd" value="#{progMatqtyInfoMngAction.progInfoShowUpd.periodNo}"
+                                     style="background-color:gainsboro;" readonly="true"
                                      onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         <p:outputLabel value="备注内容：" for="noteForUpd"/>
                         <p:inputText id="noteForUpd" value="#{progMatqtyInfoMngAction.progInfoShowUpd.note}"/>
@@ -241,7 +234,7 @@
                     <h:panelGrid id="pgOperBtnForUpd" columns="2">
                         <p:commandButton id="submitBtnForUpd"
                                          value="提交（更新）"
-                                         action="#{progMatqtyInfoMngAction.onClickForMngAction()}"
+                                         action="#{progMatqtyInfoMngAction.onClickForMngAction('Upd')}"
                                          update="pdt,msgs,pgViewForUpd"
                                          oncomplete="wVDlgViewForUpd.hide()">
                         </p:commandButton>
@@ -305,7 +298,7 @@
                     <h:panelGrid id="pgOperBtnForDel" columns="2">
                         <p:commandButton id="submitBtnForDel"
                                          value="提交（删除）"
-                                         action="#{progMatqtyInfoMngAction.onClickForMngAction()}"
+                                         action="#{progMatqtyInfoMngAction.onClickForMngAction('Del')}"
                                          update="pdt,msgs,pgViewForDel"
                                          oncomplete="wVDlgViewForDel.hide()">
                         </p:commandButton>
