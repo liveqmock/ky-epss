@@ -36,8 +36,11 @@ public class TaskService {
         return myTaskMapper.getOwnTaskFlowGroup(strOperPkidPara);
     }
 
-    public List<TaskShow> getDetailTaskShowList(String strOperPkidPara) {
-        return myTaskMapper.getDetailTaskShowList(strOperPkidPara);
+    public List<TaskShow> getDetailTodoTaskShowList(String strOperPkidPara) {
+        return myTaskMapper.getDetailTodoTaskShowList(strOperPkidPara);
+    }
+    public List<TaskShow> getDetailDoneTaskShowList(String strOperPkidPara) {
+        return myTaskMapper.getDetailDoneTaskShowList(strOperPkidPara);
     }
 
     public List<TaskShow> getRencentlyPowerDetailTaskShowList(String strOperPkidPara) {
@@ -75,7 +78,7 @@ public class TaskService {
         // 以合同类型和状态为分组,取得各组的数量
         List<TaskShow> ownTaskFlowGroupListTemp = getOwnTaskFlowGroup(strOperIdTemp);
         // 获得详细任务列表
-        List<TaskShow> detailTaskShowListTemp = getDetailTaskShowList(strOperIdTemp);
+        List<TaskShow> detailTaskShowListTemp = getDetailTodoTaskShowList(strOperIdTemp);
         for (TaskShow taskShowGroupUnit : ownTaskFlowGroupListTemp) {
             taskShowGroupUnit.setOperResFlowStatusName(
                     ESEnumStatusFlag.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
@@ -132,7 +135,7 @@ public class TaskService {
         String strOperIdTemp = ToolUtil.getOperatorManager().getOperatorId();
 
         // 获得详细任务列表
-        List<TaskShow> detailTaskShowListTemp = getDetailTaskShowList(strOperIdTemp);
+        List<TaskShow> detailTaskShowListTemp = getDetailDoneTaskShowList(strOperIdTemp);
         for (TaskShow taskShowGroupUnit : taskFlowGroupListTemp) {
             taskShowGroupUnit.setOperResFlowStatusName(
                     ESEnumStatusFlag.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
