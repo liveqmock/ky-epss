@@ -21,6 +21,7 @@
     <ui:define name="content">
         <h:form id="form">
             <p:growl id="msgs" showDetail="true" />
+
             <h:panelGrid id="pdQry" columns="1">
                 <p:commandButton value="导出到EXCEL"
                                  action="#{operFuncBusiResMngAction.onExportExcel}"
@@ -30,6 +31,11 @@
                 <p:treeTable id="resTreeTable"
                              value="#{operFuncBusiResMngAction.resRoot}"
                              var="document"
+                             rowStyleClass="
+                        #{document.resType eq '0'? 'rowGreenStyle':document.resType eq '6'?'rowGreenStyle':document.resType eq '7'?'rowGreenStyle'
+                             :document.resType eq '1'?'rowBlueStyle'
+                             :document.resType eq '2'?'rowOrangeStyle':document.resType eq '3'?'rowOrangeStyle'
+                             :document.resType eq '4'?'rowOrangeStyle':document.resType eq '5'?'rowOrangeStyle':'rowGreenStyle'}"
                              emptyMessage="数据记录为空..."
                              scrollable="true"
                              scrollHeight="500">
@@ -98,6 +104,7 @@
                     </p:column>
                 </p:treeTable>
             </h:panelGrid>
+
             <p:dialog id="dlgViewForAdd" header="资源增加" widgetVar="wVDlgViewForAdd"
                       resizable="false" modal="true"
                       showEffect="clip" hideEffect="fold">
@@ -186,7 +193,7 @@
                                          var="node"
                                          dynamic="true"
                                          cache="false"
-                                         rowStyleClass="#{node.type  eq '1' ? null:'rowDoneStyle'}"
+                                         rowStyleClass="#{node.type  eq '1' ? null:'rowGrayStyle'}"
                                          scrollable="true"
                                          scrollHeight="200">
                                 <p:column headerText="机构" style="width:200px;text-align:left">

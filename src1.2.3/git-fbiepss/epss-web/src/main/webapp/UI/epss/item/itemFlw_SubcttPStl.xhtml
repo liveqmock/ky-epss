@@ -79,10 +79,10 @@
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
                          widgetVar="dtItemDetail"
-                         rowStyleClass="#{record.subctt_Name eq '小计'? 'rowDoneStyle':
+                         rowStyleClass="#{record.subctt_Name eq '小计'? 'rowGrayStyle':
                                              record.subctt_Name eq '本期净结算额'? 'rowTotalStyle':
                                              record.subctt_Name eq '合计(扣除其它栏款项后本期结算价值)'?'rowTotalStyle':
-                                             record.subctt_Name eq '其中:安全施工措施费'?'rowDoneStyle':
+                                             record.subctt_Name eq '其中:安全施工措施费'?'rowGrayStyle':
                                              record.subctt_Name eq '质保金'? 'rowTotalStyle':null}"
                          scrollable="true"
                          scrollHeight="400">

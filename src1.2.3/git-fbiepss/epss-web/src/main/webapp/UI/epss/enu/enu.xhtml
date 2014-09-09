@@ -139,7 +139,9 @@
     <h:panelGrid id="pgViewForUpd">
         <h:panelGrid columns="4">
             <p:outputLabel value="枚举ID：" for="mainIdForUpd"/>
-            <p:inputText id="mainIdForUpd" value="#{enuAction.enumainUpd.enutype}"/>
+            <p:inputText id="mainIdForUpd" value="#{enuAction.enumainUpd.enutype}"
+                    readonly="true"
+                    style="background-color:gainsboro;text-align:right;"/>
             <p:outputLabel value="枚举名称：" for="mainNameForUpd"/>
             <p:inputText id="mainNameForUpd" value="#{enuAction.enumainUpd.enuname}"/>
             <p:outputLabel value="值类型：" for="mainValueForUpd"/>

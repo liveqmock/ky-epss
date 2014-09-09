@@ -17,7 +17,7 @@ public class ProgInfoShow {
     private String periodNo;
     private String note;
     private String attachment;
-    private String statusFlag;
+    private String flowStatus;
     private String strStatusFlagBegin;
     private String strStatusFlagEnd;
     private String preStatusFlag;
@@ -99,12 +99,12 @@ public class ProgInfoShow {
         this.note = note;
     }
 
-    public String getStatusFlag() {
-        return statusFlag;
+    public String getFlowStatus() {
+        return flowStatus;
     }
 
-    public void setStatusFlag(String statusFlag) {
-        this.statusFlag = statusFlag;
+    public void setFlowStatus(String flowStatus) {
+        this.flowStatus = flowStatus;
     }
 
     public String getStrStatusFlagBegin() {

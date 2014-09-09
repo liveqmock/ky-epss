@@ -414,7 +414,7 @@ public class ProgMatqtyItemAction {
                             progStlInfoService.insertRecord(progInfoShowQryQ);
                         }else{
                             for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                                if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))){
+                                if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
                                     esInitStl.setAutoLinkAdd("0");
                                     progStlInfoService.updateRecord(esInitStl);
                                     progInfoShowQryQ.setAutoLinkAdd("1");
@@ -478,7 +478,7 @@ public class ProgMatqtyItemAction {
                 }else if(strPowerType.equals("DoubleCheckFail")){
                     try {
                         String SubcttStlPStatus = ToolUtil.getStrIgnoreNull(
-                                esFlowService.getStatusFlag(ESEnum.ITEMTYPE5.getCode(), esInitStl.getStlPkid(), esInitStl.getPeriodNo()));
+                                esFlowService.getFlowStatus(ESEnum.ITEMTYPE5.getCode(), esInitStl.getStlPkid(), esInitStl.getPeriodNo()));
                         if (!("".equals(SubcttStlPStatus)) && ESEnumStatusFlag.STATUS_FLAG2.getCode().compareTo(SubcttStlPStatus) < 0) {
                             MessageUtil.addInfo("该数据已被分包价格结算批准，您无权进行操作！");
                             return;

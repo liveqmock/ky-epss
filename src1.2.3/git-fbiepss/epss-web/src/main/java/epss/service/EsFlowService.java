@@ -31,11 +31,38 @@ public class EsFlowService {
     private OperResService operResService;
 
     public List<CttInfoShow> selectCttByStatusFlagBegin_End(CttInfoShow cttInfoShowPara){
-        return myFlowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
+        OperRes operResTemp=new OperRes();
+        operResTemp.setOperPkid(ToolUtil.getOperatorManager().getOperatorId());
+        //List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
+        List<CttInfoShow> cttInfoShowListTemp= myFlowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
+        List<CttInfoShow> cttInfoShowList=new ArrayList<>();
+        /*for(CttInfoShow cttInfoShowUnit:cttInfoShowListTemp){
+            for(OperResShow operResShowUnit:operResShowListTemp){
+                if(cttInfoShowUnit.getCttType().equals(operResShowUnit.getInfoType())&&
+                        cttInfoShowUnit.getPkid().equals(operResShowUnit.getInfoPkid())) {
+                    cttInfoShowList.add(cttInfoShowUnit);
+                }
+            }
+        }*/
+        cttInfoShowList.addAll(cttInfoShowListTemp);
+        return cttInfoShowList;
     }
 
     public List<ProgInfoShow> selectSubcttStlQMByStatusFlagBegin_End(ProgInfoShow progInfoShowPara){
-        return myFlowMapper.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowPara);
+        OperRes operResTemp=new OperRes();
+        operResTemp.setOperPkid(ToolUtil.getOperatorManager().getOperatorId());
+        List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
+        List<ProgInfoShow> progInfoShowListTemp= myFlowMapper.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowPara);
+        List<ProgInfoShow> progInfoShowList=new ArrayList<>();
+        for(ProgInfoShow progInfoShowUnit:progInfoShowListTemp){
+            for(OperResShow operResShowUnit:operResShowListTemp){
+                if(progInfoShowUnit.getStlType().equals(operResShowUnit.getInfoType())&&
+                        progInfoShowUnit.getStlPkid().equals(operResShowUnit.getInfoPkid())) {
+                    progInfoShowList.add(progInfoShowUnit);
+                }
+            }
+        }
+        return progInfoShowList;
     }
 
     public List<ProgInfoShow> selectNotFormEsInitSubcttStlP(String strParentPkid,
@@ -98,9 +125,9 @@ public class EsFlowService {
                     getMaxPeriodNo(ESEnum.ITEMTYPE4.getCode(),subCttPkid));
 
             String quantityStatus=ToolUtil.getStrIgnoreNull(
-                    getStatusFlag(ESEnum.ITEMTYPE3.getCode(),subCttPkid,quantityMaxPeriod));
+                    getFlowStatus(ESEnum.ITEMTYPE3.getCode(),subCttPkid,quantityMaxPeriod));
             String materialStatus=ToolUtil.getStrIgnoreNull(
-                    getStatusFlag(ESEnum.ITEMTYPE4.getCode(),subCttPkid,materialMaxPeriod));
+                    getFlowStatus(ESEnum.ITEMTYPE4.getCode(),subCttPkid,materialMaxPeriod));
 
             System.out.println("\n数量结算最大期号："+quantityMaxPeriod+"\n材料结算最大期号："+materialMaxPeriod);
             System.out.println("\n数量结算最大期号对应状态标志："+quantityStatus+"\n材料结算最大期号对应状态标志："+materialStatus);
@@ -169,7 +196,7 @@ public class EsFlowService {
                 String strStaQtyMaxPeriod = ToolUtil.getStrIgnoreNull(
                         getMaxPeriodNo(ESEnum.ITEMTYPE6.getCode(),subCttPkid));
                 String strStaQtyMaxPeriodStatus=ToolUtil.getStrIgnoreNull(
-                        getStatusFlag(ESEnum.ITEMTYPE6.getCode(),subCttPkid,strStaQtyMaxPeriod));
+                        getFlowStatus(ESEnum.ITEMTYPE6.getCode(),subCttPkid,strStaQtyMaxPeriod));
 
                 if (periodNo.compareTo(strStaQtyMaxPeriod)<=0){ //首先和自身比较期号大小，如果比自身小或者等于则不能录入
                     strReturnTemp="应录入大于[" + strStaQtyMaxPeriod + "]期的总包统计数据!";
@@ -191,7 +218,7 @@ public class EsFlowService {
                     String strMeaQtyMaxPeriod = ToolUtil.getStrIgnoreNull(
                             getMaxPeriodNo(ESEnum.ITEMTYPE7.getCode(),subCttPkid));
                     String strMeaQtyMaxPeriodStatus=ToolUtil.getStrIgnoreNull(
-                            getStatusFlag(ESEnum.ITEMTYPE7.getCode(),subCttPkid,strMeaQtyMaxPeriod));
+                            getFlowStatus(ESEnum.ITEMTYPE7.getCode(),subCttPkid,strMeaQtyMaxPeriod));
 
                     if (periodNo.compareTo(strMeaQtyMaxPeriod)<=0){ //首先和自身比较期号大小，如果比自身小或者等于则不能录入
                         strReturnTemp="应录入大于[" + strMeaQtyMaxPeriod + "]期的总包统计数据!";
@@ -219,8 +246,8 @@ public class EsFlowService {
     public String getMaxPeriodNo(String stlType, String subCttPkid) {
         return myFlowMapper.getMaxPeriodNo(stlType,subCttPkid);
     }
-    public String getStatusFlag(String stlType,String subCttPkid,String periodNo){
-        return myFlowMapper.getStatusFlag(stlType,subCttPkid,periodNo);
+    public String getFlowStatus(String stlType,String subCttPkid,String periodNo){
+        return myFlowMapper.getFlowStatus(stlType,subCttPkid,periodNo);
     }
 }
 

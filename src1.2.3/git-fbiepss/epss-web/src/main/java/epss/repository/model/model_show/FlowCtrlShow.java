@@ -7,7 +7,7 @@ public class FlowCtrlShow {
     private String powerPkidName;
     private String periodNo;
 
-    private String statusFlag;
+    private String flowStatus;
     private String statusFlagName;
     private String preStatusFlag;
     private String preStatusFlagName;
@@ -51,12 +51,12 @@ public class FlowCtrlShow {
         this.periodNo = periodNo;
     }
 
-    public String getStatusFlag() {
-        return statusFlag;
+    public String getFlowStatus() {
+        return flowStatus;
     }
 
-    public void setStatusFlag(String statusFlag) {
-        this.statusFlag = statusFlag;
+    public void setFlowStatus(String flowStatus) {
+        this.flowStatus = flowStatus;
     }
 
     public String getStatusFlagName() {

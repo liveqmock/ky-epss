@@ -99,7 +99,7 @@
                          rowsPerPageTemplate="500,200,100,45,30,15"
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitSubcttList"
-                         rowStyleClass="#{record.statusFlag eq null? null:'rowDoneStyle'}"
+                         rowStyleClass="#{record.flowStatus eq null? null:'rowGrayStyle'}"
                          scrollable="true">
                 <p:column headerText="操作" style="width:61px">
                     <p:commandButton icon="ui-icon-pencil"
@@ -138,10 +138,10 @@
                     <h:outputText value="#{record.autoLinkAdd}"/>
                 </p:column>
                 <p:column headerText="状态" style="text-align:center;width:66px;">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.statusFlag)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
                 </p:column>
                 <p:column headerText="原因" style="text-align:center;width:66px;">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.preStatusFlag)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
                 </p:column>
             </p:dataTable>
             <p:dialog id="dlgViewForAdd" header="分包合同增加信息" widgetVar="wVDlgViewForAdd"

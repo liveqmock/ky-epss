@@ -32,7 +32,14 @@
         </javaClientGenerator>
 
         <!--业务类例子 -->
-      <!--  <table schema="epss" tableName="oper_res">
+        <table schema="epss" tableName="flow_ctrl_his">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+        </table>
+        <table schema="epss" tableName="oper_res">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
+        </table>
+        <table schema="epss" tableName="es_init_cust">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
@@ -44,45 +51,6 @@
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <table schema="epss" tableName="es_item_stl_subctt_eng_m">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        <table schema="epss" tableName="es_item_stl_subctt_eng_q">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        <table schema="epss" tableName="es_item_stl_subctt_eng_p">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        <table schema="epss" tableName="es_item_stl_tkctt_eng_sta">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        <table schema="epss" tableName="es_item_stl_tkctt_eng_mea">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        <table schema="epss" tableName="es_init_power_his">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-        </table>
-        <table schema="epss" tableName="ES_CTT_INFO">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        <table schema="epss" tableName="es_init_cust">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        <table schema="epss" tableName="ES_CTT_ITEM">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        <table schema="epss" tableName="es_item_info">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
         <table schema="epss" tableName="es_init_stl">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
@@ -104,38 +72,37 @@
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
         <table schema="epss" tableName="es_item_stl_tkctt_eng_mea">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        <table tableName="all_tab_columns"/>
-        <table schema="epss" tableName="tidkeys">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        -->
-        <table schema="epss" tableName="es_init_stl">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
 
-        <!--平台类 -->
-        <!--<table tableName="ptenudetail"/>
-        <table tableName="ptenumain"/>
-        <table tableName="ptlogicact"/>
-        <table tableName="ptmenu"/>
-        <table tableName="sys_lock"/>-->
-        <!--<table schema="epss" tableName="oper">
+        <!--平台类 有几个表并不是Mybatis自动生成的，更新慎用-->
+        <!--
+        <table schema="epss" tableName="DEPT">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <table schema="epss" tableName="dept">
+        <table schema="epss" tableName="OPER">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <table schema="epss" tableName="oper">
+        <table schema="epss" tableName="TIDKEYS">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <table tableName="pterror"/>-->
+        <table schema="epss" tableName="PTENUDETAIL">
+        </table>
+        <table schema="epss" tableName="PTENUMAIN">
+        </table>
+        <table schema="epss" tableName="PTERROR">
+        </table>
+        <table schema="epss" tableName="PTLOGICACT">
+        </table>
+        <table schema="epss" tableName="PTMENU">
+        </table>
+        <table schema="epss" tableName="SYS_LOCK">
+        </table>
+        <table tableName="all_tab_columns"/>-->
+
     </context>
 </generatorConfiguration>

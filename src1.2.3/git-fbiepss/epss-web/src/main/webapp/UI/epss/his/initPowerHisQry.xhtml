@@ -61,8 +61,8 @@
                             <p:selectOneMenu id="sf" value="#{flowCtrlHisAction.flowCtrlHis.flowStatus}">
                                 <f:selectItems value="#{esCommon.statusFlagList}"/>
                             </p:selectOneMenu>
-                            <p:outputLabel value="状态原因：" for="preStatusFlag"/>
-                            <p:selectOneMenu id="preStatusFlag" value="#{flowCtrlHisAction.flowCtrlHis.flowStatusReason}">
+                            <p:outputLabel value="状态原因：" for="flowStatusReason"/>
+                            <p:selectOneMenu id="flowStatusReason" value="#{flowCtrlHisAction.flowCtrlHis.flowStatusReason}">
                                 <f:selectItems value="#{esCommon.preStatusFlagList}"/>
                             </p:selectOneMenu>
                         </h:panelGrid>

@@ -91,8 +91,18 @@
                         }
                     }
                 }else if(taskType=='1'){//刚被分配录入权限的资源
-                    if (infoType == '2') {// 分包合同
-                        var rtn = dialog("../subctt/subByPower/subctt_Mng.xhtml?strSubCttInfoPkid=" + infoPkid, arg, sfeature);
+                    sfeature = "dialogwidth:440px;dialogheight:300px;center:yes;location:no;help:no;" +
+                            "resizable:no;scroll:yes;status:no;minimize:yes;maximize:no;";
+                    if (infoType == '0') {// 总包合同
+                        var rtn = dialog("../tkctt/subByPower/tkctt_TkcttMng.xhtml?strTkcttInfoPkid=" + infoPkid, arg, sfeature);
+                    }else if (infoType == '1') {// 成本计划
+                        var rtn = dialog("../cstpl/subByPower/cstpl_CstplMng.xhtml?strCstplInfoPkid=" + infoPkid, arg, sfeature);
+                    }else if (infoType == '2') {// 分包合同
+                        var rtn = dialog("../subctt/subByPower/subctt_SubcttMng.xhtml?strSubcttInfoPkid=" + infoPkid, arg, sfeature);
+                    }else if (infoType == '3') {// 数量结算
+                        var rtn = dialog("../subctt/subByPower/subctt_Mng.xhtml?strSubcttInfoPkid=" + infoPkid, arg, sfeature);
+                    }else if (infoType == '4') {// 材料结算
+                        var rtn = dialog("../subctt/subByPower/subctt_Mng.xhtml?strSubcttInfoPkid=" + infoPkid, arg, sfeature);
                     }
                 }
                 document.getElementById("form:qryBtn").click();
@@ -124,8 +134,8 @@
                              rowIndexVar="row"
                              rowKey="#{row + 1}"
                              emptyMessage="数据记录为空..."
-                             rowStyleClass="#{record.id eq null?'rowDoneStyle':
-                             record.strColorType eq '2'?'rowDoneStyle2':'rowDoneStyle1'}"
+                             rowStyleClass="#{record.id eq null?'rowGreenyellowStyle':
+                             record.strColorType eq '2'?'rowRedStyle':'rowGreenyellowStyle'}"
                              scrollable="true"
                              scrollHeight="180">
                     <p:column headerText="操作" style="width:30px;text-align: center;">
@@ -162,7 +172,7 @@
                              rowIndexVar="row"
                              rowKey="#{row + 1}"
                              emptyMessage="数据记录为空..."
-                             rowStyleClass="#{record.id eq null?'rowDoneStyle':'rowDoneStyle1'}"
+                             rowStyleClass="#{record.id eq null?'rowGrayStyle':'rowGreenyellowStyle'}"
                              scrollable="true"
                              scrollHeight="180">
                     <p:column headerText="操作" style="width:30px;text-align: center;">

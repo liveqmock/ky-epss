@@ -148,8 +148,8 @@ public class ProgMatqtyInfoAction {
         try {
             progInfoShowQry.setStlType(strStlType);
             if(strQryFlag.equals("Qry")){
-                progInfoShowQry.setStrStatusFlagBegin(progInfoShowQry.getStatusFlag());
-                progInfoShowQry.setStrStatusFlagEnd(progInfoShowQry.getStatusFlag());
+                progInfoShowQry.setStrStatusFlagBegin(progInfoShowQry.getFlowStatus());
+                progInfoShowQry.setStrStatusFlagEnd(progInfoShowQry.getFlowStatus());
             }else if(strQryFlag.equals("Mng")){
                 progInfoShowQry.setStrStatusFlagBegin(null);
                 progInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG0.getCode());
@@ -192,8 +192,8 @@ public class ProgMatqtyInfoAction {
                                      ProgInfoShow progInfoShowPara){
         try {
             strSubmitType=strSubmitTypePara;
-            String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowPara.getStatusFlag());
-            String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getStatusFlag());
+            String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowPara.getFlowStatus());
+            String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getFlowStatus());
             progInfoShowPara.setCreatedByName(ToolUtil.getUserName(progInfoShowPara.getCreatedBy()));
             progInfoShowPara.setLastUpdByName(ToolUtil.getUserName(progInfoShowPara.getLastUpdBy()));
             // 查询
@@ -312,13 +312,13 @@ public class ProgMatqtyInfoAction {
                         esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQryQ);
                 if (progInfoShowConstructsTemp.size()!=0){
                     for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag())))
+                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus())))
                                 &&(progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
                                 &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG1.getCode()).equals(
                                 ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){
                             MessageUtil.addInfo("该记录已关联分包数量结算，不可删除！");
                             return;
-                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))
+                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))
                                 &&(progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
                                 &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG0.getCode()).equals(
                                 ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){

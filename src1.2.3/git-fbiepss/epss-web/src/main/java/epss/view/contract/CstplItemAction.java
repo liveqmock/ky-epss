@@ -1297,7 +1297,7 @@ public class CstplItemAction {
     }
 
     /*ÖÇÄÜ×Ö¶ÎStart*/
-    public EsCttInfo getCstplInfo() {
+    public EsCttInfo getCttInfo() {
         return cttInfo;
     }
 

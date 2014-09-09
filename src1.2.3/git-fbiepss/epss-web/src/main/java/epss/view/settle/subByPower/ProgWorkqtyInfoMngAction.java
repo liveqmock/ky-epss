@@ -254,13 +254,13 @@ public class ProgWorkqtyInfoMngAction {
                         esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQryM);
                 if (progInfoShowConstructsTemp.size()!=0){
                     for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag())))&&
+                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus())))&&
                                 (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
                                 &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG1.getCode()).equals(
                                 ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){
                             MessageUtil.addInfo("该记录已关联分包材料结算，不可删除！");
                             return;
-                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getStatusFlag()))&&
+                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))&&
                                 (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
                                 &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG0.getCode()).equals(
                                 ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){

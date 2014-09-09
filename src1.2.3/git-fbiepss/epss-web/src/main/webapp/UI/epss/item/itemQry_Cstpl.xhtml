@@ -24,10 +24,10 @@
                 <p:growl id="msgs" showDetail="true"/>
                 <h:panelGrid columns="6">
                     <p:outputLabel value="成本计划编号：" for="id"/>
-                    <p:inputText id="id" value="#{cstplItemAction.cstplInfo.id}"
+                    <p:inputText id="id" value="#{cstplItemAction.cttInfo.id}"
                                  readonly="true" style="background-color:gainsboro;"/>
                     <p:outputLabel value="成本计划名称：" for="cttName"/>
-                    <p:inputText id="cttName" value="#{cstplItemAction.cstplInfo.name}"
+                    <p:inputText id="cttName" value="#{cstplItemAction.cttInfo.name}"
                                  readonly="true" style="width:400px;background-color:gainsboro;"/>
                     <p:commandButton icon="ui-icon-document"
                                      style="height:18px;width:18px"
@@ -52,10 +52,10 @@
                              rowsPerPageTemplate="500,200,100,45,30,15"
                              rowIndexVar="row"
                              emptyMessage="数据记录为空..."
-                             rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle':
-                                                 record.nameContrast eq '合计'? 'rowDoneStyle':
-                                                 record.name eq '总合计'? 'rowDoneStyle':
-                                                 record.nameContrast eq '总合计'? 'rowDoneStyle':null}"
+                             rowStyleClass="#{record.name eq '合计'? 'rowGrayStyle':
+                                                 record.nameContrast eq '合计'? 'rowGrayStyle':
+                                                 record.name eq '总合计'? 'rowGrayStyle':
+                                                 record.nameContrast eq '总合计'? 'rowGrayStyle':null}"
                              scrollable="true"
                              scrollHeight="480">
                     <p:column headerText="操作" style="width:28px;text-align: center">

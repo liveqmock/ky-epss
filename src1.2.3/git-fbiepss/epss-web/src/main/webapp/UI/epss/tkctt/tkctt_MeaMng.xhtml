@@ -88,7 +88,7 @@
                          rowsPerPageTemplate="500,200,100,45,30,15"
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitTkcttList"
-                         rowStyleClass="#{record.statusFlag eq null? null:'rowDoneStyle'}"
+                         rowStyleClass="#{record.flowStatus eq null? null:'rowGrayStyle'}"
                          scrollable="true">
                 <p:column headerText="操作" style="width:62px">
                     <p:commandButton icon="ui-icon-pencil"
@@ -121,10 +121,10 @@
                     <h:outputText value="#{record.periodNo}"/>
                 </p:column>
                 <p:column headerText="状态" style="width:66px;text-align:center">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.statusFlag)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
                 </p:column>
                 <p:column headerText="原因" style="width:66px;text-align:center">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.preStatusFlag)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
                 </p:column>
             </p:dataTable>
             <p:dialog id="dlgViewForAdd" header="总包数量计量增加信息" widgetVar="wVDlgViewForAdd"

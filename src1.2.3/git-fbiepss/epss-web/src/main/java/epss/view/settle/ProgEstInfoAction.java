@@ -144,8 +144,8 @@ public class ProgEstInfoAction {
         try {
             progInfoShowQry.setStlType(strStlType);
             if(strQryFlag.equals("Qry")){
-                progInfoShowQry.setStrStatusFlagBegin(progInfoShowQry.getStatusFlag());
-                progInfoShowQry.setStrStatusFlagEnd(progInfoShowQry.getStatusFlag());
+                progInfoShowQry.setStrStatusFlagBegin(progInfoShowQry.getFlowStatus());
+                progInfoShowQry.setStrStatusFlagEnd(progInfoShowQry.getFlowStatus());
             }else if(strQryFlag.equals("Mng")){
                 progInfoShowQry.setStrStatusFlagBegin(null);
                 progInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG0.getCode());
@@ -188,8 +188,8 @@ public class ProgEstInfoAction {
                                    ProgInfoShow progInfoShowPara){
         try {
             strSubmitType=strSubmitTypePara;
-            String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowPara.getStatusFlag());
-            String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getStatusFlag());
+            String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowPara.getFlowStatus());
+            String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getFlowStatus());
             progInfoShowPara.setCreatedByName(ToolUtil.getUserName(progInfoShowPara.getCreatedBy()));
             progInfoShowPara.setLastUpdByName(ToolUtil.getUserName(progInfoShowPara.getLastUpdBy()));
             // ≤È—Ø

@@ -227,7 +227,7 @@ public class ProgSubstlInfoAction {
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getStlPkid()),
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo()));
                 for(int i=0;i< progInfoShowApprovedListTemp.size();i++){
-                    if(progInfoShowApprovedListTemp.get(i).getStatusFlag().equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())||progInfoShowApprovedListTemp.get(i).getStatusFlag().equals(ESEnumStatusFlag.STATUS_FLAG3.getCode())){
+                    if(progInfoShowApprovedListTemp.get(i).getFlowStatus().equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())||progInfoShowApprovedListTemp.get(i).getFlowStatus().equals(ESEnumStatusFlag.STATUS_FLAG3.getCode())){
                         progInfoShowList.add(progInfoShowApprovedListTemp.get(i));
                     }
                 }
@@ -264,8 +264,8 @@ public class ProgSubstlInfoAction {
         try {
             strSubmitType=strSubmitTypePara;
             strApprovedFlag="true";
-            String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowPara.getStatusFlag());
-            String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getStatusFlag());
+            String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progInfoShowPara.getFlowStatus());
+            String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progInfoShowPara.getFlowStatus());
             if(strPowerTypePara.equals("Approve")){
                 if(strStatusFlagCode.equals(ESEnumStatusFlag .STATUS_FLAG4.getCode())){
                     MessageUtil.addInfo("本期数据已经"+strStatusFlagName+"，您不能再进行编辑操作！");
@@ -274,7 +274,7 @@ public class ProgSubstlInfoAction {
                 progInfoShow =(ProgInfoShow) BeanUtils.cloneBean(progInfoShowPara);
                 //编辑画面，设置只读项
                 styleModel.setDisabled_Flag("true");
-                if(ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(progInfoShow.getStatusFlag())){
+                if(ESEnumStatusFlag.STATUS_FLAG2.getCode().equals(progInfoShow.getFlowStatus())){
                     strApprovedFlag="true";
                 }else{
                     strApprovedFlag="false";

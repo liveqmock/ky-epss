@@ -3,7 +3,7 @@ package epss.service;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.common.enums.ESEnumTaskDoneFlag;
+import epss.common.enums.ESEnumTaskDownFlag;
 import epss.repository.dao.FlowCtrlHisMapper;
 import epss.repository.model.model_show.CttInfoShow;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,7 +138,7 @@ public class ProgStlInfoService {
     public void insertRecord(ProgInfoShow progInfoShowPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
-        progInfoShowPara.setTaskdoneFlag(ESEnumTaskDoneFlag.TASK_DONE_FLAG0.getCode());
+        progInfoShowPara.setTaskdoneFlag(ESEnumTaskDownFlag.TASK_DONE_FLAG0.getCode());
         progInfoShowPara.setCreatedBy(strOperatorIdTemp);
         progInfoShowPara.setCreatedDate(strLastUpdTimeTemp);
         progInfoShowPara.setDeletedFlag("0");
@@ -199,7 +199,7 @@ public class ProgStlInfoService {
     public void updateRecordForSubCttPApprovePass(EsInitStl esInitStlPara,List<ProgSubstlItemShow> progSubstlItemShowListForApprovePara){
         //结算登记表更新
         esInitStlPara.setModificationNum(
-                ToolUtil.getIntIgnoreNull(esInitStlPara.getModificationNum())+1);
+                ToolUtil.getIntIgnoreNull(esInitStlPara.getModificationNum()) + 1);
         esInitStlPara.setDeletedFlag("0");
         esInitStlPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         esInitStlPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());

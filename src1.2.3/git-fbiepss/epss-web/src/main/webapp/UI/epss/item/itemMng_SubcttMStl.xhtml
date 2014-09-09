@@ -64,8 +64,8 @@
                          rowsPerPageTemplate="500,200,100,45,30,15"
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
-                         rowStyleClass="#{record.subctt_SignPartAPrice eq 0? 'rowDoneStyle':
-                                             record.subctt_SignPartAPrice eq null? 'rowDoneStyle':null}"
+                         rowStyleClass="#{record.subctt_SignPartAPrice eq 0? 'rowGrayStyle':
+                                             record.subctt_SignPartAPrice eq null? 'rowGrayStyle':null}"
                          scrollable="true"
                          scrollHeight="480">
                 <p:column headerText="操作" style="width:91px" rendered='#{progMatqtyItemAction.strPassFlag}'>

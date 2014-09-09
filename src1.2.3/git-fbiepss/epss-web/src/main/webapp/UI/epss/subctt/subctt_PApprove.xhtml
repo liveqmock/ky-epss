@@ -66,7 +66,7 @@
                              rows="6"
                              rowIndexVar="rowNotForm"
                              rowsPerPageTemplate="100,50,40,30,20,10,5"
-                             rowStyleClass="#{recordNotForm.id eq '分包结算单'?'rowDoneStyle':null}"
+                             rowStyleClass="#{recordNotForm.id eq '分包结算单'?'rowGrayStyle':null}"
                              emptyMessage="数据记录为空...">
                     <p:column headerText="序号" style="width:30px">
                         <h:outputText value="#{rowNotForm + 1}"/>
@@ -84,10 +84,10 @@
                         <h:outputText value="#{recordNotForm.periodNo}"/>
                     </p:column>
                     <p:column headerText="今期状态" style="text-align:center;width:66px;">
-                        <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(recordNotForm.statusFlag)}"/>
+                        <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(recordNotForm.flowStatus)}"/>
                     </p:column>
                     <p:column headerText="今期原因" style="text-align:center;width:66px;">
-                        <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(recordNotForm.preStatusFlag)}"/>
+                        <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(recordNotForm.flowStatusReason)}"/>
                     </p:column>
                 </p:dataTable>
             </p:panel>
@@ -132,7 +132,7 @@
                              rowsPerPageTemplate="100,50,40,30,20,10,5"
                              emptyMessage="数据记录为空..."
                              widgetVar="DtInitSubcttList"
-                             rowStyleClass="#{record.statusFlag eq '3'?'rowDoneStyle':null}"
+                             rowStyleClass="#{record.flowStatus eq '3'?'rowGrayStyle':null}"
                              scrollable="true">
                     <p:column headerText="操作" style="width:31px">
                         <p:commandButton icon="ui-icon-triangle-1-e"
@@ -159,10 +159,10 @@
                         <h:outputText value="#{record.periodNo}"/>
                     </p:column>
                     <p:column headerText="今期状态" style="text-align:center;width:66px;">
-                        <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.statusFlag)}"/>
+                        <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
                     </p:column>
                     <p:column headerText="今期原因" style="text-align:center;width:66px;">
-                        <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.preStatusFlag)}"/>
+                        <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
                     </p:column>
                 </p:dataTable>
             </p:panel>

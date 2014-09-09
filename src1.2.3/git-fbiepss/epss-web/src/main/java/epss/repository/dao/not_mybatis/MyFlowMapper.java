@@ -380,7 +380,7 @@ public interface MyFlowMapper {
             " and s.stl_type=#{stlType}" +
             " and s.stl_pkid=#{subCttPkid}" +
             " and s.period_no=#{periodNo}")
-    String getStatusFlag(@Param("stlType") String stlType,
+    String getFlowStatus(@Param("stlType") String stlType,
                          @Param("subCttPkid") String subCttPkid,
                          @Param("periodNo") String periodNo);
 

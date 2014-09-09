@@ -2,13 +2,25 @@
     width:16px;
     height:16px;
 }
-.rowDoneStyle {
+.rowGrayStyle {
     background: gray;
 }
-.rowDoneStyle1 {
+.rowGreenStyle {
+    background: green;
+}
+.rowBlueStyle {
+    background: blue;
+}
+.rowGreenyellowStyle {
     background: greenyellow;
 }
-.rowDoneStyle2 {
+.rowOrangeStyle {
+    background:orange;
+}
+.rowYellowStyle {
+    background: yellow;
+}
+.rowRedStyle {
     background: red;
 }
 .rowSelectStyle {

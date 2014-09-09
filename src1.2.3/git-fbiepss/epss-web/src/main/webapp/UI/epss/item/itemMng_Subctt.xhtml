@@ -49,10 +49,10 @@
                 </h:panelGrid>
                 <h:panelGrid columns="5">
                     <p:outputLabel value="分包合同编号：" for="id"/>
-                    <p:inputText id="id" value="#{subcttItemAction.subcttInfo.id}"
+                    <p:inputText id="id" value="#{subcttItemAction.cttInfo.id}"
                                  readonly="true" style="background-color:gainsboro;"/>
                     <p:outputLabel value="分包合同名称：" for="cttName"/>
-                    <p:inputText id="cttName" value="#{subcttItemAction.subcttInfo.name}"
+                    <p:inputText id="cttName" value="#{subcttItemAction.cttInfo.name}"
                                  readonly="true" style="width:400px;background-color:gainsboro;"/>
                     <p:commandButton icon="ui-icon-document"
                                      style="height:18px;width:18px"
@@ -73,7 +73,7 @@
                          rowsPerPageTemplate="500,200,100,45,30,15"
                          rowIndexVar="row"
                          emptyMessage="数据记录为空..."
-                         rowStyleClass="#{record.name eq '合计'? 'rowDoneStyle': record.name eq '总合计'? 'rowDoneStyle':null}"
+                         rowStyleClass="#{record.name eq '合计'? 'rowGrayStyle': record.name eq '总合计'? 'rowGrayStyle':null}"
                          scrollable="true"
                          scrollHeight="450">
                     <p:column headerText="操作" style="width:65px">

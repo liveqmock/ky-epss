@@ -29,7 +29,7 @@
                                      oncomplete="window.close()">
                     </p:commandButton>
                     <p:outputLabel value="未过至状态:"/>
-                    <p:selectOneMenu id="statusFlag" value="#{progWorkqtyItemAction.strNotPassToStatus}">
+                    <p:selectOneMenu id="flowStatus" value="#{progWorkqtyItemAction.strNotPassToStatus}">
                         <f:selectItems value="#{esFlowControl.getBackToStatusFlagList(progWorkqtyItemAction.strFlowType)}"/>
                     </p:selectOneMenu>
                     <p:commandButton id="startInputBtn" value="未过"

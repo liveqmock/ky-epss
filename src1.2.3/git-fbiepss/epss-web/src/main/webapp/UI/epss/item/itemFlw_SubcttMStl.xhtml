@@ -29,7 +29,7 @@
                                      oncomplete="window.close()">
                     </p:commandButton>
                     <p:outputLabel value="未过至状态:"/>
-                    <p:selectOneMenu id="statusFlag" value="#{progMatqtyItemAction.strNotPassToStatus}">
+                    <p:selectOneMenu id="flowStatus" value="#{progMatqtyItemAction.strNotPassToStatus}">
                         <f:selectItems value="#{esFlowControl.getBackToStatusFlagList(progMatqtyItemAction.strFlowType)}"/>
                     </p:selectOneMenu>
                     <p:commandButton id="startInputBtn" value="未过"
@@ -67,8 +67,8 @@
                              rowIndexVar="row"
                              emptyMessage="数据记录为空..."
                              widgetVar="dtItemDetail"
-                             rowStyleClass="#{record.subctt_SignPartAPrice eq 0? 'rowDoneStyle':
-                                                 record.subctt_SignPartAPrice eq null?'rowDoneStyle':null}"
+                             rowStyleClass="#{record.subctt_SignPartAPrice eq 0? 'rowGrayStyle':
+                                                 record.subctt_SignPartAPrice eq null?'rowGrayStyle':null}"
                              scrollable="true"
                              scrollHeight="480">
                     <p:column headerText="操作" style="width:30px">

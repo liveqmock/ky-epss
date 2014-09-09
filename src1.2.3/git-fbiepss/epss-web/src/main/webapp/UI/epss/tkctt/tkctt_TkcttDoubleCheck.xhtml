@@ -75,7 +75,7 @@
                          rowsPerPageTemplate="500,200,100,45,30,15"
                          emptyMessage="数据记录为空..."
                          widgetVar="DtInitTkcttList"
-                         rowStyleClass="#{record.statusFlag eq '1'? null : 'rowDoneStyle'}"
+                         rowStyleClass="#{record.flowStatus eq '1'? null : 'rowGrayStyle'}"
                          scrollable="true">
                 <p:column headerText="操作" style="width:40px">
                     <p:commandButton icon="ui-icon-search"
@@ -105,10 +105,10 @@
                     <h:outputText value="#{esCommon.getCustNameByCustIdFromList(record.signPartB)}"/>
                 </p:column>
                 <p:column headerText="状态标志" style="width:60px;text-align:center">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.statusFlag)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
                 </p:column>
                 <p:column headerText="原因" style="width:60px;text-align:center">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.preStatusFlag)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
                 </p:column>
                 <p:column headerText="开始时间" style="width:66px;text-align:center">
                     <h:outputText value="#{record.cttStartDate}"/>

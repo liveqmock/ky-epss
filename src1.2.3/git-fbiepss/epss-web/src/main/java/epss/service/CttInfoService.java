@@ -180,7 +180,7 @@ public class CttInfoService {
         return myCttInfoMapper.getStrMaxCttId(strCttType) ;
     }
 
-    private EsCttInfo fromModelShowToModel(CttInfoShow cttInfoShowPara) {
+    public EsCttInfo fromModelShowToModel(CttInfoShow cttInfoShowPara) {
         EsCttInfo esCttInfoTemp = new EsCttInfo();
         esCttInfoTemp.setPkid(cttInfoShowPara.getPkid());
         esCttInfoTemp.setCttType(cttInfoShowPara.getCttType());
@@ -203,6 +203,30 @@ public class CttInfoService {
         esCttInfoTemp.setModificationNum(cttInfoShowPara.getModificationNum());
         esCttInfoTemp.setType(cttInfoShowPara.getType());
         return esCttInfoTemp;
+    }
+    public CttInfoShow fromModelToModelShow(EsCttInfo cttInfoPara) {
+        CttInfoShow cttInfoShowTemp = new CttInfoShow();
+        cttInfoShowTemp.setPkid(cttInfoPara.getPkid());
+        cttInfoShowTemp.setCttType(cttInfoPara.getCttType());
+        cttInfoShowTemp.setParentPkid(cttInfoPara.getParentPkid());
+        cttInfoShowTemp.setId(cttInfoPara.getId());
+        cttInfoShowTemp.setName(cttInfoPara.getName());
+        cttInfoShowTemp.setCttStartDate(cttInfoPara.getCttStartDate());
+        cttInfoShowTemp.setCttEndDate(cttInfoPara.getCttEndDate());
+        cttInfoShowTemp.setSignDate(cttInfoPara.getSignDate());
+        cttInfoShowTemp.setSignPartA(cttInfoPara.getSignPartA());
+        cttInfoShowTemp.setSignPartB(cttInfoPara.getSignPartB());
+        cttInfoShowTemp.setNote(cttInfoPara.getNote());
+        cttInfoShowTemp.setAttachment(cttInfoPara.getAttachment());
+        cttInfoShowTemp.setDeletedFlag(cttInfoPara.getDeletedFlag());
+        cttInfoShowTemp.setEndFlag(cttInfoPara.getEndFlag());
+        cttInfoShowTemp.setCreatedBy(cttInfoPara.getCreatedBy());
+        cttInfoShowTemp.setCreatedDate(cttInfoPara.getCreatedDate());
+        cttInfoShowTemp.setLastUpdBy(cttInfoPara.getLastUpdBy());
+        cttInfoShowTemp.setLastUpdDate(cttInfoPara.getLastUpdDate());
+        cttInfoShowTemp.setModificationNum(cttInfoPara.getModificationNum());
+        cttInfoShowTemp.setType(cttInfoPara.getType());
+        return cttInfoShowTemp;
     }
     //更新甲供材情况
     public int  updateByPKid(EsCttInfo esCttInfoPara){

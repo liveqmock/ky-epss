@@ -46,14 +46,14 @@ public class CttInfoShow implements Serializable {
     }
 
     public CttInfoShow(String pkid, String id, String cttType, String name, String note,
-                       String statusFlag, String preStatusFlag, String endFlag, String lastUpdBy,
+                       String flowStatus, String preStatusFlag, String endFlag, String lastUpdBy,
                        String lastUpdDate, Integer modificationNum, Boolean isSeled) {
         this.pkid = pkid;
         this.id = id;
         this.cttType=cttType;
         this.name = name;
         this.note = note;
-        this.flowStatus = statusFlag;
+        this.flowStatus = flowStatus;
         this.flowStatusReason = preStatusFlag;
         this.endFlag = endFlag;
         this.lastUpdBy=lastUpdBy;
@@ -64,7 +64,7 @@ public class CttInfoShow implements Serializable {
 
     public CttInfoShow(String id, String name, String note, String signPartAName,
                        String signPartBName, String cttStartDate, String cttEndDate,
-                       String statusFlag, String preStatusFlag) {
+                       String flowStatus, String preStatusFlag) {
         this.id = id;
         this.name = name;
         this.note = note;
@@ -72,7 +72,7 @@ public class CttInfoShow implements Serializable {
         this.signPartBName = signPartBName;
         this.cttStartDate = cttStartDate;
         this.cttEndDate = cttEndDate;
-        this.flowStatus = statusFlag;
+        this.flowStatus = flowStatus;
         this.flowStatusReason = preStatusFlag;
     }
 

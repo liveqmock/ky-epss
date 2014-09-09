@@ -104,10 +104,10 @@
                     <h:outputText value="#{record.periodNo}"/>
                 </p:column>
                 <p:column headerText="状态" style="width:66px;text-align:center">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.statusFlag)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
                 </p:column>
                 <p:column headerText="原因" style="width:66px;text-align:center">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.preStatusFlag)}"/>
+                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
                 </p:column>
             </p:dataTable>
             <p:dialog id="dlgView" header="总包数量统计维护" widgetVar="wVDlgView"
