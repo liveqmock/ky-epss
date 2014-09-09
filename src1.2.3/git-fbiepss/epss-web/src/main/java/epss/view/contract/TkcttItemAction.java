@@ -17,7 +17,6 @@ import skyline.util.StyleModel;
 import skyline.util.ToolUtil;
 import epss.common.enums.*;
 import epss.repository.model.*;
-import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
 import epss.service.*;
 import epss.service.EsFlowService;
@@ -559,12 +558,12 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
                     // 原因：录入完毕
                     cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG0.getCode());
-                    cttInfoService.updateRecord(cttInfo);
+                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
                     cttInfo.setFlowStatus(null);
                     cttInfo.setFlowStatusReason(null);
-                    cttInfoService.updateRecord(cttInfo);
+                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }// 审核
@@ -574,14 +573,14 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
                     // 原因：审核通过
                     cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
-                    cttInfoService.updateRecord(cttInfo);
+                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
                     // 状态标志：初始
                     cttInfo.setFlowStatus(null);
                     // 原因：审核未过
                     cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
-                    cttInfoService.updateRecord(cttInfo);
+                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据审核未过！");
                 }
             } // 复核
@@ -591,7 +590,7 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG2.getCode());
                     // 原因：复核通过
                     cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
-                    cttInfoService.updateRecord(cttInfo);
+                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
@@ -602,7 +601,7 @@ public class TkcttItemAction {
                     }
                     // 原因：复核未过
                     cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
-                    cttInfoService.updateRecord(cttInfo);
+                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据复核未过！");
                 }
             }// 批准
@@ -612,7 +611,7 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG3.getCode());
                     // 原因：批准通过
                     cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
-                    cttInfoService.updateRecord(cttInfo);
+                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerTypePara.equals("ApproveFail")) {
                     // 检查是否被使用
@@ -634,7 +633,7 @@ public class TkcttItemAction {
                     // 原因：批准未过
                     cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
 
-                    cttInfoService.updateRecord(cttInfo);
+                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
 
                     List<EsInitStl> esInitStlListTemp =
                             esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfo.getPkid());
@@ -701,7 +700,7 @@ public class TkcttItemAction {
                 sbTemp.append(item.getCOLUMN_PATH() + ";");
             }
             cttInfo.setAttachment(sbTemp.toString());
-            cttInfoService.updateRecord(cttInfo);
+            cttInfoService.updateRecord(cttInfo,"AttachRemove");
         } catch (Exception e) {
             logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -759,7 +758,7 @@ public class TkcttItemAction {
                 return;
             }
             cttInfo.setAttachment(sb.toString());
-            cttInfoService.updateRecord(cttInfo);
+            cttInfoService.updateRecord(cttInfo,"AttachAdd");
             try {
                 inStream = new BufferedInputStream(uploadedFile.getInputstream());
                 fileOutputStream = new FileOutputStream(descFile);

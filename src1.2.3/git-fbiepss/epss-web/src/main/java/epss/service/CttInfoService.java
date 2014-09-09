@@ -1,14 +1,16 @@
 package epss.service;
 
+import epss.common.enums.ESEnumOperType;
 import epss.repository.dao.EsCttInfoMapper;
 import epss.repository.dao.not_mybatis.MyCttInfoMapper;
-import epss.repository.model.EsCttInfo;
-import epss.repository.model.EsCttInfoExample;
+import epss.repository.model.*;
 import epss.repository.model.model_show.CttInfoShow;
+import epss.repository.model.model_show.CttItemShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import skyline.util.ToolUtil;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -24,6 +26,9 @@ public class CttInfoService {
     private EsCttInfoMapper esCttInfoMapper;
     @Autowired
     private MyCttInfoMapper myCttInfoMapper;
+    @Resource
+    private FlowCtrlHisService flowCtrlHisService;
+
 
     public List<EsCttInfo> selectListByModel(CttInfoShow cttInfoShowPara) {
         EsCttInfoExample example= new EsCttInfoExample();
@@ -145,13 +150,51 @@ public class CttInfoService {
         esCttInfoMapper.insertSelective(esCttInfoPara);
     }
 
-    public void updateRecord(EsCttInfo esCttInfoPara){
-        esCttInfoPara.setModificationNum(
+    public FlowCtrlHis fromCttInfoToFlowCtrlHis(EsCttInfo esCttInfoPara){
+        FlowCtrlHis flowCtrlHisTemp =new FlowCtrlHis();
+        flowCtrlHisTemp.setInfoType(esCttInfoPara.getCttType());
+        flowCtrlHisTemp.setInfoPkid(esCttInfoPara.getPkid());
+        flowCtrlHisTemp.setInfoId(esCttInfoPara.getId());
+        flowCtrlHisTemp.setInfoName(esCttInfoPara.getName());
+        //flowCtrlHisTemp.setPeriodNo();
+        flowCtrlHisTemp.setFlowStatus(esCttInfoPara.getFlowStatus());
+        flowCtrlHisTemp.setFlowStatusReason(esCttInfoPara.getFlowStatusReason());
+        flowCtrlHisTemp.setCreatedBy(esCttInfoPara.getCreatedBy());
+        flowCtrlHisTemp.setCreatedByName(ToolUtil.getUserName(esCttInfoPara.getCreatedBy()));
+        flowCtrlHisTemp.setCreatedTime(esCttInfoPara.getCreatedDate());
+        flowCtrlHisTemp.setRemark(esCttInfoPara.getNote());
+        return flowCtrlHisTemp;
+    }
+    public void updateRecord(EsCttInfo esCttInfoPara,String strPowerTypePara){
+        try {esCttInfoPara.setModificationNum(
                 ToolUtil.getIntIgnoreNull(esCttInfoPara.getModificationNum())+1);
-        esCttInfoPara.setDeletedFlag("0");
-        esCttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esCttInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
-        esCttInfoMapper.updateByPrimaryKey(esCttInfoPara);
+            esCttInfoPara.setDeletedFlag("0");
+            esCttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+            esCttInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
+            esCttInfoMapper.updateByPrimaryKey(esCttInfoPara);
+            FlowCtrlHis flowCtrlHisTemp=fromCttInfoToFlowCtrlHis(esCttInfoPara);
+            List<Oper> operListTemp=flowCtrlHisService.selectOperByExample(ToolUtil.getOperatorManager().getOperatorId());
+            for(Oper operTemp:operListTemp){
+                if (ToolUtil.getOperatorManager().getOperatorId().equals(operTemp.getId())){
+                    flowCtrlHisTemp.setTid(operTemp.getTid());
+                }
+            }
+            if(strPowerTypePara.contains("Pass")){
+                flowCtrlHisService.insertRecord(flowCtrlHisTemp, ESEnumOperType.OPER_Type0.getCode());
+            }else if(strPowerTypePara.contains("Fail")){
+                flowCtrlHisService.insertRecord(flowCtrlHisTemp, ESEnumOperType.OPER_Type1.getCode());
+            }else if(strPowerTypePara.contains("Del")){
+                flowCtrlHisService.insertRecord(flowCtrlHisTemp, ESEnumOperType.OPER_Type2.getCode());
+            }else if(strPowerTypePara.equals("AttachAdd")){
+                flowCtrlHisTemp.setRemark(flowCtrlHisTemp.getRemark()+"AttachAdd");
+                flowCtrlHisService.insertRecord(flowCtrlHisTemp, ESEnumOperType.OPER_Type1.getCode());
+            }else if(strPowerTypePara.equals("AttachRemove")){
+                flowCtrlHisTemp.setRemark(flowCtrlHisTemp.getRemark()+"AttachRemove");
+                flowCtrlHisService.insertRecord(flowCtrlHisTemp, ESEnumOperType.OPER_Type2.getCode());
+            }
+        } catch (Exception e) {
+            throw e;
+        }
     }
     public void updateRecord(CttInfoShow cttInfoShowPara){
         cttInfoShowPara.setModificationNum(

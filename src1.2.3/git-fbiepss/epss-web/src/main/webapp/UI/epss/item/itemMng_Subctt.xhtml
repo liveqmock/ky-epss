@@ -76,25 +76,25 @@
                          rowStyleClass="#{record.name eq '合计'? 'rowGrayStyle': record.name eq '总合计'? 'rowGrayStyle':null}"
                          scrollable="true"
                          scrollHeight="450">
-                    <p:column headerText="操作" style="width:65px">
+                    <p:column headerText="操作" style="width:65px" rendered='#{subcttItemAction.strPassFlag}'>
                         <p:commandButton  icon="ui-icon-pencil"
                                           style="height:18px;width:18px"
                                           rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
-                                          actionListener="#{subcttItemAction.selectRecordAction('Upd',record)}"
+                                          action="#{subcttItemAction.selectRecordAction('Upd',record)}"
                                           update=":form:pdt,:form:pgViewForUpd,:form:msgs"
                                           onclick="PF('wVDlgViewForUpd').show()">
                         </p:commandButton>
                         <p:commandButton  icon="ui-icon-trash"
                                           style="height:18px;width:18px"
                                           rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
-                                          actionListener="#{subcttItemAction.selectRecordAction('Del',record)}"
+                                          action="#{subcttItemAction.selectRecordAction('Del',record)}"
                                           update=":form:pdt,:form:pgViewForDel,:form:msgs"
                                           onclick="PF('wVDlgViewForDel').show()">
                         </p:commandButton>
                         <p:commandButton  icon="ui-icon-search"
                                           style="height:18px;width:18px"
                                           rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
-                                          actionListener="#{subcttItemAction.selectRecordAction('FromCstplToSubctt',record)}"
+                                          action="#{subcttItemAction.selectRecordAction('FromCstplToSubctt',record)}"
                                           pdate=":form:pdt,:form:msgs"
                                           onclick ="wvCstplDetail.show()" >
                         </p:commandButton>
@@ -184,7 +184,7 @@
                                                  title="View">
                                 </p:commandButton>
                             </p:column>
-                            <p:column headerText="操作" style="width:62px">
+                            <p:column headerText="操作" style="width:62px" rendered='#{subcttItemAction.strPassFlag}'>
                                 <p:commandButton icon="ui-icon-arrowrefresh-1-w"
                                                  style="height:18px;width:18px"
                                                  ajax="false"
@@ -198,9 +198,11 @@
                                 </p:commandButton>
                             </p:column>
                         </p:dataTable>
-                        <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
-                            <h:graphicImage binding="#{subcttItemAction.image}"/>
-                        </p:dialog>
+                    </h:panelGrid>
+                </p:dialog>
+                <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="true" showEffect="clip" hideEffect="fold">
+                    <h:panelGrid id="pgImageShow">
+                        <p:graphicImage binding="#{subcttItemAction.image}"/>
                     </h:panelGrid>
                 </p:dialog>
                 <p:dialog id="dLCstplDetail" widgetVar="wvCstplDetail"  header="成本计划"

@@ -32,11 +32,13 @@
                     </p:commandButton>
                     <p:commandButton id="endInputBtn" value="录入完成"
                                      action="#{tkcttItemAction.onClickForPowerAction('Pass')}"
+                                     rendered='#{tkcttItemAction.strPassFlag}'
                                      update="msgs,pgCondition,pdt"
                                      oncomplete="window.close()">
                     </p:commandButton>
                     <p:commandButton id="startInputBtn" value="录入未完"
                                      action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
+                                     rendered="#{tkcttItemAction.strPassFlag  eq false ? 'true': 'false'}"
                                      update="msgs,pgCondition,pdt"
                                      oncomplete="window.close()">
                     </p:commandButton>
@@ -166,7 +168,7 @@
                                                  title="View">
                                 </p:commandButton>
                             </p:column>
-                            <p:column headerText="操作" style="width:62px">
+                            <p:column headerText="操作" style="width:62px" rendered='#{tkcttItemAction.strPassFlag}'>
                                 <p:commandButton icon="ui-icon-arrowrefresh-1-w"
                                                  style="height:18px;width:18px"
                                                  ajax="false"
