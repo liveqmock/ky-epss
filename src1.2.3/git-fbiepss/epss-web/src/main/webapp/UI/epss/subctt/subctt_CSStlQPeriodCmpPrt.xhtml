@@ -20,265 +20,265 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form">
-	    <div style="margin:5px;">
-            <p:growl id="msgs" showDetail="true"/>
-            <p:panel>
-                <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
-                    <h:panelGrid columns="6">
-                        <p:outputLabel value="分包合同：" for="subcttPkid" />
-                        <p:selectOneMenu id="subcttPkid"
-                                         value="#{cstplSubcttStlQPeriodItemAction.strSubcttPkid}">
-                            <f:selectItems value="#{cstplSubcttStlQPeriodItemAction.subcttList}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="开始期数：" for="startPeriodNo"/>
-                        <p:inputText id="startPeriodNo" value="#{cstplSubcttStlQPeriodItemAction.strStartPeriodNo}"
-                                     onclick="WdatePicker({dateFmt:'yyyyMM'})">
-                            <p:ajax event="blur" update="msgs"
-                                    listener="#{cstplSubcttStlQPeriodItemAction.blurPeriodNo()}"/>
-                        </p:inputText>
-                        <p:outputLabel value="结束期数：" for="endPeriodNo"/>
-                        <p:inputText id="endPeriodNo" value="#{cstplSubcttStlQPeriodItemAction.strEndPeriodNo}"
-                                     onclick="WdatePicker({dateFmt:'yyyyMM'})">
-                            <p:ajax event="blur" update="msgs"
-                                    listener="#{cstplSubcttStlQPeriodItemAction.blurPeriodNo()}"/>
-                        </p:inputText>
+	        <div style="margin:5px;">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel>
+                    <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
+                        <h:panelGrid columns="6">
+                            <p:outputLabel value="分包合同：" for="subcttPkid" />
+                            <p:selectOneMenu id="subcttPkid"
+                                             value="#{cstplSubcttStlQPeriodItemAction.strSubcttPkid}">
+                                <f:selectItems value="#{cstplSubcttStlQPeriodItemAction.subcttList}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="开始期数：" for="startPeriodNo"/>
+                            <p:inputText id="startPeriodNo" value="#{cstplSubcttStlQPeriodItemAction.strStartPeriodNo}"
+                                         onclick="WdatePicker({dateFmt:'yyyyMM'})">
+                                <p:ajax event="blur" update="msgs"
+                                        listener="#{cstplSubcttStlQPeriodItemAction.blurPeriodNo()}"/>
+                            </p:inputText>
+                            <p:outputLabel value="结束期数：" for="endPeriodNo"/>
+                            <p:inputText id="endPeriodNo" value="#{cstplSubcttStlQPeriodItemAction.strEndPeriodNo}"
+                                         onclick="WdatePicker({dateFmt:'yyyyMM'})">
+                                <p:ajax event="blur" update="msgs"
+                                        listener="#{cstplSubcttStlQPeriodItemAction.blurPeriodNo()}"/>
+                            </p:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3">
+                            <p:commandButton id="qryBtn" value="查询"
+                                             action="#{cstplSubcttStlQPeriodItemAction.onQueryAction()}"
+                                             update="pgCondition,msgs,pdt,exportToExcel">
+                            </p:commandButton>
+                            <p:commandButton id="resetBtn" value="重置"
+                                             type="reset"
+                                             update="pgCondition,msgs">
+                            </p:commandButton>
+                            <p:ajaxStatus style="width:16px;height:16px;">
+                                <f:facet name="start">
+                                    <h:graphicImage value="/images/ajaxloading.gif"/>
+                                </f:facet>
+                                <f:facet name="complete">
+                                    <h:outputText value=""/>
+                                </f:facet>
+                            </p:ajaxStatus>
+                        </h:panelGrid>
                     </h:panelGrid>
-                    <h:panelGrid columns="3">
-                        <p:commandButton id="qryBtn" value="查询"
-                                         action="#{cstplSubcttStlQPeriodItemAction.onQueryAction()}"
-                                         update="pgCondition,msgs,pdt,exportToExcel">
-                        </p:commandButton>
-                        <p:commandButton id="resetBtn" value="重置"
-                                         type="reset"
-                                         update="pgCondition,msgs">
-                        </p:commandButton>
-                        <p:ajaxStatus style="width:16px;height:16px;">
-                            <f:facet name="start">
-                                <h:graphicImage value="/images/ajaxloading.gif"/>
-                            </f:facet>
-                            <f:facet name="complete">
-                                <h:outputText value=""/>
-                            </f:facet>
-                        </p:ajaxStatus>
-                    </h:panelGrid>
+                </p:panel>
+                <h:panelGrid id="exportToExcel">
+                    <p:commandButton
+                                     value="导出到EXCEL"
+                                     action="#{cstplSubcttStlQPeriodItemAction.onExportExcel}"
+                                     ajax="false"
+                                     rendered="#{cstplSubcttStlQPeriodItemAction.strExportToExcelRendered}">
+                    </p:commandButton>
                 </h:panelGrid>
-            </p:panel>
-            <h:panelGrid id="exportToExcel">
-                <p:commandButton
-                                 value="导出到EXCEL"
-                                 action="#{cstplSubcttStlQPeriodItemAction.onExportExcel}"
-                                 ajax="false"
-                                 rendered="#{cstplSubcttStlQPeriodItemAction.strExportToExcelRendered}">
-                </p:commandButton>
-            </h:panelGrid>
-            <p:dataTable id="pdt"
-                         value="#{cstplSubcttStlQPeriodItemAction.qryCSStlQPeriodShowList}"
-                         var="record"
-                         rowKey="#{record.strPkid}"
-                         selectionMode="single"
-                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         rows="15"
-                         rowsPerPageTemplate="500,200,100,45,30,15"
-                         rowIndexVar="row"
-                         emptyMessage="数据记录为空..."
-                         widgetVar="dtItemDetail"
-                         rowStyleClass="#{record.bdSignPartAPrice eq 0?null:'rowGrayStyle'}"
-                         scrollable="true">
-                <p:column style="width:10px" headerText="序号">
-                    <h:outputText value="#{row + 1}"/>
-                </p:column>
-                <p:column style="width:100px" headerText="编号">
-                    <h:outputText value="#{record.strNo}" escape="false"/>
-                </p:column>
-                <p:column style="width:200px" headerText="项目名称">
-                    <h:outputText value="#{record.strName}"/>
-                </p:column>
-                <p:column style="width:30px" headerText="单位">
-                    <h:outputText value="#{record.strUnit}"/>
-                </p:column>
-                <p:column style="width:100px" headerText="对应合同清单工程数量">
-                     <h:outputText value="#{record.bdContractQuantity}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:100px" headerText="开累工程数量">
-                    <h:outputText value="#{record.bdBeginToCurrentPeriodEQty}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(0).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(0).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty0}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(1).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(1).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty1}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(2).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(2).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty2}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(3).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(3).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty3}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(4).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(4).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty4}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(5).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(5).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty5}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(6).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(6).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty6}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(7).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(7).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty7}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(8).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(8).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty8}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(9).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(9).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty9}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(10).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(10).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty10}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(11).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(11).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty11}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(12).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(12).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty12}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(13).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(13).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty13}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(14).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(14).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty14}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(15).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(15).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty15}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(16).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(16).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty16}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(17).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(17).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty17}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(18).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(18).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty18}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(19).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(19).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty19}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(20).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(20).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty20}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(21).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(21).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty21}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(22).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(22).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty22}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-                <p:column style="width:80px"
-                          headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(23).header}"
-                          rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(23).rendered_flag}">
-                    <h:outputText value="#{record.bdCurrentPeriodEQty23}" style="float: right">
-                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                    </h:outputText>
-                </p:column>
-            </p:dataTable>
-       </div>
-    </h:form>
+                <p:dataTable id="pdt"
+                             value="#{cstplSubcttStlQPeriodItemAction.qryCSStlQPeriodShowList}"
+                             var="record"
+                             rowKey="#{record.strPkid}"
+                             selectionMode="single"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="15"
+                             rowsPerPageTemplate="500,200,100,45,30,15"
+                             rowIndexVar="row"
+                             emptyMessage="数据记录为空..."
+                             widgetVar="dtItemDetail"
+                             rowStyleClass="#{record.bdSignPartAPrice eq 0?null:'rowGrayStyle'}"
+                             scrollable="true">
+                    <p:column style="width:10px" headerText="序号">
+                        <h:outputText value="#{row + 1}"/>
+                    </p:column>
+                    <p:column style="width:100px" headerText="编号">
+                        <h:outputText value="#{record.strNo}" escape="false"/>
+                    </p:column>
+                    <p:column style="width:200px" headerText="项目名称">
+                        <h:outputText value="#{record.strName}"/>
+                    </p:column>
+                    <p:column style="width:30px" headerText="单位">
+                        <h:outputText value="#{record.strUnit}"/>
+                    </p:column>
+                    <p:column style="width:100px" headerText="对应合同清单工程数量">
+                         <h:outputText value="#{record.bdContractQuantity}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:100px" headerText="开累工程数量">
+                        <h:outputText value="#{record.bdBeginToCurrentPeriodEQty}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(0).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(0).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty0}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(1).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(1).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty1}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(2).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(2).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty2}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(3).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(3).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty3}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(4).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(4).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty4}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(5).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(5).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty5}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(6).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(6).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty6}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(7).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(7).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty7}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(8).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(8).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty8}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(9).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(9).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty9}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(10).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(10).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty10}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(11).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(11).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty11}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(12).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(12).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty12}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(13).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(13).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty13}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(14).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(14).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty14}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(15).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(15).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty15}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(16).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(16).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty16}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(17).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(17).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty17}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(18).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(18).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty18}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(19).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(19).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty19}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(20).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(20).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty20}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(21).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(21).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty21}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(22).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(22).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty22}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px"
+                              headerText="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(23).header}"
+                              rendered="#{cstplSubcttStlQPeriodItemAction.commColSetList.get(23).rendered_flag}">
+                        <h:outputText value="#{record.bdCurrentPeriodEQty23}" style="float: right">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
     </ui:define>
 </ui:composition>

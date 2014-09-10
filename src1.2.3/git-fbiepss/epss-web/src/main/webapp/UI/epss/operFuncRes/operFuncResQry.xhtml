@@ -21,143 +21,143 @@
     <ui:define name="content">
         <h:form id="form">
             <div style="margin:5px;">
-            <p:growl id="msgs" showDetail="true"/>
-            <p:panel header="权限信息查询">
-                <h:panelGrid id="pdQry" columns="2" style="width: 100%">
-                    <h:panelGrid columns="6">
-                        <p:outputLabel value="资源名称：" for="resourceId"/>
-                        <p:inputText id="resourceId" value="#{operFuncResQryAction.operResShowQry.infoPkidName}"/>
-                        <p:outputLabel value="功能名称：" for="functionId"/>
-                        <p:selectOneMenu id="functionId" value="#{operFuncResQryAction.operResShowQry.flowStatus}">
-                            <f:selectItems value="#{operFuncResQryAction.taskFunctionList}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="人员编号：" for="persionId"/>
-                        <p:inputText id="persionId" value="#{operFuncResQryAction.operResShowQry.operPkid}"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <h:panelGrid columns="2">
-                            <p:commandButton id="qryBtn" value="查询"
-                                             action="#{operFuncResQryAction.onQueryAction()}"
-                                             update="pdt,msgs">
-                            </p:commandButton>
-                            <p:commandButton id="resetBtn" value="重置"
-                                             type="reset"
-                                             update="pdQry,msgs">
-                            </p:commandButton>
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel header="权限信息查询">
+                    <h:panelGrid id="pdQry" columns="2" style="width: 100%">
+                        <h:panelGrid columns="6">
+                            <p:outputLabel value="资源名称：" for="resourceId"/>
+                            <p:inputText id="resourceId" value="#{operFuncResQryAction.operResShowQry.infoPkidName}"/>
+                            <p:outputLabel value="功能名称：" for="functionId"/>
+                            <p:selectOneMenu id="functionId" value="#{operFuncResQryAction.operResShowQry.flowStatus}">
+                                <f:selectItems value="#{operFuncResQryAction.taskFunctionList}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="人员编号：" for="persionId"/>
+                            <p:inputText id="persionId" value="#{operFuncResQryAction.operResShowQry.operPkid}"/>
                         </h:panelGrid>
-                        <p:ajaxStatus style="width:16px;height:16px;">
-                            <f:facet name="start">
-                                <h:graphicImage value="/images/ajaxloading.gif"/>
-                            </f:facet>
-                            <f:facet name="complete">
-                                <h:outputText value=""/>
-                            </f:facet>
-                        </p:ajaxStatus>
+                        <h:panelGrid columns="2">
+                            <h:panelGrid columns="2">
+                                <p:commandButton id="qryBtn" value="查询"
+                                                 action="#{operFuncResQryAction.onQueryAction()}"
+                                                 update="pdt,msgs">
+                                </p:commandButton>
+                                <p:commandButton id="resetBtn" value="重置"
+                                                 type="reset"
+                                                 update="pdQry,msgs">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:ajaxStatus style="width:16px;height:16px;">
+                                <f:facet name="start">
+                                    <h:graphicImage value="/images/ajaxloading.gif"/>
+                                </f:facet>
+                                <f:facet name="complete">
+                                    <h:outputText value=""/>
+                                </f:facet>
+                            </p:ajaxStatus>
+                        </h:panelGrid>
                     </h:panelGrid>
-                </h:panelGrid>
-            </p:panel>
-            <p:dataTable id="pdt" style="width:100%;"
-                         value="#{operFuncResQryAction.operResShowQryList}"
-                         var="record"
-                         rowKey="#{row + 1}"
-                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         rows="15"
-                         rowIndexVar="row"
-                         rowsPerPageTemplate="500,200,100,45,30,15"
-                         emptyMessage="数据记录为空..."
-                         widgetVar="DtInitTkcttList"
-                         scrollable="true">
-                <p:column headerText="操作" style="width:10px">
-                    <p:commandButton  icon="ui-icon-search"
-                                      style="height:18px;width:18px"
-                                      action="#{operFuncResQryAction.selectRecordAction(record)}"
-                                      update="pdt,:form:pgView,:form:msgs"
-                                      onclick="PF('wVDlgView').show()">
-                    </p:commandButton>
-                </p:column>
-                <p:column headerText="序号" style="width:10px">
-                    <h:outputText value="#{row + 1}"/>
-                </p:column>
-                <p:column headerText="资源名称" style="width:220px;text-align:left">
-                    <h:outputText value="#{record.infoPkidName}"/>
-                </p:column>
-                <p:column headerText="功能名称" style="width:40px;text-align:center">
-                    <h:outputText value="#{record.flowStatusName}"/>
-                </p:column>
-                <p:column headerText="人员编号" style="width:50px;text-align:left">
-                    <h:outputText value="#{record.operPkid}"/>
-                </p:column>
-                <p:column headerText="人员名称" style="width:100px;text-align:left">
-                    <h:outputText value="#{record.operName}"/>
-                </p:column>
-                <p:column headerText="所属区域号" style="width:100px;text-align:left">
-                    <h:outputText value="#{record.tid}"/>
-                </p:column>
-            </p:dataTable>
-            <p:dialog id="dlgView" header="权限信息" widgetVar="wVDlgView"
-                      resizable="false" modal="true"
-                      showEffect="clip" hideEffect="fold">
-                <h:panelGrid id="pgView">
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="资源名称：" for="resourceNameSel"/>
-                        <p:inputText id="resourceNameSel" value="#{operFuncResQryAction.operResShowSel.infoPkidName}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;width:328px;"/>
+                </p:panel>
+                <p:dataTable id="pdt" style="width:100%;"
+                             value="#{operFuncResQryAction.operResShowQryList}"
+                             var="record"
+                             rowKey="#{row + 1}"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                 {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="15"
+                             rowIndexVar="row"
+                             rowsPerPageTemplate="500,200,100,45,30,15"
+                             emptyMessage="数据记录为空..."
+                             widgetVar="DtInitTkcttList"
+                             scrollable="true">
+                    <p:column headerText="操作" style="width:10px">
+                        <p:commandButton  icon="ui-icon-search"
+                                          style="height:18px;width:18px"
+                                          action="#{operFuncResQryAction.selectRecordAction(record)}"
+                                          update="pdt,:form:pgView,:form:msgs"
+                                          onclick="PF('wVDlgView').show()">
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="序号" style="width:10px">
+                        <h:outputText value="#{row + 1}"/>
+                    </p:column>
+                    <p:column headerText="资源名称" style="width:220px;text-align:left">
+                        <h:outputText value="#{record.infoPkidName}"/>
+                    </p:column>
+                    <p:column headerText="功能名称" style="width:40px;text-align:center">
+                        <h:outputText value="#{record.flowStatusName}"/>
+                    </p:column>
+                    <p:column headerText="人员编号" style="width:50px;text-align:left">
+                        <h:outputText value="#{record.operPkid}"/>
+                    </p:column>
+                    <p:column headerText="人员名称" style="width:100px;text-align:left">
+                        <h:outputText value="#{record.operName}"/>
+                    </p:column>
+                    <p:column headerText="所属区域号" style="width:100px;text-align:left">
+                        <h:outputText value="#{record.tid}"/>
+                    </p:column>
+                </p:dataTable>
+                <p:dialog id="dlgView" header="权限信息" widgetVar="wVDlgView"
+                          resizable="false" modal="true"
+                          showEffect="clip" hideEffect="fold">
+                    <h:panelGrid id="pgView">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="资源名称：" for="resourceNameSel"/>
+                            <p:inputText id="resourceNameSel" value="#{operFuncResQryAction.operResShowSel.infoPkidName}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;width:328px;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel for="persionIdSel" value="人员编号：" />
+                            <h:inputText id="persionIdSel"
+                                         value="#{operFuncResQryAction.operResShowSel.operPkid}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="persionNameSel" value="人员名称：" />
+                            <h:inputText id="persionNameSel"
+                                         value="#{operFuncResQryAction.operResShowSel.operName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel value="功能名称：" for="funcNameSel"/>
+                            <p:inputText id="funcNameSel" value="#{operFuncResQryAction.operResShowSel.flowStatusName}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                            <p:outputLabel value="所属区域：" for="tidSel"/>
+                            <p:inputText id="tidSel" value="#{operFuncResQryAction.operResShowSel.tid}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel for="createdByNameSel" value="创建人：" />
+                            <h:inputText id="createdByNameSel"
+                                         value="#{operFuncResQryAction.operResShowSel.createdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="createdDateSel" value="创建时间：" />
+                            <h:inputText id="createdDateSel"
+                                         value="#{operFuncResQryAction.operResShowSel.createdTime}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdByNameSel" value="修改人：" />
+                            <h:inputText id="lastUpdByNameSel"
+                                         value="#{operFuncResQryAction.operResShowSel.lastUpdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdDateSel" value="修改时间：" />
+                            <h:inputText id="lastUpdDateSel"
+                                         value="#{operFuncResQryAction.operResShowSel.createdTime}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="modificationNumSel" value="修改次数：" />
+                            <h:inputText id="modificationNumSel"
+                                         value="#{operFuncResQryAction.operResShowSel.recversion}"
+                                         style="background-color:gainsboro;text-align:right;" readonly="true">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                            </h:inputText>
+                            <p:outputLabel for="archivedFlagSel" value="废止标志：" />
+                            <h:inputText id="archivedFlagSel"
+                                         value="#{operFuncResQryAction.operResShowSel.archivedFlag}"
+                                         style="background-color:gainsboro;text-align:right;" readonly="true">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                            </h:inputText>
+                        </h:panelGrid>
                     </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel for="persionIdSel" value="人员编号：" />
-                        <h:inputText id="persionIdSel"
-                                     value="#{operFuncResQryAction.operResShowSel.operPkid}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="persionNameSel" value="人员名称：" />
-                        <h:inputText id="persionNameSel"
-                                     value="#{operFuncResQryAction.operResShowSel.operName}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel value="功能名称：" for="funcNameSel"/>
-                        <p:inputText id="funcNameSel" value="#{operFuncResQryAction.operResShowSel.flowStatusName}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                        <p:outputLabel value="所属区域：" for="tidSel"/>
-                        <p:inputText id="tidSel" value="#{operFuncResQryAction.operResShowSel.tid}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel for="createdByNameSel" value="创建人：" />
-                        <h:inputText id="createdByNameSel"
-                                     value="#{operFuncResQryAction.operResShowSel.createdByName}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="createdDateSel" value="创建时间：" />
-                        <h:inputText id="createdDateSel"
-                                     value="#{operFuncResQryAction.operResShowSel.createdTime}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="lastUpdByNameSel" value="修改人：" />
-                        <h:inputText id="lastUpdByNameSel"
-                                     value="#{operFuncResQryAction.operResShowSel.lastUpdByName}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="lastUpdDateSel" value="修改时间：" />
-                        <h:inputText id="lastUpdDateSel"
-                                     value="#{operFuncResQryAction.operResShowSel.createdTime}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="modificationNumSel" value="修改次数：" />
-                        <h:inputText id="modificationNumSel"
-                                     value="#{operFuncResQryAction.operResShowSel.recversion}"
-                                     style="background-color:gainsboro;text-align:right;" readonly="true">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                        </h:inputText>
-                        <p:outputLabel for="archivedFlagSel" value="废止标志：" />
-                        <h:inputText id="archivedFlagSel"
-                                     value="#{operFuncResQryAction.operResShowSel.archivedFlag}"
-                                     style="background-color:gainsboro;text-align:right;" readonly="true">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                        </h:inputText>
-                    </h:panelGrid>
-                </h:panelGrid>
-            </p:dialog>
-       </div>
-    </h:form>
+                </p:dialog>
+            </div>
+        </h:form>
     </ui:define>
 </ui:composition>

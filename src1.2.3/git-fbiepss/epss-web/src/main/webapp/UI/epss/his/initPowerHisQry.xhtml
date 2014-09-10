@@ -21,129 +21,129 @@
     <ui:define name="content">
         <h:form id="form">
             <div style="margin:5px;">
-            <p:growl id="msgs" showDetail="true"/>
-            <p:focus for="infoType"/>
-            <p:panel>
-                <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
-                    <h:panelGrid>
-                        <h:panelGrid columns="6">
-                            <p:outputLabel value="所属种类：" for="infoType"/>
-                            <p:selectOneMenu id="infoType" value="#{flowCtrlHisAction.flowCtrlHis.infoType}"
-                                             style="width:133px">
-                                <f:selectItems value="#{esCommon.itemTypeList}"/>
-                                <p:ajax update="msgs,pgCondition"
-                                        listener="#{flowCtrlHisAction.setEsInitPowerHisActionOfPowerPkidAction}"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel id="strLabel1"
-                                            value="#{flowCtrlHisAction.strLabel1}："
-                                            for="tkcttCstpl"
-                                            rendered="#{flowCtrlHisAction.strRendered1}"/>
-                            <p:selectOneMenu id="tkcttCstpl"
-                                             value="#{flowCtrlHisAction.strTkcttCstplSelected}"
-                                             rendered="#{flowCtrlHisAction.strRendered1}">
-                                <f:selectItems value="#{flowCtrlHisAction.esInitCtt1List}"/>
-                                <p:ajax update="msgs,pgCondition"
-                                        listener="#{flowCtrlHisAction.setFromTkAndCttToSStlAction}"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel id="strLabel2"
-                                           value="#{flowCtrlHisAction.strLabel2}："
-                                           for="subcttStlTkcttMeaSta"
-                                           rendered="#{flowCtrlHisAction.strRendered2}"/>
-                            <p:selectOneMenu id="subcttStlTkcttMeaSta"
-                                             value="#{flowCtrlHisAction.flowCtrlHis.infoPkid}"
-                                             rendered="#{flowCtrlHisAction.strRendered2}">
-                                <f:selectItems value="#{flowCtrlHisAction.esInitCtt2List}"/>
-                            </p:selectOneMenu>
-                        </h:panelGrid>
-                        <h:panelGrid columns="6">
-                            <p:outputLabel value="期数编码：" for="pno"/>
-                            <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHis.periodNo}"/>
-                            <p:outputLabel value="状态标志：" for="sf"/>
-                            <p:selectOneMenu id="sf" value="#{flowCtrlHisAction.flowCtrlHis.flowStatus}">
-                                <f:selectItems value="#{esCommon.statusFlagList}"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel value="状态原因：" for="flowStatusReason"/>
-                            <p:selectOneMenu id="flowStatusReason" value="#{flowCtrlHisAction.flowCtrlHis.flowStatusReason}">
-                                <f:selectItems value="#{esCommon.preStatusFlagList}"/>
-                            </p:selectOneMenu>
-                        </h:panelGrid>
-                        <h:panelGrid columns="4">
-                            <p:outputLabel value="创建人名：" for="createid"/>
-                            <p:inputText id="createid" value="#{flowCtrlHisAction.flowCtrlHis.createdBy}"/>
-                            <p:outputLabel value="创建时间：" for="createdate"/>
-                            <p:inputText id="createdate" value="#{flowCtrlHisAction.flowCtrlHis.createdTime}"
-                                         onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                        </h:panelGrid>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:focus for="infoType"/>
+                <p:panel>
+                    <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
                         <h:panelGrid>
-                            <p:commandButton id="qryBtn" value="查询"
-                                             action="#{flowCtrlHisAction.onQueryAction('true')}"
-                                             update="pdt,msgs">
-                            </p:commandButton>
-                            <p:commandButton id="resetBtn" value="重置"
-                                             type="reset"
-                                             update="pgCondition,msgs">
-                            </p:commandButton>
+                            <h:panelGrid columns="6">
+                                <p:outputLabel value="所属种类：" for="infoType"/>
+                                <p:selectOneMenu id="infoType" value="#{flowCtrlHisAction.flowCtrlHis.infoType}"
+                                                 style="width:133px">
+                                    <f:selectItems value="#{esCommon.itemTypeList}"/>
+                                    <p:ajax update="msgs,pgCondition"
+                                            listener="#{flowCtrlHisAction.setEsInitPowerHisActionOfPowerPkidAction}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel id="strLabel1"
+                                                value="#{flowCtrlHisAction.strLabel1}："
+                                                for="tkcttCstpl"
+                                                rendered="#{flowCtrlHisAction.strRendered1}"/>
+                                <p:selectOneMenu id="tkcttCstpl"
+                                                 value="#{flowCtrlHisAction.strTkcttCstplSelected}"
+                                                 rendered="#{flowCtrlHisAction.strRendered1}">
+                                    <f:selectItems value="#{flowCtrlHisAction.esInitCtt1List}"/>
+                                    <p:ajax update="msgs,pgCondition"
+                                            listener="#{flowCtrlHisAction.setFromTkAndCttToSStlAction}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel id="strLabel2"
+                                               value="#{flowCtrlHisAction.strLabel2}："
+                                               for="subcttStlTkcttMeaSta"
+                                               rendered="#{flowCtrlHisAction.strRendered2}"/>
+                                <p:selectOneMenu id="subcttStlTkcttMeaSta"
+                                                 value="#{flowCtrlHisAction.flowCtrlHis.infoPkid}"
+                                                 rendered="#{flowCtrlHisAction.strRendered2}">
+                                    <f:selectItems value="#{flowCtrlHisAction.esInitCtt2List}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid columns="6">
+                                <p:outputLabel value="期数编码：" for="pno"/>
+                                <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHis.periodNo}"/>
+                                <p:outputLabel value="状态标志：" for="sf"/>
+                                <p:selectOneMenu id="sf" value="#{flowCtrlHisAction.flowCtrlHis.flowStatus}">
+                                    <f:selectItems value="#{esCommon.statusFlagList}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="状态原因：" for="flowStatusReason"/>
+                                <p:selectOneMenu id="flowStatusReason" value="#{flowCtrlHisAction.flowCtrlHis.flowStatusReason}">
+                                    <f:selectItems value="#{esCommon.preStatusFlagList}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid columns="4">
+                                <p:outputLabel value="创建人名：" for="createid"/>
+                                <p:inputText id="createid" value="#{flowCtrlHisAction.flowCtrlHis.createdBy}"/>
+                                <p:outputLabel value="创建时间：" for="createdate"/>
+                                <p:inputText id="createdate" value="#{flowCtrlHisAction.flowCtrlHis.createdTime}"
+                                             onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                            </h:panelGrid>
                         </h:panelGrid>
-                        <p:ajaxStatus style="width:16px;height:16px;">
-                            <f:facet name="start">
-                                <h:graphicImage value="/images/ajaxloading.gif"/>
-                            </f:facet>
-                            <f:facet name="complete">
-                                <h:outputText value=""/>
-                            </f:facet>
-                        </p:ajaxStatus>
+                        <h:panelGrid columns="2">
+                            <h:panelGrid>
+                                <p:commandButton id="qryBtn" value="查询"
+                                                 action="#{flowCtrlHisAction.onQueryAction('true')}"
+                                                 update="pdt,msgs">
+                                </p:commandButton>
+                                <p:commandButton id="resetBtn" value="重置"
+                                                 type="reset"
+                                                 update="pgCondition,msgs">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:ajaxStatus style="width:16px;height:16px;">
+                                <f:facet name="start">
+                                    <h:graphicImage value="/images/ajaxloading.gif"/>
+                                </f:facet>
+                                <f:facet name="complete">
+                                    <h:outputText value=""/>
+                                </f:facet>
+                            </p:ajaxStatus>
+                        </h:panelGrid>
                     </h:panelGrid>
-                </h:panelGrid>
-            </p:panel>
-            <!--列表维护-->
-            <p:dataTable id="pdt" style="width:100%;"
-                         value="#{flowCtrlHisAction.flowCtrlHisList}"
-                         var="record"
-                         rowKey="#{record.infoPkid}"
-                         selectionMode="single"
-                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         rows="15"
-                         rowIndexVar="row"
-                         rowsPerPageTemplate="500,200,100,45,30,15"
-                         emptyMessage="数据记录为空..."
-                         widgetVar="DtInitTkcttList">
-                <p:column headerText="序号" style="width:30px">
-                    <h:outputText value="#{row + 1}"/>
-                </p:column>
-                <p:column headerText="pkid" style="display:none;" rendered="false">
-                    <h:outputText id="tetid" value="#{record.infoPkid}"/>
-                </p:column>
-                <p:column headerText="对象所属" style="text-align:center">
-                    <h:outputText value="#{esCommon.getLabelByValueInItemTypeList(record.infoType)}"/>
-                </p:column>
-                <p:column headerText="对象" style="text-align:left">
-                    <h:outputText value="#{esFlowControl.getCttInfoByPkId(record.infoPkid).name}"/>
-                </p:column>
-                <p:column headerText="期数编码" style="text-align:center">
-                    <h:outputText value="#{record.periodNo}"/>
-                </p:column>
-                <p:column headerText="状态标志" style="text-align:center">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
-                </p:column>
-                <p:column headerText="创建人" style="text-align:center">
-                    <h:outputText value="#{record.createdBy}"/>
-                </p:column>
-                <p:column headerText="创建时间" style="text-align:center">
-                    <h:outputText value="#{record.createdTime}"/>
-                </p:column>
-                <p:column headerText="状态原因" style="text-align:center">
-                    <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
-                </p:column>
-                <p:column headerText="备注內容" style="text-align:center">
-                    <h:outputText value="#{record.remark}"/>
-                </p:column>
-            </p:dataTable>
-        </div>
+                </p:panel>
+                <!--列表维护-->
+                <p:dataTable id="pdt" style="width:100%;"
+                             value="#{flowCtrlHisAction.flowCtrlHisList}"
+                             var="record"
+                             rowKey="#{record.infoPkid}"
+                             selectionMode="single"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="15"
+                             rowIndexVar="row"
+                             rowsPerPageTemplate="500,200,100,45,30,15"
+                             emptyMessage="数据记录为空..."
+                             widgetVar="DtInitTkcttList">
+                    <p:column headerText="序号" style="width:30px">
+                        <h:outputText value="#{row + 1}"/>
+                    </p:column>
+                    <p:column headerText="pkid" style="display:none;" rendered="false">
+                        <h:outputText id="tetid" value="#{record.infoPkid}"/>
+                    </p:column>
+                    <p:column headerText="对象所属" style="text-align:center">
+                        <h:outputText value="#{esCommon.getLabelByValueInItemTypeList(record.infoType)}"/>
+                    </p:column>
+                    <p:column headerText="对象" style="text-align:left">
+                        <h:outputText value="#{esFlowControl.getCttInfoByPkId(record.infoPkid).name}"/>
+                    </p:column>
+                    <p:column headerText="期数编码" style="text-align:center">
+                        <h:outputText value="#{record.periodNo}"/>
+                    </p:column>
+                    <p:column headerText="状态标志" style="text-align:center">
+                        <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
+                    </p:column>
+                    <p:column headerText="创建人" style="text-align:center">
+                        <h:outputText value="#{record.createdBy}"/>
+                    </p:column>
+                    <p:column headerText="创建时间" style="text-align:center">
+                        <h:outputText value="#{record.createdTime}"/>
+                    </p:column>
+                    <p:column headerText="状态原因" style="text-align:center">
+                        <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
+                    </p:column>
+                    <p:column headerText="备注內容" style="text-align:center">
+                        <h:outputText value="#{record.remark}"/>
+                    </p:column>
+                </p:dataTable>
+            </div>
         </h:form>
     </ui:define>
 </ui:composition>

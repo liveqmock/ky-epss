@@ -21,41 +21,41 @@
     <ui:define name="content">
         <h:form id="form">
             <div style="margin:5px;">
-            <p:growl id="msgs" showDetail="true"/>
-            <p:panel header="在线用户列表">
-                <h:outputText id="onlineUserNum" value="在线人数：#{onlineUserAction.onlineUserNum}" style="text-align: left"/>
-                <p:dataTable id="pdt" style="width:100%;"
-                             value="#{onlineUserAction.operList}"
-                             var="record"
-                             rowKey="#{record.sessionKey}"
-                             rowIndexVar="row"
-                             emptyMessage="数据记录为空..."
-                             widgetVar="DtInitTkcttList"
-                             scrollable="true">
-                    <p:column headerText="所属部门" width="13%" style="text-align: center">
-                        <h:outputText value="#{record.dept.name}"/>
-                    </p:column>
-                    <p:column headerText="操作员姓名" width="10%" style="text-align:center">
-                        <h:outputText value="#{record.name}"/>
-                    </p:column>
-                    <p:column headerText="操作员标识" width="10%" style="text-align:center">
-                        <h:outputText value="#{record.id}"/>
-                    </p:column>
-                    <p:column headerText="登录信息" width="35%" style="text-align:center">
-                        <h:outputText value="#{record.onlineSituation}"/>
-                    </p:column>
-                    <p:column headerText="SessionUser" width="22%" style="text-align:left">
-                        <h:outputText value="#{record.sessionKey}"/>
-                    </p:column>
-                    <p:column headerText="操作" style="text-align:center">
-                        <p:commandLink  value="强制下线"
-                                          action="#{onlineUserAction.killLineUser(record)}"
-                                          update="pdt,:form:onlineUserNum">
-                        </p:commandLink>
-                    </p:column>
-                </p:dataTable>
-            </p:panel>
-       </div>
-    </h:form>
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel header="在线用户列表">
+                    <h:outputText id="onlineUserNum" value="在线人数：#{onlineUserAction.onlineUserNum}" style="text-align: left"/>
+                    <p:dataTable id="pdt" style="width:100%;"
+                                 value="#{onlineUserAction.operList}"
+                                 var="record"
+                                 rowKey="#{record.sessionKey}"
+                                 rowIndexVar="row"
+                                 emptyMessage="数据记录为空..."
+                                 widgetVar="DtInitTkcttList"
+                                 scrollable="true">
+                        <p:column headerText="所属部门" width="13%" style="text-align: center">
+                            <h:outputText value="#{record.dept.name}"/>
+                        </p:column>
+                        <p:column headerText="操作员姓名" width="10%" style="text-align:center">
+                            <h:outputText value="#{record.name}"/>
+                        </p:column>
+                        <p:column headerText="操作员标识" width="10%" style="text-align:center">
+                            <h:outputText value="#{record.id}"/>
+                        </p:column>
+                        <p:column headerText="登录信息" width="35%" style="text-align:center">
+                            <h:outputText value="#{record.onlineSituation}"/>
+                        </p:column>
+                        <p:column headerText="SessionUser" width="22%" style="text-align:left">
+                            <h:outputText value="#{record.sessionKey}"/>
+                        </p:column>
+                        <p:column headerText="操作" style="text-align:center">
+                            <p:commandLink  value="强制下线"
+                                              action="#{onlineUserAction.killLineUser(record)}"
+                                              update="pdt,:form:onlineUserNum">
+                            </p:commandLink>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </div>
+        </h:form>
     </ui:define>
 </ui:composition>

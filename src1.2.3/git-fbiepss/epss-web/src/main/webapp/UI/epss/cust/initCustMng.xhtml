@@ -20,286 +20,286 @@
     <ui:define name="content">
         <h:form id="form">
             <div style="margin:5px;">
-            <p:growl id="msgs" showDetail="true"/>
-            <p:focus for="id"/>
-            <p:panel>
-                <h:panelGrid id="pdQry" columns="2" style="width: 100%">
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="客户编号：" for="id"
-                                       style="width: 200px"/>
-                        <p:inputText id="id" value="#{esInitCustAction.signPartShowQry.id}"/>
-                        <p:outputLabel value="客户名称：" for="name"/>
-                        <p:inputText id="name" value="#{esInitCustAction.signPartShowQry.name}"
-                                     style="width: 360px"/>
+                <p:growl id="msgs" showDetail="true"/>
+                <p:focus for="id"/>
+                <p:panel>
+                    <h:panelGrid id="pdQry" columns="2" style="width: 100%">
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="客户编号：" for="id"
+                                           style="width: 200px"/>
+                            <p:inputText id="id" value="#{esInitCustAction.signPartShowQry.id}"/>
+                            <p:outputLabel value="客户名称：" for="name"/>
+                            <p:inputText id="name" value="#{esInitCustAction.signPartShowQry.name}"
+                                         style="width: 360px"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3">
+                            <p:commandButton id="qryBtn" value="查询"
+                                             action="#{esInitCustAction.onQueryAction('true')}"
+                                             update="pdt,msgs,pdQry">
+                            </p:commandButton>
+                            <p:commandButton id="resetBtn" value="重置"
+                                             type="reset"
+                                             update="pdQry,msgs">
+                            </p:commandButton>
+                            <p:ajaxStatus style="width:16px;height:16px;">
+                                <f:facet name="start">
+                                    <h:graphicImage value="/images/ajaxloading.gif"/>
+                                </f:facet>
+                                <f:facet name="complete">
+                                    <h:outputText value=""/>
+                                </f:facet>
+                            </p:ajaxStatus>
+                        </h:panelGrid>
                     </h:panelGrid>
-                    <h:panelGrid columns="3">
-                        <p:commandButton id="qryBtn" value="查询"
-                                         action="#{esInitCustAction.onQueryAction('true')}"
-                                         update="pdt,msgs,pdQry">
+                </p:panel>
+                <p:commandButton id="addBtn"
+                                 value="增加" icon="ui-icon-plus"
+                                 action="#{esInitCustAction.resetActionForAdd()}"
+                                 update="pdt,msgs,pgViewForAdd"
+                                 onclick="PF('wVDlgViewForAdd').show()"/>
+                <p:dataTable id="pdt" style="width:100%;"
+                             value="#{esInitCustAction.signPartShowList}"
+                             var="record"
+                             rowKey="#{record.pkid}"
+                             selectionMode="single"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="15"
+                             rowIndexVar="row"
+                             rowsPerPageTemplate="200,100,50,40,30,20,15"
+                             emptyMessage="数据记录为空..."
+                             scrollable="true">
+                    <p:column headerText="操作" style="width:45px">
+                        <p:commandButton  icon="ui-icon-pencil"
+                                          style="height:18px;width:18px"
+                                          action="#{esInitCustAction.selectRecordAction('Upd',record)}"
+                                          update="pdt,:form:pgViewForUpd,:form:msgs"
+                                          onclick="PF('wVDlgViewForUpd').show()">
                         </p:commandButton>
-                        <p:commandButton id="resetBtn" value="重置"
-                                         type="reset"
-                                         update="pdQry,msgs">
+                        <p:commandButton  icon="ui-icon-trash"
+                                          style="height:18px;width:18px"
+                                          action="#{esInitCustAction.selectRecordAction('Del',record)}"
+                                          update="pdt,:form:pgViewForDel,:form:msgs"
+                                          onclick="PF('wVDlgViewForDel').show()">
                         </p:commandButton>
-                        <p:ajaxStatus style="width:16px;height:16px;">
-                            <f:facet name="start">
-                                <h:graphicImage value="/images/ajaxloading.gif"/>
-                            </f:facet>
-                            <f:facet name="complete">
-                                <h:outputText value=""/>
-                            </f:facet>
-                        </p:ajaxStatus>
+                    </p:column>
+                    <p:column headerText="序号" style="width:30px">
+                        <h:outputText value="#{row + 1}"/>
+                    </p:column>
+                    <p:column headerText="客户编号" style="width:160px;text-align:center">
+                        <h:outputText value="#{record.id}"/>
+                    </p:column>
+                    <p:column headerText="客户名称" style="width:300px;text-align:left">
+                        <h:outputText value="#{record.name}"/>
+                    </p:column>
+                    <p:column headerText="手机" style="width:80px;text-align:center">
+                        <h:outputText value="#{record.mobilephone}"/>
+                    </p:column>
+                    <p:column headerText="邮箱" style="width:150px;text-align:center">
+                        <h:outputText value="#{record.email}"/>
+                    </p:column>
+                    <p:column headerText="电话" style="width:100px;text-align:center">
+                        <h:outputText value="#{record.operphone}"/>
+                    </p:column>
+                    <p:column headerText="其他电话" style="width:100px;text-align:center">
+                        <h:outputText value="#{record.otherphone}"/>
+                    </p:column>
+                    <p:column headerText="传真" style="width:100px;text-align:center">
+                        <h:outputText value="#{record.fax}"/>
+                    </p:column>
+                    <p:column headerText="备注内容" style="width:150px;text-align:center">
+                        <h:outputText value="#{record.note}"/>
+                    </p:column>
+                </p:dataTable>
+                <p:dialog id="dlgViewForAdd" header="签约客户增加信息" widgetVar="wVDlgViewForAdd"
+                          resizable="false" modal="true"
+                          showEffect="clip" hideEffect="fold">
+                    <h:panelGrid id="pgViewForAdd">
+                        <h:panelGrid columns="3">
+                            <p:outputLabel value="客户编号：" for="idForAdd"/>
+                            <p:inputText id="idForAdd" value="#{esInitCustAction.signPartShowAdd.id}"/>
+                            <p:commandButton id="autoSetIdBtnForAdd" icon="ui-icon-plus"
+                                             action="#{esInitCustAction.setMaxNoPlusOne}"
+                                             update="idForAdd"
+                                             style="height:20px">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="客户名称：" for="nameForAdd"/>
+                            <p:inputText id="nameForAdd" value="#{esInitCustAction.signPartShowAdd.name}"
+                                         style="width:328px;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="手机：" for="mobilephoneForAdd"/>
+                            <p:inputText id="mobilephoneForAdd" value="#{esInitCustAction.signPartShowAdd.mobilephone}"/>
+                            <p:outputLabel value="电话：" for="operphoneForAdd"/>
+                            <p:inputText id="operphoneForAdd" value="#{esInitCustAction.signPartShowAdd.operphone}"/>
+                            <p:outputLabel value="备注内容：" for="noteForAdd"/>
+                            <p:inputText id="noteForAdd" value="#{esInitCustAction.signPartShowAdd.note}"/>
+                            <p:outputLabel value="其他电话：" for="otherphoneForAdd"/>
+                            <p:inputText id="otherphoneForAdd" value="#{esInitCustAction.signPartShowAdd.otherphone}"/>
+                            <p:outputLabel value="传真：" for="faxForAdd"/>
+                            <p:inputText id="faxForAdd" value="#{esInitCustAction.signPartShowAdd.fax}"/>
+                            <p:outputLabel value="邮箱：" for="emailForAdd"/>
+                            <p:inputText id="emailForAdd" value="#{esInitCustAction.signPartShowAdd.email}"/>
+                        </h:panelGrid>
+                        <h:panelGrid id="pgOperBtnForAdd" columns="4">
+                            <p:commandButton id="submitBtnForAdd"
+                                             value="提交（增加）"
+                                             action="#{esInitCustAction.submitThisRecordAction}"
+                                             update="pdt,msgs,pgViewForAdd">
+                            </p:commandButton>
+                            <p:commandButton id="resetBtnForAdd" value="重置"
+                                             type="reset"
+                                             update="pgViewForAdd">
+                            </p:commandButton>
+                        </h:panelGrid>
                     </h:panelGrid>
-                </h:panelGrid>
-            </p:panel>
-            <p:commandButton id="addBtn"
-                             value="增加" icon="ui-icon-plus"
-                             action="#{esInitCustAction.resetActionForAdd()}"
-                             update="pdt,msgs,pgViewForAdd"
-                             onclick="PF('wVDlgViewForAdd').show()"/>
-            <p:dataTable id="pdt" style="width:100%;"
-                         value="#{esInitCustAction.signPartShowList}"
-                         var="record"
-                         rowKey="#{record.pkid}"
-                         selectionMode="single"
-                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         rows="15"
-                         rowIndexVar="row"
-                         rowsPerPageTemplate="200,100,50,40,30,20,15"
-                         emptyMessage="数据记录为空..."
-                         scrollable="true">
-                <p:column headerText="操作" style="width:45px">
-                    <p:commandButton  icon="ui-icon-pencil"
-                                      style="height:18px;width:18px"
-                                      action="#{esInitCustAction.selectRecordAction('Upd',record)}"
-                                      update="pdt,:form:pgViewForUpd,:form:msgs"
-                                      onclick="PF('wVDlgViewForUpd').show()">
-                    </p:commandButton>
-                    <p:commandButton  icon="ui-icon-trash"
-                                      style="height:18px;width:18px"
-                                      action="#{esInitCustAction.selectRecordAction('Del',record)}"
-                                      update="pdt,:form:pgViewForDel,:form:msgs"
-                                      onclick="PF('wVDlgViewForDel').show()">
-                    </p:commandButton>
-                </p:column>
-                <p:column headerText="序号" style="width:30px">
-                    <h:outputText value="#{row + 1}"/>
-                </p:column>
-                <p:column headerText="客户编号" style="width:160px;text-align:center">
-                    <h:outputText value="#{record.id}"/>
-                </p:column>
-                <p:column headerText="客户名称" style="width:300px;text-align:left">
-                    <h:outputText value="#{record.name}"/>
-                </p:column>
-                <p:column headerText="手机" style="width:80px;text-align:center">
-                    <h:outputText value="#{record.mobilephone}"/>
-                </p:column>
-                <p:column headerText="邮箱" style="width:150px;text-align:center">
-                    <h:outputText value="#{record.email}"/>
-                </p:column>
-                <p:column headerText="电话" style="width:100px;text-align:center">
-                    <h:outputText value="#{record.operphone}"/>
-                </p:column>
-                <p:column headerText="其他电话" style="width:100px;text-align:center">
-                    <h:outputText value="#{record.otherphone}"/>
-                </p:column>
-                <p:column headerText="传真" style="width:100px;text-align:center">
-                    <h:outputText value="#{record.fax}"/>
-                </p:column>
-                <p:column headerText="备注内容" style="width:150px;text-align:center">
-                    <h:outputText value="#{record.note}"/>
-                </p:column>
-            </p:dataTable>
-            <p:dialog id="dlgViewForAdd" header="签约客户增加信息" widgetVar="wVDlgViewForAdd"
-                      resizable="false" modal="true"
-                      showEffect="clip" hideEffect="fold">
-                <h:panelGrid id="pgViewForAdd">
-                    <h:panelGrid columns="3">
-                        <p:outputLabel value="客户编号：" for="idForAdd"/>
-                        <p:inputText id="idForAdd" value="#{esInitCustAction.signPartShowAdd.id}"/>
-                        <p:commandButton id="autoSetIdBtnForAdd" icon="ui-icon-plus"
-                                         action="#{esInitCustAction.setMaxNoPlusOne}"
-                                         update="idForAdd"
-                                         style="height:20px">
-                        </p:commandButton>
+                </p:dialog>
+                <p:dialog id="dlgViewForUpd" header="签约客户更新信息" widgetVar="wVDlgViewForUpd"
+                          resizable="false" modal="true"
+                          showEffect="clip" hideEffect="fold">
+                    <h:panelGrid id="pgViewForUpd">
+                        <h:panelGrid columns="3">
+                            <p:outputLabel value="客户编号：" for="idForUpd"/>
+                            <p:inputText id="idForUpd" value="#{esInitCustAction.signPartShowUpd.id}"/>
+                            <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
+                                             action="#{esInitCustAction.setMaxNoPlusOne}"
+                                             update="idForUpd"
+                                             style="height:20px">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="客户名称：" for="nameForUpd"/>
+                            <p:inputText id="nameForUpd" value="#{esInitCustAction.signPartShowUpd.name}"
+                                         style="width:328px;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="手机：" for="mobilephoneForUpd"/>
+                            <p:inputText id="mobilephoneForUpd" value="#{esInitCustAction.signPartShowUpd.mobilephone}"/>
+                            <p:outputLabel value="电话：" for="operphoneForUpd"/>
+                            <p:inputText id="operphoneForUpd" value="#{esInitCustAction.signPartShowUpd.operphone}"/>
+                            <p:outputLabel value="备注内容：" for="noteForUpd"/>
+                            <p:inputText id="noteForUpd" value="#{esInitCustAction.signPartShowUpd.note}"/>
+                            <p:outputLabel value="其他电话：" for="otherphoneForUpd"/>
+                            <p:inputText id="otherphoneForUpd" value="#{esInitCustAction.signPartShowUpd.otherphone}"/>
+                            <p:outputLabel value="传真：" for="faxForUpd"/>
+                            <p:inputText id="faxForUpd" value="#{esInitCustAction.signPartShowUpd.fax}"/>
+                            <p:outputLabel value="邮箱：" for="emailForUpd"/>
+                            <p:inputText id="emailForUpd" value="#{esInitCustAction.signPartShowUpd.email}"/>
+                            <p:outputLabel for="createdByItemInfoForUpd" value="创建人:" />
+                            <h:inputText id="createdByItemInfoForUpd"
+                                         value="#{esInitCustAction.signPartShowUpd.createdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="createdDateItemInfoForUpd" value="创建时间:" />
+                            <h:inputText id="createdDateItemInfoForUpd"
+                                         value="#{esInitCustAction.signPartShowUpd.createdDate}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdByItemInfoForUpd" value="修改人:" />
+                            <h:inputText id="lastUpdByItemInfoForUpd"
+                                         value="#{esInitCustAction.signPartShowUpd.lastUpdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdDateItemInfoForUpd" value="修改时间:" />
+                            <h:inputText id="lastUpdDateItemInfoForUpd"
+                                         value="#{esInitCustAction.signPartShowUpd.lastUpdDate}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="modificationNumItemInfoForUpd" value="修改次数:" />
+                            <h:inputText id="modificationNumItemInfoForUpd"
+                                         value="#{esInitCustAction.signPartShowUpd.modificationNum}"
+                                         style="background-color:gainsboro;text-align:right;" readonly="true">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                            </h:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid id="pgOperBtnForUpd" columns="4">
+                            <p:commandButton id="submitBtnForUpd"
+                                             value="提交（更新）"
+                                             action="#{esInitCustAction.submitThisRecordAction}"
+                                             update="pdt,msgs,pgViewForUpd"
+                                             oncomplete="wVDlgViewForUpd.hide()">
+                            </p:commandButton>
+                            <p:commandButton id="resetBtnForUpd" value="重置"
+                                             type="reset"
+                                             update="pgViewForUpd">
+                            </p:commandButton>
+                        </h:panelGrid>
                     </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="客户名称：" for="nameForAdd"/>
-                        <p:inputText id="nameForAdd" value="#{esInitCustAction.signPartShowAdd.name}"
-                                     style="width:328px;"/>
+                </p:dialog>
+                <p:dialog id="dlgViewForDel" header="签约客户删除信息" widgetVar="wVDlgViewForDel"
+                          resizable="false" modal="true"
+                          showEffect="clip" hideEffect="fold">
+                    <h:panelGrid id="pgViewForDel">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="客户编号：" for="idForDel"/>
+                            <p:inputText id="idForDel" value="#{esInitCustAction.signPartShowDel.id}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="客户名称：" for="nameForDel"/>
+                            <p:inputText id="nameForDel" value="#{esInitCustAction.signPartShowDel.name}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;width:328px;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="手机：" for="mobilephoneForDel"/>
+                            <p:inputText id="mobilephoneForDel" value="#{esInitCustAction.signPartShowDel.mobilephone}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                            <p:outputLabel value="电话：" for="operphoneForDel"/>
+                            <p:inputText id="operphoneForDel" value="#{esInitCustAction.signPartShowDel.operphone}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                            <p:outputLabel value="备注内容：" for="noteForDel"/>
+                            <p:inputText id="noteForDel" value="#{esInitCustAction.signPartShowDel.note}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                            <p:outputLabel value="其他电话：" for="otherphoneForDel"/>
+                            <p:inputText id="otherphoneForDel" value="#{esInitCustAction.signPartShowDel.otherphone}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                            <p:outputLabel value="传真：" for="faxForDel"/>
+                            <p:inputText id="faxForDel" value="#{esInitCustAction.signPartShowDel.fax}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                            <p:outputLabel value="邮箱：" for="emailForDel"/>
+                            <p:inputText id="emailForDel" value="#{esInitCustAction.signPartShowDel.email}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                            <p:outputLabel for="createdByItemInfoForDel" value="创建人:" />
+                            <h:inputText id="createdByItemInfoForDel"
+                                         value="#{esInitCustAction.signPartShowDel.createdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="createdDateItemInfoForDel" value="创建时间:" />
+                            <h:inputText id="createdDateItemInfoForDel"
+                                         value="#{esInitCustAction.signPartShowDel.createdDate}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdByItemInfoForDel" value="修改人:" />
+                            <h:inputText id="lastUpdByItemInfoForDel"
+                                         value="#{esInitCustAction.signPartShowDel.lastUpdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdDateItemInfoForDel" value="修改时间:" />
+                            <h:inputText id="lastUpdDateItemInfoForDel"
+                                         value="#{esInitCustAction.signPartShowDel.lastUpdDate}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="modificationNumItemInfoForDel" value="修改次数:" />
+                            <h:inputText id="modificationNumItemInfoForDel"
+                                         value="#{esInitCustAction.signPartShowDel.modificationNum}"
+                                         style="background-color:gainsboro;text-align:right;" readonly="true">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                            </h:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid id="pgOperBtnForDel">
+                            <p:commandButton id="submitBtnForDel"
+                                             value="提交（删除）"
+                                             action="#{esInitCustAction.submitThisRecordAction}"
+                                             update="pdt,msgs,pgViewForDel"
+                                    oncomplete="wVDlgViewForDel.hide()">
+                            </p:commandButton>
+                        </h:panelGrid>
                     </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="手机：" for="mobilephoneForAdd"/>
-                        <p:inputText id="mobilephoneForAdd" value="#{esInitCustAction.signPartShowAdd.mobilephone}"/>
-                        <p:outputLabel value="电话：" for="operphoneForAdd"/>
-                        <p:inputText id="operphoneForAdd" value="#{esInitCustAction.signPartShowAdd.operphone}"/>
-                        <p:outputLabel value="备注内容：" for="noteForAdd"/>
-                        <p:inputText id="noteForAdd" value="#{esInitCustAction.signPartShowAdd.note}"/>
-                        <p:outputLabel value="其他电话：" for="otherphoneForAdd"/>
-                        <p:inputText id="otherphoneForAdd" value="#{esInitCustAction.signPartShowAdd.otherphone}"/>
-                        <p:outputLabel value="传真：" for="faxForAdd"/>
-                        <p:inputText id="faxForAdd" value="#{esInitCustAction.signPartShowAdd.fax}"/>
-                        <p:outputLabel value="邮箱：" for="emailForAdd"/>
-                        <p:inputText id="emailForAdd" value="#{esInitCustAction.signPartShowAdd.email}"/>
-                    </h:panelGrid>
-                    <h:panelGrid id="pgOperBtnForAdd" columns="4">
-                        <p:commandButton id="submitBtnForAdd"
-                                         value="提交（增加）"
-                                         action="#{esInitCustAction.submitThisRecordAction}"
-                                         update="pdt,msgs,pgViewForAdd">
-                        </p:commandButton>
-                        <p:commandButton id="resetBtnForAdd" value="重置"
-                                         type="reset"
-                                         update="pgViewForAdd">
-                        </p:commandButton>
-                    </h:panelGrid>
-                </h:panelGrid>
-            </p:dialog>
-            <p:dialog id="dlgViewForUpd" header="签约客户更新信息" widgetVar="wVDlgViewForUpd"
-                      resizable="false" modal="true"
-                      showEffect="clip" hideEffect="fold">
-                <h:panelGrid id="pgViewForUpd">
-                    <h:panelGrid columns="3">
-                        <p:outputLabel value="客户编号：" for="idForUpd"/>
-                        <p:inputText id="idForUpd" value="#{esInitCustAction.signPartShowUpd.id}"/>
-                        <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
-                                         action="#{esInitCustAction.setMaxNoPlusOne}"
-                                         update="idForUpd"
-                                         style="height:20px">
-                        </p:commandButton>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="客户名称：" for="nameForUpd"/>
-                        <p:inputText id="nameForUpd" value="#{esInitCustAction.signPartShowUpd.name}"
-                                     style="width:328px;"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="手机：" for="mobilephoneForUpd"/>
-                        <p:inputText id="mobilephoneForUpd" value="#{esInitCustAction.signPartShowUpd.mobilephone}"/>
-                        <p:outputLabel value="电话：" for="operphoneForUpd"/>
-                        <p:inputText id="operphoneForUpd" value="#{esInitCustAction.signPartShowUpd.operphone}"/>
-                        <p:outputLabel value="备注内容：" for="noteForUpd"/>
-                        <p:inputText id="noteForUpd" value="#{esInitCustAction.signPartShowUpd.note}"/>
-                        <p:outputLabel value="其他电话：" for="otherphoneForUpd"/>
-                        <p:inputText id="otherphoneForUpd" value="#{esInitCustAction.signPartShowUpd.otherphone}"/>
-                        <p:outputLabel value="传真：" for="faxForUpd"/>
-                        <p:inputText id="faxForUpd" value="#{esInitCustAction.signPartShowUpd.fax}"/>
-                        <p:outputLabel value="邮箱：" for="emailForUpd"/>
-                        <p:inputText id="emailForUpd" value="#{esInitCustAction.signPartShowUpd.email}"/>
-                        <p:outputLabel for="createdByItemInfoForUpd" value="创建人:" />
-                        <h:inputText id="createdByItemInfoForUpd"
-                                     value="#{esInitCustAction.signPartShowUpd.createdByName}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="createdDateItemInfoForUpd" value="创建时间:" />
-                        <h:inputText id="createdDateItemInfoForUpd"
-                                     value="#{esInitCustAction.signPartShowUpd.createdDate}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="lastUpdByItemInfoForUpd" value="修改人:" />
-                        <h:inputText id="lastUpdByItemInfoForUpd"
-                                     value="#{esInitCustAction.signPartShowUpd.lastUpdByName}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="lastUpdDateItemInfoForUpd" value="修改时间:" />
-                        <h:inputText id="lastUpdDateItemInfoForUpd"
-                                     value="#{esInitCustAction.signPartShowUpd.lastUpdDate}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="modificationNumItemInfoForUpd" value="修改次数:" />
-                        <h:inputText id="modificationNumItemInfoForUpd"
-                                     value="#{esInitCustAction.signPartShowUpd.modificationNum}"
-                                     style="background-color:gainsboro;text-align:right;" readonly="true">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                        </h:inputText>
-                    </h:panelGrid>
-                    <h:panelGrid id="pgOperBtnForUpd" columns="4">
-                        <p:commandButton id="submitBtnForUpd"
-                                         value="提交（更新）"
-                                         action="#{esInitCustAction.submitThisRecordAction}"
-                                         update="pdt,msgs,pgViewForUpd"
-                                         oncomplete="wVDlgViewForUpd.hide()">
-                        </p:commandButton>
-                        <p:commandButton id="resetBtnForUpd" value="重置"
-                                         type="reset"
-                                         update="pgViewForUpd">
-                        </p:commandButton>
-                    </h:panelGrid>
-                </h:panelGrid>
-            </p:dialog>
-            <p:dialog id="dlgViewForDel" header="签约客户删除信息" widgetVar="wVDlgViewForDel"
-                      resizable="false" modal="true"
-                      showEffect="clip" hideEffect="fold">
-                <h:panelGrid id="pgViewForDel">
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="客户编号：" for="idForDel"/>
-                        <p:inputText id="idForDel" value="#{esInitCustAction.signPartShowDel.id}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:outputLabel value="客户名称：" for="nameForDel"/>
-                        <p:inputText id="nameForDel" value="#{esInitCustAction.signPartShowDel.name}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;width:328px;"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="手机：" for="mobilephoneForDel"/>
-                        <p:inputText id="mobilephoneForDel" value="#{esInitCustAction.signPartShowDel.mobilephone}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                        <p:outputLabel value="电话：" for="operphoneForDel"/>
-                        <p:inputText id="operphoneForDel" value="#{esInitCustAction.signPartShowDel.operphone}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                        <p:outputLabel value="备注内容：" for="noteForDel"/>
-                        <p:inputText id="noteForDel" value="#{esInitCustAction.signPartShowDel.note}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                        <p:outputLabel value="其他电话：" for="otherphoneForDel"/>
-                        <p:inputText id="otherphoneForDel" value="#{esInitCustAction.signPartShowDel.otherphone}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                        <p:outputLabel value="传真：" for="faxForDel"/>
-                        <p:inputText id="faxForDel" value="#{esInitCustAction.signPartShowDel.fax}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                        <p:outputLabel value="邮箱：" for="emailForDel"/>
-                        <p:inputText id="emailForDel" value="#{esInitCustAction.signPartShowDel.email}"
-                                     readonly="true"
-                                     style="background-color:gainsboro;"/>
-                        <p:outputLabel for="createdByItemInfoForDel" value="创建人:" />
-                        <h:inputText id="createdByItemInfoForDel"
-                                     value="#{esInitCustAction.signPartShowDel.createdByName}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="createdDateItemInfoForDel" value="创建时间:" />
-                        <h:inputText id="createdDateItemInfoForDel"
-                                     value="#{esInitCustAction.signPartShowDel.createdDate}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="lastUpdByItemInfoForDel" value="修改人:" />
-                        <h:inputText id="lastUpdByItemInfoForDel"
-                                     value="#{esInitCustAction.signPartShowDel.lastUpdByName}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="lastUpdDateItemInfoForDel" value="修改时间:" />
-                        <h:inputText id="lastUpdDateItemInfoForDel"
-                                     value="#{esInitCustAction.signPartShowDel.lastUpdDate}"
-                                     style="background-color:gainsboro" readonly="true"/>
-                        <p:outputLabel for="modificationNumItemInfoForDel" value="修改次数:" />
-                        <h:inputText id="modificationNumItemInfoForDel"
-                                     value="#{esInitCustAction.signPartShowDel.modificationNum}"
-                                     style="background-color:gainsboro;text-align:right;" readonly="true">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                        </h:inputText>
-                    </h:panelGrid>
-                    <h:panelGrid id="pgOperBtnForDel">
-                        <p:commandButton id="submitBtnForDel"
-                                         value="提交（删除）"
-                                         action="#{esInitCustAction.submitThisRecordAction}"
-                                         update="pdt,msgs,pgViewForDel"
-                                oncomplete="wVDlgViewForDel.hide()">
-                        </p:commandButton>
-                    </h:panelGrid>
-                </h:panelGrid>
-            </p:dialog>
+                </p:dialog>
             </div>
         </h:form>
     </ui:define>

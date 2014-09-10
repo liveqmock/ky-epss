@@ -20,122 +20,122 @@
     <ui:define name="content">
         <h:form id="form">
             <div style="margin:5px;">
-            <p:growl id="msgs" showDetail="true"/>
-            <p:panel>
-                <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="成本计划：" for="cstplPkid" />
-                        <p:selectOneMenu id="cstplPkid"
-                                         value="#{cstplMeaSubStlQItemAction.strCstplPkid}">
-                            <f:selectItems value="#{cstplMeaSubStlQItemAction.cstplList}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value="期数编码：" for="periodNo"/>
-                        <p:inputText id="periodNo" value="#{cstplMeaSubStlQItemAction.strPeriodNo}"
-                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel>
+                    <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="成本计划：" for="cstplPkid" />
+                            <p:selectOneMenu id="cstplPkid"
+                                             value="#{cstplMeaSubStlQItemAction.strCstplPkid}">
+                                <f:selectItems value="#{cstplMeaSubStlQItemAction.cstplList}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="期数编码：" for="periodNo"/>
+                            <p:inputText id="periodNo" value="#{cstplMeaSubStlQItemAction.strPeriodNo}"
+                                         onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3">
+                            <p:commandButton id="qryBtn" value="查询"
+                                             action="#{cstplMeaSubStlQItemAction.onQueryAction()}"
+                                             update="pgCondition,msgs,pdt,exportToExcel">
+                            </p:commandButton>
+                            <p:commandButton id="resetBtn" value="重置"
+                                             type="reset"
+                                             update="pgCondition,msgs">
+                            </p:commandButton>
+                            <p:ajaxStatus style="width:16px;height:16px;">
+                                <f:facet name="start">
+                                    <h:graphicImage value="/images/ajaxloading.gif"/>
+                                </f:facet>
+                                <f:facet name="complete">
+                                    <h:outputText value=""/>
+                                </f:facet>
+                            </p:ajaxStatus>
+                        </h:panelGrid>
                     </h:panelGrid>
-                    <h:panelGrid columns="3">
-                        <p:commandButton id="qryBtn" value="查询"
-                                         action="#{cstplMeaSubStlQItemAction.onQueryAction()}"
-                                         update="pgCondition,msgs,pdt,exportToExcel">
-                        </p:commandButton>
-                        <p:commandButton id="resetBtn" value="重置"
-                                         type="reset"
-                                         update="pgCondition,msgs">
-                        </p:commandButton>
-                        <p:ajaxStatus style="width:16px;height:16px;">
-                            <f:facet name="start">
-                                <h:graphicImage value="/images/ajaxloading.gif"/>
-                            </f:facet>
-                            <f:facet name="complete">
-                                <h:outputText value=""/>
-                            </f:facet>
-                        </p:ajaxStatus>
-                    </h:panelGrid>
+                </p:panel>
+                <h:panelGrid id="exportToExcel" columns="1">
+                    <p:commandButton value="导出到EXCEL"
+                                     action="#{cstplMeaSubStlQItemAction.onExportExcel}"
+                                     ajax="false"
+                                     rendered="#{cstplMeaSubStlQItemAction.strExportToExcelRendered}">
+                    </p:commandButton>
                 </h:panelGrid>
-            </p:panel>
-            <h:panelGrid id="exportToExcel" columns="1">
-                <p:commandButton value="导出到EXCEL"
-                                 action="#{cstplMeaSubStlQItemAction.onExportExcel}"
-                                 ajax="false"
-                                 rendered="#{cstplMeaSubStlQItemAction.strExportToExcelRendered}">
-                </p:commandButton>
-            </h:panelGrid>
-            <p:dataTable id="pdt" style="width:100%;"
-                         value="#{cstplMeaSubStlQItemAction.qryCSMeaSubQShowList}"
-                         var="record"
-                         rowKey="#{record.strCstpl_Pkid}"
-                         selectionMode="single"
-                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         paginator="true"
-                         paginatorPosition="bottom"
-                         rows="15"
-                         rowsPerPageTemplate="500,200,100,45,30,15"
-                         rowIndexVar="row"
-                         emptyMessage="数据记录为空..."
-                         scrollable="true">
-                <p:column style="width:30px" headerText="序号">
-                    <h:outputText value="#{row + 1}"/>
-                </p:column>
-                <p:column style="width:100px" headerText="成本_编号">
-                    <h:outputText value="#{record.strCstpl_No}" escape="false"/>
-                </p:column>
-                  <p:column style="width:150px" headerText="成本_项目名称">
-                      <h:outputText value="#{record.strCstpl_Name}"/>
-                  </p:column>
-                  <p:column style="width:60px" headerText="成本_单位">
-                      <h:outputText value="#{record.strCstpl_Unit}"/>
-                  </p:column>
-                  <p:column style="width:80px" headerText="成本_单价">
-                      <h:outputText value="#{record.bdCstpl_ContractUnitPrice}" style="float: right" >
-                          <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                      </h:outputText>
-                  </p:column>
-                  <p:column style="width:80px" headerText="计量_数量">
-                      <h:outputText value="#{record.bdTkcttStl_MeaQuantity}" style="float: right" >
-                          <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                      </h:outputText>
-                  </p:column>
-                  <p:column style="width:100px" headerText="计量_合计">
-                      <h:outputText value="#{record.bdTkcttStl_MeaAmount}" style="float: right" >
-                          <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                      </h:outputText>
-                  </p:column>
-                  <p:column style="width:250px" headerText="分包_协作单位">
-                      <h:outputText value="#{record.strSubctt_SignPartName}" style="text-align:left">
-                      </h:outputText>
-                  </p:column>
-                  <p:column style="width:80px" headerText="分包_单价">
-                      <h:outputText value="#{record.bdSubctt_ContractUnitPrice}" style="float: right" >
-                          <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                      </h:outputText>
-                  </p:column>
-                  <p:column style="width:100px" headerText="分包结算＿数量">
-                      <h:outputText value="#{record.bdSubcttStl_BeginToCurrentPeriodQQty}" style="float: right" >
-                          <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                      </h:outputText>
-                  </p:column>
-                  <p:column style="width:100px" headerText="分包结算＿合计">
-                      <h:outputText value="#{record.bdSubcttStl_BeginToCurrentPeriodMAmount}" style="float: right" >
-                          <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                      </h:outputText>
-                  </p:column>
-                  <p:column style="width:160px" headerText="计量与分包结算比较_数量">
-                      <h:outputText value="#{record.bdMeaS_BeginToCurrentPeriodQQty}" style="float: right" >
-                          <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                      </h:outputText>
-                  </p:column>
-                  <p:column style="width:160px" headerText="计量与分包结算比较_单价">
-                      <h:outputText value="#{record.bdMeaS_ContractUnitPrice}" style="float: right" >
-                          <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                      </h:outputText>
-                  </p:column>
-                  <p:column style="width:160px" headerText="计量与分包结算比较_合计">
-                      <h:outputText value="#{record.bdMeaS_BeginToCurrentPeriodMAmount}" style="float: right" >
-                          <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                      </h:outputText>
-                  </p:column>
-            </p:dataTable>
+                <p:dataTable id="pdt" style="width:100%;"
+                             value="#{cstplMeaSubStlQItemAction.qryCSMeaSubQShowList}"
+                             var="record"
+                             rowKey="#{record.strCstpl_Pkid}"
+                             selectionMode="single"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="15"
+                             rowsPerPageTemplate="500,200,100,45,30,15"
+                             rowIndexVar="row"
+                             emptyMessage="数据记录为空..."
+                             scrollable="true">
+                    <p:column style="width:30px" headerText="序号">
+                        <h:outputText value="#{row + 1}"/>
+                    </p:column>
+                    <p:column style="width:100px" headerText="成本_编号">
+                        <h:outputText value="#{record.strCstpl_No}" escape="false"/>
+                    </p:column>
+                      <p:column style="width:150px" headerText="成本_项目名称">
+                          <h:outputText value="#{record.strCstpl_Name}"/>
+                      </p:column>
+                      <p:column style="width:60px" headerText="成本_单位">
+                          <h:outputText value="#{record.strCstpl_Unit}"/>
+                      </p:column>
+                      <p:column style="width:80px" headerText="成本_单价">
+                          <h:outputText value="#{record.bdCstpl_ContractUnitPrice}" style="float: right" >
+                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                          </h:outputText>
+                      </p:column>
+                      <p:column style="width:80px" headerText="计量_数量">
+                          <h:outputText value="#{record.bdTkcttStl_MeaQuantity}" style="float: right" >
+                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                          </h:outputText>
+                      </p:column>
+                      <p:column style="width:100px" headerText="计量_合计">
+                          <h:outputText value="#{record.bdTkcttStl_MeaAmount}" style="float: right" >
+                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                          </h:outputText>
+                      </p:column>
+                      <p:column style="width:250px" headerText="分包_协作单位">
+                          <h:outputText value="#{record.strSubctt_SignPartName}" style="text-align:left">
+                          </h:outputText>
+                      </p:column>
+                      <p:column style="width:80px" headerText="分包_单价">
+                          <h:outputText value="#{record.bdSubctt_ContractUnitPrice}" style="float: right" >
+                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                          </h:outputText>
+                      </p:column>
+                      <p:column style="width:100px" headerText="分包结算＿数量">
+                          <h:outputText value="#{record.bdSubcttStl_BeginToCurrentPeriodQQty}" style="float: right" >
+                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                          </h:outputText>
+                      </p:column>
+                      <p:column style="width:100px" headerText="分包结算＿合计">
+                          <h:outputText value="#{record.bdSubcttStl_BeginToCurrentPeriodMAmount}" style="float: right" >
+                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                          </h:outputText>
+                      </p:column>
+                      <p:column style="width:160px" headerText="计量与分包结算比较_数量">
+                          <h:outputText value="#{record.bdMeaS_BeginToCurrentPeriodQQty}" style="float: right" >
+                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                          </h:outputText>
+                      </p:column>
+                      <p:column style="width:160px" headerText="计量与分包结算比较_单价">
+                          <h:outputText value="#{record.bdMeaS_ContractUnitPrice}" style="float: right" >
+                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                          </h:outputText>
+                      </p:column>
+                      <p:column style="width:160px" headerText="计量与分包结算比较_合计">
+                          <h:outputText value="#{record.bdMeaS_BeginToCurrentPeriodMAmount}" style="float: right" >
+                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                          </h:outputText>
+                      </p:column>
+                </p:dataTable>
             </div>
         </h:form>
     </ui:define>

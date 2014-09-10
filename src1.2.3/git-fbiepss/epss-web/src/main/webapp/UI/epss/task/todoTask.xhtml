@@ -112,100 +112,100 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form" enctype="multipart/form-data">
-	    <div style="margin:5px;">
-            <p:growl id="msgs" showDetail="true"/>
-            <div style="display: none">
-                <p:commandButton id="qryBtn" value="查询"
-                                 action="#{todoTaskAction.init()}"
-                                 update="pdtTask,pdtRecentlyPower,msgs">
-                </p:commandButton>
-            </div>
-            <!--列表维护-->
-            <p:panel header="待处理任务">
-                <div style="height:20px;
-                         vertical-align: bottom;
-                         FONT-SIZE:10pt;
-                         text-align: left;">
-                    <h:outputLabel value="待处理:" style="font-weight:normal"/>
-                    <h:outputLabel value="下级已通过" style="background-color: yellowgreen;"/>
-                    <h:outputLabel value="上级未通过" style="background-color: red"/>
+	        <div style="margin:5px;">
+                <p:growl id="msgs" showDetail="true"/>
+                <div style="display: none">
+                    <p:commandButton id="qryBtn" value="查询"
+                                     action="#{todoTaskAction.init()}"
+                                     update="pdtTask,pdtRecentlyPower,msgs">
+                    </p:commandButton>
                 </div>
-                <p:dataTable id="pdtTask"
-                             value="#{todoTaskAction.taskShowList}"
-                             var="record"
-                             rowIndexVar="row"
-                             rowKey="#{row + 1}"
-                             emptyMessage="数据记录为空..."
-                             rowStyleClass="#{record.pkid eq null?'rowGrayStyle':
-                             record.strColorType eq '2'?'rowRedStyle':'rowGreenyellowStyle'}"
-                             scrollable="true"
-                             scrollHeight="180">
-                    <p:column headerText="操作" style="width:30px;text-align: center;">
-                        <p:commandButton icon="ui-icon-triangle-1-e"
-                             style="height:16px;width:30px;"
-                             rendered="#{record.id eq null?'false':'true'}"
-                             onclick="actSelect('0','#{record.type}','#{record.flowStatus}','#{record.pkid}')">
-                        </p:commandButton>
-                    </p:column>
-                    <p:column headerText="序号" style="width:30px">
-                        <h:outputText value="#{row + 1}"/>
-                    </p:column>
-                    <p:column headerText="任务类别" style="width:100px;text-align:left;">
-                        <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
-                    </p:column>
-                    <p:column headerText="待处理任务ID" style="width:200px;text-align:left;">
-                        <h:outputText value="#{record.id}"/>
-                    </p:column>
-                    <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
-                        <h:outputText value="#{record.name}"/>
-                    </p:column>
-                    <p:column headerText="期数" style="width:100px;text-align:left;">
-                        <h:outputText value="#{record.periodNo}"/>
-                    </p:column>
-                    <p:column headerText="状态原因" style="width:100px;text-align:center;">
-                        <h:outputText value="#{record.flowStatusReasonName}"/>
-                    </p:column>
-                </p:dataTable>
-            </p:panel>
-            <p:panel header="刚被分配录入权限的结算资源"
-                     rendered="#{todoTaskAction.strRecentlyPowerVisable}">
-                <p:dataTable id="pdtRecentlyPower"
-                             value="#{todoTaskAction.taskShowRecentlyPowerList}"
-                             var="record"
-                             rowIndexVar="row"
-                             rowKey="#{row + 1}"
-                             emptyMessage="数据记录为空..."
-                             rowStyleClass="#{record.id eq null?'rowGrayStyle':'rowGreenyellowStyle'}"
-                             scrollable="true"
-                             scrollHeight="180">
-                    <p:column headerText="操作" style="width:30px;text-align: center;">
-                        <p:commandButton icon="ui-icon-triangle-1-e"
-                                         style="height:16px;width:30px;"
-                                         rendered="#{record.id eq null?'false':'true'}"
-                                         onclick="actSelect('1','#{record.type}','#{record.flowStatus}','#{record.pkid}')">
-                        </p:commandButton>
-                    </p:column>
-                    <p:column headerText="序号" style="width:30px">
-                        <h:outputText value="#{row + 1}"/>
-                    </p:column>
-                    <p:column headerText="任务类别" style="width:100px;text-align:left;">
-                        <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
-                    </p:column>
-                    <p:column headerText="待处理任务ID" style="width:150px;text-align:left;">
-                        <h:outputText value="#{record.id}"/>
-                    </p:column>
-                    <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
-                        <h:outputText value="#{record.name}"/>
-                    </p:column>
-                    <p:column headerText="授权状态" style="width:100px;text-align:center;">
-                        <h:outputText value="#{record.flowStatusName}"/>
-                    </p:column>
-                    <p:column headerText="执行状态" style="width:100px;text-align:center;">
-                        <h:outputText value="#{record.taskDoneFlagName}"/>
-                    </p:column>
-                </p:dataTable>
-            </p:panel>
-       </div>
-    </h:form>
+                <!--列表维护-->
+                <p:panel header="待处理任务">
+                    <div style="height:20px;
+                             vertical-align: bottom;
+                             FONT-SIZE:10pt;
+                             text-align: left;">
+                        <h:outputLabel value="待处理:" style="font-weight:normal"/>
+                        <h:outputLabel value="下级已通过" style="background-color: yellowgreen;"/>
+                        <h:outputLabel value="上级未通过" style="background-color: red"/>
+                    </div>
+                    <p:dataTable id="pdtTask"
+                                 value="#{todoTaskAction.taskShowList}"
+                                 var="record"
+                                 rowIndexVar="row"
+                                 rowKey="#{row + 1}"
+                                 emptyMessage="数据记录为空..."
+                                 rowStyleClass="#{record.pkid eq null?'rowGrayStyle':
+                                 record.strColorType eq '2'?'rowRedStyle':'rowGreenyellowStyle'}"
+                                 scrollable="true"
+                                 scrollHeight="180">
+                        <p:column headerText="操作" style="width:30px;text-align: center;">
+                            <p:commandButton icon="ui-icon-triangle-1-e"
+                                 style="height:16px;width:30px;"
+                                 rendered="#{record.id eq null?'false':'true'}"
+                                 onclick="actSelect('0','#{record.type}','#{record.flowStatus}','#{record.pkid}')">
+                            </p:commandButton>
+                        </p:column>
+                        <p:column headerText="序号" style="width:30px">
+                            <h:outputText value="#{row + 1}"/>
+                        </p:column>
+                        <p:column headerText="任务类别" style="width:100px;text-align:left;">
+                            <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
+                        </p:column>
+                        <p:column headerText="待处理任务ID" style="width:200px;text-align:left;">
+                            <h:outputText value="#{record.id}"/>
+                        </p:column>
+                        <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
+                            <h:outputText value="#{record.name}"/>
+                        </p:column>
+                        <p:column headerText="期数" style="width:100px;text-align:left;">
+                            <h:outputText value="#{record.periodNo}"/>
+                        </p:column>
+                        <p:column headerText="状态原因" style="width:100px;text-align:center;">
+                            <h:outputText value="#{record.flowStatusReasonName}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+                <p:panel header="刚被分配录入权限的结算资源"
+                         rendered="#{todoTaskAction.strRecentlyPowerVisable}">
+                    <p:dataTable id="pdtRecentlyPower"
+                                 value="#{todoTaskAction.taskShowRecentlyPowerList}"
+                                 var="record"
+                                 rowIndexVar="row"
+                                 rowKey="#{row + 1}"
+                                 emptyMessage="数据记录为空..."
+                                 rowStyleClass="#{record.id eq null?'rowGrayStyle':'rowGreenyellowStyle'}"
+                                 scrollable="true"
+                                 scrollHeight="180">
+                        <p:column headerText="操作" style="width:30px;text-align: center;">
+                            <p:commandButton icon="ui-icon-triangle-1-e"
+                                             style="height:16px;width:30px;"
+                                             rendered="#{record.id eq null?'false':'true'}"
+                                             onclick="actSelect('1','#{record.type}','#{record.flowStatus}','#{record.pkid}')">
+                            </p:commandButton>
+                        </p:column>
+                        <p:column headerText="序号" style="width:30px">
+                            <h:outputText value="#{row + 1}"/>
+                        </p:column>
+                        <p:column headerText="任务类别" style="width:100px;text-align:left;">
+                            <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
+                        </p:column>
+                        <p:column headerText="待处理任务ID" style="width:150px;text-align:left;">
+                            <h:outputText value="#{record.id}"/>
+                        </p:column>
+                        <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
+                            <h:outputText value="#{record.name}"/>
+                        </p:column>
+                        <p:column headerText="授权状态" style="width:100px;text-align:center;">
+                            <h:outputText value="#{record.flowStatusName}"/>
+                        </p:column>
+                        <p:column headerText="执行状态" style="width:100px;text-align:center;">
+                            <h:outputText value="#{record.taskDoneFlagName}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
+            </div>
+        </h:form>
     </ui:define>
 </ui:composition>

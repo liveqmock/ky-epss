@@ -21,37 +21,37 @@
     <ui:define name="content">
         <h:form id="form">
             <div style="margin:5px;">
-            <p:growl id="msgs" showDetail="true"/>
-            <p:panel value="用户密码修改">
-                <h:panelGrid columns="2">
-                    <p:outputLabel value="操作员编号：" for="operIdForOperUpd"/>
-                    <p:inputText id="operIdForOperUpd" value="#{operPwdAction.operUpd.id}"
-                                 readonly="true"
-                                 style="background-color:gainsboro;"/>
-                    <p:outputLabel value="操作员姓名：" for="operNameForOperUpd"/>
-                    <p:inputText id="operNameForOperUpd" value="#{operPwdAction.operUpd.name}"
-                                 readonly="true"
-                                 style="background-color:gainsboro;"/>
-                    <p:outputLabel value="操作员密码*：" for="operPasswdForOperUpd"/>
-                    <p:inputText id="operPasswdForOperUpd" type="password"
-                                 value="#{operPwdAction.operUpd.passwd}"/>
-                    <p:outputLabel value="密码确认*：" for="operRePasswdForOperUpd"/>
-                    <p:inputText id="operRePasswdForOperUpd" type="password"
-                                 value="#{operPwdAction.strConfirmPasswd}"/>
-                </h:panelGrid>
-                <h:panelGrid id="pgOperBtnForOperUpd" columns="2">
-                    <p:commandButton id="submitBtnForOperUpd"
-                                     value="提交（更新）"
-                                     action="#{operPwdAction.onClickForMngAction()}"
-                                     update="msgs"
-                                     oncomplete="wVDlgViewForOperUpd.hide()">
-                    </p:commandButton>
-                    <p:commandButton id="resetBtnForOperUpd" value="重置"
-                                     type="reset">
-                    </p:commandButton>
-                </h:panelGrid>
-            </p:panel>
-        </div>
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel value="用户密码修改">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="操作员编号：" for="operIdForOperUpd"/>
+                        <p:inputText id="operIdForOperUpd" value="#{operPwdAction.operUpd.id}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="操作员姓名：" for="operNameForOperUpd"/>
+                        <p:inputText id="operNameForOperUpd" value="#{operPwdAction.operUpd.name}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="操作员密码*：" for="operPasswdForOperUpd"/>
+                        <p:inputText id="operPasswdForOperUpd" type="password"
+                                     value="#{operPwdAction.operUpd.passwd}"/>
+                        <p:outputLabel value="密码确认*：" for="operRePasswdForOperUpd"/>
+                        <p:inputText id="operRePasswdForOperUpd" type="password"
+                                     value="#{operPwdAction.strConfirmPasswd}"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="pgOperBtnForOperUpd" columns="2">
+                        <p:commandButton id="submitBtnForOperUpd"
+                                         value="提交（更新）"
+                                         action="#{operPwdAction.onClickForMngAction()}"
+                                         update="msgs"
+                                         oncomplete="wVDlgViewForOperUpd.hide()">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtnForOperUpd" value="重置"
+                                         type="reset">
+                        </p:commandButton>
+                    </h:panelGrid>
+                </p:panel>
+            </div>
         </h:form>
     </ui:define>
 </ui:composition>
