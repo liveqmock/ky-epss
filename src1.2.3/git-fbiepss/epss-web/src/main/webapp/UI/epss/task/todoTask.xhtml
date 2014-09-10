@@ -196,8 +196,11 @@
                     <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
                         <h:outputText value="#{record.name}"/>
                     </p:column>
-                    <p:column headerText="状态" style="width:100px;text-align:center;">
+                    <p:column headerText="授权状态" style="width:100px;text-align:center;">
                         <h:outputText value="#{record.flowStatusName}"/>
+                    </p:column>
+                    <p:column headerText="执行状态" style="width:100px;text-align:center;">
+                        <h:outputText value="#{record.taskDoneFlagName}"/>
                     </p:column>
                 </p:dataTable>
             </p:panel>

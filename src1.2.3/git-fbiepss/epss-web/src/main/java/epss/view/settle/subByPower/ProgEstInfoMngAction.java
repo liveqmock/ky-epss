@@ -1,7 +1,7 @@
 package epss.view.settle.subByPower;
 
-import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.*;
+import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitStl;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
@@ -21,9 +21,11 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -42,10 +44,10 @@ public class ProgEstInfoMngAction {
     private ProgEstItemService progEstItemService;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
-    @ManagedProperty(value = "#{operResService}")
-    private OperResService operResService;
     @ManagedProperty(value = "#{esFlowService}")
     private EsFlowService esFlowService;
+    @ManagedProperty(value = "#{operResService}")
+    private OperResService operResService;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{esCommon}")
@@ -59,7 +61,6 @@ public class ProgEstInfoMngAction {
     private ProgInfoShow progInfoShowDel;
 
     private List<ProgInfoShow> progInfoShowList;
-
     private List<SelectItem> tkcttList;
 
     private String strSubmitType;
@@ -82,8 +83,7 @@ public class ProgEstInfoMngAction {
         List<OperResShow> operResShowListTemp =
                 operResService.getInfoListByOperFlowPkid(
                         strStlType,
-                        ESEnumStatusFlag.STATUS_FLAG0.getCode(),
-                        ToolUtil.getOperatorManager().getOperatorId());
+                        ESEnumStatusFlag.STATUS_FLAG0.getCode());
         tkcttList = new ArrayList<SelectItem>();
         if (operResShowListTemp.size() > 0) {
             SelectItem selectItem = new SelectItem("", "全部");
@@ -210,6 +210,9 @@ public class ProgEstInfoMngAction {
         else if (StringUtils.isEmpty(progInfoShow.getStlPkid())) {
             MessageUtil.addError("请输入总包合同！");
             return false;
+        }else if (StringUtils.isEmpty(progInfoShow.getPeriodNo())){
+            MessageUtil.addError("请输入期数编码！");
+            return false;
         }
         return true ;
     }
@@ -240,7 +243,6 @@ public class ProgEstInfoMngAction {
                 addRecordAction(progInfoShowAdd);
                 resetActionForAdd();
             }
-
         }
         else if(strSubmitType.equals("Upd")){
             progInfoShowUpd.setStlType(strStlType);
@@ -260,8 +262,8 @@ public class ProgEstInfoMngAction {
         this.progInfoShowList.clear();
         List<ProgInfoShow> progInfoShowConstructsTemp =
                 esFlowService.selectTkcttStlSMByStatusFlagBegin_End(progInfoShowTemp);
-        for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-            for (SelectItem itemUnit : tkcttList) {
+        for (SelectItem itemUnit : tkcttList) {
+            for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
                 if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())) {
                     progInfoShowList.add(esISSOMPCUnit);
                 }

@@ -83,8 +83,7 @@ public class ProgSubstlInfoApproveAction {
         List<OperResShow> operResShowListTemp =
                 operResService.getInfoListByOperFlowPkid(
                         strStlType,
-                        ESEnumStatusFlag.STATUS_FLAG3.getCode(),
-                        ToolUtil.getOperatorManager().getOperatorId());
+                        ESEnumStatusFlag.STATUS_FLAG3.getCode());
         subcttList = new ArrayList<SelectItem>();
         if (operResShowListTemp.size() > 0) {
             SelectItem selectItem = new SelectItem("", "È«²¿");

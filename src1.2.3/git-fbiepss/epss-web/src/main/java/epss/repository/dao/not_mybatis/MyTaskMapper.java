@@ -39,62 +39,32 @@ public interface MyTaskMapper {
     List<TaskShow> getOwnTaskFlowGroup(@Param("strOperPkid") String strOperPkid);
 
     @Select(
-            /*"    (" +
-            "         select" +
-            "             opr.INFO_TYPE as type," +
-            "             opr.INFO_PKID as pkid," +
-            "             eci.ID as id," +
-            "             eci.NAME as name," +
-            "             opr.FLOW_STATUS as operResFlowStatus," +
-            "             '' as periodNo," +
-            "             eci.FLOW_STATUS as flowStatus," +
-            "             eci.FLOW_STATUS_REASON as flowStatusReason" +
-            "         from  " +
-            "             OPER_RES opr  " +
-            "         inner join  " +
-            "             ES_CTT_INFO eci" +
-            "         on  " +
-            "             eci.CTT_TYPE=opr.INFO_TYPE" +
-            "         and  " +
-            "             eci.PKID=opr.INFO_PKID" +
-            "         and" +
-            "             eci.FLOW_STATUS is null" +
-            "         where  " +
-            "             opr.OPER_PKID=#{strOperPkid} " +
-            "         and" +
-            "             opr.FLOW_STATUS='0'" +
-            "         and" +
-            "             opr.TYPE='business'" +
-            "    ) " +
-            " union " +*/
-            "    (" +
-            "         select" +
-            "              distinct  " +
-            "              opr.INFO_TYPE as type," +
-            "              opr.INFO_PKID as pkid," +
-            "              stl.ID as ID," +
-            "              opr.flow_status as operResFlowStatus," +
-            "              (select name from ES_CTT_INFO where pkid=stl.stl_pkid) as NAME," +
-            "              stl.PERIOD_NO as periodNo," +
-            "              stl.FLOW_STATUS as flowStatus," +
-            "              stl.FLOW_STATUS_REASON as flowStatusReason" +
-            "         from  " +
-            "              OPER_RES opr  " +
-            "         inner join  " +
-            "              ES_INIT_STL stl" +
-            "         on  " +
-            "              opr.INFO_TYPE=stl.stl_type " +
-            "         and  " +
-            "              opr.INFO_PKID=stl.stl_pkid  " +
-            "         where" +
-            "              stl.PERIOD_NO='NULL'" +
-            "         and" +
-            "              opr.OPER_PKID=#{strOperPkid}" +
-            "         and " +
-            "              opr.TYPE='business'" +
-            "    )" +
-            "order by  " +
-            "    flowStatus,TYPE,flowStatusReason")
+            " (" +
+            "      SELECT" +
+            "           DISTINCT" +
+            "           opr.INFO_TYPE as type," +
+            "           opr.INFO_PKID as pkid," +
+            "           eci.ID," +
+            "           eci.NAME," +
+            "           opr.FLOW_STATUS as flowStatus," +
+            "           opr.TASKDONE_FLAG as taskDoneFlag" +
+            "      FROM" +
+            "           OPER_RES opr" +
+            "      INNER JOIN" +
+            "           ES_CTT_INFO eci" +
+            "      ON" +
+            "           opr.INFO_PKID=eci.PKID" +
+            "      where" +
+            "           opr.OPER_PKID=#{strOperPkid}" +
+            "      and" +
+            "           opr.INFO_TYPE>='3'" +
+            "      and" +
+            "           opr.FLOW_STATUS='0'" +
+            "      and " +
+            "           opr.TYPE='business'" +
+            " )" +
+            " order by  " +
+            "    flowStatus,type")
     List<TaskShow> getRencentlyPowerDetailTaskShowList(@Param("strOperPkid") String strOperPkid);
 
     @Select(

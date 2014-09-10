@@ -40,7 +40,7 @@ public interface MyOperResMapper {
             "   eci.NAME as infoPkidName" +
             " from " +
             "   OPER_RES opr" +
-            " left join" +
+            " inner join" +
             "   ES_CTT_INFO eci" +
             " on" +
             "   opr.INFO_PKID=eci.PKID" +

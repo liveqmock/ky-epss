@@ -27,8 +27,6 @@ import java.util.List;
 public class EsFlowService {
     @Autowired
     private MyFlowMapper myFlowMapper;
-    @Resource
-    private OperResService operResService;
 
     public List<CttInfoShow> selectCttByStatusFlagBegin_End(CttInfoShow cttInfoShowPara){
         return myFlowMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);

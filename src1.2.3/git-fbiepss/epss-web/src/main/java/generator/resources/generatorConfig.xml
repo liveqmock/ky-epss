@@ -32,11 +32,11 @@
         </javaClientGenerator>
 
         <!--业务类例子 -->
-        <table schema="epss" tableName="flow_ctrl_his">
+        <table schema="epss" tableName="oper_res">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <table schema="epss" tableName="oper_res">
+        <!--<table schema="epss" tableName="flow_ctrl_his">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
@@ -51,12 +51,12 @@
         <table schema="epss" tableName="es_ctt_item">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
+        </table>-->
         <table schema="epss" tableName="es_init_stl">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <table schema="epss" tableName="es_item_stl_subctt_eng_m">
+       <!-- <table schema="epss" tableName="es_item_stl_subctt_eng_m">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
@@ -75,7 +75,7 @@
         <table schema="epss" tableName="es_item_stl_tkctt_eng_mea">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
+        </table>-->
 
         <!--平台类 有几个表并不是Mybatis自动生成的，更新慎用-->
         <!--

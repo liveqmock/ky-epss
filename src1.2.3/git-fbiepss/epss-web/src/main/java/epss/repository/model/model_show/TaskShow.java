@@ -14,6 +14,8 @@ public class TaskShow {
     private String operResFlowStatus;
     private String operResFlowStatusName;
     private String isOwnTaskFlowFlag;
+    private String taskDoneFlag;
+    private String taskDoneFlagName;
 
     public String getType() {
         return type;
@@ -119,4 +121,19 @@ public class TaskShow {
         this.isOwnTaskFlowFlag = isOwnTaskFlowFlag;
     }
 
+    public String getTaskDoneFlag() {
+        return taskDoneFlag;
+    }
+
+    public void setTaskDoneFlag(String taskDoneFlag) {
+        this.taskDoneFlag = taskDoneFlag;
+    }
+
+    public String getTaskDoneFlagName() {
+        return taskDoneFlagName;
+    }
+
+    public void setTaskDoneFlagName(String taskDoneFlagName) {
+        this.taskDoneFlagName = taskDoneFlagName;
+    }
 }

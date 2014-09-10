@@ -62,10 +62,8 @@ public class ProgWorkqtyInfoMngAction {
     private ProgInfoShow progInfoShowDel;
 
     private List<ProgInfoShow> progInfoShowList;
-    //在某一成本计划下的分包合同
+
     private List<SelectItem> subcttList;
-    //自己拥有权限的分包合同
-    //private List<SelectItem> subcttByPowerList;
 
     private String strStlType;
     /*控制维护画面层级部分的显示*/
@@ -74,31 +72,24 @@ public class ProgWorkqtyInfoMngAction {
 
     @PostConstruct
     public void init() {
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (parammap.containsKey("strProgWorkqtyInfoPkid")) {
-            strProgWorkqtyInfoPkid = parammap.get("strProgWorkqtyInfoPkid").toString();
-        } else {// 总包合同页面上
-            strProgWorkqtyInfoPkid = null;
-        }
-        initData();
-    }
-    private void initData() {
+        styleModel = new StyleModel();
+        styleModel.setDisabled_Flag("false");
+        progInfoShowList = new ArrayList<ProgInfoShow>();
         progInfoShowQry = new ProgInfoShow();
         progInfoShowSel = new ProgInfoShow();
         progInfoShowAdd = new ProgInfoShow();
         progInfoShowUpd = new ProgInfoShow();
         progInfoShowDel = new ProgInfoShow();
-        styleModel = new StyleModel();
-        styleModel.setDisabled_Flag("false");
-        progInfoShowList = new ArrayList<ProgInfoShow>();
+        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        if (parammap.containsKey("strProgWorkqtyInfoPkid")) {
+            strProgWorkqtyInfoPkid = parammap.get("strProgWorkqtyInfoPkid").toString();
+        }
         strStlType = ESEnum.ITEMTYPE3.getCode();
-        //自己拥有权限的分包合同
         List<OperResShow> operResShowListTemp =
                 operResService.getInfoListByOperFlowPkid(
                         strStlType,
-                        ESEnumStatusFlag.STATUS_FLAG0.getCode(),
-                        ToolUtil.getOperatorManager().getOperatorId());
-        subcttList = new ArrayList<SelectItem>();
+                        ESEnumStatusFlag.STATUS_FLAG0.getCode());
+        subcttList = new ArrayList<>();
         if (operResShowListTemp.size() > 0) {
             SelectItem selectItem = new SelectItem("", "全部");
             subcttList.add(selectItem);
@@ -107,16 +98,6 @@ public class ProgWorkqtyInfoMngAction {
                 selectItem.setValue(operResShowUnit.getInfoPkid());
                 selectItem.setLabel(operResShowUnit.getInfoPkidName());
                 subcttList.add(selectItem);
-            }
-        }
-        ProgInfoShow progInfoShowTemp = new ProgInfoShow();
-        progInfoShowTemp.setStlType(strStlType);
-        progInfoShowTemp.setStlPkid(strProgWorkqtyInfoPkid);
-        List<ProgInfoShow> progInfoShowConstructsTemp =
-                esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowTemp);
-        for (ProgInfoShow progInfoShowUnit:progInfoShowConstructsTemp){
-            if (!("NULL".equals(progInfoShowUnit.getPeriodNo()))) {
-                progInfoShowList.add(progInfoShowUnit);
             }
         }
     }
@@ -165,18 +146,9 @@ public class ProgWorkqtyInfoMngAction {
             this.progInfoShowList.clear();
             List<ProgInfoShow> progInfoShowConstructsTemp =
                     esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQry);
-            if ("".equals(ToolUtil.getStrIgnoreNull(progInfoShowQry.getStlPkid()))){
+            for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
                 for (SelectItem itemUnit : subcttList) {
-                    for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                        if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())
-                                &&!("NULL".equals(esISSOMPCUnit.getPeriodNo()))) {
-                            progInfoShowList.add(esISSOMPCUnit);
-                        }
-                    }
-                }
-            }else {
-                for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                    if (!("NULL".equals(esISSOMPCUnit.getPeriodNo()))){
+                    if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())) {
                         progInfoShowList.add(esISSOMPCUnit);
                     }
                 }
@@ -242,7 +214,9 @@ public class ProgWorkqtyInfoMngAction {
             if (!submitPreCheck(progInfoShowAdd)) {
                 return;
             }
-            if (progStlInfoService.getInitStlListByModelShow(progInfoShowAdd).size() > 0) {
+            List<EsInitStl> esInitStlListTemp =
+                    progStlInfoService.getInitStlListByModelShow(progInfoShowAdd);
+            if(esInitStlListTemp.size()>0) {
                 MessageUtil.addError("该记录已存在，请重新录入！");
                 return;
             }
@@ -300,17 +274,16 @@ public class ProgWorkqtyInfoMngAction {
                 esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowTemp);                               //无分包合同条件查询
         for (SelectItem itemUnit : subcttList) {
             for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())
-                        &&!("NULL".equals(esISSOMPCUnit.getPeriodNo()))) {
+                if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())) {
                     progInfoShowList.add(esISSOMPCUnit);
                 }
             }
         }
     }
-
     private void addRecordAction(ProgInfoShow progInfoShowPara) {
         try {
             MessageUtil.addInfo(progStlInfoService.insertStlQAndItemRecordAction(progInfoShowPara));
+            MessageUtil.addInfo("新增数据完成。");
         } catch (Exception e) {
             logger.error("新增数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -337,10 +310,11 @@ public class ProgWorkqtyInfoMngAction {
         try {
             progStlInfoService.deleteStlMAndItemRecord(progInfoShowPara);
         } catch (Exception e) {
-            logger.error("删除对应材料结算数据失败，", e);
+            logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
         }
     }
+
     /*智能字段Start*/
     public ProgWorkqtyItemService getProgWorkqtyItemService() {
         return progWorkqtyItemService;
@@ -381,14 +355,6 @@ public class ProgWorkqtyInfoMngAction {
     public void setProgStlInfoService(ProgStlInfoService progStlInfoService) {
         this.progStlInfoService = progStlInfoService;
     }
-
-   /* public List<SelectItem> getSubcttByPowerList() {
-        return subcttByPowerList;
-    }
-
-    public void setSubcttByPowerList(List<SelectItem> subcttByPowerList) {
-        this.subcttByPowerList = subcttByPowerList;
-    }*/
 
     public EsFlowControl getEsFlowControl() {
         return esFlowControl;

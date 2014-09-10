@@ -3,6 +3,7 @@ package epss.view.operRes;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumDeletedFlag;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.ESEnumTaskDoneFlag;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitStl;
 import skyline.util.JxlsManager;
@@ -658,6 +659,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                     operResTemp.setInfoPkid(cttInfoShowSel.getPkid());
                     operResTemp.setArchivedFlag(ESEnumDeletedFlag.DELETED_FLAG0.getCode());
                     operResTemp.setType("business");
+                    operResTemp.setTaskdoneFlag(ESEnumTaskDoneFlag.TASK_DONE_FLAG0.getCode());
                     operResService.insertRecord(operResTemp);
                 }
                 MessageUtil.addInfo("权限添加成功!");

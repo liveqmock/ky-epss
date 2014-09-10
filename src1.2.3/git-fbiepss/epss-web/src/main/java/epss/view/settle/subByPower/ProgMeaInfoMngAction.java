@@ -1,7 +1,7 @@
 package epss.view.settle.subByPower;
 
-import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.*;
+import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitStl;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
@@ -21,9 +21,11 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -80,8 +82,7 @@ public class ProgMeaInfoMngAction {
         List<OperResShow> operResShowListTemp =
                 operResService.getInfoListByOperFlowPkid(
                         strStlType,
-                        ESEnumStatusFlag.STATUS_FLAG0.getCode(),
-                        ToolUtil.getOperatorManager().getOperatorId());
+                        ESEnumStatusFlag.STATUS_FLAG0.getCode());
         tkcttList = new ArrayList<SelectItem>();
         if (operResShowListTemp.size() > 0) {
             SelectItem selectItem = new SelectItem("", "全部");
@@ -96,11 +97,11 @@ public class ProgMeaInfoMngAction {
     }
 
     public void resetAction(){
-        progInfoShowQry =new ProgInfoShow();
-        progInfoShowSel =new ProgInfoShow();
-        progInfoShowAdd =new ProgInfoShow();
-        progInfoShowUpd =new ProgInfoShow();
-        progInfoShowDel =new ProgInfoShow();
+        progInfoShowQry = new ProgInfoShow();
+        progInfoShowSel = new ProgInfoShow();
+        progInfoShowAdd = new ProgInfoShow();
+        progInfoShowUpd = new ProgInfoShow();
+        progInfoShowDel = new ProgInfoShow();
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
         strSubmitType="Add";
@@ -209,6 +210,9 @@ public class ProgMeaInfoMngAction {
         else if (StringUtils.isEmpty(progInfoShow.getStlPkid())) {
             MessageUtil.addError("请输入总包合同！");
             return false;
+        }else if (StringUtils.isEmpty(progInfoShow.getPeriodNo())){
+            MessageUtil.addError("请输入期数编码！");
+            return false;
         }
         return true ;
     }
@@ -258,8 +262,8 @@ public class ProgMeaInfoMngAction {
         this.progInfoShowList.clear();
         List<ProgInfoShow> progInfoShowConstructsTemp =
                 esFlowService.selectTkcttStlSMByStatusFlagBegin_End(progInfoShowTemp);
-        for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-            for (SelectItem itemUnit : tkcttList) {
+        for (SelectItem itemUnit : tkcttList) {
+            for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
                 if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())) {
                     progInfoShowList.add(esISSOMPCUnit);
                 }
@@ -482,5 +486,5 @@ public class ProgMeaInfoMngAction {
     public void setOperResService(OperResService operResService) {
         this.operResService = operResService;
     }
-/*智能字段End*/
+    /*智能字段End*/
 }

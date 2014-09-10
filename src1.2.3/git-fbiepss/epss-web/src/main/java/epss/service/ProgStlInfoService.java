@@ -127,7 +127,6 @@ public class ProgStlInfoService {
         esInitStlTemp.setLastUpdDate(progInfoShowPara.getLastUpdDate());
         esInitStlTemp.setModificationNum(progInfoShowPara.getModificationNum());
         esInitStlTemp.setAutoLinkAdd(progInfoShowPara.getAutoLinkAdd());
-        esInitStlTemp.setTaskdoneFlag(progInfoShowPara.getTaskdoneFlag());
         esInitStlTemp.setFlowStatus(progInfoShowPara.getFlowStatus());
         esInitStlTemp.setFlowStatusReason(progInfoShowPara.getFlowStatusReason());
         return esInitStlTemp;
@@ -140,7 +139,6 @@ public class ProgStlInfoService {
     public void insertRecord(ProgInfoShow progInfoShowPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
-        progInfoShowPara.setTaskdoneFlag(ESEnumTaskDoneFlag.TASK_DONE_FLAG1.getCode());
         progInfoShowPara.setCreatedBy(strOperatorIdTemp);
         progInfoShowPara.setCreatedDate(strLastUpdTimeTemp);
         progInfoShowPara.setDeletedFlag("0");

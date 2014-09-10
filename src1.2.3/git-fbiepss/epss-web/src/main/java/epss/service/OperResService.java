@@ -40,8 +40,9 @@ public class OperResService {
     public List<OperResShow> getInfoListByOperPkid(String strInfoTypePara,String strOperPkidPara){
         return myOperResMapper.getInfoListByOperPkid(strInfoTypePara,strOperPkidPara);
     }
-    public List<OperResShow> getInfoListByOperFlowPkid(String strInfoTypePara,String strFlowStatusPara,String strOperPkidPara){
-        return myOperResMapper.getInfoListByOperFlowPkid(strInfoTypePara,strFlowStatusPara,strOperPkidPara);
+    public List<OperResShow> getInfoListByOperFlowPkid(String strInfoTypePara,String strFlowStatusPara){
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        return myOperResMapper.getInfoListByOperFlowPkid(strInfoTypePara,strFlowStatusPara,strOperatorIdTemp);
     }
 	public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara){
         return  myOperResMapper.selectRecordsFromCtt(parentPkidPara);

@@ -367,9 +367,7 @@ public interface MyFlowMapper {
             " from es_init_stl s"+
             " where"+
             " s.stl_type=#{stlType}"+
-            " and s.stl_pkid=#{subCttPkid}"+
-            " and s.period_no!='NULL' "+
-            " and s.taskdone_flag='1'")
+            " and s.stl_pkid=#{subCttPkid}")
     String getMaxPeriodNo(@Param("stlType") String stlType,
                           @Param("subCttPkid") String subCttPkid);
 
@@ -380,8 +378,7 @@ public interface MyFlowMapper {
             " where" +
             " s.stl_type=#{stlType}" +
             " and s.stl_pkid=#{subCttPkid}" +
-            " and s.period_no=#{periodNo}"+
-            " and s.taskdone_flag='1'")
+            " and s.period_no=#{periodNo}")
     String getFlowStatus(@Param("stlType") String stlType,
                          @Param("subCttPkid") String subCttPkid,
                          @Param("periodNo") String periodNo);

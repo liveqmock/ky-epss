@@ -147,7 +147,6 @@
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
         <result column="MODIFICATION_NUM" jdbcType="DECIMAL" property="modificationNum" />
         <result column="AUTO_LINK_ADD" jdbcType="CHAR" property="autoLinkAdd" />
-        <result column="TASKDONE_FLAG" jdbcType="CHAR" property="taskdoneFlag" />
     </resultMap>
     <select id="selectSubcttStlQMByStatusFlagBegin_End"
             parameterType="epss.repository.model.model_show.ProgInfoShow"
@@ -172,8 +171,7 @@
                 eis.MODIFICATION_NUM,
                 eis.AUTO_LINK_ADD AS autoLinkAdd,
                 eis.FLOW_STATUS,
-                eis.FLOW_STATUS_REASON,
-                eis.TASKDONE_FLAG
+                eis.FLOW_STATUS_REASON
             from
                 ES_INIT_STL eis
             left outer join

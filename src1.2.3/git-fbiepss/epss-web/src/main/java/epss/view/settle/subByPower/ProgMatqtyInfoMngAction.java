@@ -71,32 +71,24 @@ public class ProgMatqtyInfoMngAction {
 
     @PostConstruct
     public void init() {
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (parammap.containsKey("strProgMatqtyInfoPkid")) {
-            strProgMatqtyInfoPkid = parammap.get("strProgMatqtyInfoPkid").toString();
-        } else {// 总包合同页面上
-            strProgMatqtyInfoPkid = null;
-        }
-        initData();
-    }
-
-    public void initData(){
+        styleModel = new StyleModel();
+        styleModel.setDisabled_Flag("false");
+        progInfoShowList = new ArrayList<ProgInfoShow>();
         progInfoShowQry = new ProgInfoShow();
         progInfoShowSel = new ProgInfoShow();
         progInfoShowAdd = new ProgInfoShow();
         progInfoShowUpd = new ProgInfoShow();
         progInfoShowDel = new ProgInfoShow();
-        styleModel=new StyleModel();
-        styleModel.setDisabled_Flag("false");
-        this.progInfoShowList = new ArrayList<ProgInfoShow>();
-        strStlType =ESEnum.ITEMTYPE4.getCode();
-        //自己拥有权限的分包合同
+        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        if (parammap.containsKey("strProgMatqtyInfoPkid")) {
+            strProgMatqtyInfoPkid = parammap.get("strProgMatqtyInfoPkid").toString();
+        }
+        strStlType = ESEnum.ITEMTYPE4.getCode();
         List<OperResShow> operResShowListTemp =
                 operResService.getInfoListByOperFlowPkid(
                         strStlType,
-                        ESEnumStatusFlag.STATUS_FLAG0.getCode(),
-                        ToolUtil.getOperatorManager().getOperatorId());
-        subcttList = new ArrayList<SelectItem>();
+                        ESEnumStatusFlag.STATUS_FLAG0.getCode());
+        subcttList = new ArrayList<>();
         if (operResShowListTemp.size() > 0) {
             SelectItem selectItem = new SelectItem("", "全部");
             subcttList.add(selectItem);
@@ -107,17 +99,8 @@ public class ProgMatqtyInfoMngAction {
                 subcttList.add(selectItem);
             }
         }
-        ProgInfoShow progInfoShowTemp = new ProgInfoShow();
-        progInfoShowTemp.setStlType(strStlType);
-        progInfoShowTemp.setStlPkid(strProgMatqtyInfoPkid);
-        List<ProgInfoShow> progInfoShowConstructsTemp =
-                esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowTemp);
-        for (ProgInfoShow progInfoShowUnit:progInfoShowConstructsTemp){
-            if (!("NULL".equals(progInfoShowUnit.getPeriodNo()))) {
-                progInfoShowList.add(progInfoShowUnit);
-            }
-        }
     }
+
     public void resetActionForAdd(){
         progInfoShowAdd =new ProgInfoShow();
         progInfoShowAdd.setStlPkid(strProgMatqtyInfoPkid);
@@ -129,8 +112,7 @@ public class ProgMatqtyInfoMngAction {
             String strMaxId= progStlInfoService.getStrMaxStlId(strStlType);
             if(StringUtils .isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))){
                 strMaxId="STLM"+ ToolUtil.getStrToday()+"001";
-            }
-            else{
+            } else {
                 if(strMaxId .length()>3){
                     String strTemp=strMaxId.substring(strMaxId .length() -3).replaceFirst("^0+","");
                     if(ToolUtil.strIsDigit(strTemp)){
@@ -163,18 +145,9 @@ public class ProgMatqtyInfoMngAction {
             this.progInfoShowList.clear();
             List<ProgInfoShow> progInfoShowConstructsTemp =
                     esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowQry);
-            if ("".equals(ToolUtil.getStrIgnoreNull(progInfoShowQry.getStlPkid()))){
+            for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
                 for (SelectItem itemUnit : subcttList) {
-                    for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                        if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())
-                                &&!("NULL".equals(esISSOMPCUnit.getPeriodNo()))) {
-                            progInfoShowList.add(esISSOMPCUnit);
-                        }
-                    }
-                }
-            }else {
-                for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
-                    if (!("NULL".equals(esISSOMPCUnit.getPeriodNo()))){
+                    if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())) {
                         progInfoShowList.add(esISSOMPCUnit);
                     }
                 }
@@ -185,8 +158,8 @@ public class ProgMatqtyInfoMngAction {
                 }
             }
         } catch (Exception e) {
-            logger.error("总包合同信息查询失败", e);
-            MessageUtil.addError("总包合同信息查询失败");
+            logger.error("信息查询失败", e);
+            MessageUtil.addError("信息查询失败");
         }
     }
 
@@ -221,15 +194,14 @@ public class ProgMatqtyInfoMngAction {
         if (StringUtils.isEmpty(progInfoShow.getId())){
             MessageUtil.addError("请输入结算编号！");
             return false;
-        }
-        else if (StringUtils.isEmpty(progInfoShow.getStlPkid())) {
+        } else if (StringUtils.isEmpty(progInfoShow.getStlPkid())) {
             MessageUtil.addError("请输入分包合同！");
             return false;
         }else if (StringUtils.isEmpty(progInfoShow.getPeriodNo())){
             MessageUtil.addError("请输入期数编码！");
             return false;
         }
-        return true ;
+        return true;
     }
 
     /**
@@ -393,14 +365,6 @@ public class ProgMatqtyInfoMngAction {
         this.esFlowControl = esFlowControl;
     }
 
-    public ProgInfoShow getProgInfoShowQry() {
-        return progInfoShowQry;
-    }
-
-    public void setProgInfoShowQry(ProgInfoShow progInfoShowQry) {
-        this.progInfoShowQry = progInfoShowQry;
-    }
-
     public EsCommon getEsCommon() {
         return esCommon;
     }
@@ -423,6 +387,14 @@ public class ProgMatqtyInfoMngAction {
 
     public void setSubcttList(List<SelectItem> subcttList) {
         this.subcttList = subcttList;
+    }
+
+    public ProgInfoShow getProgInfoShowQry() {
+        return progInfoShowQry;
+    }
+
+    public void setProgInfoShowQry(ProgInfoShow progInfoShowQry) {
+        this.progInfoShowQry = progInfoShowQry;
     }
 
     public ProgInfoShow getProgInfoShowSel() {
@@ -456,7 +428,6 @@ public class ProgMatqtyInfoMngAction {
     public void setProgInfoShowDel(ProgInfoShow progInfoShowDel) {
         this.progInfoShowDel = progInfoShowDel;
     }
-    /*智能字段End*/
 
     public ProgWorkqtyItemService getProgWorkqtyItemService() {
         return progWorkqtyItemService;
@@ -473,4 +444,5 @@ public class ProgMatqtyInfoMngAction {
     public void setOperResService(OperResService operResService) {
         this.operResService = operResService;
     }
+    /*智能字段End*/
 }
