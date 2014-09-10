@@ -19,7 +19,8 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form">
-            <p:growl id="msgs" showDetail="true"/>
+        <div style="margin:5px;">
+        <p:growl id="msgs" showDetail="true"/>
             <p:focus for="menuid"/>
             <p:panel>
                 <h:panelGrid id="pdQry" columns="2" style="width: 100%">
@@ -318,6 +319,7 @@
                     </h:panelGrid>
                 </h:panelGrid>
             </p:dialog>
-        </h:form>
+       </div>
+    </h:form>
     </ui:define>
 </ui:composition>

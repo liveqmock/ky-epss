@@ -109,6 +109,7 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form" enctype="multipart/form-data">
+	    <div style="margin:5px;">
             <p:growl id="msgs" showDetail="true"/>
             <div style="display: none">
                 <p:commandButton id="qryBtn" value="查询"
@@ -158,6 +159,7 @@
                     </p:column>
                 </p:dataTable>
             </p:panel>
-        </h:form>
+       </div>
+    </h:form>
     </ui:define>
 </ui:composition>

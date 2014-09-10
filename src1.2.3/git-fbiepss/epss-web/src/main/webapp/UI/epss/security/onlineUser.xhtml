@@ -20,6 +20,7 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form">
+            <div style="margin:5px;">
             <p:growl id="msgs" showDetail="true"/>
             <p:panel header="在线用户列表">
                 <h:outputText id="onlineUserNum" value="在线人数：#{onlineUserAction.onlineUserNum}" style="text-align: left"/>
@@ -54,6 +55,7 @@
                     </p:column>
                 </p:dataTable>
             </p:panel>
-        </h:form>
+       </div>
+    </h:form>
     </ui:define>
 </ui:composition>

@@ -26,6 +26,7 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form">
+            <div style="margin:5px;">
             <p:panel>
                 <p:growl id="msgs" showDetail="true"/>
                 <h:inputHidden id="hiPkid" value="#{progSubstlItemAction.commStlSubcttEngH.strSubcttPkid}"/>
@@ -148,6 +149,7 @@
                     </p:column>
                 </p:dataTable>
             </p:panel>
-        </h:form>
+       </div>
+    </h:form>
     </ui:define>
 </ui:composition>
