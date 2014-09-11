@@ -73,7 +73,7 @@ public class ProgStlInfoService {
         flowCtrlHisMapper.insert(fromInitStlToEsInitPowerHis(esInitStlPara, "update"));
     }
 
-    private FlowCtrlHis fromCttInfoToEsInitPowerHis(EsCttInfo cttInfoPara,String strOperType){
+    public FlowCtrlHis fromCttInfoToEsInitPowerHis(EsCttInfo cttInfoPara,String strOperType){
         FlowCtrlHis flowCtrlHisTemp =new FlowCtrlHis();
         flowCtrlHisTemp.setInfoType(cttInfoPara.getCttType());
         flowCtrlHisTemp.setInfoPkid(cttInfoPara.getPkid());
@@ -84,7 +84,7 @@ public class ProgStlInfoService {
         flowCtrlHisTemp.setOperType(strOperType);
         return flowCtrlHisTemp;
     }
-    private FlowCtrlHis fromCttInfoShowToEsInitPowerHis(CttInfoShow cttInfoShowPara,String strOperType){
+    public FlowCtrlHis fromCttInfoShowToEsInitPowerHis(CttInfoShow cttInfoShowPara,String strOperType){
         FlowCtrlHis flowCtrlHisTemp =new FlowCtrlHis();
         flowCtrlHisTemp.setInfoType(cttInfoShowPara.getCttType());
         flowCtrlHisTemp.setInfoPkid(cttInfoShowPara.getPkid());
@@ -96,8 +96,7 @@ public class ProgStlInfoService {
         flowCtrlHisTemp.setOperType(strOperType);
         return flowCtrlHisTemp;
     }
-
-    private FlowCtrlHis fromInitStlToEsInitPowerHis(EsInitStl esInitStlPara,String strOperType){
+    public FlowCtrlHis fromInitStlToEsInitPowerHis(EsInitStl esInitStlPara,String strOperType){
         FlowCtrlHis flowCtrlHis =new FlowCtrlHis();
         flowCtrlHis.setInfoType(esInitStlPara.getStlType());
         flowCtrlHis.setInfoPkid(esInitStlPara.getStlPkid());
@@ -109,8 +108,7 @@ public class ProgStlInfoService {
         flowCtrlHis.setOperType(strOperType);
         return flowCtrlHis;
     }
-
-    private EsInitStl fromModelShowToModel(ProgInfoShow progInfoShowPara){
+    public EsInitStl fromModelShowToModel(ProgInfoShow progInfoShowPara){
         EsInitStl esInitStlTemp =new EsInitStl();
         esInitStlTemp.setPkid(progInfoShowPara.getPkid());
         esInitStlTemp.setStlType(progInfoShowPara.getStlType());
@@ -130,6 +128,27 @@ public class ProgStlInfoService {
         esInitStlTemp.setFlowStatus(progInfoShowPara.getFlowStatus());
         esInitStlTemp.setFlowStatusReason(progInfoShowPara.getFlowStatusReason());
         return esInitStlTemp;
+    }
+    public ProgInfoShow fromModelToModelShow(EsInitStl esInitStlPara){
+        ProgInfoShow progInfoShowTemp =new ProgInfoShow();
+        progInfoShowTemp.setPkid(esInitStlPara.getPkid());
+        progInfoShowTemp.setStlType(esInitStlPara.getStlType());
+        progInfoShowTemp.setStlPkid(esInitStlPara.getStlPkid());
+        progInfoShowTemp.setId(esInitStlPara.getId());
+        progInfoShowTemp.setPeriodNo(esInitStlPara.getPeriodNo());
+        progInfoShowTemp.setNote(esInitStlPara.getNote());
+        progInfoShowTemp.setAttachment(esInitStlPara.getAttachment());
+        progInfoShowTemp.setDeletedFlag(esInitStlPara.getDeletedFlag());
+        progInfoShowTemp.setEndFlag(esInitStlPara.getEndFlag());
+        progInfoShowTemp.setCreatedBy(esInitStlPara.getCreatedBy());
+        progInfoShowTemp.setCreatedDate(esInitStlPara.getCreatedDate());
+        progInfoShowTemp.setLastUpdBy(esInitStlPara.getLastUpdBy());
+        progInfoShowTemp.setLastUpdDate(esInitStlPara.getLastUpdDate());
+        progInfoShowTemp.setModificationNum(esInitStlPara.getModificationNum());
+        progInfoShowTemp.setAutoLinkAdd(esInitStlPara.getAutoLinkAdd());
+        progInfoShowTemp.setFlowStatus(esInitStlPara.getFlowStatus());
+        progInfoShowTemp.setFlowStatusReason(esInitStlPara.getFlowStatusReason());
+        return progInfoShowTemp;
     }
 
     public EsInitStl selectRecordsByPrimaryKey(String strPkId){

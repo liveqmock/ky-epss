@@ -235,6 +235,8 @@ public class CttInfoService {
         esCttInfoTemp.setSignDate(cttInfoShowPara.getSignDate());
         esCttInfoTemp.setSignPartA(cttInfoShowPara.getSignPartA());
         esCttInfoTemp.setSignPartB(cttInfoShowPara.getSignPartB());
+        esCttInfoTemp.setFlowStatus(cttInfoShowPara.getFlowStatus());
+        esCttInfoTemp.setFlowStatusReason(cttInfoShowPara.getFlowStatusReason());
         esCttInfoTemp.setNote(cttInfoShowPara.getNote());
         esCttInfoTemp.setAttachment(cttInfoShowPara.getAttachment());
         esCttInfoTemp.setDeletedFlag(cttInfoShowPara.getDeletedFlag());
@@ -260,6 +262,8 @@ public class CttInfoService {
         cttInfoShowTemp.setSignPartA(cttInfoPara.getSignPartA());
         cttInfoShowTemp.setSignPartB(cttInfoPara.getSignPartB());
         cttInfoShowTemp.setNote(cttInfoPara.getNote());
+        cttInfoShowTemp.setFlowStatus(cttInfoPara.getFlowStatus());
+        cttInfoShowTemp.setFlowStatusReason(cttInfoPara.getFlowStatusReason());
         cttInfoShowTemp.setAttachment(cttInfoPara.getAttachment());
         cttInfoShowTemp.setDeletedFlag(cttInfoPara.getDeletedFlag());
         cttInfoShowTemp.setEndFlag(cttInfoPara.getEndFlag());
@@ -272,8 +276,7 @@ public class CttInfoService {
         return cttInfoShowTemp;
     }
     //更新甲供材情况
-    public int  updateByPKid(EsCttInfo esCttInfoPara){
-      // return esCttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
+    public int updateByPKid(EsCttInfo esCttInfoPara){
         return esCttInfoMapper.updateByPrimaryKey(esCttInfoPara);
     }
 

@@ -73,10 +73,10 @@ public class ProgWorkqtyInfoAction {
     @PostConstruct
     public void init() {
         this.progInfoShowList = new ArrayList<ProgInfoShow>();
-        String strCstplInfoPkid = "";
+        String strCttInfoPkid = "";
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (parammap.containsKey("strCstplInfoPkid")) {
-            strCstplInfoPkid = parammap.get("strCstplInfoPkid").toString();
+        if (parammap.containsKey("strCttInfoPkid")) {
+            strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
         }
         strStlType = ESEnum.ITEMTYPE3.getCode();
 
@@ -85,7 +85,7 @@ public class ProgWorkqtyInfoAction {
         List<CttInfoShow> cttInfoShowList =
                 cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
                         ESEnum.ITEMTYPE2.getCode()
-                        , strCstplInfoPkid
+                        , strCttInfoPkid
                         , ESEnumStatusFlag.STATUS_FLAG3.getCode());
         subcttList = new ArrayList<SelectItem>();
         if (cttInfoShowList.size() > 0) {

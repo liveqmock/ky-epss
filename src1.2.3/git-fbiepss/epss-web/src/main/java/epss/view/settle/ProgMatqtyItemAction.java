@@ -81,9 +81,9 @@ public class ProgMatqtyItemAction {
         if(parammap.containsKey("strFlowType")){
             strFlowType=parammap.get("strFlowType").toString();
         }
-        if(parammap.containsKey("strProgMatqtyInfoPkid")){
-            String strProgMatqtyInfoPkidTemp=parammap.get("strProgMatqtyInfoPkid").toString();
-            esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strProgMatqtyInfoPkidTemp);
+        if(parammap.containsKey("strStlInfoPkid")){
+            String strStlInfoPkidTemp=parammap.get("strStlInfoPkid").toString();
+            esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkidTemp);
             beansMap.put("esInitStl", esInitStl);
             strSubcttPkid= esInitStl.getStlPkid();
         }

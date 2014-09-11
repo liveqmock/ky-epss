@@ -39,19 +39,19 @@ public class CstplInfoMngAction {
     private EsFlowControl esFlowControl;
 
     private CttInfoShow cttInfoShowUpd;
-    private String strCstplInfoPkid;
+    private String strCttInfoPkid;
 
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         // 从总包合同传递过来的总包合同号
-        if (parammap.containsKey("strCstplInfoPkid")) {
-            strCstplInfoPkid = parammap.get("strCstplInfoPkid").toString();
+        if (parammap.containsKey("strCttInfoPkid")) {
+            strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
         }
         initData();
     }
     public void initData() {
-        EsCttInfo esCttInfoTemp = cttInfoService.getCttInfoByPkId(strCstplInfoPkid);
+        EsCttInfo esCttInfoTemp = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
         cttInfoShowUpd=cttInfoService.fromModelToModelShow(esCttInfoTemp);
     }
 
@@ -75,8 +75,8 @@ public class CstplInfoMngAction {
             }
             cttInfoShowUpd.setId(strMaxId);
         } catch (Exception e) {
-            logger.error("总包合同信息查询失败", e);
-            MessageUtil.addError("总包合同信息查询失败");
+            logger.error("合同信息查询失败", e);
+            MessageUtil.addError("合同信息查询失败");
         }
     }
 
@@ -114,23 +114,19 @@ public class CstplInfoMngAction {
      * @param
      */
     public void onClickForMngAction() {
-        if (!submitPreCheck(cttInfoShowUpd)) {
-         return;
-        }
-        updRecordAction(cttInfoShowUpd);
-        MessageUtil.addInfo("更新数据完成。");
-        initData();
-    }
-
-    private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
-            cttInfoService.updateRecord(cttInfoShowPara);
+            if (!submitPreCheck(cttInfoShowUpd)) {
+                return;
+            }
+            cttInfoService.updateRecord(cttInfoShowUpd);
+            initData();
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
             MessageUtil.addError(e.getMessage());
         }
     }
+
     /*智能字段 Start*/
 
     public CttInfoService getCttInfoService() {

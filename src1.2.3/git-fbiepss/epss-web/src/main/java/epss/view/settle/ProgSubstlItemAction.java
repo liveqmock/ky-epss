@@ -66,7 +66,7 @@ public class ProgSubstlItemAction {
     private EsInitStl esInitStl;
 
     /*所属号*/
-    private String strEsInitStlPkid;
+    private String strStlInfoPkid;
 
     // 画面上控件的显示控制
     private String strExportToExcelRendered;
@@ -82,8 +82,8 @@ public class ProgSubstlItemAction {
         beansMap = new HashMap();
         commStlSubcttEngH = new CommStlSubcttEngH();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (parammap.containsKey("strEsInitStlPkid")) {
-            strEsInitStlPkid = parammap.get("strEsInitStlPkid").toString();
+        if (parammap.containsKey("strStlInfoPkid")) {
+            strStlInfoPkid = parammap.get("strStlInfoPkid").toString();
         }
         if (parammap.containsKey("strSubmitType")) {
             strSubmitType = parammap.get("strSubmitType").toString();
@@ -94,7 +94,7 @@ public class ProgSubstlItemAction {
     /*初始化操作*/
     private void initData() {
         progSubstlItemShowList = new ArrayList<ProgSubstlItemShow>();
-        esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strEsInitStlPkid);
+        esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
         initHeadMsg();
         EsCttInfo esCttInfo=cttInfoService.getCttInfoByPkId(esInitStl.getStlPkid());
         if ("".equals(ToolUtil.getStrIgnoreNull(esCttInfo.getType()))){

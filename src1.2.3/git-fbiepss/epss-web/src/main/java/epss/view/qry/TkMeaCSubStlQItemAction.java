@@ -103,11 +103,11 @@ public class TkMeaCSubStlQItemAction {
         }
         return null;
     }
-    private void initData(String strTkcttInfoPkid) {
+    private void initData(String strCttInfoPkid) {
         beansMap.put("strThisMonth", ToolUtil.getStrThisMonth());
         // 1。总包合同信息
         // 1。1。取出总包合同信息
-        EsCttInfo esTkcttInfo= cttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
+        EsCttInfo esTkcttInfo= cttInfoService.getCttInfoByPkId(strCttInfoPkid);
         commStlSubcttEngH.setStrTkcttId(esTkcttInfo.getId());
         commStlSubcttEngH.setStrTkcttName(esTkcttInfo.getName());
         beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
@@ -138,11 +138,11 @@ public class TkMeaCSubStlQItemAction {
         // 小于等于所选期码的最近已经批准了的计量期码
         String strMeaLatestApprovedPeriodNo=ToolUtil.getStrIgnoreNull(
                 esFlowService.getLatestApprovedPeriodNoByEndPeriod(
-                        ESEnum.ITEMTYPE7.getCode(),strTkcttInfoPkid,strPeriodNo));
+                        ESEnum.ITEMTYPE7.getCode(),strCttInfoPkid,strPeriodNo));
         List<EsItemStlTkcttEngMea> esItemStlTkcttEngMeaList=new ArrayList<EsItemStlTkcttEngMea>();
         if(!ToolUtil.getStrIgnoreNull(strMeaLatestApprovedPeriodNo).equals("")){
             EsItemStlTkcttEngMea esItemStlTkcttEngMea=new EsItemStlTkcttEngMea();
-            esItemStlTkcttEngMea.setTkcttPkid(strTkcttInfoPkid);
+            esItemStlTkcttEngMea.setTkcttPkid(strCttInfoPkid);
             esItemStlTkcttEngMea.setPeriodNo(strMeaLatestApprovedPeriodNo);
             esItemStlTkcttEngMeaList= progMeaItemService.selectRecordsByPkidPeriodNoExample(esItemStlTkcttEngMea);
         }

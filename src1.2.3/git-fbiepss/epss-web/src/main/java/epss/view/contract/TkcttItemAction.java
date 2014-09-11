@@ -73,7 +73,7 @@ public class TkcttItemAction {
     /*所属类型*/
     private String strBelongToType;
     /*所属号*/
-    private String strTkcttInfoPkid;
+    private String strCttInfoPkid;
 
     /*提交类型*/
     private String strSubmitType;
@@ -96,9 +96,9 @@ public class TkcttItemAction {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         beansMap = new HashMap();
         strBelongToType = ESEnum.ITEMTYPE0.getCode();
-        if (parammap.containsKey("strTkcttInfoPkid")) {
-            strTkcttInfoPkid = parammap.get("strTkcttInfoPkid").toString();
-            cttInfo = cttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
+        if (parammap.containsKey("strCttInfoPkid")) {
+            strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
+            cttInfo = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
         }
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
@@ -118,14 +118,14 @@ public class TkcttItemAction {
         try {
         /*初始化流程状态列表*/
             if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
-                    ToolUtil.getStrIgnoreNull(strTkcttInfoPkid).length()!=0) {
+                    ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
                 esFlowControl.getBackToStatusFlagList(strFlowType);
                 // 附件记录变成List
                 attachmentList=attachmentStrToList(cttInfo.getAttachment());
                 // 输出Excel表头
                 beansMap.put("tkcttInfo", cttInfo);
                 esCttItemList = cttItemService.getEsItemList(
-                        strBelongToType, strTkcttInfoPkid);
+                        strBelongToType, strCttInfoPkid);
                 recursiveDataTable("root", esCttItemList);
                 cttItemShowList = getTkcttItemList_DoFromatNo(cttItemShowList);
                 cttItemShowListExcel = new ArrayList<CttItemShow>();
@@ -272,20 +272,20 @@ public class TkcttItemAction {
         styleModelNo.setDisabled_Flag("false");
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
-        cttItemShowSel = new CttItemShow(strBelongToType, strTkcttInfoPkid);
-        cttItemShowAdd = new CttItemShow(strBelongToType, strTkcttInfoPkid);
-        cttItemShowUpd = new CttItemShow(strBelongToType, strTkcttInfoPkid);
-        cttItemShowDel = new CttItemShow(strBelongToType, strTkcttInfoPkid);
+        cttItemShowSel = new CttItemShow(strBelongToType, strCttInfoPkid);
+        cttItemShowAdd = new CttItemShow(strBelongToType, strCttInfoPkid);
+        cttItemShowUpd = new CttItemShow(strBelongToType, strCttInfoPkid);
+        cttItemShowDel = new CttItemShow(strBelongToType, strCttInfoPkid);
     }
 
     public void resetActionForAdd() {
         strSubmitType = "Add";
-        cttItemShowAdd = new CttItemShow(strBelongToType, strTkcttInfoPkid);
+        cttItemShowAdd = new CttItemShow(strBelongToType, strCttInfoPkid);
     }
 
     /*提交前的检查：必须项的输入*/
     private Boolean subMitActionPreCheck() {
-        CttItemShow cttItemShowTemp = new CttItemShow(strBelongToType, strTkcttInfoPkid);
+        CttItemShow cttItemShowTemp = new CttItemShow(strBelongToType, strCttInfoPkid);
         if (strSubmitType.equals("Add")) {
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -382,7 +382,7 @@ public class TkcttItemAction {
     }
 
     public Boolean blurStrNoToGradeAndOrderidAction() {
-        CttItemShow cttItemShowTemp = new CttItemShow(strBelongToType, strTkcttInfoPkid);
+        CttItemShow cttItemShowTemp = new CttItemShow(strBelongToType, strCttInfoPkid);
         if (strSubmitType.equals("Add")) {
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -815,10 +815,10 @@ public class TkcttItemAction {
         this.cttItemShowList = cttItemShowList;
     }
     public String getStrBelongToPkid() {
-        return strTkcttInfoPkid;
+        return strCttInfoPkid;
     }
-    public void setStrBelongToPkid(String strTkcttInfoPkid) {
-        this.strTkcttInfoPkid = strTkcttInfoPkid;
+    public void setStrBelongToPkid(String strCttInfoPkid) {
+        this.strCttInfoPkid = strCttInfoPkid;
     }
     public EsFlowControl getEsFlowControl() {
         return esFlowControl;

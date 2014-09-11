@@ -236,7 +236,7 @@ public interface MyQueryMapper {
             "                         where                       " +
             "                                ecinfo.CTT_TYPE = '2' " +
             "                         and" +
-            "                                ecinfo.PARENT_PKID = #{strCstplInfoPkid}" +
+            "                                ecinfo.PARENT_PKID = #{strCttInfoPkid}" +
             "                     ) aprdsubctt" +
                                      // 某一个成本计划下对应的批准了的分包合同 并把它们产生的最近一期批准了的价格结算的期号记录下来
             "                inner join" +
@@ -262,7 +262,7 @@ public interface MyQueryMapper {
             " where " +
             "    t.ADD_UP_QTY is not null" +
             " order by t.CORRESPONDING_PKID")
-    List<QryTkMeaCSStlQShow> getCSStlQBySignPartList(@Param("strCstplInfoPkid") String strCstplInfoPkid,
+    List<QryTkMeaCSStlQShow> getCSStlQBySignPartList(@Param("strCttInfoPkid") String strCttInfoPkid,
                                                      @Param("strPeriodNo") String strPeriodNo);
 
     @Select("select PKID as pkid, "+

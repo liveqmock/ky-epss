@@ -74,8 +74,8 @@ public class CstplInfoAction {
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         // 从总包合同传递过来的总包合同号
-        if (parammap.containsKey("strTkcttInfoPkid")) {
-            strBelongToPkid = parammap.get("strTkcttInfoPkid").toString();
+        if (parammap.containsKey("strCttInfoPkid")) {
+            strBelongToPkid = parammap.get("strCttInfoPkid").toString();
         }
         initData();
     }

@@ -69,8 +69,8 @@ public class SubcttInfoAction {
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         // 从成本计划传递过来的成本计划号
-        if (parammap.containsKey("strCstplInfoPkid")) {
-            strBelongToPkid = parammap.get("strCstplInfoPkid").toString();
+        if (parammap.containsKey("strCttInfoPkid")) {
+            strBelongToPkid = parammap.get("strCttInfoPkid").toString();
         } else {// 总包合同页面上
             strBelongToPkid = null;
         }

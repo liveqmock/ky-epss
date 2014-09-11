@@ -39,21 +39,21 @@ public class SubcttInfoMngAction {
     private EsFlowControl esFlowControl;
 
     private CttInfoShow cttInfoShowUpd;
-    private String strSubcttInfoPkid;
+    private String strCttInfoPkid;
 
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 
-        if (parammap.containsKey("strSubcttInfoPkid")) {
-            strSubcttInfoPkid = parammap.get("strSubcttInfoPkid").toString();
+        if (parammap.containsKey("strCttInfoPkid")) {
+            strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
         }
 
         cttInfoShowUpd = new CttInfoShow();
         initData();
     }
     public void initData() {
-        EsCttInfo esCttInfoTemp = cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
+        EsCttInfo esCttInfoTemp = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
         cttInfoShowUpd=cttInfoService.fromModelToModelShow(esCttInfoTemp);
     }
 
@@ -128,23 +128,19 @@ public class SubcttInfoMngAction {
      * @param
      */
     public void onClickForMngAction() {
-        if (!submitPreCheck(cttInfoShowUpd)) {
-         return;
-        }
-        updRecordAction(cttInfoShowUpd);
-        MessageUtil.addInfo("更新数据完成。");
-        initData();
-    }
-
-    private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
-            cttInfoService.updateRecord(cttInfoShowPara);
+            if (!submitPreCheck(cttInfoShowUpd)) {
+                return;
+            }
+            cttInfoService.updateRecord(cttInfoShowUpd);
+            initData();
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
             MessageUtil.addError(e.getMessage());
         }
     }
+
     /*智能字段 Start*/
 
     public CttInfoService getCttInfoService() {

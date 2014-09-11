@@ -101,10 +101,10 @@ public class ProgSubstlItemService {
         return esItemStlSubcttEngP;
     }
 
-    public void deleteRecordByExample(String strSubcttInfoPkidPara,String strPeriodNoPara){
+    public void deleteRecordByExample(String strCttInfoPkidPara,String strPeriodNoPara){
         EsItemStlSubcttEngPExample example = new EsItemStlSubcttEngPExample();
         example.createCriteria()
-                .andSubcttPkidEqualTo(strSubcttInfoPkidPara)
+                .andSubcttPkidEqualTo(strCttInfoPkidPara)
                 .andPeriodNoEqualTo(strPeriodNoPara);
         esItemStlSubcttEngPMapper.deleteByExample(example);
     }

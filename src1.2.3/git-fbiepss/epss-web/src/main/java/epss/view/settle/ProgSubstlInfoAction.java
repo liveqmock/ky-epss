@@ -65,7 +65,7 @@ public class ProgSubstlInfoAction {
     private String strRowSelectedFlag;
     private String strApprovedFlag;
 	private String strStlType;
-    private String strCstplInfoPkid;
+    private String strCttInfoPkid;
 
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
@@ -74,10 +74,10 @@ public class ProgSubstlInfoAction {
     public void init() {
         progInfoShowList = new ArrayList<ProgInfoShow>();
         progInfoShowNotFormList = new ArrayList<ProgInfoShow>();
-        strCstplInfoPkid="";
+        strCttInfoPkid="";
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (parammap.containsKey("strCstplInfoPkid")){
-            strCstplInfoPkid=parammap.get("strCstplInfoPkid").toString();
+        if (parammap.containsKey("strCttInfoPkid")){
+            strCttInfoPkid=parammap.get("strCttInfoPkid").toString();
         }
         strStlType =ESEnum.ITEMTYPE5.getCode();
         resetAction();
@@ -86,7 +86,7 @@ public class ProgSubstlInfoAction {
         List<CttInfoShow> cttInfoShowList =
                 cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
                         ESEnum.ITEMTYPE2.getCode()
-                        , strCstplInfoPkid
+                        , strCttInfoPkid
                         , ESEnumStatusFlag.STATUS_FLAG3.getCode());
         subcttList = new ArrayList<SelectItem>();
         if (cttInfoShowList.size() > 0) {
@@ -150,12 +150,12 @@ public class ProgSubstlInfoAction {
                 List<ProgInfoShow> progInfoShowListTemp =new ArrayList<>();
                 List<ProgInfoShow> itemEsInitNotFormStlListTemp=
                     esFlowService.selectNotFormEsInitSubcttStlP(
-                            strCstplInfoPkid,
+                            strCttInfoPkid,
                             ToolUtil.getStrIgnoreNull(progInfoShowNotForm.getStlPkid()),
                             ToolUtil.getStrIgnoreNull(progInfoShowNotForm.getPeriodNo()));
                 List<ProgInfoShow> selectFormPreEsInitSubcttStlP=
                         esFlowService.selectFormPreEsInitSubcttStlP(
-                                strCstplInfoPkid,
+                                strCttInfoPkid,
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getStlPkid()),
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo()));
                 for(ProgInfoShow itemUnitAll:itemEsInitNotFormStlListTemp) {
@@ -223,7 +223,7 @@ public class ProgSubstlInfoAction {
             if(strQryFlag.equals("Approve")){
                 List<ProgInfoShow> progInfoShowApprovedListTemp =
                         esFlowService.selectFormedEsInitSubcttStlP(
-                                strCstplInfoPkid,
+                                strCttInfoPkid,
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getStlPkid()),
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo()));
                 for(int i=0;i< progInfoShowApprovedListTemp.size();i++){
@@ -235,7 +235,7 @@ public class ProgSubstlInfoAction {
             else if(strQryFlag.equals("Qry")){
                 progInfoShowList =
                         esFlowService.getFormedAfterEsInitSubcttStlPList(
-                                strCstplInfoPkid,
+                                strCttInfoPkid,
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getStlPkid()),
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo())
                         );
@@ -244,7 +244,7 @@ public class ProgSubstlInfoAction {
             else if(strQryFlag.equals("Account")){
                 progInfoShowList =
                         esFlowService.getFormedAfterEsInitSubcttStlPList(
-                                strCstplInfoPkid,
+                                strCttInfoPkid,
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getStlPkid()),
                                 ToolUtil.getStrIgnoreNull(progInfoShow.getPeriodNo())
                         );
@@ -381,14 +381,6 @@ public class ProgSubstlInfoAction {
 
     public void setStrSubmitType(String strSubmitType) {
         this.strSubmitType = strSubmitType;
-    }
-
-    public String getStrCstplInfoPkid() {
-        return strCstplInfoPkid;
-    }
-
-    public void setStrCstplInfoPkid(String strCstplInfoPkid) {
-        this.strCstplInfoPkid = strCstplInfoPkid;
     }
 
     public EsCommon getEsCommon() {

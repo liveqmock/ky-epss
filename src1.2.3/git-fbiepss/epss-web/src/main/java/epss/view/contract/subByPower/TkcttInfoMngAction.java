@@ -39,21 +39,20 @@ public class TkcttInfoMngAction {
     private EsFlowControl esFlowControl;
 
     private CttInfoShow cttInfoShowUpd;
-    private String strTkcttInfoPkid;
+    private String strCttInfoPkid;
 
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-
-        if (parammap.containsKey("strTkcttInfoPkid")) {
-            strTkcttInfoPkid = parammap.get("strTkcttInfoPkid").toString();
+        if (parammap.containsKey("strCttInfoPkid")) {
+            strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
         }
 
         cttInfoShowUpd = new CttInfoShow();
         initData();
     }
     public void initData() {
-        EsCttInfo esCttInfoTemp = cttInfoService.getCttInfoByPkId(strTkcttInfoPkid);
+        EsCttInfo esCttInfoTemp = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
         cttInfoShowUpd=cttInfoService.fromModelToModelShow(esCttInfoTemp);
     }
 
@@ -79,17 +78,6 @@ public class TkcttInfoMngAction {
         } catch (Exception e) {
             logger.error("总包合同信息查询失败", e);
             MessageUtil.addError("总包合同信息查询失败");
-        }
-    }
-
-    public void selectRecordAction(CttInfoShow cttInfoShowPara) {
-        try {
-            // 查询
-            cttInfoShowPara.setCreatedByName(ToolUtil.getUserName(cttInfoShowPara.getCreatedBy()));
-            cttInfoShowPara.setLastUpdByName(ToolUtil.getUserName(cttInfoShowPara.getLastUpdBy()));
-            cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
-        } catch (Exception e) {
-            MessageUtil.addError(e.getMessage());
         }
     }
 
@@ -128,23 +116,19 @@ public class TkcttInfoMngAction {
      * @param
      */
     public void onClickForMngAction() {
-        if (!submitPreCheck(cttInfoShowUpd)) {
-         return;
-        }
-        updRecordAction(cttInfoShowUpd);
-        MessageUtil.addInfo("更新数据完成。");
-        initData();
-    }
-
-    private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
-            cttInfoService.updateRecord(cttInfoShowPara);
+            if (!submitPreCheck(cttInfoShowUpd)) {
+                return;
+            }
+            cttInfoService.updateRecord(cttInfoShowUpd);
+            initData();
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
             MessageUtil.addError(e.getMessage());
         }
     }
+
     /*智能字段 Start*/
 
     public CttInfoService getCttInfoService() {

@@ -73,7 +73,7 @@ public class SubcttItemAction {
     /*所属类型*/
     private String strBelongToType;
     /*所属号*/
-    private String strSubcttInfoPkid;
+    private String strCttInfoPkid;
 
     /*提交类型*/
     private String strSubmitType;
@@ -105,9 +105,9 @@ public class SubcttItemAction {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         beansMap = new HashMap();
         strBelongToType=ESEnum.ITEMTYPE2.getCode();
-        if (parammap.containsKey("strSubcttInfoPkid")) {
-            strSubcttInfoPkid = parammap.get("strSubcttInfoPkid").toString();
-            cttInfo=cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
+        if (parammap.containsKey("strCttInfoPkid")) {
+            strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
+            cttInfo=cttInfoService.getCttInfoByPkId(strCttInfoPkid);
         }
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
@@ -125,9 +125,9 @@ public class SubcttItemAction {
         try{
             cttItemShowList_Cstpl =new ArrayList<>();
             if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
-                    ToolUtil.getStrIgnoreNull(strSubcttInfoPkid).length()!=0) {
+                    ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
         /*分包合同*/
-                cttInfo = cttInfoService.getCttInfoByPkId(strSubcttInfoPkid);
+                cttInfo = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
                 // 附件记录变成List
                 attachmentList = attachmentStrToList(cttInfo.getAttachment());
                 beansMap.put("subcttInfo", cttInfo);
@@ -141,7 +141,7 @@ public class SubcttItemAction {
                 esCttItemList = new ArrayList<EsCttItem>();
                 cttItemShowList = new ArrayList<CttItemShow>();
                 esCttItemList = cttItemService.getEsItemList(
-                        strBelongToType, strSubcttInfoPkid);
+                        strBelongToType, strCttInfoPkid);
                 cttItemShowList.clear();
                 recursiveDataTable("root", esCttItemList, cttItemShowList);
                 cttItemShowList = getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList);
@@ -277,14 +277,14 @@ public class SubcttItemAction {
         styleModelCttQty.setDisabled_Flag("false");
         styleModelCttAmount=new StyleModel();
         styleModelCttAmount.setDisabled_Flag("true");
-        cttItemShowSel =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
-        cttItemShowAdd =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
-        cttItemShowUpd =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
-        cttItemShowDel =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
+        cttItemShowSel =new CttItemShow(strBelongToType ,strCttInfoPkid);
+        cttItemShowAdd =new CttItemShow(strBelongToType ,strCttInfoPkid);
+        cttItemShowUpd =new CttItemShow(strBelongToType ,strCttInfoPkid);
+        cttItemShowDel =new CttItemShow(strBelongToType ,strCttInfoPkid);
     }
     public void resetActionForAdd(){
         strSubmitType="Add";
-        cttItemShowAdd =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
+        cttItemShowAdd =new CttItemShow(strBelongToType ,strCttInfoPkid);
     }
     /*右单击事件*/
     public void selectRecordAction(String strSubmitTypePara,CttItemShow cttItemShowSeledPara){
@@ -347,7 +347,7 @@ public class SubcttItemAction {
     }
     public void blurCalculateAmountAction(){
         BigDecimal bigDecimal;
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCttInfoPkid);
         if (strSubmitType.equals("Add")){
             if(cttItemShowAdd.getContractUnitPrice()==null|| cttItemShowAdd.getContractQuantity()==null){
                 bigDecimal=null;
@@ -369,7 +369,7 @@ public class SubcttItemAction {
 
     }
     public Boolean blurStrNoToGradeAndOrderid(){
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCttInfoPkid);
         if (strSubmitType.equals("Add")){
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -446,7 +446,7 @@ public class SubcttItemAction {
         return true ;
     }
     public Boolean blurCorrespondingPkid(){
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCttInfoPkid);
         if (strSubmitType.equals("Add")){
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -551,7 +551,7 @@ public class SubcttItemAction {
 
     /*提交前的检查：必须项的输入*/
 	private Boolean subMitActionPreCheck(){
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strSubcttInfoPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCttInfoPkid);
         if (strSubmitType.equals("Add")){
             cttItemShowTemp = cttItemShowAdd;
         }

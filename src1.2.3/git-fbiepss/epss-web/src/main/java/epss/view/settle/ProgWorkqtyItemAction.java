@@ -79,9 +79,9 @@ public class ProgWorkqtyItemAction {
         if(parammap.containsKey("strFlowType")){
             strFlowType=parammap.get("strFlowType").toString();
         }
-        if(parammap.containsKey("strProgWorkqtyInfoPkid")){
-            String strProgWorkqtyInfoPkidTemp=parammap.get("strProgWorkqtyInfoPkid").toString();
-            esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strProgWorkqtyInfoPkidTemp);
+        if(parammap.containsKey("strStlInfoPkid")){
+            String strStlInfoPkidTemp=parammap.get("strStlInfoPkid").toString();
+            esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkidTemp);
             strSubcttPkid= esInitStl.getStlPkid();
         }
 
