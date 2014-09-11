@@ -382,7 +382,7 @@ public class ProgWorkqtyItemAction {
                                         esInitStl.setAutoLinkAdd("0");
                                         progStlInfoService.updateRecord(esInitStl);
                                         progInfoShowQryM.setAutoLinkAdd("1");
-                                        progStlInfoService.insertRecord(progInfoShowQryM);
+                                        progStlInfoService.updateRecord(progInfoShowQryM);
                                     }else{
                                         if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
                                             esInitStl.setAutoLinkAdd("0");
@@ -402,7 +402,6 @@ public class ProgWorkqtyItemAction {
                     strPassFlag="false";
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerType.equals("MngFail")) {
-                    esInitStl.setAutoLinkAdd("");
                     esInitStl.setAutoLinkAdd("");
                     esInitStl.setFlowStatus(null);
                     esInitStl.setFlowStatusReason(null);

@@ -418,7 +418,7 @@ public class ProgMatqtyItemAction {
                                     esInitStl.setAutoLinkAdd("0");
                                     progStlInfoService.updateRecord(esInitStl);
                                     progInfoShowQryQ.setAutoLinkAdd("1");
-                                    progStlInfoService.insertRecord(progInfoShowQryQ);
+                                    progStlInfoService.updateRecord(progInfoShowQryQ);
                                 }else{
                                     if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
                                         esInitStl.setAutoLinkAdd("0");
