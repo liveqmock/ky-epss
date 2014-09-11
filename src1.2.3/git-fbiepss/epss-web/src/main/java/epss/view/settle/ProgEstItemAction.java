@@ -65,7 +65,7 @@ public class ProgEstItemAction {
     private CommStlSubcttEngH commStlSubcttEngH;
 
     /*所属号*/
-    private String strEsInitStlSubcttEng;
+    private String strStlInfoPkid;
     private String strTkcttPkid;
     private EsInitStl esInitStl;
 
@@ -86,9 +86,9 @@ public class ProgEstItemAction {
         if(parammap.containsKey("strFlowType")){
             strFlowType=parammap.get("strFlowType").toString();
         }
-        if(parammap.containsKey("strEsInitStlSubcttEng")){
-            strEsInitStlSubcttEng=parammap.get("strEsInitStlSubcttEng").toString();
-            this.esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strEsInitStlSubcttEng);
+        if(parammap.containsKey("strStlInfoPkid")){
+            strStlInfoPkid=parammap.get("strStlInfoPkid").toString();
+            this.esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
             strTkcttPkid= this.esInitStl.getStlPkid();
         }
 
@@ -102,7 +102,7 @@ public class ProgEstItemAction {
 
         /*分包合同数据*/
         // From StlPkid To SubcttPkid
-        EsInitStl esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strEsInitStlSubcttEng);
+        EsInitStl esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
         commStlSubcttEngH.setStrSubcttPkid(esInitStl.getStlPkid());
         commStlSubcttEngH.setStrStlId(esInitStl.getId());
         // From SubcttPkid To CstplPkid
