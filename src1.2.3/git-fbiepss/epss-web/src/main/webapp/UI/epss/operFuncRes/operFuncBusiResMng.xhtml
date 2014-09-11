@@ -37,9 +37,10 @@
                                  :document.resType eq '2' ? 'rowOrangeStyle':document.resType eq '3' ? 'rowOrangeStyle'
                                  :document.resType eq '4' ? 'rowOrangeStyle':document.resType eq '5' ? 'rowOrangeStyle':'rowGreenStyle'}"
                                  emptyMessage="数据记录为空..."
-                                 scrollable="true"
-                                 scrollHeight="500">
-                        <p:column headerText="名称" style="width:400px;">
+                             scrollable="true"
+                             scrollHeight="500">
+                    <p:ajax event="collapse" update=":form:msgs" listener="#{operFuncBusiResMngAction.onNodeCollapse}" />
+                            <p:column headerText="名称" style="width:400px;">
                             <h:outputText value="#{document.resName}"/>
                         </p:column>
                         <p:column headerText="操作" style="width:75px;">

@@ -6,6 +6,7 @@ import epss.common.enums.ESEnumStatusFlag;
 import epss.common.enums.ESEnumTaskDoneFlag;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitStl;
+import org.primefaces.event.NodeCollapseEvent;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
@@ -64,6 +65,7 @@ public class OperFuncBusiResMngAction implements Serializable{
     //ctt tree
     private TreeNode resRoot;
     private TreeNode deptOperRoot;
+    private TreeNode currentSelectedNode;
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
@@ -524,6 +526,18 @@ public class OperFuncBusiResMngAction implements Serializable{
                         ToolUtil.padLeftSpace_DoLevel(3, operFuncResShowForExcelTemp.getResName()));
                 operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
             }
+            if (currentSelectedNode!=null){
+                OperFuncResShow operFuncResShow1= (OperFuncResShow) currentSelectedNode.getData();
+                OperFuncResShow operFuncResShow2= (OperFuncResShow) childNodeTemp.getData();
+                if (operFuncResShow1.getResType().equals(operFuncResShow2.getResType())
+                        &&operFuncResShow1.getResPkid().equals(operFuncResShow2.getResPkid())){
+                    TreeNode treeNodeTemp=childNodeTemp;
+                    while (!(treeNodeTemp.getData().equals("ROOT"))){
+                        treeNodeTemp.setExpanded(true);
+                        treeNodeTemp=treeNodeTemp.getParent();
+                    }
+                }
+            }
             recursiveResTreeNode(operFuncResShowTemp.getResPkid(),childNodeTemp);
         }
     }
@@ -535,8 +549,35 @@ public class OperFuncBusiResMngAction implements Serializable{
         }
     }
 
+    public void recursiveResTreeNode(TreeNode treeNodePara){
+        treeNodePara.setExpanded(false);
+        if (treeNodePara.getChildCount()!=0){
+            for (int i=0;i<treeNodePara.getChildCount();i++){
+                recursiveResTreeNode(treeNodePara.getChildren().get(i));
+            }
+        }
+    }
+
+    public void onNodeCollapse(NodeCollapseEvent event) {
+        recursiveResTreeNode(event.getTreeNode());
+    }
+
+    public void findSelectedNode(OperFuncResShow operFuncResShowPara, TreeNode treeNodePara) {
+        if (treeNodePara.getChildCount() != 0) {
+            for (int i = 0; i < treeNodePara.getChildCount(); i++) {
+                TreeNode treeNodeTemp = treeNodePara.getChildren().get(i);
+                if (operFuncResShowPara == treeNodeTemp.getData()) {
+                    currentSelectedNode = treeNodeTemp;
+                    return;
+                }
+                findSelectedNode(operFuncResShowPara, treeNodeTemp);
+            }
+        }
+    }
+
     public void selectRecordAction(String strSubmitTypePara,OperFuncResShow operFuncResShowPara) {
         try {
+            findSelectedNode(operFuncResShowPara,resRoot);
             if (strSubmitTypePara.equals("Add")) {
                 cttInfoShowAdd = new CttInfoShow();
                 if(operFuncResShowPara.getResPkid().equals("ROOT")) {
