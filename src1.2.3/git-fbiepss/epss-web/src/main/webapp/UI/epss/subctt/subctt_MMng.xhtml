@@ -150,7 +150,7 @@
                             <p:outputLabel value="结算编号：" for="idForAdd"/>
                             <p:inputText id="idForAdd" value="#{progMatqtyInfoAction.progInfoShowAdd.id}"/>
                             <p:commandButton id="autoSetIdBtnForAdd" icon="ui-icon-plus"
-                                             action="#{progMatqtyInfoAction.setMaxNoPlusOne()}"
+                                             action="#{progMatqtyInfoAction.setMaxNoPlusOne('Add')}"
                                              update="idForAdd"
                                              style="height:20px">
                             </p:commandButton>

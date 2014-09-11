@@ -26,12 +26,13 @@
                 <p:panel>
                     <h:panelGrid id="pdQry" columns="2" style="width: 100%">
                         <h:panelGrid>
-                            <h:panelGrid columns="6">
+                            <h:panelGrid columns="4">
                                 <p:outputLabel value="分包合同：" for="stlName" />
                                 <p:inputText id="stlName"
                                                  value="#{progWorkqtyInfoMngAction.progInfoShowQry.stlName}"/>
                                 <p:outputLabel value="期数编码：" for="periodNo"/>
-                                <p:inputText id="periodNo" value="#{progWorkqtyInfoMngAction.progInfoShowQry.periodNo}"
+                                <p:inputText id="periodNo" 
+				value="#{progWorkqtyInfoMngAction.progInfoShowQry.periodNo}"
                                              onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                             </h:panelGrid>
                         </h:panelGrid>
@@ -56,7 +57,7 @@
                     </h:panelGrid>
                 </p:panel>
                 <p:panel>
-                    <h:panelGrid id="pgCondition" columns="1">
+                    <h:panelGrid id="pgCondition">
                         <p:commandButton id="addBtn"
                                          value="增加" icon="ui-icon-plus"
                                          action="#{progWorkqtyInfoMngAction.resetActionForAdd()}"
@@ -70,7 +71,7 @@
                                  rowKey="#{record.pkid}"
                                  selectionMode="single"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                                                    {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                                {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                  paginator="true"
                                  paginatorPosition="bottom"
                                  rows="15"
@@ -81,20 +82,20 @@
                                  rowStyleClass="#{record.flowStatus eq null? null:'rowGrayStyle'}"
                                  scrollable="true">
                         <p:column headerText="操作"
-                                  style="width:36px;text-align:center;">
-                              <p:commandButton icon="ui-icon-pencil"
-                                              style="height:18px;width:18px"
-                                              actionListener="#{progWorkqtyInfoMngAction.selectRecordAction('Mng','Upd',record)}"
-                                              rendered="#{record.flowStatus eq null? 'true':'false'}"
-                                              update=":form:pdt,:form:pgViewForUpd,:form:msgs"
-                                              onclick="PF('wVDlgViewForUpd').show()">
+                                  style="width:40px;text-align:center;">
+                            <p:commandButton icon="ui-icon-pencil"
+                                  style="height:18px;width:18px"
+                                  actionListener="#{progWorkqtyInfoMngAction.selectRecordAction('Mng','Upd',record)}"
+                                  rendered="#{record.flowStatus eq null? 'true':'false'}"
+                                  update=":form:pdt,:form:pgViewForUpd,:form:msgs"
+                                  onclick="PF('wVDlgViewForUpd').show()">
                             </p:commandButton>
                             <p:commandButton  icon="ui-icon-trash"
-                                              style="height:18px;width:18px"
-                                              actionListener="#{progWorkqtyInfoMngAction.selectRecordAction('Mng','Del',record)}"
-                                              rendered="#{record.flowStatus eq null? 'true':'false'}"
-                                              update=":form:pdt,:form:pgViewForDel,:form:msgs"
-                                              onclick="PF('wVDlgViewForDel').show()">
+                                  style="height:18px;width:18px"
+                                  actionListener="#{progWorkqtyInfoMngAction.selectRecordAction('Mng','Del',record)}"
+                                  rendered="#{record.flowStatus eq null? 'true':'false'}"
+                                  update=":form:pdt,:form:pgViewForDel,:form:msgs"
+                                  onclick="PF('wVDlgViewForDel').show()">
                             </p:commandButton>
                         </p:column>
                         <p:column headerText="序号" style="width:30px">

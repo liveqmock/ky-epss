@@ -135,7 +135,7 @@
                             <p:outputLabel value="结算编号：" for="idForAdd"/>
                             <p:inputText id="idForAdd" value="#{progEstInfoAction.progInfoShowAdd.id}"/>
                             <p:commandButton id="autoSetIdBtnForAdd" icon="ui-icon-plus"
-                                             action="#{progEstInfoAction.setMaxNoPlusOne()}"
+                                             action="#{progEstInfoAction.setMaxNoPlusOne('Add')}"
                                              update="idForAdd"
                                              style="height:20px">
                             </p:commandButton>
@@ -176,7 +176,7 @@
                             <p:outputLabel value="结算编号：" for="idForUpd"/>
                             <p:inputText id="idForUpd" value="#{progEstInfoAction.progInfoShowUpd.id}"/>
                             <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
-                                             action="#{progEstInfoAction.setMaxNoPlusOne()}"
+                                             action="#{progEstInfoAction.setMaxNoPlusOne('Add')}"
                                              update="idForUpd"
                                              style="height:20px">
                             </p:commandButton>

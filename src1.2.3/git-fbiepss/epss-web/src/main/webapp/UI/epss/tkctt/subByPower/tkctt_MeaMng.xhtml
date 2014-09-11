@@ -17,55 +17,43 @@
                         event.srcElement.click();
                 }
             }
-            function actSelect(obj) {
-                var pkid = obj;
-                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
-                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
-                var arg = new Object();
-                arg.doType = "select";
-                var rtn = dialog("../item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strEsInitStlSubcttEng=" + pkid + "", arg, sfeature);
-                document.getElementById("form:qryBtn").click();
-            }
         </script>
     </ui:define>
     <ui:define name="content">
         <h:form id="form" enctype="multipart/form-data">
             <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
-                <p:focus for="id"/>
+                <p:focus for="stlName"/>
                 <p:panel>
                     <h:panelGrid id="pdQry" columns="3" style="width: 100%">
-                        <h:panelGrid columns="8">
-                            <p:outputLabel value="结算编号：" for="id"/>
-                            <p:inputText id="id" value="#{progMeaInfoMngAction.progInfoShowQry.id}"/>
-                            <p:outputLabel value="总包合同：" for="tkcttPkid"/>
-                            <p:selectOneMenu id="tkcttPkid" value="#{progMeaInfoMngAction.progInfoShowQry.stlPkid}">
-                                <f:selectItems value="#{progMeaInfoMngAction.tkcttList}"/>
-                            </p:selectOneMenu>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="总包合同：" for="stlName"/>
+                            <p:inputText id="stlName"
+                                         value="#{progMeaInfoMngAction.progInfoShowQry.stlName}"/>
                             <p:outputLabel value="期数编码：" for="periodNo"/>
-                            <p:inputText id="periodNo" value="#{progMeaInfoMngAction.progInfoShowQry.periodNo}"
+                            <p:inputText id="periodNo"
+                                         value="#{progMeaInfoMngAction.progInfoShowQry.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
-                </h:panelGrid>
+                        </h:panelGrid>
                         <h:panelGrid columns="3">
                             <p:commandButton id="qryBtn" value="查询"
-                                             action="#{progMeaInfoMngAction.onQueryAction('Mng','true')}"
+                                             action="#{progMeaInfoMngAction.onQueryAction('true')}"
                                              update="pdt,msgs,pgCondition">
                             </p:commandButton>
                             <p:commandButton id="resetBtn" value="重置"
                                              type="reset"
                                              update="pdQry,msgs">
                             </p:commandButton>
-                        <p:ajaxStatus style="width:16px;height:16px;">
-                            <f:facet name="start">
-                                <h:graphicImage value="/images/ajaxloading.gif"/>
-                            </f:facet>
-                            <f:facet name="complete">
-                                <h:outputText value=""/>
-                            </f:facet>
-                        </p:ajaxStatus>
-                    </h:panelGrid>
+                            <p:ajaxStatus style="width:16px;height:16px;">
+                                <f:facet name="start">
+                                    <h:graphicImage value="/images/ajaxloading.gif"/>
+                                </f:facet>
+                                <f:facet name="complete">
+                                    <h:outputText value=""/>
+                                </f:facet>
+                            </p:ajaxStatus>
                         </h:panelGrid>
-
+                    </h:panelGrid>
                 </p:panel>
                 <h:panelGrid id="pgCondition">
                     <p:commandButton id="addBtn"
@@ -91,22 +79,21 @@
                              widgetVar="DtInitTkcttList"
                              rowStyleClass="#{record.flowStatus eq null? null:'rowGrayStyle'}"
                              scrollable="true">
-                    <p:column headerText="操作" style="width:62px">
+                    <p:column headerText="操作"
+                              style="width:40px;text-align:center;">
                         <p:commandButton icon="ui-icon-pencil"
                                          style="height:18px;width:18px"
-                                         action="#{progMeaInfoMngAction.selectRecordAction('Mng','Upd',record)}"
+                                         action="#{progMeaInfoMngAction.selectRecordAction('Upd',record)}"
+                                         rendered="#{record.flowStatus eq null? 'true':'false'}"
                                          update="pdt,:form:pgViewForUpd,:form:msgs"
                                          onclick="PF('wVDlgViewForUpd').show()">
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-trash"
                                          style="height:18px;width:18px"
-                                         action="#{progMeaInfoMngAction.selectRecordAction('Mng','Del',record)}"
+                                         action="#{progMeaInfoMngAction.selectRecordAction('Del',record)}"
+                                         rendered="#{record.flowStatus eq null? 'true':'false'}"
                                          update="pdt,:form:pgViewForDel,:form:msgs"
                                          onclick="PF('wVDlgViewForDel').show()">
-                        </p:commandButton>
-                        <p:commandButton icon="ui-icon-triangle-1-e"
-                                         style="height:18px;width:18px"
-                                         onclick="actSelect('#{record.pkid}')">
                         </p:commandButton>
                     </p:column>
                     <p:column headerText="序号" style="width:30px">
@@ -118,7 +105,7 @@
                     <p:column headerText="总包合同" style="width:400px;text-align:left">
                         <h:outputText value="#{record.stlName}"/>
                     </p:column>
-                    <p:column headerText="期数编码" style="width:60px;text-align:center">
+                    <p:column headerText="期数编码" style="width:66px;text-align:center">
                         <h:outputText value="#{record.periodNo}"/>
                     </p:column>
                     <p:column headerText="状态" style="width:66px;text-align:center">

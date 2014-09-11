@@ -107,6 +107,10 @@
                     var rtn = dialog("../subctt/subByPower/subctt_QMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
                 }else if (infoType == '4') {// 材料结算
                     var rtn = dialog("../subctt/subByPower/subctt_MMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
+                }else if (infoType == '6') {// 统计结算
+                    var rtn = dialog("../tkctt/subByPower/tkctt_StaMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
+                }else if (infoType == '7') {// 计量结算
+                    var rtn = dialog("../tkctt/subByPower/tkctt_MeaMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
                 }
                 document.getElementById("form:qryBtn").click();
             }
@@ -179,7 +183,7 @@
                                  emptyMessage="数据记录为空..."
                                  rowStyleClass="#{record.id eq null?'rowGrayStyle':'rowGreenyellowStyle'}"
                                  scrollable="true"
-                                 scrollHeight="180">
+                                 scrollHeight="160">
                         <p:column headerText="操作" style="width:30px;text-align: center;">
                             <p:commandButton icon="ui-icon-triangle-1-e"
                                              style="height:16px;width:30px;"

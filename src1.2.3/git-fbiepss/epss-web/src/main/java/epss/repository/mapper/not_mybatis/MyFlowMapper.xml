@@ -260,7 +260,7 @@
                 eis.FLOW_STATUS_REASON
             from
                 ES_INIT_STL eis
-            left outer join
+            inner join
                 ES_CTT_INFO eic
             on
                 eic.pkid=eis.stl_pkid
@@ -284,6 +284,9 @@
         </if>
         <if test="stlPkid != null and stlPkid != ''">
             and eis.STL_PKID like CONCAT('%',CONCAT(trim(#{stlPkid}),'%'))
+        </if>
+        <if test="stlName != null and stlName != ''">
+            and eic.NAME like CONCAT('%',CONCAT(trim(#{stlName}),'%'))
         </if>
         <if test="periodNo != null and periodNo != ''">
             and eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{periodNo}),'%'))
