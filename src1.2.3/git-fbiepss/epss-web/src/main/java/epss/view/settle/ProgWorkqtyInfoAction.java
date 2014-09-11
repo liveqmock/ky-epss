@@ -316,15 +316,11 @@ public class ProgWorkqtyInfoAction {
                 if (progInfoShowConstructsTemp.size()!=0){
                     for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
                         if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus())))&&
-                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
-                                &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG1.getCode()).equals(
-                                ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){
+                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
                             MessageUtil.addInfo("该记录已关联分包材料结算，不可删除！");
                             return;
                         }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))&&
-                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))
-                                &&(ESEnumAutoLinkFlag.AUTO_LINK_FLAG0.getCode()).equals(
-                                ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getAutoLinkAdd()))){
+                                (progInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
                             delMatRecordAction(esISSOMPCUnit);
                         }
                     }
