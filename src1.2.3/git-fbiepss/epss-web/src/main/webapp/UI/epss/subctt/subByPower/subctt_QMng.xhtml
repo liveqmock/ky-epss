@@ -44,14 +44,15 @@
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:outputLabel value="分包合同：" for="cttName"/>
-                            <p:inputText id="cttName" value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.stlName}"
+                            <p:inputText id="cttName"
+                                         value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.stlName}"
                                          style="background-color:gainsboro;width:328px;" readonly="true"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="期数编码：  " for="periodNo"/>
-                            <p:inputText id="periodNo" value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.periodNo}"
-                                         style="background-color:gainsboro;text-align:right;" readonly="true"
-                                         onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
+                            <p:inputText id="periodNo"
+                                         value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.periodNo}"
+                                         style="background-color:gainsboro;text-align:right;" readonly="true"/>
                             <p:outputLabel value="备注内容：" for="note"/>
                             <p:inputText id="note" value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.note}"/>
                         </h:panelGrid>
