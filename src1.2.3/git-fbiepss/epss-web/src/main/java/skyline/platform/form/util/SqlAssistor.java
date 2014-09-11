@@ -553,7 +553,7 @@ public class SqlAssistor {
 
   /**
    * 生成（insert update delete时）SQL语句串中"set field=value"中的value部分，因为有的需要加"'"
-   * @param type
+   * @param p_value
    * @return String
    */
   public static String crtWhereValue(String p_value, int p_tp, int p_opt) {

@@ -20,7 +20,7 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form" enctype="multipart/form-data">
-	        <div style="margin:5px;">
+            <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
                 <p:focus for="stlName"/>
                 <p:panel>
@@ -80,16 +80,19 @@
                                  widgetVar="DtInitSubcttList"
                                  rowStyleClass="#{record.flowStatus eq null? null:'rowGrayStyle'}"
                                  scrollable="true">
-                        <p:column headerText="操作" style="width:40px;text-align:center;" >
+                        <p:column headerText="操作"
+                                  style="width:36px;text-align:center;">
                               <p:commandButton icon="ui-icon-pencil"
-                                                style="height:18px;width:18px"
-                                                actionListener="#{progWorkqtyInfoMngAction.selectRecordAction('Mng','Upd',record)}"
+                                              style="height:18px;width:18px"
+                                              actionListener="#{progWorkqtyInfoMngAction.selectRecordAction('Mng','Upd',record)}"
+                                              rendered="#{record.flowStatus eq null? 'true':'false'}"
                                               update=":form:pdt,:form:pgViewForUpd,:form:msgs"
                                               onclick="PF('wVDlgViewForUpd').show()">
                             </p:commandButton>
                             <p:commandButton  icon="ui-icon-trash"
                                               style="height:18px;width:18px"
                                               actionListener="#{progWorkqtyInfoMngAction.selectRecordAction('Mng','Del',record)}"
+                                              rendered="#{record.flowStatus eq null? 'true':'false'}"
                                               update=":form:pdt,:form:pgViewForDel,:form:msgs"
                                               onclick="PF('wVDlgViewForDel').show()">
                             </p:commandButton>

@@ -42,8 +42,8 @@ public interface MyTaskMapper {
             " (" +
             "      SELECT" +
             "           DISTINCT" +
+            "           opr.PKID," +
             "           opr.INFO_TYPE as type," +
-            "           opr.INFO_PKID as pkid," +
             "           eci.ID," +
             "           eci.NAME," +
             "           opr.FLOW_STATUS as flowStatus," +
@@ -64,7 +64,7 @@ public interface MyTaskMapper {
             "           opr.TYPE='business'" +
             " )" +
             " order by  " +
-            "    flowStatus,type")
+            "    taskDoneFlag,flowStatus,type")
     List<TaskShow> getRencentlyPowerDetailTaskShowList(@Param("strOperPkid") String strOperPkid);
 
     @Select(
@@ -75,7 +75,6 @@ public interface MyTaskMapper {
             "            opr.INFO_PKID as pkid," +
             "            eci.ID as id," +
             "            eci.NAME as name," +
-            "            opr.FLOW_STATUS as operResFlowStatus," +
             "            '' as periodNo," +
             "            eci.FLOW_STATUS as flowStatus," +
             "            eci.FLOW_STATUS_REASON as flowStatusReason" +
@@ -102,7 +101,6 @@ public interface MyTaskMapper {
             "             stl.PKID as pkid," +
             "             stl.ID as id," +
             "             (select name from ES_CTT_INFO where pkid=stl.stl_pkid) as name," +
-            "             opr.FLOW_STATUS as operResFlowStatus," +
             "             stl.PERIOD_NO as periodNo," +
             "             stl.FLOW_STATUS as flowStatus," +
             "             stl.FLOW_STATUS_REASON as flowStatusReason" +
@@ -122,7 +120,7 @@ public interface MyTaskMapper {
             "             opr.TYPE='business'" +
             "    )" +
             " order by" +
-            "    flowStatus,TYPE,flowStatusReason")
+            "    flowStatus,flowStatusReason nulls first")
     List<TaskShow> getDetailTodoTaskShowList(@Param("strOperPkid") String strOperPkid);
 
     @Select(" select" +

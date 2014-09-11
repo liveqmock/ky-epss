@@ -3,6 +3,7 @@ package epss.view.settle.subByPower;
 import epss.common.enums.*;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitStl;
+import epss.repository.model.OperRes;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.ProgInfoShow;
@@ -68,7 +69,7 @@ public class ProgWorkqtyInfoMngAction {
     private String strStlType;
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
-    private String strProgWorkqtyInfoPkid;
+    private OperRes operRes;
 
     @PostConstruct
     public void init() {
@@ -80,10 +81,11 @@ public class ProgWorkqtyInfoMngAction {
         progInfoShowAdd = new ProgInfoShow();
         progInfoShowUpd = new ProgInfoShow();
         progInfoShowDel = new ProgInfoShow();
+
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (parammap.containsKey("strProgWorkqtyInfoPkid")) {
-            strProgWorkqtyInfoPkid = parammap.get("strProgWorkqtyInfoPkid").toString();
-        }
+        String strResPkidTemp = parammap.get("strResPkid").toString();
+        operRes=operResService.getOperResByPkid(strResPkidTemp);
+
         strStlType = ESEnum.ITEMTYPE3.getCode();
         List<OperResShow> operResShowListTemp =
                 operResService.getInfoListByOperFlowPkid(
@@ -104,7 +106,7 @@ public class ProgWorkqtyInfoMngAction {
 
     public void resetActionForAdd(){
         progInfoShowAdd = new ProgInfoShow();
-        progInfoShowAdd.setStlPkid(strProgWorkqtyInfoPkid);
+        progInfoShowAdd.setStlPkid(operRes.getInfoPkid());
     }
 
     public void setMaxNoPlusOne(String strQryTypePara) {
@@ -230,10 +232,18 @@ public class ProgWorkqtyInfoMngAction {
             }else{
                 addRecordAction(progInfoShowAdd);
                 resetActionForAdd();
+                if(!ESEnumTaskDoneFlag.TASK_DONE_FLAG1.getCode().equals(operRes.getTaskdoneFlag())){
+                    operRes.setTaskdoneFlag(ESEnumTaskDoneFlag.TASK_DONE_FLAG1.getCode());
+                   operResService.updateRecord(operRes);
+                }
             }
         } else if (strSubmitType.equals("Upd")) {
             progInfoShowUpd.setStlType(strStlType);
             updRecordAction(progInfoShowUpd);
+            if(!ESEnumTaskDoneFlag.TASK_DONE_FLAG1.getCode().equals(operRes.getTaskdoneFlag())){
+                operRes.setTaskdoneFlag(ESEnumTaskDoneFlag.TASK_DONE_FLAG1.getCode());
+                operResService.updateRecord(operRes);
+            }
         } else if (strSubmitType.equals("Del")) {
             progInfoShowDel.setStlType(strStlType);
             //判断是否已关联产生了分包材料结算
@@ -271,7 +281,7 @@ public class ProgWorkqtyInfoMngAction {
         progInfoShowTemp.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG0.getCode());
         this.progInfoShowList.clear();
         List<ProgInfoShow> progInfoShowConstructsTemp =
-                esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowTemp);                               //无分包合同条件查询
+                esFlowService.selectSubcttStlQMByStatusFlagBegin_End(progInfoShowTemp);//无分包合同条件查询
         for (SelectItem itemUnit : subcttList) {
             for (ProgInfoShow esISSOMPCUnit : progInfoShowConstructsTemp) {
                 if (itemUnit.getValue().equals(esISSOMPCUnit.getStlPkid())) {

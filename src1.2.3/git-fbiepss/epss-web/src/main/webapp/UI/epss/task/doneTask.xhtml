@@ -109,7 +109,7 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form" enctype="multipart/form-data">
-	        <div style="margin:5px;">
+             <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
                 <div style="display: none">
                     <p:commandButton id="qryBtn" value="查询"
@@ -118,7 +118,15 @@
                     </p:commandButton>
                 </div>
                 <!--列表维护-->
-                <p:panel>
+                <p:panel header="处理过的任务">
+                    <div style="height:20px;
+                             vertical-align: bottom;
+                             font-size:10pt;
+                             text-align: left;">
+                        <h:outputLabel value="已处理:" style="font-weight:normal"/>
+                        <h:outputLabel value="上级还未批" style="background-color: yellowgreen;"/>
+                        <h:outputLabel value="上级已经批" style="background-color: red;"/>
+                    </div>
                     <p:dataTable id="pdt"
                                  value="#{doneTaskAction.taskShowList}"
                                  var="record"
@@ -126,7 +134,7 @@
                                  rowKey="#{row + 1}"
                                  emptyMessage="数据记录为空..."
                                  rowStyleClass="#{record.id eq null?'rowGrayStyle':
-                                                  record.flowStatus eq record.operResFlowStatus?null:'rowGreenyellowStyle'}"
+                                  record.flowStatus eq record.operResFlowStatus?'rowGreenyellowStyle':'rowRedStyle'}"
                                  scrollable="true"
                                  scrollHeight="442">
                         <p:column headerText="操作" style="width:30px;text-align: center;">
@@ -139,13 +147,13 @@
                         <p:column headerText="序号" style="width:30px">
                             <h:outputText value="#{row + 1}"/>
                         </p:column>
-                        <p:column headerText="任务类别" style="width:100px;text-align:left;">
+                        <p:column headerText="任务类别" style="width:60px;text-align:left;">
                             <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
                         </p:column>
-                        <p:column headerText="待处理任务ID" style="width:150px;text-align:left;">
+                        <p:column headerText="待处理任务ID" style="width:200px;text-align:left;">
                             <h:outputText value="#{record.id}"/>
                         </p:column>
-                        <p:column headerText="待处理任务名称" style="width:450px;text-align:left;">
+                        <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
                             <h:outputText value="#{record.name}"/>
                         </p:column>
                         <p:column headerText="期数" style="width:100px;text-align:left;">

@@ -46,7 +46,6 @@ public class ProgWorkqtyItemAction {
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
-
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
     @ManagedProperty(value = "#{progWorkqtyItemService}")

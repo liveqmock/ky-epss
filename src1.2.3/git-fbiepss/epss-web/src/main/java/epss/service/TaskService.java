@@ -3,6 +3,7 @@ package epss.service;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.ESEnumTaskDoneFlag;
 import epss.repository.dao.not_mybatis.MyTaskMapper;
 import epss.repository.model.model_show.TaskShow;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,8 @@ public class TaskService {
             detailTaskShowUnit.setId(
                     "(" + ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" + detailTaskShowUnit.getId());
             detailTaskShowUnit.setFlowStatusName("已授权");
+            detailTaskShowUnit.setTaskDoneFlagName(
+                    ESEnumTaskDoneFlag.getValueByKey(detailTaskShowUnit.getTaskDoneFlag()).getTitle());
             taskShowList.add(detailTaskShowUnit);
         }
         return taskShowList;
@@ -73,46 +76,56 @@ public class TaskService {
                     ESEnumStatusFlag.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
             taskShowList.add(taskShowGroupUnit);
             int intHasRecordCount=0;
-            for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
-                if (taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getOperResFlowStatus())){
-                    if (taskShowGroupUnit.getFlowStatus().equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())
-                            &&detailTaskShowUnit.getFlowStatus()==null){
+            if (ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(taskShowGroupUnit.getFlowStatus())){
+                for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
+                    if(detailTaskShowUnit.getFlowStatus()==null) {
                         intHasRecordCount++;
                         detailTaskShowUnit.setId(
-                                "("+ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+detailTaskShowUnit.getId());
+                                "("+ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+
+                                        ToolUtil.getStrIgnoreNull(detailTaskShowUnit.getId()));
+                        if(detailTaskShowUnit.getFlowStatusReason()==null){
+                            detailTaskShowUnit.setFlowStatusReasonName(null);
+                        }else {
+                            detailTaskShowUnit.setFlowStatusReasonName(
+                                    ESEnumPreStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatusReason()).getTitle());
+                        }
                         taskShowList.add(detailTaskShowUnit);
-                        continue;
+                        if (detailTaskShowUnit.getFlowStatusReason()==null) {
+                            detailTaskShowUnit.setStrColorType("1");
+                        }else{
+                            detailTaskShowUnit.setStrColorType("2");
+                        }
                     }
+                }
+                taskShowGroupUnit.setOperResFlowStatusName(
+                        taskShowGroupUnit.getOperResFlowStatusName()+"("+intHasRecordCount+")");
+            }else {
+                for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
                     if (detailTaskShowUnit.getFlowStatus() != null) {
-                        if (taskShowGroupUnit.getFlowStatus().compareTo(detailTaskShowUnit.getFlowStatus())==1){
+                        if (taskShowGroupUnit.getFlowStatus().compareTo(detailTaskShowUnit.getFlowStatus()) == 1) {
                             intHasRecordCount++;
                             detailTaskShowUnit.setId(
-                                    "("+ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+detailTaskShowUnit.getId());
-                            detailTaskShowUnit.setFlowStatusName(
-                                    ESEnumStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatus()).getTitle());
+                                    "(" + ESEnum.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" +
+                                            ToolUtil.getStrIgnoreNull(detailTaskShowUnit.getId()));
                             detailTaskShowUnit.setFlowStatusReasonName(
                                     ESEnumPreStatusFlag.getValueByKey(detailTaskShowUnit.getFlowStatusReason()).getTitle());
                             taskShowList.add(detailTaskShowUnit);
                         }
                         //颜色区分
-                        if (detailTaskShowUnit.getFlowStatusReason().equals("0")) {
+                        if ((int) (Integer.parseInt(detailTaskShowUnit.getFlowStatusReason()))
+                                > 2 * (int) (Integer.parseInt(detailTaskShowUnit.getFlowStatus()))) {
+                            detailTaskShowUnit.setStrColorType("2");
+                        } else if (
+                                (int) (Integer.parseInt(detailTaskShowUnit.getFlowStatus()) +
+                                        (int) Integer.parseInt(detailTaskShowUnit.getFlowStatus())) - 1
+                                        == (int) Integer.parseInt(detailTaskShowUnit.getFlowStatus())) {
                             detailTaskShowUnit.setStrColorType("1");
-                        } else {
-                            if ((int) (Integer.parseInt(detailTaskShowUnit.getFlowStatusReason()))
-                                    > 2 * (int) (Integer.parseInt(detailTaskShowUnit.getFlowStatus()))) {
-                                detailTaskShowUnit.setStrColorType("2");
-                            } else if (
-                                    (int) (Integer.parseInt(detailTaskShowUnit.getFlowStatus()) +
-                                            (int) Integer.parseInt(detailTaskShowUnit.getFlowStatus())) - 1
-                                            == (int) Integer.parseInt(detailTaskShowUnit.getFlowStatus())) {
-                                detailTaskShowUnit.setStrColorType("1");
-                            }
                         }
                     }
                 }
+                taskShowGroupUnit.setOperResFlowStatusName(
+                        taskShowGroupUnit.getOperResFlowStatusName() + "(" + intHasRecordCount + ")");
             }
-            taskShowGroupUnit.setOperResFlowStatusName(
-                    taskShowGroupUnit.getOperResFlowStatusName()+"("+intHasRecordCount+")");
         }
         return taskShowList;
     }

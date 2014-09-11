@@ -47,6 +47,9 @@ public class OperResService {
 	public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara){
         return  myOperResMapper.selectRecordsFromCtt(parentPkidPara);
     }
+    public OperRes getOperResByPkid(String strOperResPkidPara){
+        return  operResMapper.selectByPrimaryKey(strOperResPkidPara);
+    }
     public void insertRecord(OperResShow operResShowPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTime=ToolUtil.getStrLastUpdTime();
@@ -64,6 +67,13 @@ public class OperResService {
         operResPara.setLastUpdBy(strOperatorIdTemp);
         operResPara.setLastUpdTime(strLastUpdTime);
         operResMapper.insertSelective(operResPara);
+    }
+    public void updateRecord(OperRes operResPara){
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTime=ToolUtil.getStrLastUpdTime();
+        operResPara.setLastUpdBy(strOperatorIdTemp);
+        operResPara.setLastUpdTime(strLastUpdTime);
+        operResMapper.updateByPrimaryKey(operResPara);
     }
     public void deleteRecord(OperRes operResPara){
         OperResExample example =new OperResExample();

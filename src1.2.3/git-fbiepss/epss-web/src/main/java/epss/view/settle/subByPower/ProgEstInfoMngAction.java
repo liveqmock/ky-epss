@@ -3,6 +3,7 @@ package epss.view.settle.subByPower;
 import epss.common.enums.*;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitStl;
+import epss.repository.model.OperRes;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.ProgInfoShow;
@@ -73,11 +74,17 @@ public class ProgEstInfoMngAction {
     private String strCallPageNameFlag;
     private StyleModel styleModel;
 
+    private OperRes operRes;
+
     @PostConstruct
     public void init() {
         this.progInfoShowList = new ArrayList<ProgInfoShow>();
         strStlType=ESEnum.ITEMTYPE6.getCode();
         resetAction();
+
+        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        String strResPkidTemp = parammap.get("strResPkid").toString();
+        operRes=operResService.getOperResByPkid(strResPkidTemp);
 
         //自己拥有权限的分包合同
         List<OperResShow> operResShowListTemp =

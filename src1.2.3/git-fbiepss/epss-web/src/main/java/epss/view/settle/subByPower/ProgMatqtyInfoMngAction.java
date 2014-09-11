@@ -3,6 +3,7 @@ package epss.view.settle.subByPower;
 import epss.common.enums.*;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsInitStl;
+import epss.repository.model.OperRes;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.repository.model.model_show.ProgInfoShow;
@@ -67,7 +68,7 @@ public class ProgMatqtyInfoMngAction {
     private String strStlType;
     /*控制维护画面层级部分的显示*/
     private StyleModel styleModel;
-    private String strProgMatqtyInfoPkid;
+    private OperRes operRes;
 
     @PostConstruct
     public void init() {
@@ -79,10 +80,11 @@ public class ProgMatqtyInfoMngAction {
         progInfoShowAdd = new ProgInfoShow();
         progInfoShowUpd = new ProgInfoShow();
         progInfoShowDel = new ProgInfoShow();
+
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (parammap.containsKey("strProgMatqtyInfoPkid")) {
-            strProgMatqtyInfoPkid = parammap.get("strProgMatqtyInfoPkid").toString();
-        }
+        String strResPkidTemp = parammap.get("strResPkid").toString();
+        operRes=operResService.getOperResByPkid(strResPkidTemp);
+
         strStlType = ESEnum.ITEMTYPE4.getCode();
         List<OperResShow> operResShowListTemp =
                 operResService.getInfoListByOperFlowPkid(
@@ -103,7 +105,7 @@ public class ProgMatqtyInfoMngAction {
 
     public void resetActionForAdd(){
         progInfoShowAdd =new ProgInfoShow();
-        progInfoShowAdd.setStlPkid(strProgMatqtyInfoPkid);
+        progInfoShowAdd.setStlPkid(operRes.getInfoPkid());
     }
 
     public void setMaxNoPlusOne(String strQryTypePara){

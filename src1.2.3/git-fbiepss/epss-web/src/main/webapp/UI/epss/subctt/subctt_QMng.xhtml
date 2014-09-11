@@ -29,7 +29,7 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form" enctype="multipart/form-data">
-	        <div style="margin:5px;">
+	    <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
                 <p:focus for="id"/>
                 <p:panel>
@@ -133,9 +133,6 @@
                     </p:column>
                     <p:column headerText="期数编码" style="text-align:center;width:66px">
                         <h:outputText value="#{record.periodNo}"/>
-                    </p:column>
-                    <p:column headerText="生成情况" style="text-align:center;width:66px">
-                        <h:outputText value="#{record.autoLinkAdd}"/>
                     </p:column>
                     <p:column headerText="状态" style="text-align:center;width:66px;">
                         <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
