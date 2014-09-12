@@ -43,13 +43,13 @@
                     </h:panelGrid>
                     <h:panelGrid columns="6">
                         <p:outputLabel value="分包合同编号：" for="id"/>
-                        <p:inputText id="id" value="#{progWorkqtyItemAction.progWorkqtyInfoShowH.id}"
+                        <p:inputText id="id" value="#{progWorkqtyItemAction.progInfoShow.id}"
                                      readonly="true" style="background-color:gainsboro;"/>
                         <p:outputLabel value="分包合同名称：" for="cttName"/>
-                        <p:inputText id="cttName" value="#{progWorkqtyItemAction.progWorkqtyInfoShowH.stlName}"
+                        <p:inputText id="cttName" value="#{progWorkqtyItemAction.progInfoShow.stlName}"
                                      readonly="true" style="width:400px;background-color:gainsboro;"/>
                         <p:outputLabel value="期号：" for="periodNo"/>
-                        <p:inputText id="periodNo" value="#{progWorkqtyItemAction.progWorkqtyInfoShowH.periodNo}"
+                        <p:inputText id="periodNo" value="#{progWorkqtyItemAction.progInfoShow.periodNo}"
                                      readonly="true" style="background-color:gainsboro;"/>
                     </h:panelGrid>
                     <p:dataTable id="pdt" style="width:100%;"
@@ -67,7 +67,8 @@
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="480">
-                        <p:column headerText="操作" style="width:91px" rendered='#{progWorkqtyItemAction.strPassFlag}'>
+                        <p:column headerText="操作" style="width:40px"
+                                  rendered='#{progWorkqtyItemAction.strPassFlag}'>
                             <p:commandButton  icon="ui-icon-pencil"
                                               style="height:18px;width:18px"
                                               actionListener="#{progWorkqtyItemAction.selectRecordAction('Upd',record)}"

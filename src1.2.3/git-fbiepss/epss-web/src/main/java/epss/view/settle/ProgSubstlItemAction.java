@@ -3,10 +3,10 @@ package epss.view.settle;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
 import epss.common.enums.ESEnumSubcttType;
-import epss.repository.model.model_show.CommStlSubcttEngH;
+import epss.repository.model.model_show.ReportHeader;
 import epss.repository.model.model_show.ProgSubstlItemShow;
 import skyline.util.JxlsManager;
-import skyline.util.MessageUtil;;
+import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.repository.model.*;
 import epss.service.*;
@@ -60,7 +60,7 @@ public class ProgSubstlItemAction {
     private List<ProgSubstlItemShow> progSubstlItemShowList;
     private List<ProgSubstlItemShow> progSubstlItemShowListForApprove;
     private List<EsItemStlSubcttEngP> progSubstlItemShowListForAccountAndQry;
-    private CommStlSubcttEngH commStlSubcttEngH;
+    private ReportHeader reportHeader;
 
     private Map beansMap;
     private EsInitStl esInitStl;
@@ -80,7 +80,7 @@ public class ProgSubstlItemAction {
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
-        commStlSubcttEngH = new CommStlSubcttEngH();
+        reportHeader = new ReportHeader();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if (parammap.containsKey("strStlInfoPkid")) {
             strStlInfoPkid = parammap.get("strStlInfoPkid").toString();
@@ -161,27 +161,27 @@ public class ProgSubstlItemAction {
 
     private void initHeadMsg() {
         // Excel中的头信息
-        commStlSubcttEngH.setStrDate(ToolUtil.getStrLastUpdDate());
-        commStlSubcttEngH.setStrSubcttPkid(esInitStl.getStlPkid());
-        commStlSubcttEngH.setStrStlId(esInitStl.getId());
+        reportHeader.setStrDate(ToolUtil.getStrLastUpdDate());
+        reportHeader.setStrSubcttPkid(esInitStl.getStlPkid());
+        reportHeader.setStrStlId(esInitStl.getId());
         // From SubcttPkid To CstplPkid
-        EsCttInfo esCttInfo_Subctt = cttInfoService.getCttInfoByPkId(commStlSubcttEngH.getStrSubcttPkid());
-        commStlSubcttEngH.setStrCstplPkid(esCttInfo_Subctt.getParentPkid());
-        commStlSubcttEngH.setStrSubcttId(esCttInfo_Subctt.getId());
-        commStlSubcttEngH.setStrSubcttName(esCttInfo_Subctt.getName());
-        commStlSubcttEngH.setStrSignPartPkid(esCttInfo_Subctt.getSignPartB());
-        commStlSubcttEngH.setStrSignPartName(signPartService.getEsInitCustByPkid(
-                commStlSubcttEngH.getStrSignPartPkid()).getName());
+        EsCttInfo esCttInfo_Subctt = cttInfoService.getCttInfoByPkId(reportHeader.getStrSubcttPkid());
+        reportHeader.setStrCstplPkid(esCttInfo_Subctt.getParentPkid());
+        reportHeader.setStrSubcttId(esCttInfo_Subctt.getId());
+        reportHeader.setStrSubcttName(esCttInfo_Subctt.getName());
+        reportHeader.setStrSignPartPkid(esCttInfo_Subctt.getSignPartB());
+        reportHeader.setStrSignPartName(signPartService.getEsInitCustByPkid(
+                reportHeader.getStrSignPartPkid()).getName());
         // From CstplPkid To TkcttPkid
-        EsCttInfo esCttInfo_Cstpl = cttInfoService.getCttInfoByPkId(commStlSubcttEngH.getStrCstplPkid());
-        commStlSubcttEngH.setStrTkcttPkid(esCttInfo_Cstpl.getParentPkid());
-        commStlSubcttEngH.setStrCstplId(esCttInfo_Cstpl.getId());
-        commStlSubcttEngH.setStrCstplName(esCttInfo_Cstpl.getName());
+        EsCttInfo esCttInfo_Cstpl = cttInfoService.getCttInfoByPkId(reportHeader.getStrCstplPkid());
+        reportHeader.setStrTkcttPkid(esCttInfo_Cstpl.getParentPkid());
+        reportHeader.setStrCstplId(esCttInfo_Cstpl.getId());
+        reportHeader.setStrCstplName(esCttInfo_Cstpl.getName());
 
-        EsCttInfo esCttInfo_Tkctt = cttInfoService.getCttInfoByPkId(commStlSubcttEngH.getStrTkcttPkid());
-        commStlSubcttEngH.setStrTkcttId(esCttInfo_Tkctt.getId());
-        commStlSubcttEngH.setStrTkcttName(esCttInfo_Tkctt.getName());
-        beansMap.put("commStlSubcttEngH",commStlSubcttEngH);
+        EsCttInfo esCttInfo_Tkctt = cttInfoService.getCttInfoByPkId(reportHeader.getStrTkcttPkid());
+        reportHeader.setStrTkcttId(esCttInfo_Tkctt.getId());
+        reportHeader.setStrTkcttName(esCttInfo_Tkctt.getName());
+        beansMap.put("reportHeader", reportHeader);
     }
     private void initMsgForExcel() {
         List<ProgSubstlItemShow> records0 = new ArrayList<ProgSubstlItemShow>();
@@ -283,7 +283,7 @@ public class ProgSubstlItemAction {
             }
             progSubstlItemShowList.clear();
             ProgSubstlItemShow stl1 = new ProgSubstlItemShow();
-            stl1.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl1.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
             stl1.setSubctt_ItemPkid("stl1");
             stl1.setSubctt_ItemName("造价计算");
             stl1.setEngPMng_SubStlType(ESEnum.ITEMTYPE3.getCode());
@@ -294,7 +294,7 @@ public class ProgSubstlItemAction {
             for (ProgSubstlItemShow itemUnit : progSubstlItemShowListForSubcttEngQ) {
                 // 从工程数量结算中抽取结算数据
                 EsItemStlSubcttEngQ esItemStlSubcttEngQTemp = new EsItemStlSubcttEngQ();
-                esItemStlSubcttEngQTemp.setSubcttPkid(commStlSubcttEngH.getStrSubcttPkid());
+                esItemStlSubcttEngQTemp.setSubcttPkid(reportHeader.getStrSubcttPkid());
                 esItemStlSubcttEngQTemp.setSubcttItemPkid(itemUnit.getSubctt_ItemPkid());
                 esItemStlSubcttEngQTemp.setPeriodNo(esInitStl.getPeriodNo());
                 List<EsItemStlSubcttEngQ> esItemStlSubcttEngQList =
@@ -353,7 +353,7 @@ public class ProgSubstlItemAction {
 
             //1小计
             ProgSubstlItemShow stl2 = new ProgSubstlItemShow();
-            stl2.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl2.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
             stl2.setSubctt_ItemPkid("stl2");
             stl2.setSubctt_ItemName("小计");
             stl2.setEngPMng_SubStlType(ESEnum.ITEMTYPE3.getCode());
@@ -365,7 +365,7 @@ public class ProgSubstlItemAction {
 
             //3扣款
             ProgSubstlItemShow stl3 = new ProgSubstlItemShow();
-            stl3.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl3.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
             stl3.setSubctt_ItemPkid("stl3");
             stl3.setSubctt_ItemName("扣款(材料)");
             stl3.setEngPMng_SubStlType(ESEnum.ITEMTYPE4.getCode());
@@ -380,7 +380,7 @@ public class ProgSubstlItemAction {
             for (ProgSubstlItemShow itemUnit : progSubstlItemShowListForSubcttEngM) {
                 // 从工程材料结算中抽取结算数据
                 EsItemStlSubcttEngM esItemStlSubcttEngM = new EsItemStlSubcttEngM();
-                esItemStlSubcttEngM.setSubcttPkid(commStlSubcttEngH.getStrSubcttPkid());
+                esItemStlSubcttEngM.setSubcttPkid(reportHeader.getStrSubcttPkid());
                 esItemStlSubcttEngM.setSubcttItemPkid(itemUnit.getSubctt_ItemPkid());
                 esItemStlSubcttEngM.setPeriodNo(esInitStl.getPeriodNo());
                 List<EsItemStlSubcttEngM> esItemStlSubcttEngMList =
@@ -424,7 +424,7 @@ public class ProgSubstlItemAction {
             beansMap.put("records1", records1);
 
             ProgSubstlItemShow stl4 = new ProgSubstlItemShow();
-            stl4.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl4.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
             stl4.setSubctt_ItemPkid("stl4");
             stl4.setSubctt_ItemName("扣款(税)");
             stl4.setEngPMng_SubStlType(ESEnum.ITEMTYPE4.getCode());
@@ -436,7 +436,7 @@ public class ProgSubstlItemAction {
             progSubstlItemShowListForApprove.add(stl4);
 
             ProgSubstlItemShow stl5 = new ProgSubstlItemShow();
-            stl5.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl5.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
             stl5.setSubctt_ItemPkid("stl5");
             stl5.setSubctt_ItemName("小计");
             stl5.setEngPMng_SubStlType(ESEnum.ITEMTYPE4.getCode());
@@ -447,7 +447,7 @@ public class ProgSubstlItemAction {
             progSubstlItemShowListForApprove.add(stl5);
 
             ProgSubstlItemShow stl6 = new ProgSubstlItemShow();
-            stl6.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl6.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
             stl6.setSubctt_ItemPkid("stl6");
             stl6.setSubctt_ItemName("本期净结算额");
             stl6.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
@@ -459,7 +459,7 @@ public class ProgSubstlItemAction {
             progSubstlItemShowListForApprove.add(stl6);
 
             ProgSubstlItemShow stl7 = new ProgSubstlItemShow();
-            stl7.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl7.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
             stl7.setSubctt_ItemPkid("stl7");
             stl7.setSubctt_ItemName("其它(质保金)");
             stl7.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
@@ -470,7 +470,7 @@ public class ProgSubstlItemAction {
             progSubstlItemShowListForApprove.add(stl7);
 
             ProgSubstlItemShow stl8 = new ProgSubstlItemShow();
-            stl8.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl8.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
             stl8.setSubctt_ItemPkid("stl8");
             stl8.setSubctt_ItemName("小计");
             stl8.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
@@ -480,7 +480,7 @@ public class ProgSubstlItemAction {
             progSubstlItemShowListForApprove.add(stl8);
 
             ProgSubstlItemShow stl9 = new ProgSubstlItemShow();
-            stl9.setSubctt_Pkid(commStlSubcttEngH.getStrSubcttPkid());
+            stl9.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
             stl9.setSubctt_ItemPkid("stl9");
             stl9.setSubctt_ItemName("合计(扣除其它栏款项后本期结算价值)");
             stl9.setEngPMng_PeriodNo(esInitStl.getPeriodNo());
@@ -519,7 +519,7 @@ public class ProgSubstlItemAction {
         for (EsCttItem itemUnit : subEsCttItemList) {
             ProgSubstlItemShow progSubstlItemShowTemp = new ProgSubstlItemShow();
             progSubstlItemShowTemp.setSubctt_Pkid(itemUnit.getBelongToPkid());
-            progSubstlItemShowTemp.setSubctt_Name(commStlSubcttEngH.getStrSubcttName());
+            progSubstlItemShowTemp.setSubctt_Name(reportHeader.getStrSubcttName());
             progSubstlItemShowTemp.setSubctt_BelongToType(itemUnit.getBelongToType());
             progSubstlItemShowTemp.setSubctt_BelongToPkid(itemUnit.getBelongToPkid());
             progSubstlItemShowTemp.setSubctt_ParentPkid(itemUnit.getParentPkid());
@@ -547,14 +547,14 @@ public class ProgSubstlItemAction {
                 MessageUtil.addWarn("记录为空...");
                 return null;
             }else {
-                strExcelName = "subStl.xls";
+                strExcelName = "actSubstl.xls";
             }
         } else {
             if (this.progSubstlItemShowList.size() == 0) {
                 MessageUtil.addWarn("记录为空...");
                 return null;
             }else {
-                strExcelName = "stlSubCttEngP.xls";
+                strExcelName = "progSubstl.xls";
             }
         }
         String excelFilename = "分包工程预结算单-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
@@ -759,12 +759,12 @@ public class ProgSubstlItemAction {
         this.strExportToExcelRendered = strExportToExcelRendered;
     }
 
-    public CommStlSubcttEngH getCommStlSubcttEngH() {
-        return commStlSubcttEngH;
+    public ReportHeader getReportHeader() {
+        return reportHeader;
     }
 
-    public void setCommStlSubcttEngH(CommStlSubcttEngH commStlSubcttEngH) {
-        this.commStlSubcttEngH = commStlSubcttEngH;
+    public void setReportHeader(ReportHeader reportHeader) {
+        this.reportHeader = reportHeader;
     }
 
     public String getStrAccountBtnRendered() {

@@ -13,7 +13,7 @@ import epss.common.enums.ESEnumStatusFlag;
 import skyline.util.JxlsManager;
 import epss.repository.model.EsCttItem;
 import epss.repository.model.model_show.*;
-import skyline.util.MessageUtil;;
+import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.repository.model.EsCttInfo;
 import epss.service.*;
@@ -58,13 +58,13 @@ public class CstplSubcttItemAction {
     private EsCttItem esCttItem;
 
     // 画面上控件的显示控制
-    private CommStlSubcttEngH commStlSubcttEngH;
+    private ReportHeader reportHeader;
     private String strExportToExcelRendered;
     private Map beansMap;
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
-        commStlSubcttEngH =new CommStlSubcttEngH();
+        reportHeader =new ReportHeader();
         List<CttInfoShow> cttInfoShowList =
                 cttInfoService.getCttInfoListByCttType_Status(
                         ESEnum.ITEMTYPE1.getCode()
@@ -97,9 +97,9 @@ public class CstplSubcttItemAction {
     }
     private void initData(String strBelongToPkid) {
         EsCttInfo esCttInfo= cttInfoService.getCttInfoByPkId(strBelongToPkid);
-        commStlSubcttEngH.setStrCstplId(esCttInfo.getId());
-        commStlSubcttEngH.setStrCstplName(esCttInfo.getName());
-        beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
+        reportHeader.setStrCstplId(esCttInfo.getId());
+        reportHeader.setStrCstplName(esCttInfo.getName());
+        beansMap.put("reportHeader", reportHeader);
         /*成本计划列表*/
         List<EsCttItem> esCttItemListCstpl =new ArrayList<EsCttItem>();
         esCttItemListCstpl = cttItemService.getEsItemList(
@@ -491,12 +491,12 @@ public class CstplSubcttItemAction {
         return strExportToExcelRendered;
     }
 
-    public CommStlSubcttEngH getCommStlSubcttEngH() {
-        return commStlSubcttEngH;
+    public ReportHeader getReportHeader() {
+        return reportHeader;
     }
 
-    public void setCommStlSubcttEngH(CommStlSubcttEngH commStlSubcttEngH) {
-        this.commStlSubcttEngH = commStlSubcttEngH;
+    public void setReportHeader(ReportHeader reportHeader) {
+        this.reportHeader = reportHeader;
     }
 
     /*智能字段End*/

@@ -35,9 +35,9 @@
                     <h:panelGrid id="pgView">
                         <h:panelGrid columns="3">
                             <p:outputLabel value="结算编号：" for="id"/>
-                            <p:inputText id="id" value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.id}"/>
+                            <p:inputText id="id" value="#{progWorkqtyInfoTaskAction.progInfoShowUpd.id}"/>
                             <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
-                                             action="#{subcttWorkqtyProgInfoMngAction.setMaxNoPlusOne()}"
+                                             action="#{progWorkqtyInfoTaskAction.setMaxNoPlusOne()}"
                                              update="id"
                                              style="height:20px">
                             </p:commandButton>
@@ -45,37 +45,37 @@
                         <h:panelGrid columns="2">
                             <p:outputLabel value="分包合同：" for="cttName"/>
                             <p:inputText id="cttName"
-                                         value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.stlName}"
+                                         value="#{progWorkqtyInfoTaskAction.progInfoShowUpd.stlName}"
                                          style="background-color:gainsboro;width:328px;" readonly="true"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="期数编码：  " for="periodNo"/>
                             <p:inputText id="periodNo"
-                                         value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.periodNo}"
-                                         style="background-color:gainsboro;text-align:right;" readonly="true"/>
+                                         value="#{progWorkqtyInfoTaskAction.progInfoShowUpd.periodNo}"
+                                         style="background-color:gainsboro;" readonly="true"/>
                             <p:outputLabel value="备注内容：" for="note"/>
-                            <p:inputText id="note" value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.note}"/>
+                            <p:inputText id="note" value="#{progWorkqtyInfoTaskAction.progInfoShowUpd.note}"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel for="createdByName" value="创建人：" />
                             <h:inputText id="createdByName"
-                                         value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.createdByName}"
+                                         value="#{progWorkqtyInfoTaskAction.progInfoShowUpd.createdByName}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="createdDate" value="创建时间：" />
                             <h:inputText id="createdDate"
-                                         value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.createdDate}"
+                                         value="#{progWorkqtyInfoTaskAction.progInfoShowUpd.createdDate}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="lastUpdByName" value="修改人：" />
                             <h:inputText id="lastUpdByName"
-                                         value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.lastUpdByName}"
+                                         value="#{progWorkqtyInfoTaskAction.progInfoShowUpd.lastUpdByName}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="lastUpdDate" value="修改时间：" />
                             <h:inputText id="lastUpdDate"
-                                         value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.lastUpdDate}"
+                                         value="#{progWorkqtyInfoTaskAction.progInfoShowUpd.lastUpdDate}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="modificationNum" value="修改次数：" />
                             <h:inputText id="modificationNum"
-                                         value="#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.modificationNum}"
+                                         value="#{progWorkqtyInfoTaskAction.progInfoShowUpd.modificationNum}"
                                          style="background-color:gainsboro;text-align:right;" readonly="true">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>
@@ -83,7 +83,7 @@
                         <h:panelGrid id="pgOperBtn" columns="4">
                             <p:commandButton id="submitBtn"
                                              value="提交（更新）"
-                                             action="#{subcttWorkqtyProgInfoMngAction.onClickForMngAction()}"
+                                             action="#{progWorkqtyInfoTaskAction.onClickForMngAction()}"
                                              update="msgs,pgView"
                                              oncomplete="wVDlgView.hide()">
                             </p:commandButton>
@@ -92,7 +92,7 @@
                                              update="pgView">
                             </p:commandButton>
                             <p:commandButton icon="ui-icon-triangle-1-e"
-                                             onclick="actSelect('#{subcttWorkqtyProgInfoMngAction.progInfoShowUpd.pkid}')">
+                                             onclick="actSelect('#{progWorkqtyInfoTaskAction.progInfoShowUpd.pkid}')">
                             </p:commandButton>
                             <p:ajaxStatus style="width:16px;height:16px;">
                                 <f:facet name="start">

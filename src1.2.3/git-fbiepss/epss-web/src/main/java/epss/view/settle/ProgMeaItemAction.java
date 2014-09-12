@@ -3,12 +3,12 @@ package epss.view.settle;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.repository.model.model_show.CommStlSubcttEngH;
+import epss.repository.model.model_show.ProgInfoShow;
+import epss.repository.model.model_show.ReportHeader;
 import epss.repository.model.model_show.ProgMeaItemShow;
-import skyline.util.MessageUtil;;
+import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.repository.model.*;
-import epss.repository.model.model_show.ProgInfoShow;
 import epss.service.*;
 import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
@@ -63,12 +63,14 @@ public class ProgMeaItemAction {
     private BigDecimal bDEng_BeginToCurrentPeriodEQtyInDB;
     private BigDecimal bDEng_CurrentPeriodEQtyInDB;
 
-    private CommStlSubcttEngH commStlSubcttEngH;
+    private ReportHeader reportHeader;
 
     /*所属号*/
     private String strStlInfoPkid;
     private String strTkcttPkid;
     private EsInitStl esInitStl;
+
+    private ProgInfoShow progInfoShow;
 
     private String strSubmitType;
     private String strPassFlag;
@@ -82,7 +84,7 @@ public class ProgMeaItemAction {
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
-        commStlSubcttEngH =new CommStlSubcttEngH();
+        reportHeader =new ReportHeader();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if(parammap.containsKey("strFlowType")){
             strFlowType=parammap.get("strFlowType").toString();
@@ -100,22 +102,6 @@ public class ProgMeaItemAction {
 
         resetAction();
         initData();
-
-        /*分包合同数据*/
-        // From StlPkid To SubcttPkid
-        EsInitStl esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
-        commStlSubcttEngH.setStrSubcttPkid(esInitStl.getStlPkid());
-        commStlSubcttEngH.setStrStlId(esInitStl.getId());
-        // From SubcttPkid To CstplPkid
-        EsCttInfo esCttInfo_Subctt= cttInfoService.getCttInfoByPkId(commStlSubcttEngH.getStrSubcttPkid());
-        commStlSubcttEngH.setStrCstplPkid(esCttInfo_Subctt.getParentPkid());
-        commStlSubcttEngH.setStrSubcttId(esCttInfo_Subctt.getId());
-        commStlSubcttEngH.setStrSubcttName(esCttInfo_Subctt.getName());
-        commStlSubcttEngH.setStrSignPartPkid(esCttInfo_Subctt.getSignPartB());
-        commStlSubcttEngH.setStrSignPartName(signPartService.getEsInitCustByPkid(
-                commStlSubcttEngH.getStrSignPartPkid()).getName());
-
-        beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
     }
     /*重置*/
     public void resetAction(){
@@ -263,6 +249,26 @@ public class ProgMeaItemAction {
     }
     /*初始化操作*/
     private void initData() {
+        /*分包合同数据*/
+        // From StlPkid To SubcttPkid
+        EsInitStl esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
+        reportHeader.setStrSubcttPkid(esInitStl.getStlPkid());
+        reportHeader.setStrStlId(esInitStl.getId());
+        // From SubcttPkid To CstplPkid
+        EsCttInfo esCttInfoTemp= cttInfoService.getCttInfoByPkId(reportHeader.getStrSubcttPkid());
+        reportHeader.setStrCstplPkid(esCttInfoTemp.getParentPkid());
+        reportHeader.setStrSubcttId(esCttInfoTemp.getId());
+        reportHeader.setStrSubcttName(esCttInfoTemp.getName());
+        reportHeader.setStrSignPartPkid(esCttInfoTemp.getSignPartB());
+        reportHeader.setStrSignPartName(signPartService.getEsInitCustByPkid(
+                reportHeader.getStrSignPartPkid()).getName());
+
+        beansMap.put("reportHeader", reportHeader);
+
+        progInfoShow=progStlInfoService.fromModelToModelShow(esInitStl);
+        progInfoShow.setStlName(esCttInfoTemp.getName());
+        progInfoShow.setSignPartBName(reportHeader.getStrSignPartName());
+
         /*分包合同*/
         List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
         progMeaItemShowListForExcel=new ArrayList<ProgMeaItemShow>();
@@ -535,7 +541,7 @@ public class ProgMeaItemAction {
         } else {
             String excelFilename = "总包数量计量-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
             JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap,"stlTkcttEngMea.xls");
+            jxls.exportList(excelFilename, beansMap,"progMea.xls");
             // 其他状态的票据需要添加时再修改导出文件名
         }
         return null;
@@ -643,6 +649,15 @@ public class ProgMeaItemAction {
         }
     }
     /* 智能字段Start*/
+
+    public ProgInfoShow getProgInfoShow() {
+        return progInfoShow;
+    }
+
+    public void setProgInfoShow(ProgInfoShow progInfoShow) {
+        this.progInfoShow = progInfoShow;
+    }
+
     public CttInfoService getCttInfoService() {
         return cttInfoService;
     }
@@ -730,12 +745,12 @@ public class ProgMeaItemAction {
         this.esFlowControl = esFlowControl;
     }
 
-    public CommStlSubcttEngH getCommStlSubcttEngH() {
-        return commStlSubcttEngH;
+    public ReportHeader getReportHeader() {
+        return reportHeader;
     }
 
-    public void setCommStlSubcttEngH(CommStlSubcttEngH commStlSubcttEngH) {
-        this.commStlSubcttEngH = commStlSubcttEngH;
+    public void setReportHeader(ReportHeader reportHeader) {
+        this.reportHeader = reportHeader;
     }
 
     public SignPartService getSignPartService() {

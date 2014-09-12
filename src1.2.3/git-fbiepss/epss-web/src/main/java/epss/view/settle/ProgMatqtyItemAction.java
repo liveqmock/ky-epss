@@ -15,8 +15,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.util.MessageUtil;;
-
+import skyline.util.MessageUtil;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -64,7 +63,6 @@ public class ProgMatqtyItemAction {
     private BigDecimal bDEngMMng_CurrentPeriodMQtyInDB;
 
     private String strSubmitType;
-    private String strSubcttPkid;
     private EsInitStl esInitStl;
 
     /*控制维护画面层级部分的显示*/
@@ -73,7 +71,7 @@ public class ProgMatqtyItemAction {
     private String strNotPassToStatus;
     private List<ProgMatQtyItemShow> progMatQtyItemShowListExcel;
     private Map beansMap;
-    private ProgInfoShow progMatqtyInfoShowH;
+    private ProgInfoShow progInfoShow;
     @PostConstruct
     public void init() {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -84,12 +82,11 @@ public class ProgMatqtyItemAction {
         if(parammap.containsKey("strStlInfoPkid")){
             String strStlInfoPkidTemp=parammap.get("strStlInfoPkid").toString();
             esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkidTemp);
-            beansMap.put("esInitStl", esInitStl);
-            strSubcttPkid= esInitStl.getStlPkid();
         }
 
         strPassFlag="true";
-        if("Mng".equals(strFlowType)&&ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitStl.getFlowStatus())) {
+        if("Mng".equals(strFlowType)&&
+                ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(esInitStl.getFlowStatus())) {
             strPassFlag="false";
         }
         resetAction();
@@ -100,14 +97,16 @@ public class ProgMatqtyItemAction {
     private void initData() {
         try {
             // 详细页头
-            EsCttInfo esCttInfo_Subctt= cttInfoService.getCttInfoByPkId(esInitStl.getStlPkid());
-            progMatqtyInfoShowH.setStlName(esCttInfo_Subctt.getName());
-            progMatqtyInfoShowH.setSignPartBName(signPartService.getEsInitCustByPkid(esCttInfo_Subctt.getSignPartB()).getName());
-            beansMap.put("progMatqtyInfoShowH", progMatqtyInfoShowH);
+            EsCttInfo esCttInfoTemp= cttInfoService.getCttInfoByPkId(esInitStl.getStlPkid());
+            progInfoShow=progStlInfoService.fromModelToModelShow(esInitStl);
+            progInfoShow.setStlName(esCttInfoTemp.getName());
+            progInfoShow.setSignPartBName(signPartService.getEsInitCustByPkid(esCttInfoTemp.getSignPartB()).getName());
+            beansMap.put("progInfoShow", progInfoShow);
+
             /*分包合同*/
             List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
             esCttItemList = cttItemService.getEsItemList(
-                    ESEnum.ITEMTYPE2.getCode(), strSubcttPkid);
+                    ESEnum.ITEMTYPE2.getCode(), esInitStl.getStlPkid());
             if(esCttItemList.size()<=0){
                 return;
             }
@@ -153,7 +152,7 @@ public class ProgMatqtyItemAction {
             progMatQtyItemShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
 
             EsItemStlSubcttEngM esItemStlSubcttEngM=new EsItemStlSubcttEngM();
-            esItemStlSubcttEngM.setSubcttPkid(strSubcttPkid);
+            esItemStlSubcttEngM.setSubcttPkid(esInitStl.getStlPkid());
             esItemStlSubcttEngM.setSubcttItemPkid(itemUnit.getPkid());
             esItemStlSubcttEngM.setPeriodNo(esInitStl.getPeriodNo());
             List<EsItemStlSubcttEngM> esItemStlSubcttEngMList =
@@ -229,7 +228,7 @@ public class ProgMatqtyItemAction {
 
     /*重置*/
     public void resetAction(){
-        progMatqtyInfoShowH=new ProgInfoShow();
+        progInfoShow=new ProgInfoShow();
         progMatQtyItemShowSel =new ProgMatQtyItemShow();
         progMatQtyItemShowUpd =new ProgMatQtyItemShow();
         progMatQtyItemShowDel =new ProgMatQtyItemShow();
@@ -243,7 +242,7 @@ public class ProgMatqtyItemAction {
                     return;
                 }
                 ProgMatQtyItemShow progMatQtyItemShowTemp=new ProgMatQtyItemShow();
-                progMatQtyItemShowTemp.setEngMMng_SubcttPkid(strSubcttPkid);
+                progMatQtyItemShowTemp.setEngMMng_SubcttPkid(esInitStl.getStlPkid());
                 progMatQtyItemShowTemp.setEngMMng_PeriodNo(esInitStl.getPeriodNo());
                 progMatQtyItemShowTemp.setEngMMng_SubcttItemPkid(progMatQtyItemShowUpd.getSubctt_Pkid());
                 List<EsItemStlSubcttEngM> esItemStlSubcttEngMListTemp =
@@ -256,7 +255,7 @@ public class ProgMatqtyItemAction {
                     progMatQtyItemShowUpd.setEngMMng_Pkid (esItemStlSubcttEngMListTemp.get(0).getPkid());
                     updRecordAction(progMatQtyItemShowUpd);
                 } else if (esItemStlSubcttEngMListTemp.size()==0){
-                    progMatQtyItemShowUpd.setEngMMng_SubcttPkid(strSubcttPkid);
+                    progMatQtyItemShowUpd.setEngMMng_SubcttPkid(esInitStl.getStlPkid());
                     progMatQtyItemShowUpd.setEngMMng_PeriodNo(esInitStl.getPeriodNo());
                     progMatQtyItemShowUpd.setEngMMng_SubcttItemPkid(progMatQtyItemShowUpd.getSubctt_Pkid());
                     addRecordAction(progMatQtyItemShowUpd);
@@ -537,7 +536,7 @@ public class ProgMatqtyItemAction {
         } else {
             String excelFilename = "分包材料结算-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
             JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap,"stlSubCttEngM.xls");
+            jxls.exportList(excelFilename, beansMap,"progMatqty.xls");
             // 其他状态的票据需要添加时再修改导出文件名
         }
         return null;
@@ -694,12 +693,12 @@ public class ProgMatqtyItemAction {
         this.signPartService = signPartService;
     }
 
-    public ProgInfoShow getProgMatqtyInfoShowH() {
-        return progMatqtyInfoShowH;
+    public ProgInfoShow getProgInfoShow() {
+        return progInfoShow;
     }
 
-    public void setProgMatqtyInfoShowH(ProgInfoShow progMatqtyInfoShowH) {
-        this.progMatqtyInfoShowH = progMatqtyInfoShowH;
+    public void setProgInfoShow(ProgInfoShow progInfoShow) {
+        this.progInfoShow = progInfoShow;
     }
 
     public EsInitStl getEsInitStl() {
@@ -709,7 +708,6 @@ public class ProgMatqtyItemAction {
     public void setEsInitStl(EsInitStl esInitStl) {
         this.esInitStl = esInitStl;
     }
-	/*智能字段End*/
 
     public ProgWorkqtyItemService getProgWorkqtyItemService() {
         return progWorkqtyItemService;
@@ -718,4 +716,5 @@ public class ProgMatqtyItemAction {
     public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
         this.progWorkqtyItemService = progWorkqtyItemService;
     }
+    /*智能字段End*/
 }

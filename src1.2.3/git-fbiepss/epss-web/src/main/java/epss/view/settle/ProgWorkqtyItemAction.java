@@ -15,8 +15,7 @@ import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.util.MessageUtil;;
-
+import skyline.util.MessageUtil;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -64,7 +63,7 @@ public class ProgWorkqtyItemAction {
     private String strSubmitType;
     private String strSubcttPkid;
     private EsInitStl esInitStl;
-    private ProgInfoShow progWorkqtyInfoShowH;
+    private ProgInfoShow progInfoShow;
 
     /*控制维护画面层级部分的显示*/
     private String strPassFlag;
@@ -97,13 +96,13 @@ public class ProgWorkqtyItemAction {
     private void initData() {
         try {
             // 详细页头
-            EsCttInfo esCttInfo_Subctt= cttInfoService.getCttInfoByPkId(esInitStl.getStlPkid());
-            progWorkqtyInfoShowH.setId(esInitStl.getId());
-            progWorkqtyInfoShowH.setStlName(esCttInfo_Subctt.getName());
-            progWorkqtyInfoShowH.setPeriodNo(esInitStl.getPeriodNo());
-            progWorkqtyInfoShowH.setSignPartBName(signPartService.getEsInitCustByPkid(esCttInfo_Subctt.getSignPartB()).getName());
-            beansMap.put("progWorkqtyInfoShowH", progWorkqtyInfoShowH);
-        /*分包合同*/
+            EsCttInfo esCttInfoTemp= cttInfoService.getCttInfoByPkId(esInitStl.getStlPkid());
+            progInfoShow=progStlInfoService.fromModelToModelShow(esInitStl);
+            progInfoShow.setStlName(esCttInfoTemp.getName());
+            progInfoShow.setSignPartBName(signPartService.getEsInitCustByPkid(esCttInfoTemp.getSignPartB()).getName());
+            beansMap.put("progInfoShow", progInfoShow);
+
+            /*分包合同*/
             List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
             esCttItemList = cttItemService.getEsItemList(
                     ESEnum.ITEMTYPE2.getCode(), strSubcttPkid);
@@ -230,7 +229,7 @@ public class ProgWorkqtyItemAction {
 
     /*重置*/
     public void resetAction(){
-        progWorkqtyInfoShowH=new ProgInfoShow();
+        progInfoShow=new ProgInfoShow();
         progWorkqtyItemShowSel =new ProgWorkqtyItemShow();
         progWorkqtyItemShowUpd =new ProgWorkqtyItemShow();
         progWorkqtyItemShowDel =new ProgWorkqtyItemShow();
@@ -500,7 +499,7 @@ public class ProgWorkqtyItemAction {
         } else {
             String excelFilename = "分包数量结算-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
             JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap,"stlSubCttEngQ.xls");
+            jxls.exportList(excelFilename, beansMap,"progWorkqty.xls");
             // 其他状态的票据需要添加时再修改导出文件名
         }
         return null;
@@ -549,8 +548,8 @@ public class ProgWorkqtyItemAction {
         this.cttItemService = cttItemService;
     }
 
-    public ProgInfoShow getProgWorkqtyInfoShowH() {
-        return progWorkqtyInfoShowH;
+    public ProgInfoShow getProgInfoShow() {
+        return progInfoShow;
     }
 
     public ProgWorkqtyItemShow getProgWorkqtyItemShowSel() {

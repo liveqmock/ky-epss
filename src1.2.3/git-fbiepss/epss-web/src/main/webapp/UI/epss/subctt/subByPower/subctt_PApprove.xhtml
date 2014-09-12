@@ -36,16 +36,16 @@
                         <h:panelGrid columns="4">
                             <p:outputLabel value="分包合同：" for="idNotForm" />
                             <p:selectOneMenu id="idNotForm"
-                                             value="#{subcttStlProgInfoMngAction.progInfoShowNotForm.stlPkid}">
-                                <f:selectItems value="#{subcttStlProgInfoMngAction.subcttList}"/>
+                                             value="#{progSubstlInfoTaskAction.progInfoShowNotForm.stlPkid}">
+                                <f:selectItems value="#{progSubstlInfoTaskAction.subcttList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="期数编码：" for="periodNoNotForm"/>
-                            <p:inputText id="periodNoNotForm" value="#{subcttStlProgInfoMngAction.progInfoShowNotForm.periodNo}"
+                            <p:inputText id="periodNoNotForm" value="#{progSubstlInfoTaskAction.progInfoShowNotForm.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:commandButton id="qryBtnNotForm" value="查询"
-                                             action="#{subcttStlProgInfoMngAction.onQueryFormPreAction('Approve')}"
+                                             action="#{progSubstlInfoTaskAction.onQueryFormPreAction('Approve')}"
                                              update="pdtNotForm,msgs">
                             </p:commandButton>
                             <p:commandButton id="resetBtnNotForm" value="重置"
@@ -55,10 +55,10 @@
                         </h:panelGrid>
                     </h:panelGrid>
                     <p:dataTable id="pdtNotForm" style="width:100%;"
-                                 value="#{subcttStlProgInfoMngAction.progInfoShowNotFormList}"
+                                 value="#{progSubstlInfoTaskAction.progInfoShowNotFormList}"
                                  var="recordNotForm"
                                  rowKey="#{recordNotForm.pkid}"
-                                 selection="#{subcttStlProgInfoMngAction.progInfoShowNotFormSelected}"
+                                 selection="#{progSubstlInfoTaskAction.progInfoShowNotFormSelected}"
                                  selectionMode="single"
                                  paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                                  {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -97,20 +97,20 @@
                         <h:panelGrid columns="4">
                             <p:outputLabel value="分包合同：" for="id" />
                             <p:selectOneMenu id="id"
-                                             value="#{subcttStlProgInfoMngAction.progInfoShow.stlPkid}"
-                                             disabled="#{subcttStlProgInfoMngAction.styleModel.disabled_Flag}"
-                                             style="#{subcttStlProgInfoMngAction.styleModel.disabled_Style};">
-                                <f:selectItems value="#{subcttStlProgInfoMngAction.subcttList}"/>
+                                             value="#{progSubstlInfoTaskAction.progInfoShow.stlPkid}"
+                                             disabled="#{progSubstlInfoTaskAction.styleModel.disabled_Flag}"
+                                             style="#{progSubstlInfoTaskAction.styleModel.disabled_Style};">
+                                <f:selectItems value="#{progSubstlInfoTaskAction.subcttList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="期数编码：" for="periodNo"/>
-                            <p:inputText id="periodNo" value="#{subcttStlProgInfoMngAction.progInfoShow.periodNo}"
+                            <p:inputText id="periodNo" value="#{progSubstlInfoTaskAction.progInfoShow.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"
-                                         disabled="#{subcttStlProgInfoMngAction.styleModel.disabled_Flag}"
-                                         style="#{subcttStlProgInfoMngAction.styleModel.disabled_Style};"/>
+                                         disabled="#{progSubstlInfoTaskAction.styleModel.disabled_Flag}"
+                                         style="#{progSubstlInfoTaskAction.styleModel.disabled_Style};"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:commandButton id="qryBtn" value="查询"
-                                             action="#{subcttStlProgInfoMngAction.onQueryFormedAction('Approve','true')}"
+                                             action="#{progSubstlInfoTaskAction.onQueryFormedAction('Approve','true')}"
                                              update="pdt,msgs">
                             </p:commandButton>
                             <p:commandButton id="resetBtn" value="重置"
@@ -120,7 +120,7 @@
                         </h:panelGrid>
                     </h:panelGrid>
                     <p:dataTable id="pdt" style="width:100%;"
-                                 value="#{subcttStlProgInfoMngAction.progInfoShowList}"
+                                 value="#{progSubstlInfoTaskAction.progInfoShowList}"
                                  var="record"
                                  rowKey="#{record.pkid}"
                                  selectionMode="single"

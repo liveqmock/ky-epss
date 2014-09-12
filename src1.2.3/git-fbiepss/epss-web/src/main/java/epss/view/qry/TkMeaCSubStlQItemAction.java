@@ -12,7 +12,7 @@ import epss.common.enums.ESEnumStatusFlag;
 import skyline.util.JxlsManager;
 import epss.repository.model.EsCttItem;
 import epss.repository.model.model_show.*;
-import skyline.util.MessageUtil;;
+import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.repository.model.EsCttInfo;
 import epss.repository.model.EsItemStlTkcttEngMea;
@@ -64,14 +64,14 @@ public class TkMeaCSubStlQItemAction {
     private String strPeriodNo;
 
     // 画面上控件的显示控制
-    private CommStlSubcttEngH commStlSubcttEngH;
+    private ReportHeader reportHeader;
     private String strExportToExcelRendered;
     private Map beansMap;
 
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
-        commStlSubcttEngH =new CommStlSubcttEngH();
+        reportHeader =new ReportHeader();
         // 获取已经批准了的总包合同列表
         List<CttInfoShow> cttInfoShowList =
                 cttInfoService.getCttInfoListByCttType_Status(
@@ -108,9 +108,9 @@ public class TkMeaCSubStlQItemAction {
         // 1。总包合同信息
         // 1。1。取出总包合同信息
         EsCttInfo esTkcttInfo= cttInfoService.getCttInfoByPkId(strCttInfoPkid);
-        commStlSubcttEngH.setStrTkcttId(esTkcttInfo.getId());
-        commStlSubcttEngH.setStrTkcttName(esTkcttInfo.getName());
-        beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
+        reportHeader.setStrTkcttId(esTkcttInfo.getId());
+        reportHeader.setStrTkcttName(esTkcttInfo.getName());
+        beansMap.put("reportHeader", reportHeader);
         // 1。2。抽取相应总包合同的详细内容
         List<EsCttItem> esCttItemOfTkcttList = cttItemService.getEsItemList(
                 ESEnum.ITEMTYPE0.getCode(),
@@ -587,12 +587,12 @@ public class TkMeaCSubStlQItemAction {
         this.strExportToExcelRendered = strExportToExcelRendered;
     }
 
-    public CommStlSubcttEngH getCommStlSubcttEngH() {
-        return commStlSubcttEngH;
+    public ReportHeader getReportHeader() {
+        return reportHeader;
     }
 
-    public void setCommStlSubcttEngH(CommStlSubcttEngH commStlSubcttEngH) {
-        this.commStlSubcttEngH = commStlSubcttEngH;
+    public void setReportHeader(ReportHeader reportHeader) {
+        this.reportHeader = reportHeader;
     }
 
     public List<QryTkMeaCSStlQShow> getQryTkMeaCSStlQShowListForExcel() {

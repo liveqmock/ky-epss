@@ -1,20 +1,17 @@
 package epss.view.deptOper;
 
-import epss.service.TidkeysService;
-import skyline.security.MD5Helper;
-import skyline.util.MessageUtil;;
 import epss.repository.model.Dept;
 import epss.repository.model.Oper;
 import epss.repository.model.model_show.DeptOperShow;
 import epss.service.DeptOperService;
-import org.apache.commons.beanutils.BeanUtils;
+import epss.service.TidkeysService;
 import org.apache.commons.lang.StringUtils;
-import org.primefaces.event.NodeSelectEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import skyline.security.MD5Helper;
+import skyline.util.MessageUtil;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;

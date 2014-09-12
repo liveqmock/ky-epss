@@ -41,6 +41,17 @@
                                          ajax="false">
                         </p:commandButton>
                     </h:panelGrid>
+                    <h:panelGrid columns="6">
+                        <p:outputLabel value="总包合同编号：" for="id"/>
+                        <p:inputText id="id" value="#{progEstItemAction.progInfoShow.id}"
+                                     readonly="true" style="background-color:gainsboro;"/>
+                        <p:outputLabel value="总包合同名称：" for="cttName"/>
+                        <p:inputText id="cttName" value="#{progEstItemAction.progInfoShow.stlName}"
+                                     readonly="true" style="width:400px;background-color:gainsboro;"/>
+                        <p:outputLabel value="期号：" for="periodNo"/>
+                        <p:inputText id="periodNo" value="#{progEstItemAction.progInfoShow.periodNo}"
+                                     readonly="true" style="background-color:gainsboro;"/>
+                    </h:panelGrid>
                     <p:dataTable id="pdt" style="width:100%;"
                                  value="#{progEstItemAction.progEstItemShowList}"
                                  var="record"

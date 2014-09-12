@@ -3,12 +3,12 @@ package epss.view.settle;
 import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumPreStatusFlag;
 import epss.common.enums.ESEnumStatusFlag;
-import epss.repository.model.model_show.CommStlSubcttEngH;
+import epss.repository.model.model_show.ProgInfoShow;
+import epss.repository.model.model_show.ReportHeader;
 import epss.repository.model.model_show.ProgEstItemShow;
-import skyline.util.MessageUtil;;
+import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.repository.model.*;
-import epss.repository.model.model_show.ProgInfoShow;
 import epss.service.*;
 import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
@@ -62,12 +62,14 @@ public class ProgEstItemAction {
     private BigDecimal bDEng_BeginToCurrentPeriodEQtyInDB;
     private BigDecimal bDEng_CurrentPeriodEQtyInDB;
 
-    private CommStlSubcttEngH commStlSubcttEngH;
+    private ReportHeader reportHeader;
 
     /*所属号*/
     private String strStlInfoPkid;
     private String strTkcttPkid;
     private EsInitStl esInitStl;
+
+    private ProgInfoShow progInfoShow;
 
     private String strSubmitType;
     private String strPassFlag;
@@ -81,7 +83,7 @@ public class ProgEstItemAction {
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
-        commStlSubcttEngH =new CommStlSubcttEngH();
+        reportHeader =new ReportHeader();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if(parammap.containsKey("strFlowType")){
             strFlowType=parammap.get("strFlowType").toString();
@@ -99,23 +101,116 @@ public class ProgEstItemAction {
 
         resetAction();
         initData();
+    }
 
-        /*分包合同数据*/
+    /*初始化操作*/
+    private void initData() {
+         /*分包合同数据*/
         // From StlPkid To SubcttPkid
         EsInitStl esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
-        commStlSubcttEngH.setStrSubcttPkid(esInitStl.getStlPkid());
-        commStlSubcttEngH.setStrStlId(esInitStl.getId());
+        reportHeader.setStrSubcttPkid(esInitStl.getStlPkid());
+        reportHeader.setStrStlId(esInitStl.getId());
         // From SubcttPkid To CstplPkid
-        EsCttInfo esCttInfo_Subctt= cttInfoService.getCttInfoByPkId(commStlSubcttEngH.getStrSubcttPkid());
-        commStlSubcttEngH.setStrCstplPkid(esCttInfo_Subctt.getParentPkid());
-        commStlSubcttEngH.setStrSubcttId(esCttInfo_Subctt.getId());
-        commStlSubcttEngH.setStrSubcttName(esCttInfo_Subctt.getName());
-        commStlSubcttEngH.setStrSignPartPkid(esCttInfo_Subctt.getSignPartB());
-        commStlSubcttEngH.setStrSignPartName(signPartService.getEsInitCustByPkid(
-                commStlSubcttEngH.getStrSignPartPkid()).getName());
+        EsCttInfo esCttInfoTemp= cttInfoService.getCttInfoByPkId(reportHeader.getStrSubcttPkid());
+        reportHeader.setStrCstplPkid(esCttInfoTemp.getParentPkid());
+        reportHeader.setStrSubcttId(esCttInfoTemp.getId());
+        reportHeader.setStrSubcttName(esCttInfoTemp.getName());
+        reportHeader.setStrSignPartPkid(esCttInfoTemp.getSignPartB());
+        reportHeader.setStrSignPartName(signPartService.getEsInitCustByPkid(
+                reportHeader.getStrSignPartPkid()).getName());
 
-        beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
+        beansMap.put("reportHeader", reportHeader);
+
+        progInfoShow=progStlInfoService.fromModelToModelShow(esInitStl);
+        progInfoShow.setStlName(esCttInfoTemp.getName());
+        progInfoShow.setSignPartBName(reportHeader.getStrSignPartName());
+
+        /*分包合同*/
+        List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
+        progEstItemShowListForExcel=new ArrayList<ProgEstItemShow>();
+        esCttItemList = cttItemService.getEsItemList(
+                ESEnum.ITEMTYPE0.getCode(), strTkcttPkid);
+        if(esCttItemList.size()<=0){
+            return;
+        }
+        progEstItemShowList =new ArrayList<ProgEstItemShow>();
+        recursiveDataTable("root", esCttItemList, progEstItemShowList);
+        progEstItemShowList =getItemStlTkcttEngSMList_DoFromatNo(progEstItemShowList);
+        setItemOfEsItemHieRelapList_AddTotal();
+        beansMap.put("progEstItemShowListForExcel", progEstItemShowListForExcel);
+        // 表内容设定
+        if(progEstItemShowList.size()>0){
+            strExportToExcelRendered="true";
+        }else{
+            strExportToExcelRendered="false";
+        }
     }
+    /*根据数据库中层级关系数据列表得到总包合同*/
+    private void recursiveDataTable(String strLevelParentId,
+                                    List<EsCttItem> esCttItemListPara,
+                                    List<ProgEstItemShow> sprogEstItemShowListPara){
+        // 根据父层级号获得该父层级下的子节点
+        List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
+        // 通过父层id查找它的孩子
+        subEsCttItemList =getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
+        BigDecimal bdContractUnitPrice=new BigDecimal(0);
+        BigDecimal bdCurrentPeriodQty=new BigDecimal(0);
+        BigDecimal bdBeginToCurrentPeriodQty=new BigDecimal(0);
+        for(EsCttItem itemUnit: subEsCttItemList){
+            ProgEstItemShow progEstItemShowTemp = new ProgEstItemShow();
+            progEstItemShowTemp.setTkctt_Pkid(itemUnit.getPkid());
+            progEstItemShowTemp.setTkctt_BelongToType(itemUnit.getBelongToType());
+            progEstItemShowTemp.setTkctt_BelongToPkid(itemUnit.getBelongToPkid());
+            progEstItemShowTemp.setTkctt_ParentPkid(itemUnit.getParentPkid());
+            progEstItemShowTemp.setTkctt_Grade(itemUnit.getGrade());
+            progEstItemShowTemp.setTkctt_Orderid(itemUnit.getOrderid());
+            progEstItemShowTemp.setTkctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
+            progEstItemShowTemp.setTkctt_Name(itemUnit.getName());
+            progEstItemShowTemp.setTkctt_Note(itemUnit.getNote());
+            progEstItemShowTemp.setTkctt_Unit(itemUnit.getUnit());
+            progEstItemShowTemp.setTkctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
+            bdContractUnitPrice=ToolUtil.getBdIgnoreNull(itemUnit.getContractUnitPrice());
+            progEstItemShowTemp.setTkctt_ContractQuantity(itemUnit.getContractQuantity());
+            progEstItemShowTemp.setTkctt_ContractAmount(itemUnit.getContractAmount());
+
+            EsItemStlTkcttEngSta esItemStlTkcttEngSta=new EsItemStlTkcttEngSta();
+            esItemStlTkcttEngSta.setTkcttPkid(strTkcttPkid);
+            esItemStlTkcttEngSta.setTkcttItemPkid(progEstItemShowTemp.getTkctt_Pkid());
+            esItemStlTkcttEngSta.setPeriodNo(esInitStl.getPeriodNo());
+            List<EsItemStlTkcttEngSta> esItemStlTkcttEngStaList =
+                    progEstItemService.selectRecordsByExample(esItemStlTkcttEngSta);
+            if(esItemStlTkcttEngStaList.size()>0){
+                esItemStlTkcttEngSta= esItemStlTkcttEngStaList.get(0);
+                String strCreatedByName= ToolUtil.getUserName(esItemStlTkcttEngSta.getCreatedBy());
+                String strLastUpdByName= ToolUtil.getUserName(esItemStlTkcttEngSta.getLastUpdBy());
+                progEstItemShowTemp.setEng_Pkid(esItemStlTkcttEngSta.getPkid());
+                progEstItemShowTemp.setEng_PeriodNo(esItemStlTkcttEngSta.getPeriodNo());
+                progEstItemShowTemp.setEng_TkcttPkid(esItemStlTkcttEngSta.getTkcttPkid());
+                progEstItemShowTemp.setEng_TkcttItemPkid(esItemStlTkcttEngSta.getTkcttItemPkid());
+                progEstItemShowTemp.setEng_CurrentPeriodEQty(esItemStlTkcttEngSta.getCurrentPeriodQty());
+                bdCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngSta.getCurrentPeriodQty());
+                progEstItemShowTemp.setEng_CurrentPeriodEAmount(
+                        ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdCurrentPeriodQty)));
+
+                progEstItemShowTemp.setEng_BeginToCurrentPeriodEQty(esItemStlTkcttEngSta.getBeginToCurrentPeriodQty());
+                bdBeginToCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngSta.getBeginToCurrentPeriodQty());
+                progEstItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
+                        ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdBeginToCurrentPeriodQty)));
+
+                progEstItemShowTemp.setEng_DeletedFlag(esItemStlTkcttEngSta.getDeleteFlag());
+                progEstItemShowTemp.setEng_CreatedBy(esItemStlTkcttEngSta.getCreatedBy());
+                progEstItemShowTemp.setEng_CreatedByName(strCreatedByName);
+                progEstItemShowTemp.setEng_CreatedDate(esItemStlTkcttEngSta.getCreatedDate());
+                progEstItemShowTemp.setEng_LastUpdBy(esItemStlTkcttEngSta.getLastUpdBy());
+                progEstItemShowTemp.setEng_LastUpdByName(strLastUpdByName);
+                progEstItemShowTemp.setEng_LastUpdDate(esItemStlTkcttEngSta.getLastUpdDate());
+                progEstItemShowTemp.setEng_ModificationNum(esItemStlTkcttEngSta.getModificationNum());
+            }
+            sprogEstItemShowListPara.add(progEstItemShowTemp) ;
+            recursiveDataTable(progEstItemShowTemp.getTkctt_Pkid(), esCttItemListPara, sprogEstItemShowListPara);
+        }
+    }
+
     /*重置*/
     public void resetAction(){
         progEstItemShowSel =new ProgEstItemShow();
@@ -258,93 +353,6 @@ public class ProgEstItemAction {
         } catch (Exception e) {
             logger.error("", e);
             MessageUtil.addError(e.getMessage());
-        }
-    }
-    /*初始化操作*/
-    private void initData() {
-        /*分包合同*/
-        List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
-        progEstItemShowListForExcel=new ArrayList<ProgEstItemShow>();
-        esCttItemList = cttItemService.getEsItemList(
-                ESEnum.ITEMTYPE0.getCode(), strTkcttPkid);
-        if(esCttItemList.size()<=0){
-            return;
-        }
-        progEstItemShowList =new ArrayList<ProgEstItemShow>();
-        recursiveDataTable("root", esCttItemList, progEstItemShowList);
-        progEstItemShowList =getItemStlTkcttEngSMList_DoFromatNo(progEstItemShowList);
-        setItemOfEsItemHieRelapList_AddTotal();
-        beansMap.put("progEstItemShowListForExcel", progEstItemShowListForExcel);
-        // 表内容设定
-        if(progEstItemShowList.size()>0){
-            strExportToExcelRendered="true";
-        }else{
-            strExportToExcelRendered="false";
-        }
-    }
-    /*根据数据库中层级关系数据列表得到总包合同*/
-    private void recursiveDataTable(String strLevelParentId,
-                                      List<EsCttItem> esCttItemListPara,
-                                      List<ProgEstItemShow> sprogEstItemShowListPara){
-        // 根据父层级号获得该父层级下的子节点
-        List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
-        // 通过父层id查找它的孩子
-        subEsCttItemList =getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
-        BigDecimal bdContractUnitPrice=new BigDecimal(0);
-        BigDecimal bdCurrentPeriodQty=new BigDecimal(0);
-        BigDecimal bdBeginToCurrentPeriodQty=new BigDecimal(0);
-        for(EsCttItem itemUnit: subEsCttItemList){
-            ProgEstItemShow progEstItemShowTemp = new ProgEstItemShow();
-            progEstItemShowTemp.setTkctt_Pkid(itemUnit.getPkid());
-            progEstItemShowTemp.setTkctt_BelongToType(itemUnit.getBelongToType());
-            progEstItemShowTemp.setTkctt_BelongToPkid(itemUnit.getBelongToPkid());
-            progEstItemShowTemp.setTkctt_ParentPkid(itemUnit.getParentPkid());
-            progEstItemShowTemp.setTkctt_Grade(itemUnit.getGrade());
-            progEstItemShowTemp.setTkctt_Orderid(itemUnit.getOrderid());
-            progEstItemShowTemp.setTkctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
-            progEstItemShowTemp.setTkctt_Name(itemUnit.getName());
-            progEstItemShowTemp.setTkctt_Note(itemUnit.getNote());
-            progEstItemShowTemp.setTkctt_Unit(itemUnit.getUnit());
-            progEstItemShowTemp.setTkctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
-            bdContractUnitPrice=ToolUtil.getBdIgnoreNull(itemUnit.getContractUnitPrice());
-            progEstItemShowTemp.setTkctt_ContractQuantity(itemUnit.getContractQuantity());
-            progEstItemShowTemp.setTkctt_ContractAmount(itemUnit.getContractAmount());
-
-            EsItemStlTkcttEngSta esItemStlTkcttEngSta=new EsItemStlTkcttEngSta();
-            esItemStlTkcttEngSta.setTkcttPkid(strTkcttPkid);
-            esItemStlTkcttEngSta.setTkcttItemPkid(progEstItemShowTemp.getTkctt_Pkid());
-            esItemStlTkcttEngSta.setPeriodNo(esInitStl.getPeriodNo());
-            List<EsItemStlTkcttEngSta> esItemStlTkcttEngStaList =
-                    progEstItemService.selectRecordsByExample(esItemStlTkcttEngSta);
-            if(esItemStlTkcttEngStaList.size()>0){
-                esItemStlTkcttEngSta= esItemStlTkcttEngStaList.get(0);
-                String strCreatedByName= ToolUtil.getUserName(esItemStlTkcttEngSta.getCreatedBy());
-                String strLastUpdByName= ToolUtil.getUserName(esItemStlTkcttEngSta.getLastUpdBy());
-                progEstItemShowTemp.setEng_Pkid(esItemStlTkcttEngSta.getPkid());
-                progEstItemShowTemp.setEng_PeriodNo(esItemStlTkcttEngSta.getPeriodNo());
-                progEstItemShowTemp.setEng_TkcttPkid(esItemStlTkcttEngSta.getTkcttPkid());
-                progEstItemShowTemp.setEng_TkcttItemPkid(esItemStlTkcttEngSta.getTkcttItemPkid());
-                progEstItemShowTemp.setEng_CurrentPeriodEQty(esItemStlTkcttEngSta.getCurrentPeriodQty());
-                bdCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngSta.getCurrentPeriodQty());
-                progEstItemShowTemp.setEng_CurrentPeriodEAmount(
-                        ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdCurrentPeriodQty)));
-
-                progEstItemShowTemp.setEng_BeginToCurrentPeriodEQty(esItemStlTkcttEngSta.getBeginToCurrentPeriodQty());
-                bdBeginToCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngSta.getBeginToCurrentPeriodQty());
-                progEstItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
-                        ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdBeginToCurrentPeriodQty)));
-
-                progEstItemShowTemp.setEng_DeletedFlag(esItemStlTkcttEngSta.getDeleteFlag());
-                progEstItemShowTemp.setEng_CreatedBy(esItemStlTkcttEngSta.getCreatedBy());
-                progEstItemShowTemp.setEng_CreatedByName(strCreatedByName);
-                progEstItemShowTemp.setEng_CreatedDate(esItemStlTkcttEngSta.getCreatedDate());
-                progEstItemShowTemp.setEng_LastUpdBy(esItemStlTkcttEngSta.getLastUpdBy());
-                progEstItemShowTemp.setEng_LastUpdByName(strLastUpdByName);
-                progEstItemShowTemp.setEng_LastUpdDate(esItemStlTkcttEngSta.getLastUpdDate());
-                progEstItemShowTemp.setEng_ModificationNum(esItemStlTkcttEngSta.getModificationNum());
-            }
-            sprogEstItemShowListPara.add(progEstItemShowTemp) ;
-            recursiveDataTable(progEstItemShowTemp.getTkctt_Pkid(), esCttItemListPara, sprogEstItemShowListPara);
         }
     }
 
@@ -529,7 +537,6 @@ public class ProgEstItemAction {
         return progEstItemShowListPara;
     }
 
-
     public String onExportExcel()throws IOException, WriteException {
         if (this.progEstItemShowList.size() == 0) {
             MessageUtil.addWarn("记录为空...");
@@ -537,15 +544,16 @@ public class ProgEstItemAction {
         } else {
             String excelFilename = "总包数量统计-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
             JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap,"stlTkcttEngSta.xls");
+            jxls.exportList(excelFilename, beansMap,"progEst.xls");
             // 其他状态的票据需要添加时再修改导出文件名
         }
         return null;
     }
 
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
-             List<EsCttItem> esCttItemListPara) {
+    private List<EsCttItem> getEsCttItemListByParentPkid(
+            String strLevelParentPkid,
+            List<EsCttItem> esCttItemListPara) {
         List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
         /*避开重复链接数据库*/
         for(EsCttItem itemUnit: esCttItemListPara){
@@ -555,6 +563,7 @@ public class ProgEstItemAction {
         }
         return tempEsCttItemList;
     }
+
     /**
      * 根据权限进行审核
      * @param strPowerType
@@ -644,7 +653,17 @@ public class ProgEstItemAction {
             MessageUtil.addError(e.getMessage());
         }
     }
+
     /* 智能字段Start*/
+
+    public ProgInfoShow getProgInfoShow() {
+        return progInfoShow;
+    }
+
+    public void setProgInfoShow(ProgInfoShow progInfoShow) {
+        this.progInfoShow = progInfoShow;
+    }
+
     public CttInfoService getCttInfoService() {
         return cttInfoService;
     }
@@ -716,12 +735,12 @@ public class ProgEstItemAction {
         this.esFlowControl = esFlowControl;
     }
 
-    public CommStlSubcttEngH getCommStlSubcttEngH() {
-        return commStlSubcttEngH;
+    public ReportHeader getReportHeader() {
+        return reportHeader;
     }
 
-    public void setCommStlSubcttEngH(CommStlSubcttEngH commStlSubcttEngH) {
-        this.commStlSubcttEngH = commStlSubcttEngH;
+    public void setReportHeader(ReportHeader reportHeader) {
+        this.reportHeader = reportHeader;
     }
 
     public SignPartService getSignPartService() {

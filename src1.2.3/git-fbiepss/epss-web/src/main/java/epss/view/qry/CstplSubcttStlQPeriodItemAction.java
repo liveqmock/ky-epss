@@ -12,7 +12,7 @@ import epss.common.enums.ESEnum;
 import epss.common.enums.ESEnumStatusFlag;
 import skyline.util.JxlsManager;
 import epss.repository.model.model_show.*;
-import skyline.util.MessageUtil;;
+import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.repository.model.*;
 import epss.service.*;
@@ -82,14 +82,14 @@ public class CstplSubcttStlQPeriodItemAction {
     private String strLatestApprovedPeriodNo;
 
     // 画面上控件的显示控制
-    private CommStlSubcttEngH commStlSubcttEngH;
+    private ReportHeader reportHeader;
     private String strExportToExcelRendered;
     private Map beansMap;
 
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
-        commStlSubcttEngH =new CommStlSubcttEngH();
+        reportHeader =new ReportHeader();
         commColSetList =new ArrayList<CommCol>();
         for(int i=0;i<24;i++){
             CommCol commCol =new CommCol();
@@ -139,13 +139,13 @@ public class CstplSubcttStlQPeriodItemAction {
     }
     private void initData(String strBelongToPkid) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
         EsCttInfo esCttInfo_Subctt= cttInfoService.getCttInfoByPkId(strBelongToPkid);
-        commStlSubcttEngH.setStrCstplPkid(esCttInfo_Subctt.getParentPkid());
-        commStlSubcttEngH.setStrSubcttId(esCttInfo_Subctt.getId());
-        commStlSubcttEngH.setStrSubcttName(esCttInfo_Subctt.getName());
-        commStlSubcttEngH.setStrSignPartPkid(esCttInfo_Subctt.getSignPartB());
-        commStlSubcttEngH.setStrSignPartName(signPartService.getEsInitCustByPkid(
-                commStlSubcttEngH.getStrSignPartPkid()).getName());
-        beansMap.put("commStlSubcttEngH", commStlSubcttEngH);
+        reportHeader.setStrCstplPkid(esCttInfo_Subctt.getParentPkid());
+        reportHeader.setStrSubcttId(esCttInfo_Subctt.getId());
+        reportHeader.setStrSubcttName(esCttInfo_Subctt.getName());
+        reportHeader.setStrSignPartPkid(esCttInfo_Subctt.getSignPartB());
+        reportHeader.setStrSignPartName(signPartService.getEsInitCustByPkid(
+                reportHeader.getStrSignPartPkid()).getName());
+        beansMap.put("reportHeader", reportHeader);
 
         strLatestApprovedPeriodNo=ToolUtil.getStrIgnoreNull(
                 esFlowService.getLatestApprovedPeriodNoByEndPeriod(
@@ -517,12 +517,12 @@ public class CstplSubcttStlQPeriodItemAction {
         this.strLatestApprovedPeriodNo = strLatestApprovedPeriodNo;
     }
 
-    public CommStlSubcttEngH getCommStlSubcttEngH() {
-        return commStlSubcttEngH;
+    public ReportHeader getReportHeader() {
+        return reportHeader;
     }
 
-    public void setCommStlSubcttEngH(CommStlSubcttEngH commStlSubcttEngH) {
-        this.commStlSubcttEngH = commStlSubcttEngH;
+    public void setReportHeader(ReportHeader reportHeader) {
+        this.reportHeader = reportHeader;
     }
 
     public String getStrExportToExcelRendered() {
