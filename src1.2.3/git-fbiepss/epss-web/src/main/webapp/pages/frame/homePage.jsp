@@ -138,21 +138,32 @@
                 doBizLoad();
                 sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
                 doSysLoad();
-                tabbarhide("todotasklayout");
-                document.getElementById("todotask").setAttribute("active", "true");
-                document.getElementById("todotask").className = "tabs-item-active";
+                var strOperid = '<%=operid%>';
+                if(strOperid=="0001"){ //系统管理员
+                    document.getElementById('sys').style.display = 'inline';
+                    tabbarhide("syslayout");
+                    document.getElementById("sys").setAttribute("active", "true");
+                    document.getElementById("sys").className = "tabs-item-active";
+                }else if(strOperid=="9999"){               //超级系统管理员
+                    document.getElementById('todotask').style.display = 'inline';
+                    document.getElementById('donetask').style.display = 'inline';
+                    document.getElementById('biz').style.display = 'inline';
+                    document.getElementById('sys').style.display = 'inline';
+                    tabbarhide("todotasklayout");
+                    document.getElementById("todotask").setAttribute("active", "true");
+                    document.getElementById("todotask").className = "tabs-item-active";
+                }else{                                    //其他用户
+                    document.getElementById('todotask').style.display = 'inline';
+                    document.getElementById('donetask').style.display = 'inline';
+                    document.getElementById('biz').style.display = 'inline';
+                    tabbarhide("todotasklayout");
+                    document.getElementById("todotask").setAttribute("active", "true");
+                    document.getElementById("todotask").className = "tabs-item-active";
+                }
             }
             function relogin() {
                 parent.window.reload = "true";
                 parent.window.location.replace("<%=contextPath%>/pages/security/logout.jsp");
-            }
-            // 控制加载页面时间长时，给用户友好提示
-            document.onreadystatechange = subSomething;//当页面加载状态改变的时候执行这个方法.
-            function subSomething() {
-                if (document.readyState == "complete" &&
-                    window.parent.frames["todoWorkFrame"].document.readyState == "complete") {
-                    document.getElementById('todoloading').style.display = 'none';
-                }
             }
             function myRequest() {
                 var url = "ajaxRequest.do?time=" + Math.random();
@@ -197,26 +208,25 @@
                 <tr style="width:100%; height:25px">
                     <td colspan="5" style="height:25px;">
                         <div onclick="tabbarclk(this);document.frames('todoWorkFrame').location.href='<%=contextPath%>/UI/epss/task/todoTask.xhtml;'" active="true" id="todotask" class="tabs-item-active"
-                             style="float:left;width:80px;margin-left:12px;">
+                             style="float:left;width:80px;margin-left:12px;display: none">
                             <span style="width:100%;">待办业务</span>
                         </div>
-                        <div style="float:left;width:2px;"></div>
+                        <div id="middleId1" style="float:left;width:2px;"></div>
                         <div onclick="document.frames('donetaskworkFrame').location.href='<%=contextPath%>/UI/epss/task/doneTask.xhtml';tabbarclk(this);" active="false" id="donetask" class="tabs-item"
-                             style="float:left;width:80px;">
+                             style="float:left;width:80px;display: none">
                             <span style="width:100%;">已办业务</span>
                         </div>
-                        <div style="float:left;width:2px;"></div>
+                        <div id="middleId2" style="float:left;width:2px;"></div>
                         <div onclick="myRequest();tabbarclk(this);" active="false" id="biz" class="tabs-item"
-                             style="float:left;width:80px;">
+                             style="float:left;width:80px;display: none">
                             <span style="width:100%;">业务管理</span>
                         </div>
-                        <div style="float:left;width:2px;"></div>
+                        <div id="middleId3" style="float:left;width:2px;"></div>
                         <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
-                             style="float:left;width:80px;">
+                             style="float:left;width:80px;display: none">
                             <span style="width:100%;">系统管理</span>
                         </div>
-                        <div style="float:left;width:2px;"></div>
-                        <div style="float:left;width:2px;"></div>
+                        <div id="middleId4" style="float:left;width:2px;"></div>
                         <div id="dynamicInfo" style="float:right;width:300px;">
                             <iframe id="scrollInfoWorkFrame"
                                     src="<%=contextPath%>/UI/epss/scrollInfo/scrollInfo.xhtml"
@@ -236,13 +246,6 @@
                 <tr style="width:100%">
                     <td width="100%" colspan="4">
                         <div class="divlayout" id="todotasklayout">
-                            <div class="divlayout" id="todoloading">
-                                <div style="position:absolute;top:30%;left: 40%;text-align: center;">
-                                    <img src="<%=contextPath%>/images/ajaxloadingbar.gif"/>
-                                    <br>
-                                    <span>页面正在加载中...</span>
-                                </div>
-                            </div>
                             <iframe id="todoWorkFrame"
                                     src="<%=contextPath%>/UI/epss/task/todoTask.xhtml"
                                     width="100%" height="100%"
