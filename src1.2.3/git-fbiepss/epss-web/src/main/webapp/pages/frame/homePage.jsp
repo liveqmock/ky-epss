@@ -142,7 +142,6 @@
                 sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
                 doSysLoad();
                 var strOperType = '<%=strType%>';
-                alert(strOperType);
                 if(strOperType=="1"){                      //系统管理员
                     document.getElementById('sys').style.display = 'inline';
                     tabbarhide("syslayout");
