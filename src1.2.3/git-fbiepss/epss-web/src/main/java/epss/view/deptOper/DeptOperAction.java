@@ -6,6 +6,7 @@ import epss.repository.model.model_show.DeptOperShow;
 import epss.service.DeptOperService;
 import epss.service.TidkeysService;
 import org.apache.commons.lang.StringUtils;
+import org.primefaces.event.NodeCollapseEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class DeptOperAction implements Serializable {
     private TidkeysService tidkeysService;
 
     private TreeNode deptOperRoot;
+    private TreeNode currentSelectedNode;
     private String strSubmitType;
     private Dept deptAdd;
     private Dept deptUpd;
@@ -45,6 +47,7 @@ public class DeptOperAction implements Serializable {
     private List<SelectItem> operIsSuperList;
     private List<SelectItem> typeList;
     private List<SelectItem> enableList;
+    private List<SelectItem> operTypeList;
     private String strConfirmPasswd;
 
     @PostConstruct
@@ -75,6 +78,10 @@ public class DeptOperAction implements Serializable {
         enableList= new ArrayList<SelectItem>();
         enableList.add(new SelectItem("1", "可用"));
         enableList.add(new SelectItem("0", "不可用"));
+        operTypeList= new ArrayList<SelectItem>();
+        operTypeList.add(new SelectItem("2", "业务人员"));
+        operTypeList.add(new SelectItem("1", "系统管理员"));
+        operTypeList.add(new SelectItem("0", "超级系统管理员"));
         initDeptOper();
     }
 
@@ -92,14 +99,51 @@ public class DeptOperAction implements Serializable {
     private void recursiveTreeNode(String strParentPkidPara, TreeNode parentNode) {
         List<DeptOperShow> deptOperShowTempList= deptOperService.selectDeptAndOperRecords(strParentPkidPara);
         for (int i = 0; i < deptOperShowTempList.size(); i++) {
-            TreeNode childNode = new DefaultTreeNode(deptOperShowTempList.get(i), parentNode);
-            recursiveTreeNode(deptOperShowTempList.get(i).getId(), childNode);
+            TreeNode childNodeTemp = new DefaultTreeNode(deptOperShowTempList.get(i), parentNode);
+            if (currentSelectedNode!=null){
+                DeptOperShow deptOperShow1= (DeptOperShow) currentSelectedNode.getData();
+                DeptOperShow deptOperShow2= (DeptOperShow) childNodeTemp.getData();
+                if (deptOperShow1.getPkid().equals(deptOperShow2.getPkid())){
+                    TreeNode treeNodeTemp=childNodeTemp;
+                    while (!(treeNodeTemp.getData().equals("ROOT"))){
+                        treeNodeTemp.setExpanded(true);
+                        treeNodeTemp=treeNodeTemp.getParent();
+                    }
+                }
+            }
+            recursiveTreeNode(deptOperShowTempList.get(i).getId(), childNodeTemp);
         }
     }
 
+    public void recursiveDeptOperTreeNode(TreeNode treeNodePara){
+        treeNodePara.setExpanded(false);
+        if (treeNodePara.getChildCount()!=0){
+            for (int i=0;i<treeNodePara.getChildCount();i++){
+                recursiveDeptOperTreeNode(treeNodePara.getChildren().get(i));
+            }
+        }
+    }
+
+    public void onNodeCollapse(NodeCollapseEvent event) {
+        recursiveDeptOperTreeNode(event.getTreeNode());
+    }
+
+    public void findSelectedNode(DeptOperShow deptOperShowPara, TreeNode treeNodePara) {
+        if (treeNodePara.getChildCount() != 0) {
+            for (int i = 0; i < treeNodePara.getChildCount(); i++) {
+                TreeNode treeNodeTemp = treeNodePara.getChildren().get(i);
+                if (deptOperShowPara == treeNodeTemp.getData()) {
+                    currentSelectedNode = treeNodeTemp;
+                    return;
+                }
+                findSelectedNode(deptOperShowPara, treeNodeTemp);
+            }
+        }
+    }
     public void selectRecordAction(String strSubmitTypePara,
                                      DeptOperShow deptOperShowPara) {
         try {
+            findSelectedNode(deptOperShowPara,deptOperRoot);
             strSubmitType = strSubmitTypePara;
             if (strSubmitTypePara.contains("Dept")) {
                 if (strSubmitTypePara.contains("Add")) {
@@ -336,5 +380,13 @@ public class DeptOperAction implements Serializable {
 
     public void setStrConfirmPasswd(String strConfirmPasswd) {
         this.strConfirmPasswd = strConfirmPasswd;
+    }
+
+    public List<SelectItem> getOperTypeList() {
+        return operTypeList;
+    }
+
+    public void setOperTypeList(List<SelectItem> operTypeList) {
+        this.operTypeList = operTypeList;
     }
 }

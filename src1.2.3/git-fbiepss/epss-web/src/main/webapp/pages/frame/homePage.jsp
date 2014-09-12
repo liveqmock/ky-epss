@@ -1,3 +1,4 @@
+<%@ page import="epss.repository.model.Oper" %>
 <%@ page contentType="text/html; charset=GBK" %>
 <%@ include file="/pages/security/loginassistor.jsp" %>
 <%
@@ -14,10 +15,12 @@
         System.out.println("jsp" + e + "\n");
     }
     String operid = null;
+    String strType=null;
     if (om != null) {
         if (om.getOperator() != null) {
             username = om.getOperatorName();
             operid = om.getOperator().getId();
+            strType=om.getOperator().getType();
         }
     }
 %>
@@ -138,13 +141,14 @@
                 doBizLoad();
                 sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
                 doSysLoad();
-                var strOperid = '<%=operid%>';
-                if(strOperid=="0001"){ //系统管理员
+                var strOperType = '<%=strType%>';
+                alert(strOperType);
+                if(strOperType=="1"){                      //系统管理员
                     document.getElementById('sys').style.display = 'inline';
                     tabbarhide("syslayout");
                     document.getElementById("sys").setAttribute("active", "true");
                     document.getElementById("sys").className = "tabs-item-active";
-                }else if(strOperid=="9999"){               //超级系统管理员
+                }else if(strOperType=="0"){               //超级系统管理员
                     document.getElementById('todotask').style.display = 'inline';
                     document.getElementById('donetask').style.display = 'inline';
                     document.getElementById('biz').style.display = 'inline';

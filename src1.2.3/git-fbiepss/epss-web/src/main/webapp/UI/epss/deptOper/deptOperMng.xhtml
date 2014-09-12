@@ -33,6 +33,7 @@
                                  rowStyleClass="#{node.type  eq '1' ? null:'rowGrayStyle'}"
                                  scrollable="true"
                                  scrollHeight="400">
+                        <p:ajax event="collapse" update=":form:msgs" listener="#{deptOperAction.onNodeCollapse}"/>
                         <p:column headerText="机构名称" style="width:200px;text-align:left">
                             <h:outputText value="#{node.type eq '0'?node.name:''}"/>
                         </p:column>
@@ -109,7 +110,7 @@
                                              value="提交（增加）"
                                              action="#{deptOperAction.onClickForMngAction()}"
                                              update="pdt,msgs,pgViewForDeptAdd"
-                                             oncomplete="wVDlgViewForAdd.hide()">
+                                             oncomplete="wVDlgViewForDeptAdd.hide()">
                             </p:commandButton>
                             <p:commandButton id="resetBtnForDeptAdd" value="重置"
                                              type="reset"
@@ -178,6 +179,10 @@
                     <h:panelGrid id="idViewForOperAdd">
                         <h:panelGrid id="pgViewForOperAdd">
                             <h:panelGrid columns="4">
+                                <p:outputLabel value="操作员级别：" for="operTypeForOperAdd"/>
+                                <p:selectOneMenu id="operTypeForOperAdd" value="#{deptOperAction.operAdd.type}">
+                                    <f:selectItems value="#{deptOperAction.operTypeList}"/>
+                                </p:selectOneMenu>
                                 <p:outputLabel value="操作员号*  ：" for="operIdForOperAdd"/>
                                 <p:inputText id="operIdForOperAdd" value="#{deptOperAction.operAdd.id}"/>
                                 <p:outputLabel value="操作员密码*：" for="operPasswdForOperAdd"/>
@@ -224,6 +229,10 @@
                           showEffect="clip" hideEffect="fold">
                     <h:panelGrid id="pgViewForOperUpd">
                         <h:panelGrid columns="4">
+                            <p:outputLabel value="操作员级别：" for="operTypeForOperUpd"/>
+                            <p:selectOneMenu id="operTypeForOperUpd" value="#{deptOperAction.operUpd.type}">
+                                <f:selectItems value="#{deptOperAction.operTypeList}"/>
+                            </p:selectOneMenu>
                             <p:outputLabel value="操作员号*  ：" for="operIdForOperUpd"/>
                             <p:inputText id="operIdForOperUpd" value="#{deptOperAction.operUpd.id}" />
                             <p:outputLabel value="操作员密码*：" for="operPasswdForOperUpd"/>

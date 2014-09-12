@@ -39,7 +39,7 @@
                                  emptyMessage="数据记录为空..."
                              scrollable="true"
                              scrollHeight="500">
-                    <p:ajax event="collapse" update=":form:msgs" listener="#{operFuncBusiResMngAction.onNodeCollapse}" />
+                        <p:ajax event="collapse" update=":form:msgs" listener="#{operFuncBusiResMngAction.onNodeCollapse}" />
                             <p:column headerText="名称" style="width:400px;">
                             <h:outputText value="#{document.resName}"/>
                         </p:column>
