@@ -117,7 +117,7 @@ public class DeptOperAction implements Serializable {
             } else if (strSubmitTypePara.contains("Oper")) {
                 if (strSubmitTypePara.contains("Add")){
                     operAdd = new Oper();
-                    operAdd.setDeptPkid(deptOperShowPara.getPkid());
+                    operAdd.setDeptPkid(deptOperShowPara.getId());
                 }else if (strSubmitTypePara.contains("Upd")) {
                     operUpd = new Oper();
                     operUpd = (Oper) deptOperService.selectRecordByPkid(deptOperShowPara);
@@ -125,7 +125,7 @@ public class DeptOperAction implements Serializable {
                 } else if (strSubmitTypePara.contains("Del")) {
                     operDel = new Oper();
                     operDel = (Oper) deptOperService.selectRecordByPkid(deptOperShowPara);
-                    operUpd.setPasswd(MD5Helper.getMD5String(operUpd.getPasswd()));
+                    operDel.setPasswd(MD5Helper.getMD5String(operUpd.getPasswd()));
                 }
             }
         } catch (Exception e) {

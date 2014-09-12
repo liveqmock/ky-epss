@@ -122,6 +122,7 @@ public class ProgEstItemAction {
         beansMap.put("reportHeader", reportHeader);
 
         progInfoShow=progStlInfoService.fromModelToModelShow(esInitStl);
+        progInfoShow.setStlId(esCttInfoTemp.getId());
         progInfoShow.setStlName(esCttInfoTemp.getName());
         progInfoShow.setSignPartBName(reportHeader.getStrSignPartName());
 

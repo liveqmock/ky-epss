@@ -12,6 +12,7 @@ public class ProgInfoShow {
     private String id;
     private String stlType;
     private String stlPkid;
+    private String stlId;
     private String stlName;
     private String signPartBName;
     private String periodNo;
@@ -73,6 +74,14 @@ public class ProgInfoShow {
 
     public void setStlPkid(String stlPkid) {
         this.stlPkid = stlPkid;
+    }
+
+    public String getStlId() {
+        return stlId;
+    }
+
+    public void setStlId(String stlId) {
+        this.stlId = stlId;
     }
 
     public String getPeriodNo() {

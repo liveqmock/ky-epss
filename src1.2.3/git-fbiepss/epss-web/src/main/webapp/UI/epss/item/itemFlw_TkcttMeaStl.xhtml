@@ -43,15 +43,18 @@
                                          ajax="false">
                         </p:commandButton>
                     </h:panelGrid>
-                    <h:panelGrid columns="6">
-                        <p:outputLabel value="总包合同编号：" for="id"/>
-                        <p:inputText id="id" value="#{progMeaItemAction.progInfoShow.id}"
+                    <h:panelGrid columns="8">
+                        <p:outputLabel value="总包合同编号：" for="stlId"/>
+                        <p:inputText id="stlId" value="#{progMeaItemAction.progInfoShow.stlId}"
                                      readonly="true" style="background-color:gainsboro;"/>
                         <p:outputLabel value="总包合同名称：" for="cttName"/>
                         <p:inputText id="cttName" value="#{progMeaItemAction.progInfoShow.stlName}"
                                      readonly="true" style="width:400px;background-color:gainsboro;"/>
                         <p:outputLabel value="期号：" for="periodNo"/>
                         <p:inputText id="periodNo" value="#{progMeaItemAction.progInfoShow.periodNo}"
+                                     readonly="true" style="background-color:gainsboro;"/>
+                        <p:outputLabel value="总包计量结算编号：" for="id"/>
+                        <p:inputText id="id" value="#{progMatqtyItemAction.progInfoShow.id}"
                                      readonly="true" style="background-color:gainsboro;"/>
                     </h:panelGrid>
                     <p:dataTable id="pdt" style="width:100%;"
@@ -68,7 +71,7 @@
                              rowIndexVar="row"
                              emptyMessage="数据记录为空..."
                              scrollable="true"
-                             scrollHeight="480">
+                             scrollHeight="460">
                         <p:column headerText="操作" style="width:30px">
                             <p:commandButton  icon="ui-icon-search"
                                               style="height:18px;width:18px"

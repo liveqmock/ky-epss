@@ -98,6 +98,7 @@ public class ProgWorkqtyItemAction {
             // ÏêÏ¸Ò³Í·
             EsCttInfo esCttInfoTemp= cttInfoService.getCttInfoByPkId(esInitStl.getStlPkid());
             progInfoShow=progStlInfoService.fromModelToModelShow(esInitStl);
+            progInfoShow.setStlId(esCttInfoTemp.getId());
             progInfoShow.setStlName(esCttInfoTemp.getName());
             progInfoShow.setSignPartBName(signPartService.getEsInitCustByPkid(esCttInfoTemp.getSignPartB()).getName());
             beansMap.put("progInfoShow", progInfoShow);

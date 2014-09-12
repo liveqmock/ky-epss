@@ -43,15 +43,18 @@
                                      ajax="false">
                     </p:commandButton>
                 </h:panelGrid>
-                <h:panelGrid columns="6">
-                    <p:outputLabel value="分包合同编号：" for="id"/>
-                    <p:inputText id="id" value="#{progMatqtyItemAction.progInfoShow.id}"
+                <h:panelGrid columns="8">
+                    <p:outputLabel value="分包合同编号：" for="stlId"/>
+                    <p:inputText id="stlId" value="#{progMatqtyItemAction.progInfoShow.stlId}"
                                  readonly="true" style="background-color:gainsboro;"/>
                     <p:outputLabel value="分包合同名称：" for="cttName"/>
                     <p:inputText id="cttName" value="#{progMatqtyItemAction.progInfoShow.stlName}"
                                  readonly="true" style="width:400px;background-color:gainsboro;"/>
                     <p:outputLabel value="期号：" for="periodNo"/>
                     <p:inputText id="periodNo" value="#{progMatqtyItemAction.progInfoShow.periodNo}"
+                                 readonly="true" style="background-color:gainsboro;"/>
+                    <p:outputLabel value="分包材料结算编号：" for="id"/>
+                    <p:inputText id="id" value="#{progMatqtyItemAction.progInfoShow.id}"
                                  readonly="true" style="background-color:gainsboro;"/>
                 </h:panelGrid>
                 <p:dataTable id="pdt" style="width:100%;"
@@ -71,7 +74,7 @@
                              rowStyleClass="#{record.subctt_SignPartAPrice eq 0? 'rowGrayStyle':
                                                  record.subctt_SignPartAPrice eq null?'rowGrayStyle':null}"
                              scrollable="true"
-                             scrollHeight="480">
+                             scrollHeight="460">
                     <p:column headerText="操作" style="width:30px">
                         <p:commandButton  icon="ui-icon-search"
                                           style="height:18px;width:18px"

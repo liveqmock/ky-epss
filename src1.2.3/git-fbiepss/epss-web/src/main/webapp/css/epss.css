@@ -2,7 +2,16 @@
     width:16px;
     height:16px;
 }
-.rowGrayStyle {
+ .rowLavenderStyle {
+    background: lavender ;
+ }
+.rowPinkStyle {
+    background: pink ;
+}
+ .rowKhakiStyle {
+     background: khaki  ;
+ }
+ .rowGrayStyle {
     background: gray;
 }
 .rowGreenStyle {

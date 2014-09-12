@@ -81,6 +81,7 @@ public class ProgMeaItemAction {
     // 画面上控件的显示控制
     private String strExportToExcelRendered;
     private List<ProgMeaItemShow> progMeaItemShowListForExcel;
+
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
@@ -103,6 +104,116 @@ public class ProgMeaItemAction {
         resetAction();
         initData();
     }
+
+    /*初始化操作*/
+    private void initData() {
+        /*分包合同数据*/
+        // From StlPkid To SubcttPkid
+        EsInitStl esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
+        reportHeader.setStrSubcttPkid(esInitStl.getStlPkid());
+        reportHeader.setStrStlId(esInitStl.getId());
+        // From SubcttPkid To CstplPkid
+        EsCttInfo esCttInfoTemp= cttInfoService.getCttInfoByPkId(reportHeader.getStrSubcttPkid());
+        reportHeader.setStrCstplPkid(esCttInfoTemp.getParentPkid());
+        reportHeader.setStrSubcttId(esCttInfoTemp.getId());
+        reportHeader.setStrSubcttName(esCttInfoTemp.getName());
+        reportHeader.setStrSignPartPkid(esCttInfoTemp.getSignPartB());
+        reportHeader.setStrSignPartName(signPartService.getEsInitCustByPkid(
+                reportHeader.getStrSignPartPkid()).getName());
+
+        beansMap.put("reportHeader", reportHeader);
+
+        progInfoShow=progStlInfoService.fromModelToModelShow(esInitStl);
+        progInfoShow.setStlId(esCttInfoTemp.getId());
+        progInfoShow.setStlName(esCttInfoTemp.getName());
+        progInfoShow.setSignPartBName(reportHeader.getStrSignPartName());
+
+        /*分包合同*/
+        List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
+        progMeaItemShowListForExcel=new ArrayList<ProgMeaItemShow>();
+        esCttItemList = cttItemService.getEsItemList(
+                ESEnum.ITEMTYPE0.getCode(), strTkcttPkid);
+        if(esCttItemList.size()<=0){
+            return;
+        }
+        progMeaItemShowList =new ArrayList<ProgMeaItemShow>();
+        recursiveDataTable("root", esCttItemList, progMeaItemShowList);
+        progMeaItemShowList =getItemStlTkcttEngSMList_DoFromatNo(progMeaItemShowList);
+        setItemOfEsItemHieRelapList_AddTotal();
+        beansMap.put("progMeaItemShowListForExcel", progMeaItemShowListForExcel);
+        // 表内容设定
+        if(progMeaItemShowList.size()>0){
+            strExportToExcelRendered="true";
+        }else{
+            strExportToExcelRendered="false";
+        }
+    }
+    /*根据数据库中层级关系数据列表得到总包合同*/
+    private void recursiveDataTable(String strLevelParentId,
+                                    List<EsCttItem> esCttItemListPara,
+                                    List<ProgMeaItemShow> sProgMeaItemShowListPara){
+        // 根据父层级号获得该父层级下的子节点
+        List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
+        // 通过父层id查找它的孩子
+        subEsCttItemList =getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
+        BigDecimal bdContractUnitPrice=new BigDecimal(0);
+        BigDecimal bdCurrentPeriodQty=new BigDecimal(0);
+        BigDecimal bdBeginToCurrentPeriodQty=new BigDecimal(0);
+        for(EsCttItem itemUnit: subEsCttItemList){
+            ProgMeaItemShow progMeaItemShowTemp = new ProgMeaItemShow();
+            progMeaItemShowTemp.setTkctt_Pkid(itemUnit.getPkid());
+            progMeaItemShowTemp.setTkctt_BelongToType(itemUnit.getBelongToType());
+            progMeaItemShowTemp.setTkctt_BelongToPkid(itemUnit.getBelongToPkid());
+            progMeaItemShowTemp.setTkctt_ParentPkid(itemUnit.getParentPkid());
+            progMeaItemShowTemp.setTkctt_Grade(itemUnit.getGrade());
+            progMeaItemShowTemp.setTkctt_Orderid(itemUnit.getOrderid());
+            progMeaItemShowTemp.setTkctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
+            progMeaItemShowTemp.setTkctt_Name(itemUnit.getName());
+            progMeaItemShowTemp.setTkctt_Note(itemUnit.getNote());
+            progMeaItemShowTemp.setTkctt_Unit(itemUnit.getUnit());
+            progMeaItemShowTemp.setTkctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
+            bdContractUnitPrice=ToolUtil.getBdIgnoreNull(itemUnit.getContractUnitPrice());
+            progMeaItemShowTemp.setTkctt_ContractQuantity(itemUnit.getContractQuantity());
+            progMeaItemShowTemp.setTkctt_ContractAmount(itemUnit.getContractAmount());
+
+            EsItemStlTkcttEngMea esItemStlTkcttEngMea=new EsItemStlTkcttEngMea();
+            esItemStlTkcttEngMea.setTkcttPkid(strTkcttPkid);
+            esItemStlTkcttEngMea.setTkcttItemPkid(progMeaItemShowTemp.getTkctt_Pkid());
+            esItemStlTkcttEngMea.setPeriodNo(esInitStl.getPeriodNo());
+            List<EsItemStlTkcttEngMea> esItemStlTkcttEngMeaList =
+                    progMeaItemService.selectRecordsByKeyExample(esItemStlTkcttEngMea);
+            if(esItemStlTkcttEngMeaList.size()>0){
+                esItemStlTkcttEngMea= esItemStlTkcttEngMeaList.get(0);
+                String strCreatedByName= ToolUtil.getUserName(esItemStlTkcttEngMea.getCreatedBy());
+                String strLastUpdByName= ToolUtil.getUserName(esItemStlTkcttEngMea.getLastUpdBy());
+                progMeaItemShowTemp.setEng_Pkid(esItemStlTkcttEngMea.getPkid());
+                progMeaItemShowTemp.setEng_PeriodNo(esItemStlTkcttEngMea.getPeriodNo());
+                progMeaItemShowTemp.setEng_TkcttPkid(esItemStlTkcttEngMea.getTkcttPkid());
+                progMeaItemShowTemp.setEng_TkcttItemPkid (esItemStlTkcttEngMea.getTkcttItemPkid());
+                progMeaItemShowTemp.setEng_CurrentPeriodEQty(esItemStlTkcttEngMea.getCurrentPeriodQty());
+                bdCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getCurrentPeriodQty());
+                progMeaItemShowTemp.setEng_CurrentPeriodEAmount(
+                        ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdCurrentPeriodQty)));
+
+                progMeaItemShowTemp.setEng_BeginToCurrentPeriodEQty(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
+                bdBeginToCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
+                progMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
+                        ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdBeginToCurrentPeriodQty)));
+
+                progMeaItemShowTemp.setEng_DeletedFlag(esItemStlTkcttEngMea.getDeleteFlag());
+                progMeaItemShowTemp.setEng_CreatedBy(esItemStlTkcttEngMea.getCreatedBy());
+                progMeaItemShowTemp.setEng_CreatedByName(strCreatedByName);
+                progMeaItemShowTemp.setEng_CreatedDate(esItemStlTkcttEngMea.getCreatedDate());
+                progMeaItemShowTemp.setEng_LastUpdBy(esItemStlTkcttEngMea.getLastUpdBy());
+                progMeaItemShowTemp.setEng_LastUpdByName(strLastUpdByName);
+                progMeaItemShowTemp.setEng_LastUpdDate(esItemStlTkcttEngMea.getLastUpdDate());
+                progMeaItemShowTemp.setEng_ModificationNum(esItemStlTkcttEngMea.getModificationNum());
+            }
+            sProgMeaItemShowListPara.add(progMeaItemShowTemp) ;
+            recursiveDataTable(progMeaItemShowTemp.getTkctt_Pkid(), esCttItemListPara, sProgMeaItemShowListPara);
+        }
+    }
+
     /*重置*/
     public void resetAction(){
         progMeaItemShowSel =new ProgMeaItemShow();
@@ -245,113 +356,6 @@ public class ProgMeaItemAction {
         } catch (Exception e) {
             logger.error("", e);
             MessageUtil.addError(e.getMessage());
-        }
-    }
-    /*初始化操作*/
-    private void initData() {
-        /*分包合同数据*/
-        // From StlPkid To SubcttPkid
-        EsInitStl esInitStl = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
-        reportHeader.setStrSubcttPkid(esInitStl.getStlPkid());
-        reportHeader.setStrStlId(esInitStl.getId());
-        // From SubcttPkid To CstplPkid
-        EsCttInfo esCttInfoTemp= cttInfoService.getCttInfoByPkId(reportHeader.getStrSubcttPkid());
-        reportHeader.setStrCstplPkid(esCttInfoTemp.getParentPkid());
-        reportHeader.setStrSubcttId(esCttInfoTemp.getId());
-        reportHeader.setStrSubcttName(esCttInfoTemp.getName());
-        reportHeader.setStrSignPartPkid(esCttInfoTemp.getSignPartB());
-        reportHeader.setStrSignPartName(signPartService.getEsInitCustByPkid(
-                reportHeader.getStrSignPartPkid()).getName());
-
-        beansMap.put("reportHeader", reportHeader);
-
-        progInfoShow=progStlInfoService.fromModelToModelShow(esInitStl);
-        progInfoShow.setStlName(esCttInfoTemp.getName());
-        progInfoShow.setSignPartBName(reportHeader.getStrSignPartName());
-
-        /*分包合同*/
-        List<EsCttItem> esCttItemList =new ArrayList<EsCttItem>();
-        progMeaItemShowListForExcel=new ArrayList<ProgMeaItemShow>();
-        esCttItemList = cttItemService.getEsItemList(
-                ESEnum.ITEMTYPE0.getCode(), strTkcttPkid);
-        if(esCttItemList.size()<=0){
-            return;
-        }
-        progMeaItemShowList =new ArrayList<ProgMeaItemShow>();
-        recursiveDataTable("root", esCttItemList, progMeaItemShowList);
-        progMeaItemShowList =getItemStlTkcttEngSMList_DoFromatNo(progMeaItemShowList);
-        setItemOfEsItemHieRelapList_AddTotal();
-        beansMap.put("progMeaItemShowListForExcel", progMeaItemShowListForExcel);
-        // 表内容设定
-        if(progMeaItemShowList.size()>0){
-            strExportToExcelRendered="true";
-        }else{
-            strExportToExcelRendered="false";
-        }
-    }
-    /*根据数据库中层级关系数据列表得到总包合同*/
-    private void recursiveDataTable(String strLevelParentId,
-                                      List<EsCttItem> esCttItemListPara,
-                                      List<ProgMeaItemShow> sProgMeaItemShowListPara){
-        // 根据父层级号获得该父层级下的子节点
-        List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
-        // 通过父层id查找它的孩子
-        subEsCttItemList =getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
-        BigDecimal bdContractUnitPrice=new BigDecimal(0);
-        BigDecimal bdCurrentPeriodQty=new BigDecimal(0);
-        BigDecimal bdBeginToCurrentPeriodQty=new BigDecimal(0);
-        for(EsCttItem itemUnit: subEsCttItemList){
-            ProgMeaItemShow progMeaItemShowTemp = new ProgMeaItemShow();
-            progMeaItemShowTemp.setTkctt_Pkid(itemUnit.getPkid());
-            progMeaItemShowTemp.setTkctt_BelongToType(itemUnit.getBelongToType());
-            progMeaItemShowTemp.setTkctt_BelongToPkid(itemUnit.getBelongToPkid());
-            progMeaItemShowTemp.setTkctt_ParentPkid(itemUnit.getParentPkid());
-            progMeaItemShowTemp.setTkctt_Grade(itemUnit.getGrade());
-            progMeaItemShowTemp.setTkctt_Orderid(itemUnit.getOrderid());
-            progMeaItemShowTemp.setTkctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
-            progMeaItemShowTemp.setTkctt_Name(itemUnit.getName());
-            progMeaItemShowTemp.setTkctt_Note(itemUnit.getNote());
-            progMeaItemShowTemp.setTkctt_Unit(itemUnit.getUnit());
-            progMeaItemShowTemp.setTkctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
-            bdContractUnitPrice=ToolUtil.getBdIgnoreNull(itemUnit.getContractUnitPrice());
-            progMeaItemShowTemp.setTkctt_ContractQuantity(itemUnit.getContractQuantity());
-            progMeaItemShowTemp.setTkctt_ContractAmount(itemUnit.getContractAmount());
-
-            EsItemStlTkcttEngMea esItemStlTkcttEngMea=new EsItemStlTkcttEngMea();
-            esItemStlTkcttEngMea.setTkcttPkid(strTkcttPkid);
-            esItemStlTkcttEngMea.setTkcttItemPkid(progMeaItemShowTemp.getTkctt_Pkid());
-            esItemStlTkcttEngMea.setPeriodNo(esInitStl.getPeriodNo());
-            List<EsItemStlTkcttEngMea> esItemStlTkcttEngMeaList =
-                    progMeaItemService.selectRecordsByKeyExample(esItemStlTkcttEngMea);
-            if(esItemStlTkcttEngMeaList.size()>0){
-                esItemStlTkcttEngMea= esItemStlTkcttEngMeaList.get(0);
-                String strCreatedByName= ToolUtil.getUserName(esItemStlTkcttEngMea.getCreatedBy());
-                String strLastUpdByName= ToolUtil.getUserName(esItemStlTkcttEngMea.getLastUpdBy());
-                progMeaItemShowTemp.setEng_Pkid(esItemStlTkcttEngMea.getPkid());
-                progMeaItemShowTemp.setEng_PeriodNo(esItemStlTkcttEngMea.getPeriodNo());
-                progMeaItemShowTemp.setEng_TkcttPkid(esItemStlTkcttEngMea.getTkcttPkid());
-                progMeaItemShowTemp.setEng_TkcttItemPkid (esItemStlTkcttEngMea.getTkcttItemPkid());
-                progMeaItemShowTemp.setEng_CurrentPeriodEQty(esItemStlTkcttEngMea.getCurrentPeriodQty());
-                bdCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getCurrentPeriodQty());
-                progMeaItemShowTemp.setEng_CurrentPeriodEAmount(
-                        ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdCurrentPeriodQty)));
-
-                progMeaItemShowTemp.setEng_BeginToCurrentPeriodEQty(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
-                bdBeginToCurrentPeriodQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
-                progMeaItemShowTemp.setEng_BeginToCurrentPeriodEAmount(
-                        ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdBeginToCurrentPeriodQty)));
-
-                progMeaItemShowTemp.setEng_DeletedFlag(esItemStlTkcttEngMea.getDeleteFlag());
-                progMeaItemShowTemp.setEng_CreatedBy(esItemStlTkcttEngMea.getCreatedBy());
-                progMeaItemShowTemp.setEng_CreatedByName(strCreatedByName);
-                progMeaItemShowTemp.setEng_CreatedDate(esItemStlTkcttEngMea.getCreatedDate());
-                progMeaItemShowTemp.setEng_LastUpdBy(esItemStlTkcttEngMea.getLastUpdBy());
-                progMeaItemShowTemp.setEng_LastUpdByName(strLastUpdByName);
-                progMeaItemShowTemp.setEng_LastUpdDate(esItemStlTkcttEngMea.getLastUpdDate());
-                progMeaItemShowTemp.setEng_ModificationNum(esItemStlTkcttEngMea.getModificationNum());
-            }
-            sProgMeaItemShowListPara.add(progMeaItemShowTemp) ;
-            recursiveDataTable(progMeaItemShowTemp.getTkctt_Pkid(), esCttItemListPara, sProgMeaItemShowListPara);
         }
     }
 
