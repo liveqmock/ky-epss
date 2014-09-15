@@ -10,6 +10,8 @@ public class DeptOperShow {
     private String type;
     private String isDisabled;
     private Boolean isSeled;
+    private String deptId;
+    private String operId;
     private String deptName;
     private String operName;
     public String getPkid() {
@@ -66,6 +68,22 @@ public class DeptOperShow {
 
     public void setDeptName(String deptName) {
         this.deptName = deptName;
+    }
+
+    public String getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(String deptId) {
+        this.deptId = deptId;
+    }
+
+    public String getOperId() {
+        return operId;
+    }
+
+    public void setOperId(String operId) {
+        this.operId = operId;
     }
 
     public String getOperName() {

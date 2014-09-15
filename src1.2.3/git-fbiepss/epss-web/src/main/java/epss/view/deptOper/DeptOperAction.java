@@ -124,8 +124,10 @@ public class DeptOperAction implements Serializable {
             DeptOperShow deptOperShowForExcelTemp= (DeptOperShow)BeanUtils.cloneBean(deptOperShowTempList.get(i));
             DeptOperShow deptOperShowForExcelTemp2=new DeptOperShow();
             if(("0").equals(deptOperShowTempList.get(i).getType())){
+                deptOperShowForExcelTemp2.setDeptId(deptOperShowTempList.get(i).getId());
                 deptOperShowForExcelTemp2.setDeptName(deptOperShowTempList.get(i).getName());
             }else{
+                deptOperShowForExcelTemp2.setOperId(deptOperShowTempList.get(i).getId());
                 deptOperShowForExcelTemp2.setOperName(deptOperShowTempList.get(i).getName());
             }
             deptOperShowFowExcelList.add(deptOperShowForExcelTemp2);
