@@ -8,7 +8,7 @@ function tabbarhide(tabbarid) {
 function tabbarclk(obj) {
     var active = obj.getAttribute("active");
     if (active == 'false') {
-        var tabbarid = obj.getAttribute("id") + "layout";
+        var tabbarid = obj.getAttribute("id") + "Layout";
         setclass(obj.getAttribute("id"));
         obj.setAttribute("active", "true");
         obj.className = "tabs-item-active";

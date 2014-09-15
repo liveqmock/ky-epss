@@ -137,8 +137,8 @@ function sysaddtabbar(divID, tabname, url) {
     }
 }
 
-var layoutary = new Array('todotasklayout', 'donetasklayout', 'stlpowertasklayout','bizlayout', 'syslayout');
-var tabbarary = new Array('todotask', 'donetask', 'stlpowertask','biz', 'sys');
+var layoutary = new Array('todoTaskLayout', 'doneTaskLayout', 'stlpowerLayout','bizLayout', 'sysLayout');
+var tabbarary = new Array('todoTask', 'doneTask', 'stlpower','biz', 'sys');
 
 function changepwd() {
     var sfeature = "dialogwidth:400px; dialogheight:200px;center:yes;help:no;resizable:no;scroll:no;status:no";

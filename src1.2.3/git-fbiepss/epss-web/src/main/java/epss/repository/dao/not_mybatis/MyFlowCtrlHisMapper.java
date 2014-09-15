@@ -48,7 +48,7 @@ public interface MyFlowCtrlHisMapper {
             " and " +
             "     eipwai.FLOW_STATUS=maxcreated_date.FLOW_STATUS  " +
             " and " +
-            "     NVL(eipwai.CREATED_TIME,'NOTNULL')=NVL(maxcreated_date.maxDate,'NOTNULL')  "+
+            "     NVL(eipwai.CREATED_TIME,'NOTNULL')=NVL(maxcreated_date.maxTime,'NOTNULL')  "+
             " where " +
             "     eipwai.INFO_PKID=#{infoPkid} " +
             " and " +

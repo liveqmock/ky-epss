@@ -57,33 +57,33 @@
             var defaultMenuStr = '<%=jsonDefaultMenu%>';
             var systemMenuStr = '<%=jsonSystemMenu%>';
             function doOnLoad() {
-                bizdhxLayout = new dhtmlXLayoutObject("bizlayout", "2U", "dhx_skyblue");
+                bizdhxLayout = new dhtmlXLayoutObject("bizLayout", "2U", "dhx_skyblue");
                 doBizLoad();
-                sysdhxLayout = new dhtmlXLayoutObject("syslayout", "2U", "dhx_skyblue");
+                sysdhxLayout = new dhtmlXLayoutObject("sysLayout", "2U", "dhx_skyblue");
                 doSysLoad();
                 var strOperType = '<%=strType%>';
                 if(strOperType=="1"){                      //系统管理员
                     document.getElementById('sys').style.display = 'inline';
-                    tabbarhide("syslayout");
+                    tabbarhide("sysLayout");
                     document.getElementById("sys").setAttribute("active", "true");
                     document.getElementById("sys").className = "tabs-item-active";
                 }else if(strOperType=="0"){               //超级系统管理员
-                    document.getElementById('todotask').style.display = 'inline';
-                    document.getElementById('donetask').style.display = 'inline';
-                    document.getElementById('stlpowertask').style.display = 'inline';
+                    document.getElementById('todoTask').style.display = 'inline';
+                    document.getElementById('doneTask').style.display = 'inline';
+                    document.getElementById('stlpower').style.display = 'inline';
                     document.getElementById('biz').style.display = 'inline';
                     document.getElementById('sys').style.display = 'inline';
-                    tabbarhide("todotasklayout");
-                    document.getElementById("todotask").setAttribute("active", "true");
-                    document.getElementById("todotask").className = "tabs-item-active";
+                    tabbarhide("todoTaskLayout");
+                    document.getElementById("todoTask").setAttribute("active", "true");
+                    document.getElementById("todoTask").className = "tabs-item-active";
                 }else{                                    //其他用户
-                    document.getElementById('todotask').style.display = 'inline';
-                    document.getElementById('donetask').style.display = 'inline';
-                    document.getElementById('stlpowertask').style.display = 'inline';
+                    document.getElementById('todoTask').style.display = 'inline';
+                    document.getElementById('doneTask').style.display = 'inline';
+                    document.getElementById('stlpower').style.display = 'inline';
                     document.getElementById('biz').style.display = 'inline';
-                    tabbarhide("todotasklayout");
-                    document.getElementById("todotask").setAttribute("active", "true");
-                    document.getElementById("todotask").className = "tabs-item-active";
+                    tabbarhide("todoTaskLayout");
+                    document.getElementById("todoTask").setAttribute("active", "true");
+                    document.getElementById("todoTask").className = "tabs-item-active";
                 }
             }
             function relogin() {
@@ -132,20 +132,20 @@
                 </tr>
                 <tr style="width:100%; height:25px">
                     <td colspan="5" style="height:25px;">
-                        <div onclick="tabbarclk(this);document.frames('todoWorkFrame').location.href='<%=contextPath%>/UI/epss/task/todoTask.xhtml;'"
-                             active="true" id="todotask" class="tabs-item-active"
+                        <div onclick="tabbarclk(this);document.frames('todoTaskWorkFrame').location.href='<%=contextPath%>/UI/epss/task/todoTask.xhtml;'"
+                             active="true" id="todoTask" class="tabs-item-active"
                              style="float:left;width:80px;margin-left:12px;display: none">
                             <span style="width:100%;">待办任务</span>
                         </div>
                         <div id="middleId1" style="float:left;width:2px;"></div>
-                        <div onclick="document.frames('donetaskworkFrame').location.href='<%=contextPath%>/UI/epss/task/doneTask.xhtml';tabbarclk(this);"
-                             active="false" id="donetask" class="tabs-item"
+                        <div onclick="document.frames('doneTaskWorkFrame').location.href='<%=contextPath%>/UI/epss/task/doneTask.xhtml';tabbarclk(this);"
+                             active="false" id="doneTask" class="tabs-item"
                              style="float:left;width:80px;display: none">
                             <span style="width:100%;">已办任务</span>
                         </div>
                         <div id="middleId2" style="float:left;width:2px;"></div>
-                        <div onclick="document.frames('donetaskworkFrame').location.href='../../UI/epss/task/stlPower.xhtml';tabbarclk(this);"
-                             active="false" id="stlpowertask" class="tabs-item"
+                        <div onclick="document.frames('stlpowerWorkFrame').location.href='<%=contextPath%>/UI/epss/task/stlPower.xhtml';tabbarclk(this);"
+                             active="false" id="stlpower" class="tabs-item"
                              style="float:left;width:80px;display: none">
                             <span style="width:100%;">结算权限</span>
                         </div>
@@ -184,8 +184,8 @@
                 </tr>
                 <tr style="width:100%">
                     <td width="100%" colspan="4">
-                        <div class="divlayout" id="todotasklayout">
-                            <iframe id="todoWorkFrame"
+                        <div class="divlayout" id="todoTaskLayout">
+                            <iframe id="todoTaskWorkFrame"
                                     src="<%=contextPath%>/UI/epss/task/todoTask.xhtml"
                                     width="100%" height="100%"
                                     frameborder="no"
@@ -194,8 +194,8 @@
                                     scrolling="no">
                             </iframe>
                         </div>
-                        <div class="divlayout" id="donetasklayout">
-                            <iframe id="donetaskworkFrame" name="workFrame"
+                        <div class="divlayout" id="doneTaskLayout">
+                            <iframe id="doneTaskWorkFrame" name="workFrame"
                                     src="<%=contextPath%>/UI/epss/task/doneTask.xhtml"
                                     width="100%" height="100%"
                                     frameborder="no"
@@ -204,8 +204,8 @@
                                     scrolling="no">
                             </iframe>
                         </div>
-                        <div class="divlayout" id="stlpowertasklayout">
-                            <iframe id="stlpowertaskworkFrame" name="workFrame"
+                        <div class="divlayout" id="stlpowerLayout">
+                            <iframe id="stlpowerWorkFrame" name="workFrame"
                                     src="<%=contextPath%>/UI/epss/task/stlPower.xhtml"
                                     width="100%" height="100%"
                                     frameborder="no"
@@ -214,8 +214,8 @@
                                     scrolling="no">
                             </iframe>
                         </div>
-                        <div class="divlayout" id="bizlayout"></div>
-                        <div class="divlayout" id="syslayout">
+                        <div class="divlayout" id="bizLayout"></div>
+                        <div class="divlayout" id="sysLayout">
                             <br/>系统帮助信息...
                         </div>
                     </td>
