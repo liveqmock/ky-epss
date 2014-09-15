@@ -5,6 +5,8 @@ import epss.repository.model.Oper;
 import epss.repository.model.model_show.DeptOperShow;
 import epss.service.DeptOperService;
 import epss.service.TidkeysService;
+import jxl.write.WriteException;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.NodeCollapseEvent;
 import org.primefaces.model.DefaultTreeNode;
@@ -12,15 +14,18 @@ import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.security.MD5Helper;
+import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.model.SelectItem;
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by XIANGYANG on 2014/8/11.
@@ -49,11 +54,16 @@ public class DeptOperAction implements Serializable {
     private List<SelectItem> enableList;
     private List<SelectItem> operTypeList;
     private String strConfirmPasswd;
+    private List<DeptOperShow> deptOperShowFowExcelList;
+    private Map beansMap;
 
     @PostConstruct
     public void init() {
+        deptOperShowFowExcelList=new ArrayList<>();
+        beansMap = new HashMap();
         initVariables();
         initData();
+        beansMap.put("deptOperShowFowExcelList", deptOperShowFowExcelList);
     }
 
     private void initVariables() {
@@ -92,14 +102,32 @@ public class DeptOperAction implements Serializable {
         deptOperShowTemp.setName("机构人员信息");
         deptOperShowTemp.setType("0");
         TreeNode node0 = new DefaultTreeNode(deptOperShowTemp, deptOperRoot);
-        recursiveTreeNode("ROOT", node0);
+        try {
+            recursiveTreeNode("ROOT", node0);
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
         node0.setExpanded(true);
     }
 
-    private void recursiveTreeNode(String strParentPkidPara, TreeNode parentNode) {
+    private void recursiveTreeNode(String strParentPkidPara, TreeNode parentNode) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         List<DeptOperShow> deptOperShowTempList= deptOperService.selectDeptAndOperRecords(strParentPkidPara);
         for (int i = 0; i < deptOperShowTempList.size(); i++) {
             TreeNode childNodeTemp = new DefaultTreeNode(deptOperShowTempList.get(i), parentNode);
+            DeptOperShow deptOperShowForExcelTemp= (DeptOperShow)BeanUtils.cloneBean(deptOperShowTempList.get(i));
+            DeptOperShow deptOperShowForExcelTemp2=new DeptOperShow();
+            if(("0").equals(deptOperShowTempList.get(i).getType())){
+                deptOperShowForExcelTemp2.setDeptName(deptOperShowTempList.get(i).getName());
+            }else{
+                deptOperShowForExcelTemp2.setOperName(deptOperShowTempList.get(i).getName());
+            }
+            deptOperShowFowExcelList.add(deptOperShowForExcelTemp2);
             if (currentSelectedNode!=null){
                 DeptOperShow deptOperShow1= (DeptOperShow) currentSelectedNode.getData();
                 DeptOperShow deptOperShow2= (DeptOperShow) childNodeTemp.getData();
@@ -267,6 +295,18 @@ public class DeptOperAction implements Serializable {
         }
         return true;
     }
+    public String onExportExcel()throws IOException, WriteException {
+        if (this.deptOperShowFowExcelList.size() == 0) {
+            MessageUtil.addWarn("记录为空...");
+            return null;
+        } else {
+            String excelFilename = "机构人员信息表-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+            JxlsManager jxls = new JxlsManager();
+            jxls.exportList(excelFilename, beansMap,"deptOper.xls");
+            // 其他状态的票据需要添加时再修改导出文件名
+        }
+        return null;
+    }
 
     /*智能字段 Start*/
 
@@ -388,5 +428,13 @@ public class DeptOperAction implements Serializable {
 
     public void setOperTypeList(List<SelectItem> operTypeList) {
         this.operTypeList = operTypeList;
+    }
+
+    public Map getBeansMap() {
+        return beansMap;
+    }
+
+    public void setBeansMap(Map beansMap) {
+        this.beansMap = beansMap;
     }
 }

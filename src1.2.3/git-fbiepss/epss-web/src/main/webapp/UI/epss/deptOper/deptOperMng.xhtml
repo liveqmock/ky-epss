@@ -22,6 +22,11 @@
         <h:form id="form">
             <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
+                <p:commandButton value="导出到EXCEL"
+                                 action="#{deptOperAction.onExportExcel}"
+                                 update="msgs"
+                                 ajax="false">
+                </p:commandButton>
                 <p:panel header="机构人员信息维护">
                     <p:treeTable id="pdt"
                                  value="#{deptOperAction.deptOperRoot}"
