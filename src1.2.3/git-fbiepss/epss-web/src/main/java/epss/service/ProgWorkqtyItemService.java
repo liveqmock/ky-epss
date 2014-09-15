@@ -74,9 +74,9 @@ public class ProgWorkqtyItemService {
         progStlItemSubQTemp.setCurrentPeriodEQty(progStlItemSubQShowPara.getEngQMng_CurrentPeriodEQty());
         progStlItemSubQTemp.setArchivedFlag(progStlItemSubQShowPara.getEngQMng_DeletedFlag());
         progStlItemSubQTemp.setCreatedBy(progStlItemSubQShowPara.getEngQMng_CreatedBy());
-        progStlItemSubQTemp.setCreatedDate(progStlItemSubQShowPara.getEngQMng_CreatedDate());
+        progStlItemSubQTemp.setCreatedTime(progStlItemSubQShowPara.getEngQMng_CreatedTime());
         progStlItemSubQTemp.setLastUpdBy(progStlItemSubQShowPara.getEngQMng_LastUpdBy());
-        progStlItemSubQTemp.setLastUpdDate(progStlItemSubQShowPara.getEngQMng_LastUpdDate());
+        progStlItemSubQTemp.setLastUpdTime(progStlItemSubQShowPara.getEngQMng_LastUpdTime());
         progStlItemSubQTemp.setModificationNum(progStlItemSubQShowPara.getEngQMng_ModificationNum());
         return progStlItemSubQTemp;
     }
@@ -91,17 +91,17 @@ public class ProgWorkqtyItemService {
                 ToolUtil.getIntIgnoreNull(progStlItemSubQTemp.getModificationNum())+1);
         progStlItemSubQTemp.setArchivedFlag("0");
         progStlItemSubQTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemSubQTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubQTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubQMapper.updateByPrimaryKey(progStlItemSubQTemp) ;
     }
 
     public void insertRecord(ProgStlItemSubQShow progStlItemSubQShowPara){
         ProgStlItemSubQ progStlItemSubQTemp =fromModelShowToModel(progStlItemSubQShowPara);
         progStlItemSubQTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemSubQTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubQTemp.setCreatedTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubQTemp.setArchivedFlag("0");
         progStlItemSubQTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemSubQTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubQTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubQMapper.insert(progStlItemSubQTemp);
     }
 

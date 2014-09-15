@@ -63,7 +63,7 @@ public interface MyOperResMapper {
             "    t.note as note," +
             "    t.created_by as createdBy," +
             "    (select name from oper where id=t.created_by) as createdByName," +
-            "    t.created_date as createdDate " +
+            "    t.CREATED_TIME as createdTime " +
             " from" +
             "    CTT_INFO t" +
             " where" +

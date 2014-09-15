@@ -73,7 +73,7 @@ public class CstplMeaSubStlQItemAction {
         List<CttInfoShow> cttInfoShowList =
                 cttInfoService.getCttInfoListByCttType_Status(
                         EnumResType.RES_TYPE1.getCode()
-                       , EnumFlowStatus.FLOW_STATUS3.getCode());
+                      , EnumFlowStatus.FLOW_STATUS3.getCode());
         cstplList=new ArrayList<SelectItem>();
         if(cttInfoShowList.size()>0){
             SelectItem selectItem=new SelectItem("","");
@@ -161,7 +161,7 @@ public class CstplMeaSubStlQItemAction {
 
                 // 统计计量
                 for(ProgStlItemTkMea progStlItemTkMea : progStlItemTkMeaList){
-                    if(ToolUtil.getStrIgnoreNull(itemUnit.getStrCorrespondingItemPkid()).equals(
+                    if(ToolUtil.getStrIgnoreNull(itemUnit.getCorrespondingPkid()).equals(
                             progStlItemTkMea.getTkcttItemPkid())){
                         itemCstplInsertItem.setBdTkcttStl_MeaQuantity(progStlItemTkMea.getBeginToCurrentPeriodQty());
                         bdTkcttStlMeaQuantity=ToolUtil.getBdIgnoreNull(progStlItemTkMea.getBeginToCurrentPeriodQty());
@@ -295,10 +295,10 @@ public class CstplMeaSubStlQItemAction {
                     itemUnit.getOriginFlag() ,
                     itemUnit.getCreatedBy() ,
                     strCreatedByName,
-                    itemUnit.getCreatedDate() ,
+                    itemUnit.getCreatedTime() ,
                     itemUnit.getLastUpdBy() ,
                     strLastUpdByName,
-                    itemUnit.getLastUpdDate() ,
+                    itemUnit.getLastUpdTime() ,
                     itemUnit.getModificationNum(),
                     itemUnit.getNote(),
                     itemUnit.getCorrespondingPkid(),

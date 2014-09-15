@@ -79,9 +79,9 @@ public class SignPartService {
         signPartShowPara.setDeletedFlag("0");
         signPartShowPara.setOriginFlag("0");
         signPartShowPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        signPartShowPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        signPartShowPara.setCreatedTime(ToolUtil.getStrLastUpdTime());
         signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        signPartShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        signPartShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         signPartMapper.insertSelective(fromShowToModel(signPartShowPara));
     }
 
@@ -98,9 +98,9 @@ public class SignPartService {
         signPartTemp.setArchivedFlag(signPartShowPara.getDeletedFlag());
         signPartTemp.setOriginFlag(signPartShowPara.getOriginFlag());
         signPartTemp.setCreatedBy(signPartShowPara.getCreatedBy());
-        signPartTemp.setCreatedDate(signPartShowPara.getCreatedDate()) ;
+        signPartTemp.setCreatedTime(signPartShowPara.getCreatedTime()); ;
         signPartTemp.setLastUpdBy(signPartShowPara.getLastUpdBy());
-        signPartTemp.setLastUpdDate(signPartShowPara.getLastUpdDate());
+        signPartTemp.setLastUpdTime(signPartShowPara.getLastUpdTime());
         signPartTemp.setModificationNum(signPartShowPara.getModificationNum());
         signPartTemp.setNote(signPartShowPara.getNote());
         return signPartTemp;
@@ -118,14 +118,13 @@ public class SignPartService {
         signPartShowTemp.setDeletedFlag(signPartPara.getArchivedFlag());
         signPartShowTemp.setOriginFlag(signPartPara.getOriginFlag());
         signPartShowTemp.setCreatedBy(signPartPara.getCreatedBy());
-        signPartShowTemp.setCreatedDate(signPartPara.getCreatedDate()) ;
+        signPartShowTemp.setCreatedTime(signPartPara.getCreatedTime());
         signPartShowTemp.setLastUpdBy(signPartPara.getLastUpdBy());
-        signPartShowTemp.setLastUpdDate(signPartPara.getLastUpdDate());
+        signPartShowTemp.setLastUpdTime(signPartPara.getLastUpdTime());
         signPartShowTemp.setModificationNum(signPartPara.getModificationNum());
         signPartShowTemp.setNote(signPartPara.getNote());
         return signPartShowTemp;
     }
-
 
     public void updateRecord(SignPartShow signPartShowPara){
         signPartShowPara.setModificationNum(
@@ -133,7 +132,7 @@ public class SignPartService {
         signPartShowPara.setDeletedFlag("0");
         signPartShowPara.setOriginFlag("0");
         signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        signPartShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        signPartShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         signPartMapper.updateByPrimaryKey(fromShowToModel(signPartShowPara));
     }
 

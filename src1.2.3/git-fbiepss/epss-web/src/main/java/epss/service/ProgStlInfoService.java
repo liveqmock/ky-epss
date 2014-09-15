@@ -72,7 +72,7 @@ public class ProgStlInfoService {
         flowCtrlHis.setPeriodNo(progStlInfoPara.getPeriodNo());
         flowCtrlHis.setFlowStatus(progStlInfoPara.getFlowStatus());
         flowCtrlHis.setFlowStatusReason(progStlInfoPara.getFlowStatusReason());
-        flowCtrlHis.setCreatedTime(progStlInfoPara.getCreatedDate());
+        flowCtrlHis.setCreatedTime(progStlInfoPara.getCreatedTime());
         flowCtrlHis.setCreatedBy(progStlInfoPara.getCreatedBy());
         flowCtrlHis.setOperType(strOperType);
         return flowCtrlHis;
@@ -88,9 +88,9 @@ public class ProgStlInfoService {
         progStlInfoTemp.setAttachment(progStlInfoShowPara.getAttachment());
         progStlInfoTemp.setArchivedFlag(progStlInfoShowPara.getDeletedFlag());
         progStlInfoTemp.setCreatedBy(progStlInfoShowPara.getCreatedBy());
-        progStlInfoTemp.setCreatedDate(progStlInfoShowPara.getCreatedDate());
+        progStlInfoTemp.setCreatedTime(progStlInfoShowPara.getCreatedTime());
         progStlInfoTemp.setLastUpdBy(progStlInfoShowPara.getLastUpdBy());
-        progStlInfoTemp.setLastUpdDate(progStlInfoShowPara.getLastUpdDate());
+        progStlInfoTemp.setLastUpdTime(progStlInfoShowPara.getLastUpdTime());
         progStlInfoTemp.setModificationNum(progStlInfoShowPara.getModificationNum());
         progStlInfoTemp.setAutoLinkAdd(progStlInfoShowPara.getAutoLinkAdd());
         progStlInfoTemp.setFlowStatus(progStlInfoShowPara.getFlowStatus());
@@ -108,9 +108,9 @@ public class ProgStlInfoService {
         progStlInfoShowTemp.setAttachment(progStlInfoPara.getAttachment());
         progStlInfoShowTemp.setDeletedFlag(progStlInfoPara.getArchivedFlag());
         progStlInfoShowTemp.setCreatedBy(progStlInfoPara.getCreatedBy());
-        progStlInfoShowTemp.setCreatedDate(progStlInfoPara.getCreatedDate());
+        progStlInfoShowTemp.setCreatedTime(progStlInfoPara.getCreatedTime());
         progStlInfoShowTemp.setLastUpdBy(progStlInfoPara.getLastUpdBy());
-        progStlInfoShowTemp.setLastUpdDate(progStlInfoPara.getLastUpdDate());
+        progStlInfoShowTemp.setLastUpdTime(progStlInfoPara.getLastUpdTime());
         progStlInfoShowTemp.setModificationNum(progStlInfoPara.getModificationNum());
         progStlInfoShowTemp.setAutoLinkAdd(progStlInfoPara.getAutoLinkAdd());
         progStlInfoShowTemp.setFlowStatus(progStlInfoPara.getFlowStatus());
@@ -126,20 +126,20 @@ public class ProgStlInfoService {
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         progStlInfoShowPara.setCreatedBy(strOperatorIdTemp);
-        progStlInfoShowPara.setCreatedDate(strLastUpdTimeTemp);
+        progStlInfoShowPara.setCreatedTime(strLastUpdTimeTemp);
         progStlInfoShowPara.setDeletedFlag("0");
         progStlInfoShowPara.setLastUpdBy(strOperatorIdTemp);
-        progStlInfoShowPara.setLastUpdDate(strLastUpdTimeTemp);
+        progStlInfoShowPara.setLastUpdTime(strLastUpdTimeTemp);
         progStlInfoMapper.insert(fromModelShowToModel(progStlInfoShowPara)) ;
     }
     public void insertRecord(ProgStlInfo progStlInfoPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         progStlInfoPara.setCreatedBy(strOperatorIdTemp);
-        progStlInfoPara.setCreatedDate(strLastUpdTimeTemp);
+        progStlInfoPara.setCreatedTime(strLastUpdTimeTemp);
         progStlInfoPara.setArchivedFlag("0");
         progStlInfoPara.setLastUpdBy(strOperatorIdTemp);
-        progStlInfoPara.setLastUpdDate(strLastUpdTimeTemp);
+        progStlInfoPara.setLastUpdTime(strLastUpdTimeTemp);
         progStlInfoMapper.insert(progStlInfoPara) ;
     }
 
@@ -190,7 +190,7 @@ public class ProgStlInfoService {
                 ToolUtil.getIntIgnoreNull(progStlInfoPara.getModificationNum())+1);
         progStlInfoPara.setArchivedFlag("0");
         progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlInfoPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
         progStlInfoPara.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
         progStlInfoMapper.updateByPrimaryKey(progStlInfoPara) ;
@@ -207,7 +207,7 @@ public class ProgStlInfoService {
                 ToolUtil.getIntIgnoreNull(progStlInfoShowPara.getModificationNum())+1);
         progStlInfoShowPara.setDeletedFlag("0");
         progStlInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlInfoShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlInfoMapper.updateByPrimaryKey(fromModelShowToModel(progStlInfoShowPara));
     }
     @Transactional
@@ -216,7 +216,7 @@ public class ProgStlInfoService {
                 ToolUtil.getIntIgnoreNull(progStlInfoPara.getModificationNum()) + 1);
         progStlInfoPara.setArchivedFlag("0");
         progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlInfoMapper.updateByPrimaryKey(progStlInfoPara);
 
         //  ˝¡øΩ·À„

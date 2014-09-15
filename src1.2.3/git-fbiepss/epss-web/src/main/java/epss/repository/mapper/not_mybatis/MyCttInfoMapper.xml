@@ -22,9 +22,9 @@
         <result column="FLOW_STATUS_REASON" jdbcType="VARCHAR" property="flowStatusReason"/>
         <result column="ARCHIVED_FLAG" jdbcType="VARCHAR" property="deletedFlag"/>
         <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
-        <result column="CREATED_DATE" jdbcType="VARCHAR" property="createdDate" />
+        <result column="CREATED_TIME" jdbcType="VARCHAR" property="createdTime" />
         <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
-        <result column="LAST_UPD_DATE" jdbcType="VARCHAR" property="lastUpdDate" />
+        <result column="LAST_UPD_TIME" jdbcType="VARCHAR" property="lastUpdTime" />
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
         <result column="MODIFICATION_NUM" jdbcType="DECIMAL" property="modificationNum" />
         <result column="TYPE" jdbcType="CHAR" property="type" />
@@ -49,9 +49,9 @@
                 eic.NOTE,
                 eic.ARCHIVED_FLAG,
                 eic.CREATED_BY,
-                eic.CREATED_DATE,
+                eic.CREATED_TIME,
                 eic.LAST_UPD_BY,
-                eic.LAST_UPD_DATE,
+                eic.LAST_UPD_TIME,
                 eic.MODIFICATION_NUM,
                 eic.FLOW_STATUS,
                 '' AS STR_FLOW_STATUS_BEGIN,

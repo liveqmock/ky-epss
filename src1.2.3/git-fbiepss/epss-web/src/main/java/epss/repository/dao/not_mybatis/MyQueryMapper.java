@@ -140,8 +140,8 @@ public interface MyQueryMapper {
             "          eis.STL_PKID=ecinfo.pkid" +
             "   and" +
             "          eis.STL_TYPE='3'" +
-            "   and " +                        //已经批准了的工程数量结算
-            "          eis.FLOW_STATUS='3'" +
+            "   and " +                        //已经复核了的工程数量结算
+            "          eis.FLOW_STATUS='2'" +
             "   where" +                       //根据成本计划号得到分包合同列表
             "          ecinfo.CTT_TYPE = '2'" +
             "   and " +
@@ -283,10 +283,10 @@ public interface MyQueryMapper {
             "      ORIGIN_FLAG as originFlag,"+
             "      CREATED_BY as createdBy,"+
             "      CREATED_BY_NAME as createdByName,"+
-            "      CREATED_DATE as createdDate,"+
+            "      CREATED_TIME as createdTime,"+
             "      LAST_UPD_BY as lastUpdBy,"+
             "      LAST_UPD_BY_NAME as lastUpdByName,"+
-            "      LAST_UPD_DATE as lastUpdDate,"+
+            "      LAST_UPD_TIME as lastUpdTime,"+
             "      REC_VERSION as recVersion,"+
             "      REMARK as remark,"+
             "      CONTRACT_QUANTITY as contractQuantity,"+

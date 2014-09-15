@@ -42,10 +42,10 @@ public class ProgStlItemSubMShow implements Serializable {
     private String engMMng_OriginFlag;
     private String engMMng_CreatedBy;
     private String engMMng_CreatedByName;
-    private String engMMng_CreatedDate;
+    private String engMMng_CreatedTime;
     private String engMMng_LastUpdBy;
     private String engMMng_LastUpdByName;
-    private String engMMng_LastUpdDate;
+    private String engMMng_LastUpdTime;
     private Integer engMMng_ModificationNum;
 
     public ProgStlItemSubMShow() {
@@ -269,14 +269,6 @@ public class ProgStlItemSubMShow implements Serializable {
         this.engMMng_CreatedBy = engMMng_CreatedBy;
     }
 
-    public String getEngMMng_CreatedDate() {
-        return engMMng_CreatedDate;
-    }
-
-    public void setEngMMng_CreatedDate(String engMMng_CreatedDate) {
-        this.engMMng_CreatedDate = engMMng_CreatedDate;
-    }
-
     public String getEngMMng_LastUpdBy() {
         return engMMng_LastUpdBy;
     }
@@ -285,12 +277,20 @@ public class ProgStlItemSubMShow implements Serializable {
         this.engMMng_LastUpdBy = engMMng_LastUpdBy;
     }
 
-    public String getEngMMng_LastUpdDate() {
-        return engMMng_LastUpdDate;
+    public String getEngMMng_CreatedTime() {
+        return engMMng_CreatedTime;
     }
 
-    public void setEngMMng_LastUpdDate(String engMMng_LastUpdDate) {
-        this.engMMng_LastUpdDate = engMMng_LastUpdDate;
+    public void setEngMMng_CreatedTime(String engMMng_CreatedTime) {
+        this.engMMng_CreatedTime = engMMng_CreatedTime;
+    }
+
+    public String getEngMMng_LastUpdTime() {
+        return engMMng_LastUpdTime;
+    }
+
+    public void setEngMMng_LastUpdTime(String engMMng_LastUpdTime) {
+        this.engMMng_LastUpdTime = engMMng_LastUpdTime;
     }
 
     public Integer getEngMMng_ModificationNum() {

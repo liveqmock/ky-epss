@@ -198,10 +198,10 @@ public class ProgStlItemTkEstAction {
                 progStlItemTkEstShowTemp.setEng_DeletedFlag(progStlItemTkEst.getArchivedFlag());
                 progStlItemTkEstShowTemp.setEng_CreatedBy(progStlItemTkEst.getCreatedBy());
                 progStlItemTkEstShowTemp.setEng_CreatedByName(strCreatedByName);
-                progStlItemTkEstShowTemp.setEng_CreatedDate(progStlItemTkEst.getCreatedDate());
+                progStlItemTkEstShowTemp.setEng_CreatedTime(progStlItemTkEst.getCreatedTime());
                 progStlItemTkEstShowTemp.setEng_LastUpdBy(progStlItemTkEst.getLastUpdBy());
                 progStlItemTkEstShowTemp.setEng_LastUpdByName(strLastUpdByName);
-                progStlItemTkEstShowTemp.setEng_LastUpdDate(progStlItemTkEst.getLastUpdDate());
+                progStlItemTkEstShowTemp.setEng_LastUpdTime(progStlItemTkEst.getLastUpdTime());
                 progStlItemTkEstShowTemp.setEng_ModificationNum(progStlItemTkEst.getModificationNum());
             }
             sprogStlItemTkEstShowListPara.add(progStlItemTkEstShowTemp) ;

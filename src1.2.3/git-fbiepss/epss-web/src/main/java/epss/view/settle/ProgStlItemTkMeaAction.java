@@ -200,10 +200,10 @@ public class ProgStlItemTkMeaAction {
                 progStlItemTkMeaShowTemp.setEng_DeletedFlag(progStlItemTkMea.getArchivedFlag());
                 progStlItemTkMeaShowTemp.setEng_CreatedBy(progStlItemTkMea.getCreatedBy());
                 progStlItemTkMeaShowTemp.setEng_CreatedByName(strCreatedByName);
-                progStlItemTkMeaShowTemp.setEng_CreatedDate(progStlItemTkMea.getCreatedDate());
+                progStlItemTkMeaShowTemp.setEng_CreatedTime(progStlItemTkMea.getCreatedTime());
                 progStlItemTkMeaShowTemp.setEng_LastUpdBy(progStlItemTkMea.getLastUpdBy());
                 progStlItemTkMeaShowTemp.setEng_LastUpdByName(strLastUpdByName);
-                progStlItemTkMeaShowTemp.setEng_LastUpdDate(progStlItemTkMea.getLastUpdDate());
+                progStlItemTkMeaShowTemp.setEng_LastUpdTime(progStlItemTkMea.getLastUpdTime());
                 progStlItemTkMeaShowTemp.setEng_ModificationNum(progStlItemTkMea.getModificationNum());
             }
             sProgStlItemTkMeaShowListPara.add(progStlItemTkMeaShowTemp) ;

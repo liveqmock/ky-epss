@@ -14,8 +14,6 @@ import java.math.BigDecimal;
 public class CttItemShow implements Serializable {
     /*编号，用作显示用，不在数据库里存储，动态显示.依据grade,orderid*/
     private String strNo;
-    /*对应Pkid，用作显示用，不在数据库里存储，动态显示。依据correspondingPkid*/
-    private String strCorrespondingItemPkid;
     /*对应编号，用作显示用，不在数据库里存储，动态显示。依据correspondingPkid*/
     private String strCorrespondingItemNo;
     /*对应编号名称，用作显示用，不在数据库里存储，动态显示。依据correspondingPkid*/
@@ -57,12 +55,12 @@ public class CttItemShow implements Serializable {
     private String originFlag;
     /*EPSS.ES_ITEM_INFO.CREATED_BY*/
     private String createdBy;
-    /*EPSS.ES_ITEM_INFO.CREATED_DATE*/
-    private String createdDate;
+    /*EPSS.ES_ITEM_INFO.CREATED_TIME*/
+    private String createdTime;
     /*EPSS.ES_ITEM_INFO.LAST_UPD_BY*/
     private String lastUpdBy;
-    /*EPSS.ES_ITEM_INFO.LAST_UPD_DATE*/
-    private String lastUpdDate;
+    /*EPSS.ES_ITEM_INFO.LAST_UPD_TIME*/
+    private String lastUpdTime;
     /*EPSS.ES_ITEM_INFO.MODIFICATION_NUM*/
     private Integer modificationNum;
 
@@ -99,10 +97,10 @@ public class CttItemShow implements Serializable {
             String strOriginFlag,
             String strCreatedBy,
             String strCreatedByName,
-            String dtCreatedDate,
+            String dtCreatedTime,
             String strLastUpdBy,
             String strLastUpdByName,
-            String dtLastUpdDate,
+            String dtLastUpdTime,
             Integer intModificationNum,
             String strNote,
             String strCorrespondingPkid,
@@ -143,13 +141,13 @@ public class CttItemShow implements Serializable {
         /*EPSS.ES_ITEM_INFO.CREATED_BY*/
         this.createdBy=strCreatedBy;
         this.createdByName=strCreatedByName;
-        /*EPSS.ES_ITEM_INFO.CREATED_DATE*/
-        this.createdDate=dtCreatedDate;
+        /*EPSS.ES_ITEM_INFO.CREATED_TIME*/
+        this.createdTime=dtCreatedTime;
         /*EPSS.ES_ITEM_INFO.LAST_UPD_BY*/
         this.lastUpdBy=strLastUpdBy;
         this.lastUpdByName=strLastUpdByName;
-        /*EPSS.ES_ITEM_INFO.LAST_UPD_DATE*/
-        this.lastUpdDate=dtLastUpdDate;
+        /*EPSS.ES_ITEM_INFO.LAST_UPD_TIME*/
+        this.lastUpdTime=dtLastUpdTime;
         /*EPSS.ES_ITEM_INFO.MODIFICATION_NUM*/
         this.modificationNum=intModificationNum;
 
@@ -196,12 +194,12 @@ public class CttItemShow implements Serializable {
                         itemForTkcttAndCstpl.originFlag .equals(this.originFlag))
                     &&((itemForTkcttAndCstpl.createdBy==null&&this.createdBy==null)||
                         itemForTkcttAndCstpl.createdBy .equals(this.createdBy))
-                    &&((itemForTkcttAndCstpl.createdDate==null&&this.createdDate==null)||
-                        itemForTkcttAndCstpl.createdDate .equals(this.createdDate))
+                    &&((itemForTkcttAndCstpl.createdTime==null&&this.createdTime==null)||
+                        itemForTkcttAndCstpl.createdTime .equals(this.createdTime))
                     &&((itemForTkcttAndCstpl.lastUpdBy==null&&this.lastUpdBy==null)||
                         itemForTkcttAndCstpl.lastUpdBy .equals(this.lastUpdBy))
-                    &&((itemForTkcttAndCstpl.lastUpdDate==null&&this.lastUpdDate==null)||
-                        itemForTkcttAndCstpl.lastUpdDate .equals(this.lastUpdDate))
+                    &&((itemForTkcttAndCstpl.lastUpdTime==null&&this.lastUpdTime==null)||
+                        itemForTkcttAndCstpl.lastUpdTime .equals(this.lastUpdTime))
                     &&(itemForTkcttAndCstpl.modificationNum==this.modificationNum)
                     ;
         }
@@ -344,14 +342,6 @@ public class CttItemShow implements Serializable {
         this.createdBy = createdBy;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
-
     public String getLastUpdBy() {
         return lastUpdBy;
     }
@@ -360,12 +350,20 @@ public class CttItemShow implements Serializable {
         this.lastUpdBy = lastUpdBy;
     }
 
-    public String getLastUpdDate() {
-        return lastUpdDate;
+    public String getCreatedTime() {
+        return createdTime;
     }
 
-    public void setLastUpdDate(String lastUpdDate) {
-        this.lastUpdDate = lastUpdDate;
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getLastUpdTime() {
+        return lastUpdTime;
+    }
+
+    public void setLastUpdTime(String lastUpdTime) {
+        this.lastUpdTime = lastUpdTime;
     }
 
     public Integer getModificationNum() {
@@ -398,14 +396,6 @@ public class CttItemShow implements Serializable {
 
     public void setStrCorrespondingItemName(String strCorrespondingItemName) {
         this.strCorrespondingItemName = strCorrespondingItemName;
-    }
-
-    public String getStrCorrespondingItemPkid() {
-        return strCorrespondingItemPkid;
-    }
-
-    public void setStrCorrespondingItemPkid(String strCorrespondingItemPkid) {
-        this.strCorrespondingItemPkid = strCorrespondingItemPkid;
     }
 
     public String getCreatedByName() {

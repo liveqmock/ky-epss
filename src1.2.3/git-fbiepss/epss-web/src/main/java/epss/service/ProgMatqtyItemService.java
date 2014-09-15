@@ -89,9 +89,9 @@ public class ProgMatqtyItemService {
         progStlItemSubMTemp.setmPurchaseUnitPrice(progStlItemSubMShowPara.getEngMMng_MPurchaseUnitPrice());
         progStlItemSubMTemp.setArchivedFlag(progStlItemSubMShowPara.getEngMMng_DeletedFlag());
         progStlItemSubMTemp.setCreatedBy(progStlItemSubMShowPara.getEngMMng_CreatedBy());
-        progStlItemSubMTemp.setCreatedDate(progStlItemSubMShowPara.getEngMMng_CreatedDate());
+        progStlItemSubMTemp.setCreatedTime(progStlItemSubMShowPara.getEngMMng_CreatedTime());
         progStlItemSubMTemp.setLastUpdBy(progStlItemSubMShowPara.getEngMMng_LastUpdBy());
-        progStlItemSubMTemp.setLastUpdDate(progStlItemSubMShowPara.getEngMMng_LastUpdDate());
+        progStlItemSubMTemp.setLastUpdTime(progStlItemSubMShowPara.getEngMMng_LastUpdTime());
         progStlItemSubMTemp.setModificationNum(progStlItemSubMShowPara.getEngMMng_ModificationNum());
         return progStlItemSubMTemp;
     }
@@ -102,17 +102,17 @@ public class ProgMatqtyItemService {
                 ToolUtil.getIntIgnoreNull(progStlItemSubMTemp.getModificationNum())+1);
         progStlItemSubMTemp.setArchivedFlag("0");
         progStlItemSubMTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemSubMTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubMTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubMMapper.updateByPrimaryKey(progStlItemSubMTemp) ;
     }
 
     public void insertRecord(ProgStlItemSubMShow progStlItemSubMShowPara){
         ProgStlItemSubM progStlItemSubMTemp =fromModelShowToModel(progStlItemSubMShowPara);
         progStlItemSubMTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemSubMTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubMTemp.setCreatedTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubMTemp.setArchivedFlag("0");
         progStlItemSubMTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemSubMTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubMTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubMMapper.insert(progStlItemSubMTemp) ;
     }
 

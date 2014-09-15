@@ -55,17 +55,17 @@ public class ProgSubstlItemService {
                 ToolUtil.getIntIgnoreNull(progStlItemSubStlmentPara.getRecVersion())+1);
         progStlItemSubStlmentPara.setArchivedFlag("0");
         progStlItemSubStlmentPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemSubStlmentPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubStlmentPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubStlmentMapper.updateByPrimaryKey(progStlItemSubStlmentPara) ;
     }
 
     public void insertRecordDetail(ProgStlItemSubStlmentShow progStlItemSubStlmentShowPara){
         progStlItemSubStlmentShowPara.setEngPMng_CreatedBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlItemSubStlmentShowPara.setEngPMng_CreatedByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperatorId()));
-        progStlItemSubStlmentShowPara.setEngPMng_CreatedDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubStlmentShowPara.setEngPMng_CreatedTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubStlmentShowPara.setEngPMng_LastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlItemSubStlmentShowPara.setEngPMng_LastUpdByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperatorId()));
-        progStlItemSubStlmentShowPara.setEngPMng_LastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubStlmentShowPara.setEngPMng_LastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubStlmentMapper.insert(fromModelShowToModel(progStlItemSubStlmentShowPara));
     }
 
@@ -89,10 +89,10 @@ public class ProgSubstlItemService {
         progStlItemSubStlment.setOriginFlag("0");
         progStlItemSubStlment.setCreatedBy(progStlItemSubStlmentShowPara.getEngPMng_CreatedBy());
         progStlItemSubStlment.setCreatedByName(progStlItemSubStlmentShowPara.getEngPMng_CreatedByName());
-        progStlItemSubStlment.setCreatedDate(progStlItemSubStlmentShowPara.getEngPMng_CreatedDate());
+        progStlItemSubStlment.setCreatedTime(progStlItemSubStlmentShowPara.getEngPMng_CreatedTime());
         progStlItemSubStlment.setLastUpdBy(progStlItemSubStlmentShowPara.getEngPMng_LastUpdBy());
         progStlItemSubStlment.setLastUpdByName(progStlItemSubStlmentShowPara.getEngPMng_LastUpdByName());
-        progStlItemSubStlment.setLastUpdDate(progStlItemSubStlmentShowPara.getEngPMng_LastUpdDate());
+        progStlItemSubStlment.setLastUpdTime(progStlItemSubStlmentShowPara.getEngPMng_LastUpdTime());
         progStlItemSubStlment.setRemark("");
         progStlItemSubStlment.setContractQuantity(progStlItemSubStlmentShowPara.getSubctt_ContractQuantity());
         progStlItemSubStlment.setContractAmount(progStlItemSubStlmentShowPara.getSubctt_ContractAmount());

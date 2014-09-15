@@ -219,9 +219,9 @@ public interface MyProgStlInfoMapper {
             "     ,eispower.NOTE as note" +
             "     ,eispower.ARCHIVED_FLAG as deletedFlag" +
             "     ,eispower.CREATED_BY as createdBy" +
-            "     ,eispower.CREATED_DATE as createdDate"+
+            "     ,eispower.CREATED_TIME as createdTime"+
             "     ,eispower.LAST_UPD_BY as lastUpdBy" +
-            "     ,eispower.LAST_UPD_DATE as lastUpdDate" +
+            "     ,eispower.LAST_UPD_TIME as lastUpdTime" +
             "     ,eispower.FLOW_STATUS as flowStatus" +
             "     ,eispower.FLOW_STATUS_REASON as flowStatusReason" +
             " from " +
@@ -238,9 +238,9 @@ public interface MyProgStlInfoMapper {
             "               ,eis.NOTE" +
             "               ,eis.ARCHIVED_FLAG" +
             "               ,eis.CREATED_BY" +
-            "               ,eis.CREATED_DATE"+
+            "               ,eis.CREATED_TIME"+
             "               ,eis.LAST_UPD_BY" +
-            "               ,eis.LAST_UPD_DATE" +
+            "               ,eis.LAST_UPD_TIME" +
             "               ,eis.FLOW_STATUS" +
             "               ,eis.FLOW_STATUS_REASON" +
             "         from" +
@@ -280,9 +280,9 @@ public interface MyProgStlInfoMapper {
             "     ,eispower.NOTE as note" +
             "     ,eispower.ARCHIVED_FLAG as deletedFlag" +
             "     ,eispower.CREATED_BY as createdBy" +
-            "     ,eispower.CREATED_DATE as createdDate"+
+            "     ,eispower.CREATED_TIME as createdTime"+
             "     ,eispower.LAST_UPD_BY as lastUpdBy" +
-            "     ,eispower.LAST_UPD_DATE as lastUpdDate" +
+            "     ,eispower.LAST_UPD_TIME as lastUpdTime" +
             "     ,eispower.FLOW_STATUS as flowStatus" +
             "     ,eispower.FLOW_STATUS_REASON as flowStatusReason" +
             " from " +
@@ -299,9 +299,9 @@ public interface MyProgStlInfoMapper {
             "             ,eis.NOTE" +
             "             ,eis.ARCHIVED_FLAG" +
             "             ,eis.CREATED_BY" +
-            "             ,eis.CREATED_DATE"+
+            "             ,eis.CREATED_TIME"+
             "             ,eis.LAST_UPD_BY" +
-            "             ,eis.LAST_UPD_DATE" +
+            "             ,eis.LAST_UPD_TIME" +
             "             ,eis.FLOW_STATUS" +
             "             ,eis.FLOW_STATUS_REASON" +
             "         from" +

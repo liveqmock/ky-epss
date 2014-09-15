@@ -280,9 +280,9 @@ public class CstplSubcttStlQPeriodItemAction {
                     progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(progStlItemSubQ.getCurrentPeriodEQty());
                     progStlItemSubQShowTemp.setEngQMng_DeletedFlag(progStlItemSubQ.getArchivedFlag());
                     progStlItemSubQShowTemp.setEngQMng_CreatedBy(progStlItemSubQ.getCreatedBy());
-                    progStlItemSubQShowTemp.setEngQMng_CreatedDate(progStlItemSubQ.getCreatedDate());
+                    progStlItemSubQShowTemp.setEngQMng_CreatedTime(progStlItemSubQ.getCreatedTime());
                     progStlItemSubQShowTemp.setEngQMng_LastUpdBy(progStlItemSubQ.getLastUpdBy());
-                    progStlItemSubQShowTemp.setEngQMng_LastUpdDate(progStlItemSubQ.getLastUpdDate());
+                    progStlItemSubQShowTemp.setEngQMng_LastUpdTime(progStlItemSubQ.getLastUpdTime());
                     progStlItemSubQShowTemp.setEngQMng_ModificationNum(progStlItemSubQ.getModificationNum());
                 }
             }

@@ -13,10 +13,10 @@ public class SignPartShow {
     private String originFlag;
     private String createdBy;
     private String createdByName;
-    private String createdDate;
+    private String createdTime;
     private String lastUpdBy;
     private String lastUpdByName;
-    private String lastUpdDate;
+    private String lastUpdTime;
     private Integer modificationNum;
     private String note;
     public String getPkid() {
@@ -85,23 +85,23 @@ public class SignPartShow {
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy == null ? null : createdBy.trim();
     }
-    public String getCreatedDate() {
-        return createdDate;
-    }
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate == null ? null : createdDate.trim();
-    }
     public String getLastUpdBy() {
         return lastUpdBy;
     }
     public void setLastUpdBy(String lastUpdBy) {
         this.lastUpdBy = lastUpdBy == null ? null : lastUpdBy.trim();
     }
-    public String getLastUpdDate() {
-        return lastUpdDate;
+    public String getCreatedTime() {
+        return createdTime;
     }
-    public void setLastUpdDate(String lastUpdDate) {
-        this.lastUpdDate = lastUpdDate == null ? null : lastUpdDate.trim();
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+    public String getLastUpdTime() {
+        return lastUpdTime;
+    }
+    public void setLastUpdTime(String lastUpdTime) {
+        this.lastUpdTime = lastUpdTime;
     }
     public Integer getModificationNum() {
         return modificationNum;

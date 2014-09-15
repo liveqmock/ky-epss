@@ -22,15 +22,15 @@ public interface MyFlowCtrlHisMapper {
      @Select(" select DISTINCT" +
             "     eipwai.INFO_TYPE as infoType, " +
             "     eipwai.FLOW_STATUS as flowStatus,  " +
-            "     eipwai.note as note," +
-            "     eipwai.created_by as createdBy, " +
-            "     eipwai.created_date as createdDate    " +
+            "     eipwai.REMARK as remark," +
+            "     eipwai.CREATED_BY as createdBy, " +
+            "     eipwai.CREATED_TIME as createdTime" +
             " from " +
             "     FLOW_CTRL_HIS eipwai  " +
             " inner join " +
             "     ( " +
             "         select  " +
-            "            max(created_date) as maxDate, " +
+            "            max(CREATED_TIME) as maxTime, " +
             "            INFO_TYPE, " +
             "            FLOW_STATUS " +
             "         from " +
@@ -38,9 +38,9 @@ public interface MyFlowCtrlHisMapper {
             "         where  " +
             "            INFO_TYPE in ('3','4','5') " +
             "         and " +
-            "            power_pkid=#{powerPkid} " +
+            "            INFO_PKID=#{infoPkid} " +
             "         and " +
-            "            period_no=#{periodNo} " +
+            "            PERIOD_NO=#{periodNo} " +
             "         group by INFO_TYPE,FLOW_STATUS " +
             "     )maxcreated_date  " +
             " on   " +
@@ -48,12 +48,12 @@ public interface MyFlowCtrlHisMapper {
             " and " +
             "     eipwai.FLOW_STATUS=maxcreated_date.FLOW_STATUS  " +
             " and " +
-            "     NVL(eipwai.created_date,'NOTNULL')=NVL(maxcreated_date.maxDate,'NOTNULL')  "+
+            "     NVL(eipwai.CREATED_TIME,'NOTNULL')=NVL(maxcreated_date.maxDate,'NOTNULL')  "+
             " where " +
-            "     eipwai.power_pkid=#{powerPkid} " +
+            "     eipwai.INFO_PKID=#{infoPkid} " +
             " and " +
             "     eipwai.period_no=#{periodNo} " +
             " order by eipwai.INFO_TYPE,eipwai.FLOW_STATUS")
-    List<FlowCtrlHis> getSubStlListByFlowCtrlHis(@Param("powerPkid") String powerPkid,
+    List<FlowCtrlHis> getSubStlListByFlowCtrlHis(@Param("infoPkid") String infoPkid,
                                                  @Param("periodNo") String periodNo);
 }

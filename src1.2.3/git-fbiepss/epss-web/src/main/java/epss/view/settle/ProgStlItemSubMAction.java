@@ -167,9 +167,9 @@ public class ProgStlItemSubMAction {
                 progStlItemSubMShowTemp.setEngMMng_MPurchaseUnitPrice(progStlItemSubM.getmPurchaseUnitPrice());
                 progStlItemSubMShowTemp.setEngMMng_DeletedFlag(progStlItemSubM.getArchivedFlag());
                 progStlItemSubMShowTemp.setEngMMng_CreatedBy(progStlItemSubM.getCreatedBy());
-                progStlItemSubMShowTemp.setEngMMng_CreatedDate(progStlItemSubM.getCreatedDate());
+                progStlItemSubMShowTemp.setEngMMng_CreatedTime(progStlItemSubM.getCreatedTime());
                 progStlItemSubMShowTemp.setEngMMng_LastUpdBy(progStlItemSubM.getLastUpdBy());
-                progStlItemSubMShowTemp.setEngMMng_LastUpdDate(progStlItemSubM.getLastUpdDate());
+                progStlItemSubMShowTemp.setEngMMng_LastUpdTime(progStlItemSubM.getLastUpdTime());
                 progStlItemSubMShowTemp.setEngMMng_ModificationNum(progStlItemSubM.getModificationNum());
             }
             sProgStlItemSubMShowListPara.add(progStlItemSubMShowTemp) ;

@@ -13,10 +13,10 @@ public class FlowCtrlShow {
     private String flowStatusReasonName;
     private String createdBy;
     private String createdByName;
-    private String createdDate;
+    private String createdTime;
     private String lastUpdBy;
     private String lastUpdByName;
-    private String lastUpdDate;
+    private String lastUpdTime;
     private String spareField;
 
     public String getPowerType() {
@@ -99,14 +99,6 @@ public class FlowCtrlShow {
         this.createdByName = createdByName;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
-
     public String getLastUpdBy() {
         return lastUpdBy;
     }
@@ -123,12 +115,44 @@ public class FlowCtrlShow {
         this.lastUpdByName = lastUpdByName;
     }
 
-    public String getLastUpdDate() {
-        return lastUpdDate;
+    public String getCreatedTime() {
+        return createdTime;
     }
 
-    public void setLastUpdDate(String lastUpdDate) {
-        this.lastUpdDate = lastUpdDate;
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getLastUpdTime() {
+        return lastUpdTime;
+    }
+
+    public void setLastUpdTime(String lastUpdTime) {
+        this.lastUpdTime = lastUpdTime;
+    }
+
+    public String getFlowStatusReasonName() {
+        return flowStatusReasonName;
+    }
+
+    public void setFlowStatusReasonName(String flowStatusReasonName) {
+        this.flowStatusReasonName = flowStatusReasonName;
+    }
+
+    public String getFlowStatusReason() {
+        return flowStatusReason;
+    }
+
+    public void setFlowStatusReason(String flowStatusReason) {
+        this.flowStatusReason = flowStatusReason;
+    }
+
+    public String getFlowStatusName() {
+        return flowStatusName;
+    }
+
+    public void setFlowStatusName(String flowStatusName) {
+        this.flowStatusName = flowStatusName;
     }
 
     public String getSpareField() {

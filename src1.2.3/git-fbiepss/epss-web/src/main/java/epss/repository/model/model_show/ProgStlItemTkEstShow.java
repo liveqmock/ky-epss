@@ -41,10 +41,10 @@ public class ProgStlItemTkEstShow implements Serializable {
     private String eng_CreatedBy;
     private String eng_CreatedByName;
     private String eng_OriginFlag;
-    private String eng_CreatedDate;
+    private String eng_CreatedTime;
     private String eng_LastUpdBy;
     private String eng_LastUpdByName;
-    private String eng_LastUpdDate;
+    private String eng_LastUpdTime;
     private Integer eng_ModificationNum;
 
     public ProgStlItemTkEstShow() {
@@ -243,14 +243,6 @@ public class ProgStlItemTkEstShow implements Serializable {
         this.eng_CreatedBy = eng_CreatedBy;
     }
 
-    public String getEng_CreatedDate() {
-        return eng_CreatedDate;
-    }
-
-    public void setEng_CreatedDate(String eng_CreatedDate) {
-        this.eng_CreatedDate = eng_CreatedDate;
-    }
-
     public String getEng_LastUpdBy() {
         return eng_LastUpdBy;
     }
@@ -259,12 +251,20 @@ public class ProgStlItemTkEstShow implements Serializable {
         this.eng_LastUpdBy = eng_LastUpdBy;
     }
 
-    public String getEng_LastUpdDate() {
-        return eng_LastUpdDate;
+    public String getEng_CreatedTime() {
+        return eng_CreatedTime;
     }
 
-    public void setEng_LastUpdDate(String eng_LastUpdDate) {
-        this.eng_LastUpdDate = eng_LastUpdDate;
+    public void setEng_CreatedTime(String eng_CreatedTime) {
+        this.eng_CreatedTime = eng_CreatedTime;
+    }
+
+    public String getEng_LastUpdTime() {
+        return eng_LastUpdTime;
+    }
+
+    public void setEng_LastUpdTime(String eng_LastUpdTime) {
+        this.eng_LastUpdTime = eng_LastUpdTime;
     }
 
     public Integer getEng_ModificationNum() {

@@ -116,9 +116,9 @@ public class CttItemService {
         cttItemTemp.setArchivedFlag("0");
         cttItemTemp.setOriginFlag("0");
         cttItemTemp.setCreatedBy(strOperatorIdTemp);
-        cttItemTemp.setCreatedDate(strLastUpdTimeTemp);
+        cttItemTemp.setCreatedTime(strLastUpdTimeTemp);
         cttItemTemp.setLastUpdBy(strOperatorIdTemp);
-        cttItemTemp.setLastUpdDate(strLastUpdTimeTemp);
+        cttItemTemp.setLastUpdTime(strLastUpdTimeTemp);
         cttItemMapper.insertSelective(cttItemTemp);
     }
     public void insertRecord(CttItem cttItemPara){
@@ -127,9 +127,9 @@ public class CttItemService {
         cttItemPara.setArchivedFlag("0");
         cttItemPara.setOriginFlag("0");
         cttItemPara.setCreatedBy(strOperatorIdTemp);
-        cttItemPara.setCreatedDate(strLastUpdTimeTemp);
+        cttItemPara.setCreatedTime(strLastUpdTimeTemp);
         cttItemPara.setLastUpdBy(strOperatorIdTemp);
-        cttItemPara.setLastUpdDate(strLastUpdTimeTemp);
+        cttItemPara.setLastUpdTime(strLastUpdTimeTemp);
         cttItemMapper.insert(cttItemPara);
     }
 
@@ -150,9 +150,9 @@ public class CttItemService {
         cttItemTemp.setContractAmount(cttItemShowPara.getContractAmount());
         cttItemTemp.setArchivedFlag(cttItemShowPara.getDeletedFlag());
         cttItemTemp.setOriginFlag(cttItemShowPara.getOriginFlag());
-        cttItemTemp.setCreatedDate(cttItemShowPara.getCreatedDate());
+        cttItemTemp.setCreatedTime(cttItemShowPara.getCreatedTime());
         cttItemTemp.setCreatedBy(cttItemShowPara.getCreatedBy());
-        cttItemTemp.setLastUpdDate(cttItemShowPara.getLastUpdDate());
+        cttItemTemp.setLastUpdTime(cttItemShowPara.getLastUpdTime());
         cttItemTemp.setLastUpdBy(cttItemShowPara.getLastUpdBy());
         cttItemTemp.setNote(cttItemShowPara.getNote()) ;
         cttItemTemp.setCorrespondingPkid(cttItemShowPara.getCorrespondingPkid());
@@ -181,7 +181,7 @@ public class CttItemService {
         cttItemTemp.setArchivedFlag("0");
         cttItemTemp.setOriginFlag("0");
         cttItemTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        cttItemTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        cttItemTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         cttItemMapper.updateByPrimaryKey(cttItemTemp) ;
     }
 

@@ -65,17 +65,17 @@ public class ProgMeaItemService {
                 ToolUtil.getIntIgnoreNull(esStlTkcttEngMeaTemp.getModificationNum())+1);
         esStlTkcttEngMeaTemp.setArchivedFlag("0");
         esStlTkcttEngMeaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esStlTkcttEngMeaTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        esStlTkcttEngMeaTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemTkMeaMapper.updateByPrimaryKey(esStlTkcttEngMeaTemp) ;
     }
 
     public void insertRecord(ProgStlItemTkMeaShow progStlItemTkMeaShowPara){
         ProgStlItemTkMea esStlTkcttEngMeaTemp=fromModelShowToModel(progStlItemTkMeaShowPara);
         esStlTkcttEngMeaTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        esStlTkcttEngMeaTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        esStlTkcttEngMeaTemp.setCreatedTime(ToolUtil.getStrLastUpdTime());
         esStlTkcttEngMeaTemp.setArchivedFlag("0");
         esStlTkcttEngMeaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esStlTkcttEngMeaTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        esStlTkcttEngMeaTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemTkMeaMapper.insert(esStlTkcttEngMeaTemp) ;
     }
 
@@ -91,9 +91,9 @@ public class ProgMeaItemService {
         progStlItemTkMeaTemp.setCurrentPeriodQty(progStlItemTkMeaShowPara.getEng_CurrentPeriodEQty());
         progStlItemTkMeaTemp.setArchivedFlag(progStlItemTkMeaShowPara.getEng_DeletedFlag());
         progStlItemTkMeaTemp.setCreatedBy(progStlItemTkMeaShowPara.getEng_CreatedBy());
-        progStlItemTkMeaTemp.setCreatedDate(progStlItemTkMeaShowPara.getEng_CreatedDate());
+        progStlItemTkMeaTemp.setCreatedTime(progStlItemTkMeaShowPara.getEng_CreatedTime());
         progStlItemTkMeaTemp.setLastUpdBy(progStlItemTkMeaShowPara.getEng_LastUpdBy());
-        progStlItemTkMeaTemp.setLastUpdDate(progStlItemTkMeaShowPara.getEng_LastUpdDate());
+        progStlItemTkMeaTemp.setLastUpdTime(progStlItemTkMeaShowPara.getEng_LastUpdTime());
         progStlItemTkMeaTemp.setModificationNum(progStlItemTkMeaShowPara.getEng_ModificationNum());
         return progStlItemTkMeaTemp;
     }

@@ -587,9 +587,9 @@ public class CstplItemAction {
                                 itemTkcttInsertItem.setDeletedFlag(null);
                                 itemTkcttInsertItem.setOriginFlag(null);
                                 itemTkcttInsertItem.setCreatedBy(null);
-                                itemTkcttInsertItem.setCreatedDate(null);
+                                itemTkcttInsertItem.setCreatedTime(null);
                                 itemTkcttInsertItem.setLastUpdBy(null);
-                                itemTkcttInsertItem.setLastUpdDate(null);
+                                itemTkcttInsertItem.setLastUpdTime(null);
                                 itemTkcttInsertItem.setModificationNum(null);
                                 itemTkcttInsertItem.setCorrespondingPkid(null);
                             } else
@@ -611,9 +611,9 @@ public class CstplItemAction {
                             itemTkcttInsertItem.setDeletedFlagContrast(itemCstpl.getDeletedFlag());
                             itemTkcttInsertItem.setOriginFlagContrast(itemCstpl.getOriginFlag());
                             itemTkcttInsertItem.setCreatedByContrast(itemCstpl.getCreatedBy());
-                            itemTkcttInsertItem.setCreatedDateContrast(itemCstpl.getCreatedDate());
+                            itemTkcttInsertItem.setCreatedTimeContrast(itemCstpl.getCreatedTime());
                             itemTkcttInsertItem.setLastUpdByContrast(itemCstpl.getLastUpdBy());
-                            itemTkcttInsertItem.setLastUpdDateContrast(itemCstpl.getLastUpdDate());
+                            itemTkcttInsertItem.setLastUpdTimeContrast(itemCstpl.getLastUpdTime());
                             itemTkcttInsertItem.setModificationNumContrast(itemCstpl.getModificationNum());
                             itemTkcttInsertItem.setCorrespondingPkidContrast(itemCstpl.getCorrespondingPkid());
                             if (itemTkcttInsertItem.getPkid() == null || itemTkcttInsertItem.getPkid().equals("")) {
@@ -891,10 +891,10 @@ public class CstplItemAction {
                     itemUnit.getOriginFlag() ,
                     itemUnit.getCreatedBy() ,
                     strCreatedByName,
-                    itemUnit.getCreatedDate() ,
+                    itemUnit.getCreatedTime() ,
                     itemUnit.getLastUpdBy() ,
                     strLastUpdByName,
-                    itemUnit.getLastUpdDate() ,
+                    itemUnit.getLastUpdTime() ,
                     itemUnit.getModificationNum(),
                     itemUnit.getNote(),
                     itemUnit.getCorrespondingPkid(),
@@ -1031,9 +1031,9 @@ public class CstplItemAction {
             cttItemShowTemp.setDeletedFlag(cstplItemShowPara.getDeletedFlag());
             cttItemShowTemp.setOriginFlag(cstplItemShowPara.getOriginFlag()) ;
             cttItemShowTemp.setCreatedBy(cstplItemShowPara.getCreatedBy());
-            cttItemShowTemp.setCreatedDate(cstplItemShowPara.getCreatedDate());
+            cttItemShowTemp.setCreatedTime(cstplItemShowPara.getCreatedTime());
             cttItemShowTemp.setLastUpdBy(cstplItemShowPara.getLastUpdBy());
-            cttItemShowTemp.setLastUpdDate(cstplItemShowPara.getLastUpdDate());
+            cttItemShowTemp.setLastUpdTime(cstplItemShowPara.getLastUpdTime());
             cttItemShowTemp.setModificationNum(cstplItemShowPara.getModificationNum());
             cttItemShowTemp.setCorrespondingPkid(cstplItemShowPara.getCorrespondingPkid());
             cttItemShowTemp.setStrCorrespondingItemNo(null);
@@ -1057,9 +1057,9 @@ public class CstplItemAction {
             cttItemShowTemp.setDeletedFlag(cstplItemShowPara.getDeletedFlagContrast());
             cttItemShowTemp.setOriginFlag(cstplItemShowPara.getOriginFlagContrast()) ;
             cttItemShowTemp.setCreatedBy(cstplItemShowPara.getCreatedByContrast());
-            cttItemShowTemp.setCreatedDate(cstplItemShowPara.getCreatedDateContrast());
+            cttItemShowTemp.setCreatedTime(cstplItemShowPara.getCreatedTimeContrast());
             cttItemShowTemp.setLastUpdBy(cstplItemShowPara.getLastUpdByContrast());
-            cttItemShowTemp.setLastUpdDate(cstplItemShowPara.getLastUpdDateContrast());
+            cttItemShowTemp.setLastUpdTime(cstplItemShowPara.getLastUpdTimeContrast());
             cttItemShowTemp.setModificationNum(cstplItemShowPara.getModificationNumContrast());
 
             String strCorrespondingPkid= cstplItemShowPara.getCorrespondingPkidContrast();
@@ -1098,9 +1098,9 @@ public class CstplItemAction {
             cstplItemShowTemp.setDeletedFlag(cttItemShowPara.getDeletedFlag());
             cstplItemShowTemp.setOriginFlag(cttItemShowPara.getOriginFlag()) ;
             cstplItemShowTemp.setCreatedBy(cttItemShowPara.getCreatedBy());
-            cstplItemShowTemp.setCreatedDate(cttItemShowPara.getCreatedDate());
+            cstplItemShowTemp.setCreatedTime(cttItemShowPara.getCreatedTime());
             cstplItemShowTemp.setLastUpdBy(cttItemShowPara.getLastUpdBy());
-            cstplItemShowTemp.setLastUpdDate(cttItemShowPara.getLastUpdDate());
+            cstplItemShowTemp.setLastUpdTime(cttItemShowPara.getLastUpdTime());
             cstplItemShowTemp.setModificationNum(cttItemShowPara.getModificationNum());
         }
         else if(strTkcttOrCstpl .equals("Cstpl")){
@@ -1123,9 +1123,9 @@ public class CstplItemAction {
             cstplItemShowTemp.setDeletedFlagContrast(cttItemShowPara.getDeletedFlag());
             cstplItemShowTemp.setOriginFlagContrast(cttItemShowPara.getOriginFlag()) ;
             cstplItemShowTemp.setCreatedByContrast(cttItemShowPara.getCreatedBy());
-            cstplItemShowTemp.setCreatedDateContrast(cttItemShowPara.getCreatedDate());
+            cstplItemShowTemp.setCreatedTimeContrast(cttItemShowPara.getCreatedTime());
             cstplItemShowTemp.setLastUpdByContrast(cttItemShowPara.getLastUpdBy());
-            cstplItemShowTemp.setLastUpdDateContrast(cttItemShowPara.getLastUpdDate());
+            cstplItemShowTemp.setLastUpdTimeContrast(cttItemShowPara.getLastUpdTime());
             cstplItemShowTemp.setModificationNumContrast(cttItemShowPara.getModificationNum());
         }
         return cstplItemShowTemp;

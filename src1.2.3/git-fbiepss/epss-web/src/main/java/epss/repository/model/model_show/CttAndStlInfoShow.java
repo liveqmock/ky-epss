@@ -18,7 +18,7 @@ public class CttAndStlInfoShow implements Serializable {
     private String note;
     private String createdBy;
     private String createdByName;
-    private String createdDate;
+    private String createdTime;
     private Boolean isSeled;
 
     public String getPkid() {
@@ -77,12 +77,12 @@ public class CttAndStlInfoShow implements Serializable {
         this.createdByName = createdByName;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
+    public String getCreatedTime() {
+        return createdTime;
     }
 
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
     }
 
     public String getCorrespondingPkid() {

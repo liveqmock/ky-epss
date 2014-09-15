@@ -25,10 +25,10 @@ public class ProgStlInfoShow {
     private String deletedFlag;
     private String createdBy;
     private String createdByName;
-    private String createdDate;
+    private String createdTime;
     private String lastUpdBy;
     private String lastUpdByName;
-    private String lastUpdDate;
+    private String lastUpdTime;
     private String spareField;
     private Integer modificationNum;
     private String type;
@@ -154,14 +154,6 @@ public class ProgStlInfoShow {
         this.createdBy = createdBy;
     }
 
-    public String getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(String createdDate) {
-        this.createdDate = createdDate;
-    }
-
     public String getLastUpdBy() {
         return lastUpdBy;
     }
@@ -170,12 +162,20 @@ public class ProgStlInfoShow {
         this.lastUpdBy = lastUpdBy;
     }
 
-    public String getLastUpdDate() {
-        return lastUpdDate;
+    public String getCreatedTime() {
+        return createdTime;
     }
 
-    public void setLastUpdDate(String lastUpdDate) {
-        this.lastUpdDate = lastUpdDate;
+    public void setCreatedTime(String createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public String getLastUpdTime() {
+        return lastUpdTime;
+    }
+
+    public void setLastUpdTime(String lastUpdTime) {
+        this.lastUpdTime = lastUpdTime;
     }
 
     public String getSpareField() {

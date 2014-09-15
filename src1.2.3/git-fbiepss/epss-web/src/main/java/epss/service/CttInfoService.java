@@ -133,9 +133,9 @@ public class CttInfoService {
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         cttInfoShowPara.setDeletedFlag("0");
         cttInfoShowPara.setCreatedBy(strOperatorIdTemp);
-        cttInfoShowPara.setCreatedDate(strLastUpdTimeTemp);
+        cttInfoShowPara.setCreatedTime(strLastUpdTimeTemp);
         cttInfoShowPara.setLastUpdBy(strOperatorIdTemp);
-        cttInfoShowPara.setLastUpdDate(strLastUpdTimeTemp);
+        cttInfoShowPara.setLastUpdTime(strLastUpdTimeTemp);
         cttInfoMapper.insertSelective(fromModelShowToModel(cttInfoShowPara));
     }
     public void insertRecord(CttInfo cttInfoPara) {
@@ -143,9 +143,9 @@ public class CttInfoService {
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         cttInfoPara.setArchivedFlag("0");
         cttInfoPara.setCreatedBy(strOperatorIdTemp);
-        cttInfoPara.setCreatedDate(strLastUpdTimeTemp);
+        cttInfoPara.setCreatedTime(strLastUpdTimeTemp);
         cttInfoPara.setLastUpdBy(strOperatorIdTemp);
-        cttInfoPara.setLastUpdDate(strLastUpdTimeTemp);
+        cttInfoPara.setLastUpdTime(strLastUpdTimeTemp);
         cttInfoMapper.insertSelective(cttInfoPara);
     }
 
@@ -160,7 +160,7 @@ public class CttInfoService {
         flowCtrlHisTemp.setFlowStatusReason(cttInfoPara.getFlowStatusReason());
         flowCtrlHisTemp.setCreatedBy(cttInfoPara.getCreatedBy());
         flowCtrlHisTemp.setCreatedByName(ToolUtil.getUserName(cttInfoPara.getCreatedBy()));
-        flowCtrlHisTemp.setCreatedTime(cttInfoPara.getCreatedDate());
+        flowCtrlHisTemp.setCreatedTime(cttInfoPara.getCreatedTime());
         flowCtrlHisTemp.setRemark(cttInfoPara.getNote());
         return flowCtrlHisTemp;
     }
@@ -170,7 +170,7 @@ public class CttInfoService {
                 ToolUtil.getIntIgnoreNull(cttInfoPara.getModificationNum())+1);
             cttInfoPara.setArchivedFlag("0");
             cttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-            cttInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
+            cttInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
             cttInfoMapper.updateByPrimaryKey(cttInfoPara);
             FlowCtrlHis flowCtrlHisTemp=fromCttInfoToFlowCtrlHis(cttInfoPara);
             List<Oper> operListTemp=flowCtrlHisService.selectOperByExample(ToolUtil.getOperatorManager().getOperatorId());
@@ -201,7 +201,7 @@ public class CttInfoService {
                 ToolUtil.getIntIgnoreNull(cttInfoShowPara.getModificationNum())+1);
         cttInfoShowPara.setDeletedFlag("0");
         cttInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
+        cttInfoShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         cttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
     }
     public void updateRecordForOperRes(CttInfoShow cttInfoShowPara){
@@ -211,7 +211,7 @@ public class CttInfoService {
                 ToolUtil.getIntIgnoreNull(cttInfoShowPara.getModificationNum())+1);
         cttInfoTemp.setArchivedFlag("0");
         cttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        cttInfoTemp.setLastUpdDate(ToolUtil.getStrLastUpdTime());
+        cttInfoTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         cttInfoMapper.updateByPrimaryKey(cttInfoTemp);
     }
 
@@ -241,9 +241,9 @@ public class CttInfoService {
         cttInfoTemp.setAttachment(cttInfoShowPara.getAttachment());
         cttInfoTemp.setArchivedFlag(cttInfoShowPara.getDeletedFlag());
         cttInfoTemp.setCreatedBy(cttInfoShowPara.getCreatedBy());
-        cttInfoTemp.setCreatedDate(cttInfoShowPara.getCreatedDate());
+        cttInfoTemp.setCreatedTime(cttInfoShowPara.getCreatedTime());
         cttInfoTemp.setLastUpdBy(cttInfoShowPara.getLastUpdBy());
-        cttInfoTemp.setLastUpdDate(cttInfoShowPara.getLastUpdDate());
+        cttInfoTemp.setLastUpdTime(cttInfoShowPara.getLastUpdTime());
         cttInfoTemp.setModificationNum(cttInfoShowPara.getModificationNum());
         cttInfoTemp.setType(cttInfoShowPara.getType());
         return cttInfoTemp;
@@ -266,9 +266,9 @@ public class CttInfoService {
         cttInfoShowTemp.setAttachment(cttInfoPara.getAttachment());
         cttInfoShowTemp.setDeletedFlag(cttInfoPara.getArchivedFlag());
         cttInfoShowTemp.setCreatedBy(cttInfoPara.getCreatedBy());
-        cttInfoShowTemp.setCreatedDate(cttInfoPara.getCreatedDate());
+        cttInfoShowTemp.setCreatedTime(cttInfoPara.getCreatedTime());
         cttInfoShowTemp.setLastUpdBy(cttInfoPara.getLastUpdBy());
-        cttInfoShowTemp.setLastUpdDate(cttInfoPara.getLastUpdDate());
+        cttInfoShowTemp.setLastUpdTime(cttInfoPara.getLastUpdTime());
         cttInfoShowTemp.setModificationNum(cttInfoPara.getModificationNum());
         cttInfoShowTemp.setType(cttInfoPara.getType());
         return cttInfoShowTemp;

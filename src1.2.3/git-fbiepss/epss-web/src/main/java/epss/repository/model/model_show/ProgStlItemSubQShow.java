@@ -41,10 +41,10 @@ public class ProgStlItemSubQShow implements Serializable {
     private String engQMng_OriginFlag;
     private String engQMng_CreatedByName;
     private String engQMng_CreatedBy;
-    private String engQMng_CreatedDate;
+    private String engQMng_CreatedTime;
     private String engQMng_LastUpdBy;
     private String engQMng_LastUpdByName;
-    private String engQMng_LastUpdDate;
+    private String engQMng_LastUpdTime;
     private Integer engQMng_ModificationNum;
 
     public ProgStlItemSubQShow() {
@@ -259,14 +259,6 @@ public class ProgStlItemSubQShow implements Serializable {
         this.engQMng_CreatedBy = engQMng_CreatedBy;
     }
 
-    public String getEngQMng_CreatedDate() {
-        return engQMng_CreatedDate;
-    }
-
-    public void setEngQMng_CreatedDate(String engQMng_CreatedDate) {
-        this.engQMng_CreatedDate = engQMng_CreatedDate;
-    }
-
     public String getEngQMng_LastUpdBy() {
         return engQMng_LastUpdBy;
     }
@@ -291,12 +283,20 @@ public class ProgStlItemSubQShow implements Serializable {
         this.engQMng_CreatedByName = engQMng_CreatedByName;
     }
 
-    public String getEngQMng_LastUpdDate() {
-        return engQMng_LastUpdDate;
+    public String getEngQMng_CreatedTime() {
+        return engQMng_CreatedTime;
     }
 
-    public void setEngQMng_LastUpdDate(String engQMng_LastUpdDate) {
-        this.engQMng_LastUpdDate = engQMng_LastUpdDate;
+    public void setEngQMng_CreatedTime(String engQMng_CreatedTime) {
+        this.engQMng_CreatedTime = engQMng_CreatedTime;
+    }
+
+    public String getEngQMng_LastUpdTime() {
+        return engQMng_LastUpdTime;
+    }
+
+    public void setEngQMng_LastUpdTime(String engQMng_LastUpdTime) {
+        this.engQMng_LastUpdTime = engQMng_LastUpdTime;
     }
 
     public Integer getEngQMng_ModificationNum() {

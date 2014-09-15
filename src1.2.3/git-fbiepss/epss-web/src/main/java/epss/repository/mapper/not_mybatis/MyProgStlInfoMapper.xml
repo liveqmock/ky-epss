@@ -15,9 +15,9 @@
         <result column="FLOW_STATUS_REASON" jdbcType="CHAR" property="flowStatusReason"/>
         <result column="ARCHIVED_FLAG" jdbcType="CHAR" property="deletedFlag"/>
         <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
-        <result column="CREATED_DATE" jdbcType="VARCHAR" property="createdDate" />
+        <result column="CREATED_TIME" jdbcType="VARCHAR" property="createdTime" />
         <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
-        <result column="LAST_UPD_DATE" jdbcType="VARCHAR" property="lastUpdDate" />
+        <result column="LAST_UPD_TIME" jdbcType="VARCHAR" property="lastUpdTime" />
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
         <result column="MODIFICATION_NUM" jdbcType="DECIMAL" property="modificationNum" />
         <result column="AUTO_LINK_ADD" jdbcType="CHAR" property="autoLinkAdd" />
@@ -38,9 +38,9 @@
                 eis.NOTE,
                 eis.ARCHIVED_FLAG,
                 eis.CREATED_BY,
-                eis.CREATED_DATE,
+                eis.CREATED_TIME,
                 eis.LAST_UPD_BY,
-                eis.LAST_UPD_DATE,
+                eis.LAST_UPD_TIME,
                 eis.MODIFICATION_NUM,
                 eis.AUTO_LINK_ADD AS autoLinkAdd,
                 eis.FLOW_STATUS,
@@ -121,9 +121,9 @@
                 eis.NOTE,
                 eis.ARCHIVED_FLAG,
                 eis.CREATED_BY,
-                eis.CREATED_DATE,
+                eis.CREATED_TIME,
                 eis.LAST_UPD_BY,
-                eis.LAST_UPD_DATE,
+                eis.LAST_UPD_TIME,
                 eis.MODIFICATION_NUM,
                 eis.FLOW_STATUS,
                 eis.FLOW_STATUS_REASON

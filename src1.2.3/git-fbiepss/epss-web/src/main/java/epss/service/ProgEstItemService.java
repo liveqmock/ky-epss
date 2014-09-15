@@ -58,17 +58,17 @@ public class ProgEstItemService {
                 ToolUtil.getIntIgnoreNull(progStlItemTkEstShowPara.getEng_ModificationNum())+1);
         progStlItemTkEstTemp.setArchivedFlag("0");
         progStlItemTkEstTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemTkEstTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemTkEstTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemTkEstMapper.updateByPrimaryKey(progStlItemTkEstTemp) ;
     }
 
     public void insertRecord(ProgStlItemTkEstShow progStlItemTkEstShowPara){
         ProgStlItemTkEst progStlItemTkEstTemp =fromModelShowToModel(progStlItemTkEstShowPara);
         progStlItemTkEstTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemTkEstTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        progStlItemTkEstTemp.setCreatedTime(ToolUtil.getStrLastUpdTime());
         progStlItemTkEstTemp.setArchivedFlag("0");
         progStlItemTkEstTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemTkEstTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemTkEstTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemTkEstMapper.insert(progStlItemTkEstTemp);
     }
 
@@ -102,9 +102,9 @@ public class ProgEstItemService {
         progStlItemTkEstTemp.setCurrentPeriodQty(progStlItemTkEstShowPara.getEng_CurrentPeriodEQty());
         progStlItemTkEstTemp.setArchivedFlag(progStlItemTkEstShowPara.getEng_DeletedFlag());
         progStlItemTkEstTemp.setCreatedBy(progStlItemTkEstShowPara.getEng_CreatedBy());
-        progStlItemTkEstTemp.setCreatedDate(progStlItemTkEstShowPara.getEng_CreatedDate());
+        progStlItemTkEstTemp.setCreatedTime(progStlItemTkEstShowPara.getEng_CreatedTime());
         progStlItemTkEstTemp.setLastUpdBy(progStlItemTkEstShowPara.getEng_LastUpdBy());
-        progStlItemTkEstTemp.setLastUpdDate(progStlItemTkEstShowPara.getEng_LastUpdDate());
+        progStlItemTkEstTemp.setLastUpdTime(progStlItemTkEstShowPara.getEng_LastUpdTime());
         progStlItemTkEstTemp.setModificationNum(progStlItemTkEstShowPara.getEng_ModificationNum());
         return progStlItemTkEstTemp;
     }
