@@ -533,12 +533,16 @@ public class OperFuncBusiResMngAction implements Serializable{
             if (currentSelectedNode!=null){
                 OperFuncResShow operFuncResShow1= (OperFuncResShow) currentSelectedNode.getData();
                 OperFuncResShow operFuncResShow2= (OperFuncResShow) childNodeTemp.getData();
-                if (operFuncResShow1.getResType().equals(operFuncResShow2.getResType())
-                        &&operFuncResShow1.getResPkid().equals(operFuncResShow2.getResPkid())){
-                    TreeNode treeNodeTemp=childNodeTemp;
-                    while (!(treeNodeTemp.getData().equals("ROOT"))){
-                        treeNodeTemp.setExpanded(true);
-                        treeNodeTemp=treeNodeTemp.getParent();
+                if ("ROOT".equals(operFuncResShow1.getResPkid())){
+                    currentSelectedNode.setExpanded(true);
+                }else {
+                    if (operFuncResShow1.getResType().equals(operFuncResShow2.getResType())
+                            &&operFuncResShow1.getResPkid().equals(operFuncResShow2.getResPkid())){
+                        TreeNode treeNodeTemp=childNodeTemp;
+                        while (!(treeNodeTemp.getData().equals("ROOT"))){
+                            treeNodeTemp.setExpanded(true);
+                            treeNodeTemp=treeNodeTemp.getParent();
+                        }
                     }
                 }
             }
@@ -566,22 +570,26 @@ public class OperFuncBusiResMngAction implements Serializable{
         recursiveResTreeNode(event.getTreeNode());
     }
 
-    public void findSelectedNode(OperFuncResShow operFuncResShowPara, TreeNode treeNodePara) {
+    public void findSelectedNode(OperFuncResShow operFuncResShowPara, TreeNode treeNodePara,String strSubmitTypePara) {
         if (treeNodePara.getChildCount() != 0) {
             for (int i = 0; i < treeNodePara.getChildCount(); i++) {
                 TreeNode treeNodeTemp = treeNodePara.getChildren().get(i);
                 if (operFuncResShowPara == treeNodeTemp.getData()) {
-                    currentSelectedNode = treeNodeTemp;
+                    if ("Add".equals(strSubmitTypePara)){
+                        currentSelectedNode = treeNodeTemp;
+                    }else if ("Upd".equals(strSubmitTypePara)||"Del".equals(strSubmitTypePara)||"Sel".equals(strSubmitTypePara)){
+                        currentSelectedNode=treeNodeTemp.getParent();
+                    }
                     return;
                 }
-                findSelectedNode(operFuncResShowPara, treeNodeTemp);
+                findSelectedNode(operFuncResShowPara, treeNodeTemp,strSubmitTypePara);
             }
         }
     }
 
     public void selectRecordAction(String strSubmitTypePara,OperFuncResShow operFuncResShowPara) {
         try {
-            findSelectedNode(operFuncResShowPara,resRoot);
+            findSelectedNode(operFuncResShowPara,resRoot,strSubmitTypePara);
             if (strSubmitTypePara.equals("Add")) {
                 cttInfoShowAdd = new CttInfoShow();
                 if(operFuncResShowPara.getResPkid().equals("ROOT")) {

@@ -99,6 +99,7 @@ public class DeptOperAction implements Serializable {
         deptOperRoot = new DefaultTreeNode("ROOT", null);
         DeptOperShow deptOperShowTemp = new DeptOperShow();
         deptOperShowTemp.setPkid("ROOT");
+        deptOperShowTemp.setId("ROOT");
         deptOperShowTemp.setName("机构人员信息");
         deptOperShowTemp.setType("0");
         TreeNode node0 = new DefaultTreeNode(deptOperShowTemp, deptOperRoot);
@@ -131,11 +132,15 @@ public class DeptOperAction implements Serializable {
             if (currentSelectedNode!=null){
                 DeptOperShow deptOperShow1= (DeptOperShow) currentSelectedNode.getData();
                 DeptOperShow deptOperShow2= (DeptOperShow) childNodeTemp.getData();
-                if (deptOperShow1.getPkid().equals(deptOperShow2.getPkid())){
-                    TreeNode treeNodeTemp=childNodeTemp;
-                    while (!(treeNodeTemp.getData().equals("ROOT"))){
-                        treeNodeTemp.setExpanded(true);
-                        treeNodeTemp=treeNodeTemp.getParent();
+                if ("ROOT".equals(deptOperShow1.getPkid())){
+                    currentSelectedNode.setExpanded(true);
+                }else {
+                    if (deptOperShow1.getPkid().equals(deptOperShow2.getPkid())){
+                        TreeNode treeNodeTemp=childNodeTemp;
+                        while (!(treeNodeTemp.getData().equals("ROOT"))){
+                            treeNodeTemp.setExpanded(true);
+                            treeNodeTemp=treeNodeTemp.getParent();
+                        }
                     }
                 }
             }
@@ -156,22 +161,26 @@ public class DeptOperAction implements Serializable {
         recursiveDeptOperTreeNode(event.getTreeNode());
     }
 
-    public void findSelectedNode(DeptOperShow deptOperShowPara, TreeNode treeNodePara) {
+    public void findSelectedNode(DeptOperShow deptOperShowPara, TreeNode treeNodePara,String strSubmitTypePara) {
         if (treeNodePara.getChildCount() != 0) {
             for (int i = 0; i < treeNodePara.getChildCount(); i++) {
                 TreeNode treeNodeTemp = treeNodePara.getChildren().get(i);
                 if (deptOperShowPara == treeNodeTemp.getData()) {
-                    currentSelectedNode = treeNodeTemp;
+                    if (strSubmitTypePara.contains("Add")){
+                        currentSelectedNode = treeNodeTemp;
+                    }else if (strSubmitTypePara.contains("Upd")||strSubmitTypePara.contains("Del")){
+                        currentSelectedNode=treeNodeTemp.getParent();
+                    }
                     return;
                 }
-                findSelectedNode(deptOperShowPara, treeNodeTemp);
+                findSelectedNode(deptOperShowPara, treeNodeTemp,strSubmitTypePara);
             }
         }
     }
     public void selectRecordAction(String strSubmitTypePara,
                                      DeptOperShow deptOperShowPara) {
         try {
-            findSelectedNode(deptOperShowPara,deptOperRoot);
+            findSelectedNode(deptOperShowPara,deptOperRoot,strSubmitTypePara);
             strSubmitType = strSubmitTypePara;
             if (strSubmitTypePara.contains("Dept")) {
                 if (strSubmitTypePara.contains("Add")) {
