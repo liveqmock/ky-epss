@@ -37,18 +37,18 @@
                     <h:panelGrid id="pdQry" columns="3" style="width: 100%">
                         <h:panelGrid columns="8">
                             <p:outputLabel value="结算编号：" for="id"/>
-                            <p:inputText id="id" value="#{progMeaInfoAction.progInfoShowQry.id}"/>
+                            <p:inputText id="id" value="#{progStlInfoTkMeaAction.progStlInfoShowQry.id}"/>
                             <p:outputLabel value="总包合同：" for="tkcttPkid"/>
-                            <p:selectOneMenu id="tkcttPkid" value="#{progMeaInfoAction.progInfoShowQry.stlPkid}">
-                                <f:selectItems value="#{progMeaInfoAction.tkcttList}"/>
+                            <p:selectOneMenu id="tkcttPkid" value="#{progStlInfoTkMeaAction.progStlInfoShowQry.stlPkid}">
+                                <f:selectItems value="#{progStlInfoTkMeaAction.tkcttList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="期数编码：" for="periodNo"/>
-                            <p:inputText id="periodNo" value="#{progMeaInfoAction.progInfoShowQry.periodNo}"
+                            <p:inputText id="periodNo" value="#{progStlInfoTkMeaAction.progStlInfoShowQry.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                 </h:panelGrid>
                         <h:panelGrid columns="3">
                             <p:commandButton id="qryBtn" value="查询"
-                                             action="#{progMeaInfoAction.onQueryAction('Mng','true')}"
+                                             action="#{progStlInfoTkMeaAction.onQueryAction('Mng','true')}"
                                              update="pdt,msgs,pgCondition">
                             </p:commandButton>
                             <p:commandButton id="resetBtn" value="重置"
@@ -70,13 +70,13 @@
                 <h:panelGrid id="pgCondition">
                     <p:commandButton id="addBtn"
                                      value="增加" icon="ui-icon-plus"
-                                     action="#{progMeaInfoAction.resetActionForAdd()}"
+                                     action="#{progStlInfoTkMeaAction.resetActionForAdd()}"
                                      update="pgViewForAdd,pgCondition,pdQry"
                                      onclick="PF('wVDlgViewForAdd').show()">
                     </p:commandButton>
                 </h:panelGrid>
                 <p:dataTable id="pdt" style="width:100%;"
-                             value="#{progMeaInfoAction.progInfoShowList}"
+                             value="#{progStlInfoTkMeaAction.progStlInfoShowList}"
                              var="record"
                              rowKey="#{record.pkid}"
                              selectionMode="single"
@@ -94,13 +94,13 @@
                     <p:column headerText="操作" style="width:62px">
                         <p:commandButton icon="ui-icon-pencil"
                                          style="height:18px;width:18px"
-                                         action="#{progMeaInfoAction.selectRecordAction('Mng','Upd',record)}"
+                                         action="#{progStlInfoTkMeaAction.selectRecordAction('Upd',record)}"
                                          update="pdt,:form:pgViewForUpd,:form:msgs"
                                          onclick="PF('wVDlgViewForUpd').show()">
                         </p:commandButton>
                         <p:commandButton icon="ui-icon-trash"
                                          style="height:18px;width:18px"
-                                         action="#{progMeaInfoAction.selectRecordAction('Mng','Del',record)}"
+                                         action="#{progStlInfoTkMeaAction.selectRecordAction('Mng','Del',record)}"
                                          update="pdt,:form:pgViewForDel,:form:msgs"
                                          onclick="PF('wVDlgViewForDel').show()">
                         </p:commandButton>
@@ -134,9 +134,9 @@
                     <h:panelGrid id="pgViewForAdd">
                         <h:panelGrid columns="5">
                             <p:outputLabel value="结算编号：" for="idForAdd"/>
-                            <p:inputText id="idForAdd" value="#{progMeaInfoAction.progInfoShowAdd.id}"/>
+                            <p:inputText id="idForAdd" value="#{progStlInfoTkMeaAction.progStlInfoShowAdd.id}"/>
                             <p:commandButton id="autoSetIdBtnForAdd" icon="ui-icon-plus"
-                                             action="#{progMeaInfoAction.setMaxNoPlusOne('Add')}"
+                                             action="#{progStlInfoTkMeaAction.setMaxNoPlusOne('Add')}"
                                              update="idForAdd"
                                              style="height:20px">
                             </p:commandButton>
@@ -144,22 +144,22 @@
                         <h:panelGrid columns="2">
                             <p:outputLabel value="总包合同：" for="tkcttPkidForAdd"/>
                             <p:selectOneMenu id="tkcttPkidForAdd"
-                                             value="#{progMeaInfoAction.progInfoShowAdd.stlPkid}">
-                                <f:selectItems value="#{progMeaInfoAction.tkcttList}"/>
+                                             value="#{progStlInfoTkMeaAction.progStlInfoShowAdd.stlPkid}">
+                                <f:selectItems value="#{progStlInfoTkMeaAction.tkcttList}"/>
                             </p:selectOneMenu>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="期数编码：" for="periodNoForAdd"/>
-                            <p:inputText id="periodNoForAdd" value="#{progMeaInfoAction.progInfoShowAdd.periodNo}"
+                            <p:inputText id="periodNoForAdd" value="#{progStlInfoTkMeaAction.progStlInfoShowAdd.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                             <p:outputLabel value="备注内容：" for="noteForAdd"/>
-                            <p:inputText id="noteForAdd" value="#{progMeaInfoAction.progInfoShowAdd.note}"
+                            <p:inputText id="noteForAdd" value="#{progStlInfoTkMeaAction.progStlInfoShowAdd.note}"
                                          style="width:176px"/>
                         </h:panelGrid>
                         <h:panelGrid id="pgOperBtnForAdd" columns="2">
                             <p:commandButton id="submitBtnForAdd"
                                              value="提交（增加）"
-                                             action="#{progMeaInfoAction.onClickForMngAction}"
+                                             action="#{progStlInfoTkMeaAction.onClickForMngAction}"
                                              update="pdt,msgs,pgViewForAdd">
                             </p:commandButton>
                             <p:commandButton id="resetBtnForAdd" value="重置"
@@ -175,46 +175,46 @@
                     <h:panelGrid id="pgViewForUpd">
                         <h:panelGrid columns="5">
                             <p:outputLabel value="结算编号：" for="idForUpd"/>
-                            <p:inputText id="idForUpd" value="#{progMeaInfoAction.progInfoShowUpd.id}"/>
+                            <p:inputText id="idForUpd" value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.id}"/>
                             <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
-                                             action="#{progMeaInfoAction.setMaxNoPlusOne('Upd')}"
+                                             action="#{progStlInfoTkMeaAction.setMaxNoPlusOne('Upd')}"
                                              update="idForUpd"
                                              style="height:20px">
                             </p:commandButton>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:outputLabel value="总包合同：" for="tkcttPkidForUpd"/>
-                            <p:inputText id="tkcttPkidForUpd" value="#{progMeaInfoAction.progInfoShowUpd.stlName}"
+                            <p:inputText id="tkcttPkidForUpd" value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.stlName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width: 328px;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="期数编码：" for="periodNoForUpd"/>
-                            <p:inputText id="periodNoForUpd" value="#{progMeaInfoAction.progInfoShowUpd.periodNo}"
+                            <p:inputText id="periodNoForUpd" value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                             <p:outputLabel value="备注内容：" for="noteForUpd"/>
-                            <p:inputText id="noteForUpd" value="#{progMeaInfoAction.progInfoShowUpd.note}"/>
+                            <p:inputText id="noteForUpd" value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.note}"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel for="createdByNameUpd" value="创建人：" />
                             <h:inputText id="createdByNameUpd"
-                                         value="#{progMeaInfoAction.progInfoShowUpd.createdByName}"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.createdByName}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="createdDateUpd" value="创建时间：" />
                             <h:inputText id="createdDateUpd"
-                                         value="#{progMeaInfoAction.progInfoShowUpd.createdDate}"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.createdDate}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="lastUpdByNameUpd" value="修改人：" />
                             <h:inputText id="lastUpdByNameUpd"
-                                         value="#{progMeaInfoAction.progInfoShowUpd.lastUpdByName}"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.lastUpdByName}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="lastUpdDateUpd" value="修改时间：" />
                             <h:inputText id="lastUpdDateUpd"
-                                         value="#{progMeaInfoAction.progInfoShowUpd.lastUpdDate}"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.lastUpdDate}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="modificationNumUpd" value="修改次数：" />
                             <h:inputText id="modificationNumUpd"
-                                         value="#{progMeaInfoAction.progInfoShowUpd.modificationNum}"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.modificationNum}"
                                          style="background-color:gainsboro;text-align:right;" readonly="true">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>
@@ -222,7 +222,7 @@
                         <h:panelGrid id="pgOperBtnForUpd" columns="2">
                             <p:commandButton id="submitBtnForUpd"
                                              value="提交（更新）"
-                                             action="#{progMeaInfoAction.onClickForMngAction}"
+                                             action="#{progStlInfoTkMeaAction.onClickForMngAction}"
                                              update="pdt,msgs,pgViewForUpd">
                             </p:commandButton>
                             <p:commandButton id="resetBtnForUpd" value="重置"
@@ -238,46 +238,46 @@
                     <h:panelGrid id="pgViewForDel">
                         <h:panelGrid columns="5">
                             <p:outputLabel value="结算编号：" for="idForDel"/>
-                            <p:inputText id="idForDel" value="#{progMeaInfoAction.progInfoShowDel.id}"
+                            <p:inputText id="idForDel" value="#{progStlInfoTkMeaAction.progStlInfoShowDel.id}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:outputLabel value="总包合同：" for="tkcttPkidForDel"/>
-                            <p:inputText id="tkcttPkidForDel" value="#{progMeaInfoAction.progInfoShowDel.stlName}"
+                            <p:inputText id="tkcttPkidForDel" value="#{progStlInfoTkMeaAction.progStlInfoShowDel.stlName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width: 328px;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="期数编码：" for="periodNoForDel"/>
-                            <p:inputText id="periodNoForDel" value="#{progMeaInfoAction.progInfoShowDel.periodNo}"
+                            <p:inputText id="periodNoForDel" value="#{progStlInfoTkMeaAction.progStlInfoShowDel.periodNo}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="备注内容：" for="noteForDel"/>
-                            <p:inputText id="noteForDel" value="#{progMeaInfoAction.progInfoShowDel.note}"
+                            <p:inputText id="noteForDel" value="#{progStlInfoTkMeaAction.progStlInfoShowDel.note}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel for="createdByNameDel" value="创建人：" />
                             <h:inputText id="createdByNameDel"
-                                         value="#{progMeaInfoAction.progInfoShowDel.createdByName}"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowDel.createdByName}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="createdDateDel" value="创建时间：" />
                             <h:inputText id="createdDateDel"
-                                         value="#{progMeaInfoAction.progInfoShowDel.createdDate}"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowDel.createdDate}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="lastUpdByNameDel" value="修改人：" />
                             <h:inputText id="lastUpdByNameDel"
-                                         value="#{progMeaInfoAction.progInfoShowDel.lastUpdByName}"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowDel.lastUpdByName}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="lastUpdDateDel" value="修改时间：" />
                             <h:inputText id="lastUpdDateDel"
-                                         value="#{progMeaInfoAction.progInfoShowDel.lastUpdDate}"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowDel.lastUpdDate}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="modificationNumDel" value="修改次数：" />
                             <h:inputText id="modificationNumDel"
-                                         value="#{progMeaInfoAction.progInfoShowDel.modificationNum}"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowDel.modificationNum}"
                                          style="background-color:gainsboro;text-align:right;" readonly="true">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>
@@ -285,7 +285,7 @@
                         <h:panelGrid id="pgOperBtnForDel" columns="2">
                             <p:commandButton id="submitBtnForDel"
                                              value="提交（删除）"
-                                             action="#{progMeaInfoAction.onClickForMngAction}"
+                                             action="#{progStlInfoTkMeaAction.onClickForMngAction}"
                                              update="pdt,msgs,pgViewForDel">
                             </p:commandButton>
                         </h:panelGrid>

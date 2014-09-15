@@ -46,92 +46,12 @@
 
         <link rel="stylesheet" type="text/css" href="../../dhtmlx/dhtmlxTabbar/codebase/dhtmlxtabbar.css"/>
         <script src="../../dhtmlx/dhtmlxTabbar/codebase/dhtmlxtabbar.js" type="text/javascript"></script>
+        <link rel="stylesheet" type="text/css" href="<%=contextPath%>/css/diytabbar.css">
 
         <script type="text/javascript" src="homePage_layout.js"></script>
         <script type="text/javascript" src="homePage_tab.js"></script>
         <script type="text/javascript" src="myAjax.js"></script>
-        <link href="<%=contextPath%>/css/diytabbar.css" type="text/css" rel="stylesheet">
-        <style type="text/css">
-            html, body {
-                margin: 0px;
-                width: 100%;
-                height: 100%;
-                padding: 0px;
-                overflow: hidden;
-            }
-            .divlayout {
-                position: relative;
-                top: 0px;
-                left: 0px;
-                width: 100%;
-                height: 100%;
-                margin: 0px;
-                padding: 0px;
-                overflow: hidden;
-            }
-            .headfont {
-                font-size: 12px;
-                font-family: SimSun;
-                color: #7387A0;
-            }
-            .skin-top-right {
-                background-position: top right;
-                background-repeat: no-repeat;
-                background-image: url(../../images/top_right.jpg)
-            }
-            #tip {
-                position: absolute;
-                right: 0px;
-                bottom: 0px;
-                height: 0px;
-                width: 180px;
-                border: 1px solid #CCCCCC;
-                background-color: #eeeeee;
-                padding: 1px;
-                overflow: hidden;
-                display: none;
-                font-size: 12px;
-                z-index: 10;
-            }
-            #tip p {
-                padding: 6px;
-            }
-            #tip h1, #detail h1 {
-                font-size: 14px;
-                height: 25px;
-                line-height: 25px;
-                background-color: #0066CC;
-                color: #FFFFFF;
-                padding: 0px 3px 0px 3px;
-                filter: Alpha(Opacity=100);
-            }
-            #tip h1 a, #detail h1 a {
-                float: right;
-                text-decoration: none;
-                color: #FFFFFF;
-            }
-            #shadow {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                background-color: #000000;
-                z-index: 11;
-                filter: Alpha(Opacity=70);
-                display: none;
-                overflow: hidden;
-            }
-            #detail {
-                width: 500px;
-                height: 200px;
-                border: 3px double #ccc;
-                background-color: #FFFFFF;
-                position: absolute;
-                z-index: 30;
-                display: none;
-                left: 30%;
-                top: 30%
-            }
-        </style>
+
         <script type="text/javascript">
             var contextPath = '<%=contextPath%>';
             var defaultMenuStr = '<%=jsonDefaultMenu%>';
@@ -150,6 +70,7 @@
                 }else if(strOperType=="0"){               //超级系统管理员
                     document.getElementById('todotask').style.display = 'inline';
                     document.getElementById('donetask').style.display = 'inline';
+                    document.getElementById('stlpowertask').style.display = 'inline';
                     document.getElementById('biz').style.display = 'inline';
                     document.getElementById('sys').style.display = 'inline';
                     tabbarhide("todotasklayout");
@@ -158,6 +79,7 @@
                 }else{                                    //其他用户
                     document.getElementById('todotask').style.display = 'inline';
                     document.getElementById('donetask').style.display = 'inline';
+                    document.getElementById('stlpowertask').style.display = 'inline';
                     document.getElementById('biz').style.display = 'inline';
                     tabbarhide("todotasklayout");
                     document.getElementById("todotask").setAttribute("active", "true");
@@ -210,26 +132,36 @@
                 </tr>
                 <tr style="width:100%; height:25px">
                     <td colspan="5" style="height:25px;">
-                        <div onclick="tabbarclk(this);document.frames('todoWorkFrame').location.href='<%=contextPath%>/UI/epss/task/todoTask.xhtml;'" active="true" id="todotask" class="tabs-item-active"
+                        <div onclick="tabbarclk(this);document.frames('todoWorkFrame').location.href='<%=contextPath%>/UI/epss/task/todoTask.xhtml;'"
+                             active="true" id="todotask" class="tabs-item-active"
                              style="float:left;width:80px;margin-left:12px;display: none">
-                            <span style="width:100%;">待办业务</span>
+                            <span style="width:100%;">待办任务</span>
                         </div>
                         <div id="middleId1" style="float:left;width:2px;"></div>
-                        <div onclick="document.frames('donetaskworkFrame').location.href='<%=contextPath%>/UI/epss/task/doneTask.xhtml';tabbarclk(this);" active="false" id="donetask" class="tabs-item"
+                        <div onclick="document.frames('donetaskworkFrame').location.href='<%=contextPath%>/UI/epss/task/doneTask.xhtml';tabbarclk(this);"
+                             active="false" id="donetask" class="tabs-item"
                              style="float:left;width:80px;display: none">
-                            <span style="width:100%;">已办业务</span>
+                            <span style="width:100%;">已办任务</span>
                         </div>
                         <div id="middleId2" style="float:left;width:2px;"></div>
-                        <div onclick="myRequest();tabbarclk(this);" active="false" id="biz" class="tabs-item"
+                        <div onclick="document.frames('donetaskworkFrame').location.href='../../UI/epss/task/stlPower.xhtml';tabbarclk(this);"
+                             active="false" id="stlpowertask" class="tabs-item"
                              style="float:left;width:80px;display: none">
-                            <span style="width:100%;">业务管理</span>
+                            <span style="width:100%;">结算权限</span>
                         </div>
                         <div id="middleId3" style="float:left;width:2px;"></div>
-                        <div onclick="tabbarclk(this);" active="false" id="sys" class="tabs-item"
+                        <div onclick="myRequest();tabbarclk(this);"
+                             active="false" id="biz" class="tabs-item"
+                             style="float:left;width:80px;display: none">
+                            <span style="width:100%;">业务查询</span>
+                        </div>
+                        <div id="middleId4" style="float:left;width:2px;"></div>
+                        <div onclick="tabbarclk(this);"
+                             active="false" id="sys" class="tabs-item"
                              style="float:left;width:80px;display: none">
                             <span style="width:100%;">系统管理</span>
                         </div>
-                        <div id="middleId4" style="float:left;width:2px;"></div>
+                        <div id="middleId5" style="float:left;width:2px;"></div>
                         <div id="dynamicInfo" style="float:right;width:300px;">
                             <iframe id="scrollInfoWorkFrame"
                                     src="<%=contextPath%>/UI/epss/scrollInfo/scrollInfo.xhtml"
@@ -244,7 +176,11 @@
                     </td>
                 </tr>
                 <tr style="width:100%; height:4px">
-                    <td width="100%" style="height:4px;background-color: #3169AD;" colspan="4"></td>
+                    <td width="100%"
+                        style="height:4px;
+                        background-color: #3169AD;"
+                        colspan="4">
+                    </td>
                 </tr>
                 <tr style="width:100%">
                     <td width="100%" colspan="4">
@@ -261,6 +197,16 @@
                         <div class="divlayout" id="donetasklayout">
                             <iframe id="donetaskworkFrame" name="workFrame"
                                     src="<%=contextPath%>/UI/epss/task/doneTask.xhtml"
+                                    width="100%" height="100%"
+                                    frameborder="no"
+                                    border="0"
+                                    marginwidth="0" marginheight="0"
+                                    scrolling="no">
+                            </iframe>
+                        </div>
+                        <div class="divlayout" id="stlpowertasklayout">
+                            <iframe id="stlpowertaskworkFrame" name="workFrame"
+                                    src="<%=contextPath%>/UI/epss/task/stlPower.xhtml"
                                     width="100%" height="100%"
                                     frameborder="no"
                                     border="0"

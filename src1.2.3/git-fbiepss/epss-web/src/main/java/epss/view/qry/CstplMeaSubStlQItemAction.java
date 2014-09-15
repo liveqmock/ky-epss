@@ -7,17 +7,16 @@ package epss.view.qry;
  * Time: 下午1:53
  * To change this template use File | Settings | File Templates.
  */
-import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.EnumResType;
+import epss.common.enums.EnumFlowStatus;
+import epss.repository.model.CttItem;
+import epss.repository.model.ProgStlItemTkMea;
 import skyline.util.JxlsManager;
-import epss.repository.model.EsCttInfo;
-import epss.repository.model.EsCttItem;
+import epss.repository.model.CttInfo;
 import epss.repository.model.model_show.*;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
-import epss.repository.model.EsItemStlTkcttEngMea;
 import epss.service.*;
-import epss.service.EsFlowService;
 import epss.service.EsQueryService;
 import epss.view.flow.EsCommon;
 import jxl.write.WriteException;
@@ -46,8 +45,8 @@ public class CstplMeaSubStlQItemAction {
     private CttItemService cttItemService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
-    @ManagedProperty(value = "#{esFlowService}")
-    private EsFlowService esFlowService;
+    @ManagedProperty(value = "#{progStlInfoService}")
+    private ProgStlInfoService progStlInfoService;
     @ManagedProperty(value = "#{esQueryService}")
     private EsQueryService esQueryService;
     @ManagedProperty(value = "#{progMeaItemService}")
@@ -73,8 +72,8 @@ public class CstplMeaSubStlQItemAction {
         reportHeader =new ReportHeader();
         List<CttInfoShow> cttInfoShowList =
                 cttInfoService.getCttInfoListByCttType_Status(
-                        ESEnum.ITEMTYPE1.getCode()
-                       ,ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                        EnumResType.RES_TYPE1.getCode()
+                       , EnumFlowStatus.FLOW_STATUS3.getCode());
         cstplList=new ArrayList<SelectItem>();
         if(cttInfoShowList.size()>0){
             SelectItem selectItem=new SelectItem("","");
@@ -102,33 +101,33 @@ public class CstplMeaSubStlQItemAction {
         return null;
     }
     private void initData(String strBelongToPkid) {
-        List<EsItemStlTkcttEngMea> esItemStlTkcttEngMeaList=new ArrayList<EsItemStlTkcttEngMea>();
+        List<ProgStlItemTkMea> progStlItemTkMeaList =new ArrayList<ProgStlItemTkMea>();
 
         beansMap.put("strThisMonth", ToolUtil.getStrThisMonth());
-        EsCttInfo esInitCttCstpl= cttInfoService.getCttInfoByPkId(strBelongToPkid);
+        CttInfo esInitCttCstpl= cttInfoService.getCttInfoByPkId(strBelongToPkid);
         reportHeader.setStrCstplId(esInitCttCstpl.getId());
         reportHeader.setStrCstplName(esInitCttCstpl.getName());
         beansMap.put("reportHeader", reportHeader);
         /*成本计划列表*/
-        List<EsCttItem> esCttItemListCstpl =new ArrayList<EsCttItem>();
-        esCttItemListCstpl = cttItemService.getEsItemList(
-                ESEnum.ITEMTYPE1.getCode(),
+        List<CttItem> cttItemListCstpl =new ArrayList<CttItem>();
+        cttItemListCstpl = cttItemService.getEsItemList(
+                EnumResType.RES_TYPE1.getCode(),
                 strCstplPkid);
         List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();
-        recursiveDataTable("root", esCttItemListCstpl, cttItemShowListCstpl);
+        recursiveDataTable("root", cttItemListCstpl, cttItemShowListCstpl);
         cttItemShowListCstpl =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowListCstpl);
 
         String strMeaLatestApprovedPeriodNo=ToolUtil.getStrIgnoreNull(
-                esFlowService.getLatestApprovedPeriodNoByEndPeriod(
-                        ESEnum.ITEMTYPE7.getCode(),
+                progStlInfoService.getLatestApprovedPeriodNoByEndPeriod(
+                        EnumResType.RES_TYPE7.getCode(),
                         esInitCttCstpl.getParentPkid(),
                         strPeriodNo));
 
         if(!ToolUtil.getStrIgnoreNull(strMeaLatestApprovedPeriodNo).equals("")){
-            EsItemStlTkcttEngMea esItemStlTkcttEngMea=new EsItemStlTkcttEngMea();
-            esItemStlTkcttEngMea.setTkcttPkid(esInitCttCstpl.getParentPkid());
-            esItemStlTkcttEngMea.setPeriodNo(strMeaLatestApprovedPeriodNo);
-            esItemStlTkcttEngMeaList= progMeaItemService.selectRecordsByPkidPeriodNoExample(esItemStlTkcttEngMea);
+            ProgStlItemTkMea progStlItemTkMea =new ProgStlItemTkMea();
+            progStlItemTkMea.setTkcttPkid(esInitCttCstpl.getParentPkid());
+            progStlItemTkMea.setPeriodNo(strMeaLatestApprovedPeriodNo);
+            progStlItemTkMeaList = progMeaItemService.selectRecordsByPkidPeriodNoExample(progStlItemTkMea);
         }
 
         List<QryShow> qryShowList =esQueryService.getCSStlQList(strBelongToPkid, strPeriodNo);
@@ -161,11 +160,11 @@ public class CstplMeaSubStlQItemAction {
                 itemCstplInsertItem.setBdCstpl_ContractUnitPrice(bdCstplContractUnitPrice);
 
                 // 统计计量
-                for(EsItemStlTkcttEngMea esItemStlTkcttEngMea:esItemStlTkcttEngMeaList){
+                for(ProgStlItemTkMea progStlItemTkMea : progStlItemTkMeaList){
                     if(ToolUtil.getStrIgnoreNull(itemUnit.getStrCorrespondingItemPkid()).equals(
-                            esItemStlTkcttEngMea.getTkcttItemPkid())){
-                        itemCstplInsertItem.setBdTkcttStl_MeaQuantity(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
-                        bdTkcttStlMeaQuantity=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
+                            progStlItemTkMea.getTkcttItemPkid())){
+                        itemCstplInsertItem.setBdTkcttStl_MeaQuantity(progStlItemTkMea.getBeginToCurrentPeriodQty());
+                        bdTkcttStlMeaQuantity=ToolUtil.getBdIgnoreNull(progStlItemTkMea.getBeginToCurrentPeriodQty());
                         bdTkcttStlMeaAmount=bdTkcttStlMeaQuantity.multiply(bdCstplContractUnitPrice);
                         itemCstplInsertItem.setBdTkcttStl_MeaAmount(bdTkcttStlMeaAmount);
                         break;
@@ -268,14 +267,14 @@ public class CstplMeaSubStlQItemAction {
 
     /*递归排序*/
     private void recursiveDataTable(String strLevelParentId,
-                                      List<EsCttItem> esCttItemListPara,
+                                      List<CttItem> cttItemListPara,
                                       List<CttItemShow> cttItemShowListPara){
         // 根据父层级号获得该父层级下的子节点
-        List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
+        List<CttItem> subCttItemList =new ArrayList<CttItem>();
         // 通过父层id查找它的孩子
-        subEsCttItemList =getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
-        EsCttItem esCttItem =null;
-        for(EsCttItem itemUnit: subEsCttItemList){
+        subCttItemList =getEsCttItemListByParentPkid(strLevelParentId, cttItemListPara);
+        CttItem cttItem =null;
+        for(CttItem itemUnit: subCttItemList){
             CttItemShow cttItemShowTemp = null;
             String strCreatedByName= ToolUtil.getUserName(itemUnit.getCreatedBy());
             String strLastUpdByName= ToolUtil.getUserName(itemUnit.getLastUpdBy());
@@ -292,7 +291,7 @@ public class CstplMeaSubStlQItemAction {
                     itemUnit.getContractQuantity(),
                     itemUnit.getContractAmount(),
                     itemUnit.getSignPartAPrice(),
-                    itemUnit.getDeletedFlag() ,
+                    itemUnit.getArchivedFlag() ,
                     itemUnit.getOriginFlag() ,
                     itemUnit.getCreatedBy() ,
                     strCreatedByName,
@@ -307,20 +306,20 @@ public class CstplMeaSubStlQItemAction {
                     ""
                 );
             cttItemShowListPara.add(cttItemShowTemp) ;
-            recursiveDataTable(cttItemShowTemp.getPkid(), esCttItemListPara, cttItemShowListPara);
+            recursiveDataTable(cttItemShowTemp.getPkid(), cttItemListPara, cttItemShowListPara);
         }
     }
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
-             List<EsCttItem> esCttItemListPara) {
-        List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
+    private List<CttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
+             List<CttItem> cttItemListPara) {
+        List<CttItem> tempCttItemList =new ArrayList<CttItem>();
         /*避开重复链接数据库*/
-        for(EsCttItem itemUnit: esCttItemListPara){
+        for(CttItem itemUnit: cttItemListPara){
             if(strLevelParentPkid.equalsIgnoreCase(itemUnit.getParentPkid())){
-                tempEsCttItemList.add(itemUnit);
+                tempCttItemList.add(itemUnit);
             }
         }
-        return tempEsCttItemList;
+        return tempCttItemList;
     }
 
     /*根据group和orderid临时编制编码strNo*/
@@ -479,13 +478,12 @@ public class CstplMeaSubStlQItemAction {
         this.progMeaItemService = progMeaItemService;
     }
 
-    public EsFlowService getEsFlowService() {
-        return esFlowService;
+    public ProgStlInfoService getProgStlInfoService() {
+        return progStlInfoService;
     }
 
-    public void setEsFlowService(EsFlowService esFlowService) {
-        this.esFlowService = esFlowService;
+    public void setProgStlInfoService(ProgStlInfoService progStlInfoService) {
+        this.progStlInfoService = progStlInfoService;
     }
-
-    /*智能字段End*/
+/*智能字段End*/
 }

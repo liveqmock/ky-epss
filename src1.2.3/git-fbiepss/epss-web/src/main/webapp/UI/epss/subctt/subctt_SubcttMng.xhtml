@@ -67,7 +67,7 @@
                              rowKey="#{record.pkid}"
                              selectionMode="single"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                            {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              paginator="true"
                              paginatorPosition="bottom"
                              rows="15"
@@ -79,8 +79,8 @@
                              scrollable="true">
                     <p:column headerText="操作" style="width:65px">
                         <p:commandButton icon="ui-icon-pencil"
-                                         style="height:18px;width:18px"
-                                        actionListener="#{subcttInfoAction.selectRecordAction('Mng','Upd',record)}"
+                                        style="height:18px;width:18px"
+                                        actionListener="#{subcttInfoAction.selectRecordAction('Upd',record)}"
                                         update="pdt,:form:pgViewForUpd,:form:msgs"
                                         onclick="PF('wVDlgViewForUpd').show()">
                         </p:commandButton>
@@ -132,45 +132,57 @@
                     <h:panelGrid id="pgViewForUpd">
                         <h:panelGrid columns="5">
                             <p:outputLabel value="合同编号：" for="idForUpd"/>
-                            <p:inputText id="idForUpd" value="#{subcttInfoAction.cttInfoShowUpd.id}">
-                                <p:ajax event="keyup" update="warnForId" listener="#{subcttInfoAction.validSubCttId()}"/>
+                            <p:inputText id="idForUpd"
+                                         value="#{subcttInfoAction.cttInfoShowUpd.id}">
+                                <p:ajax event="keyup" update="warnForId"
+                                        listener="#{subcttInfoAction.validSubCttId()}"/>
                             </p:inputText>
                             <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
-                                             action="#{subcttInfoAction.setMaxNoPlusOne()}"
+                                             action="#{subcttInfoAction.setMaxNoPlusOne('Upd')}"
                                              update="idForUpd"
                                              style="height:20px">
                             </p:commandButton>
-                            <h:outputText id="warnForId" value="#{subcttInfoAction.strWarnMsg}" style="color: red"/>
+                            <h:outputText id="warnForId" value="#{subcttInfoAction.strWarnMsg}"
+                                          style="color: red"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="合同名称：" for="cttNameForUpd"/>
-                            <p:inputText id="cttNameForUpd" value="#{subcttInfoAction.cttInfoShowUpd.name}"
+                            <p:inputText id="cttNameForUpd"
+                                         value="#{subcttInfoAction.cttInfoShowUpd.name}"
                                          style="width:328px;">
                                 <p:ajax event="keyup" update="warnForName"
                                         listener="#{subcttInfoAction.validSubCttName()}"/>
                             </p:inputText>
-                            <h:outputText id="warnForName" value="#{subcttInfoAction.strWarnMsg}" style="color: red"/>
+                            <h:outputText id="warnForName"
+                                          value="#{subcttInfoAction.strWarnMsg}"
+                                          style="color: red"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="备注内容：" for="noteForUpd"/>
-                            <p:inputText id="noteForUpd" value="#{subcttInfoAction.cttInfoShowUpd.note}"/>
-                            <p:outputLabel value="签订日期：  " for="signDateForUpd"/>
-                            <p:inputText id="signDateForUpd" value="#{subcttInfoAction.cttInfoShowUpd.signDate}"
+                            <p:inputText id="noteForUpd"
+                                         value="#{subcttInfoAction.cttInfoShowUpd.note}"/>
+                            <p:outputLabel value="签订日期： " for="signDateForUpd"/>
+                            <p:inputText id="signDateForUpd"
+                                         value="#{subcttInfoAction.cttInfoShowUpd.signDate}"
                                          onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
                             <p:outputLabel value="开始时间：" for="cttStartDateForUpd"/>
-                            <p:inputText id="cttStartDateForUpd" value="#{subcttInfoAction.cttInfoShowUpd.cttStartDate}"
+                            <p:inputText id="cttStartDateForUpd"
+                                         value="#{subcttInfoAction.cttInfoShowUpd.cttStartDate}"
                                          onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
                             <p:outputLabel value="截止时间：" for="cttEndDateForUpd"/>
-                            <p:inputText id="cttEndDateForUpd" value="#{subcttInfoAction.cttInfoShowUpd.cttEndDate}"
+                            <p:inputText id="cttEndDateForUpd"
+                                         value="#{subcttInfoAction.cttInfoShowUpd.cttEndDate}"
                                          onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:outputLabel value="签订甲方：" for="signPartAForUpd"/>
-                            <p:selectOneMenu id="signPartAForUpd" value="#{subcttInfoAction.cttInfoShowUpd.signPartA}">
+                            <p:selectOneMenu id="signPartAForUpd"
+                                             value="#{subcttInfoAction.cttInfoShowUpd.signPartA}">
                                 <f:selectItems value="#{esCommon.customerlist}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="签订乙方：" for="signPartBForUpd"/>
-                            <p:selectOneMenu id="signPartBForUpd" value="#{subcttInfoAction.cttInfoShowUpd.signPartB}">
+                            <p:selectOneMenu id="signPartBForUpd"
+                                             value="#{subcttInfoAction.cttInfoShowUpd.signPartB}">
                                 <f:selectItems value="#{esCommon.customerlist}"/>
                             </p:selectOneMenu>
                         </h:panelGrid>

@@ -21,24 +21,24 @@ public class CttItemShow implements Serializable {
     /*对应编号名称，用作显示用，不在数据库里存储，动态显示。依据correspondingPkid*/
     private String strCorrespondingItemName;
 
-    /*EPSS.ES_CTT_ITEM.PKID*/
+    /*EPSS.CTT_ITEM.PKID*/
     private String pkid;
-    /*EPSS.ES_CTT_ITEM.BELONG_TO_TYPE*/
+    /*EPSS.CTT_ITEM.BELONG_TO_TYPE*/
     private String belongToType;
-    /*EPSS.ES_CTT_ITEM.BELONG_TO_PKID*/
+    /*EPSS.CTT_ITEM.BELONG_TO_PKID*/
     private String belongToPkid;
-    /*EPSS.ES_CTT_ITEM.ORDERID*/
+    /*EPSS.CTT_ITEM.ORDERID*/
     private Integer orderid;
-    /*EPSS.ES_CTT_ITEM.GRADE*/
+    /*EPSS.CTT_ITEM.GRADE*/
     private Integer grade;
-    /*EPSS.ES_CTT_ITEM.PARENT_PKID*/
+    /*EPSS.CTT_ITEM.PARENT_PKID*/
     private String parentPkid;
-    /*EPSS.ES_CTT_ITEM.CORRESPONDING_PKID*/
+    /*EPSS.CTT_ITEM.CORRESPONDING_PKID*/
     private String correspondingPkid;
 
-    /*EPSS.ES_CTT_ITEM.NAME/EPSS.ES_ITEM_INFO.NAME*/
+    /*EPSS.CTT_ITEM.NAME/EPSS.ES_ITEM_INFO.NAME*/
     private String name;
-    /*EPSS.ES_CTT_ITEM.NOTE/EPSS.ES_ITEM_INFO.NOTE*/
+    /*EPSS.CTT_ITEM.NOTE/EPSS.ES_ITEM_INFO.NOTE*/
     private String note;
 
     /*EPSS.ES_ITEM_INFO.UNIT*/
@@ -51,7 +51,7 @@ public class CttItemShow implements Serializable {
     private BigDecimal contractAmount;
     /*EPSS.ES_ITEM_INFO.SIGN_PART_A_PRICE*/
     private BigDecimal signPartAPrice;
-    /*EPSS.ES_ITEM_INFO.DELETED_FLAG*/
+    /*EPSS.ES_ITEM_INFO.ARCHIVED_FLAG*/
     private String deletedFlag;
     /*EPSS.ES_ITEM_INFO.ORIGIN_FLAG*/
     private String originFlag;
@@ -76,9 +76,9 @@ public class CttItemShow implements Serializable {
     public CttItemShow(String strBelongToType,
                        String strBelongToPkid) {
         //To change body of created methods use File | Settings | File Templates.
-        /*EPSS.ES_CTT_ITEM.BelongToType*/
+        /*EPSS.CTT_ITEM.BelongToType*/
         this.belongToType =strBelongToType ;
-        /*EPSS.ES_CTT_ITEM.ITEMBELONGTOPKID*/
+        /*EPSS.CTT_ITEM.ITEMBELONGTOPKID*/
         this.belongToPkid =strBelongToPkid ;
     }
 
@@ -110,9 +110,9 @@ public class CttItemShow implements Serializable {
             String strCorrespondingItemNo) {
         /*EPSS.ES_ITEM_INFO.PKID*/
         this.pkid=strPkId;
-        /*EPSS.ES_CTT_ITEM.BelongToType*/
+        /*EPSS.CTT_ITEM.BelongToType*/
         this.belongToType =strBelongToType ;
-        /*EPSS.ES_CTT_ITEM.ITEMBELONGTOPKID*/
+        /*EPSS.CTT_ITEM.ITEMBELONGTOPKID*/
         this.belongToPkid =strBelongToPkid ;
         this.strNo =strNo ;
         this.orderid =intOrderid;
@@ -123,7 +123,7 @@ public class CttItemShow implements Serializable {
         this.parentPkid =strParentPkid;
         /*EPSS.ES_ITEM_INFO.NOTE*/
         this.note=strNote;
-        /*EPSS.ES_CTT_ITEM.CORRESPONDING_PKID*/
+        /*EPSS.CTT_ITEM.CORRESPONDING_PKID*/
         this.correspondingPkid =strCorrespondingPkid;
 
         /*EPSS.ES_ITEM_INFO.UNIT*/
@@ -136,7 +136,7 @@ public class CttItemShow implements Serializable {
         this.contractAmount=bdContractAmount;
         /*EPSS.ES_ITEM_INFO.SIGN_PART_A_PRICE*/
         this.signPartAPrice=bdSignPartAPrice;
-        /*EPSS.ES_ITEM_INFO.DELETED_FLAG*/
+        /*EPSS.ES_ITEM_INFO.ARCHIVED_FLAG*/
         this.deletedFlag=strDeletedFlag;
         /*EPSS.ES_ITEM_INFO.ORIGIN_FLAG*/
         this.originFlag=strOriginFlag;

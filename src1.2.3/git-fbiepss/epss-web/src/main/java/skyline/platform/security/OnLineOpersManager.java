@@ -2,11 +2,9 @@ package skyline.platform.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Iterator;
-
 
 /**
  * Created by IntelliJ IDEA.
@@ -37,7 +35,8 @@ public class OnLineOpersManager {
     }
 
     public static synchronized void removeSessionFromServer(String sessionId, ServletContext application) {
-        HashMap<String, OperatorManager> userMaps = ((HashMap<String, OperatorManager>) application.getAttribute(ONLINE_USERS));
+        HashMap<String, OperatorManager> userMaps =
+                ((HashMap<String, OperatorManager>) application.getAttribute(ONLINE_USERS));
         if (userMaps != null) {
             Iterator it = userMaps.keySet().iterator();
             String sessionKey = "";

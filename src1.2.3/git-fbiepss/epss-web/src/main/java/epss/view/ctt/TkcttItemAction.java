@@ -19,7 +19,6 @@ import epss.common.enums.*;
 import epss.repository.model.*;
 import epss.repository.model.model_show.CttItemShow;
 import epss.service.*;
-import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
 import jxl.write.WriteException;
@@ -52,14 +51,15 @@ public class TkcttItemAction {
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
-    @ManagedProperty(value = "#{esFlowService}")
-    private EsFlowService esFlowService;
-    private EsCttInfo cttInfo;
+    @ManagedProperty(value = "#{progStlInfoService}")
+    private ProgStlInfoService progStlInfoService;
+
+    private CttInfo cttInfo;
     private CttItemShow cttItemShowSel;
     private CttItemShow cttItemShowAdd;
     private CttItemShow cttItemShowUpd;
     private CttItemShow cttItemShowDel;
-    private List<EsCttItem> esCttItemList;
+    private List<CttItem> cttItemList;
     private List<CttItemShow> cttItemShowList;
 
     //附件
@@ -67,7 +67,6 @@ public class TkcttItemAction {
     private HtmlGraphicImage image;
     //上传下载文件
     private StreamedContent downloadFile;
-    private UploadedFile uploadedFile;
 
     /*所属类型*/
     private String strBelongToType;
@@ -84,17 +83,13 @@ public class TkcttItemAction {
     private String strPassFlag;
     private String strNotPassToStatus;
     private String strFlowType;
-    private Boolean checkForUpd;
     private List<CttItemShow> cttItemShowListExcel;
     private Map beansMap;
     @PostConstruct
     public void init() {
-        esCttItemList =new ArrayList<>();
-        cttItemShowList =new ArrayList<>();
-        attachmentList=new ArrayList<>();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         beansMap = new HashMap();
-        strBelongToType = ESEnum.ITEMTYPE0.getCode();
+        strBelongToType = EnumResType.RES_TYPE0.getCode();
         if (parammap.containsKey("strCttInfoPkid")) {
             strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
             cttInfo = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
@@ -104,7 +99,7 @@ public class TkcttItemAction {
         }
 
         strPassFlag = "true";
-        if ("Mng".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(cttInfo.getFlowStatus())) {
+        if ("Mng".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())) {
             strPassFlag = "false";
         }
         resetAction();
@@ -115,6 +110,9 @@ public class TkcttItemAction {
     private void initData() {
         /*形成关系树*/
         try {
+            cttItemList =new ArrayList<>();
+            cttItemShowList =new ArrayList<>();
+            attachmentList=new ArrayList<>();
         /*初始化流程状态列表*/
             if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
                     ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
@@ -123,9 +121,9 @@ public class TkcttItemAction {
                 attachmentList=attachmentStrToList(cttInfo.getAttachment());
                 // 输出Excel表头
                 beansMap.put("tkcttInfo", cttInfo);
-                esCttItemList = cttItemService.getEsItemList(
+                cttItemList = cttItemService.getEsItemList(
                         strBelongToType, strCttInfoPkid);
-                recursiveDataTable("root", esCttItemList);
+                recursiveDataTable("root", cttItemList);
                 cttItemShowList = getTkcttItemList_DoFromatNo(cttItemShowList);
                 cttItemShowListExcel = new ArrayList<CttItemShow>();
                 for (CttItemShow itemUnit : cttItemShowList) {
@@ -144,12 +142,12 @@ public class TkcttItemAction {
     }
 
     /*根据数据库中层级关系数据列表得到总包合同*/
-    private void recursiveDataTable(String strLevelParentId, List<EsCttItem> esCttItemListPara) {
+    private void recursiveDataTable(String strLevelParentId, List<CttItem> cttItemListPara) {
         // 根据父层级号获得该父层级下的子节点
-        List<EsCttItem> subEsCttItemList = new ArrayList<EsCttItem>();
+        List<CttItem> subCttItemList = new ArrayList<CttItem>();
         // 通过父层id查找它的孩子
-        subEsCttItemList = getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
-        for (EsCttItem itemUnit : subEsCttItemList) {
+        subCttItemList = getEsCttItemListByParentPkid(strLevelParentId, cttItemListPara);
+        for (CttItem itemUnit : subCttItemList) {
             CttItemShow cttItemShowTemp = null;
             String strCreatedByName = ToolUtil.getUserName(itemUnit.getCreatedBy());
             String strLastUpdByName = ToolUtil.getUserName(itemUnit.getLastUpdBy());
@@ -167,7 +165,7 @@ public class TkcttItemAction {
                     itemUnit.getContractQuantity(),
                     itemUnit.getContractAmount(),
                     itemUnit.getSignPartAPrice(),
-                    itemUnit.getDeletedFlag(),
+                    itemUnit.getArchivedFlag(),
                     itemUnit.getOriginFlag(),
                     itemUnit.getCreatedBy(),
                     strCreatedByName,
@@ -182,7 +180,7 @@ public class TkcttItemAction {
                     ""
             );
             cttItemShowList.add(cttItemShowTemp);
-            recursiveDataTable(cttItemShowTemp.getPkid(), esCttItemListPara);
+            recursiveDataTable(cttItemShowTemp.getPkid(), cttItemListPara);
         }
     }
 
@@ -408,8 +406,8 @@ public class TkcttItemAction {
         Integer intLastIndexof=strIgnoreSpaceOfStr.lastIndexOf(".");
 
         if (intLastIndexof < 0) {
-            List<EsCttItem> itemHieRelapListSubTemp = new ArrayList<>();
-            itemHieRelapListSubTemp = getEsCttItemListByParentPkid("root", esCttItemList);
+            List<CttItem> itemHieRelapListSubTemp = new ArrayList<>();
+            itemHieRelapListSubTemp = getEsCttItemListByParentPkid("root", cttItemList);
 
             if (itemHieRelapListSubTemp.size() == 0) {
                 if (!strIgnoreSpaceOfStr.equals("1")) {
@@ -433,10 +431,10 @@ public class TkcttItemAction {
                 MessageUtil.addError("请确认输入的编号！父层" + strParentNo + "不存在！");
                 return strNoBlurFalse();
             } else {
-                List<EsCttItem> itemHieRelapListSubTemp = new ArrayList<>();
+                List<CttItem> itemHieRelapListSubTemp = new ArrayList<>();
                 itemHieRelapListSubTemp = getEsCttItemListByParentPkid(
                         cttItemShowTemp1.getPkid(),
-                        esCttItemList);
+                        cttItemList);
                 if (itemHieRelapListSubTemp.size() == 0) {
                     if (!cttItemShowTemp.getStrNo().equals(strParentNo + ".1")) {
                         MessageUtil.addError("请确认输入的编号！该编号不符合规范，应输入" + strParentNo + ".1！");
@@ -462,10 +460,6 @@ public class TkcttItemAction {
         try{
             /*提交前的检查*/
             if(strSubmitType .equals("Del")) {
-                if(ToolUtil.getStrIgnoreNull(cttItemShowDel.getStrNo()).length()==0){
-                    MessageUtil.addError("请确认选择的行，合计行不可编辑！");
-                    return;
-                }
                 delThisRecordAction(cttItemShowDel);
             }else{
                 if(!subMitActionPreCheck()){
@@ -476,16 +470,11 @@ public class TkcttItemAction {
                     return ;
                 }
                 if(strSubmitType .equals("Upd")) {
-                    if(ToolUtil.getStrIgnoreNull(cttItemShowUpd.getStrNo()).length()==0){
-                        MessageUtil.addError("请确认选择的行，合计行不可编辑！");
-                        return;
-                    }
                     cttItemService.updateRecord(cttItemShowUpd) ;
-                    checkForUpd = true;
                 }
                 else if(strSubmitType .equals("Add")) {
-                     EsCttItem esCttItemTemp= cttItemService.fromModelShowToModel(cttItemShowAdd);
-                    if (cttItemService.isExistSameRecordInDb(esCttItemTemp)){
+                     CttItem cttItemTemp = cttItemService.fromModelShowToModel(cttItemShowAdd);
+                    if (cttItemService.isExistSameRecordInDb(cttItemTemp)){
                         MessageUtil.addInfo("该编号对应记录已存在，请重新录入。");
                         return;
                     }
@@ -502,22 +491,21 @@ public class TkcttItemAction {
                 initData();
             }
         } catch (Exception e) {
-            checkForUpd = false;
             MessageUtil.addError("提交数据失败，" + e.getMessage());
         }
     }
 
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
-             List<EsCttItem> esCttItemListPara) {
-        List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
+    private List<CttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
+             List<CttItem> cttItemListPara) {
+        List<CttItem> tempCttItemList =new ArrayList<CttItem>();
         /*避开重复链接数据库*/
-        for(EsCttItem itemUnit: esCttItemListPara){
+        for(CttItem itemUnit: cttItemListPara){
             if(strLevelParentPkid.equalsIgnoreCase(itemUnit.getParentPkid())){
-                tempEsCttItemList.add(itemUnit);
+                tempCttItemList.add(itemUnit);
             }
         }
-        return tempEsCttItemList;
+        return tempCttItemList;
     }
     /*在总包合同列表中根据编号找到项*/
     private CttItemShow getEsCttItemByStrNo(
@@ -555,9 +543,9 @@ public class TkcttItemAction {
             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
                     // 状态标志：初始
-                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
                     // 原因：录入完毕
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG0.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
@@ -570,16 +558,16 @@ public class TkcttItemAction {
             else if (strPowerTypePara.contains("Check") && !strPowerTypePara.contains("DoubleCheck")) {
                 if (strPowerTypePara.equals("CheckPass")) {
                     // 状态标志：审核
-                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+                    cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
                     // 原因：审核通过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON1.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
                     // 状态标志：初始
                     cttInfo.setFlowStatus(null);
                     // 原因：审核未过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON2.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据审核未过！");
                 }
@@ -587,20 +575,20 @@ public class TkcttItemAction {
             else if (strPowerTypePara.contains("DoubleCheck")) {
                 if (strPowerTypePara.equals("DoubleCheckPass")) {
                     // 状态标志：复核
-                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+                    cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                     // 原因：复核通过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
-                    if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())) {
-                        cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-                    }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
+                    if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS1.getCode())) {
+                        cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
+                    }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS0.getCode())) {
                         cttInfo.setFlowStatus(null);
                     }
                     // 原因：复核未过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据复核未过！");
                 }
@@ -608,43 +596,43 @@ public class TkcttItemAction {
             else if (strPowerTypePara.contains("Approve")) {
                 if (strPowerTypePara.equals("ApprovePass")) {
                     // 状态标志：批准
-                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                    cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
                     // 原因：批准通过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerTypePara.equals("ApproveFail")) {
                     // 检查是否被使用
                     String strCttTypeTemp = "";
-                    if (cttInfo.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
-                        strCttTypeTemp = ESEnum.ITEMTYPE1.getCode();
-                    } else if (cttInfo.getCttType().equals(ESEnum.ITEMTYPE1.getCode())) {
-                        strCttTypeTemp = ESEnum.ITEMTYPE2.getCode();
+                    if (cttInfo.getCttType().equals(EnumResType.RES_TYPE0.getCode())) {
+                        strCttTypeTemp = EnumResType.RES_TYPE1.getCode();
+                    } else if (cttInfo.getCttType().equals(EnumResType.RES_TYPE1.getCode())) {
+                        strCttTypeTemp = EnumResType.RES_TYPE2.getCode();
                     }
 
                     // 这样写可以实现越级退回
-                    if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())) {
-                        cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                    }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())) {
-                        cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-                    }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
+                    if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS2.getCode())) {
+                        cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
+                    }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS1.getCode())) {
+                        cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
+                    }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS0.getCode())) {
                         cttInfo.setFlowStatus(null);
                     }
                     // 原因：批准未过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
 
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
 
-                    List<EsInitStl> esInitStlListTemp =
-                            esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfo.getPkid());
-                    if (esInitStlListTemp.size() > 0) {
+                    List<ProgStlInfo> progStlInfoListTemp =
+                            progStlInfoService.selectIsUsedInQMPBySubcttPkid(cttInfo.getPkid());
+                    if (progStlInfoListTemp.size() > 0) {
                         MessageUtil.addInfo("该数据已经被["
-                                + ESEnum.getValueByKey(esInitStlListTemp.get(0).getStlType()).getTitle()
+                                + EnumResType.getValueByKey(progStlInfoListTemp.get(0).getStlType()).getTitle()
                                 + "]使用，数据批准未过,请慎重编辑！");
                     } else {
-                        if (esFlowService.getChildrenOfThisRecordInEsInitCtt(strCttTypeTemp,
+                        if (cttInfoService.getChildrenOfThisRecordInEsInitCtt(strCttTypeTemp,
                                 cttInfo.getPkid()) > 0) {
-                            MessageUtil.addInfo("该数据已经被[" + ESEnum.getValueByKey(strCttTypeTemp).getTitle()
+                            MessageUtil.addInfo("该数据已经被[" + EnumResType.getValueByKey(strCttTypeTemp).getTitle()
                                     + "]使用，数据批准未过,请慎重编辑！");
                         } else {
                             MessageUtil.addInfo("数据批准未过！");
@@ -855,11 +843,11 @@ public class TkcttItemAction {
     public void setCttItemShowUpd(CttItemShow cttItemShowUpd) {
         this.cttItemShowUpd = cttItemShowUpd;
     }
-    public EsFlowService getEsFlowService() {
-        return esFlowService;
+    public ProgStlInfoService getProgStlInfoService() {
+        return progStlInfoService;
     }
-    public void setEsFlowService(EsFlowService esFlowService) {
-        this.esFlowService = esFlowService;
+    public void setProgStlInfoService(ProgStlInfoService progStlInfoService) {
+        this.progStlInfoService = progStlInfoService;
     }
     public String getStrNotPassToStatus() {
         return strNotPassToStatus;
@@ -873,7 +861,7 @@ public class TkcttItemAction {
     public void setStrFlowType(String strFlowType) {
         this.strFlowType = strFlowType;
     }
-    public EsCttInfo getCttInfo() {
+    public CttInfo getCttInfo() {
         return cttInfo;
     }
     public CttInfoService getCttInfoService() {
@@ -881,9 +869,6 @@ public class TkcttItemAction {
     }
     public void setCttInfoService(CttInfoService cttInfoService) {
         this.cttInfoService = cttInfoService;
-    }
-    public Boolean getCheckForUpd() {
-        return checkForUpd;
     }
     public List<CttItemShow> getCttItemShowListExcel() {
         return cttItemShowListExcel;
@@ -909,12 +894,6 @@ public class TkcttItemAction {
     }
     public void setDownloadFile(StreamedContent downloadFile) {
         this.downloadFile = downloadFile;
-    }
-    public UploadedFile getUploadedFile() {
-        return uploadedFile;
-    }
-    public void setUploadedFile(UploadedFile uploadedFile) {
-        this.uploadedFile = uploadedFile;
     }
     /*智能字段End*/
 }

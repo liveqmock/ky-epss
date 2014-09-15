@@ -1,6 +1,6 @@
 package epss.repository.dao.not_mybatis;
 
-import epss.repository.model.EsItemStlSubcttEngQ;
+import epss.repository.model.ProgStlItemSubQ;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
@@ -18,27 +18,30 @@ import java.util.List;
 public interface MyProgWorkqtyItemMapper {
     @Select(
             " select" +
-                    "   eisseq.subctt_item_pkid as itemPkid," +
-                    "   eisseq.period_no as periodNo," +
-                    "   eisseq.current_period_e_qty as currentPeriodEQty" +
-                    " from" +
-                    "   ES_ITEM_STL_SUBCTT_ENG_Q eisseq" +
-                    " inner join" +
-                    "   ES_INIT_STL eis" +
-                    " on" +
-                    "   eis.STL_TYPE='3'" +
-                    " and" +
-                    "   eis.STL_PKID=eisseq.subctt_pkid" +
-                    " and" +
-                    "   eis.PERIOD_NO=eisseq.period_no" +
-                    " and" +
-                    "   eis.FLOW_STATUS='3'" +
-                    " where" +
-                    "   eisseq.subctt_pkid = #{strSubcttPkid}"+
-                    "   and eisseq.period_no >= #{strPeriodNoBegin}"+
-                    "   and eisseq.period_no <= #{strPeriodNoEnd}" +
-                    " order by eisseq.subctt_item_pkid,eisseq.period_no")
-    List<EsItemStlSubcttEngQ> getProgWorkqtyItemListByPeriod(
+            "   eisseq.subctt_item_pkid as itemPkid," +
+            "   eisseq.period_no as periodNo," +
+            "   eisseq.current_period_e_qty as currentPeriodEQty" +
+            " from" +
+            "   PROG_STL_ITEM_SUB_Q eisseq" +
+            " inner join" +
+            "   PROG_STL_INFO eis" +
+            " on" +
+            "   eis.STL_TYPE='3'" +
+            " and" +
+            "   eis.STL_PKID=eisseq.subctt_pkid" +
+            " and" +
+            "   eis.PERIOD_NO=eisseq.period_no" +
+            " and" +
+            "   eis.FLOW_STATUS='3'" +
+            " where" +
+            "   eisseq.subctt_pkid = #{strSubcttPkid}"+
+            " and " +
+            "   eisseq.period_no >= #{strPeriodNoBegin}"+
+            " and " +
+            "   eisseq.period_no <= #{strPeriodNoEnd}" +
+            " order by " +
+            "   eisseq.subctt_item_pkid,eisseq.period_no")
+    List<ProgStlItemSubQ> getProgWorkqtyItemListByPeriod(
             @Param("strSubcttPkid") String strSubcttPkid,
             @Param("strPeriodNoBegin") String strPeriodNoBegin,
             @Param("strPeriodNoEnd") String strPeriodNoEnd);
@@ -46,9 +49,9 @@ public interface MyProgWorkqtyItemMapper {
     @Select("select " +
             "   distinct eisseq.period_no" +
             " from" +
-            "   ES_ITEM_STL_SUBCTT_ENG_Q eisseq" +
+            "   PROG_STL_ITEM_SUB_Q eisseq" +
             " inner join" +
-            "   ES_INIT_STL eis" +
+            "   PROG_STL_INFO eis" +
             " on" +
             "   eis.STL_TYPE='3'" +
             " and" +

@@ -14,119 +14,78 @@
                         "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
-                if(flowStatus=="") { // 录入
+                if(flowStatus=="") { // 待录入
                     if (infoType == '0'){
-                        var rtn = dialog("../tkctt/subByPower/tkctt_Mng.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../tkctt/todoTask/tkctt_Mng.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '1'){
-                        var rtn = dialog("../cstpl/subByPower/cstpl_Mng.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../cstpl/todoTask/cstpl_Mng.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '2'){
-                        var rtn = dialog("../subctt/subByPower/subctt_Mng.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../subctt/todoTask/subctt_Mng.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '3'){
-                        var rtn = dialog("../subctt/subByPower/subctt_QMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../subctt/todoTask/subctt_QMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '4'){
-                        var rtn = dialog("../subctt/subByPower/subctt_MMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../subctt/todoTask/subctt_MMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '5'){
-                        var rtn = dialog("../subctt/subByPower/subctt_PMng.xhtml?strStlInfoPkid=" + infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../subctt/todoTask/subctt_PMng.xhtml?strStlInfoPkid=" + infoPkid, arg, sfeatureMng);
                     }else if (infoType == '6'){
-                        var rtn = dialog("../tkctt/subByPower/tkctt_StaMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../tkctt/todoTask/tkctt_StaMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '7'){
-                        var rtn = dialog("../tkctt/subByPower/tkctt_MeaMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../tkctt/todoTask/tkctt_MeaMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }
                 }else
-                if(flowStatus=="0") { // 审核
+                if(flowStatus=="0") { // 待审核
                     if (infoType == '0') {// 总包合同待处理任务
                         var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Check&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '1') {// 成本计划待处理任务
+                    }else if (infoType == '1') {// 成本计划待处理任务
                         var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=Check&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '2') {// 成本计划待处理任务
+                    }else if (infoType == '2') {// 成本计划待处理任务
                         var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=Check&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '3') {// 分包数量结算待处理任务
+                    }else if (infoType == '3') {// 分包数量结算待处理任务
                         var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '4') {// 分包材料结算待处理任务
+                    }else if (infoType == '4') {// 分包材料结算待处理任务
                         var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '6') {// 总包统计待处理任务
+                    }else if (infoType == '6') {// 总包统计待处理任务
                         var rtn = dialog("../item/itemFlw_TkcttStaStl.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '7') {// 总包计量待处理任务
+                    }else if (infoType == '7') {// 总包计量待处理任务
                         var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
-                if(flowStatus=="1") { // 复核
+                if(flowStatus=="1") { // 待复核
                     if (infoType == '0') {// 总包合同待处理任务
                         var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '1') {// 成本计划待处理任务
+                    }else if (infoType == '1') {// 成本计划待处理任务
                         var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '2') {// 分包合同待处理任务
+                    }else if (infoType == '2') {// 分包合同待处理任务
                         var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '3') {// 分包数量结算待处理任务
+                    }else if (infoType == '3') {// 分包数量结算待处理任务
                         var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '4') {// 分包材料结算待处理任务
+                    }else if (infoType == '4') {// 分包材料结算待处理任务
                         var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '6') {// 总包统计待处理任务
+                    }else if (infoType == '6') {// 总包统计待处理任务
                         var rtn = dialog("../item/itemFlw_TkcttStaStl.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '7') {// 总包计量待处理任务
+                    }else if (infoType == '7') {// 总包计量待处理任务
                         var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
-                if(flowStatus=="2") { // 批准
+                if(flowStatus=="2") { // 待批准
                     if (infoType == '0') {// 总包合同待处理任务
                         var rtn = dialog("../item/itemFlw_Tkctt.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '1') {// 成本计划待处理任务
+                    }else if (infoType == '1') {// 成本计划待处理任务
                         var rtn = dialog("../item/itemFlw_Cstpl.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '2') {// 成本计划待处理任务
+                    }else if (infoType == '2') {// 成本计划待处理任务
                         var rtn = dialog("../item/itemFlw_Subctt.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '3') {// 分包数量结算待处理任务
-                        var rtn = dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '4') {// 分包材料结算待处理任务
-                        var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '5') {// 分包价格结算待处理任务
+                    }else if (infoType == '5') {// 分包价格结算待处理任务
                         var rtn = dialog("../item/itemFlw_SubcttPStl.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '6') {// 总包统计待处理任务
+                    }else if (infoType == '6') {// 总包统计待处理任务
                         var rtn = dialog("../item/itemFlw_TkcttStaStl.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
-                    }else
-                    if (infoType == '7') {// 总包计量待处理任务
+                    }else if (infoType == '7') {// 总包计量待处理任务
                         var rtn = dialog("../item/itemFlw_SubcttMStl.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
-                if(flowStatus=="3") { // 记账
+                if(flowStatus=="3") { // 待记账
                     if (infoType == '5'){
                         var rtn = dialog("../item/itemAct_SubcttEngPStl.xhtml?strStlInfoPkid=" + infoPkid, arg, sfeature);
                     }
-                }
-                document.getElementById("form:qryBtn").click();
-            }
-            function actSelectStlPower(infoType,strResPkid) {
-                var arg = new Object();
-                arg.doType = "select";
-                var sfeatureStl = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
-                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
-                if (infoType == '3') {// 数量结算
-                    var rtn = dialog("../stlPower/subctt_QMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
-                }else if (infoType == '4') {// 材料结算
-                    var rtn = dialog("../stlPower/subctt_MMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
-                }else if (infoType == '5') {// 价格结算
-                    var rtn = dialog("../stlPower/subctt_PApprove.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
-                }else if (infoType == '6') {// 统计结算
-                    var rtn = dialog("../stlPower/tkctt_StaMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
-                }else if (infoType == '7') {// 计量结算
-                    var rtn = dialog("../stlPower/tkctt_MeaMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
                 }
                 document.getElementById("form:qryBtn").click();
             }
@@ -139,7 +98,7 @@
                 <div style="display: none">
                     <p:commandButton id="qryBtn" value="查询"
                                      action="#{todoTaskAction.init()}"
-                                     update="pdtTask,pdtRecentlyPower,msgs">
+                                     update="pdtTask,msgs">
                     </p:commandButton>
                 </div>
                 <!--列表维护-->
@@ -161,7 +120,7 @@
                                  rowStyleClass="#{record.pkid eq null?'rowGrayStyle':
                                  record.strColorType eq '2'?'rowRedStyle':'rowGreenyellowStyle'}"
                                  scrollable="true"
-                                 scrollHeight="180">
+                                 scrollHeight="442">
                         <p:column headerText="操作" style="width:30px;text-align: center;">
                             <p:commandButton icon="ui-icon-triangle-1-e"
                                  style="height:16px;width:30px;"
@@ -186,44 +145,6 @@
                         </p:column>
                         <p:column headerText="状态原因" style="width:100px;text-align:center;">
                             <h:outputText value="#{record.flowStatusReasonName}"/>
-                        </p:column>
-                    </p:dataTable>
-                </p:panel>
-                <p:panel header="分配录入权限的结算资源"
-                         rendered="#{todoTaskAction.strRecentlyPowerVisable}">
-                    <p:dataTable id="pdtRecentlyPower"
-                                 value="#{todoTaskAction.taskShowRecentlyPowerList}"
-                                 var="record"
-                                 rowIndexVar="row"
-                                 rowKey="#{row + 1}"
-                                 emptyMessage="数据记录为空..."
-                                 rowStyleClass="#{record.id eq null?'rowGrayStyle':'rowGreenyellowStyle'}"
-                                 scrollable="true"
-                                 scrollHeight="160">
-                        <p:column headerText="操作" style="width:30px;text-align: center;">
-                            <p:commandButton icon="ui-icon-triangle-1-e"
-                                             style="height:16px;width:30px;"
-                                             rendered="#{record.id eq null?'false':'true'}"
-                                         onclick="actSelectStlPower('#{record.type}','#{record.pkid}')">
-                            </p:commandButton>
-                        </p:column>
-                        <p:column headerText="序号" style="width:30px">
-                            <h:outputText value="#{row + 1}"/>
-                        </p:column>
-                        <p:column headerText="任务类别" style="width:60px;text-align:left;">
-                            <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
-                        </p:column>
-                        <p:column headerText="待处理任务ID" style="width:200px;text-align:left;">
-                            <h:outputText value="#{record.id}"/>
-                        </p:column>
-                        <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
-                            <h:outputText value="#{record.name}"/>
-                        </p:column>
-                        <p:column headerText="授权状态" style="width:100px;text-align:center;">
-                            <h:outputText value="#{record.flowStatusName}"/>
-                        </p:column>
-                        <p:column headerText="执行状态" style="width:100px;text-align:center;">
-                            <h:outputText value="#{record.taskDoneFlagName}"/>
                         </p:column>
                     </p:dataTable>
                 </p:panel>

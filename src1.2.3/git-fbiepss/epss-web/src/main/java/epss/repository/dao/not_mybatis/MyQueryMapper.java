@@ -1,6 +1,6 @@
 package epss.repository.dao.not_mybatis;
 
-import epss.repository.model.EsItemStlSubcttEngP;
+import epss.repository.model.ProgStlItemSubStlment;
 import epss.repository.model.model_show.*;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -23,15 +23,15 @@ public interface MyQueryMapper {
             "     sum(ecitem.Contract_Quantity) as bdQuantity," +
             "     sum(ecitem.Contract_Amount) as bdAmount" +
             " from" +
-            "     ES_CTT_INFO ecinfo" +
+            "     CTT_INFO ecinfo" +
             " inner join " +
-            "     ES_CTT_ITEM ecitem" +
+            "     CTT_ITEM ecitem" +
             " on " +
             "     ecinfo.PKID=ecitem.BELONG_TO_PKID" +
             " and " +
             "     ecinfo.CTT_TYPE=ecitem.BELONG_TO_TYPE" +
             " join " +
-            "     ES_INIT_CUST eicust" +
+            "     SIGN_PART eicust" +
             " on " +
             "     ecinfo.SIGN_PART_B=eicust.PKID" +
             " where"+
@@ -59,15 +59,15 @@ public interface MyQueryMapper {
             "          eis.period_no," +
             "          eicust.name" +
             "   from" +
-            "          ES_CTT_INFO ecinfo" +
+            "          CTT_INFO ecinfo" +
             "   inner join " +
-            "          ES_INIT_CUST eicust" +
+            "          SIGN_PART eicust" +
             "   on " +
             "          ecinfo.SIGN_PART_B=eicust.PKID" +
             "   and " +
             "          ecinfo.FLOW_STATUS='3' " +
             "   inner join" +
-            "          ES_INIT_STL eis" +
+            "          PROG_STL_INFO eis" +
             "   on" +
             "          eis.stl_pkid=ecinfo.pkid" +
             "   and" +
@@ -85,19 +85,19 @@ public interface MyQueryMapper {
             "            subctt_pkid,period_no,subctt_item_pkid,current_period_m_qty," +
             "            (" +
             "               select max(begin_to_current_period_m_qty)" +
-            "               from ES_ITEM_STL_SUBCTT_ENG_M eissemnei" +
+            "               from PROG_STL_ITEM_SUB_M eissemnei" +
             "               where eissemnei.subctt_pkid=eissemwai.subctt_pkid" +
             "                     and  eissemnei.subctt_item_pkid=eissemwai.subctt_item_pkid" +
             "                     and  eissemnei.period_no<=#{strPeriodNo}) as begin_to_current_period_m_qty" +
             "      from" +
-            "          ES_ITEM_STL_SUBCTT_ENG_M eissemwai" +
+            "          PROG_STL_ITEM_SUB_M eissemwai" +
             "    ）eissem" +
             " on" +
             "    eissem.subctt_pkid=nei.stl_pkid" +
             " and" +
             "    eissem.period_no=nei.period_no" +
             " inner join " +
-            "    ES_CTT_ITEM ecitem" +
+            "    CTT_ITEM ecitem" +
             " on" +
             "    ecitem.PKID=eissem.subctt_item_pkid" +
             " and " +
@@ -127,15 +127,15 @@ public interface MyQueryMapper {
             "          eis.period_no," +
             "          eicust.name" +
             "   from" +
-            "          ES_CTT_INFO ecinfo" +
+            "          CTT_INFO ecinfo" +
             "   inner join " +
-            "          ES_INIT_CUST eicust" +   //连客户信息
+            "          SIGN_PART eicust" +   //连客户信息
             "   on " +
             "          ecinfo.SIGN_PART_B=eicust.PKID" +
             "   and " +                            //已经批准了的分包合同
             "          ecinfo.FLOW_STATUS='3' " +
             "   inner join" +                    //已经登记了的工程数量结算
-            "          ES_INIT_STL eis" +
+            "          PROG_STL_INFO eis" +
             "   on" +
             "          eis.STL_PKID=ecinfo.pkid" +
             "   and" +
@@ -153,19 +153,19 @@ public interface MyQueryMapper {
             "            subctt_pkid,period_no,subctt_item_pkid," +
             "            (" +
             "               select max(begin_to_current_period_e_qty)" +
-            "               from ES_ITEM_STL_SUBCTT_ENG_Q eisseqnei" +
+            "               from PROG_STL_ITEM_SUB_Q eisseqnei" +
             "               where eisseqnei.subctt_pkid=eisseqwai.subctt_pkid" +
             "                     and   eisseqnei.subctt_item_pkid=eisseqwai.subctt_item_pkid" +
             "                     and   eisseqnei.period_no<=#{strPeriodNo}) as begin_to_current_period_e_qty" +
             "      from" +
-            "          ES_ITEM_STL_SUBCTT_ENG_Q eisseqwai" +
+            "          PROG_STL_ITEM_SUB_Q eisseqwai" +
             "    ）eisseq" +
             " on" +
             "    eisseq.subctt_pkid=nei.stl_pkid" +
             " and" +
             "    eisseq.period_no=nei.period_no" +
             " inner join " +                 //联分包合同关系表找到对应项
-            "    ES_CTT_ITEM ecitem" +
+            "    CTT_ITEM ecitem" +
             " on" +
             "    ecitem.PKID=eisseq.subctt_item_pkid" +
             " and " +
@@ -213,7 +213,7 @@ public interface MyQueryMapper {
             "                                    select " +
             "                                         eicust.NAME " +
             "                                    from " +
-            "                                         ES_INIT_CUST eicust " +
+            "                                         SIGN_PART eicust " +
             "                                    where " +
             "                                         eicust.PKID = ecinfo.SIGN_PART_B " +
             "                                )as SIGN_PART_B_NAME," +
@@ -221,7 +221,7 @@ public interface MyQueryMapper {
             "                                    select " +
             "                                           max(eis.PERIOD_NO)" +
             "                                    from " +
-            "                                       ES_INIT_STL eis " +
+            "                                       PROG_STL_INFO eis " +
             "                                    where " +
             "                                       eis.STL_TYPE='5'" +
             "                                    and " +
@@ -232,7 +232,7 @@ public interface MyQueryMapper {
             "                                       eis.PERIOD_NO<=#{strPeriodNo}" +
             "                                ) as MAX_PERIOD_NO_INP" +
             "                         from " +
-            "                                ES_CTT_INFO ecinfo " +
+            "                                CTT_INFO ecinfo " +
             "                         where                       " +
             "                                ecinfo.CTT_TYPE = '2' " +
             "                         and" +
@@ -240,7 +240,7 @@ public interface MyQueryMapper {
             "                     ) aprdsubctt" +
                                      // 某一个成本计划下对应的批准了的分包合同 并把它们产生的最近一期批准了的价格结算的期号记录下来
             "                inner join" +
-            "                     ES_CTT_ITEM ecitem" +
+            "                     CTT_ITEM ecitem" +
             "                on" +
             "                   ecitem.belong_to_type='2'" +
             "                and" +
@@ -248,7 +248,7 @@ public interface MyQueryMapper {
             "            )subPerEd " +
                           // 某一个成本计划下对应的批准了的分包合同的详细内容
             "       inner join" +
-            "            ES_ITEM_STL_SUBCTT_ENG_P eissep" +
+            "            PROG_STL_ITEM_SUB_STLMENT eissep" +
             "       on" +
             "            eissep.SUBSTL_TYPE='3'" +
             "       and" +
@@ -294,7 +294,7 @@ public interface MyQueryMapper {
             "      STRNO as strno,"+
             "      ROW_NO as rowNo"+
             " from " +
-            "      ES_ITEM_STL_SUBCTT_ENG_P" +
+            "      PROG_STL_ITEM_SUB_STLMENT" +
             " where " +
             "      (add_up_amt is not null or subctt_item_pkid like '%stl%')" +
             " and " +
@@ -302,7 +302,6 @@ public interface MyQueryMapper {
             " and " +
             "      period_no=#{strPeriodNo}"+
             " order by row_no")
-    List<EsItemStlSubcttEngP> selectRecordsForAccount(@Param("strSubcttPkid") String strSubcttPkid,
-                                                      @Param("strPeriodNo") String strPeriodNo);
-
+    List<ProgStlItemSubStlment> selectRecordsForAccount(@Param("strSubcttPkid") String strSubcttPkid,
+                                                        @Param("strPeriodNo") String strPeriodNo);
 }

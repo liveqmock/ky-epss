@@ -82,7 +82,7 @@
                     <p:column headerText="操作" style="width:40px" >
                         <p:commandButton   icon="ui-icon-search"
                                            style="height:18px;width:18px"
-                                           actionListener="#{subcttInfoAction.selectRecordAction('Qry','',record)}"
+                                           actionListener="#{subcttInfoAction.selectRecordAction('Sel',record)}"
                                            update=":form:pdt,:form:pgView,:form:msgs"
                                            onclick="PF('wVDlgView').show()">
                         </p:commandButton>
@@ -122,68 +122,6 @@
                         <h:outputText value="#{record.signDate}"/>
                     </p:column>
                 </p:dataTable>
-                <!--附件列表维护-->
-                <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
-                          showEffect="clip" hideEffect="fold" header="附件列表">
-                    <p:growl id="messages" showDetail="true"/>
-                    <h:panelGrid id="pgAttachmentView">
-                        <p:fileUpload id="attachmentName" fileUploadListener="#{subcttInfoAction.upload}"
-                                      mode="advanced"
-                                      sizeLimit="1000000"
-                                      multiple="true"
-                                      label="选择" showButtons="true"
-                                      cancelLabel="全部取消" uploadLabel="全部上传" process="@this"
-                                      allowTypes="/(\.|\/)(gif|jpe?g|png|xls|xlsx|doc|docx)$/"
-                                      update="pdtAttachmentList,attachmentName">
-                        </p:fileUpload>
-                        <p:dataTable id="pdtAttachmentList" style="width:100%;"
-                                     value="#{subcttInfoAction.attachmentList}"
-                                     var="recordAttachment"
-                                     rowKey="#{recordAttachment.COLUMN_NAME}"
-                                     selectionMode="single"
-                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                     paginator="true"
-                                     paginatorPosition="bottom"
-                                     rows="5"
-                                     rowsPerPageTemplate="100,50,30,15,5"
-                                     emptyMessage="数据记录为空..."
-                                     widgetVar="WvPdtAttachmentList">
-                            <p:column headerText="附件ID" style="text-align:left">
-                                <h:outputText value="#{recordAttachment.COLUMN_ID}"/>
-                            </p:column>
-                            <p:column headerText="附件名" style="text-align:left">
-                                <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
-                            </p:column>
-                            <p:column headerText="缩略图" style="text-align:center" rendered="false">
-                                <h:graphicImage value="/upload/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
-                            </p:column>
-                            <p:column headerText="预览">
-                                <p:commandButton id="selectButton" update=":form:imageShow"
-                                                 action="#{subcttInfoAction.onViewAttachment(recordAttachment)}"
-                                                 oncomplete="dlgWvView.show()"
-                                                 icon="ui-icon-search" title="View">
-                                </p:commandButton>
-                            </p:column>
-                            <p:column headerText="操作" style="width:62px">
-                                <p:commandButton icon="ui-icon-arrowrefresh-1-w"
-                                                 style="height:18px;width:18px"
-                                                 ajax="false"
-                                                 actionListener="#{subcttInfoAction.download(recordAttachment.COLUMN_PATH)}">
-                                    <p:fileDownload value="#{subcttInfoAction.downloadFile}"/>
-                                </p:commandButton>
-                                <p:commandButton icon="ui-icon-trash"
-                                                 style="height:18px;width:18px"
-                                                 action="#{subcttInfoAction.delAttachmentRecordAction(recordAttachment)}"
-                                                 update=":form:pgAttachmentView,:form:msgs">
-                                </p:commandButton>
-                            </p:column>
-                        </p:dataTable>
-                        <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
-                            <h:graphicImage binding="#{subcttInfoAction.image}"/>
-                        </p:dialog>
-                    </h:panelGrid>
-                </p:dialog>
                 <p:dialog id="dlgView" header="分包合同维护" widgetVar="wVDlgView"
                           resizable="false" modal="true"
                           showEffect="clip" hideEffect="fold">
@@ -196,36 +134,43 @@
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:outputLabel value="合同名称：" for="cttNameForDlg"/>
-                            <p:inputText id="cttNameForDlg" value="#{subcttInfoAction.cttInfoShowSel.name}"
+                            <p:inputText id="cttNameForDlg"
+                                         value="#{subcttInfoAction.cttInfoShowSel.name}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:328px;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="备注内容：" for="noteForDlg"/>
-                            <p:inputText id="noteForDlg" value="#{subcttInfoAction.cttInfoShowSel.note}"
+                            <p:inputText id="noteForDlg"
+                                         value="#{subcttInfoAction.cttInfoShowSel.note}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="签订日期：" for="signDateForDlg"/>
-                            <p:inputText id="signDateForDlg" value="#{subcttInfoAction.cttInfoShowSel.signDate}"
+                            <p:inputText id="signDateForDlg"
+                                         value="#{subcttInfoAction.cttInfoShowSel.signDate}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="开始时间：" for="cttStartDateForDlg"/>
-                            <p:inputText id="cttStartDateForDlg" value="#{subcttInfoAction.cttInfoShowSel.cttStartDate}"
+                            <p:inputText id="cttStartDateForDlg"
+                                         value="#{subcttInfoAction.cttInfoShowSel.cttStartDate}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="截止时间：" for="cttEndDateForDlg"/>
-                            <p:inputText id="cttEndDateForDlg" value="#{subcttInfoAction.cttInfoShowSel.cttEndDate}"
+                            <p:inputText id="cttEndDateForDlg"
+                                         value="#{subcttInfoAction.cttInfoShowSel.cttEndDate}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:outputLabel value="签订甲方：" for="signPartAForDlg"/>
-                            <p:inputText id="signPartAForDlg" value="#{subcttInfoAction.cttInfoShowSel.signPartAName}"
+                            <p:inputText id="signPartAForDlg"
+                                         value="#{subcttInfoAction.cttInfoShowSel.signPartAName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:328px;">
                             </p:inputText>
                             <p:outputLabel value="签订乙方：" for="signPartBForDlg"/>
-                            <p:inputText id="signPartBForDlg" value="#{subcttInfoAction.cttInfoShowSel.signPartBName}"
+                            <p:inputText id="signPartBForDlg"
+                                         value="#{subcttInfoAction.cttInfoShowSel.signPartBName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:328px;">
                             </p:inputText>

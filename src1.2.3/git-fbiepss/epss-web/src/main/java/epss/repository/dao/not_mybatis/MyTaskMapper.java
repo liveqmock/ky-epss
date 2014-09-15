@@ -51,7 +51,7 @@ public interface MyTaskMapper {
             "      FROM" +
             "           OPER_RES opr" +
             "      INNER JOIN" +
-            "           ES_CTT_INFO eci" +
+            "           CTT_INFO eci" +
             "      ON" +
             "           opr.INFO_PKID=eci.PKID" +
             "      where" +
@@ -81,7 +81,7 @@ public interface MyTaskMapper {
             "        from" +
             "            OPER_RES opr" +
             "        inner join  " +
-            "            ES_CTT_INFO eci" +
+            "            CTT_INFO eci" +
             "        on" +
             "            opr.INFO_TYPE=eci.CTT_TYPE" +
             "        and" +
@@ -100,14 +100,14 @@ public interface MyTaskMapper {
             "             opr.INFO_TYPE as type," +
             "             stl.PKID as pkid," +
             "             stl.ID as id," +
-            "             (select name from ES_CTT_INFO where pkid=stl.stl_pkid) as name," +
+            "             (select name from CTT_INFO where pkid=stl.stl_pkid) as name," +
             "             stl.PERIOD_NO as periodNo," +
             "             stl.FLOW_STATUS as flowStatus," +
             "             stl.FLOW_STATUS_REASON as flowStatusReason" +
             "         from" +
             "             OPER_RES opr" +
             "         inner join  " +
-            "             ES_INIT_STL stl" +
+            "             PROG_STL_INFO stl" +
             "         on" +
             "             opr.INFO_TYPE=stl.stl_type" +
             "         and" +
@@ -120,7 +120,7 @@ public interface MyTaskMapper {
             "             opr.TYPE='business'" +
             "    )" +
             " order by" +
-            "    flowStatus,flowStatusReason nulls first")
+            "    flowStatus,name,periodNo")
     List<TaskShow> getDetailTodoTaskShowList(@Param("strOperPkid") String strOperPkid);
 
     @Select(" select" +
@@ -148,7 +148,7 @@ public interface MyTaskMapper {
             "           from" +
             "               OPER_RES opr" +
             "           inner join  " +
-            "               ES_CTT_INFO eci" +
+            "               CTT_INFO eci" +
             "           on" +
             "               opr.INFO_TYPE=eci.CTT_TYPE" +
             "           and" +
@@ -167,7 +167,7 @@ public interface MyTaskMapper {
             "                opr.INFO_TYPE as type," +
             "                stl.PKID as pkid," +
             "                stl.ID as id," +
-            "                (select name from ES_CTT_INFO where pkid=stl.stl_pkid) as name," +
+            "                (select name from CTT_INFO where pkid=stl.stl_pkid) as name," +
             "                opr.FLOW_STATUS as operResFlowStatus," +
             "                stl.PERIOD_NO as periodNo," +
             "                stl.FLOW_STATUS as flowStatus," +
@@ -175,7 +175,7 @@ public interface MyTaskMapper {
             "            from" +
             "                OPER_RES opr" +
             "            inner join  " +
-            "                ES_INIT_STL stl" +
+            "                PROG_STL_INFO stl" +
             "            on" +
             "                opr.INFO_TYPE=stl.stl_type" +
             "            and" +
@@ -199,6 +199,6 @@ public interface MyTaskMapper {
             "    flowStatus," +
             "    flowStatusReason" +
             " order by" +
-            "    flowStatus,TYPE,flowStatusReason")
+            "    flowStatus,name,periodNo")
     List<TaskShow> getDetailDoneTaskShowList(@Param("strOperPkid") String strOperPkid);
 }

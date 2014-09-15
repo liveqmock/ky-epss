@@ -7,6 +7,7 @@ package epss.view.ctt;
  * Time: 下午1:53
  * To change this template use File | Settings | File Templates.
  */
+import epss.repository.model.CttItem;
 import epss.repository.model.model_show.AttachmentModel;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -16,14 +17,12 @@ import skyline.util.JxlsManager;
 import skyline.util.StyleModel;
 import skyline.util.ToolUtil;
 import epss.common.enums.*;
-import epss.repository.model.EsCttInfo;
-import epss.repository.model.EsCttItem;
-import epss.repository.model.EsInitStl;
+import epss.repository.model.CttInfo;
+import epss.repository.model.ProgStlInfo;
 import epss.repository.model.model_show.CstplItemShow;
 import epss.repository.model.model_show.CttItemShow;
 import epss.service.*;
 import epss.service.CttInfoService;
-import epss.service.EsFlowService;
 import epss.view.flow.EsCommon;
 import epss.view.flow.EsFlowControl;
 import jxl.write.WriteException;
@@ -50,8 +49,8 @@ public class CstplItemAction {
     private static final Logger logger = LoggerFactory.getLogger(CstplItemAction.class);
     @ManagedProperty(value = "#{cttItemService}")
     private CttItemService cttItemService;
-    @ManagedProperty(value = "#{esFlowService}")
-    private EsFlowService esFlowService;
+    @ManagedProperty(value = "#{progStlInfoService}")
+    private ProgStlInfoService progStlInfoService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
@@ -59,7 +58,7 @@ public class CstplItemAction {
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
 
-    private EsCttInfo cttInfo;
+    private CttInfo cttInfo;
     private CttItemShow cttItemShowSel;
     private CttItemShow cttItemShowAdd;
     private CttItemShow cttItemShowUpd;
@@ -89,14 +88,13 @@ public class CstplItemAction {
     private HtmlGraphicImage image;
     //上传下载文件
     private StreamedContent downloadFile;
-    private UploadedFile uploadedFile;
 
     @PostConstruct
     public void init() {
         this.attachmentList=new ArrayList<AttachmentModel>();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         beansMap = new HashMap();
-        strBelongToType=ESEnum.ITEMTYPE1.getCode();
+        strBelongToType= EnumResType.RES_TYPE1.getCode();
         if (parammap.containsKey("strCttInfoPkid")) {
             strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
             cttInfo = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
@@ -106,7 +104,7 @@ public class CstplItemAction {
         }
 
         strPassFlag = "true";
-        if ("Mng".equals(strFlowType) && ESEnumStatusFlag.STATUS_FLAG0.getCode().equals(cttInfo.getFlowStatus())) {
+        if ("Mng".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())) {
             strPassFlag = "false";
         }
 
@@ -125,9 +123,9 @@ public class CstplItemAction {
              if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
                     // 状态标志：初始
-                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                    cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
                     // 原因：录入完毕
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG0.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
@@ -140,16 +138,16 @@ public class CstplItemAction {
             else if (strPowerTypePara.contains("Check") && !strPowerTypePara.contains("DoubleCheck")) {
                 if (strPowerTypePara.equals("CheckPass")) {
                     // 状态标志：审核
-                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+                    cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
                     // 原因：审核通过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG1.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON1.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
                     // 状态标志：初始
                     cttInfo.setFlowStatus(null);
                     // 原因：审核未过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG2.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON2.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据审核未过！");
                 }
@@ -157,20 +155,20 @@ public class CstplItemAction {
             else if (strPowerTypePara.contains("DoubleCheck")) {
                 if (strPowerTypePara.equals("DoubleCheckPass")) {
                     // 状态标志：复核
-                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+                    cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                     // 原因：复核通过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG3.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
-                    if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())) {
-                        cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-                    }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
+                    if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS1.getCode())) {
+                        cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
+                    }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS0.getCode())) {
                         cttInfo.setFlowStatus(null);
                     }
                     // 原因：复核未过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG4.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据复核未过！");
                 }
@@ -178,42 +176,42 @@ public class CstplItemAction {
             else if (strPowerTypePara.contains("Approve")) {
                 if (strPowerTypePara.equals("ApprovePass")) {
                     // 状态标志：批准
-                    cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                    cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
                     // 原因：批准通过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG5.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerTypePara.equals("ApproveFail")) {
                     // 检查是否被使用
                     String strCttTypeTemp = "";
-                    if (cttInfo.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
-                        strCttTypeTemp = ESEnum.ITEMTYPE1.getCode();
-                    } else if (cttInfo.getCttType().equals(ESEnum.ITEMTYPE1.getCode())) {
-                        strCttTypeTemp = ESEnum.ITEMTYPE2.getCode();
+                    if (cttInfo.getCttType().equals(EnumResType.RES_TYPE0.getCode())) {
+                        strCttTypeTemp = EnumResType.RES_TYPE1.getCode();
+                    } else if (cttInfo.getCttType().equals(EnumResType.RES_TYPE1.getCode())) {
+                        strCttTypeTemp = EnumResType.RES_TYPE2.getCode();
                     }
 
                     // 这样写可以实现越级退回
-                    if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG2.getCode())) {
-                        cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                    }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG1.getCode())) {
-                        cttInfo.setFlowStatus(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-                    }else if(strNotPassToStatus.equals(ESEnumStatusFlag.STATUS_FLAG0.getCode())) {
+                    if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS2.getCode())) {
+                        cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
+                    }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS1.getCode())) {
+                        cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
+                    }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS0.getCode())) {
                         cttInfo.setFlowStatus(null);
                     }
                     // 原因：批准未过
-                    cttInfo.setFlowStatusReason(ESEnumPreStatusFlag.PRE_STATUS_FLAG6.getCode());
+                    cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
                     cttInfoService.updateRecord(cttInfo,strPowerTypePara);
 
-                    List<EsInitStl> esInitStlListTemp =
-                            esFlowService.selectIsUsedInQMPBySubcttPkid(cttInfo.getPkid());
-                    if (esInitStlListTemp.size() > 0) {
+                    List<ProgStlInfo> progStlInfoListTemp =
+                            progStlInfoService.selectIsUsedInQMPBySubcttPkid(cttInfo.getPkid());
+                    if (progStlInfoListTemp.size() > 0) {
                         MessageUtil.addInfo("该数据已经被["
-                                + ESEnum.getValueByKey(esInitStlListTemp.get(0).getStlType()).getTitle()
+                                + EnumResType.getValueByKey(progStlInfoListTemp.get(0).getStlType()).getTitle()
                                 + "]使用，数据批准未过,请慎重编辑！");
                     } else {
-                        if (esFlowService.getChildrenOfThisRecordInEsInitCtt(strCttTypeTemp,
+                        if (cttInfoService.getChildrenOfThisRecordInEsInitCtt(strCttTypeTemp,
                                 cttInfo.getPkid()) > 0) {
-                            MessageUtil.addInfo("该数据已经被[" + ESEnum.getValueByKey(strCttTypeTemp).getTitle()
+                            MessageUtil.addInfo("该数据已经被[" + EnumResType.getValueByKey(strCttTypeTemp).getTitle()
                                     + "]使用，数据批准未过,请慎重编辑！");
                         } else {
                             MessageUtil.addInfo("数据批准未过！");
@@ -479,10 +477,6 @@ public class CstplItemAction {
         try{
             /*提交前的检查*/
             if (strSubmitType.equals("Del")) {
-                if (ToolUtil.getStrIgnoreNull(cttItemShowDel.getStrNo()).length() == 0) {
-                    MessageUtil.addError("请确认选择的行，合计行不可编辑！");
-                    return;
-                }
                 delThisRecordAction(cttItemShowDel);
             } else {
                 if (!subMitActionPreCheck()) {
@@ -499,8 +493,8 @@ public class CstplItemAction {
                 if (strSubmitType.equals("Upd")) {
                     cttItemService.updateRecord(cttItemShowUpd);
                 } else if (strSubmitType.equals("Add")) {
-                    EsCttItem esCttItemTemp = cttItemService.fromModelShowToModel(cttItemShowAdd);
-                    if (cttItemService.isExistSameRecordInDb(esCttItemTemp)) {
+                    CttItem cttItemTemp = cttItemService.fromModelShowToModel(cttItemShowAdd);
+                    if (cttItemService.isExistSameRecordInDb(cttItemTemp)) {
                         MessageUtil.addInfo("该编号对应记录已存在，请重新录入。");
                         return;
                     }
@@ -543,7 +537,7 @@ public class CstplItemAction {
     private void initData() {
         try {
         /*总包合同列表*/
-            List<EsCttItem> esCttItemListTkctt =new ArrayList<EsCttItem>();
+            List<CttItem> cttItemListTkctt =new ArrayList<CttItem>();
             if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
                     ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
                 // 附件记录变成List
@@ -551,18 +545,18 @@ public class CstplItemAction {
 
                 beansMap.put("cttInfo", cttInfo);
                 String strTkcttPkidInCstpl = cttInfo.getParentPkid();
-                esCttItemListTkctt =
-                        cttItemService.getEsItemList(ESEnum.ITEMTYPE0.getCode(), strTkcttPkidInCstpl);
+                cttItemListTkctt =
+                        cttItemService.getEsItemList(EnumResType.RES_TYPE0.getCode(), strTkcttPkidInCstpl);
                 List<CttItemShow> cttItemShowListTkctt = new ArrayList<>();
-                recursiveDataTable("root", esCttItemListTkctt, cttItemShowListTkctt);
+                recursiveDataTable("root", cttItemListTkctt, cttItemShowListTkctt);
                 cttItemShowListTkctt = getCstplItemList_DoFromatNo(cttItemShowListTkctt);
 
         /*成本计划列表*/
-                List<EsCttItem> esCttItemListCstpl = cttItemService.getEsItemList(
+                List<CttItem> cttItemListCstpl = cttItemService.getEsItemList(
                         strBelongToType, strCttInfoPkid);
 
                 List<CttItemShow> cttItemShowListCstpl = new ArrayList<>();
-                recursiveDataTable("root", esCttItemListCstpl, cttItemShowListCstpl);
+                recursiveDataTable("root", cttItemListCstpl, cttItemShowListCstpl);
                 cttItemShowListCstpl = getCstplItemList_DoFromatNo(
                         cttItemShowListCstpl);
 
@@ -869,13 +863,13 @@ public class CstplItemAction {
     }
     /*递归排序*/
     private void recursiveDataTable(String strLevelParentId,
-                                    List<EsCttItem> esCttItemListPara,
+                                    List<CttItem> cttItemListPara,
                                     List<CttItemShow> cttItemShowListPara){
         // 根据父层级号获得该父层级下的子节点
-        List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
+        List<CttItem> subCttItemList =new ArrayList<CttItem>();
         // 通过父层id查找它的孩子
-        subEsCttItemList =getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
-        for(EsCttItem itemUnit: subEsCttItemList){
+        subCttItemList =getEsCttItemListByParentPkid(strLevelParentId, cttItemListPara);
+        for(CttItem itemUnit: subCttItemList){
             CttItemShow cttItemShowTemp = null;
             String strCreatedByName= ToolUtil.getUserName(itemUnit.getCreatedBy());
             String strLastUpdByName= ToolUtil.getUserName(itemUnit.getLastUpdBy());
@@ -893,7 +887,7 @@ public class CstplItemAction {
                     itemUnit.getContractQuantity(),
                     itemUnit.getContractAmount(),
                     itemUnit.getSignPartAPrice(),
-                    itemUnit.getDeletedFlag() ,
+                    itemUnit.getArchivedFlag() ,
                     itemUnit.getOriginFlag() ,
                     itemUnit.getCreatedBy() ,
                     strCreatedByName,
@@ -908,7 +902,7 @@ public class CstplItemAction {
                     ""
             );
             cttItemShowListPara.add(cttItemShowTemp) ;
-            recursiveDataTable(cttItemShowTemp.getPkid(), esCttItemListPara, cttItemShowListPara);
+            recursiveDataTable(cttItemShowTemp.getPkid(), cttItemListPara, cttItemShowListPara);
         }
     }
     /*不符合规范的编码输入并离开时,清空相应的对象*/
@@ -920,16 +914,16 @@ public class CstplItemAction {
         return false;
     }
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
-                                                          List<EsCttItem> esCttItemListPara) {
-        List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
+    private List<CttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
+                                                          List<CttItem> cttItemListPara) {
+        List<CttItem> tempCttItemList =new ArrayList<CttItem>();
         /*避开重复链接数据库*/
-        for(EsCttItem itemUnit: esCttItemListPara){
+        for(CttItem itemUnit: cttItemListPara){
             if(strLevelParentPkid.equalsIgnoreCase(itemUnit.getParentPkid())){
-                tempEsCttItemList.add(itemUnit);
+                tempCttItemList.add(itemUnit);
             }
         }
-        return tempEsCttItemList;
+        return tempCttItemList;
     }
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
     private List<CstplItemShow> getItemOfTkcttAndCstplByLevelParentPkid(
@@ -1305,7 +1299,7 @@ public class CstplItemAction {
     }
 
     /*智能字段Start*/
-    public EsCttInfo getCttInfo() {
+    public CttInfo getCttInfo() {
         return cttInfo;
     }
 
@@ -1391,12 +1385,12 @@ public class CstplItemAction {
         this.cttItemShowSel = cttItemShowSel;
     }
 
-    public EsFlowService getEsFlowService() {
-        return esFlowService;
+    public ProgStlInfoService getProgStlInfoService() {
+        return progStlInfoService;
     }
 
-    public void setEsFlowService(EsFlowService esFlowService) {
-        this.esFlowService = esFlowService;
+    public void setProgStlInfoService(ProgStlInfoService progStlInfoService) {
+        this.progStlInfoService = progStlInfoService;
     }
 
     public String getStrNotPassToStatus() {
@@ -1450,14 +1444,5 @@ public class CstplItemAction {
     public void setDownloadFile(StreamedContent downloadFile) {
         this.downloadFile = downloadFile;
     }
-
-    public UploadedFile getUploadedFile() {
-        return uploadedFile;
-    }
-
-    public void setUploadedFile(UploadedFile uploadedFile) {
-        this.uploadedFile = uploadedFile;
-    }
-
     /*智能字段End*/
 }

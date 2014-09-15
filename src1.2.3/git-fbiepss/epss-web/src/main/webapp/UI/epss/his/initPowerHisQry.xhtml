@@ -30,7 +30,7 @@
                                 <p:outputLabel value="所属种类：" for="infoType"/>
                                 <p:selectOneMenu id="infoType" value="#{flowCtrlHisAction.flowCtrlHis.infoType}"
                                                  style="width:133px">
-                                    <f:selectItems value="#{esCommon.itemTypeList}"/>
+                                    <f:selectItems value="#{esCommon.resTypeList}"/>
                                     <p:ajax update="msgs,pgCondition"
                                             listener="#{flowCtrlHisAction.setEsInitPowerHisActionOfPowerPkidAction}"/>
                                 </p:selectOneMenu>
@@ -60,11 +60,11 @@
                                 <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHis.periodNo}"/>
                                 <p:outputLabel value="状态标志：" for="sf"/>
                                 <p:selectOneMenu id="sf" value="#{flowCtrlHisAction.flowCtrlHis.flowStatus}">
-                                    <f:selectItems value="#{esCommon.statusFlagList}"/>
+                                    <f:selectItems value="#{esCommon.flowStatusList}"/>
                                 </p:selectOneMenu>
                                 <p:outputLabel value="状态原因：" for="flowStatusReason"/>
                                 <p:selectOneMenu id="flowStatusReason" value="#{flowCtrlHisAction.flowCtrlHis.flowStatusReason}">
-                                    <f:selectItems value="#{esCommon.preStatusFlagList}"/>
+                                    <f:selectItems value="#{esCommon.flowStatusReasonList}"/>
                                 </p:selectOneMenu>
                             </h:panelGrid>
                             <h:panelGrid columns="4">
@@ -119,7 +119,7 @@
                         <h:outputText id="tetid" value="#{record.infoPkid}"/>
                     </p:column>
                     <p:column headerText="对象所属" style="text-align:center">
-                        <h:outputText value="#{esCommon.getLabelByValueInItemTypeList(record.infoType)}"/>
+                        <h:outputText value="#{esCommon.getLabelByValueInresTypeList(record.infoType)}"/>
                     </p:column>
                     <p:column headerText="对象" style="text-align:left">
                         <h:outputText value="#{esFlowControl.getCttInfoByPkId(record.infoPkid).name}"/>

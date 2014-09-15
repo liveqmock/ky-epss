@@ -8,9 +8,9 @@ public class FlowCtrlShow {
     private String periodNo;
 
     private String flowStatus;
-    private String statusFlagName;
-    private String preStatusFlag;
-    private String preStatusFlagName;
+    private String flowStatusName;
+    private String flowStatusReason;
+    private String flowStatusReasonName;
     private String createdBy;
     private String createdByName;
     private String createdDate;
@@ -60,27 +60,27 @@ public class FlowCtrlShow {
     }
 
     public String getStatusFlagName() {
-        return statusFlagName;
+        return flowStatusName;
     }
 
-    public void setStatusFlagName(String statusFlagName) {
-        this.statusFlagName = statusFlagName;
+    public void setStatusFlagName(String flowStatusName) {
+        this.flowStatusName = flowStatusName;
     }
 
     public String getPreStatusFlagName() {
-        return preStatusFlagName;
+        return flowStatusReasonName;
     }
 
-    public void setPreStatusFlagName(String preStatusFlagName) {
-        this.preStatusFlagName = preStatusFlagName;
+    public void setPreStatusFlagName(String flowStatusReasonName) {
+        this.flowStatusReasonName = flowStatusReasonName;
     }
 
     public String getPreStatusFlag() {
-        return preStatusFlag;
+        return flowStatusReason;
     }
 
-    public void setPreStatusFlag(String preStatusFlag) {
-        this.preStatusFlag = preStatusFlag;
+    public void setPreStatusFlag(String flowStatusReason) {
+        this.flowStatusReason = flowStatusReason;
     }
 
     public String getCreatedBy() {

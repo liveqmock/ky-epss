@@ -27,32 +27,16 @@ public class TodoTaskAction {
     private TaskService taskService;
 
     private List<TaskShow> taskShowList;
-    private List<TaskShow> taskShowRecentlyPowerList;
-    private String strRecentlyPowerVisable;
 
     @PostConstruct
     public void init() {
         //整个任务列表
         taskShowList = new ArrayList<>();
         taskShowList=taskService.initTodoTaskShowList();
-        taskShowRecentlyPowerList=taskService.initRecentlyPowerTaskShowList();
-        if(taskShowRecentlyPowerList.size()>1){
-            strRecentlyPowerVisable="true";
-        }else{
-            strRecentlyPowerVisable="false";
-        }
     }
 
     public List<TaskShow> getTaskShowList() {
         return taskShowList;
-    }
-
-    public List<TaskShow> getTaskShowRecentlyPowerList() {
-        return taskShowRecentlyPowerList;
-    }
-
-    public String getStrRecentlyPowerVisable() {
-        return strRecentlyPowerVisable;
     }
 
     public TaskService getTaskService() {

@@ -29,43 +29,43 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <h:inputHidden id="hiPkid" value="#{progSubstlItemAction.reportHeader.strSubcttPkid}"/>
+                    <h:inputHidden id="hiPkid" value="#{progStlItemSubStlmentAction.reportHeader.strSubcttPkid}"/>
                     <h:panelGrid id="pgCondition">
                         <h:panelGrid columns="4">
                             <p:outputLabel value="工程名称：" for="id"/>
-                            <p:inputText id="id" value="#{progSubstlItemAction.reportHeader.strTkcttName}"
+                            <p:inputText id="id" value="#{progStlItemSubStlmentAction.reportHeader.strTkcttName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:500px;"/>
                             <p:outputLabel value="结算单编号：" for="strStlId"/>
-                            <p:inputText id="strStlId" value="#{progSubstlItemAction.reportHeader.strStlId}"
+                            <p:inputText id="strStlId" value="#{progStlItemSubStlmentAction.reportHeader.strStlId}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:200px;"/>
                             <p:outputLabel value="工程项目：" for="strSubcttName"/>
-                            <p:inputText id="strSubcttName" value="#{progSubstlItemAction.reportHeader.strSubcttName}"
+                            <p:inputText id="strSubcttName" value="#{progStlItemSubStlmentAction.reportHeader.strSubcttName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:500px;"/>
                             <p:outputLabel value="协作合同编号：" for="strSubcttId"/>
-                            <p:inputText id="strSubcttId" value="#{progSubstlItemAction.reportHeader.strSubcttId}"
+                            <p:inputText id="strSubcttId" value="#{progStlItemSubStlmentAction.reportHeader.strSubcttId}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:200px;"/>
                             <p:outputLabel value="协作队伍：" for="strSignPartName"/>
-                            <p:inputText id="strSignPartName" value="#{progSubstlItemAction.reportHeader.strSignPartName}"
+                            <p:inputText id="strSignPartName" value="#{progStlItemSubStlmentAction.reportHeader.strSignPartName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:500px;"/>
                             <p:outputLabel value="日期：" for="strDate"/>
-                            <p:inputText id="strDate" value="#{progSubstlItemAction.reportHeader.strDate}"
+                            <p:inputText id="strDate" value="#{progStlItemSubStlmentAction.reportHeader.strDate}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:200px;"/>
                         </h:panelGrid>
                         <h:panelGrid id="AccountPass" columns="4">
                             <p:commandButton value="分包合同附件" onclick="actSelect()"/>
                             <p:commandButton id="ApprovePassBtn" value="记账"
-                                             action="#{progSubstlItemAction.accountAction()}"
+                                             action="#{progStlItemSubStlmentAction.accountAction()}"
                                              update="AccountPass,msgs"
-                                             rendered="#{progSubstlItemAction.strAccountBtnRendered}">
+                                             rendered="#{progStlItemSubStlmentAction.strAccountBtnRendered}">
                             </p:commandButton>
                             <p:commandButton value="导出到EXCEL"
-                                             action="#{progSubstlItemAction.onExportExcel}"
+                                             action="#{progStlItemSubStlmentAction.onExportExcel}"
                                              ajax="false">
                             </p:commandButton>
                             <p:ajaxStatus style="width:16px;height:16px;">
@@ -79,7 +79,7 @@
                         </h:panelGrid>
                     </h:panelGrid>
                     <p:dataTable id="pdt" style="heiht:100%;width:100%;"
-                             value="#{progSubstlItemAction.progSubstlItemShowListForAccountAndQry}"
+                             value="#{progStlItemSubStlmentAction.progSubstlItemShowListForAccountAndQry}"
                              var="record"
                              rowKey="#{record.pkid}"
                              selectionMode="single"

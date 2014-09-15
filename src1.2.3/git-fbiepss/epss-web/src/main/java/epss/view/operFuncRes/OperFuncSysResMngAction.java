@@ -1,6 +1,6 @@
 package epss.view.operFuncRes;
 
-import epss.common.enums.ESEnumDeletedFlag;
+import epss.common.enums.EnumArchivedFlag;
 import epss.repository.model.OperRes;
 import epss.repository.model.Ptmenu;
 import epss.repository.model.model_show.DeptOperShow;
@@ -131,7 +131,7 @@ public class OperFuncSysResMngAction implements Serializable{
                     operResTemp = new OperRes();
                     operResTemp.setOperPkid(deptOperShowUnit.getId());
                     operResTemp.setInfoPkid(operFuncResShowSeled.getResPkid());
-                    operResTemp.setArchivedFlag(ESEnumDeletedFlag.DELETED_FLAG0.getCode());
+                    operResTemp.setArchivedFlag(EnumArchivedFlag.ARCHIVED_FLAG0.getCode());
                     operResTemp.setType("system");
                     operResService.insertRecord(operResTemp);
                 }

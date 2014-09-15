@@ -1,11 +1,11 @@
 package epss.service;
 
+import epss.repository.dao.ProgStlItemSubStlmentMapper;
+import epss.repository.model.ProgStlItemSubStlmentExample;
+import epss.repository.model.model_show.ProgStlItemSubStlmentShow;
 import skyline.util.ToolUtil;
-import epss.repository.dao.EsItemStlSubcttEngPMapper;
 import epss.repository.dao.not_mybatis.MyQueryMapper;
-import epss.repository.model.EsItemStlSubcttEngP;
-import epss.repository.model.EsItemStlSubcttEngPExample;
-import epss.repository.model.model_show.ProgSubstlItemShow;
+import epss.repository.model.ProgStlItemSubStlment;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
@@ -20,110 +20,110 @@ import java.util.List;
 @Service
 public class ProgSubstlItemService {
     @Resource
-    private EsItemStlSubcttEngPMapper esItemStlSubcttEngPMapper;
+    private ProgStlItemSubStlmentMapper progStlItemSubStlmentMapper;
     @Resource
     private MyQueryMapper myQueryMapper;
 
-    public EsItemStlSubcttEngP selectRecordsByDetailPrimaryKey(String strPkId){
-        return esItemStlSubcttEngPMapper.selectByPrimaryKey(strPkId);
+    public ProgStlItemSubStlment selectRecordsByDetailPrimaryKey(String strPkId){
+        return progStlItemSubStlmentMapper.selectByPrimaryKey(strPkId);
     }
 
-    public List<EsItemStlSubcttEngP> selectRecordsByDetailExample(EsItemStlSubcttEngP esItemStlSubcttEngPPara){
-        EsItemStlSubcttEngPExample example = new EsItemStlSubcttEngPExample();
-        example.createCriteria().andPeriodNoEqualTo(esItemStlSubcttEngPPara.getPeriodNo());
-        return esItemStlSubcttEngPMapper.selectByExample(example);
+    public List<ProgStlItemSubStlment> selectRecordsByDetailExample(ProgStlItemSubStlment progStlItemSubStlmentPara){
+        ProgStlItemSubStlmentExample example = new ProgStlItemSubStlmentExample();
+        example.createCriteria().andPeriodNoEqualTo(progStlItemSubStlmentPara.getPeriodNo());
+        return progStlItemSubStlmentMapper.selectByExample(example);
     }
-    public List<EsItemStlSubcttEngP> selectRecordsByDetailExampleForAccount(EsItemStlSubcttEngP esItemStlSubcttEngPPara){
-        EsItemStlSubcttEngPExample example = new EsItemStlSubcttEngPExample();
-        example.createCriteria().andSubcttPkidEqualTo(esItemStlSubcttEngPPara.getSubcttPkid())
-                .andPeriodNoEqualTo(esItemStlSubcttEngPPara.getPeriodNo())
+    public List<ProgStlItemSubStlment> selectRecordsByDetailExampleForAccount(ProgStlItemSubStlment progStlItemSubStlmentPara){
+        ProgStlItemSubStlmentExample example = new ProgStlItemSubStlmentExample();
+        example.createCriteria().andSubcttPkidEqualTo(progStlItemSubStlmentPara.getSubcttPkid())
+                .andPeriodNoEqualTo(progStlItemSubStlmentPara.getPeriodNo())
                 .andAddUpAmtIsNotNull()
                 .andSubcttItemPkidLike("stl");
         example.setOrderByClause("ROW_NO ASC") ;
-        return esItemStlSubcttEngPMapper.selectByExample(example);
+        return progStlItemSubStlmentMapper.selectByExample(example);
     }
-    public List<EsItemStlSubcttEngP> selectRecordsForAccount(String strSubcttPkidPara,String strPeriodNoPara){
+    public List<ProgStlItemSubStlment> selectRecordsForAccount(String strSubcttPkidPara,String strPeriodNoPara){
         return myQueryMapper.selectRecordsForAccount(strSubcttPkidPara,strPeriodNoPara);
     }
 
     public void deleteRecordDetail(String strPkId){
-        esItemStlSubcttEngPMapper.deleteByPrimaryKey(strPkId);
+        progStlItemSubStlmentMapper.deleteByPrimaryKey(strPkId);
     }
 
-    public void updateRecordDetail(EsItemStlSubcttEngP esItemStlSubcttEngPPara){
-        esItemStlSubcttEngPPara.setRecVersion(
-                ToolUtil.getIntIgnoreNull(esItemStlSubcttEngPPara.getRecVersion())+1);
-        esItemStlSubcttEngPPara.setArchivedFlag("0");
-        esItemStlSubcttEngPPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esItemStlSubcttEngPPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
-        esItemStlSubcttEngPMapper.updateByPrimaryKey(esItemStlSubcttEngPPara) ;
+    public void updateRecordDetail(ProgStlItemSubStlment progStlItemSubStlmentPara){
+        progStlItemSubStlmentPara.setRecVersion(
+                ToolUtil.getIntIgnoreNull(progStlItemSubStlmentPara.getRecVersion())+1);
+        progStlItemSubStlmentPara.setArchivedFlag("0");
+        progStlItemSubStlmentPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemSubStlmentPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubStlmentMapper.updateByPrimaryKey(progStlItemSubStlmentPara) ;
     }
 
-    public void insertRecordDetail(ProgSubstlItemShow progSubstlItemShowPara){
-        progSubstlItemShowPara.setEngPMng_CreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        progSubstlItemShowPara.setEngPMng_CreatedByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperatorId()));
-        progSubstlItemShowPara.setEngPMng_CreatedDate(ToolUtil.getStrLastUpdDate());
-        progSubstlItemShowPara.setEngPMng_LastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progSubstlItemShowPara.setEngPMng_LastUpdByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperatorId()));
-        progSubstlItemShowPara.setEngPMng_LastUpdDate(ToolUtil.getStrLastUpdDate());
-        esItemStlSubcttEngPMapper.insert(fromModelShowToModel(progSubstlItemShowPara));
+    public void insertRecordDetail(ProgStlItemSubStlmentShow progStlItemSubStlmentShowPara){
+        progStlItemSubStlmentShowPara.setEngPMng_CreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemSubStlmentShowPara.setEngPMng_CreatedByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperatorId()));
+        progStlItemSubStlmentShowPara.setEngPMng_CreatedDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubStlmentShowPara.setEngPMng_LastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemSubStlmentShowPara.setEngPMng_LastUpdByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperatorId()));
+        progStlItemSubStlmentShowPara.setEngPMng_LastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemSubStlmentMapper.insert(fromModelShowToModel(progStlItemSubStlmentShowPara));
     }
 
-    private EsItemStlSubcttEngP fromModelShowToModel
-            (ProgSubstlItemShow progSubstlItemShowPara){
-        EsItemStlSubcttEngP esItemStlSubcttEngP=new EsItemStlSubcttEngP();
-        esItemStlSubcttEngP.setSubstlType(progSubstlItemShowPara.getEngPMng_SubStlType());
-        esItemStlSubcttEngP.setId(null);
-        esItemStlSubcttEngP.setSubcttPkid(progSubstlItemShowPara.getSubctt_Pkid());
-        esItemStlSubcttEngP.setSubcttName(progSubstlItemShowPara.getSubctt_Name());
-        esItemStlSubcttEngP.setPeriodNo(progSubstlItemShowPara.getEngPMng_PeriodNo());
-        esItemStlSubcttEngP.setSubcttItemPkid(progSubstlItemShowPara.getSubctt_ItemPkid());
-        esItemStlSubcttEngP.setSubcttItemName(progSubstlItemShowPara.getSubctt_ItemName());
-        esItemStlSubcttEngP.setUnit(progSubstlItemShowPara.getSubctt_Unit());
-        esItemStlSubcttEngP.setUnitPrice(progSubstlItemShowPara.getSubctt_ContractUnitPrice());
-        esItemStlSubcttEngP.setThisStageQty(progSubstlItemShowPara.getEngPMng_CurrentPeriodEQty());
-        esItemStlSubcttEngP.setThisStageAmt(progSubstlItemShowPara.getEngPMng_CurrentPeriodAmt());
-        esItemStlSubcttEngP.setAddUpQty(progSubstlItemShowPara.getEngPMng_BeginToCurrentPeriodEQty());
-        esItemStlSubcttEngP.setAddUpAmt(progSubstlItemShowPara.getEngPMng_BeginToCurrentPeriodAmt());
-        esItemStlSubcttEngP.setArchivedFlag("0");
-        esItemStlSubcttEngP.setOriginFlag("0");
-        esItemStlSubcttEngP.setCreatedBy(progSubstlItemShowPara.getEngPMng_CreatedBy());
-        esItemStlSubcttEngP.setCreatedByName(progSubstlItemShowPara.getEngPMng_CreatedByName());
-        esItemStlSubcttEngP.setCreatedDate(progSubstlItemShowPara.getEngPMng_CreatedDate());
-        esItemStlSubcttEngP.setLastUpdBy(progSubstlItemShowPara.getEngPMng_LastUpdBy());
-        esItemStlSubcttEngP.setLastUpdByName(progSubstlItemShowPara.getEngPMng_LastUpdByName());
-        esItemStlSubcttEngP.setLastUpdDate(progSubstlItemShowPara.getEngPMng_LastUpdDate());
-        esItemStlSubcttEngP.setRemark("");
-        esItemStlSubcttEngP.setContractQuantity(progSubstlItemShowPara.getSubctt_ContractQuantity());
-        esItemStlSubcttEngP.setContractAmount(progSubstlItemShowPara.getSubctt_ContractAmount());
-        esItemStlSubcttEngP.setStrno(progSubstlItemShowPara.getSubctt_StrNo());
-        esItemStlSubcttEngP.setRowNo(progSubstlItemShowPara.getEngPMng_RowNo());
-        return esItemStlSubcttEngP;
+    private ProgStlItemSubStlment fromModelShowToModel
+            (ProgStlItemSubStlmentShow progStlItemSubStlmentShowPara){
+        ProgStlItemSubStlment progStlItemSubStlment =new ProgStlItemSubStlment();
+        progStlItemSubStlment.setSubstlType(progStlItemSubStlmentShowPara.getEngPMng_SubStlType());
+        progStlItemSubStlment.setId(null);
+        progStlItemSubStlment.setSubcttPkid(progStlItemSubStlmentShowPara.getSubctt_Pkid());
+        progStlItemSubStlment.setSubcttName(progStlItemSubStlmentShowPara.getSubctt_Name());
+        progStlItemSubStlment.setPeriodNo(progStlItemSubStlmentShowPara.getEngPMng_PeriodNo());
+        progStlItemSubStlment.setSubcttItemPkid(progStlItemSubStlmentShowPara.getSubctt_ItemPkid());
+        progStlItemSubStlment.setSubcttItemName(progStlItemSubStlmentShowPara.getSubctt_ItemName());
+        progStlItemSubStlment.setUnit(progStlItemSubStlmentShowPara.getSubctt_Unit());
+        progStlItemSubStlment.setUnitPrice(progStlItemSubStlmentShowPara.getSubctt_ContractUnitPrice());
+        progStlItemSubStlment.setThisStageQty(progStlItemSubStlmentShowPara.getEngPMng_CurrentPeriodEQty());
+        progStlItemSubStlment.setThisStageAmt(progStlItemSubStlmentShowPara.getEngPMng_CurrentPeriodAmt());
+        progStlItemSubStlment.setAddUpQty(progStlItemSubStlmentShowPara.getEngPMng_BeginToCurrentPeriodEQty());
+        progStlItemSubStlment.setAddUpAmt(progStlItemSubStlmentShowPara.getEngPMng_BeginToCurrentPeriodAmt());
+        progStlItemSubStlment.setArchivedFlag("0");
+        progStlItemSubStlment.setOriginFlag("0");
+        progStlItemSubStlment.setCreatedBy(progStlItemSubStlmentShowPara.getEngPMng_CreatedBy());
+        progStlItemSubStlment.setCreatedByName(progStlItemSubStlmentShowPara.getEngPMng_CreatedByName());
+        progStlItemSubStlment.setCreatedDate(progStlItemSubStlmentShowPara.getEngPMng_CreatedDate());
+        progStlItemSubStlment.setLastUpdBy(progStlItemSubStlmentShowPara.getEngPMng_LastUpdBy());
+        progStlItemSubStlment.setLastUpdByName(progStlItemSubStlmentShowPara.getEngPMng_LastUpdByName());
+        progStlItemSubStlment.setLastUpdDate(progStlItemSubStlmentShowPara.getEngPMng_LastUpdDate());
+        progStlItemSubStlment.setRemark("");
+        progStlItemSubStlment.setContractQuantity(progStlItemSubStlmentShowPara.getSubctt_ContractQuantity());
+        progStlItemSubStlment.setContractAmount(progStlItemSubStlmentShowPara.getSubctt_ContractAmount());
+        progStlItemSubStlment.setStrno(progStlItemSubStlmentShowPara.getSubctt_StrNo());
+        progStlItemSubStlment.setRowNo(progStlItemSubStlmentShowPara.getEngPMng_RowNo());
+        return progStlItemSubStlment;
     }
 
     public void deleteRecordByExample(String strCttInfoPkidPara,String strPeriodNoPara){
-        EsItemStlSubcttEngPExample example = new EsItemStlSubcttEngPExample();
+        ProgStlItemSubStlmentExample example = new ProgStlItemSubStlmentExample();
         example.createCriteria()
                 .andSubcttPkidEqualTo(strCttInfoPkidPara)
                 .andPeriodNoEqualTo(strPeriodNoPara);
-        esItemStlSubcttEngPMapper.deleteByExample(example);
+        progStlItemSubStlmentMapper.deleteByExample(example);
     }
 
-    public ProgSubstlItemShow fromModelToShow(EsItemStlSubcttEngP esItemStlSubcttEngPPara) {
-        ProgSubstlItemShow progSubstlItemShowTemp = new ProgSubstlItemShow();
-        progSubstlItemShowTemp.setSubctt_ItemPkid(esItemStlSubcttEngPPara.getSubcttItemPkid());
-        progSubstlItemShowTemp.setSubctt_StrNo(esItemStlSubcttEngPPara.getStrno());
-        progSubstlItemShowTemp.setSubctt_ItemName(esItemStlSubcttEngPPara.getSubcttItemName());
-        progSubstlItemShowTemp.setSubctt_Unit(esItemStlSubcttEngPPara.getUnit());
-        progSubstlItemShowTemp.setSubctt_ContractUnitPrice(esItemStlSubcttEngPPara.getUnitPrice());
-        progSubstlItemShowTemp.setSubctt_ContractQuantity(esItemStlSubcttEngPPara.getContractQuantity());
-        progSubstlItemShowTemp.setSubctt_ContractAmount(esItemStlSubcttEngPPara.getContractAmount());
-        progSubstlItemShowTemp.setEngPMng_CurrentPeriodEQty(esItemStlSubcttEngPPara.getThisStageQty());
-        progSubstlItemShowTemp.setEngPMng_CurrentPeriodAmt(esItemStlSubcttEngPPara.getThisStageAmt());
-        progSubstlItemShowTemp.setEngPMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngPPara.getAddUpQty());
-        progSubstlItemShowTemp.setEngPMng_BeginToCurrentPeriodAmt(esItemStlSubcttEngPPara.getAddUpAmt());
-        progSubstlItemShowTemp.setSubctt_Note(esItemStlSubcttEngPPara.getRemark());
-        progSubstlItemShowTemp.setEngPMng_SubStlType(esItemStlSubcttEngPPara.getSubstlType());
-        return progSubstlItemShowTemp;
+    public ProgStlItemSubStlmentShow fromModelToShow(ProgStlItemSubStlment progStlItemSubStlmentPara) {
+        ProgStlItemSubStlmentShow progStlItemSubStlmentShowTemp = new ProgStlItemSubStlmentShow();
+        progStlItemSubStlmentShowTemp.setSubctt_ItemPkid(progStlItemSubStlmentPara.getSubcttItemPkid());
+        progStlItemSubStlmentShowTemp.setSubctt_StrNo(progStlItemSubStlmentPara.getStrno());
+        progStlItemSubStlmentShowTemp.setSubctt_ItemName(progStlItemSubStlmentPara.getSubcttItemName());
+        progStlItemSubStlmentShowTemp.setSubctt_Unit(progStlItemSubStlmentPara.getUnit());
+        progStlItemSubStlmentShowTemp.setSubctt_ContractUnitPrice(progStlItemSubStlmentPara.getUnitPrice());
+        progStlItemSubStlmentShowTemp.setSubctt_ContractQuantity(progStlItemSubStlmentPara.getContractQuantity());
+        progStlItemSubStlmentShowTemp.setSubctt_ContractAmount(progStlItemSubStlmentPara.getContractAmount());
+        progStlItemSubStlmentShowTemp.setEngPMng_CurrentPeriodEQty(progStlItemSubStlmentPara.getThisStageQty());
+        progStlItemSubStlmentShowTemp.setEngPMng_CurrentPeriodAmt(progStlItemSubStlmentPara.getThisStageAmt());
+        progStlItemSubStlmentShowTemp.setEngPMng_BeginToCurrentPeriodEQty(progStlItemSubStlmentPara.getAddUpQty());
+        progStlItemSubStlmentShowTemp.setEngPMng_BeginToCurrentPeriodAmt(progStlItemSubStlmentPara.getAddUpAmt());
+        progStlItemSubStlmentShowTemp.setSubctt_Note(progStlItemSubStlmentPara.getRemark());
+        progStlItemSubStlmentShowTemp.setEngPMng_SubStlType(progStlItemSubStlmentPara.getSubstlType());
+        return progStlItemSubStlmentShowTemp;
     }
 }

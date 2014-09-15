@@ -8,15 +8,14 @@ package epss.view.qry;
  * To change this template use File | Settings | File Templates.
  */
 
-import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.EnumResType;
+import epss.common.enums.EnumFlowStatus;
 import skyline.util.JxlsManager;
 import epss.repository.model.model_show.*;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.repository.model.*;
 import epss.service.*;
-import epss.service.EsFlowService;
 import epss.service.EsQueryService;
 import epss.view.flow.EsCommon;
 import jxl.write.WriteException;
@@ -52,8 +51,6 @@ public class CstplSubcttStlQPeriodItemAction {
     private EsCommon esCommon;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
-    @ManagedProperty(value = "#{esFlowService}")
-    private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esQueryService}")
     private EsQueryService esQueryService;
     @ManagedProperty(value = "#{progStlInfoService}")
@@ -63,10 +60,10 @@ public class CstplSubcttStlQPeriodItemAction {
     @ManagedProperty(value = "#{signPartService}")
     private SignPartService signPartService;
 
-    private List<EsCttItem> esCttItemList;
+    private List<CttItem> cttItemList;
 
     /*列表显示用*/
-    private List<ProgWorkqtyItemShow> progWorkqtyItemShowList;
+    private List<ProgStlItemSubQShow> progStlItemSubQShowList;
     private List<QryCSStlQPeriodShow> qryCSStlQPeriodShowList;
     private List<QryCSStlQPeriodShow> qryCSStlQPeriodShowListForExcel;
     private List<CommCol> commColSetList;
@@ -106,9 +103,9 @@ public class CstplSubcttStlQPeriodItemAction {
 
         List<CttInfoShow> cttInfoShowList =
                 cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
-                        ESEnum.ITEMTYPE2.getCode()
+                        EnumResType.RES_TYPE2.getCode()
                         , strCstplPkid
-                        , ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                        , EnumFlowStatus.FLOW_STATUS3.getCode());
         subcttList=new ArrayList<SelectItem>();
         if(cttInfoShowList.size()>0){
             SelectItem selectItem=new SelectItem("","");
@@ -126,7 +123,7 @@ public class CstplSubcttStlQPeriodItemAction {
     }
 
     public String onExportExcel()throws IOException,WriteException {
-        if (this.progWorkqtyItemShowList.size() == 0) {
+        if (this.progStlItemSubQShowList.size() == 0) {
             MessageUtil.addWarn("记录为空...");
             return null;
         } else {
@@ -138,32 +135,32 @@ public class CstplSubcttStlQPeriodItemAction {
         return null;
     }
     private void initData(String strBelongToPkid) throws IntrospectionException, InvocationTargetException, IllegalAccessException {
-        EsCttInfo esCttInfo_Subctt= cttInfoService.getCttInfoByPkId(strBelongToPkid);
-        reportHeader.setStrCstplPkid(esCttInfo_Subctt.getParentPkid());
-        reportHeader.setStrSubcttId(esCttInfo_Subctt.getId());
-        reportHeader.setStrSubcttName(esCttInfo_Subctt.getName());
-        reportHeader.setStrSignPartPkid(esCttInfo_Subctt.getSignPartB());
+        CttInfo cttInfo_Subctt = cttInfoService.getCttInfoByPkId(strBelongToPkid);
+        reportHeader.setStrCstplPkid(cttInfo_Subctt.getParentPkid());
+        reportHeader.setStrSubcttId(cttInfo_Subctt.getId());
+        reportHeader.setStrSubcttName(cttInfo_Subctt.getName());
+        reportHeader.setStrSignPartPkid(cttInfo_Subctt.getSignPartB());
         reportHeader.setStrSignPartName(signPartService.getEsInitCustByPkid(
                 reportHeader.getStrSignPartPkid()).getName());
         beansMap.put("reportHeader", reportHeader);
 
         strLatestApprovedPeriodNo=ToolUtil.getStrIgnoreNull(
-                esFlowService.getLatestApprovedPeriodNoByEndPeriod(
-                ESEnum.ITEMTYPE3.getCode(),
+                progStlInfoService.getLatestApprovedPeriodNoByEndPeriod(
+                EnumResType.RES_TYPE3.getCode(),
                 strSubcttPkid,
                 strEndPeriodNo));
 
         /*分包合同*/
-        esCttItemList =new ArrayList<EsCttItem>();
+        cttItemList =new ArrayList<CttItem>();
 
-        esCttItemList = cttItemService.getEsItemList(
-                ESEnum.ITEMTYPE2.getCode(), strSubcttPkid);
-        if(esCttItemList.size()<=0){
+        cttItemList = cttItemService.getEsItemList(
+                EnumResType.RES_TYPE2.getCode(), strSubcttPkid);
+        if(cttItemList.size()<=0){
             return;
         }
-        progWorkqtyItemShowList =new ArrayList<ProgWorkqtyItemShow>();
-        recursiveDataTable("root", esCttItemList, progWorkqtyItemShowList);
-        progWorkqtyItemShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progWorkqtyItemShowList);
+        progStlItemSubQShowList =new ArrayList<ProgStlItemSubQShow>();
+        recursiveDataTable("root", cttItemList, progStlItemSubQShowList);
+        progStlItemSubQShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progStlItemSubQShowList);
 
         List<String> periodList = progWorkqtyItemService.getProgWorkqtyItemPeriodsByPeriod(
                                  strSubcttPkid,
@@ -181,7 +178,7 @@ public class CstplSubcttStlQPeriodItemAction {
             columnHeaderList[i]="";
         }
 
-        List<EsItemStlSubcttEngQ> esItemStlSubcttEngQList =
+        List<ProgStlItemSubQ> progStlItemSubQList =
                 progWorkqtyItemService.getProgWorkqtyItemListByPeriod(
                         strSubcttPkid,
                         strStartPeriodNo,
@@ -189,7 +186,7 @@ public class CstplSubcttStlQPeriodItemAction {
 
         qryCSStlQPeriodShowList =new ArrayList<QryCSStlQPeriodShow>();
 
-        for(ProgWorkqtyItemShow itemUnit : progWorkqtyItemShowList){
+        for(ProgStlItemSubQShow itemUnit : progStlItemSubQShowList){
             QryCSStlQPeriodShow qryCSStlQPeriodShow =new QryCSStlQPeriodShow();
             qryCSStlQPeriodShow.setStrPkid(itemUnit.getSubctt_Pkid());
             qryCSStlQPeriodShow.setStrNo(itemUnit.getSubctt_StrNo());
@@ -207,10 +204,10 @@ public class CstplSubcttStlQPeriodItemAction {
                 for (PropertyDescriptor propertyDescriptor : pDescriptors) {
                     String proName = propertyDescriptor.getName();
                     if (proName.equals("bdCurrentPeriodEQty"+j)) {//这个地方的id可以是已知属性值的那些属性名
-                        for(EsItemStlSubcttEngQ esItemStlSubcttEngQ:esItemStlSubcttEngQList){
-                            if(strItemPkid.equals(esItemStlSubcttEngQ.getPkid())){
-                                if(commColSetList.get(j).getHeader().equals(esItemStlSubcttEngQ.getPeriodNo())){
-                                    propertyDescriptor.getWriteMethod().invoke(qryCSStlQPeriodShow,esItemStlSubcttEngQ.getCurrentPeriodEQty());
+                        for(ProgStlItemSubQ progStlItemSubQ : progStlItemSubQList){
+                            if(strItemPkid.equals(progStlItemSubQ.getPkid())){
+                                if(commColSetList.get(j).getHeader().equals(progStlItemSubQ.getPeriodNo())){
+                                    propertyDescriptor.getWriteMethod().invoke(qryCSStlQPeriodShow, progStlItemSubQ.getCurrentPeriodEQty());
                                 }
                             }
                         }
@@ -245,61 +242,61 @@ public class CstplSubcttStlQPeriodItemAction {
 
     /*根据数据库中层级关系数据列表得到总包合同*/
     private void recursiveDataTable(String strLevelParentId,
-                                    List<EsCttItem> esCttItemListPara,
-                                    List<ProgWorkqtyItemShow> sProgWorkqtyItemShowListPara){
+                                    List<CttItem> cttItemListPara,
+                                    List<ProgStlItemSubQShow> sProgStlItemSubQShowListPara){
         // 根据父层级号获得该父层级下的子节点
-        List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
+        List<CttItem> subCttItemList =new ArrayList<CttItem>();
         // 通过父层id查找它的孩子
-        subEsCttItemList =getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
-        for(EsCttItem itemUnit: subEsCttItemList){
-            ProgWorkqtyItemShow progWorkqtyItemShowTemp = new ProgWorkqtyItemShow();
-            progWorkqtyItemShowTemp.setSubctt_Pkid(itemUnit.getPkid());
-            progWorkqtyItemShowTemp.setSubctt_BelongToType(itemUnit.getBelongToType());
-            progWorkqtyItemShowTemp.setSubctt_BelongToPkid(itemUnit.getBelongToPkid());
-            progWorkqtyItemShowTemp.setSubctt_ParentPkid(itemUnit.getParentPkid());
-            progWorkqtyItemShowTemp.setSubctt_Grade(itemUnit.getGrade());
-            progWorkqtyItemShowTemp.setSubctt_Orderid(itemUnit.getOrderid());
-            progWorkqtyItemShowTemp.setSubctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
-            progWorkqtyItemShowTemp.setSubctt_Name(itemUnit.getName());
-            progWorkqtyItemShowTemp.setSubctt_Note(itemUnit.getNote());
-            progWorkqtyItemShowTemp.setSubctt_Unit(itemUnit.getUnit());
-            progWorkqtyItemShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
-            progWorkqtyItemShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
-            progWorkqtyItemShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
-            progWorkqtyItemShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
+        subCttItemList =getEsCttItemListByParentPkid(strLevelParentId, cttItemListPara);
+        for(CttItem itemUnit: subCttItemList){
+            ProgStlItemSubQShow progStlItemSubQShowTemp = new ProgStlItemSubQShow();
+            progStlItemSubQShowTemp.setSubctt_Pkid(itemUnit.getPkid());
+            progStlItemSubQShowTemp.setSubctt_BelongToType(itemUnit.getBelongToType());
+            progStlItemSubQShowTemp.setSubctt_BelongToPkid(itemUnit.getBelongToPkid());
+            progStlItemSubQShowTemp.setSubctt_ParentPkid(itemUnit.getParentPkid());
+            progStlItemSubQShowTemp.setSubctt_Grade(itemUnit.getGrade());
+            progStlItemSubQShowTemp.setSubctt_Orderid(itemUnit.getOrderid());
+            progStlItemSubQShowTemp.setSubctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
+            progStlItemSubQShowTemp.setSubctt_Name(itemUnit.getName());
+            progStlItemSubQShowTemp.setSubctt_Note(itemUnit.getNote());
+            progStlItemSubQShowTemp.setSubctt_Unit(itemUnit.getUnit());
+            progStlItemSubQShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
+            progStlItemSubQShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
+            progStlItemSubQShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
+            progStlItemSubQShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
             if(ToolUtil.getStrIgnoreNull(strLatestApprovedPeriodNo).length()!=0){
-                EsItemStlSubcttEngQ esItemStlSubcttEngQ=new EsItemStlSubcttEngQ();
-                esItemStlSubcttEngQ.setSubcttPkid(strSubcttPkid);
-                esItemStlSubcttEngQ.setSubcttItemPkid(itemUnit.getPkid());
-                esItemStlSubcttEngQ.setPeriodNo(strLatestApprovedPeriodNo);
-                List<EsItemStlSubcttEngQ> esItemStlSubcttEngQList =
-                        progWorkqtyItemService.selectRecordsByExample(esItemStlSubcttEngQ);
-                if(esItemStlSubcttEngQList.size()>0){
-                    esItemStlSubcttEngQ= esItemStlSubcttEngQList.get(0);
-                    progWorkqtyItemShowTemp.setEngQMng_Pkid(esItemStlSubcttEngQ.getPkid());
-                    progWorkqtyItemShowTemp.setEngQMng_PeriodNo(esItemStlSubcttEngQ.getPeriodNo());
-                    progWorkqtyItemShowTemp.setEngQMng_SubcttPkid(esItemStlSubcttEngQ.getSubcttPkid());
-                    progWorkqtyItemShowTemp.setEngQMng_BeginToCurrentPeriodEQty(esItemStlSubcttEngQ.getBeginToCurrentPeriodEQty());
-                    progWorkqtyItemShowTemp.setEngQMng_CurrentPeriodEQty(esItemStlSubcttEngQ.getCurrentPeriodEQty());
-                    progWorkqtyItemShowTemp.setEngQMng_DeletedFlag(esItemStlSubcttEngQ.getDeleteFlag());
-                    progWorkqtyItemShowTemp.setEngQMng_CreatedBy(esItemStlSubcttEngQ.getCreatedBy());
-                    progWorkqtyItemShowTemp.setEngQMng_CreatedDate(esItemStlSubcttEngQ.getCreatedDate());
-                    progWorkqtyItemShowTemp.setEngQMng_LastUpdBy(esItemStlSubcttEngQ.getLastUpdBy());
-                    progWorkqtyItemShowTemp.setEngQMng_LastUpdDate(esItemStlSubcttEngQ.getLastUpdDate());
-                    progWorkqtyItemShowTemp.setEngQMng_ModificationNum(esItemStlSubcttEngQ.getModificationNum());
+                ProgStlItemSubQ progStlItemSubQ =new ProgStlItemSubQ();
+                progStlItemSubQ.setSubcttPkid(strSubcttPkid);
+                progStlItemSubQ.setSubcttItemPkid(itemUnit.getPkid());
+                progStlItemSubQ.setPeriodNo(strLatestApprovedPeriodNo);
+                List<ProgStlItemSubQ> progStlItemSubQList =
+                        progWorkqtyItemService.selectRecordsByExample(progStlItemSubQ);
+                if(progStlItemSubQList.size()>0){
+                    progStlItemSubQ = progStlItemSubQList.get(0);
+                    progStlItemSubQShowTemp.setEngQMng_Pkid(progStlItemSubQ.getPkid());
+                    progStlItemSubQShowTemp.setEngQMng_PeriodNo(progStlItemSubQ.getPeriodNo());
+                    progStlItemSubQShowTemp.setEngQMng_SubcttPkid(progStlItemSubQ.getSubcttPkid());
+                    progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(progStlItemSubQ.getBeginToCurrentPeriodEQty());
+                    progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(progStlItemSubQ.getCurrentPeriodEQty());
+                    progStlItemSubQShowTemp.setEngQMng_DeletedFlag(progStlItemSubQ.getArchivedFlag());
+                    progStlItemSubQShowTemp.setEngQMng_CreatedBy(progStlItemSubQ.getCreatedBy());
+                    progStlItemSubQShowTemp.setEngQMng_CreatedDate(progStlItemSubQ.getCreatedDate());
+                    progStlItemSubQShowTemp.setEngQMng_LastUpdBy(progStlItemSubQ.getLastUpdBy());
+                    progStlItemSubQShowTemp.setEngQMng_LastUpdDate(progStlItemSubQ.getLastUpdDate());
+                    progStlItemSubQShowTemp.setEngQMng_ModificationNum(progStlItemSubQ.getModificationNum());
                 }
             }
-            sProgWorkqtyItemShowListPara.add(progWorkqtyItemShowTemp) ;
-            recursiveDataTable(progWorkqtyItemShowTemp.getSubctt_Pkid(), esCttItemListPara, sProgWorkqtyItemShowListPara);
+            sProgStlItemSubQShowListPara.add(progStlItemSubQShowTemp) ;
+            recursiveDataTable(progStlItemSubQShowTemp.getSubctt_Pkid(), cttItemListPara, sProgStlItemSubQShowListPara);
         }
     }
 
     /*根据group和orderid临时编制编码strNo*/
-    private List<ProgWorkqtyItemShow> getStlSubCttEngQMngConstructList_DoFromatNo(
-            List<ProgWorkqtyItemShow> progWorkqtyItemShowListPara){
+    private List<ProgStlItemSubQShow> getStlSubCttEngQMngConstructList_DoFromatNo(
+            List<ProgStlItemSubQShow> progStlItemSubQShowListPara){
         String strTemp="";
         Integer intBeforeGrade=-1;
-        for(ProgWorkqtyItemShow itemUnit: progWorkqtyItemShowListPara){
+        for(ProgStlItemSubQShow itemUnit: progStlItemSubQShowListPara){
             if(itemUnit.getSubctt_Grade().equals(intBeforeGrade)){
                 if(strTemp.lastIndexOf(".")<0) {
                     strTemp=itemUnit.getSubctt_Orderid().toString();
@@ -327,20 +324,20 @@ public class CstplSubcttStlQPeriodItemAction {
             intBeforeGrade=itemUnit.getSubctt_Grade() ;
             itemUnit.setSubctt_StrNo(ToolUtil.padLeft_DoLevel(itemUnit.getSubctt_Grade(), strTemp)) ;
         }
-        return progWorkqtyItemShowListPara;
+        return progStlItemSubQShowListPara;
     }
 
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
-                                                                        List<EsCttItem> esCttItemListPara) {
-        List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
+    private List<CttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
+                                                                        List<CttItem> cttItemListPara) {
+        List<CttItem> tempCttItemList =new ArrayList<CttItem>();
         /*避开重复链接数据库*/
-        for(EsCttItem itemUnit: esCttItemListPara){
+        for(CttItem itemUnit: cttItemListPara){
             if(strLevelParentPkid.equalsIgnoreCase(itemUnit.getParentPkid())){
-                tempEsCttItemList.add(itemUnit);
+                tempCttItemList.add(itemUnit);
             }
         }
-        return tempEsCttItemList;
+        return tempCttItemList;
     }
 
     public void onQueryAction() {
@@ -397,14 +394,6 @@ public class CstplSubcttStlQPeriodItemAction {
         this.cttInfoService = cttInfoService;
     }
 
-    public EsFlowService getEsFlowService() {
-        return esFlowService;
-    }
-
-    public void setEsFlowService(EsFlowService esFlowService) {
-        this.esFlowService = esFlowService;
-    }
-
     public EsQueryService getEsQueryService() {
         return esQueryService;
     }
@@ -437,20 +426,20 @@ public class CstplSubcttStlQPeriodItemAction {
         this.signPartService = signPartService;
     }
 
-    public List<EsCttItem> getEsCttItemList() {
-        return esCttItemList;
+    public List<CttItem> getCttItemList() {
+        return cttItemList;
     }
 
-    public void setEsCttItemList(List<EsCttItem> esCttItemList) {
-        this.esCttItemList = esCttItemList;
+    public void setCttItemList(List<CttItem> cttItemList) {
+        this.cttItemList = cttItemList;
     }
 
-    public List<ProgWorkqtyItemShow> getProgWorkqtyItemShowList() {
-        return progWorkqtyItemShowList;
+    public List<ProgStlItemSubQShow> getProgStlItemSubQShowList() {
+        return progStlItemSubQShowList;
     }
 
-    public void setProgWorkqtyItemShowList(List<ProgWorkqtyItemShow> progWorkqtyItemShowList) {
-        this.progWorkqtyItemShowList = progWorkqtyItemShowList;
+    public void setProgStlItemSubQShowList(List<ProgStlItemSubQShow> progStlItemSubQShowList) {
+        this.progStlItemSubQShowList = progStlItemSubQShowList;
     }
 
     public List<QryCSStlQPeriodShow> getQryCSStlQPeriodShowList() {

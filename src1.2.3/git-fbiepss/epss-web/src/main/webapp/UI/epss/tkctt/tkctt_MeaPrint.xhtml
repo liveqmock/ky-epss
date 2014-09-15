@@ -35,19 +35,19 @@
                     <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
                         <h:panelGrid columns="8">
                                 <p:outputLabel value="结算编号：" for="id" />
-                                <p:inputText id="id" value="#{progMeaInfoAction.progInfoShowQry.id}"/>
+                                <p:inputText id="id" value="#{progStlInfoTkMeaAction.progStlInfoShowQry.id}"/>
                                 <p:outputLabel value="总包合同：" for="tkcttPkid" />
                                 <p:selectOneMenu id="tkcttPkid"
-                                                 value="#{progMeaInfoAction.progInfoShowQry.stlPkid}">
-                                    <f:selectItems value="#{progMeaInfoAction.tkcttList}"/>
+                                                 value="#{progStlInfoTkMeaAction.progStlInfoShowQry.stlPkid}">
+                                    <f:selectItems value="#{progStlInfoTkMeaAction.tkcttList}"/>
                                 </p:selectOneMenu>
                                 <p:outputLabel value="期数编码：" for="periodNo"/>
-                                <p:inputText id="periodNo" value="#{progMeaInfoAction.progInfoShowQry.periodNo}"
+                                <p:inputText id="periodNo" value="#{progStlInfoTkMeaAction.progStlInfoShowQry.periodNo}"
                                              onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         </h:panelGrid>
                         <h:panelGrid columns='1'>
                             <p:commandButton id="qryBtn" value="查询"
-                                                 action="#{progMeaInfoAction.onQueryAction('Print','true')}"
+                                                 action="#{progStlInfoTkMeaAction.onQueryAction('Print','true')}"
                                                  update="pdt,msgs">
                             </p:commandButton>
                             <p:commandButton id="resetBtn" value="重置"
@@ -66,10 +66,10 @@
                     </h:panelGrid>
                 </p:panel>
                 <p:dataTable id="pdt" style="width:100%;"
-                             value="#{progMeaInfoAction.progInfoShowList}"
+                             value="#{progStlInfoTkMeaAction.progStlInfoShowList}"
                              var="record"
                              rowKey="#{record.pkid}"
-                             selection="#{progMeaInfoAction.progInfoShowSelected}"
+                             selection="#{progStlInfoTkMeaAction.progStlInfoShowSelected}"
                              selectionMode="single"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                              {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -84,7 +84,7 @@
                     <p:column headerText="操作" style="width:45px">
                         <p:commandButton  icon="ui-icon-search"
                                           style="height:18px;width:18px"
-                                          action="#{tkcttInfoAction.selectRecordAction('Qry','',record)}"
+                                          action="#{tkcttInfoAction.selectRecordAction('Sel',record)}"
                                           update="pdt,:form:pgView,:form:msgs"
                                           onclick="PF('wVDlgView').show()">
                         </p:commandButton>

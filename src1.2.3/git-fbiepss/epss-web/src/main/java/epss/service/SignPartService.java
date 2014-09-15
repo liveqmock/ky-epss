@@ -1,10 +1,10 @@
 package epss.service;
 
+import epss.repository.dao.SignPartMapper;
+import epss.repository.model.SignPartExample;
 import skyline.util.ToolUtil;
-import epss.repository.dao.EsInitCustMapper;
 import epss.repository.dao.not_mybatis.MySignPartMapper;
-import epss.repository.model.EsInitCust;
-import epss.repository.model.EsInitCustExample;
+import epss.repository.model.SignPart;
 import epss.repository.model.model_show.SignPartShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,21 +24,21 @@ public class SignPartService {
     @Autowired
     private MySignPartMapper mySignPartMapper;
     @Autowired
-    private EsInitCustMapper esInitCustMapper;
+    private SignPartMapper signPartMapper;
 
     public List<SignPartShow> selectListByModel(SignPartShow signPartShowPara) {
-        EsInitCustExample example= new EsInitCustExample();
-        EsInitCustExample.Criteria criteria = example.createCriteria();
+        SignPartExample example= new SignPartExample();
+        SignPartExample.Criteria criteria = example.createCriteria();
         criteria.andIdLike("%" + ToolUtil.getStrIgnoreNull(signPartShowPara.getId()) + "%")
                 .andNameLike("%" + ToolUtil.getStrIgnoreNull(signPartShowPara.getName()) + "%")
-                .andDeletedFlagLike("%" + ToolUtil.getStrIgnoreNull(signPartShowPara.getDeletedFlag()) + "%");
+                .andArchivedFlagLike("%" + ToolUtil.getStrIgnoreNull(signPartShowPara.getDeletedFlag()) + "%");
         if (!ToolUtil.getStrIgnoreNull(signPartShowPara.getNote()).equals("")){
             criteria.andNoteLike("%"+signPartShowPara .getNote()+"%");
         }
         example.setOrderByClause("ID ASC") ;
-        List<EsInitCust> esInitCustListTemp=esInitCustMapper.selectByExample(example);
+        List<SignPart> signPartListTemp = signPartMapper.selectByExample(example);
         List<SignPartShow> signPartShowListTemp=new ArrayList<>();
-        for(EsInitCust itemUnit:esInitCustListTemp){
+        for(SignPart itemUnit: signPartListTemp){
             SignPartShow signPartShowTemp=new SignPartShow();
             signPartShowTemp=fromModelToShow(itemUnit);
             signPartShowTemp.setCreatedByName(ToolUtil.getUserName(itemUnit.getCreatedBy()));
@@ -48,27 +48,27 @@ public class SignPartService {
         return signPartShowListTemp;
     }
 
-    public List<EsInitCust> selectListByModel() {
-        EsInitCustExample example= new EsInitCustExample();
-        EsInitCustExample.Criteria criteria = example.createCriteria();
+    public List<SignPart> selectListByModel() {
+        SignPartExample example= new SignPartExample();
+        SignPartExample.Criteria criteria = example.createCriteria();
         example.setOrderByClause("ID ASC") ;
-        return esInitCustMapper.selectByExample(example);
+        return signPartMapper.selectByExample(example);
     }
 
-    public List<EsInitCust> getSignPartById(String strId){
-        EsInitCustExample example= new EsInitCustExample();
+    public List<SignPart> getSignPartById(String strId){
+        SignPartExample example= new SignPartExample();
         example .createCriteria().andIdLike("%" + strId + "%") ;
-        return esInitCustMapper.selectByExample(example);
+        return signPartMapper.selectByExample(example);
     }
 
-    public EsInitCust getEsInitCustByPkid(String strPkid){
-        return esInitCustMapper .selectByPrimaryKey(strPkid) ;
+    public SignPart getEsInitCustByPkid(String strPkid){
+        return signPartMapper.selectByPrimaryKey(strPkid) ;
     }
 
     public boolean isExistInDb(SignPartShow signPartShowPara) {
-        EsInitCustExample example = new EsInitCustExample();
+        SignPartExample example = new SignPartExample();
         example.createCriteria().andIdEqualTo(signPartShowPara.getId());
-        return esInitCustMapper .countByExample(example) >= 1;
+        return signPartMapper.countByExample(example) >= 1;
     }
 
     public String getMaxId(){
@@ -82,47 +82,47 @@ public class SignPartService {
         signPartShowPara.setCreatedDate(ToolUtil.getStrLastUpdDate());
         signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         signPartShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
-        esInitCustMapper.insertSelective(fromShowToModel(signPartShowPara));
+        signPartMapper.insertSelective(fromShowToModel(signPartShowPara));
     }
 
-    private EsInitCust fromShowToModel(SignPartShow signPartShowPara) {
-        EsInitCust esInitCustTemp = new EsInitCust();
-        esInitCustTemp.setPkid(signPartShowPara.getPkid());
-        esInitCustTemp.setId(signPartShowPara.getId());
-        esInitCustTemp.setName(signPartShowPara.getName());
-        esInitCustTemp.setMobilephone(signPartShowPara.getMobilephone());
-        esInitCustTemp.setEmail(signPartShowPara.getEmail());
-        esInitCustTemp.setOperphone(signPartShowPara.getOperphone());
-        esInitCustTemp.setOtherphone(signPartShowPara.getOtherphone());
-        esInitCustTemp.setFax(signPartShowPara.getFax());
-        esInitCustTemp.setDeletedFlag(signPartShowPara.getDeletedFlag());
-        esInitCustTemp.setOriginFlag(signPartShowPara.getOriginFlag());
-        esInitCustTemp.setCreatedBy(signPartShowPara.getCreatedBy());
-        esInitCustTemp.setCreatedDate(signPartShowPara.getCreatedDate()) ;
-        esInitCustTemp.setLastUpdBy(signPartShowPara.getLastUpdBy());
-        esInitCustTemp.setLastUpdDate(signPartShowPara.getLastUpdDate());
-        esInitCustTemp.setModificationNum(signPartShowPara.getModificationNum());
-        esInitCustTemp.setNote(signPartShowPara.getNote());
-        return esInitCustTemp;
+    private SignPart fromShowToModel(SignPartShow signPartShowPara) {
+        SignPart signPartTemp = new SignPart();
+        signPartTemp.setPkid(signPartShowPara.getPkid());
+        signPartTemp.setId(signPartShowPara.getId());
+        signPartTemp.setName(signPartShowPara.getName());
+        signPartTemp.setMobilephone(signPartShowPara.getMobilephone());
+        signPartTemp.setEmail(signPartShowPara.getEmail());
+        signPartTemp.setOperphone(signPartShowPara.getOperphone());
+        signPartTemp.setOtherphone(signPartShowPara.getOtherphone());
+        signPartTemp.setFax(signPartShowPara.getFax());
+        signPartTemp.setArchivedFlag(signPartShowPara.getDeletedFlag());
+        signPartTemp.setOriginFlag(signPartShowPara.getOriginFlag());
+        signPartTemp.setCreatedBy(signPartShowPara.getCreatedBy());
+        signPartTemp.setCreatedDate(signPartShowPara.getCreatedDate()) ;
+        signPartTemp.setLastUpdBy(signPartShowPara.getLastUpdBy());
+        signPartTemp.setLastUpdDate(signPartShowPara.getLastUpdDate());
+        signPartTemp.setModificationNum(signPartShowPara.getModificationNum());
+        signPartTemp.setNote(signPartShowPara.getNote());
+        return signPartTemp;
     }
-    private SignPartShow fromModelToShow(EsInitCust esInitCustPara) {
+    private SignPartShow fromModelToShow(SignPart signPartPara) {
         SignPartShow signPartShowTemp = new SignPartShow();
-        signPartShowTemp.setPkid(esInitCustPara.getPkid());
-        signPartShowTemp.setId(esInitCustPara.getId());
-        signPartShowTemp.setName(esInitCustPara.getName());
-        signPartShowTemp.setMobilephone(esInitCustPara.getMobilephone());
-        signPartShowTemp.setEmail(esInitCustPara.getEmail());
-        signPartShowTemp.setOperphone(esInitCustPara.getOperphone());
-        signPartShowTemp.setOtherphone(esInitCustPara.getOtherphone());
-        signPartShowTemp.setFax(esInitCustPara.getFax());
-        signPartShowTemp.setDeletedFlag(esInitCustPara.getDeletedFlag());
-        signPartShowTemp.setOriginFlag(esInitCustPara.getOriginFlag());
-        signPartShowTemp.setCreatedBy(esInitCustPara.getCreatedBy());
-        signPartShowTemp.setCreatedDate(esInitCustPara.getCreatedDate()) ;
-        signPartShowTemp.setLastUpdBy(esInitCustPara.getLastUpdBy());
-        signPartShowTemp.setLastUpdDate(esInitCustPara.getLastUpdDate());
-        signPartShowTemp.setModificationNum(esInitCustPara.getModificationNum());
-        signPartShowTemp.setNote(esInitCustPara.getNote());
+        signPartShowTemp.setPkid(signPartPara.getPkid());
+        signPartShowTemp.setId(signPartPara.getId());
+        signPartShowTemp.setName(signPartPara.getName());
+        signPartShowTemp.setMobilephone(signPartPara.getMobilephone());
+        signPartShowTemp.setEmail(signPartPara.getEmail());
+        signPartShowTemp.setOperphone(signPartPara.getOperphone());
+        signPartShowTemp.setOtherphone(signPartPara.getOtherphone());
+        signPartShowTemp.setFax(signPartPara.getFax());
+        signPartShowTemp.setDeletedFlag(signPartPara.getArchivedFlag());
+        signPartShowTemp.setOriginFlag(signPartPara.getOriginFlag());
+        signPartShowTemp.setCreatedBy(signPartPara.getCreatedBy());
+        signPartShowTemp.setCreatedDate(signPartPara.getCreatedDate()) ;
+        signPartShowTemp.setLastUpdBy(signPartPara.getLastUpdBy());
+        signPartShowTemp.setLastUpdDate(signPartPara.getLastUpdDate());
+        signPartShowTemp.setModificationNum(signPartPara.getModificationNum());
+        signPartShowTemp.setNote(signPartPara.getNote());
         return signPartShowTemp;
     }
 
@@ -134,10 +134,10 @@ public class SignPartService {
         signPartShowPara.setOriginFlag("0");
         signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         signPartShowPara.setLastUpdDate(ToolUtil.getStrLastUpdDate());
-        esInitCustMapper.updateByPrimaryKey(fromShowToModel(signPartShowPara));
+        signPartMapper.updateByPrimaryKey(fromShowToModel(signPartShowPara));
     }
 
     public int deleteRecord(String strPkId){
-        return esInitCustMapper.deleteByPrimaryKey(strPkId);
+        return signPartMapper.deleteByPrimaryKey(strPkId);
     }
 }

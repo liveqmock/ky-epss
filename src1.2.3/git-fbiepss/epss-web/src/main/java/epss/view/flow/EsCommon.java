@@ -9,7 +9,7 @@ package epss.view.flow;
  */
 
 import skyline.util.ToolUtil;
-import epss.repository.model.EsInitCust;
+import epss.repository.model.SignPart;
 import epss.service.SignPartService;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.model.StreamedContent;
@@ -47,7 +47,7 @@ public class EsCommon implements Serializable {
 
     private List<SelectItem> originFlagList;
 
-    private List<SelectItem> itemTypeList; // ITEM追加类型列表
+    private List<SelectItem> resTypeList; // ITEM追加类型列表
     //成本计划用
     private List<SelectItem> cstplItemNamelist;
     //分包合同用
@@ -57,30 +57,26 @@ public class EsCommon implements Serializable {
 
     //上传下载文件
     private StreamedContent downloadFile;
-    private UploadedFile uploadedFile;
 
-    private List<SelectItem> statusFlagList;
-    private List<SelectItem> preStatusFlagList;
-    private List<SelectItem> deleteFlagList;
-    private List<SelectItem> endFlagList;
+    private List<SelectItem> flowStatusList;
+    private List<SelectItem> flowStatusReasonList;
+    private List<SelectItem> achivedFlagList;
 
     @PostConstruct
     public void init() {
         this.originFlagList = toolsService.getEnuSelectItemList("ORIGIN_FLAG", false, false);
-        this.itemTypeList = toolsService.getEnuSelectItemList("ITEM_TYPE", true, false);
+        this.resTypeList = toolsService.getEnuSelectItemList("RES_TYPE", true, false);
         this.cstplItemNamelist = toolsService.getEnuSelectItemList("CSTPLITEM_NAME", false, false);
         this.subcttItemNamelist= toolsService.getEnuSelectItemList("SUBCTTITEM_NAME", false, false);
+        this.flowStatusReasonList= toolsService.getEnuSelectItemList("FLOW_STATUS_REASON", true, false);
+        this.flowStatusList = toolsService.getEnuSelectItemList("FLOW_STATUS", true, false);
+        this.achivedFlagList = toolsService.getEnuSelectItemList("ARCHIVED_FLAG", true, false);
 
-        this.preStatusFlagList= toolsService.getEnuSelectItemList("PRESTATUS_FLAG", true, false);
-        this.statusFlagList = toolsService.getEnuSelectItemList("FLOW_STATUS", true, false);
-        this.deleteFlagList = toolsService.getEnuSelectItemList("DELETED_FLAG", true, false);
-        this.endFlagList = toolsService.getEnuSelectItemList("END_FLAG", true, false);
-
-        List<EsInitCust> esInitCustList = signPartService.selectListByModel();
+        List<SignPart> signPartList = signPartService.selectListByModel();
         customerlist=new ArrayList<SelectItem>();
         SelectItem selectItem=new SelectItem("","全部");
         customerlist.add(selectItem);
-        for(EsInitCust itemUnit:esInitCustList){
+        for(SignPart itemUnit: signPartList){
             selectItem=new SelectItem();
             selectItem.setValue(itemUnit.getPkid());
             selectItem.setLabel(itemUnit.getName());
@@ -97,45 +93,19 @@ public class EsCommon implements Serializable {
         return "";
     }
 
-    public String getOperNameByOperId(String strOperId){
-        return ToolUtil.getUserName(strOperId);
-    }
-
     public String originFlagListValueOfAlias(String strValue){
-        if(!StringUtils.isEmpty(strValue))
-        {
+        if(!StringUtils.isEmpty(strValue)){
             return  originFlagList.get(Integer .parseInt(strValue)).getLabel() ;
         }
         return "";
     }
 
-    public String getLabelByValueInDeleteFlaglist(String strValue){
+    public String resTypeListValueOfAlias(String strValue){
         if(!StringUtils.isEmpty(strValue)){
-            for(SelectItem itemUnit:deleteFlagList){
-                if(itemUnit.getValue().equals(strValue)){
-                    return itemUnit.getLabel();
-                }
-            }
-        }
-        return "";
-    }
-    public String getValueByLabelInDeleteFlaglist(String strLabel){
-        if(!StringUtils.isEmpty(strLabel)){
-            for(SelectItem itemUnit:deleteFlagList){
-                if(itemUnit.getLabel().equals(strLabel)){
-                    return itemUnit.getValue().toString();
-                }
-            }
-        }
-        return "";
-    }
-
-    public String itemTypeListValueOfAlias(String strValue){
-        if(!StringUtils.isEmpty(strValue)){
-            if(itemTypeList.get(0).getLabel().equals("全部")){
-                return  itemTypeList.get(Integer .parseInt(strValue)+1).getLabel() ;
+            if(resTypeList.get(0).getLabel().equals("全部")){
+                return  resTypeList.get(Integer .parseInt(strValue)+1).getLabel() ;
             }else{
-                return  itemTypeList.get(Integer .parseInt(strValue)).getLabel() ;
+                return  resTypeList.get(Integer .parseInt(strValue)).getLabel() ;
             }
         }
         else{
@@ -164,9 +134,9 @@ public class EsCommon implements Serializable {
         return -1;
     }
 
-    public String getLabelByValueInItemTypeList(String strValue){
+    public String getLabelByValueInresTypeList(String strValue){
         if(!StringUtils.isEmpty(strValue)){
-            for(SelectItem itemUnit:itemTypeList){
+            for(SelectItem itemUnit:resTypeList){
                 if(itemUnit.getValue().equals(strValue)){
                     return itemUnit.getLabel();
                 }
@@ -176,33 +146,32 @@ public class EsCommon implements Serializable {
     }
 
     //职能字段 begin
-
     public static Logger getLogger() {
         return logger;
     }
 
-    public List<SelectItem> getStatusFlagList() {
-        return statusFlagList;
+    public List<SelectItem> getFlowStatusList() {
+        return flowStatusList;
     }
 
-    public void setStatusFlagList(List<SelectItem> statusFlagList) {
-        this.statusFlagList = statusFlagList;
+    public void setFlowStatusList(List<SelectItem> flowStatusList) {
+        this.flowStatusList = flowStatusList;
     }
 
-    public List<SelectItem> getDeleteFlagList() {
-        return deleteFlagList;
+    public List<SelectItem> getFlowStatusReasonList() {
+        return flowStatusReasonList;
     }
 
-    public void setDeleteFlagList(List<SelectItem> deleteFlagList) {
-        this.deleteFlagList = deleteFlagList;
+    public void setFlowStatusReasonList(List<SelectItem> flowStatusReasonList) {
+        this.flowStatusReasonList = flowStatusReasonList;
     }
 
-    public List<SelectItem> getEndFlagList() {
-        return endFlagList;
+    public List<SelectItem> getAchivedFlagList() {
+        return achivedFlagList;
     }
 
-    public void setEndFlagList(List<SelectItem> endFlagList) {
-        this.endFlagList = endFlagList;
+    public void setAchivedFlagList(List<SelectItem> achivedFlagList) {
+        this.achivedFlagList = achivedFlagList;
     }
 
     public ToolsService getToolsService() {
@@ -237,12 +206,12 @@ public class EsCommon implements Serializable {
         this.originFlagList = originFlagList;
     }
 
-    public List<SelectItem> getItemTypeList() {
-        return itemTypeList;
+    public List<SelectItem> getResTypeList() {
+        return resTypeList;
     }
 
-    public void setItemTypeList(List<SelectItem> itemTypeList) {
-        this.itemTypeList = itemTypeList;
+    public void setResTypeList(List<SelectItem> resTypeList) {
+        this.resTypeList = resTypeList;
     }
 
     public List<SelectItem> getCstplItemNamelist() {
@@ -261,14 +230,6 @@ public class EsCommon implements Serializable {
         this.downloadFile = downloadFile;
     }
 
-    public UploadedFile getUploadedFile() {
-        return uploadedFile;
-    }
-
-    public void setUploadedFile(UploadedFile uploadedFile) {
-        this.uploadedFile = uploadedFile;
-    }
-
     public List<SelectItem> getSubcttItemNamelist() {
         return subcttItemNamelist;
     }
@@ -285,12 +246,5 @@ public class EsCommon implements Serializable {
         this.customerlist = customerlist;
     }
 
-    public List<SelectItem> getPreStatusFlagList() {
-        return preStatusFlagList;
-    }
-
-    public void setPreStatusFlagList(List<SelectItem> preStatusFlagList) {
-        this.preStatusFlagList = preStatusFlagList;
-    }
 //职能字段 End
 }

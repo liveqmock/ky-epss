@@ -7,16 +7,15 @@ package epss.view.qry;
  * Time: 下午1:53
  * To change this template use File | Settings | File Templates.
  */
-import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.EnumResType;
+import epss.common.enums.EnumFlowStatus;
+import epss.repository.model.CttItem;
 import skyline.util.JxlsManager;
-import epss.repository.model.EsCttInfo;
-import epss.repository.model.EsCttItem;
+import epss.repository.model.CttInfo;
 import epss.repository.model.model_show.*;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.service.*;
-import epss.service.EsFlowService;
 import epss.service.EsQueryService;
 import epss.view.flow.EsCommon;
 import jxl.write.WriteException;
@@ -43,8 +42,6 @@ public class CstplSubcttStlMItemAction {
     private CttItemService cttItemService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
-    @ManagedProperty(value = "#{esFlowService}")
-    private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esQueryService}")
     private EsQueryService esQueryService;
 
@@ -67,8 +64,8 @@ public class CstplSubcttStlMItemAction {
         reportHeader =new ReportHeader();
         List<CttInfoShow> cttInfoShowList =
                 cttInfoService.getCttInfoListByCttType_Status(
-                        ESEnum.ITEMTYPE1.getCode()
-                        ,ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                        EnumResType.RES_TYPE1.getCode()
+                        , EnumFlowStatus.FLOW_STATUS3.getCode());
         cstplList=new ArrayList<SelectItem>();
         if(cttInfoShowList.size()>0){
             SelectItem selectItem=new SelectItem("","");
@@ -97,17 +94,17 @@ public class CstplSubcttStlMItemAction {
     }
     private void initData(String strBelongToPkid) {
         beansMap.put("strThisMonth", ToolUtil.getStrThisMonth());
-        EsCttInfo esCttInfo= cttInfoService.getCttInfoByPkId(strBelongToPkid);
-        reportHeader.setStrCstplId(esCttInfo.getId());
-        reportHeader.setStrCstplName(esCttInfo.getName());
+        CttInfo cttInfo = cttInfoService.getCttInfoByPkId(strBelongToPkid);
+        reportHeader.setStrCstplId(cttInfo.getId());
+        reportHeader.setStrCstplName(cttInfo.getName());
         beansMap.put("reportHeader", reportHeader);
         /*成本计划列表*/
-        List<EsCttItem> esCttItemListCstpl =new ArrayList<EsCttItem>();
-        esCttItemListCstpl = cttItemService.getEsItemList(
-                ESEnum.ITEMTYPE1.getCode(),
+        List<CttItem> cttItemListCstpl =new ArrayList<CttItem>();
+        cttItemListCstpl = cttItemService.getEsItemList(
+                EnumResType.RES_TYPE1.getCode(),
                 strCstplPkid);
         List<CttItemShow> cttItemShowListCstpl =new ArrayList<>();
-        recursiveDataTable("root", esCttItemListCstpl, cttItemShowListCstpl);
+        recursiveDataTable("root", cttItemListCstpl, cttItemShowListCstpl);
         cttItemShowListCstpl =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowListCstpl);
 
         List<QryShow> qryShowList =esQueryService.getCSStlMList(strBelongToPkid, strPeriodNo);
@@ -224,13 +221,13 @@ public class CstplSubcttStlMItemAction {
 
     /*递归排序*/
     private void recursiveDataTable(String strLevelParentId,
-                                      List<EsCttItem> esCttItemListPara,
+                                      List<CttItem> cttItemListPara,
                                       List<CttItemShow> cttItemShowListPara){
         // 根据父层级号获得该父层级下的子节点
-        List<EsCttItem> subEsCttItemList =new ArrayList<EsCttItem>();
+        List<CttItem> subCttItemList =new ArrayList<CttItem>();
         // 通过父层id查找它的孩子
-        subEsCttItemList =getEsCttItemListByParentPkid(strLevelParentId, esCttItemListPara);
-        for(EsCttItem itemUnit: subEsCttItemList){
+        subCttItemList =getEsCttItemListByParentPkid(strLevelParentId, cttItemListPara);
+        for(CttItem itemUnit: subCttItemList){
             CttItemShow cttItemShowTemp = null;
             String strCreatedByName= ToolUtil.getUserName(itemUnit.getCreatedBy());
             String strLastUpdByName= ToolUtil.getUserName(itemUnit.getLastUpdBy());
@@ -247,7 +244,7 @@ public class CstplSubcttStlMItemAction {
                 itemUnit.getContractQuantity(),
                 itemUnit.getContractAmount(),
                 itemUnit.getSignPartAPrice(),
-                itemUnit.getDeletedFlag() ,
+                itemUnit.getArchivedFlag() ,
                 itemUnit.getOriginFlag() ,
                 itemUnit.getCreatedBy() ,
                 strCreatedByName,
@@ -262,20 +259,20 @@ public class CstplSubcttStlMItemAction {
                 ""
             );
             cttItemShowListPara.add(cttItemShowTemp) ;
-            recursiveDataTable(cttItemShowTemp.getPkid(), esCttItemListPara, cttItemShowListPara);
+            recursiveDataTable(cttItemShowTemp.getPkid(), cttItemListPara, cttItemShowListPara);
         }
     }
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
-             List<EsCttItem> esCttItemListPara) {
-        List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
+    private List<CttItem> getEsCttItemListByParentPkid(String strLevelParentPkid,
+             List<CttItem> cttItemListPara) {
+        List<CttItem> tempCttItemList =new ArrayList<CttItem>();
         /*避开重复链接数据库*/
-        for(EsCttItem itemUnit: esCttItemListPara){
+        for(CttItem itemUnit: cttItemListPara){
             if(strLevelParentPkid.equalsIgnoreCase(itemUnit.getParentPkid())){
-                tempEsCttItemList.add(itemUnit);
+                tempCttItemList.add(itemUnit);
             }
         }
-        return tempEsCttItemList;
+        return tempCttItemList;
     }
 
     /*根据group和orderid临时编制编码strNo*/
@@ -334,14 +331,6 @@ public class CstplSubcttStlMItemAction {
 
     public void setCttItemService(CttItemService cttItemService) {
         this.cttItemService = cttItemService;
-    }
-
-    public EsFlowService getEsFlowService() {
-        return esFlowService;
-    }
-
-    public void setEsFlowService(EsFlowService esFlowService) {
-        this.esFlowService = esFlowService;
     }
 
     public EsCommon getEsCommon() {

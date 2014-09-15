@@ -150,11 +150,11 @@
                             </p:selectOneMenu>
                             <p:outputLabel value="资源分类：" for="infotypeAdd"/>
                             <p:selectOneMenu id="infotypeAdd" value="#{menuAction.ptmenuAdd.infotype}">
-                                <f:selectItems value="#{esCommon.itemTypeList}"/>
+                                <f:selectItems value="#{esCommon.resTypeList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="功能类型：" for="flowstatusAdd"/>
                             <p:selectOneMenu id="flowstatusAdd" value="#{menuAction.ptmenuAdd.flowstatus}">
-                                <f:selectItems value="#{esCommon.statusFlagList}"/>
+                                <f:selectItems value="#{esCommon.flowStatusList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="系统类型：" for="targetmachineAdd"/>
                             <p:selectOneMenu id="targetmachineAdd" value="#{menuAction.ptmenuAdd.targetmachine}">
@@ -215,11 +215,11 @@
                             </p:selectOneMenu>
                             <p:outputLabel value="资源分类：" for="infotypeUpd"/>
                             <p:selectOneMenu id="infotypeUpd" value="#{menuAction.ptmenuUpd.infotype}">
-                                <f:selectItems value="#{esCommon.itemTypeList}"/>
+                                <f:selectItems value="#{esCommon.resTypeList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="功能类型：" for="flowstatusUpd"/>
                             <p:selectOneMenu id="flowstatusUpd" value="#{menuAction.ptmenuUpd.flowstatus}">
-                                <f:selectItems value="#{esCommon.statusFlagList}"/>
+                                <f:selectItems value="#{esCommon.flowStatusList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="系统类型：" for="targetmachineUpd"/>
                             <p:selectOneMenu id="targetmachineUpd" value="#{menuAction.ptmenuUpd.targetmachine}">

@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="epss.repository.dao.not_mybatis.MyProgStlInfoMapper">
+    <resultMap id="BaseResultMapStl" type="epss.repository.model.model_show.ProgStlInfoShow">
+        <id column="PKID" jdbcType="VARCHAR" property="pkid" />
+        <result column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="STL_TYPE" jdbcType="VARCHAR" property="stlType" />
+        <result column="STL_PKID" jdbcType="VARCHAR" property="stlPkid" />
+        <result column="STL_NAME" jdbcType="VARCHAR" property="stlName" />
+        <result column="PERIOD_NO" jdbcType="VARCHAR" property="periodNo" />
+        <result column="SIGN_PART_B_NAME" jdbcType="VARCHAR" property="signPartBName" />
+        <result column="NOTE" jdbcType="VARCHAR" property="note" />
+        <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment" />
+        <result column="FLOW_STATUS" jdbcType="CHAR" property="flowStatus" />
+        <result column="FLOW_STATUS_REASON" jdbcType="CHAR" property="flowStatusReason"/>
+        <result column="ARCHIVED_FLAG" jdbcType="CHAR" property="deletedFlag"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+        <result column="CREATED_DATE" jdbcType="VARCHAR" property="createdDate" />
+        <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
+        <result column="LAST_UPD_DATE" jdbcType="VARCHAR" property="lastUpdDate" />
+        <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
+        <result column="MODIFICATION_NUM" jdbcType="DECIMAL" property="modificationNum" />
+        <result column="AUTO_LINK_ADD" jdbcType="CHAR" property="autoLinkAdd" />
+    </resultMap>
+    <select id="selectSubcttStlQMByStatusFlagBegin_End"
+            parameterType="epss.repository.model.model_show.ProgStlInfoShow"
+            resultMap="BaseResultMapStl">
+        <![CDATA[
+             select
+                eis.PKID,
+                eis.ID,
+                eis.STL_TYPE,
+                eis.STL_PKID,
+                eic.NAME AS STL_NAME,
+                eis.PERIOD_NO,
+                eis.ATTACHMENT,
+                eicust.NAME AS SIGN_PART_B_NAME,
+                eis.NOTE,
+                eis.ARCHIVED_FLAG,
+                eis.CREATED_BY,
+                eis.CREATED_DATE,
+                eis.LAST_UPD_BY,
+                eis.LAST_UPD_DATE,
+                eis.MODIFICATION_NUM,
+                eis.AUTO_LINK_ADD AS autoLinkAdd,
+                eis.FLOW_STATUS,
+                eis.FLOW_STATUS_REASON
+            from
+                PROG_STL_INFO eis
+            inner join
+                CTT_INFO eic
+            on
+                eis.stl_pkid=eic.pkid
+            and
+                eic.CTT_TYPE='2'
+            left outer join
+                 SIGN_PART eicust
+            on
+                 eic.SIGN_PART_B=eicust.PKID
+            where
+                 1=1
+         ]]>
+        <if test="pkid != null and pkid != ''">
+            and eis.pkid like CONCAT('%',CONCAT(trim(#{pkid}),'%'))
+        </if>
+        <if test="id != null and id != ''">
+            and eis.id like CONCAT('%',CONCAT(trim(#{id}),'%'))
+        </if>
+        <if test="stlType != null and stlType != ''">
+            and eis.STL_TYPE like CONCAT('%',CONCAT(trim(#{stlType}),'%'))
+        </if>
+        <if test="stlPkid != null and stlPkid != ''">
+            and eis.STL_PKID like CONCAT('%',CONCAT(trim(#{stlPkid}),'%'))
+        </if>
+        <if test="stlName != null and stlName != ''">
+            and eic.NAME like CONCAT('%',CONCAT(trim(#{stlName}),'%'))
+        </if>
+        <if test="periodNo != null and periodNo != ''">
+            and eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{periodNo}),'%'))
+        </if>
+        <if test="attachment != null and attachment != ''">
+            and eis.attachment like CONCAT('%',CONCAT(trim(#{attachment}),'%'))
+        </if>
+        <if test="note != null and note != ''">
+            and eis.note like CONCAT('%',CONCAT(trim(#{note}),'%'))
+        </if>
+        <if test="deletedFlag != null and deletedFlag != ''">
+            and eis.ARCHIVED_FLAG = #{deletedFlag}
+        </if>
+
+        <!--<if test='strStatusFlagBegin == null and strStatusFlagEnd == "0"'>-->
+        <if test="strStatusFlagBegin == null and strStatusFlagEnd == '0'.toString()">
+            and (eis.FLOW_STATUS is null
+            or eis.FLOW_STATUS='0')
+        </if>
+
+        <if test="strStatusFlagBegin != null and strStatusFlagBegin !='' and
+                       strStatusFlagEnd != null and strStatusFlagEnd != ''">
+            and eis.FLOW_STATUS <![CDATA[>=]]> #{strStatusFlagBegin}
+            and eis.FLOW_STATUS <![CDATA[<=]]> #{strStatusFlagEnd}
+        </if>
+
+        <if test="flowStatusReason != null and flowStatusReason != ''">
+            and eis.FLOW_STATUS_REASON = #{flowStatusReason}
+        </if>
+        order by eis.FLOW_STATUS asc,eis.ID asc
+    </select>
+    <select id="selectTkcttStlSMByStatusFlagBegin_End"
+            parameterType="epss.repository.model.model_show.ProgStlInfoShow"
+            resultMap="BaseResultMapStl">
+        <![CDATA[
+             select
+                eis.PKID,
+                eis.ID,
+                eis.STL_TYPE,
+                eis.STL_PKID,
+                eic.NAME AS STL_NAME,
+                eis.PERIOD_NO,
+                eis.ATTACHMENT,
+                eicust.NAME AS SIGN_PART_B_NAME,
+                eis.NOTE,
+                eis.ARCHIVED_FLAG,
+                eis.CREATED_BY,
+                eis.CREATED_DATE,
+                eis.LAST_UPD_BY,
+                eis.LAST_UPD_DATE,
+                eis.MODIFICATION_NUM,
+                eis.FLOW_STATUS,
+                eis.FLOW_STATUS_REASON
+            from
+                PROG_STL_INFO eis
+            inner join
+                CTT_INFO eic
+            on
+                eic.pkid=eis.stl_pkid
+            and
+                eic.CTT_TYPE='0'
+            left outer join
+                 SIGN_PART eicust   --连客户信息
+            on
+                 eicust.PKID=eic.SIGN_PART_B
+            where
+                1=1
+         ]]>
+        <if test="pkid != null and pkid != ''">
+            and eis.pkid like CONCAT('%',CONCAT(trim(#{pkid}),'%'))
+        </if>
+        <if test="id != null and id != ''">
+            and eis.id like CONCAT('%',CONCAT(trim(#{id}),'%'))
+        </if>
+        <if test="stlType != null and stlType != ''">
+            and eis.STL_TYPE like CONCAT('%',CONCAT(trim(#{stlType}),'%'))
+        </if>
+        <if test="stlPkid != null and stlPkid != ''">
+            and eis.STL_PKID like CONCAT('%',CONCAT(trim(#{stlPkid}),'%'))
+        </if>
+        <if test="stlName != null and stlName != ''">
+            and eic.NAME like CONCAT('%',CONCAT(trim(#{stlName}),'%'))
+        </if>
+        <if test="periodNo != null and periodNo != ''">
+            and eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{periodNo}),'%'))
+        </if>
+        <if test="attachment != null and attachment != ''">
+            and eis.attachment like CONCAT('%',CONCAT(trim(#{attachment}),'%'))
+        </if>
+        <if test="note != null and note != ''">
+            and eis.note like CONCAT('%',CONCAT(trim(#{note}),'%'))
+        </if>
+        <if test="deletedFlag != null and deletedFlag != ''">
+            and eis.ARCHIVED_FLAG = #{deletedFlag}
+        </if>
+
+        <!--<if test='strStatusFlagBegin == null and strStatusFlagEnd == "0"'>-->
+        <if test="strStatusFlagBegin == null and strStatusFlagEnd == '0'.toString()">
+            and (eis.FLOW_STATUS is null
+            or eis.FLOW_STATUS='0')
+        </if>
+
+        <if test="strStatusFlagBegin != null and strStatusFlagBegin !='' and
+                       strStatusFlagEnd != null and strStatusFlagEnd != ''">
+            and eis.FLOW_STATUS <![CDATA[>=]]> #{strStatusFlagBegin}
+            and eis.FLOW_STATUS <![CDATA[<=]]> #{strStatusFlagEnd}
+        </if>
+        <if test="flowStatusReason != null and flowStatusReason != ''">
+            and eis.FLOW_STATUS_REASON = #{flowStatusReason}
+        </if>
+        order by eis.FLOW_STATUS asc,eis.ID asc
+    </select>
+</mapper>

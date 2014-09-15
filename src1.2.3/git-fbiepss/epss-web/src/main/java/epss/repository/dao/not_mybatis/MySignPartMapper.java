@@ -12,6 +12,6 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public interface MySignPartMapper {
-    @Select("select max(id) from es_init_cust")
+    @Select("select max(id) from SIGN_PART")
     String strMaxCustId();
 }

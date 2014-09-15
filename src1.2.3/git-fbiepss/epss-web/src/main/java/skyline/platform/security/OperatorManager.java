@@ -34,8 +34,6 @@ public class OperatorManager implements Serializable {
     /**
      * operatorid是从login(operatorid, password)中得到的。
      */
-    private String fimgSign = "";
-
     private String operatorid = null;
     /*
     20100820 zhanrui
@@ -48,8 +46,6 @@ public class OperatorManager implements Serializable {
 
     private MenuBean mb;
 
-    private List jsplist = null;
-
     private Oper oper;
 
     private String remoteAddr = null;
@@ -61,8 +57,6 @@ public class OperatorManager implements Serializable {
     private boolean isLogin = false;
 
     public OperatorManager() {
-        // //创建图片标示
-        createImgSign();
     }
 
     /**
@@ -142,14 +136,6 @@ public class OperatorManager implements Serializable {
     }
 
     /**
-     * @return ArrayList
-     * @roseuid 3F80B71A01BC
-     */
-    public List getJspList() {
-        return jsplist;
-    }
-
-    /**
      * @return boolean
      * @roseuid 3F80B71A00BC
      */
@@ -176,33 +162,6 @@ public class OperatorManager implements Serializable {
 
     public void setRemoteHost(String remoteHost) {
         this.remoteHost = remoteHost;
-    }
-
-    private void createImgSign() {
-        fimgSign = "";
-        try {
-            int rad = (int) Math.round(Math.random() * 10);
-            if (rad == 10)
-                rad = 9;
-            fimgSign += rad;
-
-            rad = (int) Math.round(Math.random() * 10);
-            if (rad == 10)
-                rad = 9;
-            fimgSign += rad;
-
-            rad = (int) Math.round(Math.random() * 10);
-            if (rad == 10)
-                rad = 9;
-            fimgSign += rad;
-
-            rad = (int) Math.round(Math.random() * 10);
-            if (rad == 10)
-                rad = 9;
-            fimgSign += rad;
-        } catch (Exception e) {
-
-        }
     }
 
     public String getJsonString(String target){

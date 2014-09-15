@@ -8,12 +8,8 @@ package epss.view.flow;
  * To change this template use File | Settings | File Templates.
  */
 
-import epss.repository.model.EsCttInfo;
-import epss.repository.model.model_show.FlowCtrlShow;
+import epss.repository.model.CttInfo;
 import epss.service.CttInfoService;
-import epss.service.EsFlowService;
-import epss.common.enums.ESEnumPreStatusFlag;
-import epss.common.enums.ESEnumStatusFlag;
 import epss.service.SignPartService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -45,28 +41,24 @@ public class EsFlowControl implements Serializable {
     private ToolsService toolsService;
     @ManagedProperty(value = "#{signPartService}")
     private SignPartService signPartService;
-    @ManagedProperty(value = "#{esFlowService}")
-    private EsFlowService esFlowService;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
 
-    private List<SelectItem> statusFlagFromDBList;
-    private List<SelectItem> preStatusFlagList;
-    private List<SelectItem> preStatusFlagFromDBList;
-    private List<SelectItem> deleteFlagList;
-    private List<SelectItem> endFlagList;
+    private List<SelectItem> flowStatusFromDBList;
+    private List<SelectItem> flowStatusReasonList;
+    private List<SelectItem> flowStatusReasonFromDBList;
+    private List<SelectItem> achivedFlagList;
 
     @PostConstruct
     public void init() {
-        this.statusFlagFromDBList = toolsService.getEnuSelectItemList("FLOW_STATUS", false, false);
-        this.preStatusFlagFromDBList= toolsService.getEnuSelectItemList("FLOW_STATUS_REASON", false, false);
-        this.deleteFlagList = toolsService.getEnuSelectItemList("DELETED_FLAG", true, false);
-        this.endFlagList = toolsService.getEnuSelectItemList("END_FLAG", true, false);
+        this.flowStatusFromDBList = toolsService.getEnuSelectItemList("FLOW_STATUS", false, false);
+        this.flowStatusReasonFromDBList= toolsService.getEnuSelectItemList("FLOW_STATUS_REASON", false, false);
+        this.achivedFlagList = toolsService.getEnuSelectItemList("ARCHIVED_FLAG", true, false);
     }
 
     public String getLabelByValueInStatusFlaglist(String strValue){
         if(!StringUtils.isEmpty(strValue)){
-            for(SelectItem itemUnit:statusFlagFromDBList){
+            for(SelectItem itemUnit:flowStatusFromDBList){
                 if(itemUnit.getValue().equals(strValue)){
                     return itemUnit.getLabel();
                 }
@@ -76,13 +68,13 @@ public class EsFlowControl implements Serializable {
     }
 
 
-    public EsCttInfo getCttInfoByPkId(String strPkid) {
+    public CttInfo getCttInfoByPkId(String strPkid) {
         return cttInfoService.getCttInfoByPkId(strPkid);
     }
 
     public String getLabelByValueInPreStatusFlaglist(String strValue){
         if(!StringUtils.isEmpty(strValue)){
-            for(SelectItem itemUnit:preStatusFlagFromDBList){
+            for(SelectItem itemUnit:flowStatusReasonFromDBList){
                 if(itemUnit.getValue().equals(strValue)){
                     return itemUnit.getLabel();
                 }
@@ -92,40 +84,40 @@ public class EsFlowControl implements Serializable {
     }
 
     public List<SelectItem> getBackToStatusFlagList(String strFlowStatusPara){
-        List<SelectItem> statusFlagListTemp=new ArrayList<>();
+        List<SelectItem> flowStatusListTemp=new ArrayList<>();
         if(strFlowStatusPara.equals("Qry")){
-            statusFlagListTemp.addAll(statusFlagFromDBList);
-            statusFlagListTemp.add(0,siAllForSelect);
+            flowStatusListTemp.addAll(flowStatusFromDBList);
+            flowStatusListTemp.add(0,siAllForSelect);
         }else if(strFlowStatusPara.equals("Mng")){
-            for(SelectItem itemUnit:statusFlagFromDBList) {
+            for(SelectItem itemUnit:flowStatusFromDBList) {
                 if(itemUnit.getLabel().contains("≥ı º")){
-                    statusFlagListTemp.add(itemUnit);
-                    statusFlagListTemp.add(0,siNullForSelect);
+                    flowStatusListTemp.add(itemUnit);
+                    flowStatusListTemp.add(0,siNullForSelect);
                 }
             }
         }else if(strFlowStatusPara.equals("Check")){
-            for(SelectItem itemUnit:statusFlagFromDBList) {
+            for(SelectItem itemUnit:flowStatusFromDBList) {
                 if(itemUnit.getLabel().equals("≥ı º")){
-                    statusFlagListTemp.add(itemUnit);
+                    flowStatusListTemp.add(itemUnit);
                 }
             }
         }else if(strFlowStatusPara.equals("DoubleCheck")){
-            for(SelectItem itemUnit:statusFlagFromDBList) {
+            for(SelectItem itemUnit:flowStatusFromDBList) {
                 if(itemUnit.getLabel().equals("≥ı º")||
                         itemUnit.getLabel().equals("…Û∫À")){
-                    statusFlagListTemp.add(itemUnit);
+                    flowStatusListTemp.add(itemUnit);
                 }
             }
         }else if(strFlowStatusPara.equals("Approve")){
-            for(SelectItem itemUnit:statusFlagFromDBList) {
+            for(SelectItem itemUnit:flowStatusFromDBList) {
                 if(itemUnit.getLabel().equals("≥ı º")||
                         itemUnit.getLabel().equals("…Û∫À")||
                         itemUnit.getLabel().equals("∏¥∫À")){
-                    statusFlagListTemp.add(itemUnit);
+                    flowStatusListTemp.add(itemUnit);
                 }
             }
         }
-        return statusFlagListTemp;
+        return flowStatusListTemp;
     }
 
     /*÷«ƒ‹◊÷∂Œ Start*/
@@ -145,36 +137,20 @@ public class EsFlowControl implements Serializable {
         this.signPartService = signPartService;
     }
 
-    public List<SelectItem> getDeleteFlagList() {
-        return deleteFlagList;
+    public List<SelectItem> getAchivedFlagList() {
+        return achivedFlagList;
     }
 
-    public void setDeleteFlagList(List<SelectItem> deleteFlagList) {
-        this.deleteFlagList = deleteFlagList;
-    }
-
-    public List<SelectItem> getEndFlagList() {
-        return endFlagList;
-    }
-
-    public void setEndFlagList(List<SelectItem> endFlagList) {
-        this.endFlagList = endFlagList;
+    public void setAchivedFlagList(List<SelectItem> achivedFlagList) {
+        this.achivedFlagList = achivedFlagList;
     }
 
     public List<SelectItem> getPreStatusFlagList() {
-        return preStatusFlagList;
+        return flowStatusReasonList;
     }
 
-    public void setPreStatusFlagList(List<SelectItem> preStatusFlagList) {
-        this.preStatusFlagList = preStatusFlagList;
-    }
-
-    public EsFlowService getEsFlowService() {
-        return esFlowService;
-    }
-
-    public void setEsFlowService(EsFlowService esFlowService) {
-        this.esFlowService = esFlowService;
+    public void setPreStatusFlagList(List<SelectItem> flowStatusReasonList) {
+        this.flowStatusReasonList = flowStatusReasonList;
     }
 
     public CttInfoService getCttInfoService() {

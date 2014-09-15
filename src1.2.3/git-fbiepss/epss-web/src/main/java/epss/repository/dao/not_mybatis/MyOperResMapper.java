@@ -26,7 +26,7 @@ public interface MyOperResMapper {
             " from " +
             "   OPER_RES opr" +
             " left join" +
-            "   ES_CTT_INFO eci" +
+            "   CTT_INFO eci" +
             " on" +
             "   opr.INFO_PKID=eci.PKID" +
             " where " +
@@ -41,7 +41,7 @@ public interface MyOperResMapper {
             " from " +
             "   OPER_RES opr" +
             " inner join" +
-            "   ES_CTT_INFO eci" +
+            "   CTT_INFO eci" +
             " on" +
             "   opr.INFO_PKID=eci.PKID" +
             " where " +
@@ -61,12 +61,11 @@ public interface MyOperResMapper {
             "    t.id as id," +
             "    t.name as name," +
             "    t.note as note," +
-            "    t.end_flag as endFlag," +
             "    t.created_by as createdBy," +
             "    (select name from oper where id=t.created_by) as createdByName," +
             "    t.created_date as createdDate " +
             " from" +
-            "    ES_CTT_INFO t" +
+            "    CTT_INFO t" +
             " where" +
             "    t.parent_pkid=#{parentPkid}" +
             " order by" +

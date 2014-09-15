@@ -1,11 +1,11 @@
 package epss.service;
 
-import epss.repository.model.model_show.ProgEstItemShow;
-import epss.repository.model.model_show.ProgInfoShow;
+import epss.repository.dao.ProgStlItemTkEstMapper;
+import epss.repository.model.ProgStlItemTkEstExample;
+import epss.repository.model.model_show.ProgStlItemTkEstShow;
+import epss.repository.model.model_show.ProgStlInfoShow;
 import skyline.util.ToolUtil;
-import epss.repository.dao.EsItemStlTkcttEngStaMapper;
-import epss.repository.model.EsItemStlTkcttEngSta;
-import epss.repository.model.EsItemStlTkcttEngStaExample;
+import epss.repository.model.ProgStlItemTkEst;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
@@ -20,100 +20,100 @@ import java.util.List;
 @Service
 public class ProgEstItemService {
     @Resource
-    private EsItemStlTkcttEngStaMapper esItemStlTkcttEngStaMapper;
+    private ProgStlItemTkEstMapper progStlItemTkEstMapper;
     @Resource
-    private EsFlowService esFlowService;
+    private ProgStlInfoService progStlInfoService;
 
-    public List<EsItemStlTkcttEngSta> selectRecordsByExample(EsItemStlTkcttEngSta EsItemStlTkcttEngStaPara){
-        EsItemStlTkcttEngStaExample example = new EsItemStlTkcttEngStaExample();
+    public List<ProgStlItemTkEst> selectRecordsByExample(ProgStlItemTkEst progStlItemTkEstPara){
+        ProgStlItemTkEstExample example = new ProgStlItemTkEstExample();
         example.createCriteria()
-                .andTkcttPkidEqualTo(EsItemStlTkcttEngStaPara.getTkcttPkid())
-                .andTkcttItemPkidEqualTo(EsItemStlTkcttEngStaPara.getTkcttItemPkid())
-                .andPeriodNoEqualTo(EsItemStlTkcttEngStaPara.getPeriodNo());
-        return esItemStlTkcttEngStaMapper.selectByExample(example);
+                .andTkcttPkidEqualTo(progStlItemTkEstPara.getTkcttPkid())
+                .andTkcttItemPkidEqualTo(progStlItemTkEstPara.getTkcttItemPkid())
+                .andPeriodNoEqualTo(progStlItemTkEstPara.getPeriodNo());
+        return progStlItemTkEstMapper.selectByExample(example);
     }
 
     /**
      * 判断记录是否已存在
      *
-     * @param progEstItemShowPara
+     * @param progStlItemTkEstShowPara
      * @return
      */
-    public List<EsItemStlTkcttEngSta> isExistInDb(ProgEstItemShow progEstItemShowPara) {
-        EsItemStlTkcttEngStaExample example = new EsItemStlTkcttEngStaExample();
+    public List<ProgStlItemTkEst> isExistInDb(ProgStlItemTkEstShow progStlItemTkEstShowPara) {
+        ProgStlItemTkEstExample example = new ProgStlItemTkEstExample();
         example.createCriteria()
-                .andTkcttPkidEqualTo(progEstItemShowPara.getTkctt_BelongToPkid())
-                .andTkcttItemPkidEqualTo(progEstItemShowPara.getTkctt_Pkid())
-                .andPeriodNoEqualTo(progEstItemShowPara.getEng_PeriodNo());
-        return esItemStlTkcttEngStaMapper.selectByExample(example);
+                .andTkcttPkidEqualTo(progStlItemTkEstShowPara.getTkctt_BelongToPkid())
+                .andTkcttItemPkidEqualTo(progStlItemTkEstShowPara.getTkctt_Pkid())
+                .andPeriodNoEqualTo(progStlItemTkEstShowPara.getEng_PeriodNo());
+        return progStlItemTkEstMapper.selectByExample(example);
     }
 
     public int deleteRecord(String strPkId){
-        return esItemStlTkcttEngStaMapper.deleteByPrimaryKey(strPkId);
+        return progStlItemTkEstMapper.deleteByPrimaryKey(strPkId);
     }
 
-    public void updateRecord(ProgEstItemShow progEstItemShowPara){
-        EsItemStlTkcttEngSta esItemStlTkcttEngStaTemp=fromModelShowToModel(progEstItemShowPara);
-        esItemStlTkcttEngStaTemp.setModificationNum(
-                ToolUtil.getIntIgnoreNull(progEstItemShowPara.getEng_ModificationNum())+1);
-        esItemStlTkcttEngStaTemp.setDeleteFlag("0");
-        esItemStlTkcttEngStaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esItemStlTkcttEngStaTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
-        esItemStlTkcttEngStaMapper.updateByPrimaryKey(esItemStlTkcttEngStaTemp) ;
+    public void updateRecord(ProgStlItemTkEstShow progStlItemTkEstShowPara){
+        ProgStlItemTkEst progStlItemTkEstTemp =fromModelShowToModel(progStlItemTkEstShowPara);
+        progStlItemTkEstTemp.setModificationNum(
+                ToolUtil.getIntIgnoreNull(progStlItemTkEstShowPara.getEng_ModificationNum())+1);
+        progStlItemTkEstTemp.setArchivedFlag("0");
+        progStlItemTkEstTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemTkEstTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemTkEstMapper.updateByPrimaryKey(progStlItemTkEstTemp) ;
     }
 
-    public void insertRecord(ProgEstItemShow progEstItemShowPara){
-        EsItemStlTkcttEngSta esItemStlTkcttEngStaTemp=fromModelShowToModel(progEstItemShowPara);
-        esItemStlTkcttEngStaTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        esItemStlTkcttEngStaTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
-        esItemStlTkcttEngStaTemp.setDeleteFlag("0");
-        esItemStlTkcttEngStaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esItemStlTkcttEngStaTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
-        esItemStlTkcttEngStaMapper.insert(esItemStlTkcttEngStaTemp);
+    public void insertRecord(ProgStlItemTkEstShow progStlItemTkEstShowPara){
+        ProgStlItemTkEst progStlItemTkEstTemp =fromModelShowToModel(progStlItemTkEstShowPara);
+        progStlItemTkEstTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemTkEstTemp.setCreatedDate(ToolUtil.getStrLastUpdDate());
+        progStlItemTkEstTemp.setArchivedFlag("0");
+        progStlItemTkEstTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemTkEstTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        progStlItemTkEstMapper.insert(progStlItemTkEstTemp);
     }
 
-    public void setFromLastStageApproveDataToThisStageBeginData(ProgInfoShow progInfoShowPara){
+    public void setFromLastStageApproveDataToThisStageBeginData(ProgStlInfoShow progStlInfoShowPara){
         // 插入新数据之后,就得把上期批准了的数据作为今期数据的起始数据
         String strLatestApprovedPeriodNo= ToolUtil.getStrIgnoreNull(
-                esFlowService.getLatestApprovedPeriodNo(progInfoShowPara.getStlType(), progInfoShowPara.getStlPkid()));
+                progStlInfoService.getLatestApprovedPeriodNo(progStlInfoShowPara.getStlType(), progStlInfoShowPara.getStlPkid()));
         if(strLatestApprovedPeriodNo!=null){
-            EsItemStlTkcttEngStaExample example = new EsItemStlTkcttEngStaExample();
+            ProgStlItemTkEstExample example = new ProgStlItemTkEstExample();
             example.createCriteria()
-                    .andTkcttPkidEqualTo(progInfoShowPara.getStlPkid())
+                    .andTkcttPkidEqualTo(progStlInfoShowPara.getStlPkid())
                     .andPeriodNoEqualTo(strLatestApprovedPeriodNo);
-            List<EsItemStlTkcttEngSta> esItemStlTkcttEngStaList =
-                    esItemStlTkcttEngStaMapper.selectByExample(example);
-            for(EsItemStlTkcttEngSta itemUnit:esItemStlTkcttEngStaList){
+            List<ProgStlItemTkEst> progStlItemTkEstList =
+                    progStlItemTkEstMapper.selectByExample(example);
+            for(ProgStlItemTkEst itemUnit: progStlItemTkEstList){
                 itemUnit.setCurrentPeriodQty(null);
-                itemUnit.setPeriodNo(progInfoShowPara.getPeriodNo());
-                esItemStlTkcttEngStaMapper.insert(itemUnit);
+                itemUnit.setPeriodNo(progStlInfoShowPara.getPeriodNo());
+                progStlItemTkEstMapper.insert(itemUnit);
             }
         }
     }
 
-    private EsItemStlTkcttEngSta fromModelShowToModel
-            (ProgEstItemShow progEstItemShowPara){
-        EsItemStlTkcttEngSta esItemStlTkcttEngStaTemp=new EsItemStlTkcttEngSta();
-        esItemStlTkcttEngStaTemp.setPkid(progEstItemShowPara.getEng_Pkid());
-        esItemStlTkcttEngStaTemp.setPeriodNo(progEstItemShowPara.getEng_PeriodNo());
-        esItemStlTkcttEngStaTemp.setTkcttPkid(progEstItemShowPara.getEng_TkcttPkid());
-        esItemStlTkcttEngStaTemp.setTkcttItemPkid(progEstItemShowPara.getEng_TkcttItemPkid());
-        esItemStlTkcttEngStaTemp.setBeginToCurrentPeriodQty(progEstItemShowPara.getEng_BeginToCurrentPeriodEQty());
-        esItemStlTkcttEngStaTemp.setCurrentPeriodQty(progEstItemShowPara.getEng_CurrentPeriodEQty());
-        esItemStlTkcttEngStaTemp.setDeleteFlag(progEstItemShowPara.getEng_DeletedFlag());
-        esItemStlTkcttEngStaTemp.setCreatedBy(progEstItemShowPara.getEng_CreatedBy());
-        esItemStlTkcttEngStaTemp.setCreatedDate(progEstItemShowPara.getEng_CreatedDate());
-        esItemStlTkcttEngStaTemp.setLastUpdBy(progEstItemShowPara.getEng_LastUpdBy());
-        esItemStlTkcttEngStaTemp.setLastUpdDate(progEstItemShowPara.getEng_LastUpdDate());
-        esItemStlTkcttEngStaTemp.setModificationNum(progEstItemShowPara.getEng_ModificationNum());
-        return esItemStlTkcttEngStaTemp;
+    private ProgStlItemTkEst fromModelShowToModel
+            (ProgStlItemTkEstShow progStlItemTkEstShowPara){
+        ProgStlItemTkEst progStlItemTkEstTemp =new ProgStlItemTkEst();
+        progStlItemTkEstTemp.setPkid(progStlItemTkEstShowPara.getEng_Pkid());
+        progStlItemTkEstTemp.setPeriodNo(progStlItemTkEstShowPara.getEng_PeriodNo());
+        progStlItemTkEstTemp.setTkcttPkid(progStlItemTkEstShowPara.getEng_TkcttPkid());
+        progStlItemTkEstTemp.setTkcttItemPkid(progStlItemTkEstShowPara.getEng_TkcttItemPkid());
+        progStlItemTkEstTemp.setBeginToCurrentPeriodQty(progStlItemTkEstShowPara.getEng_BeginToCurrentPeriodEQty());
+        progStlItemTkEstTemp.setCurrentPeriodQty(progStlItemTkEstShowPara.getEng_CurrentPeriodEQty());
+        progStlItemTkEstTemp.setArchivedFlag(progStlItemTkEstShowPara.getEng_DeletedFlag());
+        progStlItemTkEstTemp.setCreatedBy(progStlItemTkEstShowPara.getEng_CreatedBy());
+        progStlItemTkEstTemp.setCreatedDate(progStlItemTkEstShowPara.getEng_CreatedDate());
+        progStlItemTkEstTemp.setLastUpdBy(progStlItemTkEstShowPara.getEng_LastUpdBy());
+        progStlItemTkEstTemp.setLastUpdDate(progStlItemTkEstShowPara.getEng_LastUpdDate());
+        progStlItemTkEstTemp.setModificationNum(progStlItemTkEstShowPara.getEng_ModificationNum());
+        return progStlItemTkEstTemp;
     }
 
     public int deleteItemsByInitStlTkcttEng(String strTkcttPkid,String strPeriodNo){
-        EsItemStlTkcttEngStaExample example = new EsItemStlTkcttEngStaExample();
+        ProgStlItemTkEstExample example = new ProgStlItemTkEstExample();
         example.createCriteria().
                 andTkcttPkidEqualTo(strTkcttPkid).
                 andPeriodNoEqualTo(strPeriodNo);
-        return esItemStlTkcttEngStaMapper.deleteByExample(example);
+        return progStlItemTkEstMapper.deleteByExample(example);
     }
 }

@@ -1,7 +1,7 @@
 package epss.view.his;
 
-import epss.common.enums.ESEnum;
-import epss.repository.model.EsCttInfo;
+import epss.common.enums.EnumResType;
+import epss.repository.model.CttInfo;
 import epss.repository.model.FlowCtrlHis;
 import epss.service.CttInfoService;
 import epss.service.FlowCtrlHisService;
@@ -80,21 +80,21 @@ public class FlowCtrlHisAction {
             esInitCtt2List=new ArrayList<SelectItem>();
             return;
         }
-        if(strCttType.equals(ESEnum.ITEMTYPE0.getCode())
-        ||strCttType.equals(ESEnum.ITEMTYPE6.getCode())
-        ||strCttType.equals(ESEnum.ITEMTYPE7.getCode())){
+        if(strCttType.equals(EnumResType.RES_TYPE0.getCode())
+        ||strCttType.equals(EnumResType.RES_TYPE6.getCode())
+        ||strCttType.equals(EnumResType.RES_TYPE7.getCode())){
             strLabel1="";
-            strLabel2=ESEnum.ITEMTYPE0.getTitle();
+            strLabel2= EnumResType.RES_TYPE0.getTitle();
             strRendered1="false";
             strRendered2="true";
-            List<EsCttInfo> esCttInfoListTemp =new ArrayList<EsCttInfo>();
-            esCttInfoListTemp = cttInfoService.getEsInitCttListByCttType(ESEnum.ITEMTYPE0.getCode());
+            List<CttInfo> cttInfoListTemp =new ArrayList<CttInfo>();
+            cttInfoListTemp = cttInfoService.getEsInitCttListByCttType(EnumResType.RES_TYPE0.getCode());
             esInitCtt1List=new ArrayList<SelectItem>();
             esInitCtt2List=new ArrayList<SelectItem>();
             SelectItem selectItem=new SelectItem("","全部");
             esInitCtt2List.add(selectItem);
-            if(esCttInfoListTemp.size()>0){
-                for(EsCttInfo itemUnit: esCttInfoListTemp){
+            if(cttInfoListTemp.size()>0){
+                for(CttInfo itemUnit: cttInfoListTemp){
                     selectItem=new SelectItem();
                     selectItem.setValue(itemUnit.getPkid());
                     selectItem.setLabel(itemUnit.getName());
@@ -102,19 +102,19 @@ public class FlowCtrlHisAction {
                 }
             }
         }
-        else if(strCttType.equals(ESEnum.ITEMTYPE1.getCode())){
-            strLabel1=ESEnum.ITEMTYPE0.getTitle();
-            strLabel2=ESEnum.ITEMTYPE1.getTitle();
+        else if(strCttType.equals(EnumResType.RES_TYPE1.getCode())){
+            strLabel1= EnumResType.RES_TYPE0.getTitle();
+            strLabel2= EnumResType.RES_TYPE1.getTitle();
             strRendered1="true";
             strRendered2="true";
-            List<EsCttInfo> esCttInfoListTemp =new ArrayList<EsCttInfo>();
-            esCttInfoListTemp = cttInfoService.getEsInitCttListByCttType(ESEnum.ITEMTYPE0.getCode());
+            List<CttInfo> cttInfoListTemp =new ArrayList<CttInfo>();
+            cttInfoListTemp = cttInfoService.getEsInitCttListByCttType(EnumResType.RES_TYPE0.getCode());
             esInitCtt1List=new ArrayList<SelectItem>();
             esInitCtt2List=new ArrayList<SelectItem>();
             SelectItem selectItem=new SelectItem("","全部");
             esInitCtt1List.add(selectItem);
-            if(esCttInfoListTemp.size()>0){
-                for(EsCttInfo itemUnit: esCttInfoListTemp){
+            if(cttInfoListTemp.size()>0){
+                for(CttInfo itemUnit: cttInfoListTemp){
                     selectItem=new SelectItem();
                     selectItem.setValue(itemUnit.getPkid());
                     selectItem.setLabel(itemUnit.getName());
@@ -122,18 +122,18 @@ public class FlowCtrlHisAction {
                 }
             }
         }else{
-            strLabel1=ESEnum.ITEMTYPE1.getTitle();
-            strLabel2=ESEnum.getValueByKey(strCttType).getTitle();
+            strLabel1= EnumResType.RES_TYPE1.getTitle();
+            strLabel2= EnumResType.getValueByKey(strCttType).getTitle();
             strRendered1="true";
             strRendered2="true";
-            List<EsCttInfo> esCttInfoListTemp =new ArrayList<EsCttInfo>();
-            esCttInfoListTemp = cttInfoService.getEsInitCttListByCttType(ESEnum.ITEMTYPE1.getCode());
+            List<CttInfo> cttInfoListTemp =new ArrayList<CttInfo>();
+            cttInfoListTemp = cttInfoService.getEsInitCttListByCttType(EnumResType.RES_TYPE1.getCode());
             esInitCtt1List=new ArrayList<SelectItem>();
             esInitCtt2List=new ArrayList<SelectItem>();
             SelectItem selectItem=new SelectItem("","全部");
             esInitCtt1List.add(selectItem);
-            if(esCttInfoListTemp.size()>0){
-                for(EsCttInfo itemUnit: esCttInfoListTemp){
+            if(cttInfoListTemp.size()>0){
+                for(CttInfo itemUnit: cttInfoListTemp){
                     selectItem=new SelectItem();
                     selectItem.setValue(itemUnit.getPkid());
                     selectItem.setLabel(itemUnit.getName());
@@ -144,20 +144,20 @@ public class FlowCtrlHisAction {
     }
 
     public void setFromTkAndCttToSStlAction(){
-        List<EsCttInfo> esCttInfoListTemp =new ArrayList<EsCttInfo>();
+        List<CttInfo> cttInfoListTemp =new ArrayList<CttInfo>();
         String strCttType= flowCtrlHis.getInfoType();
-        if(strCttType.equals(ESEnum.ITEMTYPE1.getCode())){
-            esCttInfoListTemp = cttInfoService.getEsInitCttByCttTypeAndBelongToPkId(
-                    ESEnum.ITEMTYPE1.getCode(),strTkcttCstplSelected);
+        if(strCttType.equals(EnumResType.RES_TYPE1.getCode())){
+            cttInfoListTemp = cttInfoService.getEsInitCttByCttTypeAndBelongToPkId(
+                    EnumResType.RES_TYPE1.getCode(),strTkcttCstplSelected);
         }else{
-            esCttInfoListTemp = cttInfoService.getEsInitCttByCttTypeAndBelongToPkId(
-                ESEnum.ITEMTYPE2.getCode(),strTkcttCstplSelected);
+            cttInfoListTemp = cttInfoService.getEsInitCttByCttTypeAndBelongToPkId(
+                EnumResType.RES_TYPE2.getCode(),strTkcttCstplSelected);
         }
         esInitCtt2List=new ArrayList<SelectItem>();
         SelectItem selectItem=new SelectItem("","全部");
         esInitCtt2List.add(selectItem);
-        if(esCttInfoListTemp.size()>0){
-            for(EsCttInfo itemUnit: esCttInfoListTemp){
+        if(cttInfoListTemp.size()>0){
+            for(CttInfo itemUnit: cttInfoListTemp){
                 selectItem=new SelectItem();
                 selectItem.setValue(itemUnit.getPkid());
                 selectItem.setLabel(itemUnit.getName());

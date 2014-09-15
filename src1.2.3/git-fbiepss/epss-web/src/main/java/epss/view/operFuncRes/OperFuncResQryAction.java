@@ -1,7 +1,7 @@
 package epss.view.operFuncRes;
 
-import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.EnumResType;
+import epss.common.enums.EnumFlowStatus;
 import epss.repository.model.model_show.OperResShow;
 import epss.service.OperResService;
 import org.apache.commons.beanutils.BeanUtils;
@@ -45,17 +45,17 @@ public class OperFuncResQryAction implements Serializable{
         taskFunctionList = new ArrayList<>();
         taskFunctionList.add(new SelectItem("","È«²¿"));
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS0.getCode(), EnumFlowStatus.FLOW_STATUS0.getTitle()));
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG1.getCode(),ESEnumStatusFlag.STATUS_FLAG1.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS1.getCode(), EnumFlowStatus.FLOW_STATUS1.getTitle()));
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG2.getCode(),ESEnumStatusFlag.STATUS_FLAG2.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS2.getCode(), EnumFlowStatus.FLOW_STATUS2.getTitle()));
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG3.getCode(),ESEnumStatusFlag.STATUS_FLAG3.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS3.getCode(), EnumFlowStatus.FLOW_STATUS3.getTitle()));
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG4.getCode(),ESEnumStatusFlag.STATUS_FLAG4.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS4.getCode(), EnumFlowStatus.FLOW_STATUS4.getTitle()));
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG5.getCode(),ESEnumStatusFlag.STATUS_FLAG5.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS5.getCode(), EnumFlowStatus.FLOW_STATUS5.getTitle()));
     }
 
     public void selectRecordAction(OperResShow operResShowPara) {
@@ -79,12 +79,12 @@ public class OperFuncResQryAction implements Serializable{
                 for (int i = 0; i < operResShowQryTempList.size(); i++) {
                     if(ToolUtil.getStrIgnoreNull(operResShowQryTempList.get(i).getFlowStatus()).length()>0) {
                         operResShowQryTempList.get(i).setFlowStatusName(
-                                ESEnumStatusFlag.getValueByKey(operResShowQryTempList.get(i).getFlowStatus()).getTitle()
+                                EnumFlowStatus.getValueByKey(operResShowQryTempList.get(i).getFlowStatus()).getTitle()
                         );
                     }
                     if(ToolUtil.getStrIgnoreNull(operResShowQryTempList.get(i).getInfoType()).length()>0) {
                         operResShowQryTempList.get(i).setInfoPkidName(
-                                "(" + ESEnum.getValueByKey(operResShowQryTempList.get(i).getInfoType()).getTitle() + ")-"
+                                "(" + EnumResType.getValueByKey(operResShowQryTempList.get(i).getInfoType()).getTitle() + ")-"
                                         + operResShowQryTempList.get(i).getInfoPkidName()
                         );
                     }

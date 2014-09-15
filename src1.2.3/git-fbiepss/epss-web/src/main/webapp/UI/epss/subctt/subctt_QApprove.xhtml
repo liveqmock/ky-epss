@@ -36,20 +36,20 @@
                     <h:panelGrid id="pdQry" columns="2" style="width: 100%">
                         <h:panelGrid columns="6">
                             <p:outputLabel value="结算编号：" for="id" />
-                            <p:inputText id="id" value="#{progWorkqtyInfoAction.progInfoShowQry.id}"/>
+                            <p:inputText id="id" value="#{progStlInfoSubQAction.progStlInfoShowQry.id}"/>
                             <p:outputLabel value="分包合同：" for="stlPkid" />
                             <p:selectOneMenu id="stlPkid"
-                                             value="#{progWorkqtyInfoAction.progInfoShowQry.stlPkid}">
-                                <f:selectItems value="#{progWorkqtyInfoAction.subcttList}"/>
+                                             value="#{progStlInfoSubQAction.progStlInfoShowQry.stlPkid}">
+                                <f:selectItems value="#{progStlInfoSubQAction.subcttList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="期数编码：" for="periodNo"/>
                             <p:inputText id="periodNo"
-                                        value="#{progWorkqtyInfoAction.progInfoShowQry.periodNo}"
+                                        value="#{progStlInfoSubQAction.progStlInfoShowQry.periodNo}"
                                         onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         </h:panelGrid>
                         <h:panelGrid columns="3">
                             <p:commandButton id="qryBtn" value="查询"
-                                             action="#{progWorkqtyInfoAction.onQueryAction('Approve','true')}"
+                                             action="#{progStlInfoSubQAction.onQueryAction('Approve','true')}"
                                              update="pdt,msgs">
                             </p:commandButton>
                             <p:commandButton id="resetBtn" value="重置"
@@ -68,7 +68,7 @@
                     </h:panelGrid>
                 </p:panel>
                 <p:dataTable id="pdt" style="width:100%;"
-                             value="#{progWorkqtyInfoAction.progInfoShowList}"
+                             value="#{progStlInfoSubQAction.progStlInfoShowList}"
                              var="record"
                              rowKey="#{record.pkid}"
                              selectionMode="single"
@@ -86,7 +86,7 @@
                     <p:column headerText="操作" style="width:61px">
                         <p:commandButton  icon="ui-icon-search"
                                           style="height:18px;width:18px"
-                                          actionListener="#{progWorkqtyInfoAction.selectRecordAction('Qry','',record)}"
+                                          actionListener="#{progStlInfoSubQAction.selectRecordAction('Sel',record)}"
                                           update="pdt,:form:msgs,:form:pgView"
                                           onclick="PF('wVDlgView').show()">
                         </p:commandButton>
@@ -124,49 +124,49 @@
                         <h:panelGrid columns="2">
                             <p:outputLabel value="结算编号：" for="idForDlg"/>
                             <p:inputText id="idForDlg"
-                                         value="#{progWorkqtyInfoAction.progInfoShowSel.id}"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.id}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:outputLabel value="分包合同：" for="cttNameForDlg"/>
                             <p:inputText id="cttNameForDlg"
-                                         value="#{progWorkqtyInfoAction.progInfoShowSel.signPartBName}"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.signPartBName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:328px;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="协作单位：" for="noteForDlg"/>
                             <p:inputText id="noteForDlg"
-                                         value="#{progWorkqtyInfoAction.progInfoShowSel.note}"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.note}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="期数编码：" for="signDateForDlg"/>
                             <p:inputText id="signDateForDlg"
-                                         value="#{progWorkqtyInfoAction.progInfoShowSel.periodNo}"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.periodNo}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel for="createdByNameSel" value="创建人：" />
                             <h:inputText id="createdByNameSel"
-                                         value="#{progWorkqtyInfoAction.progInfoShowSel.createdByName}"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.createdByName}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="createdDateSel" value="创建时间：" />
                             <h:inputText id="createdDateSel"
-                                         value="#{progWorkqtyInfoAction.progInfoShowSel.createdDate}"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.createdDate}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="lastUpdByNameSel" value="修改人：" />
                             <h:inputText id="lastUpdByNameSel"
-                                         value="#{progWorkqtyInfoAction.progInfoShowSel.lastUpdByName}"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.lastUpdByName}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="lastUpdDateSel" value="修改时间：" />
                             <h:inputText id="lastUpdDateSel"
-                                         value="#{progWorkqtyInfoAction.progInfoShowSel.lastUpdDate}"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.lastUpdDate}"
                                          style="background-color:gainsboro" readonly="true"/>
                             <p:outputLabel for="modificationNumSel" value="修改次数：" />
                             <h:inputText id="modificationNumSel"
-                                         value="#{progWorkqtyInfoAction.progInfoShowSel.modificationNum}"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.modificationNum}"
                                          style="background-color:gainsboro;text-align:right;" readonly="true">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>

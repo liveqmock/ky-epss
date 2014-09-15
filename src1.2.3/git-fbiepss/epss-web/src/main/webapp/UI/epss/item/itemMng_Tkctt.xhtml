@@ -320,7 +320,7 @@
                                                  value="提交（更新）"
                                      action="#{tkcttItemAction.submitThisRecordAction()}"
                                      update="pgViewForUpd,pdt,msgs"
-                                     oncomplete="if('#{tkcttItemAction.checkForUpd}')wVDlgViewForUpd.hide()">
+                                     oncomplete="wVDlgViewForUpd.hide()">
                                 </p:commandButton>
                                 <p:commandButton id="resetBtnForUpd" value="重置"
                                                  type="reset"

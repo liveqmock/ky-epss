@@ -1,10 +1,10 @@
 package epss.service;
 
+import epss.repository.model.CttItem;
+import epss.repository.model.CttItemExample;
 import skyline.util.ToolUtil;
-import epss.repository.dao.EsCttItemMapper;
+import epss.repository.dao.CttItemMapper;
 import epss.repository.dao.not_mybatis.MyCttItemMapper;
-import epss.repository.model.EsCttItem;
-import epss.repository.model.EsCttItemExample;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ import java.util.List;
 @Service
 public class CttItemService {
     @Resource
-    private EsCttItemMapper esCttItemMapper;
+    private CttItemMapper cttItemMapper;
     @Resource
     private MyCttItemMapper myCttItemMapper;
 
@@ -29,27 +29,27 @@ public class CttItemService {
                                                  String strBelongToPkid,
                                                  String strParentPkid,
                                                  Integer intGrade){
-        EsCttItemExample example = new EsCttItemExample();
+        CttItemExample example = new CttItemExample();
         example.createCriteria()
                 .andBelongToTypeEqualTo(strBelongToType)
                 .andBelongToPkidEqualTo(strBelongToPkid)
                 .andParentPkidEqualTo(strParentPkid)
                 .andGradeEqualTo(intGrade);
         example .setOrderByClause("ORDERID DESC") ;
-        List<EsCttItem> esCttItemList = esCttItemMapper.selectByExample(example);
-        if(esCttItemList.size() ==0){
+        List<CttItem> cttItemList = cttItemMapper.selectByExample(example);
+        if(cttItemList.size() ==0){
             return 0;
         }
         else{
-            return  esCttItemList.get(0).getOrderid();
+            return  cttItemList.get(0).getOrderid();
         }
     }
-    public List<EsCttItem> getEsItemList(String strBelongToType,String strItemBelongToPkid){
-        EsCttItemExample example = new EsCttItemExample();
+    public List<CttItem> getEsItemList(String strBelongToType,String strItemBelongToPkid){
+        CttItemExample example = new CttItemExample();
         example.createCriteria().andBelongToTypeEqualTo(strBelongToType)
                 .andBelongToPkidEqualTo(strItemBelongToPkid);
         example .setOrderByClause("GRADE ASC,ORDERID ASC") ;
-        return esCttItemMapper.selectByExample(example);
+        return cttItemMapper.selectByExample(example);
         /*return commonMapper.selEsItemHieRelapListByTypeAndId(strBelongToType,strItemBelongToId);*/
     }
 
@@ -59,141 +59,141 @@ public class CttItemService {
      * @param   strPkId
      * @return
      */
-    public EsCttItem getEsCttItemByPkId(String strPkId){
-        return esCttItemMapper.selectByPrimaryKey(strPkId) ;
+    public CttItem getEsCttItemByPkId(String strPkId){
+        return cttItemMapper.selectByPrimaryKey(strPkId) ;
     }
-    public boolean isExistSameNameNodeInDb(EsCttItem esCttItem) {
-        EsCttItemExample example = new EsCttItemExample();
-        EsCttItemExample.Criteria criteria = example.createCriteria();
+    public boolean isExistSameNameNodeInDb(CttItem cttItem) {
+        CttItemExample example = new CttItemExample();
+        CttItemExample.Criteria criteria = example.createCriteria();
         criteria
-                .andBelongToTypeEqualTo(esCttItem.getBelongToType())
-                .andBelongToPkidEqualTo(esCttItem.getBelongToPkid())
-                .andParentPkidEqualTo(esCttItem.getParentPkid())
-                .andGradeEqualTo(esCttItem.getGrade());
-        if(esCttItem.getName()==null){
+                .andBelongToTypeEqualTo(cttItem.getBelongToType())
+                .andBelongToPkidEqualTo(cttItem.getBelongToPkid())
+                .andParentPkidEqualTo(cttItem.getParentPkid())
+                .andGradeEqualTo(cttItem.getGrade());
+        if(cttItem.getName()==null){
             criteria.andNameIsNull();
         }
         else{
-            criteria.andNameEqualTo(esCttItem.getName());
+            criteria.andNameEqualTo(cttItem.getName());
         }
-        if(esCttItem.getSpareField()==null){
+        if(cttItem.getSpareField()==null){
             criteria.andSpareFieldIsNull();
         }
         else{
-            criteria.andSpareFieldEqualTo(esCttItem.getSpareField());
+            criteria.andSpareFieldEqualTo(cttItem.getSpareField());
         }
-        return esCttItemMapper.countByExample(example) >= 1;
+        return cttItemMapper.countByExample(example) >= 1;
     }
-    public boolean isExistSameRecordInDb(EsCttItem esCttItem) {
-        EsCttItemExample example = new EsCttItemExample();
-        EsCttItemExample.Criteria criteria = example.createCriteria();
+    public boolean isExistSameRecordInDb(CttItem cttItem) {
+        CttItemExample example = new CttItemExample();
+        CttItemExample.Criteria criteria = example.createCriteria();
         criteria
-                .andBelongToTypeEqualTo(esCttItem.getBelongToType())
-                .andBelongToPkidEqualTo(esCttItem.getBelongToPkid())
-                .andParentPkidEqualTo(esCttItem.getParentPkid())
-                .andGradeEqualTo(esCttItem.getGrade())
-                .andOrderidEqualTo(esCttItem.getOrderid());
+                .andBelongToTypeEqualTo(cttItem.getBelongToType())
+                .andBelongToPkidEqualTo(cttItem.getBelongToPkid())
+                .andParentPkidEqualTo(cttItem.getParentPkid())
+                .andGradeEqualTo(cttItem.getGrade())
+                .andOrderidEqualTo(cttItem.getOrderid());
 
-        if(esCttItem.getName()==null){
+        if(cttItem.getName()==null){
             criteria.andNameIsNull();
         }
         else{
-            criteria.andNameEqualTo(esCttItem.getName());
+            criteria.andNameEqualTo(cttItem.getName());
         }
-        if(esCttItem.getSpareField()==null){
+        if(cttItem.getSpareField()==null){
             criteria.andSpareFieldIsNull();
         }
         else{
-            criteria.andSpareFieldEqualTo(esCttItem.getSpareField());
+            criteria.andSpareFieldEqualTo(cttItem.getSpareField());
         }
-        return esCttItemMapper.countByExample(example) >= 1;
+        return cttItemMapper.countByExample(example) >= 1;
     }
 
     public void insertRecord(CttItemShow cttItemShowPara) {
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
-        EsCttItem esCttItemTemp=fromModelShowToModel(cttItemShowPara);
-        esCttItemTemp.setDeletedFlag("0");
-        esCttItemTemp.setOriginFlag("0");
-        esCttItemTemp.setCreatedBy(strOperatorIdTemp);
-        esCttItemTemp.setCreatedDate(strLastUpdTimeTemp);
-        esCttItemTemp.setLastUpdBy(strOperatorIdTemp);
-        esCttItemTemp.setLastUpdDate(strLastUpdTimeTemp);
-        esCttItemMapper.insertSelective(esCttItemTemp);
+        CttItem cttItemTemp =fromModelShowToModel(cttItemShowPara);
+        cttItemTemp.setArchivedFlag("0");
+        cttItemTemp.setOriginFlag("0");
+        cttItemTemp.setCreatedBy(strOperatorIdTemp);
+        cttItemTemp.setCreatedDate(strLastUpdTimeTemp);
+        cttItemTemp.setLastUpdBy(strOperatorIdTemp);
+        cttItemTemp.setLastUpdDate(strLastUpdTimeTemp);
+        cttItemMapper.insertSelective(cttItemTemp);
     }
-    public void insertRecord(EsCttItem esCttItemPara){
+    public void insertRecord(CttItem cttItemPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
-        esCttItemPara.setDeletedFlag("0");
-        esCttItemPara.setOriginFlag("0");
-        esCttItemPara.setCreatedBy(strOperatorIdTemp);
-        esCttItemPara.setCreatedDate(strLastUpdTimeTemp);
-        esCttItemPara.setLastUpdBy(strOperatorIdTemp);
-        esCttItemPara.setLastUpdDate(strLastUpdTimeTemp);
-        esCttItemMapper.insert(esCttItemPara);
+        cttItemPara.setArchivedFlag("0");
+        cttItemPara.setOriginFlag("0");
+        cttItemPara.setCreatedBy(strOperatorIdTemp);
+        cttItemPara.setCreatedDate(strLastUpdTimeTemp);
+        cttItemPara.setLastUpdBy(strOperatorIdTemp);
+        cttItemPara.setLastUpdDate(strLastUpdTimeTemp);
+        cttItemMapper.insert(cttItemPara);
     }
 
     /*总包合同到层级关系*/
-    public EsCttItem fromModelShowToModel(CttItemShow cttItemShowPara){
-        EsCttItem esCttItemTemp =new EsCttItem() ;
-        esCttItemTemp.setUnit(cttItemShowPara.getUnit());
-        esCttItemTemp.setPkid(cttItemShowPara.getPkid()) ;
-        esCttItemTemp.setBelongToType(cttItemShowPara.getBelongToType()) ;
-        esCttItemTemp.setBelongToPkid(cttItemShowPara.getBelongToPkid()) ;
-        esCttItemTemp.setParentPkid(cttItemShowPara.getParentPkid()) ;
-        esCttItemTemp.setGrade(cttItemShowPara.getGrade()) ;
-        esCttItemTemp.setOrderid(cttItemShowPara.getOrderid()) ;
-        esCttItemTemp.setName(cttItemShowPara.getName()) ;
-        esCttItemTemp.setContractUnitPrice(cttItemShowPara.getContractUnitPrice());
-        esCttItemTemp.setContractQuantity(cttItemShowPara.getContractQuantity());
-        esCttItemTemp.setSignPartAPrice(cttItemShowPara.getSignPartAPrice());
-        esCttItemTemp.setContractAmount(cttItemShowPara.getContractAmount());
-        esCttItemTemp.setDeletedFlag(cttItemShowPara.getDeletedFlag());
-        esCttItemTemp.setOriginFlag(cttItemShowPara.getOriginFlag());
-        esCttItemTemp.setCreatedDate(cttItemShowPara.getCreatedDate());
-        esCttItemTemp.setCreatedBy(cttItemShowPara.getCreatedBy());
-        esCttItemTemp.setLastUpdDate(cttItemShowPara.getLastUpdDate());
-        esCttItemTemp.setLastUpdBy(cttItemShowPara.getLastUpdBy());
-        esCttItemTemp.setNote(cttItemShowPara.getNote()) ;
-        esCttItemTemp.setCorrespondingPkid(cttItemShowPara.getCorrespondingPkid());
-        esCttItemTemp.setModificationNum(cttItemShowPara.getModificationNum());
-        return esCttItemTemp;
+    public CttItem fromModelShowToModel(CttItemShow cttItemShowPara){
+        CttItem cttItemTemp =new CttItem() ;
+        cttItemTemp.setUnit(cttItemShowPara.getUnit());
+        cttItemTemp.setPkid(cttItemShowPara.getPkid()) ;
+        cttItemTemp.setBelongToType(cttItemShowPara.getBelongToType()) ;
+        cttItemTemp.setBelongToPkid(cttItemShowPara.getBelongToPkid()) ;
+        cttItemTemp.setParentPkid(cttItemShowPara.getParentPkid()) ;
+        cttItemTemp.setGrade(cttItemShowPara.getGrade()) ;
+        cttItemTemp.setOrderid(cttItemShowPara.getOrderid()) ;
+        cttItemTemp.setName(cttItemShowPara.getName()) ;
+        cttItemTemp.setContractUnitPrice(cttItemShowPara.getContractUnitPrice());
+        cttItemTemp.setContractQuantity(cttItemShowPara.getContractQuantity());
+        cttItemTemp.setSignPartAPrice(cttItemShowPara.getSignPartAPrice());
+        cttItemTemp.setContractAmount(cttItemShowPara.getContractAmount());
+        cttItemTemp.setArchivedFlag(cttItemShowPara.getDeletedFlag());
+        cttItemTemp.setOriginFlag(cttItemShowPara.getOriginFlag());
+        cttItemTemp.setCreatedDate(cttItemShowPara.getCreatedDate());
+        cttItemTemp.setCreatedBy(cttItemShowPara.getCreatedBy());
+        cttItemTemp.setLastUpdDate(cttItemShowPara.getLastUpdDate());
+        cttItemTemp.setLastUpdBy(cttItemShowPara.getLastUpdBy());
+        cttItemTemp.setNote(cttItemShowPara.getNote()) ;
+        cttItemTemp.setCorrespondingPkid(cttItemShowPara.getCorrespondingPkid());
+        cttItemTemp.setModificationNum(cttItemShowPara.getModificationNum());
+        return cttItemTemp;
     }
     /*层级关系到总包合同*/
-    private CttItemShow fromModelToModelShow(EsCttItem esCttItemPara){
+    private CttItemShow fromModelToModelShow(CttItem cttItemPara){
         CttItemShow cttItemShowTemp =new CttItemShow() ;
-        cttItemShowTemp.setPkid(esCttItemPara.getPkid()) ;
-        cttItemShowTemp.setBelongToType(esCttItemPara.getBelongToType()) ;
-        cttItemShowTemp.setBelongToPkid(esCttItemPara.getBelongToPkid()) ;
-        cttItemShowTemp.setParentPkid(esCttItemPara.getParentPkid()) ;
-        cttItemShowTemp.setGrade(esCttItemPara.getGrade()) ;
-        cttItemShowTemp.setOrderid(esCttItemPara.getOrderid()) ;
-        cttItemShowTemp.setName(esCttItemPara.getName()) ;
-        cttItemShowTemp.setNote(esCttItemPara.getNote()) ;
-        cttItemShowTemp.setCorrespondingPkid(esCttItemPara.getCorrespondingPkid());
+        cttItemShowTemp.setPkid(cttItemPara.getPkid()) ;
+        cttItemShowTemp.setBelongToType(cttItemPara.getBelongToType()) ;
+        cttItemShowTemp.setBelongToPkid(cttItemPara.getBelongToPkid()) ;
+        cttItemShowTemp.setParentPkid(cttItemPara.getParentPkid()) ;
+        cttItemShowTemp.setGrade(cttItemPara.getGrade()) ;
+        cttItemShowTemp.setOrderid(cttItemPara.getOrderid()) ;
+        cttItemShowTemp.setName(cttItemPara.getName()) ;
+        cttItemShowTemp.setNote(cttItemPara.getNote()) ;
+        cttItemShowTemp.setCorrespondingPkid(cttItemPara.getCorrespondingPkid());
         return cttItemShowTemp;
     }
 
     public void updateRecord(CttItemShow cttItemShowPara) {
-        EsCttItem esCttItemTemp=fromModelShowToModel(cttItemShowPara);
-        esCttItemTemp.setModificationNum(
-                ToolUtil.getIntIgnoreNull(esCttItemTemp.getModificationNum())+1);
-        esCttItemTemp.setDeletedFlag("0");
-        esCttItemTemp.setOriginFlag("0");
-        esCttItemTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esCttItemTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
-        esCttItemMapper.updateByPrimaryKey(esCttItemTemp) ;
+        CttItem cttItemTemp =fromModelShowToModel(cttItemShowPara);
+        cttItemTemp.setModificationNum(
+                ToolUtil.getIntIgnoreNull(cttItemTemp.getModificationNum())+1);
+        cttItemTemp.setArchivedFlag("0");
+        cttItemTemp.setOriginFlag("0");
+        cttItemTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttItemTemp.setLastUpdDate(ToolUtil.getStrLastUpdDate());
+        cttItemMapper.updateByPrimaryKey(cttItemTemp) ;
     }
 
     public int deleteRecord(String strPkId){
-        return esCttItemMapper.deleteByPrimaryKey(strPkId);
+        return cttItemMapper.deleteByPrimaryKey(strPkId);
     }
     public int deleteRecord(CttInfoShow cttInfoShowPara){
-        EsCttItemExample example = new EsCttItemExample();
+        CttItemExample example = new CttItemExample();
         example.createCriteria()
                 .andBelongToTypeEqualTo(cttInfoShowPara.getCttType())
                 .andBelongToPkidEqualTo(cttInfoShowPara.getPkid());
-        return esCttItemMapper.deleteByExample(example);
+        return cttItemMapper.deleteByExample(example);
     }
 
     public void setAfterThisOrderidPlusOneByNode(String strBelongToType,

@@ -1,10 +1,10 @@
 package epss.view.operFuncRes;
 
-import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumDeletedFlag;
-import epss.common.enums.ESEnumStatusFlag;
-import epss.common.enums.ESEnumTaskDoneFlag;
-import epss.repository.model.EsCttInfo;
+import epss.common.enums.EnumResType;
+import epss.common.enums.EnumArchivedFlag;
+import epss.common.enums.EnumFlowStatus;
+import epss.common.enums.EnumTaskDoneFlag;
+import epss.repository.model.CttInfo;
 import org.primefaces.event.NodeCollapseEvent;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
@@ -77,17 +77,17 @@ public class OperFuncBusiResMngAction implements Serializable{
         deptOperShowSeledList = new ArrayList<>();
         operFuncResShowFowExcelList= new ArrayList<>();
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG0.getCode(),ESEnumStatusFlag.STATUS_FLAG0.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS0.getCode(), EnumFlowStatus.FLOW_STATUS0.getTitle()));
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG1.getCode(),ESEnumStatusFlag.STATUS_FLAG1.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS1.getCode(), EnumFlowStatus.FLOW_STATUS1.getTitle()));
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG2.getCode(),ESEnumStatusFlag.STATUS_FLAG2.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS2.getCode(), EnumFlowStatus.FLOW_STATUS2.getTitle()));
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG3.getCode(),ESEnumStatusFlag.STATUS_FLAG3.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS3.getCode(), EnumFlowStatus.FLOW_STATUS3.getTitle()));
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG4.getCode(),ESEnumStatusFlag.STATUS_FLAG4.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS4.getCode(), EnumFlowStatus.FLOW_STATUS4.getTitle()));
         taskFunctionList.add(
-                new SelectItem(ESEnumStatusFlag.STATUS_FLAG5.getCode(),ESEnumStatusFlag.STATUS_FLAG5.getTitle()));
+                new SelectItem(EnumFlowStatus.FLOW_STATUS5.getCode(), EnumFlowStatus.FLOW_STATUS5.getTitle()));
 
         // 资源-用户-功能
         initRes();
@@ -191,10 +191,10 @@ public class OperFuncBusiResMngAction implements Serializable{
             ToolUtil.padLeftSpace_DoLevel(Integer.parseInt(operFuncResShowForExcelTemp.getResType()),operFuncResShowForExcelTemp.getResName()));
             operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
             // 结算信息
-            if(cttInfoShowTemp.getCttType().equals(ESEnum.ITEMTYPE0.getCode())) {
+            if(cttInfoShowTemp.getCttType().equals(EnumResType.RES_TYPE0.getCode())) {
                 // 统计
                 operResShowTemp = new OperResShow();
-                operResShowTemp.setInfoType(ESEnum.ITEMTYPE6.getCode());
+                operResShowTemp.setInfoType(EnumResType.RES_TYPE6.getCode());
                 operResShowTemp.setInfoPkid(cttInfoShowTemp.getPkid());
                 List<OperResShow> operResShowForStlListTemp =
                         operResService.selectOperaResRecordsByModelShow(operResShowTemp);
@@ -246,7 +246,8 @@ public class OperFuncBusiResMngAction implements Serializable{
                 OperFuncResShow operFuncResShowForStlTemp = new OperFuncResShow();
                 operFuncResShowForStlTemp.setResType(operResShowTemp.getInfoType());
                 operFuncResShowForStlTemp.setResPkid(operResShowTemp.getInfoPkid());
-                operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__统计");
+                /*operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__统计");*/
+                operFuncResShowForStlTemp.setResName("统计");
                 operFuncResShowForStlTemp.setInputOperName(strInputOperName);
                 operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
                 operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
@@ -259,7 +260,7 @@ public class OperFuncBusiResMngAction implements Serializable{
 
                 // 计量
                 operResShowTemp = new OperResShow();
-                operResShowTemp.setInfoType(ESEnum.ITEMTYPE7.getCode());
+                operResShowTemp.setInfoType(EnumResType.RES_TYPE7.getCode());
                 operResShowTemp.setInfoPkid(cttInfoShowTemp.getPkid());
                 operResShowForStlListTemp =
                         operResService.selectOperaResRecordsByModelShow(operResShowTemp);
@@ -311,7 +312,8 @@ public class OperFuncBusiResMngAction implements Serializable{
                 operFuncResShowForStlTemp = new OperFuncResShow();
                 operFuncResShowForStlTemp.setResType(operResShowTemp.getInfoType());
                 operFuncResShowForStlTemp.setResPkid(operResShowTemp.getInfoPkid());
-                operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__计量");
+                /*operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__计量");*/
+                operFuncResShowForStlTemp.setResName("计量");
                 operFuncResShowForStlTemp.setInputOperName(strInputOperName);
                 operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
                 operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
@@ -321,10 +323,10 @@ public class OperFuncBusiResMngAction implements Serializable{
                 new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
                 operFuncResShowForExcelTemp = (OperFuncResShow) BeanUtils.cloneBean(operFuncResShowForStlTemp);
                 operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
-            }else if(cttInfoShowTemp.getCttType().equals(ESEnum.ITEMTYPE2.getCode())) {
+            }else if(cttInfoShowTemp.getCttType().equals(EnumResType.RES_TYPE2.getCode())) {
                 // 数量结算
                 operResShowTemp = new OperResShow();
-                operResShowTemp.setInfoType(ESEnum.ITEMTYPE3.getCode());
+                operResShowTemp.setInfoType(EnumResType.RES_TYPE3.getCode());
                 operResShowTemp.setInfoPkid(cttInfoShowTemp.getPkid());
                 List<OperResShow> operResShowForStlListTemp =
                         operResService.selectOperaResRecordsByModelShow(operResShowTemp);
@@ -376,7 +378,8 @@ public class OperFuncBusiResMngAction implements Serializable{
                 OperFuncResShow operFuncResShowForStlTemp = new OperFuncResShow();
                 operFuncResShowForStlTemp.setResType(operResShowTemp.getInfoType());
                 operFuncResShowForStlTemp.setResPkid(operResShowTemp.getInfoPkid());
-                operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__数量结算");
+                /*operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__数量结算");*/
+                operFuncResShowForStlTemp.setResName("数量结算");
                 operFuncResShowForStlTemp.setInputOperName(strInputOperName);
                 operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
                 operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
@@ -392,7 +395,7 @@ public class OperFuncBusiResMngAction implements Serializable{
 
                 // 材料结算
                 operResShowTemp = new OperResShow();
-                operResShowTemp.setInfoType(ESEnum.ITEMTYPE4.getCode());
+                operResShowTemp.setInfoType(EnumResType.RES_TYPE4.getCode());
                 operResShowTemp.setInfoPkid(cttInfoShowTemp.getPkid());
                 operResShowForStlListTemp =
                         operResService.selectOperaResRecordsByModelShow(operResShowTemp);
@@ -444,7 +447,8 @@ public class OperFuncBusiResMngAction implements Serializable{
                 operFuncResShowForStlTemp = new OperFuncResShow();
                 operFuncResShowForStlTemp.setResType(operResShowTemp.getInfoType());
                 operFuncResShowForStlTemp.setResPkid(operResShowTemp.getInfoPkid());
-                operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__材料结算");
+                /*operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__材料结算");*/
+                operFuncResShowForStlTemp.setResName("材料结算");
                 operFuncResShowForStlTemp.setInputOperName(strInputOperName);
                 operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
                 operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
@@ -459,7 +463,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                 operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
                 // 结算单
                 operResShowTemp = new OperResShow();
-                operResShowTemp.setInfoType(ESEnum.ITEMTYPE5.getCode());
+                operResShowTemp.setInfoType(EnumResType.RES_TYPE5.getCode());
                 operResShowTemp.setInfoPkid(cttInfoShowTemp.getPkid());
                 operResShowForStlListTemp =
                         operResService.selectOperaResRecordsByModelShow(operResShowTemp);
@@ -511,7 +515,8 @@ public class OperFuncBusiResMngAction implements Serializable{
                 operFuncResShowForStlTemp = new OperFuncResShow();
                 operFuncResShowForStlTemp.setResType(operResShowTemp.getInfoType());
                 operFuncResShowForStlTemp.setResPkid(operResShowTemp.getInfoPkid());
-                operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__结算单");
+                /*operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__结算单");*/
+                operFuncResShowForStlTemp.setResName("结算单");
                 operFuncResShowForStlTemp.setInputOperName(strInputOperName);
                 operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
                 operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
@@ -580,13 +585,13 @@ public class OperFuncBusiResMngAction implements Serializable{
             if (strSubmitTypePara.equals("Add")) {
                 cttInfoShowAdd = new CttInfoShow();
                 if(operFuncResShowPara.getResPkid().equals("ROOT")) {
-                    cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE0.getCode());
+                    cttInfoShowAdd.setCttType(EnumResType.RES_TYPE0.getCode());
                     cttInfoShowAdd.setParentPkid("ROOT");
-                }else if(operFuncResShowPara.getResType().equals(ESEnum.ITEMTYPE0.getCode())) {
-                    cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE1.getCode());
+                }else if(operFuncResShowPara.getResType().equals(EnumResType.RES_TYPE0.getCode())) {
+                    cttInfoShowAdd.setCttType(EnumResType.RES_TYPE1.getCode());
                     cttInfoShowAdd.setParentPkid(operFuncResShowPara.getResPkid());
-                }else if(operFuncResShowPara.getResType().equals(ESEnum.ITEMTYPE1.getCode())) {
-                    cttInfoShowAdd.setCttType(ESEnum.ITEMTYPE2.getCode());
+                }else if(operFuncResShowPara.getResType().equals(EnumResType.RES_TYPE1.getCode())) {
+                    cttInfoShowAdd.setCttType(EnumResType.RES_TYPE2.getCode());
                     cttInfoShowAdd.setParentPkid(operFuncResShowPara.getResPkid());
                 }
                 cttInfoShowAdd.setId(cttInfoService.getStrMaxCttId(cttInfoShowAdd.getCttType()));
@@ -627,12 +632,12 @@ public class OperFuncBusiResMngAction implements Serializable{
                     return;
                 } else {
                     cttInfoService.insertRecord(cttInfoShowAdd);
-                    List<EsCttInfo> esCttInfoList=cttInfoService.selectListByModel(cttInfoShowAdd);
+                    List<CttInfo> cttInfoList =cttInfoService.selectListByModel(cttInfoShowAdd);
                     try {
-                        progStlInfoService.insertRecordForOperRes(esCttInfoList.get(0));
+                        progStlInfoService.insertRecordForOperRes(cttInfoList.get(0));
                     }catch (Exception e){
                         logger.error("插入数据失败", e);
-                        cttInfoService.deleteRecord(esCttInfoList.get(0).getPkid());
+                        cttInfoService.deleteRecord(cttInfoList.get(0).getPkid());
                         MessageUtil.addError(e.getMessage());
                         return;
                     }
@@ -668,9 +673,9 @@ public class OperFuncBusiResMngAction implements Serializable{
                     operResTemp.setFlowStatus(taskFunctionSeled);
                     operResTemp.setInfoType(cttInfoShowSel.getCttType());
                     operResTemp.setInfoPkid(cttInfoShowSel.getPkid());
-                    operResTemp.setArchivedFlag(ESEnumDeletedFlag.DELETED_FLAG0.getCode());
+                    operResTemp.setArchivedFlag(EnumArchivedFlag.ARCHIVED_FLAG0.getCode());
                     operResTemp.setType("business");
-                    operResTemp.setTaskdoneFlag(ESEnumTaskDoneFlag.TASK_DONE_FLAG0.getCode());
+                    operResTemp.setTaskdoneFlag(EnumTaskDoneFlag.TASK_DONE_FLAG0.getCode());
                     operResService.insertRecord(operResTemp);
                 }
                 MessageUtil.addInfo("权限添加成功!");

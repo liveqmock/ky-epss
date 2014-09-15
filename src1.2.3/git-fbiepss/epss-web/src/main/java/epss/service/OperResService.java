@@ -1,15 +1,12 @@
 package epss.service;
 
-import epss.common.enums.ESEnum;
-import epss.repository.dao.EsCttItemMapper;
+import epss.common.enums.EnumResType;
 import epss.repository.model.*;
 import org.springframework.transaction.annotation.Transactional;
-import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.repository.dao.OperResMapper;
 import epss.repository.dao.not_mybatis.MyOperResMapper;
 import epss.repository.model.model_show.CttInfoShow;
-import epss.repository.model.model_show.DeptOperShow;
 import epss.repository.model.model_show.OperResShow;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
@@ -87,35 +84,35 @@ public class OperResService {
         criteria.andInfoPkidEqualTo(operResPara.getInfoPkid());
         operResMapper.deleteByExample(example);
     }
-    public EsInitStl initStlData(String strStlTypePara,CttInfoShow cttInfoShowPara){
-        EsInitStl esInitStl=new EsInitStl();
-        esInitStl.setStlType(strStlTypePara);
-        esInitStl.setStlPkid(cttInfoShowPara.getPkid());
-        esInitStl.setPeriodNo("NULL");
-        return esInitStl;
+    public ProgStlInfo initStlData(String strStlTypePara,CttInfoShow cttInfoShowPara){
+        ProgStlInfo progStlInfo =new ProgStlInfo();
+        progStlInfo.setStlType(strStlTypePara);
+        progStlInfo.setStlPkid(cttInfoShowPara.getPkid());
+        progStlInfo.setPeriodNo("NULL");
+        return progStlInfo;
     }
     @Transactional
     public String deleteResRecord(CttInfoShow cttInfoShowPara){
-        if (ESEnum.ITEMTYPE0.getCode().equals(cttInfoShowPara.getCttType())
-                ||ESEnum.ITEMTYPE1.getCode().equals(cttInfoShowPara.getCttType())
-                ||ESEnum.ITEMTYPE2.getCode().equals(cttInfoShowPara.getCttType())){
+        if (EnumResType.RES_TYPE0.getCode().equals(cttInfoShowPara.getCttType())
+                || EnumResType.RES_TYPE1.getCode().equals(cttInfoShowPara.getCttType())
+                || EnumResType.RES_TYPE2.getCode().equals(cttInfoShowPara.getCttType())){
             if (cttItemService.getEsItemList(cttInfoShowPara.getCttType(),cttInfoShowPara.getPkid()).size()>0
                     ||cttInfoService.getCttInfoByPkId(cttInfoShowPara.getPkid()).getFlowStatus()!=null) {
                 return "数据已被引用，不可删除！";
             }else {
                 int deleteRecordNumOfCtt = cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
-                if (ESEnum.ITEMTYPE0.getCode().equals(cttInfoShowPara.getCttType())){
-                    progStlInfoService.deleteRecord(initStlData(ESEnum.ITEMTYPE6.getCode(),cttInfoShowPara));
-                    progStlInfoService.deleteRecord(initStlData(ESEnum.ITEMTYPE6.getCode(),cttInfoShowPara));
-                    progStlInfoService.deleteRecord(initStlData(ESEnum.ITEMTYPE7.getCode(),cttInfoShowPara));
-                }else if (ESEnum.ITEMTYPE2.getCode().equals(cttInfoShowPara.getCttType())){
-                    progStlInfoService.deleteRecord(initStlData(ESEnum.ITEMTYPE3.getCode(),cttInfoShowPara));
-                    progStlInfoService.deleteRecord(initStlData(ESEnum.ITEMTYPE4.getCode(),cttInfoShowPara));
-                    progStlInfoService.deleteRecord(initStlData(ESEnum.ITEMTYPE5.getCode(),cttInfoShowPara));
+                if (EnumResType.RES_TYPE0.getCode().equals(cttInfoShowPara.getCttType())){
+                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE6.getCode(),cttInfoShowPara));
+                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE6.getCode(),cttInfoShowPara));
+                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE7.getCode(),cttInfoShowPara));
+                }else if (EnumResType.RES_TYPE2.getCode().equals(cttInfoShowPara.getCttType())){
+                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE3.getCode(),cttInfoShowPara));
+                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE4.getCode(),cttInfoShowPara));
+                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE5.getCode(),cttInfoShowPara));
                 }
             }
         }else {
-            if (progStlInfoService.getInitStlListByModelShow(
+            if (progStlInfoService.getInitStlListByModel(
                     initStlData(cttInfoShowPara.getCttType(), cttInfoShowPara))==null){
                 return "数据已被引用，不可删除！";
             }else {

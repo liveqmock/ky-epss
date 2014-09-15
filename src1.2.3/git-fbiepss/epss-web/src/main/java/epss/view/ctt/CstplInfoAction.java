@@ -1,8 +1,8 @@
 package epss.view.ctt;
 
-import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumStatusFlag;
-import epss.repository.model.EsCttInfo;
+import epss.common.enums.EnumResType;
+import epss.common.enums.EnumFlowStatus;
+import epss.repository.model.CttInfo;
 import epss.repository.model.model_show.CttInfoShow;
 import skyline.util.StyleModel;
 import skyline.util.ToolUtil;
@@ -38,8 +38,6 @@ public class CstplInfoAction {
     private CttInfoService cttInfoService;
     @ManagedProperty(value = "#{cttItemService}")
     private CttItemService cttItemService;
-    @ManagedProperty(value = "#{esFlowService}")
-    private EsFlowService esFlowService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
     @ManagedProperty(value = "#{esFlowControl}")
@@ -49,7 +47,9 @@ public class CstplInfoAction {
     private String strNotPassToStatus;
     private CttInfoShow cttInfoShowSelected;
     private CttInfoShow cttInfoShowSel;
+    private CttInfoShow cttInfoShowAdd;
     private CttInfoShow cttInfoShowUpd;
+    private CttInfoShow cttInfoShowDel;
     private List<CttInfoShow> cttInfoShowList;
     private String strSubmitType;
     private String rowSelectedFlag;
@@ -71,24 +71,30 @@ public class CstplInfoAction {
     public void initData() {
         this.cttInfoShowList = new ArrayList<CttInfoShow>();
         cttInfoShowQry = new CttInfoShow();
-        cttInfoShowQry.setCttType(ESEnum.ITEMTYPE1.getCode());
+        cttInfoShowQry.setCttType(EnumResType.RES_TYPE1.getCode());
         cttInfoShowQry.setParentPkid(strBelongToPkid);
         cttInfoShowSel = new CttInfoShow();
-        cttInfoShowSel.setCttType(ESEnum.ITEMTYPE1.getCode());
+        cttInfoShowSel.setCttType(EnumResType.RES_TYPE1.getCode());
         cttInfoShowSel.setParentPkid(strBelongToPkid);
+        cttInfoShowAdd = new CttInfoShow();
+        cttInfoShowAdd.setCttType(EnumResType.RES_TYPE1.getCode());
+        cttInfoShowAdd.setParentPkid(strBelongToPkid);
         cttInfoShowUpd = new CttInfoShow();
-        cttInfoShowUpd.setCttType(ESEnum.ITEMTYPE1.getCode());
+        cttInfoShowUpd.setCttType(EnumResType.RES_TYPE1.getCode());
         cttInfoShowUpd.setParentPkid(strBelongToPkid);
+        cttInfoShowDel = new CttInfoShow();
+        cttInfoShowDel.setCttType(EnumResType.RES_TYPE1.getCode());
+        cttInfoShowDel.setParentPkid(strBelongToPkid);
         styleModel = new StyleModel();
         styleModel.setDisabled_Flag("false");
-        strSubmitType = "";
+        strSubmitType = "Add";
         rowSelectedFlag = "false";
     }
 
     public void setMaxNoPlusOne() {
         try {
             Integer intTemp;
-            String strMaxId = cttInfoService.getStrMaxCttId(ESEnum.ITEMTYPE1.getCode());
+            String strMaxId = cttInfoService.getStrMaxCttId(EnumResType.RES_TYPE1.getCode());
             if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
                 strMaxId = "CSTPL" + ToolUtil.getStrToday() + "001";
             } else {
@@ -103,6 +109,7 @@ public class CstplInfoAction {
                     }
                 }
             }
+            cttInfoShowAdd.setId(strMaxId);
             cttInfoShowUpd.setId(strMaxId);
         } catch (Exception e) {
             logger.error("信息查询失败", e);
@@ -116,27 +123,27 @@ public class CstplInfoAction {
 
             } else if (strQryFlag.contains("Mng")) {
                 cttInfoShowQry.setStrStatusFlagBegin(null);
-                cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG0.getCode());
+                cttInfoShowQry.setStrStatusFlagEnd(EnumFlowStatus.FLOW_STATUS0.getCode());
             } else if (strQryFlag.contains("Check")) {
                 if (strQryFlag.contains("DoubleCheck")) {
-                    cttInfoShowQry.setStrStatusFlagBegin(ESEnumStatusFlag.STATUS_FLAG1.getCode());
-                    cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG2.getCode());
+                    cttInfoShowQry.setStrStatusFlagBegin(EnumFlowStatus.FLOW_STATUS1.getCode());
+                    cttInfoShowQry.setStrStatusFlagEnd(EnumFlowStatus.FLOW_STATUS2.getCode());
                 }else{
-                    cttInfoShowQry.setStrStatusFlagBegin(ESEnumStatusFlag.STATUS_FLAG0.getCode());
-                    cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG1.getCode());
+                    cttInfoShowQry.setStrStatusFlagBegin(EnumFlowStatus.FLOW_STATUS0.getCode());
+                    cttInfoShowQry.setStrStatusFlagEnd(EnumFlowStatus.FLOW_STATUS1.getCode());
                 }
             }  else if (strQryFlag.contains("Approve")) {
                 if (strQryFlag.equals("ApprovedQry")) {
-                    cttInfoShowQry.setStrStatusFlagBegin(ESEnumStatusFlag.STATUS_FLAG3.getCode());
-                    cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                    cttInfoShowQry.setStrStatusFlagBegin(EnumFlowStatus.FLOW_STATUS3.getCode());
+                    cttInfoShowQry.setStrStatusFlagEnd(EnumFlowStatus.FLOW_STATUS3.getCode());
                 }else{
-                    cttInfoShowQry.setStrStatusFlagBegin(ESEnumStatusFlag.STATUS_FLAG2.getCode());
-                    cttInfoShowQry.setStrStatusFlagEnd(ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                    cttInfoShowQry.setStrStatusFlagBegin(EnumFlowStatus.FLOW_STATUS2.getCode());
+                    cttInfoShowQry.setStrStatusFlagEnd(EnumFlowStatus.FLOW_STATUS3.getCode());
                 }
             }
             this.cttInfoShowList.clear();
             cttInfoShowQry.setParentPkid(strBelongToPkid);
-            cttInfoShowList = esFlowService.selectCttByStatusFlagBegin_End(cttInfoShowQry);
+            cttInfoShowList = cttInfoService.selectCttByStatusFlagBegin_End(cttInfoShowQry);
             if(strQryMsgOutPara.equals("true")){
                 if (cttInfoShowList.isEmpty()) {
                     MessageUtil.addWarn("没有查询到数据。");
@@ -150,8 +157,16 @@ public class CstplInfoAction {
         return null;
     }
 
-    public EsCttInfo getCttInfoByPkId(String strPkid) {
+    public CttInfo getCttInfoByPkId(String strPkid) {
         return cttInfoService.getCttInfoByPkId(strPkid);
+    }
+
+    public void resetActionForAdd(){
+        strSubmitType="Add";
+        cttInfoShowAdd = new CttInfoShow();
+        cttInfoShowAdd.setCttType(EnumResType.RES_TYPE1.getCode());
+        cttInfoShowAdd.setParentPkid(strBelongToPkid);
+        rowSelectedFlag = "false";
     }
 
     public void selectRecordAction(String strPowerTypePara,
@@ -169,9 +184,18 @@ public class CstplInfoAction {
                 if (strSubmitTypePara.equals("Sel")) {
                     cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                     rowSelectedFlag = "true";
-                }else if (strSubmitTypePara.equals("Upd")) {
+                } else if (strSubmitTypePara.equals("Add")) {
+                    cttInfoShowAdd = new CttInfoShow();
+                    cttInfoShowAdd.setParentPkid(strBelongToPkid);
+                    rowSelectedFlag = "false";
+                } else {
+                    if (strSubmitTypePara.equals("Upd")) {
                         cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                         rowSelectedFlag = "false";
+                    } else if (strSubmitTypePara.equals("Del")) {
+                        cttInfoShowDel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
+                        rowSelectedFlag = "false";
+                    }
                 }
             } else {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
@@ -205,12 +229,38 @@ public class CstplInfoAction {
      * @param
      */
     public void onClickForMngAction() {
-            if (!submitPreCheck(cttInfoShowUpd)) {
+        if (strSubmitType.equals("Add")) {
+            cttInfoShowAdd.setCttType(EnumResType.RES_TYPE1.getCode());
+            if (!submitPreCheck(cttInfoShowAdd)) {
                 return;
             }
-                cttInfoShowUpd.setCttType(ESEnum.ITEMTYPE1.getCode());
-                updRecordAction(cttInfoShowUpd);
-                onQueryAction("Mng","false");
+            if (cttInfoService.isExistInDb(cttInfoShowAdd)) {
+                MessageUtil.addError("该记录已存在，请重新录入！");
+            } else {
+                addRecordAction(cttInfoShowAdd);
+                resetActionForAdd();
+            }
+        } else if (strSubmitType.equals("Upd")) {
+            cttInfoShowUpd.setCttType(EnumResType.RES_TYPE1.getCode());
+            updRecordAction(cttInfoShowUpd);
+        } else if (strSubmitType.equals("Del")) {
+            cttInfoShowDel.setCttType(EnumResType.RES_TYPE1.getCode());
+            deleteRecordAction(cttInfoShowDel);
+        }
+        onQueryAction("Mng","false");
+    }
+
+    private void addRecordAction(CttInfoShow cttInfoShowPara) {
+        try {
+            if (cttInfoShowPara.getCttType().equals(EnumResType.RES_TYPE0.getCode())) {
+                cttInfoShowPara.setParentPkid("ROOT");
+            }
+            cttInfoService.insertRecord(cttInfoShowPara);
+            MessageUtil.addInfo("新增数据完成。");
+        } catch (Exception e) {
+            logger.error("新增数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
     }
     private void updRecordAction(CttInfoShow cttInfoShowPara) {
         try {
@@ -221,6 +271,22 @@ public class CstplInfoAction {
             MessageUtil.addError(e.getMessage());
         }
     }
+    private void deleteRecordAction(CttInfoShow cttInfoShowPara) {
+        try {
+            cttInfoShowPara.setCttType(EnumResType.RES_TYPE1.getCode());
+            int deleteRecordNumOfCttItem= cttItemService.deleteRecord(cttInfoShowPara);
+            int deleteRecordNumOfCtt= cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
+            if (deleteRecordNumOfCtt<=0&&deleteRecordNumOfCttItem<=0){
+                MessageUtil.addInfo("该记录已删除。");
+                return;
+            }
+            MessageUtil.addInfo("删除数据完成。");
+        } catch (Exception e) {
+            logger.error("删除数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+   
 
     /*智能字段 Start*/
     public CttInfoService getCttInfoService() {
@@ -237,14 +303,6 @@ public class CstplInfoAction {
 
     public void setCttItemService(CttItemService cttItemService) {
         this.cttItemService = cttItemService;
-    }
-
-    public EsFlowService getEsFlowService() {
-        return esFlowService;
-    }
-
-    public void setEsFlowService(EsFlowService esFlowService) {
-        this.esFlowService = esFlowService;
     }
 
     public EsCommon getEsCommon() {
@@ -309,6 +367,22 @@ public class CstplInfoAction {
 
     public void setCttInfoShowUpd(CttInfoShow cttInfoShowUpd) {
         this.cttInfoShowUpd = cttInfoShowUpd;
+    }
+
+    public CttInfoShow getCttInfoShowAdd() {
+        return cttInfoShowAdd;
+    }
+
+    public void setCttInfoShowAdd(CttInfoShow cttInfoShowAdd) {
+        this.cttInfoShowAdd = cttInfoShowAdd;
+    }
+
+    public CttInfoShow getCttInfoShowDel() {
+        return cttInfoShowDel;
+    }
+
+    public void setCttInfoShowDel(CttInfoShow cttInfoShowDel) {
+        this.cttInfoShowDel = cttInfoShowDel;
     }
 
     public CttInfoShow getCttInfoShowSel() {

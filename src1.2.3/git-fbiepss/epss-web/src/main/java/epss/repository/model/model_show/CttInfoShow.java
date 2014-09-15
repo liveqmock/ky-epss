@@ -29,7 +29,6 @@ public class CttInfoShow implements Serializable {
     private String strStatusFlagBegin;
     private String strStatusFlagEnd;
     private String flowStatusReason;
-    private String endFlag;
     private String deletedFlag;
     private String createdBy;
     private String createdByName;
@@ -46,7 +45,7 @@ public class CttInfoShow implements Serializable {
     }
 
     public CttInfoShow(String pkid, String id, String cttType, String name, String note,
-                       String flowStatus, String preStatusFlag, String endFlag, String lastUpdBy,
+                       String flowStatus, String flowStatusReason, String lastUpdBy,
                        String lastUpdDate, Integer modificationNum, Boolean isSeled) {
         this.pkid = pkid;
         this.id = id;
@@ -54,8 +53,7 @@ public class CttInfoShow implements Serializable {
         this.name = name;
         this.note = note;
         this.flowStatus = flowStatus;
-        this.flowStatusReason = preStatusFlag;
-        this.endFlag = endFlag;
+        this.flowStatusReason = flowStatusReason;
         this.lastUpdBy=lastUpdBy;
         this.lastUpdDate=lastUpdDate;
         this.modificationNum = modificationNum;
@@ -64,7 +62,7 @@ public class CttInfoShow implements Serializable {
 
     public CttInfoShow(String id, String name, String note, String signPartAName,
                        String signPartBName, String cttStartDate, String cttEndDate,
-                       String flowStatus, String preStatusFlag) {
+                       String flowStatus, String flowStatusReason) {
         this.id = id;
         this.name = name;
         this.note = note;
@@ -73,7 +71,7 @@ public class CttInfoShow implements Serializable {
         this.cttStartDate = cttStartDate;
         this.cttEndDate = cttEndDate;
         this.flowStatus = flowStatus;
-        this.flowStatusReason = preStatusFlag;
+        this.flowStatusReason = flowStatusReason;
     }
 
     public CttInfoShow() {
@@ -209,14 +207,6 @@ public class CttInfoShow implements Serializable {
 
     public void setFlowStatusReason(String flowStatusReason) {
         this.flowStatusReason = flowStatusReason;
-    }
-
-    public String getEndFlag() {
-        return endFlag;
-    }
-
-    public void setEndFlag(String endFlag) {
-        this.endFlag = endFlag == null ? null : endFlag.trim();
     }
 
     public String getDeletedFlag() {

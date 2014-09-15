@@ -1,11 +1,10 @@
 package epss.service;
 
-import epss.common.enums.ESEnumOperType;
-import epss.repository.dao.EsCttInfoMapper;
+import epss.common.enums.EnumOperType;
+import epss.repository.dao.CttInfoMapper;
 import epss.repository.dao.not_mybatis.MyCttInfoMapper;
 import epss.repository.model.*;
 import epss.repository.model.model_show.CttInfoShow;
-import epss.repository.model.model_show.CttItemShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import skyline.util.ToolUtil;
@@ -23,16 +22,16 @@ import java.util.List;
 @Service
 public class CttInfoService {
     @Autowired
-    private EsCttInfoMapper esCttInfoMapper;
+    private CttInfoMapper cttInfoMapper;
     @Autowired
     private MyCttInfoMapper myCttInfoMapper;
     @Resource
     private FlowCtrlHisService flowCtrlHisService;
 
 
-    public List<EsCttInfo> selectListByModel(CttInfoShow cttInfoShowPara) {
-        EsCttInfoExample example= new EsCttInfoExample();
-        EsCttInfoExample.Criteria criteria = example.createCriteria();
+    public List<CttInfo> selectListByModel(CttInfoShow cttInfoShowPara) {
+        CttInfoExample example= new CttInfoExample();
+        CttInfoExample.Criteria criteria = example.createCriteria();
         criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttType()))
                 .andIdLike("%" + ToolUtil.getStrIgnoreNull(cttInfoShowPara.getId()) + "%")
                 .andNameLike("%" + ToolUtil.getStrIgnoreNull(cttInfoShowPara.getName()) + "%");
@@ -56,7 +55,7 @@ public class CttInfoService {
             criteria.andCttEndDateLike(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttEndDate()));
         }
         example.setOrderByClause("ID ASC") ;
-        return esCttInfoMapper.selectByExample(example);
+        return cttInfoMapper.selectByExample(example);
     }
 
     public List<CttInfoShow> getCttInfoListByCttType_Status(String strCttyTypePara,String strStatusPara) {
@@ -73,25 +72,25 @@ public class CttInfoService {
                 strStatusPara);
     }
 
-    public List<EsCttInfo> getEsInitCttByCttTypeAndBelongToPkId(String strCttType,String strBelongToPkid) {
-        EsCttInfoExample example= new EsCttInfoExample();
-        EsCttInfoExample.Criteria criteria = example.createCriteria();
+    public List<CttInfo> getEsInitCttByCttTypeAndBelongToPkId(String strCttType,String strBelongToPkid) {
+        CttInfoExample example= new CttInfoExample();
+        CttInfoExample.Criteria criteria = example.createCriteria();
         criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(strCttType))
                 .andParentPkidEqualTo(ToolUtil.getStrIgnoreNull(strBelongToPkid));
         example.setOrderByClause("ID ASC") ;
-        return esCttInfoMapper.selectByExample(example);
+        return cttInfoMapper.selectByExample(example);
     }
 
-    public List<EsCttInfo> getEsInitCttListByCttType(String strCttType) {
-        EsCttInfoExample example= new EsCttInfoExample();
-        EsCttInfoExample.Criteria criteria = example.createCriteria();
+    public List<CttInfo> getEsInitCttListByCttType(String strCttType) {
+        CttInfoExample example= new CttInfoExample();
+        CttInfoExample.Criteria criteria = example.createCriteria();
         criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(strCttType));
         example.setOrderByClause("ID ASC") ;
-        return esCttInfoMapper.selectByExample(example);
+        return cttInfoMapper.selectByExample(example);
     }
 
-    public EsCttInfo getCttInfoByPkId(String strPkid) {
-        return esCttInfoMapper.selectByPrimaryKey(strPkid);
+    public CttInfo getCttInfoByPkId(String strPkid) {
+        return cttInfoMapper.selectByPrimaryKey(strPkid);
     }
 
     /**
@@ -101,32 +100,32 @@ public class CttInfoService {
      * @return
      */
     public boolean isExistInDb(CttInfoShow cttInfoShowPara) {
-        EsCttInfoExample example = new EsCttInfoExample();
-        EsCttInfoExample.Criteria criteria = example.createCriteria();
+        CttInfoExample example = new CttInfoExample();
+        CttInfoExample.Criteria criteria = example.createCriteria();
         criteria.andCttTypeEqualTo(cttInfoShowPara.getCttType())
                 .andNameEqualTo(cttInfoShowPara.getName());
-        return esCttInfoMapper.countByExample(example) >= 1;
+        return cttInfoMapper.countByExample(example) >= 1;
     }
-    public boolean isExistInDb(EsCttInfo esCttInfoPara) {
-        EsCttInfoExample example = new EsCttInfoExample();
-        EsCttInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andCttTypeEqualTo(esCttInfoPara.getCttType())
-                .andIdEqualTo(esCttInfoPara.getId())
-                .andNameEqualTo(esCttInfoPara.getName());
-        return esCttInfoMapper.countByExample(example) >= 1;
+    public boolean isExistInDb(CttInfo cttInfoPara) {
+        CttInfoExample example = new CttInfoExample();
+        CttInfoExample.Criteria criteria = example.createCriteria();
+        criteria.andCttTypeEqualTo(cttInfoPara.getCttType())
+                .andIdEqualTo(cttInfoPara.getId())
+                .andNameEqualTo(cttInfoPara.getName());
+        return cttInfoMapper.countByExample(example) >= 1;
     }
     //验证合同编号和名称是否已存在
     public boolean IdisExistInDb(CttInfoShow cttInfoShowPara) {
-        EsCttInfoExample example = new EsCttInfoExample();
-        EsCttInfoExample.Criteria criteria = example.createCriteria();
+        CttInfoExample example = new CttInfoExample();
+        CttInfoExample.Criteria criteria = example.createCriteria();
         criteria.andIdEqualTo(cttInfoShowPara.getId());
-        return esCttInfoMapper.countByExample(example) >= 1;
+        return cttInfoMapper.countByExample(example) >= 1;
     }
     public boolean NameisExistInDb(CttInfoShow cttInfoShowPara) {
-        EsCttInfoExample example = new EsCttInfoExample();
-        EsCttInfoExample.Criteria criteria = example.createCriteria();
+        CttInfoExample example = new CttInfoExample();
+        CttInfoExample.Criteria criteria = example.createCriteria();
         criteria.andNameEqualTo(cttInfoShowPara.getName());
-        return esCttInfoMapper.countByExample(example) >= 1;
+        return cttInfoMapper.countByExample(example) >= 1;
     }
 
     public void insertRecord(CttInfoShow cttInfoShowPara) {
@@ -137,42 +136,43 @@ public class CttInfoService {
         cttInfoShowPara.setCreatedDate(strLastUpdTimeTemp);
         cttInfoShowPara.setLastUpdBy(strOperatorIdTemp);
         cttInfoShowPara.setLastUpdDate(strLastUpdTimeTemp);
-        esCttInfoMapper.insertSelective(fromModelShowToModel(cttInfoShowPara));
+        cttInfoMapper.insertSelective(fromModelShowToModel(cttInfoShowPara));
     }
-    public void insertRecord(EsCttInfo esCttInfoPara) {
+    public void insertRecord(CttInfo cttInfoPara) {
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
-        esCttInfoPara.setDeletedFlag("0");
-        esCttInfoPara.setCreatedBy(strOperatorIdTemp);
-        esCttInfoPara.setCreatedDate(strLastUpdTimeTemp);
-        esCttInfoPara.setLastUpdBy(strOperatorIdTemp);
-        esCttInfoPara.setLastUpdDate(strLastUpdTimeTemp);
-        esCttInfoMapper.insertSelective(esCttInfoPara);
+        cttInfoPara.setArchivedFlag("0");
+        cttInfoPara.setCreatedBy(strOperatorIdTemp);
+        cttInfoPara.setCreatedDate(strLastUpdTimeTemp);
+        cttInfoPara.setLastUpdBy(strOperatorIdTemp);
+        cttInfoPara.setLastUpdDate(strLastUpdTimeTemp);
+        cttInfoMapper.insertSelective(cttInfoPara);
     }
 
-    public FlowCtrlHis fromCttInfoToFlowCtrlHis(EsCttInfo esCttInfoPara){
+    public FlowCtrlHis fromCttInfoToFlowCtrlHis(CttInfo cttInfoPara){
         FlowCtrlHis flowCtrlHisTemp =new FlowCtrlHis();
-        flowCtrlHisTemp.setInfoType(esCttInfoPara.getCttType());
-        flowCtrlHisTemp.setInfoPkid(esCttInfoPara.getPkid());
-        flowCtrlHisTemp.setInfoId(esCttInfoPara.getId());
-        flowCtrlHisTemp.setInfoName(esCttInfoPara.getName());
+        flowCtrlHisTemp.setInfoType(cttInfoPara.getCttType());
+        flowCtrlHisTemp.setInfoPkid(cttInfoPara.getPkid());
+        flowCtrlHisTemp.setInfoId(cttInfoPara.getId());
+        flowCtrlHisTemp.setInfoName(cttInfoPara.getName());
         //flowCtrlHisTemp.setPeriodNo();
-        flowCtrlHisTemp.setFlowStatus(esCttInfoPara.getFlowStatus());
-        flowCtrlHisTemp.setFlowStatusReason(esCttInfoPara.getFlowStatusReason());
-        flowCtrlHisTemp.setCreatedBy(esCttInfoPara.getCreatedBy());
-        flowCtrlHisTemp.setCreatedByName(ToolUtil.getUserName(esCttInfoPara.getCreatedBy()));
-        flowCtrlHisTemp.setCreatedTime(esCttInfoPara.getCreatedDate());
-        flowCtrlHisTemp.setRemark(esCttInfoPara.getNote());
+        flowCtrlHisTemp.setFlowStatus(cttInfoPara.getFlowStatus());
+        flowCtrlHisTemp.setFlowStatusReason(cttInfoPara.getFlowStatusReason());
+        flowCtrlHisTemp.setCreatedBy(cttInfoPara.getCreatedBy());
+        flowCtrlHisTemp.setCreatedByName(ToolUtil.getUserName(cttInfoPara.getCreatedBy()));
+        flowCtrlHisTemp.setCreatedTime(cttInfoPara.getCreatedDate());
+        flowCtrlHisTemp.setRemark(cttInfoPara.getNote());
         return flowCtrlHisTemp;
     }
-    public void updateRecord(EsCttInfo esCttInfoPara,String strPowerTypePara){
-        try {esCttInfoPara.setModificationNum(
-                ToolUtil.getIntIgnoreNull(esCttInfoPara.getModificationNum())+1);
-            esCttInfoPara.setDeletedFlag("0");
-            esCttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-            esCttInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
-            esCttInfoMapper.updateByPrimaryKey(esCttInfoPara);
-            FlowCtrlHis flowCtrlHisTemp=fromCttInfoToFlowCtrlHis(esCttInfoPara);
+    public void updateRecord(CttInfo cttInfoPara,String strPowerTypePara){
+        try {
+            cttInfoPara.setModificationNum(
+                ToolUtil.getIntIgnoreNull(cttInfoPara.getModificationNum())+1);
+            cttInfoPara.setArchivedFlag("0");
+            cttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+            cttInfoPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
+            cttInfoMapper.updateByPrimaryKey(cttInfoPara);
+            FlowCtrlHis flowCtrlHisTemp=fromCttInfoToFlowCtrlHis(cttInfoPara);
             List<Oper> operListTemp=flowCtrlHisService.selectOperByExample(ToolUtil.getOperatorManager().getOperatorId());
             for(Oper operTemp:operListTemp){
                 if (ToolUtil.getOperatorManager().getOperatorId().equals(operTemp.getId())){
@@ -180,17 +180,17 @@ public class CttInfoService {
                 }
             }
             if(strPowerTypePara.contains("Pass")){
-                flowCtrlHisService.insertRecord(flowCtrlHisTemp, ESEnumOperType.OPER_Type0.getCode());
+                flowCtrlHisService.insertRecord(flowCtrlHisTemp, EnumOperType.OPER_TYPE0.getCode());
             }else if(strPowerTypePara.contains("Fail")){
-                flowCtrlHisService.insertRecord(flowCtrlHisTemp, ESEnumOperType.OPER_Type1.getCode());
+                flowCtrlHisService.insertRecord(flowCtrlHisTemp, EnumOperType.OPER_TYPE1.getCode());
             }else if(strPowerTypePara.contains("Del")){
-                flowCtrlHisService.insertRecord(flowCtrlHisTemp, ESEnumOperType.OPER_Type2.getCode());
+                flowCtrlHisService.insertRecord(flowCtrlHisTemp, EnumOperType.OPER_TYPE2.getCode());
             }else if(strPowerTypePara.equals("AttachAdd")){
                 flowCtrlHisTemp.setRemark(flowCtrlHisTemp.getRemark()+"AttachAdd");
-                flowCtrlHisService.insertRecord(flowCtrlHisTemp, ESEnumOperType.OPER_Type1.getCode());
+                flowCtrlHisService.insertRecord(flowCtrlHisTemp, EnumOperType.OPER_TYPE1.getCode());
             }else if(strPowerTypePara.equals("AttachRemove")){
                 flowCtrlHisTemp.setRemark(flowCtrlHisTemp.getRemark()+"AttachRemove");
-                flowCtrlHisService.insertRecord(flowCtrlHisTemp, ESEnumOperType.OPER_Type2.getCode());
+                flowCtrlHisService.insertRecord(flowCtrlHisTemp, EnumOperType.OPER_TYPE2.getCode());
             }
         } catch (Exception e) {
             throw e;
@@ -202,54 +202,53 @@ public class CttInfoService {
         cttInfoShowPara.setDeletedFlag("0");
         cttInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         cttInfoShowPara.setLastUpdDate(ToolUtil.getStrLastUpdTime());
-        esCttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
+        cttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
     }
     public void updateRecordForOperRes(CttInfoShow cttInfoShowPara){
-        EsCttInfo esCttInfoTemp = getCttInfoByPkId(cttInfoShowPara.getPkid());
-        esCttInfoTemp.setName(cttInfoShowPara.getName());
-        esCttInfoTemp.setModificationNum(
+        CttInfo cttInfoTemp = getCttInfoByPkId(cttInfoShowPara.getPkid());
+        cttInfoTemp.setName(cttInfoShowPara.getName());
+        cttInfoTemp.setModificationNum(
                 ToolUtil.getIntIgnoreNull(cttInfoShowPara.getModificationNum())+1);
-        esCttInfoTemp.setDeletedFlag("0");
-        esCttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        esCttInfoTemp.setLastUpdDate(ToolUtil.getStrLastUpdTime());
-        esCttInfoMapper.updateByPrimaryKey(esCttInfoTemp);
+        cttInfoTemp.setArchivedFlag("0");
+        cttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttInfoTemp.setLastUpdDate(ToolUtil.getStrLastUpdTime());
+        cttInfoMapper.updateByPrimaryKey(cttInfoTemp);
     }
 
     public int deleteRecord(String strPkId){
-        return esCttInfoMapper.deleteByPrimaryKey(strPkId);
+        return cttInfoMapper.deleteByPrimaryKey(strPkId);
     }
 
     public String getStrMaxCttId(String strCttType){
         return myCttInfoMapper.getStrMaxCttId(strCttType) ;
     }
 
-    public EsCttInfo fromModelShowToModel(CttInfoShow cttInfoShowPara) {
-        EsCttInfo esCttInfoTemp = new EsCttInfo();
-        esCttInfoTemp.setPkid(cttInfoShowPara.getPkid());
-        esCttInfoTemp.setCttType(cttInfoShowPara.getCttType());
-        esCttInfoTemp.setParentPkid(cttInfoShowPara.getParentPkid());
-        esCttInfoTemp.setId(cttInfoShowPara.getId());
-        esCttInfoTemp.setName(cttInfoShowPara.getName());
-        esCttInfoTemp.setCttStartDate(cttInfoShowPara.getCttStartDate());
-        esCttInfoTemp.setCttEndDate(cttInfoShowPara.getCttEndDate());
-        esCttInfoTemp.setSignDate(cttInfoShowPara.getSignDate());
-        esCttInfoTemp.setSignPartA(cttInfoShowPara.getSignPartA());
-        esCttInfoTemp.setSignPartB(cttInfoShowPara.getSignPartB());
-        esCttInfoTemp.setFlowStatus(cttInfoShowPara.getFlowStatus());
-        esCttInfoTemp.setFlowStatusReason(cttInfoShowPara.getFlowStatusReason());
-        esCttInfoTemp.setNote(cttInfoShowPara.getNote());
-        esCttInfoTemp.setAttachment(cttInfoShowPara.getAttachment());
-        esCttInfoTemp.setDeletedFlag(cttInfoShowPara.getDeletedFlag());
-        esCttInfoTemp.setEndFlag(cttInfoShowPara.getEndFlag());
-        esCttInfoTemp.setCreatedBy(cttInfoShowPara.getCreatedBy());
-        esCttInfoTemp.setCreatedDate(cttInfoShowPara.getCreatedDate());
-        esCttInfoTemp.setLastUpdBy(cttInfoShowPara.getLastUpdBy());
-        esCttInfoTemp.setLastUpdDate(cttInfoShowPara.getLastUpdDate());
-        esCttInfoTemp.setModificationNum(cttInfoShowPara.getModificationNum());
-        esCttInfoTemp.setType(cttInfoShowPara.getType());
-        return esCttInfoTemp;
+    public CttInfo fromModelShowToModel(CttInfoShow cttInfoShowPara) {
+        CttInfo cttInfoTemp = new CttInfo();
+        cttInfoTemp.setPkid(cttInfoShowPara.getPkid());
+        cttInfoTemp.setCttType(cttInfoShowPara.getCttType());
+        cttInfoTemp.setParentPkid(cttInfoShowPara.getParentPkid());
+        cttInfoTemp.setId(cttInfoShowPara.getId());
+        cttInfoTemp.setName(cttInfoShowPara.getName());
+        cttInfoTemp.setCttStartDate(cttInfoShowPara.getCttStartDate());
+        cttInfoTemp.setCttEndDate(cttInfoShowPara.getCttEndDate());
+        cttInfoTemp.setSignDate(cttInfoShowPara.getSignDate());
+        cttInfoTemp.setSignPartA(cttInfoShowPara.getSignPartA());
+        cttInfoTemp.setSignPartB(cttInfoShowPara.getSignPartB());
+        cttInfoTemp.setFlowStatus(cttInfoShowPara.getFlowStatus());
+        cttInfoTemp.setFlowStatusReason(cttInfoShowPara.getFlowStatusReason());
+        cttInfoTemp.setNote(cttInfoShowPara.getNote());
+        cttInfoTemp.setAttachment(cttInfoShowPara.getAttachment());
+        cttInfoTemp.setArchivedFlag(cttInfoShowPara.getDeletedFlag());
+        cttInfoTemp.setCreatedBy(cttInfoShowPara.getCreatedBy());
+        cttInfoTemp.setCreatedDate(cttInfoShowPara.getCreatedDate());
+        cttInfoTemp.setLastUpdBy(cttInfoShowPara.getLastUpdBy());
+        cttInfoTemp.setLastUpdDate(cttInfoShowPara.getLastUpdDate());
+        cttInfoTemp.setModificationNum(cttInfoShowPara.getModificationNum());
+        cttInfoTemp.setType(cttInfoShowPara.getType());
+        return cttInfoTemp;
     }
-    public CttInfoShow fromModelToModelShow(EsCttInfo cttInfoPara) {
+    public CttInfoShow fromModelToModelShow(CttInfo cttInfoPara) {
         CttInfoShow cttInfoShowTemp = new CttInfoShow();
         cttInfoShowTemp.setPkid(cttInfoPara.getPkid());
         cttInfoShowTemp.setCttType(cttInfoPara.getCttType());
@@ -265,8 +264,7 @@ public class CttInfoService {
         cttInfoShowTemp.setFlowStatus(cttInfoPara.getFlowStatus());
         cttInfoShowTemp.setFlowStatusReason(cttInfoPara.getFlowStatusReason());
         cttInfoShowTemp.setAttachment(cttInfoPara.getAttachment());
-        cttInfoShowTemp.setDeletedFlag(cttInfoPara.getDeletedFlag());
-        cttInfoShowTemp.setEndFlag(cttInfoPara.getEndFlag());
+        cttInfoShowTemp.setDeletedFlag(cttInfoPara.getArchivedFlag());
         cttInfoShowTemp.setCreatedBy(cttInfoPara.getCreatedBy());
         cttInfoShowTemp.setCreatedDate(cttInfoPara.getCreatedDate());
         cttInfoShowTemp.setLastUpdBy(cttInfoPara.getLastUpdBy());
@@ -276,8 +274,16 @@ public class CttInfoService {
         return cttInfoShowTemp;
     }
     //更新甲供材情况
-    public int updateByPKid(EsCttInfo esCttInfoPara){
-        return esCttInfoMapper.updateByPrimaryKey(esCttInfoPara);
+    public int updateByPKid(CttInfo cttInfoPara){
+        return cttInfoMapper.updateByPrimaryKey(cttInfoPara);
+    }
+
+    public Integer getChildrenOfThisRecordInEsInitCtt(String strCttType,String strBelongToPkid){
+        return myCttInfoMapper.getChildrenOfThisRecordInEsInitCtt(strCttType,strBelongToPkid);
+    }
+
+    public List<CttInfoShow> selectCttByStatusFlagBegin_End(CttInfoShow cttInfoShowPara){
+        return myCttInfoMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
     }
 
     /*public List<AllTabColumns>  getColumnNameByTableName(String strTableName){

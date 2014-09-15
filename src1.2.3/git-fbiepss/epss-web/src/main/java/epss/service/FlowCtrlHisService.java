@@ -2,9 +2,11 @@ package epss.service;
 
 import epss.repository.dao.FlowCtrlHisMapper;
 import epss.repository.dao.OperMapper;
-import epss.repository.dao.not_mybatis.MyFlowMapper;
-import epss.repository.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import epss.repository.dao.not_mybatis.MyFlowCtrlHisMapper;
+import epss.repository.model.FlowCtrlHis;
+import epss.repository.model.FlowCtrlHisExample;
+import epss.repository.model.Oper;
+import epss.repository.model.OperExample;
 import org.springframework.stereotype.Service;
 import skyline.util.ToolUtil;
 import javax.annotation.Resource;
@@ -19,11 +21,11 @@ import java.util.List;
  */
 @Service
 public class FlowCtrlHisService {
-    @Autowired
+    @Resource
     private FlowCtrlHisMapper flowCtrlHisMapper;
     @Resource
-    private MyFlowMapper myFlowMapper;
-    @Autowired
+    private MyFlowCtrlHisMapper myFlowCtrlHisMapper;
+    @Resource
     private OperMapper operMapper;
 
     public List<FlowCtrlHis> selectListByModel(FlowCtrlHis flowCtrlHis) {
@@ -51,8 +53,8 @@ public class FlowCtrlHisService {
         return flowCtrlHisMapper.selectByExample(example);
     }
 
-    public List<FlowCtrlHis> getMngFromPowerHisForSubcttStlList(String powerPkid,String periodNo){
-        return myFlowMapper.getMngFromPowerHisForSubcttStlList(powerPkid,periodNo);
+    public List<FlowCtrlHis> getSubStlListByFlowCtrlHis(String powerPkid,String periodNo){
+        return myFlowCtrlHisMapper.getSubStlListByFlowCtrlHis(powerPkid,periodNo);
     }
 
     public List<FlowCtrlHis> selectListByModel(String strInfoType,String strInfoPkid) {

@@ -7,17 +7,16 @@ package epss.view.qry;
  * Time: 下午1:53
  * To change this template use File | Settings | File Templates.
  */
-import epss.common.enums.ESEnum;
-import epss.common.enums.ESEnumStatusFlag;
+import epss.common.enums.EnumResType;
+import epss.common.enums.EnumFlowStatus;
+import epss.repository.model.ProgStlItemTkMea;
 import skyline.util.JxlsManager;
-import epss.repository.model.EsCttItem;
+import epss.repository.model.CttItem;
 import epss.repository.model.model_show.*;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
-import epss.repository.model.EsCttInfo;
-import epss.repository.model.EsItemStlTkcttEngMea;
+import epss.repository.model.CttInfo;
 import epss.service.*;
-import epss.service.EsFlowService;
 import epss.service.EsQueryService;
 import epss.view.flow.EsCommon;
 import jxl.write.WriteException;
@@ -47,8 +46,8 @@ public class TkMeaCSubStlQItemAction {
     private CttItemService cttItemService;
     @ManagedProperty(value = "#{esCommon}")
     private EsCommon esCommon;
-    @ManagedProperty(value = "#{esFlowService}")
-    private EsFlowService esFlowService;
+    @ManagedProperty(value = "#{progStlInfoService}")
+    private ProgStlInfoService progStlInfoService;
     @ManagedProperty(value = "#{esQueryService}")
     private EsQueryService esQueryService;
     @ManagedProperty(value = "#{progMeaItemService}")
@@ -75,8 +74,8 @@ public class TkMeaCSubStlQItemAction {
         // 获取已经批准了的总包合同列表
         List<CttInfoShow> cttInfoShowList =
                 cttInfoService.getCttInfoListByCttType_Status(
-                        ESEnum.ITEMTYPE0.getCode()
-                       ,ESEnumStatusFlag.STATUS_FLAG3.getCode());
+                        EnumResType.RES_TYPE0.getCode()
+                       , EnumFlowStatus.FLOW_STATUS3.getCode());
         tkcttList=new ArrayList<SelectItem>();
         if(cttInfoShowList.size()>0){
             SelectItem selectItem=new SelectItem("","");
@@ -107,28 +106,28 @@ public class TkMeaCSubStlQItemAction {
         beansMap.put("strThisMonth", ToolUtil.getStrThisMonth());
         // 1。总包合同信息
         // 1。1。取出总包合同信息
-        EsCttInfo esTkcttInfo= cttInfoService.getCttInfoByPkId(strCttInfoPkid);
+        CttInfo esTkcttInfo= cttInfoService.getCttInfoByPkId(strCttInfoPkid);
         reportHeader.setStrTkcttId(esTkcttInfo.getId());
         reportHeader.setStrTkcttName(esTkcttInfo.getName());
         beansMap.put("reportHeader", reportHeader);
         // 1。2。抽取相应总包合同的详细内容
-        List<EsCttItem> esCttItemOfTkcttList = cttItemService.getEsItemList(
-                ESEnum.ITEMTYPE0.getCode(),
+        List<CttItem> cttItemOfTkcttList = cttItemService.getEsItemList(
+                EnumResType.RES_TYPE0.getCode(),
                 strTkcttPkid);
         // 根据总包合同内容的信息，拼成合同原稿
         List<CttItemShow> tkcttItemShowList =new ArrayList<>();
-        recursiveDataTable("root", esCttItemOfTkcttList, tkcttItemShowList);
+        recursiveDataTable("root", cttItemOfTkcttList, tkcttItemShowList);
         tkcttItemShowList =getItemList_DoFromatNo(tkcttItemShowList);
 
         // 2。成本计划信息
-        List<EsCttInfo> esCstplInfoList= cttInfoService.getEsInitCttByCttTypeAndBelongToPkId(
-                ESEnum.ITEMTYPE1.getCode(),esTkcttInfo.getPkid());
+        List<CttInfo> esCstplInfoList= cttInfoService.getEsInitCttByCttTypeAndBelongToPkId(
+                EnumResType.RES_TYPE1.getCode(),esTkcttInfo.getPkid());
         if(esCstplInfoList.size()==0){
             return;
         }
-        EsCttInfo esCstplInfo =esCstplInfoList.get(0);
-        List<EsCttItem> cstplItemListTemp=
-                cttItemService.getEsItemList(ESEnum.ITEMTYPE1.getCode(),esCstplInfo.getPkid());
+        CttInfo esCstplInfo =esCstplInfoList.get(0);
+        List<CttItem> cstplItemListTemp=
+                cttItemService.getEsItemList(EnumResType.RES_TYPE1.getCode(),esCstplInfo.getPkid());
         List<CttItemShow> cstplItemShowListTemp =new ArrayList<>();
         recursiveDataTable("root", cstplItemListTemp, cstplItemShowListTemp);
         // 成本计划排版
@@ -137,14 +136,14 @@ public class TkMeaCSubStlQItemAction {
         // 3。总包合同最近批准了的总包计量数据
         // 小于等于所选期码的最近已经批准了的计量期码
         String strMeaLatestApprovedPeriodNo=ToolUtil.getStrIgnoreNull(
-                esFlowService.getLatestApprovedPeriodNoByEndPeriod(
-                        ESEnum.ITEMTYPE7.getCode(),strCttInfoPkid,strPeriodNo));
-        List<EsItemStlTkcttEngMea> esItemStlTkcttEngMeaList=new ArrayList<EsItemStlTkcttEngMea>();
+                progStlInfoService.getLatestApprovedPeriodNoByEndPeriod(
+                        EnumResType.RES_TYPE7.getCode(),strCttInfoPkid,strPeriodNo));
+        List<ProgStlItemTkMea> progStlItemTkMeaList =new ArrayList<ProgStlItemTkMea>();
         if(!ToolUtil.getStrIgnoreNull(strMeaLatestApprovedPeriodNo).equals("")){
-            EsItemStlTkcttEngMea esItemStlTkcttEngMea=new EsItemStlTkcttEngMea();
-            esItemStlTkcttEngMea.setTkcttPkid(strCttInfoPkid);
-            esItemStlTkcttEngMea.setPeriodNo(strMeaLatestApprovedPeriodNo);
-            esItemStlTkcttEngMeaList= progMeaItemService.selectRecordsByPkidPeriodNoExample(esItemStlTkcttEngMea);
+            ProgStlItemTkMea progStlItemTkMea =new ProgStlItemTkMea();
+            progStlItemTkMea.setTkcttPkid(strCttInfoPkid);
+            progStlItemTkMea.setPeriodNo(strMeaLatestApprovedPeriodNo);
+            progStlItemTkMeaList = progMeaItemService.selectRecordsByPkidPeriodNoExample(progStlItemTkMea);
         }
 
         /*拼装列表*/
@@ -168,14 +167,14 @@ public class TkMeaCSubStlQItemAction {
                             tkcttItemShowUnit.getContractUnitPrice().multiply(tkcttItemShowUnit.getContractQuantity()));
                 }
                 // 计量
-                for(EsItemStlTkcttEngMea esItemStlTkcttEngMea:esItemStlTkcttEngMeaList){
-                    if(ToolUtil.getStrIgnoreNull(tkcttItemShowUnit.getPkid()).equals(esItemStlTkcttEngMea.getTkcttItemPkid())){
+                for(ProgStlItemTkMea progStlItemTkMea : progStlItemTkMeaList){
+                    if(ToolUtil.getStrIgnoreNull(tkcttItemShowUnit.getPkid()).equals(progStlItemTkMea.getTkcttItemPkid())){
                         // 总包合同单价
                         BigDecimal bdTkcttContractUnitPrice=ToolUtil.getBdIgnoreNull(tkcttItemShowUnit.getContractUnitPrice());
-                        BigDecimal bdTkcttStlCMeaQty=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getCurrentPeriodQty());
+                        BigDecimal bdTkcttStlCMeaQty=ToolUtil.getBdIgnoreNull(progStlItemTkMea.getCurrentPeriodQty());
                         BigDecimal bdTkcttStlCMeaAmount=bdTkcttStlCMeaQty.multiply(bdTkcttContractUnitPrice);
                         // 开累计量
-                        BigDecimal bdTkcttStlBToCMeaQuantity=ToolUtil.getBdIgnoreNull(esItemStlTkcttEngMea.getBeginToCurrentPeriodQty());
+                        BigDecimal bdTkcttStlBToCMeaQuantity=ToolUtil.getBdIgnoreNull(progStlItemTkMea.getBeginToCurrentPeriodQty());
                         BigDecimal bdTkcttStlBToCMeaAmount=bdTkcttStlBToCMeaQuantity.multiply(bdTkcttContractUnitPrice);
                         // 当期计量数量和金额
                         qryTkMeaCSStlQShowTemp.setTkcttStlItem_ThisStageQty(bdTkcttStlCMeaQty);
@@ -404,12 +403,12 @@ public class TkMeaCSubStlQItemAction {
 
     /*递归排序*/
     private void recursiveDataTable(String strLevelParentId,
-                                      List<EsCttItem> esCttItemListPara,
+                                      List<CttItem> cttItemListPara,
                                       List<CttItemShow> cttItemShowListPara){
         // 根据父层级号获得该父层级下的子节点
         // 通过父层id查找它的孩子
-        List<EsCttItem> subEsCttItemList =getEsItemListByLevelParentPkid(strLevelParentId, esCttItemListPara);
-        for(EsCttItem itemUnit: subEsCttItemList){
+        List<CttItem> subCttItemList =getEsItemListByLevelParentPkid(strLevelParentId, cttItemListPara);
+        for(CttItem itemUnit: subCttItemList){
             String strCreatedByName= ToolUtil.getUserName(itemUnit.getCreatedBy());
             String strLastUpdByName= ToolUtil.getUserName(itemUnit.getLastUpdBy());
             CttItemShow cttItemShowTemp = new CttItemShow(
@@ -425,7 +424,7 @@ public class TkMeaCSubStlQItemAction {
                 itemUnit.getContractQuantity(),
                 itemUnit.getContractAmount(),
                 itemUnit.getSignPartAPrice(),
-                itemUnit.getDeletedFlag() ,
+                itemUnit.getArchivedFlag() ,
                 itemUnit.getOriginFlag() ,
                 itemUnit.getCreatedBy() ,
                 strCreatedByName,
@@ -440,20 +439,20 @@ public class TkMeaCSubStlQItemAction {
                 ""
             );
             cttItemShowListPara.add(cttItemShowTemp) ;
-            recursiveDataTable(cttItemShowTemp.getPkid(), esCttItemListPara, cttItemShowListPara);
+            recursiveDataTable(cttItemShowTemp.getPkid(), cttItemListPara, cttItemShowListPara);
         }
     }
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/
-    private List<EsCttItem> getEsItemListByLevelParentPkid(String strLevelParentPkid,
-             List<EsCttItem> esCttItemListPara) {
-        List<EsCttItem> tempEsCttItemList =new ArrayList<EsCttItem>();
+    private List<CttItem> getEsItemListByLevelParentPkid(String strLevelParentPkid,
+             List<CttItem> cttItemListPara) {
+        List<CttItem> tempCttItemList =new ArrayList<CttItem>();
         /*避开重复链接数据库*/
-        for(EsCttItem itemUnit: esCttItemListPara){
+        for(CttItem itemUnit: cttItemListPara){
             if(strLevelParentPkid.equalsIgnoreCase(itemUnit.getParentPkid())){
-                tempEsCttItemList.add(itemUnit);
+                tempCttItemList.add(itemUnit);
             }
         }
-        return tempEsCttItemList;
+        return tempCttItemList;
     }
 
     /*根据group和orderid临时编制编码strNo*/
@@ -515,12 +514,12 @@ public class TkMeaCSubStlQItemAction {
         this.cttItemService = cttItemService;
     }
 
-    public EsFlowService getEsFlowService() {
-        return esFlowService;
+    public ProgStlInfoService getProgStlInfoService() {
+        return progStlInfoService;
     }
 
-    public void setEsFlowService(EsFlowService esFlowService) {
-        this.esFlowService = esFlowService;
+    public void setProgStlInfoService(ProgStlInfoService progStlInfoService) {
+        this.progStlInfoService = progStlInfoService;
     }
 
     public EsCommon getEsCommon() {

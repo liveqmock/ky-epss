@@ -1,5 +1,4 @@
 <%@ page contentType="text/html; charset=GBK" %>
-
 <%@ page import="skyline.platform.form.config.SystemAttributeNames" %>
 <%@ page import="skyline.platform.security.OnLineOpersManager" %>
 <%@ page import="skyline.platform.security.OperatorManager" %>
@@ -10,7 +9,9 @@
     String path = request.getContextPath();
     String username = request.getParameter("username");
     if (username == null) {
-        out.println("<script language=\"javascript\">if(top){ top.location.href='" + path + "/pages/security/loginPage.jsp'; } else { location.href = '" + path + "/pages/security/loginPage.jsp';} </script>");
+        out.println("<script language=\"javascript\">if(top){ top.location.href='" +
+                path + "/pages/security/loginPage.jsp'; } else { location.href = '" +
+                path + "/pages/security/loginPage.jsp';} </script>");
         return;
     }
 

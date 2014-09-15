@@ -16,14 +16,16 @@ import java.util.List;
  */
 @Component
 public interface MyCttInfoMapper {
-    @Select("select max(id) from ES_CTT_INFO where ctt_type = #{strCttType}")
+    List<CttInfoShow> selectCttByStatusFlagBegin_End(CttInfoShow cttInfoShow);
+
+    @Select("select max(id) from CTT_INFO where ctt_type = #{strCttType}")
     String getStrMaxCttId(@Param("strCttType") String strCttType);
 
     @Select(" select" +
                  " eci.PKID" +
                  ",eci.NAME" +
             " from" +
-                 " ES_CTT_INFO eci" +
+                 " CTT_INFO eci" +
             " where" +
                  " eci.CTT_TYPE = #{strCttType}" +
             " and" +
@@ -35,7 +37,7 @@ public interface MyCttInfoMapper {
                 " eci.PKID" +
                 ",eci.NAME" +
             " from" +
-                " ES_CTT_INFO eci" +
+                " CTT_INFO eci" +
             " where" +
                 " eci.CTT_TYPE = #{strCttType}" +
             " and" +
@@ -48,4 +50,14 @@ public interface MyCttInfoMapper {
                                                                 @Param("strParentPkid") String strParentPkid,
                                                                 @Param("strFlowStatus") String strFlowStatus);
 
+    @Select("select " +
+            "      count(1)" +
+            " from " +
+            "      CTT_INFO" +
+            " where " +
+            "      CTT_TYPE = #{strCttType}" +
+            " and " +
+            "      PARENT_PKID = #{strParentPkid}")
+    Integer getChildrenOfThisRecordInEsInitCtt(@Param("strCttType") String strCttType,
+                                               @Param("strParentPkid") String strParentPkid);
 }

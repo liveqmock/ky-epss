@@ -69,7 +69,7 @@
                                     rowsPerPageTemplate="200,100,50,40,30,20,15"
                                     emptyMessage="数据记录为空..."
                                     scrollable="true">
-                            <p:column headerText="操作" style="width:45px">
+                            <p:column headerText="操作" style="width:60px">
                                 <p:commandButton icon="ui-icon-pencil"
                                                 style="height:18px;width:18px"
                                                 action="#{enuAction.selectMainRecordAction('Upd',record)}"
@@ -92,10 +92,10 @@
                             <p:column headerText="序号" style="width:30px">
                                 <h:outputText value="#{row + 1}"/>
                             </p:column>
-                            <p:column headerText="枚举ID" style="width:160px;text-align:center">
+                            <p:column headerText="枚举ID" style="width:200px;text-align:left">
                                 <h:outputText value="#{record.enutype}"/>
                             </p:column>
-                            <p:column headerText="枚举名称" style="width:300px;text-align:left">
+                            <p:column headerText="枚举名称" style="width:400px;text-align:left">
                                 <h:outputText value="#{record.enuname}"/>
                             </p:column>
                             <p:column headerText="值类型" style="width:80px;text-align:center">

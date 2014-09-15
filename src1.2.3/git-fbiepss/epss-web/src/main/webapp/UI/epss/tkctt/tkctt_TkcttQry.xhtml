@@ -34,15 +34,15 @@
                  arg.doType = "select";
                  var rtn = dialog("../item/itemQry_Tkctt.xhtml?strFlowType=Qry&amp;strCttInfoPkid=" + pkid + "", arg, sfeature);
             }
-            /* function actSelect(obj, ind) {
+             function actSelect(obj, ind) {
                 // 寻找当前行的PKID思路：从此节点直到找到Table再找到相应的行和列
                 var pkid=obj.parentNode.parentNode.parentNode.childNodes[ind].childNodes[11].innerHTML;
-                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;
-";
+                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;"+
+                        "help:no;resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
                 var rtn = dialog("../item/itemQry_Tkctt.xhtml?strType=0&amp;strTkCttPkid=" + pkid + "", arg, sfeature);
-            }*/
+            }
         </script>
     </ui:define>
     <ui:define name="content">
@@ -117,7 +117,7 @@
                     <p:column headerText="操作" style="width:40px">
                         <p:commandButton  icon="ui-icon-search"
                                           style="height:18px;width:18px"
-                                          action="#{tkcttInfoAction.selectRecordAction('Qry','',record)}"
+                                          action="#{tkcttInfoAction.selectRecordAction('Sel',record)}"
                                           update="pdt,:form:pgView,:form:msgs"
                                           onclick="PF('wVDlgView').show()">
                         </p:commandButton>
