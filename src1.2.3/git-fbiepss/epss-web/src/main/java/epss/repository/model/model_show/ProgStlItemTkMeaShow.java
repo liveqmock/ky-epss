@@ -22,7 +22,7 @@ public class ProgStlItemTkMeaShow implements Serializable {
     private String tkctt_CorrespondingPkid;
     private String tkctt_ParentPkid;
     private String tkctt_Name;
-    private String tkctt_Note;
+    private String tkctt_Remark;
     private String tkctt_Unit;
     private BigDecimal tkctt_ContractUnitPrice;
     private BigDecimal tkctt_ContractQuantity;
@@ -37,7 +37,7 @@ public class ProgStlItemTkMeaShow implements Serializable {
     private BigDecimal eng_CurrentPeriodEQty;
     private BigDecimal eng_CurrentPeriodEAmount;
     private String eng_State;
-    private String eng_DeletedFlag;
+    private String eng_ArchivedFlag;
     private String eng_CreatedBy;
     private String eng_CreatedByName;
     private String eng_OriginFlag;
@@ -45,7 +45,7 @@ public class ProgStlItemTkMeaShow implements Serializable {
     private String eng_LastUpdBy;
     private String eng_LastUpdByName;
     private String eng_LastUpdTime;
-    private Integer eng_ModificationNum;
+    private Integer eng_Recversion;
 
     public ProgStlItemTkMeaShow() {
 
@@ -123,12 +123,12 @@ public class ProgStlItemTkMeaShow implements Serializable {
         this.tkctt_Name = tkctt_Name;
     }
 
-    public String getTkctt_Note() {
-        return tkctt_Note;
+    public String getTkctt_Remark() {
+        return tkctt_Remark;
     }
 
-    public void setTkctt_Note(String tkctt_Note) {
-        this.tkctt_Note = tkctt_Note;
+    public void setTkctt_Remark(String tkctt_Remark) {
+        this.tkctt_Remark = tkctt_Remark;
     }
 
     public String getTkctt_Unit() {
@@ -219,12 +219,12 @@ public class ProgStlItemTkMeaShow implements Serializable {
         this.eng_State = eng_State;
     }
 
-    public String getEng_DeletedFlag() {
-        return eng_DeletedFlag;
+    public String getEng_ArchivedFlag() {
+        return eng_ArchivedFlag;
     }
 
-    public void setEng_DeletedFlag(String eng_DeletedFlag) {
-        this.eng_DeletedFlag = eng_DeletedFlag;
+    public void setEng_ArchivedFlag(String eng_ArchivedFlag) {
+        this.eng_ArchivedFlag = eng_ArchivedFlag;
     }
 
     public String getEng_OriginFlag() {
@@ -267,12 +267,12 @@ public class ProgStlItemTkMeaShow implements Serializable {
         this.eng_LastUpdTime = eng_LastUpdTime;
     }
 
-    public Integer getEng_ModificationNum() {
-        return eng_ModificationNum;
+    public Integer getEng_Recversion() {
+        return eng_Recversion;
     }
 
-    public void setEng_ModificationNum(Integer eng_ModificationNum) {
-        this.eng_ModificationNum = eng_ModificationNum;
+    public void setEng_Recversion(Integer eng_Recversion) {
+        this.eng_Recversion = eng_Recversion;
     }
 
     public BigDecimal getEng_BeginToCurrentPeriodEAmount() {

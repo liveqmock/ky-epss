@@ -164,7 +164,7 @@ public class ProgStlItemTkEstAction {
             progStlItemTkEstShowTemp.setTkctt_Orderid(itemUnit.getOrderid());
             progStlItemTkEstShowTemp.setTkctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
             progStlItemTkEstShowTemp.setTkctt_Name(itemUnit.getName());
-            progStlItemTkEstShowTemp.setTkctt_Note(itemUnit.getNote());
+            progStlItemTkEstShowTemp.setTkctt_Remark(itemUnit.getRemark());
             progStlItemTkEstShowTemp.setTkctt_Unit(itemUnit.getUnit());
             progStlItemTkEstShowTemp.setTkctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             bdContractUnitPrice=ToolUtil.getBdIgnoreNull(itemUnit.getContractUnitPrice());
@@ -195,14 +195,14 @@ public class ProgStlItemTkEstAction {
                 progStlItemTkEstShowTemp.setEng_BeginToCurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdBeginToCurrentPeriodQty)));
 
-                progStlItemTkEstShowTemp.setEng_DeletedFlag(progStlItemTkEst.getArchivedFlag());
+                progStlItemTkEstShowTemp.setEng_ArchivedFlag(progStlItemTkEst.getArchivedFlag());
                 progStlItemTkEstShowTemp.setEng_CreatedBy(progStlItemTkEst.getCreatedBy());
                 progStlItemTkEstShowTemp.setEng_CreatedByName(strCreatedByName);
                 progStlItemTkEstShowTemp.setEng_CreatedTime(progStlItemTkEst.getCreatedTime());
                 progStlItemTkEstShowTemp.setEng_LastUpdBy(progStlItemTkEst.getLastUpdBy());
                 progStlItemTkEstShowTemp.setEng_LastUpdByName(strLastUpdByName);
                 progStlItemTkEstShowTemp.setEng_LastUpdTime(progStlItemTkEst.getLastUpdTime());
-                progStlItemTkEstShowTemp.setEng_ModificationNum(progStlItemTkEst.getModificationNum());
+                progStlItemTkEstShowTemp.setEng_Recversion(progStlItemTkEst.getRecversion());
             }
             sprogStlItemTkEstShowListPara.add(progStlItemTkEstShowTemp) ;
             recursiveDataTable(progStlItemTkEstShowTemp.getTkctt_Pkid(), cttItemListPara, sprogStlItemTkEstShowListPara);

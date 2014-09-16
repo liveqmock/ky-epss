@@ -15,7 +15,7 @@ public class CttAndStlInfoShow implements Serializable {
     private String correspondingPkid;
     private String id;
     private String name;
-    private String note;
+    private String remark;
     private String createdBy;
     private String createdByName;
     private String createdTime;
@@ -53,12 +53,12 @@ public class CttAndStlInfoShow implements Serializable {
         this.name = name;
     }
 
-    public String getNote() {
-        return note;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getCreatedBy() {

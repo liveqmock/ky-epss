@@ -139,7 +139,7 @@
                             </h:outputText>
                         </p:column>
                         <p:column style="width:100px" headerText="分包备注">
-                            <h:outputText value="#{record.note}"/>
+                            <h:outputText value="#{record.remark}"/>
                         </p:column>
                     </p:dataTable>
                     <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
@@ -250,7 +250,7 @@
                                 </h:outputText>
                             </p:column>
                             <p:column headerText="备注">
-                                <h:outputText value="#{recordCstpl.note}" />
+                                <h:outputText value="#{recordCstpl.remark}" />
                             </p:column>
                             <f:facet name="footer">
                                 <p:commandButton id="cstplSelSubmitBtn" value="提交"
@@ -328,9 +328,9 @@
                                              style="text-align:right;">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                 </h:inputText>
-                                <p:outputLabel for="noteForAdd" value="备注内容：" />
-                                <h:inputText id="noteForAdd"
-                                             value="#{subcttItemAction.cttItemShowAdd.note}"
+                                <p:outputLabel for="remarkForAdd" value="备注内容：" />
+                                <h:inputText id="remarkForAdd"
+                                             value="#{subcttItemAction.cttItemShowAdd.remark}"
                                              style="text-align:left;"/>
                             </h:panelGrid>
                             <h:panelGrid id="pgOperBtnForAdd" columns="4">
@@ -425,18 +425,18 @@
                                              style="text-align:right;">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                 </h:inputText>
-                                <p:outputLabel for="noteForUpd" value="备注内容：" />
-                                <h:inputText id="noteForUpd"
-                                             value="#{subcttItemAction.cttItemShowUpd.note}"
+                                <p:outputLabel for="remarkForUpd" value="备注内容：" />
+                                <h:inputText id="remarkForUpd"
+                                             value="#{subcttItemAction.cttItemShowUpd.remark}"
                                              style="text-align:left;"/>
                                 <p:outputLabel for="originFlagForUpd" value="数据来源：" />
                                 <h:inputText id="originFlagForUpd"
                                              value="#{esCommon.originFlagListValueOfAlias(
                                          subcttItemAction.cttItemShowUpd.originFlag)}"
                                              style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="modificationNumForUpd" value="修改次数：" />
-                                <h:inputText id="modificationNumForUpd"
-                                             value="#{subcttItemAction.cttItemShowUpd.modificationNum}"
+                                <p:outputLabel for="recversionForUpd" value="修改次数：" />
+                                <h:inputText id="recversionForUpd"
+                                             value="#{subcttItemAction.cttItemShowUpd.recversion}"
                                              readonly="true"
                                              style="background-color:gainsboro;text-align:right;">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
@@ -552,9 +552,9 @@
                                              style="background-color:gainsboro;text-align:right;">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                 </h:inputText>
-                                <p:outputLabel for="noteForDel" value="备注内容：" />
-                                <h:inputText id="noteForDel"
-                                             value="#{subcttItemAction.cttItemShowDel.note}"
+                                <p:outputLabel for="remarkForDel" value="备注内容：" />
+                                <h:inputText id="remarkForDel"
+                                             value="#{subcttItemAction.cttItemShowDel.remark}"
                                              readonly="true"
                                              style="background-color:gainsboro;text-align:left;"/>
                                 <p:outputLabel for="originFlagForDel" value="数据来源：" />
@@ -562,9 +562,9 @@
                                              value="#{esCommon.originFlagListValueOfAlias(
                                          subcttItemAction.cttItemShowDel.originFlag)}"
                                              style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="modificationNumForDel" value="修改次数：" />
-                                <h:inputText id="modificationNumForDel"
-                                             value="#{subcttItemAction.cttItemShowDel.modificationNum}"
+                                <p:outputLabel for="recversionForDel" value="修改次数：" />
+                                <h:inputText id="recversionForDel"
+                                             value="#{subcttItemAction.cttItemShowDel.recversion}"
                                              readonly="true"
                                              style="background-color:gainsboro;text-align:right;">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>

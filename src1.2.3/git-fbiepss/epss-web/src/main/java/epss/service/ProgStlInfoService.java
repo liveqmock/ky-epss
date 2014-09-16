@@ -84,14 +84,14 @@ public class ProgStlInfoService {
         progStlInfoTemp.setStlPkid(progStlInfoShowPara.getStlPkid());
         progStlInfoTemp.setId(progStlInfoShowPara.getId());
         progStlInfoTemp.setPeriodNo(progStlInfoShowPara.getPeriodNo());
-        progStlInfoTemp.setNote(progStlInfoShowPara.getNote());
+        progStlInfoTemp.setRemark(progStlInfoShowPara.getRemark());
         progStlInfoTemp.setAttachment(progStlInfoShowPara.getAttachment());
-        progStlInfoTemp.setArchivedFlag(progStlInfoShowPara.getDeletedFlag());
+        progStlInfoTemp.setArchivedFlag(progStlInfoShowPara.getArchivedFlag());
         progStlInfoTemp.setCreatedBy(progStlInfoShowPara.getCreatedBy());
         progStlInfoTemp.setCreatedTime(progStlInfoShowPara.getCreatedTime());
         progStlInfoTemp.setLastUpdBy(progStlInfoShowPara.getLastUpdBy());
         progStlInfoTemp.setLastUpdTime(progStlInfoShowPara.getLastUpdTime());
-        progStlInfoTemp.setModificationNum(progStlInfoShowPara.getModificationNum());
+        progStlInfoTemp.setRecversion(progStlInfoShowPara.getRecversion());
         progStlInfoTemp.setAutoLinkAdd(progStlInfoShowPara.getAutoLinkAdd());
         progStlInfoTemp.setFlowStatus(progStlInfoShowPara.getFlowStatus());
         progStlInfoTemp.setFlowStatusReason(progStlInfoShowPara.getFlowStatusReason());
@@ -104,14 +104,14 @@ public class ProgStlInfoService {
         progStlInfoShowTemp.setStlPkid(progStlInfoPara.getStlPkid());
         progStlInfoShowTemp.setId(progStlInfoPara.getId());
         progStlInfoShowTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
-        progStlInfoShowTemp.setNote(progStlInfoPara.getNote());
+        progStlInfoShowTemp.setRemark(progStlInfoPara.getRemark());
         progStlInfoShowTemp.setAttachment(progStlInfoPara.getAttachment());
-        progStlInfoShowTemp.setDeletedFlag(progStlInfoPara.getArchivedFlag());
+        progStlInfoShowTemp.setArchivedFlag(progStlInfoPara.getArchivedFlag());
         progStlInfoShowTemp.setCreatedBy(progStlInfoPara.getCreatedBy());
         progStlInfoShowTemp.setCreatedTime(progStlInfoPara.getCreatedTime());
         progStlInfoShowTemp.setLastUpdBy(progStlInfoPara.getLastUpdBy());
         progStlInfoShowTemp.setLastUpdTime(progStlInfoPara.getLastUpdTime());
-        progStlInfoShowTemp.setModificationNum(progStlInfoPara.getModificationNum());
+        progStlInfoShowTemp.setRecversion(progStlInfoPara.getRecversion());
         progStlInfoShowTemp.setAutoLinkAdd(progStlInfoPara.getAutoLinkAdd());
         progStlInfoShowTemp.setFlowStatus(progStlInfoPara.getFlowStatus());
         progStlInfoShowTemp.setFlowStatusReason(progStlInfoPara.getFlowStatusReason());
@@ -127,7 +127,7 @@ public class ProgStlInfoService {
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         progStlInfoShowPara.setCreatedBy(strOperatorIdTemp);
         progStlInfoShowPara.setCreatedTime(strLastUpdTimeTemp);
-        progStlInfoShowPara.setDeletedFlag("0");
+        progStlInfoShowPara.setArchivedFlag("0");
         progStlInfoShowPara.setLastUpdBy(strOperatorIdTemp);
         progStlInfoShowPara.setLastUpdTime(strLastUpdTimeTemp);
         progStlInfoMapper.insert(fromModelShowToModel(progStlInfoShowPara)) ;
@@ -186,8 +186,8 @@ public class ProgStlInfoService {
             ProgStlInfo progStlInfoPara,
             List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForApprovePara){
         //结算登记表更新
-        progStlInfoPara.setModificationNum(
-                ToolUtil.getIntIgnoreNull(progStlInfoPara.getModificationNum())+1);
+        progStlInfoPara.setRecversion(
+                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecversion())+1);
         progStlInfoPara.setArchivedFlag("0");
         progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
@@ -203,17 +203,17 @@ public class ProgStlInfoService {
     }
     @Transactional
     public void updateRecord(ProgStlInfoShow progStlInfoShowPara){
-        progStlInfoShowPara.setModificationNum(
-                ToolUtil.getIntIgnoreNull(progStlInfoShowPara.getModificationNum())+1);
-        progStlInfoShowPara.setDeletedFlag("0");
+        progStlInfoShowPara.setRecversion(
+                ToolUtil.getIntIgnoreNull(progStlInfoShowPara.getRecversion())+1);
+        progStlInfoShowPara.setArchivedFlag("0");
         progStlInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlInfoShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlInfoMapper.updateByPrimaryKey(fromModelShowToModel(progStlInfoShowPara));
     }
     @Transactional
     public void updateRecord(ProgStlInfo progStlInfoPara) {
-        progStlInfoPara.setModificationNum(
-                ToolUtil.getIntIgnoreNull(progStlInfoPara.getModificationNum()) + 1);
+        progStlInfoPara.setRecversion(
+                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecversion()) + 1);
         progStlInfoPara.setArchivedFlag("0");
         progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());

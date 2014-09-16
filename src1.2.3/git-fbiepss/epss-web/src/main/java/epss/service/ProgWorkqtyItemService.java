@@ -72,12 +72,12 @@ public class ProgWorkqtyItemService {
         progStlItemSubQTemp.setSubcttItemPkid(progStlItemSubQShowPara.getEngQMng_SubcttItemPkid());
         progStlItemSubQTemp.setBeginToCurrentPeriodEQty(progStlItemSubQShowPara.getEngQMng_BeginToCurrentPeriodEQty());
         progStlItemSubQTemp.setCurrentPeriodEQty(progStlItemSubQShowPara.getEngQMng_CurrentPeriodEQty());
-        progStlItemSubQTemp.setArchivedFlag(progStlItemSubQShowPara.getEngQMng_DeletedFlag());
+        progStlItemSubQTemp.setArchivedFlag(progStlItemSubQShowPara.getEngQMng_ArchivedFlag());
         progStlItemSubQTemp.setCreatedBy(progStlItemSubQShowPara.getEngQMng_CreatedBy());
         progStlItemSubQTemp.setCreatedTime(progStlItemSubQShowPara.getEngQMng_CreatedTime());
         progStlItemSubQTemp.setLastUpdBy(progStlItemSubQShowPara.getEngQMng_LastUpdBy());
         progStlItemSubQTemp.setLastUpdTime(progStlItemSubQShowPara.getEngQMng_LastUpdTime());
-        progStlItemSubQTemp.setModificationNum(progStlItemSubQShowPara.getEngQMng_ModificationNum());
+        progStlItemSubQTemp.setRecversion(progStlItemSubQShowPara.getEngQMng_Recversion());
         return progStlItemSubQTemp;
     }
 
@@ -87,8 +87,8 @@ public class ProgWorkqtyItemService {
 
     public void updateRecord(ProgStlItemSubQShow progStlItemSubQShowPara){
         ProgStlItemSubQ progStlItemSubQTemp =fromModelShowToModel(progStlItemSubQShowPara);
-        progStlItemSubQTemp.setModificationNum(
-                ToolUtil.getIntIgnoreNull(progStlItemSubQTemp.getModificationNum())+1);
+        progStlItemSubQTemp.setRecversion(
+                ToolUtil.getIntIgnoreNull(progStlItemSubQTemp.getRecversion())+1);
         progStlItemSubQTemp.setArchivedFlag("0");
         progStlItemSubQTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlItemSubQTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());

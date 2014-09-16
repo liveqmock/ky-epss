@@ -167,9 +167,9 @@
                             <p:inputText id="periodNoForAdd"
                                          value="#{progStlInfoSubMAction.progStlInfoShowAdd.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
-                            <p:outputLabel value="备注内容：" for="noteForAdd"/>
-                            <p:inputText id="noteForAdd"
-                                         value="#{progStlInfoSubMAction.progStlInfoShowAdd.note}"/>
+                            <p:outputLabel value="备注内容：" for="remarkForAdd"/>
+                            <p:inputText id="remarkForAdd"
+                                         value="#{progStlInfoSubMAction.progStlInfoShowAdd.remark}"/>
                         </h:panelGrid>
                         <h:panelGrid id="pgOperBtnForAdd" columns="2">
                             <p:commandButton id="submitBtnForAdd"
@@ -207,8 +207,8 @@
                             <p:outputLabel value="期数编码：  " for="periodNoForUpd"/>
                             <p:inputText id="periodNoForUpd" value="#{progStlInfoSubMAction.progStlInfoShowUpd.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
-                            <p:outputLabel value="备注内容：" for="noteForUpd"/>
-                            <p:inputText id="noteForUpd" value="#{progStlInfoSubMAction.progStlInfoShowUpd.note}"/>
+                            <p:outputLabel value="备注内容：" for="remarkForUpd"/>
+                            <p:inputText id="remarkForUpd" value="#{progStlInfoSubMAction.progStlInfoShowUpd.remark}"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel for="createdByNameForUpd" value="创建人：" />
@@ -227,9 +227,9 @@
                             <h:inputText id="lastUpdTimeForUpd"
                                          value="#{progStlInfoSubMAction.progStlInfoShowUpd.lastUpdTime}"
                                          style="background-color:gainsboro" readonly="true"/>
-                            <p:outputLabel for="modificationNumForUpd" value="修改次数：" />
-                            <h:inputText id="modificationNumForUpd"
-                                         value="#{progStlInfoSubMAction.progStlInfoShowUpd.modificationNum}"
+                            <p:outputLabel for="recversionForUpd" value="修改次数：" />
+                            <h:inputText id="recversionForUpd"
+                                         value="#{progStlInfoSubMAction.progStlInfoShowUpd.recversion}"
                                          style="background-color:gainsboro;text-align:right;" readonly="true">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>
@@ -271,9 +271,9 @@
                                          value="#{progStlInfoSubMAction.progStlInfoShowDel.periodNo}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
-                            <p:outputLabel value="备注内容：" for="noteForDel"/>
-                            <p:inputText id="noteForDel"
-                                         value="#{progStlInfoSubMAction.progStlInfoShowDel.note}"
+                            <p:outputLabel value="备注内容：" for="remarkForDel"/>
+                            <p:inputText id="remarkForDel"
+                                         value="#{progStlInfoSubMAction.progStlInfoShowDel.remark}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                         </h:panelGrid>
@@ -294,9 +294,9 @@
                             <h:inputText id="lastUpdTimeForDel"
                                          value="#{progStlInfoSubMAction.progStlInfoShowDel.lastUpdTime}"
                                          style="background-color:gainsboro" readonly="true"/>
-                            <p:outputLabel for="modificationNumForDel" value="修改次数：" />
-                            <h:inputText id="modificationNumForDel"
-                                         value="#{progStlInfoSubMAction.progStlInfoShowDel.modificationNum}"
+                            <p:outputLabel for="recversionForDel" value="修改次数：" />
+                            <h:inputText id="recversionForDel"
+                                         value="#{progStlInfoSubMAction.progStlInfoShowDel.recversion}"
                                          style="background-color:gainsboro;text-align:right;" readonly="true">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>

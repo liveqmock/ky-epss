@@ -9,7 +9,7 @@ public class SignPartShow {
     private String operphone;
     private String otherphone;
     private String fax;
-    private String deletedFlag;
+    private String archivedFlag;
     private String originFlag;
     private String createdBy;
     private String createdByName;
@@ -17,8 +17,8 @@ public class SignPartShow {
     private String lastUpdBy;
     private String lastUpdByName;
     private String lastUpdTime;
-    private Integer modificationNum;
-    private String note;
+    private Integer recversion;
+    private String remark;
     public String getPkid() {
         return pkid;
     }
@@ -67,11 +67,11 @@ public class SignPartShow {
     public void setFax(String fax) {
         this.fax = fax == null ? null : fax.trim();
     }
-    public String getDeletedFlag() {
-        return deletedFlag;
+    public String getArchivedFlag() {
+        return archivedFlag;
     }
-    public void setDeletedFlag(String deletedFlag) {
-        this.deletedFlag = deletedFlag == null ? null : deletedFlag.trim();
+    public void setArchivedFlag(String archivedFlag) {
+        this.archivedFlag = archivedFlag == null ? null : archivedFlag.trim();
     }
     public String getOriginFlag() {
         return originFlag;
@@ -103,17 +103,17 @@ public class SignPartShow {
     public void setLastUpdTime(String lastUpdTime) {
         this.lastUpdTime = lastUpdTime;
     }
-    public Integer getModificationNum() {
-        return modificationNum;
+    public Integer getRecversion() {
+        return recversion;
     }
-    public void setModificationNum(Integer modificationNum) {
-        this.modificationNum = modificationNum;
+    public void setRecversion(Integer recversion) {
+        this.recversion = recversion;
     }
-    public String getNote() {
-        return note;
+    public String getRemark() {
+        return remark;
     }
-    public void setNote(String note) {
-        this.note = note == null ? null : note.trim();
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
     public String getCreatedByName() {
         return createdByName;

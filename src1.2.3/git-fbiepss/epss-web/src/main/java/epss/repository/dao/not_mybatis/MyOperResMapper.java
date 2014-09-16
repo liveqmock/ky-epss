@@ -60,7 +60,7 @@ public interface MyOperResMapper {
             "    t.parent_pkid as parentPkid," +
             "    t.id as id," +
             "    t.name as name," +
-            "    t.note as note," +
+            "    t.remark as remark," +
             "    t.created_by as createdBy," +
             "    (select name from oper where id=t.created_by) as createdByName," +
             "    t.CREATED_TIME as createdTime " +

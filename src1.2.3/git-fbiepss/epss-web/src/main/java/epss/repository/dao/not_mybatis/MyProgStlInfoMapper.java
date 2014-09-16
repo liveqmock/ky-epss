@@ -216,8 +216,8 @@ public interface MyProgStlInfoMapper {
             "     ,eispower.ATTACHMENT as attachment" +
             "     ,ecinfo.NAME as stlName" +
             "     ,eicust.NAME as signPartBName"+
-            "     ,eispower.NOTE as note" +
-            "     ,eispower.ARCHIVED_FLAG as deletedFlag" +
+            "     ,eispower.REMARK as remark" +
+            "     ,eispower.ARCHIVED_FLAG as archivedFlag" +
             "     ,eispower.CREATED_BY as createdBy" +
             "     ,eispower.CREATED_TIME as createdTime"+
             "     ,eispower.LAST_UPD_BY as lastUpdBy" +
@@ -235,7 +235,7 @@ public interface MyProgStlInfoMapper {
             "               ,eis.STL_PKID" +
             "               ,eis.PERIOD_NO" +
             "               ,eis.ATTACHMENT" +
-            "               ,eis.NOTE" +
+            "               ,eis.REMARK" +
             "               ,eis.ARCHIVED_FLAG" +
             "               ,eis.CREATED_BY" +
             "               ,eis.CREATED_TIME"+
@@ -277,8 +277,8 @@ public interface MyProgStlInfoMapper {
             "     ,eispower.ATTACHMENT as attachment" +
             "     ,ecinfo.NAME as stlName" +
             "     ,eicust.NAME as signPartBName"+
-            "     ,eispower.NOTE as note" +
-            "     ,eispower.ARCHIVED_FLAG as deletedFlag" +
+            "     ,eispower.REMARK as remark" +
+            "     ,eispower.ARCHIVED_FLAG as archivedFlag" +
             "     ,eispower.CREATED_BY as createdBy" +
             "     ,eispower.CREATED_TIME as createdTime"+
             "     ,eispower.LAST_UPD_BY as lastUpdBy" +
@@ -296,7 +296,7 @@ public interface MyProgStlInfoMapper {
             "             ,eis.STL_PKID" +
             "             ,eis.PERIOD_NO" +
             "             ,eis.ATTACHMENT" +
-            "             ,eis.NOTE" +
+            "             ,eis.REMARK" +
             "             ,eis.ARCHIVED_FLAG" +
             "             ,eis.CREATED_BY" +
             "             ,eis.CREATED_TIME"+
@@ -346,7 +346,7 @@ public interface MyProgStlInfoMapper {
             "     ,STL_TYPE as stlType" +
             "     ,STL_PKID as subcttPkid" +
             "     ,PERIOD_NO as periodNo" +
-            "     ,NOTE as note" +
+            "     ,REMARK as remark" +
             "     ,ATTACHMENT as attachment" +
             " from" +
             "     PROG_STL_INFO"+

@@ -128,7 +128,7 @@
                             </h:outputText>
                         </p:column>
                         <p:column style="width:100px" headerText="备注内容">
-                            <h:outputText value="#{record.subctt_Note}" />
+                            <h:outputText value="#{record.subctt_Remark}" />
                         </p:column>
                     </p:dataTable>
                     <p:dialog id="dlgViewForUpd" header="分包数量结算更新信息" widgetVar="wVDlgViewForUpd"
@@ -146,8 +146,8 @@
                                 <h:inputText id="nameForUpd" value="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_Name}"
                                              style="background-color:gainsboro"
                                              readonly="true"/>
-                                <p:outputLabel for="noteForUpd" value="备注内容:" />
-                                <h:inputText id="noteForUpd" value="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_Note}"
+                                <p:outputLabel for="remarkForUpd" value="备注内容:" />
+                                <h:inputText id="remarkForUpd" value="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_Remark}"
                                              style="background-color:gainsboro"
                                              readonly="true"/>
                                 <p:outputLabel for="unitItemInfoForUpd" value="单位:"/>
@@ -210,9 +210,9 @@
                                              value="#{progStlItemSubQAction.progStlItemSubQShowUpd.engQMng_LastUpdTime}"
                                              style="background-color:gainsboro"
                                              readonly="true"/>
-                                <p:outputLabel for="modificationNumItemInfoForUpd" value="修改次数:" />
-                                <h:inputText id="modificationNumItemInfoForUpd"
-                                             value="#{progStlItemSubQAction.progStlItemSubQShowUpd.engQMng_ModificationNum}"
+                                <p:outputLabel for="recversionItemInfoForUpd" value="修改次数:" />
+                                <h:inputText id="recversionItemInfoForUpd"
+                                             value="#{progStlItemSubQAction.progStlItemSubQShowUpd.engQMng_Recversion}"
                                              style="background-color:gainsboro;text-align:right;"
                                              readonly="true">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
@@ -243,8 +243,8 @@
                                 <h:inputText id="nameForDel" value="#{progStlItemSubQAction.progStlItemSubQShowDel.subctt_Name}"
                                              style="background-color:gainsboro"
                                              readonly="true"/>
-                                <p:outputLabel for="noteForDel" value="备注内容:" />
-                                <h:inputText id="noteForDel" value="#{progStlItemSubQAction.progStlItemSubQShowDel.subctt_Note}"
+                                <p:outputLabel for="remarkForDel" value="备注内容:" />
+                                <h:inputText id="remarkForDel" value="#{progStlItemSubQAction.progStlItemSubQShowDel.subctt_Remark}"
                                              style="background-color:gainsboro"
                                              readonly="true"/>
                                 <p:outputLabel for="unitItemInfoForDel" value="单位:"/>
@@ -306,9 +306,9 @@
                                              value="#{progStlItemSubQAction.progStlItemSubQShowDel.engQMng_LastUpdTime}"
                                              style="background-color:gainsboro"
                                              readonly="true"/>
-                                <p:outputLabel for="modificationNumItemInfoForDel" value="修改次数:" />
-                                <h:inputText id="modificationNumItemInfoForDel"
-                                             value="#{progStlItemSubQAction.progStlItemSubQShowDel.engQMng_ModificationNum}"
+                                <p:outputLabel for="recversionItemInfoForDel" value="修改次数:" />
+                                <h:inputText id="recversionItemInfoForDel"
+                                             value="#{progStlItemSubQAction.progStlItemSubQShowDel.engQMng_Recversion}"
                                              style="background-color:gainsboro;text-align:right;"
                                              readonly="true">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>

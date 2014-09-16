@@ -104,7 +104,7 @@
                             </h:outputText>
                         </p:column>
                         <p:column style="width:100px" headerText="分包备注">
-                            <h:outputText value="#{record.note}" />
+                            <h:outputText value="#{record.remark}" />
                         </p:column>
                     </p:dataTable>
                     <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
@@ -220,8 +220,8 @@
                                 <h:inputText id="unitItemInfo" value="#{subcttItemAction.cttItemShowSel.unit}"
                                              style="background-color:gainsboro;"
                                              readonly="true"/>
-                                <p:outputLabel for="note" value="备注内容：" />
-                                <h:inputText id="note" value="#{subcttItemAction.cttItemShowSel.note}"
+                                <p:outputLabel for="remark" value="备注内容：" />
+                                <h:inputText id="remark" value="#{subcttItemAction.cttItemShowSel.remark}"
                                              style="background-color:gainsboro;"
                                              readonly="true"/>
                                 <p:outputLabel for="originFlagItemInfo" value="数据来源：" />
@@ -246,8 +246,8 @@
                                 <h:inputText id="lastUpdTimeItemInfo" value="#{subcttItemAction.cttItemShowSel.lastUpdTime}"
                                              style="background-color:gainsboro"
                                              readonly="true"/>
-                                <p:outputLabel for="modificationNumItemInfo" value="修改次数：" />
-                                <h:inputText id="modificationNumItemInfo" value="#{subcttItemAction.cttItemShowSel.modificationNum}"
+                                <p:outputLabel for="recversionItemInfo" value="修改次数：" />
+                                <h:inputText id="recversionItemInfo" value="#{subcttItemAction.cttItemShowSel.recversion}"
                                              style="background-color:gainsboro;text-align:right;"
                                              readonly="true">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>

@@ -163,8 +163,7 @@ public class ProgStlInfoSubQSPAction {
         }
     }
 
-    public void selectRecordAction(String strPowerTypePara,
-                                   String strSubmitTypePara,
+    public void selectRecordAction(String strSubmitTypePara,
                                    ProgStlInfoShow progStlInfoShowPara) {
         try {
             progStlInfoShowPara.setCreatedByName(ToolUtil.getUserName(progStlInfoShowPara.getCreatedBy()));

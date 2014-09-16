@@ -131,8 +131,8 @@
                             <p:inputText id="periodNoForDlg" value="#{progStlInfoTkEstAction.progStlInfoShowSel.periodNo}"
                                          readonly="true"
                                          style="background-color:gainsboro"/>
-                            <p:outputLabel value="备注内容：" for="noteForDlg"/>
-                            <p:inputText id="noteForDlg" value="#{progStlInfoTkEstAction.progStlInfoShowSel.note}"
+                            <p:outputLabel value="备注内容：" for="remarkForDlg"/>
+                            <p:inputText id="remarkForDlg" value="#{progStlInfoTkEstAction.progStlInfoShowSel.remark}"
                                          readonly="true"
                                          style="background-color:gainsboro"/>
                         </h:panelGrid>
@@ -153,9 +153,9 @@
                             <h:inputText id="lastUpdTimeSel"
                                          value="#{progStlInfoTkEstAction.progStlInfoShowSel.lastUpdTime}"
                                          style="background-color:gainsboro" readonly="true"/>
-                            <p:outputLabel for="modificationNumSel" value="修改次数：" />
-                            <h:inputText id="modificationNumSel"
-                                         value="#{progStlInfoTkEstAction.progStlInfoShowSel.modificationNum}"
+                            <p:outputLabel for="recversionSel" value="修改次数：" />
+                            <h:inputText id="recversionSel"
+                                         value="#{progStlInfoTkEstAction.progStlInfoShowSel.recversion}"
                                          style="background-color:gainsboro;text-align:right;" readonly="true">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>

@@ -143,7 +143,7 @@ public class ProgStlItemSubQAction {
             progStlItemSubQShowTemp.setSubctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
 
             progStlItemSubQShowTemp.setSubctt_Name(itemUnit.getName());
-            progStlItemSubQShowTemp.setSubctt_Note(itemUnit.getNote());
+            progStlItemSubQShowTemp.setSubctt_Remark(itemUnit.getRemark());
 
             progStlItemSubQShowTemp.setSubctt_Unit(itemUnit.getUnit());
             progStlItemSubQShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
@@ -165,12 +165,12 @@ public class ProgStlItemSubQAction {
                 progStlItemSubQShowTemp.setEngQMng_SubcttItemPkid(progStlItemSubQ.getSubcttItemPkid());
                 progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(progStlItemSubQ.getBeginToCurrentPeriodEQty());
                 progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(progStlItemSubQ.getCurrentPeriodEQty());
-                progStlItemSubQShowTemp.setEngQMng_DeletedFlag(progStlItemSubQ.getArchivedFlag());
+                progStlItemSubQShowTemp.setEngQMng_ArchivedFlag(progStlItemSubQ.getArchivedFlag());
                 progStlItemSubQShowTemp.setEngQMng_CreatedBy(progStlItemSubQ.getCreatedBy());
                 progStlItemSubQShowTemp.setEngQMng_CreatedTime(progStlItemSubQ.getCreatedTime());
                 progStlItemSubQShowTemp.setEngQMng_LastUpdBy(progStlItemSubQ.getLastUpdBy());
                 progStlItemSubQShowTemp.setEngQMng_LastUpdTime(progStlItemSubQ.getLastUpdTime());
-                progStlItemSubQShowTemp.setEngQMng_ModificationNum(progStlItemSubQ.getModificationNum());
+                progStlItemSubQShowTemp.setEngQMng_Recversion(progStlItemSubQ.getRecversion());
             }
             sProgStlItemSubQShowListPara.add(progStlItemSubQShowTemp) ;
             recursiveDataTable(progStlItemSubQShowTemp.getSubctt_Pkid(), cttItemListPara, sProgStlItemSubQShowListPara);

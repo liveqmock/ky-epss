@@ -156,7 +156,7 @@
                             </h:outputText>
                         </p:column>
                         <p:column style="width:100px" headerText="成本备注">
-                            <h:outputText value="#{record.noteContrast}" />
+                            <h:outputText value="#{record.remarkContrast}" />
                         </p:column>
                     </p:dataTable>
                     <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
@@ -244,9 +244,9 @@
                                 <p:outputLabel for="unitItemInfoForAdd" value="单位:"/>
                                 <h:inputText id="unitItemInfoForAdd"
                                              value="#{cstplItemAction.cttItemShowAdd.unit}"/>
-                                <p:outputLabel for="noteForAdd" value="备注内容:" />
-                                <h:inputText id="noteForAdd"
-                                             value="#{cstplItemAction.cttItemShowAdd.note}"/>
+                                <p:outputLabel for="remarkForAdd" value="备注内容:" />
+                                <h:inputText id="remarkForAdd"
+                                             value="#{cstplItemAction.cttItemShowAdd.remark}"/>
                                 <p:outputLabel for="contractUnitPriceItemInfoForAdd" value="合同单价:"/>
                                 <h:inputText id="contractUnitPriceItemInfoForAdd"
                                              value="#{cstplItemAction.cttItemShowAdd.contractUnitPrice}"
@@ -315,9 +315,9 @@
                                 <p:outputLabel for="unitItemInfoForUpd" value="单位:"/>
                                 <h:inputText id="unitItemInfoForUpd"
                                              value="#{cstplItemAction.cttItemShowUpd.unit}"/>
-                                <p:outputLabel for="noteForUpd" value="备注内容:" />
-                                <h:inputText id="noteForUpd"
-                                             value="#{cstplItemAction.cttItemShowUpd.note}"/>
+                                <p:outputLabel for="remarkForUpd" value="备注内容:" />
+                                <h:inputText id="remarkForUpd"
+                                             value="#{cstplItemAction.cttItemShowUpd.remark}"/>
                                 <p:outputLabel for="contractUnitPriceItemInfoForUpd" value="合同单价:"/>
                                 <h:inputText id="contractUnitPriceItemInfoForUpd"
                                              value="#{cstplItemAction.cttItemShowUpd.contractUnitPrice}"
@@ -368,9 +368,9 @@
                                 <h:inputText id="lastUpdTimeItemInfoForUpd"
                                              value="#{cstplItemAction.cttItemShowUpd.lastUpdTime}"
                                              style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="modificationNumItemInfoForUpd" value="修改次数:" />
-                                <h:inputText id="modificationNumItemInfoForUpd"
-                                             value="#{cstplItemAction.cttItemShowUpd.modificationNum}"
+                                <p:outputLabel for="recversionItemInfoForUpd" value="修改次数:" />
+                                <h:inputText id="recversionItemInfoForUpd"
+                                             value="#{cstplItemAction.cttItemShowUpd.recversion}"
                                              style="background-color:gainsboro;text-align:right;" readonly="true">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                                 </h:inputText>
@@ -411,9 +411,9 @@
                                              value="#{cstplItemAction.cttItemShowDel.unit}"
                                              readonly="true"
                                              style="background-color:gainsboro"/>
-                                <p:outputLabel for="noteForDel" value="备注内容:" />
-                                <h:inputText id="noteForDel"
-                                             value="#{cstplItemAction.cttItemShowDel.note}"
+                                <p:outputLabel for="remarkForDel" value="备注内容:" />
+                                <h:inputText id="remarkForDel"
+                                             value="#{cstplItemAction.cttItemShowDel.remark}"
                                              readonly="true"
                                              style="background-color:gainsboro"/>
                                 <p:outputLabel for="contractUnitPriceItemInfoForDel" value="合同单价:"/>
@@ -470,9 +470,9 @@
                                 <h:inputText id="lastUpdTimeItemInfoForDel"
                                              value="#{cstplItemAction.cttItemShowDel.lastUpdTime}"
                                              style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="modificationNumItemInfoForDel" value="修改次数:" />
-                                <h:inputText id="modificationNumItemInfoForDel"
-                                             value="#{cstplItemAction.cttItemShowDel.modificationNum}"
+                                <p:outputLabel for="recversionItemInfoForDel" value="修改次数:" />
+                                <h:inputText id="recversionItemInfoForDel"
+                                             value="#{cstplItemAction.cttItemShowDel.recversion}"
                                              style="background-color:gainsboro;text-align:right;" readonly="true">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                                 </h:inputText>

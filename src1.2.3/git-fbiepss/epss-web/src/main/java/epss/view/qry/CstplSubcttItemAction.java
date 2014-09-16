@@ -339,8 +339,8 @@ public class CstplSubcttItemAction {
                     itemUnit.getLastUpdBy() ,
                     strLastUpdByName,
                     itemUnit.getLastUpdTime() ,
-                    itemUnit.getModificationNum(),
-                    itemUnit.getNote(),
+                    itemUnit.getRecversion(),
+                    itemUnit.getRemark(),
                     itemUnit.getCorrespondingPkid(),
                     "",
                     ""

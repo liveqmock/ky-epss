@@ -136,8 +136,8 @@
                                          style="background-color:gainsboro;width:328px;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
-                            <p:outputLabel value="备注内容：" for="noteForDlg"/>
-                            <p:inputText id="noteForDlg" value="#{tkcttInfoAction.cttInfoShowSel.note}"
+                            <p:outputLabel value="备注内容：" for="remarkForDlg"/>
+                            <p:inputText id="remarkForDlg" value="#{tkcttInfoAction.cttInfoShowSel.remark}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="签订日期：" for="signDateForDlg"/>
@@ -182,9 +182,9 @@
                             <h:inputText id="lastUpdTimeSel"
                                          value="#{tkcttInfoAction.cttInfoShowSel.lastUpdTime}"
                                          style="background-color:gainsboro" readonly="true"/>
-                            <p:outputLabel for="modificationNumSel" value="修改次数：" />
-                            <h:inputText id="modificationNumSel"
-                                         value="#{tkcttInfoAction.cttInfoShowSel.modificationNum}"
+                            <p:outputLabel for="recversionSel" value="修改次数：" />
+                            <h:inputText id="recversionSel"
+                                         value="#{tkcttInfoAction.cttInfoShowSel.recversion}"
                                          style="background-color:gainsboro;text-align:right;" readonly="true">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>

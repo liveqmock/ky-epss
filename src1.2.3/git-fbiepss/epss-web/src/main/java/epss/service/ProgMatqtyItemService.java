@@ -87,19 +87,19 @@ public class ProgMatqtyItemService {
         progStlItemSubMTemp.setBeginToCurrentPeriodMQty(progStlItemSubMShowPara.getEngMMng_BeginToCurrentPeriodMQty());
         progStlItemSubMTemp.setCurrentPeriodMQty(progStlItemSubMShowPara.getEngMMng_CurrentPeriodMQty());
         progStlItemSubMTemp.setmPurchaseUnitPrice(progStlItemSubMShowPara.getEngMMng_MPurchaseUnitPrice());
-        progStlItemSubMTemp.setArchivedFlag(progStlItemSubMShowPara.getEngMMng_DeletedFlag());
+        progStlItemSubMTemp.setArchivedFlag(progStlItemSubMShowPara.getEngMMng_ArchivedFlag());
         progStlItemSubMTemp.setCreatedBy(progStlItemSubMShowPara.getEngMMng_CreatedBy());
         progStlItemSubMTemp.setCreatedTime(progStlItemSubMShowPara.getEngMMng_CreatedTime());
         progStlItemSubMTemp.setLastUpdBy(progStlItemSubMShowPara.getEngMMng_LastUpdBy());
         progStlItemSubMTemp.setLastUpdTime(progStlItemSubMShowPara.getEngMMng_LastUpdTime());
-        progStlItemSubMTemp.setModificationNum(progStlItemSubMShowPara.getEngMMng_ModificationNum());
+        progStlItemSubMTemp.setRecversion(progStlItemSubMShowPara.getEngMMng_Recversion());
         return progStlItemSubMTemp;
     }
 
     public void updateRecord(ProgStlItemSubMShow progStlItemSubMShowPara){
         ProgStlItemSubM progStlItemSubMTemp =fromModelShowToModel(progStlItemSubMShowPara);
-        progStlItemSubMTemp.setModificationNum(
-                ToolUtil.getIntIgnoreNull(progStlItemSubMTemp.getModificationNum())+1);
+        progStlItemSubMTemp.setRecversion(
+                ToolUtil.getIntIgnoreNull(progStlItemSubMTemp.getRecversion())+1);
         progStlItemSubMTemp.setArchivedFlag("0");
         progStlItemSubMTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlItemSubMTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());

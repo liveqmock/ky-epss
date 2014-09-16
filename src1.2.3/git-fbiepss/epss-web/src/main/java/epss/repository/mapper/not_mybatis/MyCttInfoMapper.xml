@@ -15,18 +15,18 @@
         <result column="CTT_START_DATE" jdbcType="VARCHAR" property="cttStartDate" />
         <result column="CTT_END_DATE" jdbcType="VARCHAR" property="cttEndDate" />
         <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment" />
-        <result column="NOTE" jdbcType="VARCHAR" property="note" />
+        <result column="REMARK" jdbcType="VARCHAR" property="remark" />
         <result column="FLOW_STATUS" jdbcType="VARCHAR" property="flowStatus" />
         <result column="STR_FLOW_STATUS_BEGIN" jdbcType="VARCHAR" property="strStatusFlagBegin" />
         <result column="STR_FLOW_STATUS_END" jdbcType="VARCHAR" property="strStatusFlagEnd" />
         <result column="FLOW_STATUS_REASON" jdbcType="VARCHAR" property="flowStatusReason"/>
-        <result column="ARCHIVED_FLAG" jdbcType="VARCHAR" property="deletedFlag"/>
+        <result column="ARCHIVED_FLAG" jdbcType="VARCHAR" property="archivedFlag"/>
         <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
         <result column="CREATED_TIME" jdbcType="VARCHAR" property="createdTime" />
         <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
         <result column="LAST_UPD_TIME" jdbcType="VARCHAR" property="lastUpdTime" />
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
-        <result column="MODIFICATION_NUM" jdbcType="DECIMAL" property="modificationNum" />
+        <result column="RECVERSION" jdbcType="DECIMAL" property="recversion" />
         <result column="TYPE" jdbcType="CHAR" property="type" />
     </resultMap>
     <select id="selectCttByStatusFlagBegin_End" parameterType="epss.repository.model.model_show.CttInfoShow"
@@ -46,13 +46,13 @@
                 eic.CTT_START_DATE,
                 eic.CTT_END_DATE,
                 eic.ATTACHMENT,
-                eic.NOTE,
+                eic.REMARK,
                 eic.ARCHIVED_FLAG,
                 eic.CREATED_BY,
                 eic.CREATED_TIME,
                 eic.LAST_UPD_BY,
                 eic.LAST_UPD_TIME,
-                eic.MODIFICATION_NUM,
+                eic.RECVERSION,
                 eic.FLOW_STATUS,
                 '' AS STR_FLOW_STATUS_BEGIN,
                 '' AS STR_FLOW_STATUS_END,
@@ -96,11 +96,11 @@
         <if test="attachment != null and attachment != ''">
             and eic.attachment like CONCAT('%',CONCAT(trim(#{attachment}),'%'))
         </if>
-        <if test="note != null and note != ''">
-            and eic.note like CONCAT('%',CONCAT(trim(#{note}),'%'))
+        <if test="remark != null and remark != ''">
+            and eic.remark like CONCAT('%',CONCAT(trim(#{remark}),'%'))
         </if>
-        <if test="deletedFlag != null and deletedFlag != ''">
-            and eic.ARCHIVED_FLAG = #{deletedFlag}
+        <if test="archivedFlag != null and archivedFlag != ''">
+            and eic.ARCHIVED_FLAG = #{archivedFlag}
         </if>
 
         <!--<if test='strStatusFlagBegin == null and strStatusFlagEnd == "0"'>-->

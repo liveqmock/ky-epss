@@ -169,35 +169,27 @@ public class CstplInfoAction {
         rowSelectedFlag = "false";
     }
 
-    public void selectRecordAction(String strPowerTypePara,
+    public void selectRecordAction(
                                    String strSubmitTypePara,
                                    CttInfoShow cttInfoShowSelected) {
         try {
             strSubmitType = strSubmitTypePara;
             cttInfoShowSelected.setCreatedByName(ToolUtil.getUserName(cttInfoShowSelected.getCreatedBy()));
             cttInfoShowSelected.setLastUpdByName(ToolUtil.getUserName(cttInfoShowSelected.getLastUpdBy()));
-            // ≤È—Ø
-            if (strPowerTypePara.equals("Qry")) {
+            if (strSubmitTypePara.equals("Sel")) {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
-            } else// Œ¨ª§
-            if (strPowerTypePara.equals("Mng")) {
-                if (strSubmitTypePara.equals("Sel")) {
-                    cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
-                    rowSelectedFlag = "true";
-                } else if (strSubmitTypePara.equals("Add")) {
-                    cttInfoShowAdd = new CttInfoShow();
-                    cttInfoShowAdd.setParentPkid(strBelongToPkid);
-                    rowSelectedFlag = "false";
-                } else {
-                    if (strSubmitTypePara.equals("Upd")) {
-                        cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
-                        rowSelectedFlag = "false";
-                    } else if (strSubmitTypePara.equals("Del")) {
-                        cttInfoShowDel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
-                        rowSelectedFlag = "false";
-                    }
-                }
-            } else {
+                rowSelectedFlag = "true";
+            } else if (strSubmitTypePara.equals("Add")) {
+                cttInfoShowAdd = new CttInfoShow();
+                cttInfoShowAdd.setParentPkid(strBelongToPkid);
+                rowSelectedFlag = "false";
+            } else if (strSubmitTypePara.equals("Upd")) {
+                cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
+                rowSelectedFlag = "false";
+            } else if (strSubmitTypePara.equals("Del")) {
+                cttInfoShowDel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
+                rowSelectedFlag = "false";
+            }else{
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                 rowSelectedFlag = "true";
             }

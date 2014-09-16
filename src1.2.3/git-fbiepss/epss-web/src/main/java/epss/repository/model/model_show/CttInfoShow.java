@@ -24,12 +24,12 @@ public class CttInfoShow implements Serializable {
     private String cttStartDate;
     private String cttEndDate;
     private String attachment;
-    private String note;
+    private String remark;
     private String flowStatus;
     private String strStatusFlagBegin;
     private String strStatusFlagEnd;
     private String flowStatusReason;
-    private String deletedFlag;
+    private String archivedFlag;
     private String createdBy;
     private String createdByName;
     private String createdTime;
@@ -37,35 +37,35 @@ public class CttInfoShow implements Serializable {
     private String lastUpdByName;
     private String lastUpdTime;
     private String spareField;
-    private Integer modificationNum;
+    private Integer recversion;
     private String type;
     private Boolean isSeled;
     public String getPkid() {
         return pkid;
     }
 
-    public CttInfoShow(String pkid, String id, String cttType, String name, String note,
+    public CttInfoShow(String pkid, String id, String cttType, String name, String remark,
                        String flowStatus, String flowStatusReason, String lastUpdBy,
-                       String lastUpdTime, Integer modificationNum, Boolean isSeled) {
+                       String lastUpdTime, Integer recversion, Boolean isSeled) {
         this.pkid = pkid;
         this.id = id;
         this.cttType=cttType;
         this.name = name;
-        this.note = note;
+        this.remark = remark;
         this.flowStatus = flowStatus;
         this.flowStatusReason = flowStatusReason;
         this.lastUpdBy=lastUpdBy;
         this.lastUpdTime=lastUpdTime;
-        this.modificationNum = modificationNum;
+        this.recversion = recversion;
         this.isSeled=isSeled;
     }
 
-    public CttInfoShow(String id, String name, String note, String signPartAName,
+    public CttInfoShow(String id, String name, String remark, String signPartAName,
                        String signPartBName, String cttStartDate, String cttEndDate,
                        String flowStatus, String flowStatusReason) {
         this.id = id;
         this.name = name;
-        this.note = note;
+        this.remark = remark;
         this.signPartAName = signPartAName;
         this.signPartBName = signPartBName;
         this.cttStartDate = cttStartDate;
@@ -185,14 +185,6 @@ public class CttInfoShow implements Serializable {
         this.attachment = attachment == null ? null : attachment.trim();
     }
 
-    public String getNote() {
-        return note;
-    }
-
-    public void setNote(String note) {
-        this.note = note == null ? null : note.trim();
-    }
-
     public String getFlowStatus() {
         return flowStatus;
     }
@@ -209,12 +201,12 @@ public class CttInfoShow implements Serializable {
         this.flowStatusReason = flowStatusReason;
     }
 
-    public String getDeletedFlag() {
-        return deletedFlag;
+    public String getArchivedFlag() {
+        return archivedFlag;
     }
 
-    public void setDeletedFlag(String deletedFlag) {
-        this.deletedFlag = deletedFlag == null ? null : deletedFlag.trim();
+    public void setArchivedFlag(String archivedFlag) {
+        this.archivedFlag = archivedFlag == null ? null : archivedFlag.trim();
     }
 
     public String getStrStatusFlagBegin() {
@@ -273,12 +265,20 @@ public class CttInfoShow implements Serializable {
         this.spareField = spareField;
     }
 
-    public Integer getModificationNum() {
-        return modificationNum;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setModificationNum(Integer modificationNum) {
-        this.modificationNum = modificationNum;
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public Integer getRecversion() {
+        return recversion;
+    }
+
+    public void setRecversion(Integer recversion) {
+        this.recversion = recversion;
     }
 
     public String getCreatedByName() {

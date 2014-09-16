@@ -533,7 +533,7 @@ public class ProgStlItemSubStlmentAction {
             progStlItemSubStlmentShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
             progStlItemSubStlmentShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
             progStlItemSubStlmentShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
-            progStlItemSubStlmentShowTemp.setSubctt_Note(itemUnit.getNote());
+            progStlItemSubStlmentShowTemp.setSubctt_Remark(itemUnit.getRemark());
             progStlItemSubStlmentShowTemp.setSubctt_SpareField(itemUnit.getSpareField());
             sProgStlItemSubStlmentShowListPara.add(progStlItemSubStlmentShowTemp);
             recursiveDataTable(progStlItemSubStlmentShowTemp.getSubctt_ItemPkid(), cttItemListPara, sProgStlItemSubStlmentShowListPara);

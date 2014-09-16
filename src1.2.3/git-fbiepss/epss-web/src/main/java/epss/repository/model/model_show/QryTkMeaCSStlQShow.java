@@ -66,7 +66,7 @@ public class QryTkMeaCSStlQShow implements Serializable {
     // 计量成本分包结算金额差
     private BigDecimal meaSCstplItem_AddUpAmt;
 
-    private String itemNote;
+    private String itemRemark;
 
     public String getTkcttItem_Pkid() {
         return tkcttItem_Pkid;
@@ -332,11 +332,11 @@ public class QryTkMeaCSStlQShow implements Serializable {
         this.meaSCstplItem_AddUpAmt = meaSCstplItem_AddUpAmt;
     }
 
-    public String getItemNote() {
-        return itemNote;
+    public String getItemRemark() {
+        return itemRemark;
     }
 
-    public void setItemNote(String itemNote) {
-        this.itemNote = itemNote;
+    public void setItemRemark(String itemRemark) {
+        this.itemRemark = itemRemark;
     }
 }

@@ -23,7 +23,7 @@ public class ProgStlItemSubStlmentShow implements Serializable {
     private String subctt_ItemName;
     private String subctt_ParentPkid;
     private String subctt_Name;
-    private String subctt_Note;
+    private String subctt_Remark;
     private String subctt_Unit;
     private BigDecimal subctt_ContractUnitPrice;
     private BigDecimal subctt_ContractQuantity;
@@ -40,9 +40,9 @@ public class ProgStlItemSubStlmentShow implements Serializable {
     private BigDecimal engPMng_CurrentPeriodAmt;
     private BigDecimal engPMng_BeginToCurrentPeriodEQty;
     private BigDecimal engPMng_BeginToCurrentPeriodAmt;
-    private String engPMng_Note;
+    private String engPMng_Remark;
     private String engPMng_State;
-    private String engPMng_DeletedFlag;
+    private String engPMng_ArchivedFlag;
     private String engPMng_OriginFlag;
     private String engPMng_CreatedBy;
     private String engPMng_CreatedByName;
@@ -50,7 +50,7 @@ public class ProgStlItemSubStlmentShow implements Serializable {
     private String engPMng_LastUpdBy;
     private String engPMng_LastUpdByName;
     private String engPMng_LastUpdTime;
-    private Integer engPMng_ModificationNum;
+    private Integer engPMng_Recversion;
     private Integer engPMng_RowNo;
 
     public ProgStlItemSubStlmentShow() {
@@ -137,12 +137,12 @@ public class ProgStlItemSubStlmentShow implements Serializable {
         this.subctt_Name = subctt_Name;
     }
 
-    public String getSubctt_Note() {
-        return subctt_Note;
+    public String getSubctt_Remark() {
+        return subctt_Remark;
     }
 
-    public void setSubctt_Note(String subctt_Note) {
-        this.subctt_Note = subctt_Note;
+    public void setSubctt_Remark(String subctt_Remark) {
+        this.subctt_Remark = subctt_Remark;
     }
 
     public String getSubctt_Unit() {
@@ -257,12 +257,12 @@ public class ProgStlItemSubStlmentShow implements Serializable {
         this.engPMng_BeginToCurrentPeriodAmt = engPMng_BeginToCurrentPeriodAmt;
     }
 
-    public String getEngPMng_Note() {
-        return engPMng_Note;
+    public String getEngPMng_Remark() {
+        return engPMng_Remark;
     }
 
-    public void setEngPMng_Note(String engPMng_Note) {
-        this.engPMng_Note = engPMng_Note;
+    public void setEngPMng_Remark(String engPMng_Remark) {
+        this.engPMng_Remark = engPMng_Remark;
     }
 
     public String getEngPMng_State() {
@@ -273,12 +273,12 @@ public class ProgStlItemSubStlmentShow implements Serializable {
         this.engPMng_State = engPMng_State;
     }
 
-    public String getEngPMng_DeletedFlag() {
-        return engPMng_DeletedFlag;
+    public String getEngPMng_ArchivedFlag() {
+        return engPMng_ArchivedFlag;
     }
 
-    public void setEngPMng_DeletedFlag(String engPMng_DeletedFlag) {
-        this.engPMng_DeletedFlag = engPMng_DeletedFlag;
+    public void setEngPMng_ArchivedFlag(String engPMng_ArchivedFlag) {
+        this.engPMng_ArchivedFlag = engPMng_ArchivedFlag;
     }
 
     public String getEngPMng_OriginFlag() {
@@ -321,12 +321,12 @@ public class ProgStlItemSubStlmentShow implements Serializable {
         this.engPMng_LastUpdTime = engPMng_LastUpdTime;
     }
 
-    public Integer getEngPMng_ModificationNum() {
-        return engPMng_ModificationNum;
+    public Integer getEngPMng_Recversion() {
+        return engPMng_Recversion;
     }
 
-    public void setEngPMng_ModificationNum(Integer engPMng_ModificationNum) {
-        this.engPMng_ModificationNum = engPMng_ModificationNum;
+    public void setEngPMng_Recversion(Integer engPMng_Recversion) {
+        this.engPMng_Recversion = engPMng_Recversion;
     }
 
     public String getEngPMng_CreatedByName() {

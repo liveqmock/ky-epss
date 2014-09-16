@@ -31,9 +31,9 @@ public class SignPartService {
         SignPartExample.Criteria criteria = example.createCriteria();
         criteria.andIdLike("%" + ToolUtil.getStrIgnoreNull(signPartShowPara.getId()) + "%")
                 .andNameLike("%" + ToolUtil.getStrIgnoreNull(signPartShowPara.getName()) + "%")
-                .andArchivedFlagLike("%" + ToolUtil.getStrIgnoreNull(signPartShowPara.getDeletedFlag()) + "%");
-        if (!ToolUtil.getStrIgnoreNull(signPartShowPara.getNote()).equals("")){
-            criteria.andNoteLike("%"+signPartShowPara .getNote()+"%");
+                .andArchivedFlagLike("%" + ToolUtil.getStrIgnoreNull(signPartShowPara.getArchivedFlag()) + "%");
+        if (!ToolUtil.getStrIgnoreNull(signPartShowPara.getRemark()).equals("")){
+            criteria.andRemarkLike("%"+signPartShowPara .getRemark()+"%");
         }
         example.setOrderByClause("ID ASC") ;
         List<SignPart> signPartListTemp = signPartMapper.selectByExample(example);
@@ -76,7 +76,7 @@ public class SignPartService {
     }
 
     public void insertRecord(SignPartShow signPartShowPara) {
-        signPartShowPara.setDeletedFlag("0");
+        signPartShowPara.setArchivedFlag("0");
         signPartShowPara.setOriginFlag("0");
         signPartShowPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
         signPartShowPara.setCreatedTime(ToolUtil.getStrLastUpdTime());
@@ -95,14 +95,14 @@ public class SignPartService {
         signPartTemp.setOperphone(signPartShowPara.getOperphone());
         signPartTemp.setOtherphone(signPartShowPara.getOtherphone());
         signPartTemp.setFax(signPartShowPara.getFax());
-        signPartTemp.setArchivedFlag(signPartShowPara.getDeletedFlag());
+        signPartTemp.setArchivedFlag(signPartShowPara.getArchivedFlag());
         signPartTemp.setOriginFlag(signPartShowPara.getOriginFlag());
         signPartTemp.setCreatedBy(signPartShowPara.getCreatedBy());
-        signPartTemp.setCreatedTime(signPartShowPara.getCreatedTime()); ;
+        signPartTemp.setCreatedTime(signPartShowPara.getCreatedTime());
         signPartTemp.setLastUpdBy(signPartShowPara.getLastUpdBy());
         signPartTemp.setLastUpdTime(signPartShowPara.getLastUpdTime());
-        signPartTemp.setModificationNum(signPartShowPara.getModificationNum());
-        signPartTemp.setNote(signPartShowPara.getNote());
+        signPartTemp.setRecversion(signPartShowPara.getRecversion());
+        signPartTemp.setRemark(signPartShowPara.getRemark());
         return signPartTemp;
     }
     private SignPartShow fromModelToShow(SignPart signPartPara) {
@@ -115,21 +115,21 @@ public class SignPartService {
         signPartShowTemp.setOperphone(signPartPara.getOperphone());
         signPartShowTemp.setOtherphone(signPartPara.getOtherphone());
         signPartShowTemp.setFax(signPartPara.getFax());
-        signPartShowTemp.setDeletedFlag(signPartPara.getArchivedFlag());
+        signPartShowTemp.setArchivedFlag(signPartPara.getArchivedFlag());
         signPartShowTemp.setOriginFlag(signPartPara.getOriginFlag());
         signPartShowTemp.setCreatedBy(signPartPara.getCreatedBy());
         signPartShowTemp.setCreatedTime(signPartPara.getCreatedTime());
         signPartShowTemp.setLastUpdBy(signPartPara.getLastUpdBy());
         signPartShowTemp.setLastUpdTime(signPartPara.getLastUpdTime());
-        signPartShowTemp.setModificationNum(signPartPara.getModificationNum());
-        signPartShowTemp.setNote(signPartPara.getNote());
+        signPartShowTemp.setRecversion(signPartPara.getRecversion());
+        signPartShowTemp.setRemark(signPartPara.getRemark());
         return signPartShowTemp;
     }
 
     public void updateRecord(SignPartShow signPartShowPara){
-        signPartShowPara.setModificationNum(
-                ToolUtil.getIntIgnoreNull(signPartShowPara.getModificationNum())+1);
-        signPartShowPara.setDeletedFlag("0");
+        signPartShowPara.setRecversion(
+                ToolUtil.getIntIgnoreNull(signPartShowPara.getRecversion())+1);
+        signPartShowPara.setArchivedFlag("0");
         signPartShowPara.setOriginFlag("0");
         signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         signPartShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());

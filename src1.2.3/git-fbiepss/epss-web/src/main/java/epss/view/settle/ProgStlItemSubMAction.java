@@ -143,7 +143,7 @@ public class ProgStlItemSubMAction {
             progStlItemSubMShowTemp.setSubctt_Orderid(itemUnit.getOrderid());
             progStlItemSubMShowTemp.setSubctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
             progStlItemSubMShowTemp.setSubctt_Name(itemUnit.getName());
-            progStlItemSubMShowTemp.setSubctt_Note(itemUnit.getNote());
+            progStlItemSubMShowTemp.setSubctt_Remark(itemUnit.getRemark());
             progStlItemSubMShowTemp.setSubctt_Unit(itemUnit.getUnit());
             progStlItemSubMShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             progStlItemSubMShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
@@ -165,12 +165,12 @@ public class ProgStlItemSubMAction {
                 progStlItemSubMShowTemp.setEngMMng_BeginToCurrentPeriodMQty(progStlItemSubM.getBeginToCurrentPeriodMQty());
                 progStlItemSubMShowTemp.setEngMMng_CurrentPeriodMQty(progStlItemSubM.getCurrentPeriodMQty());
                 progStlItemSubMShowTemp.setEngMMng_MPurchaseUnitPrice(progStlItemSubM.getmPurchaseUnitPrice());
-                progStlItemSubMShowTemp.setEngMMng_DeletedFlag(progStlItemSubM.getArchivedFlag());
+                progStlItemSubMShowTemp.setEngMMng_ArchivedFlag(progStlItemSubM.getArchivedFlag());
                 progStlItemSubMShowTemp.setEngMMng_CreatedBy(progStlItemSubM.getCreatedBy());
                 progStlItemSubMShowTemp.setEngMMng_CreatedTime(progStlItemSubM.getCreatedTime());
                 progStlItemSubMShowTemp.setEngMMng_LastUpdBy(progStlItemSubM.getLastUpdBy());
                 progStlItemSubMShowTemp.setEngMMng_LastUpdTime(progStlItemSubM.getLastUpdTime());
-                progStlItemSubMShowTemp.setEngMMng_ModificationNum(progStlItemSubM.getModificationNum());
+                progStlItemSubMShowTemp.setEngMMng_Recversion(progStlItemSubM.getRecversion());
             }
             sProgStlItemSubMShowListPara.add(progStlItemSubMShowTemp) ;
             recursiveDataTable(progStlItemSubMShowTemp.getSubctt_Pkid(), cttItemListPara, sProgStlItemSubMShowListPara);

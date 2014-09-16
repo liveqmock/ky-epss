@@ -107,7 +107,7 @@
                         <h:outputText value="#{record.signDate}"/>
                     </p:column>
                     <p:column headerText="备注内容" style="text-align:center">
-                        <h:outputText value="#{record.note}"/>
+                        <h:outputText value="#{record.remark}"/>
                     </p:column>
                 </p:dataTable>
                 <p:dialog id="dlgViewForUpd" header="成本计划更新信息" widgetVar="wVDlgViewForUpd"
@@ -131,8 +131,8 @@
                             <p:outputLabel value="制定日期：" for="signDateForUpd"/>
                             <p:inputText id="signDateForUpd" value="#{cstplInfoAction.cttInfoShowUpd.signDate}"
                                          onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                            <p:outputLabel value="备注内容：" for="noteForUpd"/>
-                            <p:inputText id="noteForUpd" value="#{cstplInfoAction.cttInfoShowUpd.note}"/>
+                            <p:outputLabel value="备注内容：" for="remarkForUpd"/>
+                            <p:inputText id="remarkForUpd" value="#{cstplInfoAction.cttInfoShowUpd.remark}"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel for="createdByNameForUpd" value="创建人：" />
@@ -151,9 +151,9 @@
                             <h:inputText id="lastUpdTimeForUpd"
                                          value="#{cstplInfoAction.cttInfoShowUpd.lastUpdTime}"
                                          style="background-color:gainsboro" readonly="true"/>
-                            <p:outputLabel for="modificationNumForUpd" value="修改次数：" />
-                            <h:inputText id="modificationNumForUpd"
-                                         value="#{cstplInfoAction.cttInfoShowUpd.modificationNum}"
+                            <p:outputLabel for="recversionForUpd" value="修改次数：" />
+                            <h:inputText id="recversionForUpd"
+                                         value="#{cstplInfoAction.cttInfoShowUpd.recversion}"
                                          style="background-color:gainsboro;text-align:right;" readonly="true">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>

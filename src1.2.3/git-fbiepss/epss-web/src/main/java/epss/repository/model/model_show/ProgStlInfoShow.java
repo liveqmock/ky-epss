@@ -16,13 +16,13 @@ public class ProgStlInfoShow {
     private String stlName;
     private String signPartBName;
     private String periodNo;
-    private String note;
+    private String remark;
     private String attachment;
     private String strStatusFlagBegin;
     private String strStatusFlagEnd;
     private String flowStatus;
     private String flowStatusReason;
-    private String deletedFlag;
+    private String archivedFlag;
     private String createdBy;
     private String createdByName;
     private String createdTime;
@@ -30,7 +30,7 @@ public class ProgStlInfoShow {
     private String lastUpdByName;
     private String lastUpdTime;
     private String spareField;
-    private Integer modificationNum;
+    private Integer recversion;
     private String type;
     private String autoLinkAdd;
 
@@ -90,8 +90,8 @@ public class ProgStlInfoShow {
         this.periodNo = periodNo;
     }
 
-    public String getNote() {
-        return note;
+    public String getRemark() {
+        return remark;
     }
 
     public String getAttachment() {
@@ -102,8 +102,8 @@ public class ProgStlInfoShow {
         this.attachment = attachment;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getFlowStatus() {
@@ -138,12 +138,12 @@ public class ProgStlInfoShow {
         this.flowStatusReason = flowStatusReason;
     }
 
-    public String getDeletedFlag() {
-        return deletedFlag;
+    public String getArchivedFlag() {
+        return archivedFlag;
     }
 
-    public void setDeletedFlag(String deletedFlag) {
-        this.deletedFlag = deletedFlag;
+    public void setArchivedFlag(String archivedFlag) {
+        this.archivedFlag = archivedFlag;
     }
 
     public String getCreatedBy() {
@@ -184,14 +184,6 @@ public class ProgStlInfoShow {
 
     public void setSpareField(String spareField) {
         this.spareField = spareField;
-    }
-
-    public Integer getModificationNum() {
-        return modificationNum;
-    }
-
-    public void setModificationNum(Integer modificationNum) {
-        this.modificationNum = modificationNum;
     }
 
     public String getStlName() {
@@ -240,5 +232,13 @@ public class ProgStlInfoShow {
 
     public void setFlowStatusReason(String flowStatusReason) {
         this.flowStatusReason = flowStatusReason;
+    }
+
+    public Integer getRecversion() {
+        return recversion;
+    }
+
+    public void setRecversion(Integer recversion) {
+        this.recversion = recversion;
     }
 }

@@ -134,9 +134,9 @@
                                          style="background-color:gainsboro;width:328px;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
-                            <p:outputLabel value="协作单位：" for="noteForDlg"/>
-                            <p:inputText id="noteForDlg"
-                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.note}"
+                            <p:outputLabel value="协作单位：" for="remarkForDlg"/>
+                            <p:inputText id="remarkForDlg"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.remark}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="期数编码：" for="signDateForDlg"/>
@@ -162,9 +162,9 @@
                             <h:inputText id="lastUpdTimeSel"
                                          value="#{progStlInfoSubQAction.progStlInfoShowSel.lastUpdTime}"
                                          style="background-color:gainsboro" readonly="true"/>
-                            <p:outputLabel for="modificationNumSel" value="修改次数：" />
-                            <h:inputText id="modificationNumSel"
-                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.modificationNum}"
+                            <p:outputLabel for="recversionSel" value="修改次数：" />
+                            <h:inputText id="recversionSel"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.recversion}"
                                          style="background-color:gainsboro;text-align:right;" readonly="true">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>

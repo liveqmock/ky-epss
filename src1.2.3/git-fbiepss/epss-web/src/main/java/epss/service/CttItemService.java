@@ -148,15 +148,15 @@ public class CttItemService {
         cttItemTemp.setContractQuantity(cttItemShowPara.getContractQuantity());
         cttItemTemp.setSignPartAPrice(cttItemShowPara.getSignPartAPrice());
         cttItemTemp.setContractAmount(cttItemShowPara.getContractAmount());
-        cttItemTemp.setArchivedFlag(cttItemShowPara.getDeletedFlag());
+        cttItemTemp.setArchivedFlag(cttItemShowPara.getArchivedFlag());
         cttItemTemp.setOriginFlag(cttItemShowPara.getOriginFlag());
         cttItemTemp.setCreatedTime(cttItemShowPara.getCreatedTime());
         cttItemTemp.setCreatedBy(cttItemShowPara.getCreatedBy());
         cttItemTemp.setLastUpdTime(cttItemShowPara.getLastUpdTime());
         cttItemTemp.setLastUpdBy(cttItemShowPara.getLastUpdBy());
-        cttItemTemp.setNote(cttItemShowPara.getNote()) ;
+        cttItemTemp.setRemark(cttItemShowPara.getRemark());
         cttItemTemp.setCorrespondingPkid(cttItemShowPara.getCorrespondingPkid());
-        cttItemTemp.setModificationNum(cttItemShowPara.getModificationNum());
+        cttItemTemp.setRecversion(cttItemShowPara.getRecversion());
         return cttItemTemp;
     }
     /*层级关系到总包合同*/
@@ -169,15 +169,15 @@ public class CttItemService {
         cttItemShowTemp.setGrade(cttItemPara.getGrade()) ;
         cttItemShowTemp.setOrderid(cttItemPara.getOrderid()) ;
         cttItemShowTemp.setName(cttItemPara.getName()) ;
-        cttItemShowTemp.setNote(cttItemPara.getNote()) ;
+        cttItemShowTemp.setRemark(cttItemPara.getRemark()) ;
         cttItemShowTemp.setCorrespondingPkid(cttItemPara.getCorrespondingPkid());
         return cttItemShowTemp;
     }
 
     public void updateRecord(CttItemShow cttItemShowPara) {
         CttItem cttItemTemp =fromModelShowToModel(cttItemShowPara);
-        cttItemTemp.setModificationNum(
-                ToolUtil.getIntIgnoreNull(cttItemTemp.getModificationNum())+1);
+        cttItemTemp.setRecversion(
+                ToolUtil.getIntIgnoreNull(cttItemTemp.getRecversion())+1);
         cttItemTemp.setArchivedFlag("0");
         cttItemTemp.setOriginFlag("0");
         cttItemTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());

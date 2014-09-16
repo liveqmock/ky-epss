@@ -21,7 +21,7 @@ public class CstplItemShow implements Serializable {
     private String name;
     private String itemPkid;
     private String parentPkid;
-    private String note;
+    private String remark;
     private String correspondingPkid;
     private String strCorrespondingItemNo;
     private String unit;
@@ -29,13 +29,13 @@ public class CstplItemShow implements Serializable {
     private BigDecimal contractQuantity;
     private BigDecimal contractAmount;
     private BigDecimal signPartAPrice;
-    private String deletedFlag;
+    private String archivedFlag;
     private String originFlag;
     private String createdBy;
     private String createdTime;
     private String lastUpdBy;
     private String lastUpdTime;
-    private Integer modificationNum;
+    private Integer recversion;
 
     // 对比项
     private String pkidContrast;
@@ -47,20 +47,20 @@ public class CstplItemShow implements Serializable {
     private String nameContrast;
     private String itemPkidContrast;
     private String parentPkidContrast;
-    private String noteContrast;
+    private String remarkContrast;
     private String correspondingPkidContrast;
     private String unitContrast;
     private BigDecimal contractUnitPriceContrast;
     private BigDecimal contractQuantityContrast;
     private BigDecimal contractAmountContrast;
     private BigDecimal signPartAPriceContrast;
-    private String deletedFlagContrast;
+    private String archivedFlagContrast;
     private String originFlagContrast;
     private String createdByContrast;
     private String createdTimeContrast;
     private String lastUpdByContrast;
     private String lastUpdTimeContrast;
-    private Integer modificationNumContrast;
+    private Integer recversionContrast;
 
     /*编号，用作显示用，不在数据库里存储，动态显示。依据correspondingPkid*/
     private String correspondingItemNoContrast;
@@ -133,12 +133,12 @@ public class CstplItemShow implements Serializable {
         this.parentPkid = parentPkid;
     }
 
-    public String getNote() {
-        return note;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getCorrespondingPkid() {
@@ -197,14 +197,6 @@ public class CstplItemShow implements Serializable {
         this.signPartAPrice = signPartAPrice;
     }
 
-    public String getDeletedFlag() {
-        return deletedFlag;
-    }
-
-    public void setDeletedFlag(String deletedFlag) {
-        this.deletedFlag = deletedFlag;
-    }
-
     public String getOriginFlag() {
         return originFlag;
     }
@@ -227,14 +219,6 @@ public class CstplItemShow implements Serializable {
 
     public void setLastUpdBy(String lastUpdBy) {
         this.lastUpdBy = lastUpdBy;
-    }
-
-    public Integer getModificationNum() {
-        return modificationNum;
-    }
-
-    public void setModificationNum(Integer modificationNum) {
-        this.modificationNum = modificationNum;
     }
 
     public String getPkidContrast() {
@@ -301,12 +285,12 @@ public class CstplItemShow implements Serializable {
         this.parentPkidContrast = parentPkidContrast;
     }
 
-    public String getNoteContrast() {
-        return noteContrast;
+    public String getRemarkContrast() {
+        return remarkContrast;
     }
 
-    public void setNoteContrast(String noteContrast) {
-        this.noteContrast = noteContrast;
+    public void setRemarkContrast(String remarkContrast) {
+        this.remarkContrast = remarkContrast;
     }
 
     public String getCorrespondingPkidContrast() {
@@ -355,14 +339,6 @@ public class CstplItemShow implements Serializable {
 
     public void setSignPartAPriceContrast(BigDecimal signPartAPriceContrast) {
         this.signPartAPriceContrast = signPartAPriceContrast;
-    }
-
-    public String getDeletedFlagContrast() {
-        return deletedFlagContrast;
-    }
-
-    public void setDeletedFlagContrast(String deletedFlagContrast) {
-        this.deletedFlagContrast = deletedFlagContrast;
     }
 
     public String getOriginFlagContrast() {
@@ -421,12 +397,36 @@ public class CstplItemShow implements Serializable {
         this.createdTimeContrast = createdTimeContrast;
     }
 
-    public Integer getModificationNumContrast() {
-        return modificationNumContrast;
+    public String getArchivedFlag() {
+        return archivedFlag;
     }
 
-    public void setModificationNumContrast(Integer modificationNumContrast) {
-        this.modificationNumContrast = modificationNumContrast;
+    public void setArchivedFlag(String archivedFlag) {
+        this.archivedFlag = archivedFlag;
+    }
+
+    public Integer getRecversion() {
+        return recversion;
+    }
+
+    public void setRecversion(Integer recversion) {
+        this.recversion = recversion;
+    }
+
+    public String getArchivedFlagContrast() {
+        return archivedFlagContrast;
+    }
+
+    public void setArchivedFlagContrast(String archivedFlagContrast) {
+        this.archivedFlagContrast = archivedFlagContrast;
+    }
+
+    public Integer getRecversionContrast() {
+        return recversionContrast;
+    }
+
+    public void setRecversionContrast(Integer recversionContrast) {
+        this.recversionContrast = recversionContrast;
     }
 
     public String getStrNo() {

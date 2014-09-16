@@ -166,7 +166,7 @@ public class ProgStlItemTkMeaAction {
             progStlItemTkMeaShowTemp.setTkctt_Orderid(itemUnit.getOrderid());
             progStlItemTkMeaShowTemp.setTkctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
             progStlItemTkMeaShowTemp.setTkctt_Name(itemUnit.getName());
-            progStlItemTkMeaShowTemp.setTkctt_Note(itemUnit.getNote());
+            progStlItemTkMeaShowTemp.setTkctt_Remark(itemUnit.getRemark());
             progStlItemTkMeaShowTemp.setTkctt_Unit(itemUnit.getUnit());
             progStlItemTkMeaShowTemp.setTkctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             bdContractUnitPrice=ToolUtil.getBdIgnoreNull(itemUnit.getContractUnitPrice());
@@ -197,14 +197,14 @@ public class ProgStlItemTkMeaAction {
                 progStlItemTkMeaShowTemp.setEng_BeginToCurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdContractUnitPrice.multiply(bdBeginToCurrentPeriodQty)));
 
-                progStlItemTkMeaShowTemp.setEng_DeletedFlag(progStlItemTkMea.getArchivedFlag());
+                progStlItemTkMeaShowTemp.setEng_ArchivedFlag(progStlItemTkMea.getArchivedFlag());
                 progStlItemTkMeaShowTemp.setEng_CreatedBy(progStlItemTkMea.getCreatedBy());
                 progStlItemTkMeaShowTemp.setEng_CreatedByName(strCreatedByName);
                 progStlItemTkMeaShowTemp.setEng_CreatedTime(progStlItemTkMea.getCreatedTime());
                 progStlItemTkMeaShowTemp.setEng_LastUpdBy(progStlItemTkMea.getLastUpdBy());
                 progStlItemTkMeaShowTemp.setEng_LastUpdByName(strLastUpdByName);
                 progStlItemTkMeaShowTemp.setEng_LastUpdTime(progStlItemTkMea.getLastUpdTime());
-                progStlItemTkMeaShowTemp.setEng_ModificationNum(progStlItemTkMea.getModificationNum());
+                progStlItemTkMeaShowTemp.setEng_Recversion(progStlItemTkMea.getRecversion());
             }
             sProgStlItemTkMeaShowListPara.add(progStlItemTkMeaShowTemp) ;
             recursiveDataTable(progStlItemTkMeaShowTemp.getTkctt_Pkid(), cttItemListPara, sProgStlItemTkMeaShowListPara);

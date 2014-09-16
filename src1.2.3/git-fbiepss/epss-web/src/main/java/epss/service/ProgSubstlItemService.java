@@ -122,7 +122,7 @@ public class ProgSubstlItemService {
         progStlItemSubStlmentShowTemp.setEngPMng_CurrentPeriodAmt(progStlItemSubStlmentPara.getThisStageAmt());
         progStlItemSubStlmentShowTemp.setEngPMng_BeginToCurrentPeriodEQty(progStlItemSubStlmentPara.getAddUpQty());
         progStlItemSubStlmentShowTemp.setEngPMng_BeginToCurrentPeriodAmt(progStlItemSubStlmentPara.getAddUpAmt());
-        progStlItemSubStlmentShowTemp.setSubctt_Note(progStlItemSubStlmentPara.getRemark());
+        progStlItemSubStlmentShowTemp.setSubctt_Remark(progStlItemSubStlmentPara.getRemark());
         progStlItemSubStlmentShowTemp.setEngPMng_SubStlType(progStlItemSubStlmentPara.getSubstlType());
         return progStlItemSubStlmentShowTemp;
     }

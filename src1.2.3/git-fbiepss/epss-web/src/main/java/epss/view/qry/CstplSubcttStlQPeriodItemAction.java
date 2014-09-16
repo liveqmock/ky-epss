@@ -258,7 +258,7 @@ public class CstplSubcttStlQPeriodItemAction {
             progStlItemSubQShowTemp.setSubctt_Orderid(itemUnit.getOrderid());
             progStlItemSubQShowTemp.setSubctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
             progStlItemSubQShowTemp.setSubctt_Name(itemUnit.getName());
-            progStlItemSubQShowTemp.setSubctt_Note(itemUnit.getNote());
+            progStlItemSubQShowTemp.setSubctt_Remark(itemUnit.getRemark());
             progStlItemSubQShowTemp.setSubctt_Unit(itemUnit.getUnit());
             progStlItemSubQShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             progStlItemSubQShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
@@ -278,12 +278,12 @@ public class CstplSubcttStlQPeriodItemAction {
                     progStlItemSubQShowTemp.setEngQMng_SubcttPkid(progStlItemSubQ.getSubcttPkid());
                     progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(progStlItemSubQ.getBeginToCurrentPeriodEQty());
                     progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(progStlItemSubQ.getCurrentPeriodEQty());
-                    progStlItemSubQShowTemp.setEngQMng_DeletedFlag(progStlItemSubQ.getArchivedFlag());
+                    progStlItemSubQShowTemp.setEngQMng_ArchivedFlag(progStlItemSubQ.getArchivedFlag());
                     progStlItemSubQShowTemp.setEngQMng_CreatedBy(progStlItemSubQ.getCreatedBy());
                     progStlItemSubQShowTemp.setEngQMng_CreatedTime(progStlItemSubQ.getCreatedTime());
                     progStlItemSubQShowTemp.setEngQMng_LastUpdBy(progStlItemSubQ.getLastUpdBy());
                     progStlItemSubQShowTemp.setEngQMng_LastUpdTime(progStlItemSubQ.getLastUpdTime());
-                    progStlItemSubQShowTemp.setEngQMng_ModificationNum(progStlItemSubQ.getModificationNum());
+                    progStlItemSubQShowTemp.setEngQMng_Recversion(progStlItemSubQ.getRecversion());
                 }
             }
             sProgStlItemSubQShowListPara.add(progStlItemSubQShowTemp) ;

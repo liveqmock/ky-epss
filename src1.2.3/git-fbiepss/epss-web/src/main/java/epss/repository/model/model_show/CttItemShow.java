@@ -36,8 +36,8 @@ public class CttItemShow implements Serializable {
 
     /*EPSS.CTT_ITEM.NAME/EPSS.ES_ITEM_INFO.NAME*/
     private String name;
-    /*EPSS.CTT_ITEM.NOTE/EPSS.ES_ITEM_INFO.NOTE*/
-    private String note;
+    /*EPSS.CTT_ITEM.REMARK/EPSS.ES_ITEM_INFO.REMARK*/
+    private String remark;
 
     /*EPSS.ES_ITEM_INFO.UNIT*/
     private String unit;
@@ -50,7 +50,7 @@ public class CttItemShow implements Serializable {
     /*EPSS.ES_ITEM_INFO.SIGN_PART_A_PRICE*/
     private BigDecimal signPartAPrice;
     /*EPSS.ES_ITEM_INFO.ARCHIVED_FLAG*/
-    private String deletedFlag;
+    private String archivedFlag;
     /*EPSS.ES_ITEM_INFO.ORIGIN_FLAG*/
     private String originFlag;
     /*EPSS.ES_ITEM_INFO.CREATED_BY*/
@@ -61,8 +61,8 @@ public class CttItemShow implements Serializable {
     private String lastUpdBy;
     /*EPSS.ES_ITEM_INFO.LAST_UPD_TIME*/
     private String lastUpdTime;
-    /*EPSS.ES_ITEM_INFO.MODIFICATION_NUM*/
-    private Integer modificationNum;
+    /*EPSS.ES_ITEM_INFO.RECVERSION*/
+    private Integer recversion;
 
     private String createdByName;
     private String lastUpdByName;
@@ -93,7 +93,7 @@ public class CttItemShow implements Serializable {
             BigDecimal bdContractQuantity,
             BigDecimal bdContractAmount,
             BigDecimal bdSignPartAPrice,
-            String strDeletedFlag,
+            String strArchivedFlag,
             String strOriginFlag,
             String strCreatedBy,
             String strCreatedByName,
@@ -101,8 +101,8 @@ public class CttItemShow implements Serializable {
             String strLastUpdBy,
             String strLastUpdByName,
             String dtLastUpdTime,
-            Integer intModificationNum,
-            String strNote,
+            Integer intRecversion,
+            String strRemark,
             String strCorrespondingPkid,
             String strNo,
             String strCorrespondingItemNo) {
@@ -119,8 +119,8 @@ public class CttItemShow implements Serializable {
         /*EPSS.ES_ITEM_INFO.NAME*/
         this.name=strName;
         this.parentPkid =strParentPkid;
-        /*EPSS.ES_ITEM_INFO.NOTE*/
-        this.note=strNote;
+        /*EPSS.ES_ITEM_INFO.REMARK*/
+        this.remark=strRemark;
         /*EPSS.CTT_ITEM.CORRESPONDING_PKID*/
         this.correspondingPkid =strCorrespondingPkid;
 
@@ -135,7 +135,7 @@ public class CttItemShow implements Serializable {
         /*EPSS.ES_ITEM_INFO.SIGN_PART_A_PRICE*/
         this.signPartAPrice=bdSignPartAPrice;
         /*EPSS.ES_ITEM_INFO.ARCHIVED_FLAG*/
-        this.deletedFlag=strDeletedFlag;
+        this.archivedFlag=strArchivedFlag;
         /*EPSS.ES_ITEM_INFO.ORIGIN_FLAG*/
         this.originFlag=strOriginFlag;
         /*EPSS.ES_ITEM_INFO.CREATED_BY*/
@@ -148,8 +148,8 @@ public class CttItemShow implements Serializable {
         this.lastUpdByName=strLastUpdByName;
         /*EPSS.ES_ITEM_INFO.LAST_UPD_TIME*/
         this.lastUpdTime=dtLastUpdTime;
-        /*EPSS.ES_ITEM_INFO.MODIFICATION_NUM*/
-        this.modificationNum=intModificationNum;
+        /*EPSS.ES_ITEM_INFO.RECVERSION*/
+        this.recversion=intRecversion;
 
         this.strNo =strNo ;
         this.strCorrespondingItemNo =strCorrespondingItemNo;
@@ -178,8 +178,8 @@ public class CttItemShow implements Serializable {
                         itemForTkcttAndCstpl.name .equals(this.name))
                     &&((itemForTkcttAndCstpl.parentPkid==null&&this.parentPkid==null)||
                         itemForTkcttAndCstpl.parentPkid .equals(this.parentPkid))
-                    &&((itemForTkcttAndCstpl.note==null&&this.note==null)||
-                        itemForTkcttAndCstpl.note .equals(this.note))
+                    &&((itemForTkcttAndCstpl.remark==null&&this.remark==null)||
+                        itemForTkcttAndCstpl.remark .equals(this.remark))
                     &&((itemForTkcttAndCstpl.correspondingPkid==null&&this.correspondingPkid==null)||
                         itemForTkcttAndCstpl.correspondingPkid .equals(this.correspondingPkid))
                     &&((itemForTkcttAndCstpl.unit==null&&this.unit==null)||
@@ -188,8 +188,8 @@ public class CttItemShow implements Serializable {
                     &&(itemForTkcttAndCstpl.contractQuantity==this.contractQuantity)
                     &&(itemForTkcttAndCstpl.contractAmount==this.contractAmount)
                     &&(itemForTkcttAndCstpl.signPartAPrice==this.signPartAPrice)
-                    &&((itemForTkcttAndCstpl.deletedFlag==null&&this.deletedFlag==null)||
-                        itemForTkcttAndCstpl.deletedFlag .equals(this.deletedFlag))
+                    &&((itemForTkcttAndCstpl.archivedFlag==null&&this.archivedFlag==null)||
+                        itemForTkcttAndCstpl.archivedFlag .equals(this.archivedFlag))
                     &&((itemForTkcttAndCstpl.originFlag==null&&this.originFlag==null)||
                         itemForTkcttAndCstpl.originFlag .equals(this.originFlag))
                     &&((itemForTkcttAndCstpl.createdBy==null&&this.createdBy==null)||
@@ -200,7 +200,7 @@ public class CttItemShow implements Serializable {
                         itemForTkcttAndCstpl.lastUpdBy .equals(this.lastUpdBy))
                     &&((itemForTkcttAndCstpl.lastUpdTime==null&&this.lastUpdTime==null)||
                         itemForTkcttAndCstpl.lastUpdTime .equals(this.lastUpdTime))
-                    &&(itemForTkcttAndCstpl.modificationNum==this.modificationNum)
+                    &&(itemForTkcttAndCstpl.recversion==this.recversion)
                     ;
         }
         return false;
@@ -262,12 +262,12 @@ public class CttItemShow implements Serializable {
         this.parentPkid = parentPkid;
     }
 
-    public String getNote() {
-        return note;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     public String getCorrespondingPkid() {
@@ -318,14 +318,6 @@ public class CttItemShow implements Serializable {
         this.signPartAPrice = signPartAPrice;
     }
 
-    public String getDeletedFlag() {
-        return deletedFlag;
-    }
-
-    public void setDeletedFlag(String deletedFlag) {
-        this.deletedFlag = deletedFlag;
-    }
-
     public String getOriginFlag() {
         return originFlag;
     }
@@ -366,12 +358,20 @@ public class CttItemShow implements Serializable {
         this.lastUpdTime = lastUpdTime;
     }
 
-    public Integer getModificationNum() {
-        return modificationNum;
+    public String getArchivedFlag() {
+        return archivedFlag;
     }
 
-    public void setModificationNum(Integer modificationNum) {
-        this.modificationNum = modificationNum;
+    public void setArchivedFlag(String archivedFlag) {
+        this.archivedFlag = archivedFlag;
+    }
+
+    public Integer getRecversion() {
+        return recversion;
+    }
+
+    public void setRecversion(Integer recversion) {
+        this.recversion = recversion;
     }
 
     public String getStrNo() {

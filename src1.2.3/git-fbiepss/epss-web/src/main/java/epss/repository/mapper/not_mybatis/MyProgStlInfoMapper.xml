@@ -9,17 +9,17 @@
         <result column="STL_NAME" jdbcType="VARCHAR" property="stlName" />
         <result column="PERIOD_NO" jdbcType="VARCHAR" property="periodNo" />
         <result column="SIGN_PART_B_NAME" jdbcType="VARCHAR" property="signPartBName" />
-        <result column="NOTE" jdbcType="VARCHAR" property="note" />
+        <result column="REMARK" jdbcType="VARCHAR" property="remark" />
         <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment" />
         <result column="FLOW_STATUS" jdbcType="CHAR" property="flowStatus" />
         <result column="FLOW_STATUS_REASON" jdbcType="CHAR" property="flowStatusReason"/>
-        <result column="ARCHIVED_FLAG" jdbcType="CHAR" property="deletedFlag"/>
+        <result column="ARCHIVED_FLAG" jdbcType="CHAR" property="archivedFlag"/>
         <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
         <result column="CREATED_TIME" jdbcType="VARCHAR" property="createdTime" />
         <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
         <result column="LAST_UPD_TIME" jdbcType="VARCHAR" property="lastUpdTime" />
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
-        <result column="MODIFICATION_NUM" jdbcType="DECIMAL" property="modificationNum" />
+        <result column="RECVERSION" jdbcType="DECIMAL" property="recversion" />
         <result column="AUTO_LINK_ADD" jdbcType="CHAR" property="autoLinkAdd" />
     </resultMap>
     <select id="selectSubcttStlQMByStatusFlagBegin_End"
@@ -35,13 +35,13 @@
                 eis.PERIOD_NO,
                 eis.ATTACHMENT,
                 eicust.NAME AS SIGN_PART_B_NAME,
-                eis.NOTE,
+                eis.REMARK,
                 eis.ARCHIVED_FLAG,
                 eis.CREATED_BY,
                 eis.CREATED_TIME,
                 eis.LAST_UPD_BY,
                 eis.LAST_UPD_TIME,
-                eis.MODIFICATION_NUM,
+                eis.RECVERSION,
                 eis.AUTO_LINK_ADD AS autoLinkAdd,
                 eis.FLOW_STATUS,
                 eis.FLOW_STATUS_REASON
@@ -81,11 +81,11 @@
         <if test="attachment != null and attachment != ''">
             and eis.attachment like CONCAT('%',CONCAT(trim(#{attachment}),'%'))
         </if>
-        <if test="note != null and note != ''">
-            and eis.note like CONCAT('%',CONCAT(trim(#{note}),'%'))
+        <if test="remark != null and remark != ''">
+            and eis.remark like CONCAT('%',CONCAT(trim(#{remark}),'%'))
         </if>
-        <if test="deletedFlag != null and deletedFlag != ''">
-            and eis.ARCHIVED_FLAG = #{deletedFlag}
+        <if test="archivedFlag != null and archivedFlag != ''">
+            and eis.ARCHIVED_FLAG = #{archivedFlag}
         </if>
 
         <!--<if test='strStatusFlagBegin == null and strStatusFlagEnd == "0"'>-->
@@ -118,13 +118,13 @@
                 eis.PERIOD_NO,
                 eis.ATTACHMENT,
                 eicust.NAME AS SIGN_PART_B_NAME,
-                eis.NOTE,
+                eis.REMARK,
                 eis.ARCHIVED_FLAG,
                 eis.CREATED_BY,
                 eis.CREATED_TIME,
                 eis.LAST_UPD_BY,
                 eis.LAST_UPD_TIME,
-                eis.MODIFICATION_NUM,
+                eis.RECVERSION,
                 eis.FLOW_STATUS,
                 eis.FLOW_STATUS_REASON
             from
@@ -163,11 +163,11 @@
         <if test="attachment != null and attachment != ''">
             and eis.attachment like CONCAT('%',CONCAT(trim(#{attachment}),'%'))
         </if>
-        <if test="note != null and note != ''">
-            and eis.note like CONCAT('%',CONCAT(trim(#{note}),'%'))
+        <if test="remark != null and remark != ''">
+            and eis.remark like CONCAT('%',CONCAT(trim(#{remark}),'%'))
         </if>
-        <if test="deletedFlag != null and deletedFlag != ''">
-            and eis.ARCHIVED_FLAG = #{deletedFlag}
+        <if test="archivedFlag != null and archivedFlag != ''">
+            and eis.ARCHIVED_FLAG = #{archivedFlag}
         </if>
 
         <!--<if test='strStatusFlagBegin == null and strStatusFlagEnd == "0"'>-->

@@ -122,7 +122,7 @@
                             </h:outputText>
                         </p:column>
                         <p:column style="width:300px" headerText="备注">
-                            <h:outputText value="#{record.note}" />
+                            <h:outputText value="#{record.remark}" />
                         </p:column>
                     </p:dataTable>
                     <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
@@ -204,8 +204,8 @@
                                 </h:inputText>
                                 <p:outputLabel for="nameForAdd" value="名称:" />
                                 <h:inputText id="nameForAdd" value="#{tkcttItemAction.cttItemShowAdd.name}"/>
-                                <p:outputLabel for="noteForAdd" value="备注内容:" />
-                                <h:inputText id="noteForAdd" value="#{tkcttItemAction.cttItemShowAdd.note}"/>
+                                <p:outputLabel for="remarkForAdd" value="备注内容:" />
+                                <h:inputText id="remarkForAdd" value="#{tkcttItemAction.cttItemShowAdd.remark}"/>
                                 <p:outputLabel for="unitItemInfoForAdd" value="单位:"/>
                                 <h:inputText id="unitItemInfoForAdd" value="#{tkcttItemAction.cttItemShowAdd.unit}"/>
                                 <p:outputLabel for="contractUnitPriceItemInfoForAdd" value="合同单价:"/>
@@ -260,8 +260,8 @@
                                 </h:inputText>
                                 <p:outputLabel for="nameForUpd" value="名称:" />
                                 <h:inputText id="nameForUpd" value="#{tkcttItemAction.cttItemShowUpd.name}"/>
-                                <p:outputLabel for="noteForUpd" value="备注内容:" />
-                                <h:inputText id="noteForUpd" value="#{tkcttItemAction.cttItemShowUpd.note}"/>
+                                <p:outputLabel for="remarkForUpd" value="备注内容:" />
+                                <h:inputText id="remarkForUpd" value="#{tkcttItemAction.cttItemShowUpd.remark}"/>
                                 <p:outputLabel for="unitItemInfoForUpd" value="单位:"/>
                                 <h:inputText id="unitItemInfoForUpd" value="#{tkcttItemAction.cttItemShowUpd.unit}"/>
                                 <p:outputLabel for="contractUnitPriceItemInfoForUpd" value="合同单价:"/>
@@ -308,9 +308,9 @@
                                 <h:inputText id="lastUpdTimeItemInfoForUpd"
                                              value="#{tkcttItemAction.cttItemShowUpd.lastUpdTime}"
                                              style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="modificationNumItemInfoForUpd" value="修改次数:" />
-                                <h:inputText id="modificationNumItemInfoForUpd"
-                                             value="#{tkcttItemAction.cttItemShowUpd.modificationNum}"
+                                <p:outputLabel for="recversionItemInfoForUpd" value="修改次数:" />
+                                <h:inputText id="recversionItemInfoForUpd"
+                                             value="#{tkcttItemAction.cttItemShowUpd.recversion}"
                                              style="background-color:gainsboro;text-align:right;" readonly="true">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                                 </h:inputText>
@@ -344,8 +344,8 @@
                                 <h:inputText id="nameForDel" value="#{tkcttItemAction.cttItemShowDel.name}"
                                              readonly="true"
                                              style="background-color:gainsboro"/>
-                                <p:outputLabel for="noteForDel" value="备注内容:" />
-                                <h:inputText id="noteForDel" value="#{tkcttItemAction.cttItemShowDel.note}"
+                                <p:outputLabel for="remarkForDel" value="备注内容:" />
+                                <h:inputText id="remarkForDel" value="#{tkcttItemAction.cttItemShowDel.remark}"
                                              readonly="true"
                                              style="background-color:gainsboro"/>
                                 <p:outputLabel for="unitItemInfoForDel" value="单位:"/>
@@ -394,9 +394,9 @@
                                 <h:inputText id="lastUpdTimeItemInfoForDel"
                                              value="#{tkcttItemAction.cttItemShowDel.lastUpdTime}"
                                              style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="modificationNumItemInfoForDel" value="修改次数:" />
-                                <h:inputText id="modificationNumItemInfoForDel"
-                                             value="#{tkcttItemAction.cttItemShowDel.modificationNum}"
+                                <p:outputLabel for="recversionItemInfoForDel" value="修改次数:" />
+                                <h:inputText id="recversionItemInfoForDel"
+                                             value="#{tkcttItemAction.cttItemShowDel.recversion}"
                                              style="background-color:gainsboro;text-align:right;" readonly="true">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                                 </h:inputText>

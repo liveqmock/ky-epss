@@ -22,7 +22,7 @@ public class ProgStlItemSubQShow implements Serializable {
     private String subctt_CorrespondingPkid;
     private String subctt_ParentPkid;
     private String subctt_Name;
-    private String subctt_Note;
+    private String subctt_Remark;
     private String subctt_Unit;
     private BigDecimal subctt_ContractUnitPrice;
     private BigDecimal subctt_ContractQuantity;
@@ -37,7 +37,7 @@ public class ProgStlItemSubQShow implements Serializable {
     private BigDecimal engQMng_BeginToCurrentPeriodEQty;
     private BigDecimal engQMng_CurrentPeriodEQty;
     private String engQMng_State;
-    private String engQMng_DeletedFlag;
+    private String engQMng_ArchivedFlag;
     private String engQMng_OriginFlag;
     private String engQMng_CreatedByName;
     private String engQMng_CreatedBy;
@@ -45,7 +45,7 @@ public class ProgStlItemSubQShow implements Serializable {
     private String engQMng_LastUpdBy;
     private String engQMng_LastUpdByName;
     private String engQMng_LastUpdTime;
-    private Integer engQMng_ModificationNum;
+    private Integer engQMng_Recversion;
 
     public ProgStlItemSubQShow() {
 
@@ -123,12 +123,12 @@ public class ProgStlItemSubQShow implements Serializable {
         this.subctt_Name = subctt_Name;
     }
 
-    public String getSubctt_Note() {
-        return subctt_Note;
+    public String getSubctt_Remark() {
+        return subctt_Remark;
     }
 
-    public void setSubctt_Note(String subctt_Note) {
-        this.subctt_Note = subctt_Note;
+    public void setSubctt_Remark(String subctt_Remark) {
+        this.subctt_Remark = subctt_Remark;
     }
 
     public String getSubctt_Unit() {
@@ -235,12 +235,12 @@ public class ProgStlItemSubQShow implements Serializable {
         this.engQMng_State = engQMng_State;
     }
 
-    public String getEngQMng_DeletedFlag() {
-        return engQMng_DeletedFlag;
+    public String getEngQMng_ArchivedFlag() {
+        return engQMng_ArchivedFlag;
     }
 
-    public void setEngQMng_DeletedFlag(String engQMng_DeletedFlag) {
-        this.engQMng_DeletedFlag = engQMng_DeletedFlag;
+    public void setEngQMng_ArchivedFlag(String engQMng_ArchivedFlag) {
+        this.engQMng_ArchivedFlag = engQMng_ArchivedFlag;
     }
 
     public String getEngQMng_OriginFlag() {
@@ -299,12 +299,12 @@ public class ProgStlItemSubQShow implements Serializable {
         this.engQMng_LastUpdTime = engQMng_LastUpdTime;
     }
 
-    public Integer getEngQMng_ModificationNum() {
-        return engQMng_ModificationNum;
+    public Integer getEngQMng_Recversion() {
+        return engQMng_Recversion;
     }
 
-    public void setEngQMng_ModificationNum(Integer engQMng_ModificationNum) {
-        this.engQMng_ModificationNum = engQMng_ModificationNum;
+    public void setEngQMng_Recversion(Integer engQMng_Recversion) {
+        this.engQMng_Recversion = engQMng_Recversion;
     }
 
 }

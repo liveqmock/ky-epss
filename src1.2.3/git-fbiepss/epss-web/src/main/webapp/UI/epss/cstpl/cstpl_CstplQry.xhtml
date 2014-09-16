@@ -43,8 +43,8 @@
                             <p:outputLabel value="制定日期：" for="signDate"/>
                             <p:inputText id="signDate" value="#{cstplInfoAction.cttInfoShowQry.signDate}"
                                          onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                            <p:outputLabel value="备注内容：" for="note"/>
-                            <p:inputText id="note" value="#{cstplInfoAction.cttInfoShowQry.note}"/>
+                            <p:outputLabel value="备注内容：" for="remark"/>
+                            <p:inputText id="remark" value="#{cstplInfoAction.cttInfoShowQry.remark}"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <h:panelGrid>
@@ -111,7 +111,7 @@
                         <h:outputText value="#{record.signDate}"/>
                     </p:column>
                     <p:column headerText="备注内容" style="text-align:center">
-                        <h:outputText value="#{record.note}"/>
+                        <h:outputText value="#{record.remark}"/>
                     </p:column>
                 </p:dataTable>
                 <p:dialog id="dlgView" header="成本计划信息" widgetVar="wVDlgView"
@@ -133,8 +133,8 @@
                             <p:inputText id="signDateForDlg" value="#{cstplInfoAction.cttInfoShowSel.signDate}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
-                            <p:outputLabel value="备注内容：" for="noteForDlg"/>
-                            <p:inputText id="noteForDlg" value="#{cstplInfoAction.cttInfoShowSel.note}"
+                            <p:outputLabel value="备注内容：" for="remarkForDlg"/>
+                            <p:inputText id="remarkForDlg" value="#{cstplInfoAction.cttInfoShowSel.remark}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                         </h:panelGrid>
@@ -155,9 +155,9 @@
                             <h:inputText id="lastUpdTime"
                                          value="#{cstplInfoAction.cttInfoShowSel.lastUpdTime}"
                                          style="background-color:gainsboro" readonly="true"/>
-                            <p:outputLabel for="modificationNum" value="修改次数：" />
-                            <h:inputText id="modificationNum"
-                                         value="#{cstplInfoAction.cttInfoShowSel.modificationNum}"
+                            <p:outputLabel for="recversion" value="修改次数：" />
+                            <h:inputText id="recversion"
+                                         value="#{cstplInfoAction.cttInfoShowSel.recversion}"
                                          style="background-color:gainsboro;text-align:right;" readonly="true">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>
