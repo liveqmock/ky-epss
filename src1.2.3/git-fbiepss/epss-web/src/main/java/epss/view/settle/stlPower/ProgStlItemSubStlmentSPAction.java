@@ -36,8 +36,8 @@ public class ProgStlItemSubStlmentSPAction {
     private static final Logger logger = LoggerFactory.getLogger(ProgStlItemSubStlmentSPAction.class);
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
-    @ManagedProperty(value = "#{progWorkqtyItemService}")
-    private ProgWorkqtyItemService progWorkqtyItemService;
+    @ManagedProperty(value = "#{progStlItemSubQService}")
+    private ProgStlItemSubQService progStlItemSubQService;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
     @ManagedProperty(value = "#{operResService}")
@@ -69,8 +69,8 @@ public class ProgStlItemSubStlmentSPAction {
 
     @PostConstruct
     public void init() {
-        progStlInfoShowList = new ArrayList<ProgStlInfoShow>();
-        progStlInfoShowNotFormList = new ArrayList<ProgStlInfoShow>();
+        progStlInfoShowList = new ArrayList<>();
+        progStlInfoShowNotFormList = new ArrayList<>();
         strStlType = EnumResType.RES_TYPE5.getCode();
         resetAction();
 
@@ -79,7 +79,7 @@ public class ProgStlItemSubStlmentSPAction {
                 operResService.getInfoListByOperFlowPkid(
                         strStlType,
                         EnumFlowStatus.FLOW_STATUS3.getCode());
-        subcttList = new ArrayList<SelectItem>();
+        subcttList = new ArrayList<>();
         if (operResShowListTemp.size() > 0) {
             SelectItem selectItem = new SelectItem("", "È«²¿");
             subcttList.add(selectItem);
@@ -251,7 +251,10 @@ public class ProgStlItemSubStlmentSPAction {
         }
     }
 
-    public void selectRecordAction(String strPowerTypePara,String strSubmitTypePara,ProgStlInfoShow progStlInfoShowPara){
+    public void selectRecordAction(
+            String strPowerTypePara,
+            String strSubmitTypePara,
+            ProgStlInfoShow progStlInfoShowPara){
         try {
             strSubmitType=strSubmitTypePara;
             strApprovedFlag="true";
@@ -285,13 +288,12 @@ public class ProgStlItemSubStlmentSPAction {
     }
 
     /*ÖÇÄÜ×Ö¶ÎStart*/
-
-    public ProgWorkqtyItemService getProgWorkqtyItemService() {
-        return progWorkqtyItemService;
+    public ProgStlItemSubQService getProgStlItemSubQService() {
+        return progStlItemSubQService;
     }
 
-    public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
-        this.progWorkqtyItemService = progWorkqtyItemService;
+    public void setProgStlItemSubQService(ProgStlItemSubQService progStlItemSubQService) {
+        this.progStlItemSubQService = progStlItemSubQService;
     }
 
     public StyleModel getStyleModel() {

@@ -60,4 +60,22 @@ public interface MyCttInfoMapper {
             "      PARENT_PKID = #{strParentPkid}")
     Integer getChildrenOfThisRecordInEsInitCtt(@Param("strCttType") String strCttType,
                                                @Param("strParentPkid") String strParentPkid);
+
+    @Select(" select" +
+            "    t.pkid as pkid," +
+            "    t.ctt_type as cttType," +
+            "    t.parent_pkid as parentPkid," +
+            "    t.id as id," +
+            "    t.name as name," +
+            "    t.remark as remark," +
+            "    t.created_by as createdBy," +
+            "    (select name from oper where id=t.created_by) as createdByName," +
+            "    t.CREATED_TIME as createdTime " +
+            " from" +
+            "    CTT_INFO t" +
+            " where" +
+            "    t.parent_pkid=#{parentPkid}" +
+            " order by" +
+            "    t.name")
+    List<CttInfoShow> selectRecordsFromCtt(@Param("parentPkid") String parentPkidPara);
 }

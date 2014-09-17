@@ -38,14 +38,12 @@ public class ProgStlInfoSubQAction {
     private static final Logger logger = LoggerFactory.getLogger(ProgStlInfoSubQAction.class);
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
-    @ManagedProperty(value = "#{progWorkqtyItemService}")
-    private ProgWorkqtyItemService progWorkqtyItemService;
+    @ManagedProperty(value = "#{progStlItemSubQService}")
+    private ProgStlItemSubQService progStlItemSubQService;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
-    @ManagedProperty(value = "#{progMatqtyItemService}")
-    private ProgMatqtyItemService progMatqtyItemService;
-    @ManagedProperty(value = "#{operResService}")
-    private OperResService operResService;
+    @ManagedProperty(value = "#{progStlItemSubMService}")
+    private ProgStlItemSubMService progStlItemSubMService;
     @ManagedProperty(value = "#{esFlowControl}")
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{esCommon}")
@@ -68,7 +66,7 @@ public class ProgStlInfoSubQAction {
 
     @PostConstruct
     public void init() {
-        this.progStlInfoShowList = new ArrayList<ProgStlInfoShow>();
+        this.progStlInfoShowList = new ArrayList<>();
         String strCttInfoPkid = "";
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if (parammap.containsKey("strCttInfoPkid")) {
@@ -80,10 +78,10 @@ public class ProgStlInfoSubQAction {
         //在某一成本计划下的分包合同
         List<CttInfoShow> cttInfoShowList =
                 cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
-                        EnumResType.RES_TYPE2.getCode()
+                          EnumResType.RES_TYPE2.getCode()
                         , strCttInfoPkid
                         , EnumFlowStatus.FLOW_STATUS3.getCode());
-        subcttList = new ArrayList<SelectItem>();
+        subcttList = new ArrayList<>();
         if (cttInfoShowList.size() > 0) {
             SelectItem selectItem = new SelectItem("", "全部");
             subcttList.add(selectItem);
@@ -221,8 +219,6 @@ public class ProgStlInfoSubQAction {
         return true;
     }
 
-
-
     /**
      * 提交维护权限
      */
@@ -238,7 +234,7 @@ public class ProgStlInfoSubQAction {
                 MessageUtil.addError("该记录已存在，请重新录入！");
                 return;
             }
-            String strTemp = progStlInfoService.subCttStlCheckForMng(
+            String strTemp = progStlInfoService.progStlInfoMngPreCheck(
                     EnumResType.RES_TYPE3.getCode(),
                     progStlInfoShowAdd.getStlPkid(),
                     progStlInfoShowAdd.getPeriodNo());
@@ -267,20 +263,8 @@ public class ProgStlInfoSubQAction {
                 progStlInfoShowQryM.setPeriodNo( progStlInfoShowDel.getPeriodNo());
                 List<ProgStlInfoShow> progStlInfoShowConstructsTemp =
                         progStlInfoService.selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryM);
-                if (progStlInfoShowConstructsTemp.size()!=0){
-                    for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
-                        if((!("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus())))&&
-                                (progStlInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
-                            MessageUtil.addInfo("该记录已关联分包材料结算，不可删除！");
-                            return;
-                        }else if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))&&
-                                (progStlInfoShowDel.getPeriodNo().equals(esISSOMPCUnit.getPeriodNo()))){
-                            delMatRecordAction(esISSOMPCUnit);
-                        }
-                    }
-                }
+
             }
-            delRecordAction(progStlInfoShowDel);
         }
         ProgStlInfoShow progStlInfoShowTemp = new ProgStlInfoShow();
         progStlInfoShowTemp.setStlType(strStlType);
@@ -302,7 +286,7 @@ public class ProgStlInfoSubQAction {
     private void addRecordAction(ProgStlInfoShow progStlInfoShowPara) {
         try {
             progStlInfoService.insertRecord(progStlInfoShowPara);
-            progWorkqtyItemService.setFromLastStageApproveDataToThisStageBeginData(progStlInfoShowPara);
+            progStlItemSubQService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
             MessageUtil.addInfo("新增数据完成。");
         } catch (Exception e) {
             logger.error("新增数据失败，", e);
@@ -319,53 +303,13 @@ public class ProgStlInfoSubQAction {
             MessageUtil.addError(e.getMessage());
         }
     }
-
-    private void delRecordAction(ProgStlInfoShow progStlInfoShowPara) {
-        try {
-            // 删除详细数据
-            int deleteItemsByInitStlTkcttEngNum =
-                    progWorkqtyItemService.deleteItemsByInitStlSubcttEng(
-                            progStlInfoShowPara.getStlPkid(),
-                            progStlInfoShowPara.getPeriodNo());
-            // 删除登记数据
-            int deleteRecordOfRegistNum = progStlInfoService.deleteRecord(progStlInfoShowPara.getPkid());
-            if (deleteItemsByInitStlTkcttEngNum <= 0 && deleteRecordOfRegistNum <= 0) {
-                MessageUtil.addInfo("该记录已删除。");
-                return;
-            }
-            MessageUtil.addInfo("删除数据完成。");
-        } catch (Exception e) {
-            logger.error("删除数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-    private void delMatRecordAction(ProgStlInfoShow progStlInfoShowPara){
-        try {
-            // 删除详细数据
-            int deleteItemsByInitStlTkcttEngNum=
-                    progMatqtyItemService.deleteItemsByInitStlSubcttEng(
-                            progStlInfoShowPara.getStlPkid(),
-                            progStlInfoShowPara.getPeriodNo());
-            // 删除登记数据
-            int deleteRecordOfRegistNum= progStlInfoService.deleteRecord(progStlInfoShowPara.getPkid()) ;
-
-            if (deleteItemsByInitStlTkcttEngNum<=0&&deleteRecordOfRegistNum<=0){
-                MessageUtil.addInfo("该记录已删除。");
-                return;
-            }
-            MessageUtil.addInfo("对应材料结算删除数据完成。");
-        } catch (Exception e) {
-            logger.error("删除对应材料结算数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
     /*智能字段Start*/
-    public ProgWorkqtyItemService getProgWorkqtyItemService() {
-        return progWorkqtyItemService;
+    public ProgStlItemSubQService getProgStlItemSubQService() {
+        return progStlItemSubQService;
     }
 
-    public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
-        this.progWorkqtyItemService = progWorkqtyItemService;
+    public void setProgStlItemSubQService(ProgStlItemSubQService progStlItemSubQService) {
+        this.progStlItemSubQService = progStlItemSubQService;
     }
 
     public StyleModel getStyleModel() {
@@ -468,12 +412,12 @@ public class ProgStlInfoSubQAction {
         this.progStlInfoShowDel = progStlInfoShowDel;
     }
 
-    public ProgMatqtyItemService getProgMatqtyItemService() {
-        return progMatqtyItemService;
+    public ProgStlItemSubMService getProgStlItemSubMService() {
+        return progStlItemSubMService;
     }
 
-    public void setProgMatqtyItemService(ProgMatqtyItemService progMatqtyItemService) {
-        this.progMatqtyItemService = progMatqtyItemService;
+    public void setProgStlItemSubMService(ProgStlItemSubMService progStlItemSubMService) {
+        this.progStlItemSubMService = progStlItemSubMService;
     }
     /*智能字段End*/
 }

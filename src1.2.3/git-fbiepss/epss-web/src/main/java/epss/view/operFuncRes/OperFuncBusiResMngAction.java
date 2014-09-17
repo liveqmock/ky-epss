@@ -121,7 +121,7 @@ public class OperFuncBusiResMngAction implements Serializable{
     }
     private void recursiveResTreeNode(String parentPkidPara,TreeNode parentNode)
             throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        List<CttInfoShow> cttInfoShowList=operResService.selectRecordsFromCtt(parentPkidPara);
+        List<CttInfoShow> cttInfoShowList=cttInfoService.selectRecordsFromCtt(parentPkidPara);
         for (int i=0;i<cttInfoShowList.size();i++){
             CttInfoShow cttInfoShowTemp =cttInfoShowList.get(i);
             // 总成分
@@ -550,7 +550,8 @@ public class OperFuncBusiResMngAction implements Serializable{
         }
     }
     private void recursiveOperTreeNode(String strParentPkidPara,TreeNode parentNode){
-        List<DeptOperShow> operResShowListTemp= deptOperService.selectDeptAndOperRecords(strParentPkidPara);
+        List<DeptOperShow> operResShowListTemp=
+                deptOperService.selectDeptAndOperRecords(strParentPkidPara);
         for (int i=0;i<operResShowListTemp.size();i++){
             TreeNode childNode = new DefaultTreeNode(operResShowListTemp.get(i), parentNode);
             recursiveOperTreeNode(operResShowListTemp.get(i).getId(), childNode);
@@ -570,7 +571,10 @@ public class OperFuncBusiResMngAction implements Serializable{
         recursiveResTreeNode(event.getTreeNode());
     }
 
-    public void findSelectedNode(OperFuncResShow operFuncResShowPara, TreeNode treeNodePara,String strSubmitTypePara) {
+    public void findSelectedNode(
+            OperFuncResShow operFuncResShowPara,
+            TreeNode treeNodePara,
+            String strSubmitTypePara) {
         if (treeNodePara.getChildCount() != 0) {
             for (int i = 0; i < treeNodePara.getChildCount(); i++) {
                 TreeNode treeNodeTemp = treeNodePara.getChildren().get(i);
@@ -640,15 +644,6 @@ public class OperFuncBusiResMngAction implements Serializable{
                     return;
                 } else {
                     cttInfoService.insertRecord(cttInfoShowAdd);
-                    List<CttInfo> cttInfoList =cttInfoService.selectListByModel(cttInfoShowAdd);
-                    try {
-                        progStlInfoService.insertRecordForOperRes(cttInfoList.get(0));
-                    }catch (Exception e){
-                        logger.error("插入数据失败", e);
-                        cttInfoService.deleteRecord(cttInfoList.get(0).getPkid());
-                        MessageUtil.addError(e.getMessage());
-                        return;
-                    }
                     MessageUtil.addInfo("新增数据完成。");
                     cttInfoShowAdd = new CttInfoShow();
                 }

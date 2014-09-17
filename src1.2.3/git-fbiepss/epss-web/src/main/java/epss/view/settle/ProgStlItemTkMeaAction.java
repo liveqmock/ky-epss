@@ -49,8 +49,8 @@ public class ProgStlItemTkMeaAction {
     private SignPartService signPartService;
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
-    @ManagedProperty(value = "#{progMeaItemService}")
-    private ProgMeaItemService progMeaItemService;
+    @ManagedProperty(value = "#{progStlItemTkMeaService}")
+    private ProgStlItemTkMeaService progStlItemTkMeaService;
 
     private List<ProgStlItemTkMeaShow> progStlItemTkMeaShowList;
     private ProgStlItemTkMeaShow progStlItemTkMeaShowSel;
@@ -178,7 +178,7 @@ public class ProgStlItemTkMeaAction {
             progStlItemTkMea.setTkcttItemPkid(progStlItemTkMeaShowTemp.getTkctt_Pkid());
             progStlItemTkMea.setPeriodNo(progStlInfo.getPeriodNo());
             List<ProgStlItemTkMea> progStlItemTkMeaList =
-                    progMeaItemService.selectRecordsByKeyExample(progStlItemTkMea);
+                    progStlItemTkMeaService.selectRecordsByKeyExample(progStlItemTkMea);
             if(progStlItemTkMeaList.size()>0){
                 progStlItemTkMea = progStlItemTkMeaList.get(0);
                 String strCreatedByName= ToolUtil.getUserName(progStlItemTkMea.getCreatedBy());
@@ -227,19 +227,19 @@ public class ProgStlItemTkMeaAction {
                 }
                 progStlItemTkMeaShowUpd.setEng_PeriodNo(progStlInfo.getPeriodNo());
                 List<ProgStlItemTkMea> progStlItemTkMeaListTemp =
-                        progMeaItemService.isExistInDb(progStlItemTkMeaShowUpd);
+                        progStlItemTkMeaService.isExistInDb(progStlItemTkMeaShowUpd);
                 if (progStlItemTkMeaListTemp.size() > 1) {
                     MessageUtil.addInfo("数据有误，数据库中存在多条记录。");
                     return;
                 }
                 if (progStlItemTkMeaListTemp.size() == 1) {
                     progStlItemTkMeaShowUpd.setEng_Pkid(progStlItemTkMeaListTemp.get(0).getPkid());
-                    progMeaItemService.updateRecord(progStlItemTkMeaShowUpd);
+                    progStlItemTkMeaService.updateRecord(progStlItemTkMeaShowUpd);
                 }
                 if (progStlItemTkMeaListTemp.size()==0){
                     progStlItemTkMeaShowUpd.setEng_TkcttPkid(strTkcttPkid);
                     progStlItemTkMeaShowUpd.setEng_TkcttItemPkid(progStlItemTkMeaShowUpd.getTkctt_Pkid());
-                    progMeaItemService.insertRecord(progStlItemTkMeaShowUpd);
+                    progStlItemTkMeaService.insertRecord(progStlItemTkMeaShowUpd);
                 }
                 MessageUtil.addInfo("更新数据完成。");
             }
@@ -307,7 +307,7 @@ public class ProgStlItemTkMeaAction {
                     progStlItemTkMeaShowPara.getEng_Pkid().equals("")){
                 MessageUtil.addError("无可删除的数据！") ;
             }else{
-                int deleteRecordNum= progMeaItemService.deleteRecord(progStlItemTkMeaShowPara.getEng_Pkid()) ;
+                int deleteRecordNum= progStlItemTkMeaService.deleteRecord(progStlItemTkMeaShowPara.getEng_Pkid()) ;
                 if (deleteRecordNum<=0){
                     MessageUtil.addInfo("该记录已删除。");
                 }else {
@@ -699,12 +699,12 @@ public class ProgStlItemTkMeaAction {
         this.progStlItemTkMeaShowList = progStlItemTkMeaShowList;
     }
 
-    public ProgMeaItemService getProgMeaItemService() {
-        return progMeaItemService;
+    public ProgStlItemTkMeaService getProgStlItemTkMeaService() {
+        return progStlItemTkMeaService;
     }
 
-    public void setProgMeaItemService(ProgMeaItemService ProgMeaItemService) {
-        this.progMeaItemService = ProgMeaItemService;
+    public void setProgStlItemTkMeaService(ProgStlItemTkMeaService ProgStlItemTkMeaService) {
+        this.progStlItemTkMeaService = ProgStlItemTkMeaService;
     }
 
     public ProgStlInfoService getProgStlInfoService() {

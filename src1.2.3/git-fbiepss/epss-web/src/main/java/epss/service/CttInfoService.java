@@ -28,7 +28,6 @@ public class CttInfoService {
     @Resource
     private FlowCtrlHisService flowCtrlHisService;
 
-
     public List<CttInfo> selectListByModel(CttInfoShow cttInfoShowPara) {
         CttInfoExample example= new CttInfoExample();
         CttInfoExample.Criteria criteria = example.createCriteria();
@@ -70,6 +69,10 @@ public class CttInfoService {
                 strCttyTypePara,
                 strParentPkidPara,
                 strStatusPara);
+    }
+
+    public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara){
+        return  myCttInfoMapper.selectRecordsFromCtt(parentPkidPara);
     }
 
     public List<CttInfo> getEsInitCttByCttTypeAndBelongToPkId(String strCttType,String strBelongToPkid) {

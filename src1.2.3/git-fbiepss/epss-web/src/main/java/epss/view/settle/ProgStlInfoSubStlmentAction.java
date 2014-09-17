@@ -36,8 +36,8 @@ public class ProgStlInfoSubStlmentAction {
     private static final Logger logger = LoggerFactory.getLogger(ProgStlInfoSubStlmentAction.class);
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
-    @ManagedProperty(value = "#{progWorkqtyItemService}")
-    private ProgWorkqtyItemService progWorkqtyItemService;
+    @ManagedProperty(value = "#{progStlItemSubQService}")
+    private ProgStlItemSubQService progStlItemSubQService;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
     @ManagedProperty(value = "#{esFlowControl}")
@@ -291,12 +291,12 @@ public class ProgStlInfoSubStlmentAction {
 
     /*ÖÇÄÜ×Ö¶ÎStart*/
 
-    public ProgWorkqtyItemService getProgWorkqtyItemService() {
-        return progWorkqtyItemService;
+    public ProgStlItemSubQService getProgStlItemSubQService() {
+        return progStlItemSubQService;
     }
 
-    public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
-        this.progWorkqtyItemService = progWorkqtyItemService;
+    public void setProgStlItemSubQService(ProgStlItemSubQService progStlItemSubQService) {
+        this.progStlItemSubQService = progStlItemSubQService;
     }
 
     public StyleModel getStyleModel() {

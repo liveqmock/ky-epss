@@ -46,8 +46,8 @@ public class ProgStlItemSubQAction {
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
-    @ManagedProperty(value = "#{progWorkqtyItemService}")
-    private ProgWorkqtyItemService progWorkqtyItemService;
+    @ManagedProperty(value = "#{progStlItemSubQService}")
+    private ProgStlItemSubQService progStlItemSubQService;
     @ManagedProperty(value = "#{signPartService}")
     private SignPartService signPartService;
     private List<ProgStlItemSubQShow> progStlItemSubQShowList;
@@ -101,16 +101,16 @@ public class ProgStlItemSubQAction {
             beansMap.put("progStlInfoShow", progStlInfoShow);
 
             /*分包合同*/
-            List<CttItem> cttItemList =new ArrayList<CttItem>();
+            List<CttItem> cttItemList =new ArrayList<>();
             cttItemList = cttItemService.getEsItemList(
                     EnumResType.RES_TYPE2.getCode(), strSubcttPkid);
             if(cttItemList.size()<=0){
                 return;
             }
-            progStlItemSubQShowList =new ArrayList<ProgStlItemSubQShow>();
+            progStlItemSubQShowList =new ArrayList<>();
             recursiveDataTable("root", cttItemList, progStlItemSubQShowList);
             progStlItemSubQShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progStlItemSubQShowList);
-            progStlItemSubQShowListExcel =new ArrayList<ProgStlItemSubQShow>();
+            progStlItemSubQShowListExcel =new ArrayList<>();
             for(ProgStlItemSubQShow itemUnit: progStlItemSubQShowList){
                 ProgStlItemSubQShow itemUnitTemp= (ProgStlItemSubQShow) BeanUtils.cloneBean(itemUnit);
                 itemUnitTemp.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getSubctt_StrNo()));
@@ -156,7 +156,7 @@ public class ProgStlItemSubQAction {
             progStlItemSubQ.setSubcttItemPkid(itemUnit.getPkid());
             progStlItemSubQ.setPeriodNo(progStlInfo.getPeriodNo());
             List<ProgStlItemSubQ> progStlItemSubQList =
-                    progWorkqtyItemService.selectRecordsByExample(progStlItemSubQ);
+                    progStlItemSubQService.selectRecordsByExample(progStlItemSubQ);
             if(progStlItemSubQList.size()>0){
                 progStlItemSubQ = progStlItemSubQList.get(0);
                 progStlItemSubQShowTemp.setEngQMng_Pkid(progStlItemSubQ.getPkid());
@@ -242,19 +242,19 @@ public class ProgStlItemSubQAction {
                 }
                 progStlItemSubQShowUpd.setEngQMng_PeriodNo(progStlInfo.getPeriodNo());
                 List<ProgStlItemSubQ> progStlItemSubQListTemp =
-                        progWorkqtyItemService.isExistInDb(progStlItemSubQShowUpd);
+                        progStlItemSubQService.isExistInDb(progStlItemSubQShowUpd);
                 if (progStlItemSubQListTemp.size() > 1) {
                     MessageUtil.addInfo("数据有误，数据库中存在多条记录。");
                     return;
                 }
                 if (progStlItemSubQListTemp.size() == 1) {
                     progStlItemSubQShowUpd.setEngQMng_Pkid (progStlItemSubQListTemp.get(0).getPkid());
-                    progWorkqtyItemService.updateRecord(progStlItemSubQShowUpd);
+                    progStlItemSubQService.updateRecord(progStlItemSubQShowUpd);
                 }
                 if (progStlItemSubQListTemp.size()==0){
                     progStlItemSubQShowUpd.setEngQMng_SubcttPkid(strSubcttPkid);
                     progStlItemSubQShowUpd.setEngQMng_SubcttItemPkid(progStlItemSubQShowUpd.getSubctt_Pkid());
-                    progWorkqtyItemService.insertRecord(progStlItemSubQShowUpd);
+                    progStlItemSubQService.insertRecord(progStlItemSubQShowUpd);
                 }
                 MessageUtil.addInfo("更新数据完成。");
             }
@@ -315,7 +315,7 @@ public class ProgStlItemSubQAction {
     }
     private void delRecordAction(ProgStlItemSubQShow progStlItemSubQShowPara){
         try {
-            int deleteRecordNum= progWorkqtyItemService.deleteRecord(progStlItemSubQShowPara.getEngQMng_Pkid());
+            int deleteRecordNum= progStlItemSubQService.deleteRecord(progStlItemSubQShowPara.getEngQMng_Pkid());
             if (deleteRecordNum<=0){
                 MessageUtil.addInfo("该记录已删除。");
                 return;
@@ -571,12 +571,12 @@ public class ProgStlItemSubQAction {
         this.progStlItemSubQShowList = progStlItemSubQShowList;
     }
 
-    public ProgWorkqtyItemService getProgWorkqtyItemService() {
-        return progWorkqtyItemService;
+    public ProgStlItemSubQService getProgStlItemSubQService() {
+        return progStlItemSubQService;
     }
 
-    public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
-        this.progWorkqtyItemService = progWorkqtyItemService;
+    public void setProgStlItemSubQService(ProgStlItemSubQService progStlItemSubQService) {
+        this.progStlItemSubQService = progStlItemSubQService;
     }
 
     public ProgStlInfoService getProgStlInfoService() {

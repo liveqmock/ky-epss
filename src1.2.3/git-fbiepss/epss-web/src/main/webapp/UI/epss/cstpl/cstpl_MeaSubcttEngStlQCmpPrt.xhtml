@@ -22,35 +22,31 @@
             <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
                 <p:panel>
-                    <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
-                        <h:panelGrid columns="4">
-                            <p:outputLabel value="成本计划：" for="cstplPkid" />
-                            <p:selectOneMenu id="cstplPkid"
-                                             value="#{cstplMeaSubStlQItemAction.strCstplPkid}">
-                                <f:selectItems value="#{cstplMeaSubStlQItemAction.cstplList}"/>
-                            </p:selectOneMenu>
-                            <p:outputLabel value="期数编码：" for="periodNo"/>
-                            <p:inputText id="periodNo" value="#{cstplMeaSubStlQItemAction.strPeriodNo}"
-                                         onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
-                        </h:panelGrid>
-                        <h:panelGrid columns="3">
-                            <p:commandButton id="qryBtn" value="查询"
-                                             action="#{cstplMeaSubStlQItemAction.onQueryAction()}"
-                                             update="pgCondition,msgs,pdt,exportToExcel">
-                            </p:commandButton>
-                            <p:commandButton id="resetBtn" value="重置"
-                                             type="reset"
-                                             update="pgCondition,msgs">
-                            </p:commandButton>
-                            <p:ajaxStatus style="width:16px;height:16px;">
-                                <f:facet name="start">
-                                    <h:graphicImage value="/images/ajaxloading.gif"/>
-                                </f:facet>
-                                <f:facet name="complete">
-                                    <h:outputText value=""/>
-                                </f:facet>
-                            </p:ajaxStatus>
-                        </h:panelGrid>
+                    <h:panelGrid id="pgCondition" columns="7">
+                        <p:outputLabel value="成本计划：" for="cstplPkid" />
+                        <p:selectOneMenu id="cstplPkid"
+                                         value="#{cstplMeaSubStlQItemAction.strCstplPkid}">
+                            <f:selectItems value="#{cstplMeaSubStlQItemAction.cstplList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="期数编码：" for="periodNo"/>
+                        <p:inputText id="periodNo" value="#{cstplMeaSubStlQItemAction.strPeriodNo}"
+                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
+                        <p:commandButton id="qryBtn" value="查询"
+                                         action="#{cstplMeaSubStlQItemAction.onQueryAction()}"
+                                         update="pgCondition,msgs,pdt,exportToExcel">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtn" value="重置"
+                                         type="reset"
+                                         update="pgCondition,msgs">
+                        </p:commandButton>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
                     </h:panelGrid>
                 </p:panel>
                 <h:panelGrid id="exportToExcel" columns="1">

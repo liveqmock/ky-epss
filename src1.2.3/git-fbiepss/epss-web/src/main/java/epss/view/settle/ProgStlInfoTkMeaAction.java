@@ -36,8 +36,8 @@ public class ProgStlInfoTkMeaAction {
     private static final Logger logger = LoggerFactory.getLogger(ProgStlInfoTkMeaAction.class);
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
-    @ManagedProperty(value = "#{progMeaItemService}")
-    private ProgMeaItemService progMeaItemService;
+    @ManagedProperty(value = "#{progStlItemTkMeaService}")
+    private ProgStlItemTkMeaService progStlItemTkMeaService;
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
     @ManagedProperty(value = "#{esFlowControl}")
@@ -272,7 +272,7 @@ public class ProgStlInfoTkMeaAction {
                 MessageUtil.addError("该记录已存在，请重新录入！");
                 return;
             }
-            String strTemp=progStlInfoService.subCttStlCheckForMng(
+            String strTemp=progStlInfoService.progStlInfoMngPreCheck(
                     EnumResType.RES_TYPE7.getCode(),
                     progStlInfoShowAdd.getStlPkid(),
                     progStlInfoShowAdd.getPeriodNo());
@@ -293,7 +293,7 @@ public class ProgStlInfoTkMeaAction {
         }
         else if(strSubmitType.equals("Del")){
             progStlInfoShowDel.setStlType(strStlType);
-            delRecordAction(progStlInfoShowDel);
+            progStlInfoService.delSubMStlInfoAndItem(progStlInfoShowDel);
         }
         ProgStlInfoShow progStlInfoShowTemp =new ProgStlInfoShow();
         progStlInfoShowTemp.setStlType(strStlType);
@@ -307,7 +307,7 @@ public class ProgStlInfoTkMeaAction {
         try {
             progStlInfoService.insertRecord(progStlInfoShowPara) ;
             // 从批准了的上一阶段的数据拿到这一阶段中，作为开始累计数
-            progMeaItemService.setFromLastStageApproveDataToThisStageBeginData(progStlInfoShowPara);
+            progStlItemTkMeaService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
             MessageUtil.addInfo("新增数据完成。");
         } catch (Exception e) {
             logger.error("新增数据失败，", e);
@@ -320,24 +320,6 @@ public class ProgStlInfoTkMeaAction {
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-    private void delRecordAction(ProgStlInfoShow progStlInfoShowPara){
-        try {
-            // 删除详细数据
-            int deleteItemsByInitStlTkcttEngNum= progMeaItemService.deleteItemsByInitStlTkcttEng(
-                    progStlInfoShowPara.getStlPkid(),
-                    progStlInfoShowPara.getPeriodNo());
-            // 删除登记数据
-            int deleteRecordOfRegistNum= progStlInfoService.deleteRecord(progStlInfoShowDel.getPkid()) ;
-            if (deleteItemsByInitStlTkcttEngNum<=0&&deleteRecordOfRegistNum<=0){
-                MessageUtil.addInfo("该记录已删除。");
-                return;
-            }
-            MessageUtil.addInfo("删除数据完成。");
-        } catch (Exception e) {
-            logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
         }
     }
@@ -359,12 +341,12 @@ public class ProgStlInfoTkMeaAction {
         this.progStlInfoService = progStlInfoService;
     }
 
-    public ProgMeaItemService getProgMeaItemService() {
-        return progMeaItemService;
+    public ProgStlItemTkMeaService getProgStlItemTkMeaService() {
+        return progStlItemTkMeaService;
     }
 
-    public void setProgMeaItemService(ProgMeaItemService progMeaItemService) {
-        this.progMeaItemService = progMeaItemService;
+    public void setProgStlItemTkMeaService(ProgStlItemTkMeaService progStlItemTkMeaService) {
+        this.progStlItemTkMeaService = progStlItemTkMeaService;
     }
 
     public CttInfoService getCttInfoService() {

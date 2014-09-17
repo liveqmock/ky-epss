@@ -48,12 +48,12 @@ public class ProgStlItemSubStlmentAction {
     private EsCommon esCommon;
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
-    @ManagedProperty(value = "#{progSubstlItemService}")
-    private ProgSubstlItemService progSubstlItemService;
-    @ManagedProperty(value = "#{progMatqtyItemService}")
-    private ProgMatqtyItemService progMatqtyItemService;
-    @ManagedProperty(value = "#{progWorkqtyItemService}")
-    private ProgWorkqtyItemService progWorkqtyItemService;
+    @ManagedProperty(value = "#{progStlItemSubStlmentService}")
+    private ProgStlItemSubStlmentService progStlItemSubStlmentService;
+    @ManagedProperty(value = "#{progStlItemSubMService}")
+    private ProgStlItemSubMService progStlItemSubMService;
+    @ManagedProperty(value = "#{progStlItemSubQService}")
+    private ProgStlItemSubQService progStlItemSubQService;
     @ManagedProperty(value = "#{flowCtrlHisService}")
     private FlowCtrlHisService flowCtrlHisService;
 
@@ -130,17 +130,17 @@ public class ProgStlItemSubStlmentAction {
                 /*表内容设定,查询和记账，查P表*/
                 progSubstlItemShowListForAccountAndQry = new ArrayList<ProgStlItemSubStlment>();
                 progSubstlItemShowListForAccountAndQry =
-                        progSubstlItemService.selectRecordsForAccount(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
+                        progStlItemSubStlmentService.selectRecordsForAccount(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
                 return;
             }
             if ("Approve".equals(strSubmitType)) {
                 strExportToExcelRendered = "true";
                 strApproveBtnRendered = "false";
                 List<ProgStlItemSubStlment> progStlItemSubStlmentList =
-                        progSubstlItemService.selectRecordsForAccount(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
+                        progStlItemSubStlmentService.selectRecordsForAccount(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
                 /*表内容设定，批准，查P表*/
                 for (ProgStlItemSubStlment progStlItemSubStlment : progStlItemSubStlmentList) {
-                    progStlItemSubStlmentShowList.add(progSubstlItemService.fromModelToShow(progStlItemSubStlment));
+                    progStlItemSubStlmentShowList.add(progStlItemSubStlmentService.fromModelToShow(progStlItemSubStlment));
                 }
             }
         } else {
@@ -187,9 +187,9 @@ public class ProgStlItemSubStlmentAction {
         List<ProgStlItemSubStlmentShow> records0 = new ArrayList<ProgStlItemSubStlmentShow>();
         List<ProgStlItemSubStlmentShow> records1 = new ArrayList<ProgStlItemSubStlmentShow>();
         List<ProgStlItemSubStlment> progSubstlItemShowListForApproveTemp =
-                progSubstlItemService.selectRecordsForAccount(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
+                progStlItemSubStlmentService.selectRecordsForAccount(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
         for (ProgStlItemSubStlment progStlItemSubStlment : progSubstlItemShowListForApproveTemp) {
-            ProgStlItemSubStlmentShow progStlItemSubStlmentShowTemp = progSubstlItemService.fromModelToShow(progStlItemSubStlment);
+            ProgStlItemSubStlmentShow progStlItemSubStlmentShowTemp = progStlItemSubStlmentService.fromModelToShow(progStlItemSubStlment);
             if (EnumResType.RES_TYPE3.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
                 if (progStlItemSubStlmentShowTemp.getSubctt_ItemPkid().contains("stl")) {
                     beansMap.put(progStlItemSubStlmentShowTemp.getSubctt_ItemPkid(), progStlItemSubStlmentShowTemp);
@@ -298,7 +298,7 @@ public class ProgStlItemSubStlmentAction {
                 progStlItemSubQTemp.setSubcttItemPkid(itemUnit.getSubctt_ItemPkid());
                 progStlItemSubQTemp.setPeriodNo(progStlInfo.getPeriodNo());
                 List<ProgStlItemSubQ> progStlItemSubQList =
-                        progWorkqtyItemService.selectRecordsByExample(progStlItemSubQTemp);
+                        progStlItemSubQService.selectRecordsByExample(progStlItemSubQTemp);
                 itemUnit.setEngPMng_PeriodNo(progStlInfo.getPeriodNo());
                 itemUnit.setEngPMng_SubStlType(EnumResType.RES_TYPE3.getCode());
                 if (progStlItemSubQList.size() <= 0) {
@@ -384,7 +384,7 @@ public class ProgStlItemSubStlmentAction {
                 progStlItemSubM.setSubcttItemPkid(itemUnit.getSubctt_ItemPkid());
                 progStlItemSubM.setPeriodNo(progStlInfo.getPeriodNo());
                 List<ProgStlItemSubM> progStlItemSubMList =
-                        progMatqtyItemService.selectRecordsByExample(progStlItemSubM);
+                        progStlItemSubMService.selectRecordsByExample(progStlItemSubM);
                 itemUnit.setEngPMng_PeriodNo(progStlInfo.getPeriodNo());
                 itemUnit.setEngPMng_SubStlType(EnumResType.RES_TYPE4.getCode());
                 if (progStlItemSubMList.size() <= 0) {
@@ -718,24 +718,24 @@ public class ProgStlItemSubStlmentAction {
         this.cttInfoService = cttInfoService;
     }
 
-    public ProgSubstlItemService getProgSubstlItemService() {
-        return progSubstlItemService;
+    public ProgStlItemSubStlmentService getProgStlItemSubStlmentService() {
+        return progStlItemSubStlmentService;
     }
 
-    public void setProgSubstlItemService(ProgSubstlItemService progSubstlItemService) {
-        this.progSubstlItemService = progSubstlItemService;
+    public void setProgStlItemSubStlmentService(ProgStlItemSubStlmentService progStlItemSubStlmentService) {
+        this.progStlItemSubStlmentService = progStlItemSubStlmentService;
     }
 
-    public ProgMatqtyItemService getProgMatqtyItemService() {
-        return progMatqtyItemService;
+    public ProgStlItemSubMService getProgStlItemSubMService() {
+        return progStlItemSubMService;
     }
 
-    public void setProgMatqtyItemService(ProgMatqtyItemService progMatqtyItemService) {
-        this.progMatqtyItemService = progMatqtyItemService;
+    public void setProgStlItemSubMService(ProgStlItemSubMService progStlItemSubMService) {
+        this.progStlItemSubMService = progStlItemSubMService;
     }
 
-    public ProgWorkqtyItemService getProgWorkqtyItemService() {
-        return progWorkqtyItemService;
+    public ProgStlItemSubQService getProgStlItemSubQService() {
+        return progStlItemSubQService;
     }
 
     public ProgStlInfoService getProgStlInfoService() {
@@ -746,8 +746,8 @@ public class ProgStlItemSubStlmentAction {
         this.progStlInfoService = progStlInfoService;
     }
 
-    public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
-        this.progWorkqtyItemService = progWorkqtyItemService;
+    public void setProgStlItemSubQService(ProgStlItemSubQService progStlItemSubQService) {
+        this.progStlItemSubQService = progStlItemSubQService;
     }
 
     public String getStrExportToExcelRendered() {

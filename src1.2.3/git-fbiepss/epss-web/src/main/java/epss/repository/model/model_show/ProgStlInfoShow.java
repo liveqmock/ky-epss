@@ -29,7 +29,6 @@ public class ProgStlInfoShow {
     private String lastUpdBy;
     private String lastUpdByName;
     private String lastUpdTime;
-    private String spareField;
     private Integer recversion;
     private String type;
     private String autoLinkAdd;
@@ -176,14 +175,6 @@ public class ProgStlInfoShow {
 
     public void setLastUpdTime(String lastUpdTime) {
         this.lastUpdTime = lastUpdTime;
-    }
-
-    public String getSpareField() {
-        return spareField;
-    }
-
-    public void setSpareField(String spareField) {
-        this.spareField = spareField;
     }
 
     public String getStlName() {

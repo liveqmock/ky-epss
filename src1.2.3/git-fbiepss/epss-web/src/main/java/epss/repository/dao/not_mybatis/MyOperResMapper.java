@@ -25,21 +25,6 @@ public interface MyOperResMapper {
             "   eci.NAME as infoPkidName" +
             " from " +
             "   OPER_RES opr" +
-            " left join" +
-            "   CTT_INFO eci" +
-            " on" +
-            "   opr.INFO_PKID=eci.PKID" +
-            " where " +
-            "   opr.INFO_TYPE=#{strInfoType}" +
-            " and" +
-            "   opr.OPER_PKID=#{strOperPkid}")
-    List<OperResShow> getInfoListByOperPkid(@Param("strInfoType") String strInfoType,
-                                            @Param("strOperPkid") String strOperPkid);
-    @Select("select distinct" +
-            "   opr.INFO_PKID as infoPkid, " +
-            "   eci.NAME as infoPkidName" +
-            " from " +
-            "   OPER_RES opr" +
             " inner join" +
             "   CTT_INFO eci" +
             " on" +
@@ -53,22 +38,4 @@ public interface MyOperResMapper {
     List<OperResShow> getInfoListByOperFlowPkid(@Param("strInfoType") String strInfoType,
                                                 @Param("strFlowStatus") String strFlowStatus,
                                                 @Param("strOperPkid") String strOperPkid);
-
-    @Select(" select" +
-            "    t.pkid as pkid," +
-            "    t.ctt_type as cttType," +
-            "    t.parent_pkid as parentPkid," +
-            "    t.id as id," +
-            "    t.name as name," +
-            "    t.remark as remark," +
-            "    t.created_by as createdBy," +
-            "    (select name from oper where id=t.created_by) as createdByName," +
-            "    t.CREATED_TIME as createdTime " +
-            " from" +
-            "    CTT_INFO t" +
-            " where" +
-            "    t.parent_pkid=#{parentPkid}" +
-            " order by" +
-            "    t.name")
-    List<CttInfoShow> selectRecordsFromCtt(@Param("parentPkid") String parentPkidPara);
 }

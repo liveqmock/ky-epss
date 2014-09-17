@@ -20,10 +20,116 @@ public interface MyProgStlInfoMapper {
     @Select("select max(id) from PROG_STL_INFO where stl_type = #{strStlType}")
     String getStrMaxStlId(@Param("strStlType") String strStlType);
 
+    @Select("select " +
+            "      max(s.period_no)"+
+            " from " +
+            "      PROG_STL_INFO s"+
+            " where"+
+            "      s.stl_type=#{stlType}"+
+            " and " +
+            "      s.stl_pkid=#{subCttPkid}")
+    String getMaxPeriodNo(@Param("stlType") String stlType,
+                          @Param("subCttPkid") String subCttPkid);
+
+    @Select("select"+
+            "      PKID as pkid" +
+            "     ,ID as id" +
+            "     ,STL_TYPE as stlType" +
+            "     ,STL_PKID as subcttPkid" +
+            "     ,PERIOD_NO as periodNo" +
+            "     ,REMARK as remark" +
+            "     ,ATTACHMENT as attachment" +
+            " from" +
+            "     PROG_STL_INFO"+
+            " where" +
+            "     STL_PKID = #{strStlPkid}" +
+            " and" +
+            "     (STL_TYPE='3' or STL_TYPE='4')")
+    List<ProgStlInfo> selectIsUsedInQMPBySubcttPkid(@Param("strStlPkid") String strStlPkid);
+
+    @Select("select " +
+            "      max(PERIOD_NO)" +
+            " from " +
+            "      PROG_STL_INFO" +
+            " where " +
+            "      STL_TYPE = #{strStlType}" +
+            " and " +
+            "      STL_PKID = #{strStlPkid}" +
+            " and " +
+            "      FLOW_STATUS='2'")
+    String getLatestDoubleCkeckedPeriodNo(@Param("strStlType") String strStlType,
+                                          @Param("strStlPkid") String strStlPkid);
+    @Select("select " +
+            "      max(PERIOD_NO)" +
+            " from " +
+            "      PROG_STL_INFO" +
+            " where " +
+            "      STL_TYPE = #{strStlType}" +
+            " and " +
+            "      STL_PKID = #{strStlPkid}" +
+            " and " +
+            "      FLOW_STATUS='3'")
+    String getLatestApprovedPeriodNo(@Param("strStlType") String strStlType,
+                                     @Param("strStlPkid") String strStlPkid);
+
+    @Select("select " +
+            "      max(PERIOD_NO)" +
+            " from " +
+            "      PROG_STL_INFO" +
+            " where " +
+            "      STL_TYPE = #{strStlType}" +
+            " and " +
+            "      STL_PKID = #{strStlPkid}" +
+            " and " +
+            "      PERIOD_NO <= #{strEndPeriodNo}" +
+            " and " +
+            "      FLOW_STATUS='3'")
+    String getLatestApprovedPeriodNoByEndPeriod(@Param("strStlType") String strStlType,
+                                                @Param("strStlPkid") String strStlPkid,
+                                                @Param("strEndPeriodNo") String strEndPeriodNo);
+
+    @Select("select " +
+            "      psi.PKID as pkid" +
+            "     ,psi.ID as id" +
+            "     ,psi.STL_TYPE as stlType" +
+            "     ,psi.STL_PKID as stlPkid" +
+            "     ,ci.NAME as stlName" +
+            "     ,sp.NAME as signPartBName" +
+            "     ,psi.PERIOD_NO as periodNo" +
+            "     ,psi.FLOW_STATUS as flowStatus" +
+            "     ,psi.FLOW_STATUS_REASON as flowStatusReason" +
+            "     ,psi.REMARK as remark" +
+            "     ,psi.ATTACHMENT as attachment" +
+            "     ,psi.ARCHIVED_FLAG as archivedFlag" +
+            "     ,psi.CREATED_BY as createdBy" +
+            "     ,psi.CREATED_TIME as createdTime" +
+            "     ,psi.LAST_UPD_BY as lastUpdBy" +
+            "     ,psi.LAST_UPD_TIME as lastUpdTime" +
+            "     ,psi.RECVERSION as recversion" +
+            "     ,psi.AUTO_LINK_ADD as autoLinkAdd" +
+            " from " +
+            "      PROG_STL_INFO psi" +
+            " left join" +
+            "      CTT_INFO ci" +
+            " on" +
+            "      psi.STL_PKID=ci.PKID" +
+            " left join" +
+            "      SIGN_PART sp" +
+            " on" +
+            "      ci.SIGN_PART_B=sp.PKID" +
+            " where " +
+            "      psi.STL_TYPE = #{strStlType}" +
+            " and " +
+            "      psi.STL_PKID = #{strStlPkid}")
+    List<ProgStlInfoShow> getInitStlShowListByInfoTypePkid(@Param("strStlType") String strStlType,
+                                                           @Param("strStlPkid") String strStlPkid);
+
     List<ProgStlInfoShow> selectSubcttStlQMByStatusFlagBegin_End(ProgStlInfoShow progStlInfoShow);
 
     List<ProgStlInfoShow> selectTkcttStlSMByStatusFlagBegin_End(ProgStlInfoShow progStlInfoShowPara);
 
+
+    // 分包结算单 Begin
     @Select("select distinct" +
             "      eispower.PKID as pkid" +
             "     ,eispower.ID" +
@@ -66,7 +172,6 @@ public interface MyProgStlInfoMapper {
     List<ProgStlInfoShow> selectNotFormEsInitSubcttStlP(@Param("strParentPkid") String strParentPkid,
                                                         @Param("strStlPkid") String strStlPkid,
                                                         @Param("strPeriodNo") String strPeriodNo);
-
     @Select("select" +
             " eispower.PKID as pkid" +
             " from"+
@@ -131,7 +236,6 @@ public interface MyProgStlInfoMapper {
     List<ProgStlInfoShow> selectFormPreEsInitSubcttStlP(@Param("strParentPkid") String strParentPkid,
                                                         @Param("strStlPkid") String strStlPkid,
                                                         @Param("strPeriodNo") String strPeriodNo);
-
     @Select("select distinct" +
             " eispower.PKID as pkid" +
             ",eispower.STL_PKID as stlPkid" +
@@ -206,7 +310,6 @@ public interface MyProgStlInfoMapper {
     List<ProgStlInfoShow> selectFormingEsInitSubcttStlP(@Param("strParentPkid") String strParentPkid,
                                                         @Param("strStlPkid") String strStlPkid,
                                                         @Param("strPeriodNo") String strPeriodNo);
-
     @Select("select " +
             "      eispower.PKID as pkid" +
             "     ,eispower.ID as id" +
@@ -267,7 +370,6 @@ public interface MyProgStlInfoMapper {
     List<ProgStlInfoShow> selectFormedEsInitSubcttStlPList(@Param("strParentPkid") String strParentPkid,
                                                            @Param("strStlPkid") String strStlPkid,
                                                            @Param("strPeriodNo") String strPeriodNo);
-
     @Select(" select " +
             "      eispower.PKID as pkid" +
             "     ,eispower.ID as id" +
@@ -328,72 +430,5 @@ public interface MyProgStlInfoMapper {
     List<ProgStlInfoShow> getFormedAfterEsInitSubcttStlPList(@Param("strParentPkid") String strParentPkid,
                                                              @Param("strStlPkid") String strStlPkid,
                                                              @Param("strPeriodNo") String strPeriodNo);
-
-    @Select("select " +
-            "      max(s.period_no)"+
-            " from " +
-            "      PROG_STL_INFO s"+
-            " where"+
-            "      s.stl_type=#{stlType}"+
-            " and " +
-            "      s.stl_pkid=#{subCttPkid}")
-    String getMaxPeriodNo(@Param("stlType") String stlType,
-                          @Param("subCttPkid") String subCttPkid);
-
-    @Select("select"+
-            "      PKID as pkid" +
-            "     ,ID as id" +
-            "     ,STL_TYPE as stlType" +
-            "     ,STL_PKID as subcttPkid" +
-            "     ,PERIOD_NO as periodNo" +
-            "     ,REMARK as remark" +
-            "     ,ATTACHMENT as attachment" +
-            " from" +
-            "     PROG_STL_INFO"+
-            " where" +
-            "     STL_PKID = #{strStlPkid}" +
-            " and" +
-            "     (STL_TYPE='3' or STL_TYPE='4')")
-    List<ProgStlInfo> selectIsUsedInQMPBySubcttPkid(@Param("strStlPkid") String strStlPkid);
-
-    @Select("select " +
-            "      max(PERIOD_NO)" +
-            " from " +
-            "      PROG_STL_INFO" +
-            " where " +
-            "      STL_TYPE = #{strStlType}" +
-            " and " +
-            "      STL_PKID = #{strStlPkid}" +
-            " and " +
-            "      FLOW_STATUS='2'")
-    String getLatestDoubleCkeckedPeriodNo(@Param("strStlType") String strStlType,
-                                          @Param("strStlPkid") String strStlPkid);
-    @Select("select " +
-            "      max(PERIOD_NO)" +
-            " from " +
-            "      PROG_STL_INFO" +
-            " where " +
-            "      STL_TYPE = #{strStlType}" +
-            " and " +
-            "      STL_PKID = #{strStlPkid}" +
-            " and " +
-            "      FLOW_STATUS='3'")
-    String getLatestApprovedPeriodNo(@Param("strStlType") String strStlType,
-                                     @Param("strStlPkid") String strStlPkid);
-
-    @Select("select " +
-            "      max(PERIOD_NO)" +
-            " from " +
-            "      PROG_STL_INFO" +
-            " where " +
-            "      STL_TYPE = #{strStlType}" +
-            " and " +
-            "      STL_PKID = #{strStlPkid}" +
-            " and " +
-            "      PERIOD_NO <= #{strEndPeriodNo}" +
-            " and " +
-            "      FLOW_STATUS='3'")
-    String getLatestApprovedPeriodNoByEndPeriod(@Param("strStlType") String strStlType,
-                                                @Param("strStlPkid") String strStlPkid,
-                                                @Param("strEndPeriodNo") String strEndPeriodNo);
+    // 分包结算单 End
 }

@@ -49,8 +49,8 @@ public class ProgStlItemTkEstAction {
     private SignPartService signPartService;
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
-    @ManagedProperty(value = "#{progEstItemService}")
-    private ProgEstItemService progEstItemService;
+    @ManagedProperty(value = "#{progStlItemTkEstService}")
+    private ProgStlItemTkEstService progStlItemTkEstService;
     private List<ProgStlItemTkEstShow> progStlItemTkEstShowList;
     private ProgStlItemTkEstShow progStlItemTkEstShowSel;
     private ProgStlItemTkEstShow progStlItemTkEstShowUpd;
@@ -176,7 +176,7 @@ public class ProgStlItemTkEstAction {
             progStlItemTkEst.setTkcttItemPkid(progStlItemTkEstShowTemp.getTkctt_Pkid());
             progStlItemTkEst.setPeriodNo(progStlInfo.getPeriodNo());
             List<ProgStlItemTkEst> progStlItemTkEstList =
-                    progEstItemService.selectRecordsByExample(progStlItemTkEst);
+                    progStlItemTkEstService.selectRecordsByExample(progStlItemTkEst);
             if(progStlItemTkEstList.size()>0){
                 progStlItemTkEst = progStlItemTkEstList.get(0);
                 String strCreatedByName= ToolUtil.getUserName(progStlItemTkEst.getCreatedBy());
@@ -225,19 +225,19 @@ public class ProgStlItemTkEstAction {
                 }
                 progStlItemTkEstShowUpd.setEng_PeriodNo(progStlInfo.getPeriodNo());
                 List<ProgStlItemTkEst> progStlItemTkEstListTemp =
-                        progEstItemService.isExistInDb(progStlItemTkEstShowUpd);
+                        progStlItemTkEstService.isExistInDb(progStlItemTkEstShowUpd);
                 if (progStlItemTkEstListTemp.size() > 1) {
                     MessageUtil.addInfo("数据有误，数据库中存在多条记录。");
                     return;
                 }
                 if (progStlItemTkEstListTemp.size() == 1) {
                     progStlItemTkEstShowUpd.setEng_Pkid(progStlItemTkEstListTemp.get(0).getPkid());
-                    progEstItemService.updateRecord(progStlItemTkEstShowUpd);
+                    progStlItemTkEstService.updateRecord(progStlItemTkEstShowUpd);
                 }
                 if (progStlItemTkEstListTemp.size()==0){
 				    progStlItemTkEstShowUpd.setEng_TkcttPkid(strTkcttPkid);
                     progStlItemTkEstShowUpd.setEng_TkcttItemPkid(progStlItemTkEstShowUpd.getTkctt_Pkid());
-                    progEstItemService.insertRecord(progStlItemTkEstShowUpd);
+                    progStlItemTkEstService.insertRecord(progStlItemTkEstShowUpd);
                 }
                 MessageUtil.addInfo("更新数据完成。");
             }
@@ -305,7 +305,7 @@ public class ProgStlItemTkEstAction {
                     progStlItemTkEstShowPara.getEng_Pkid().equals("")){
                 MessageUtil.addError("无可删除的数据！") ;
             }else{
-                int deleteRecordNum= progEstItemService.deleteRecord(progStlItemTkEstShowPara.getEng_Pkid()) ;
+                int deleteRecordNum= progStlItemTkEstService.deleteRecord(progStlItemTkEstShowPara.getEng_Pkid()) ;
                 if (deleteRecordNum<=0){
                     MessageUtil.addInfo("该记录已删除。");
                 }else {
@@ -686,12 +686,12 @@ public class ProgStlItemTkEstAction {
         this.cttItemService = cttItemService;
     }    
 
-    public ProgEstItemService getProgEstItemService() {
-        return progEstItemService;
+    public ProgStlItemTkEstService getProgStlItemTkEstService() {
+        return progStlItemTkEstService;
     }
 
-    public void setProgEstItemService(ProgEstItemService ProgEstItemService) {
-        this.progEstItemService = ProgEstItemService;
+    public void setProgStlItemTkEstService(ProgStlItemTkEstService ProgStlItemTkEstService) {
+        this.progStlItemTkEstService = ProgStlItemTkEstService;
     }
 
     public ProgStlInfoService getProgStlInfoService() {

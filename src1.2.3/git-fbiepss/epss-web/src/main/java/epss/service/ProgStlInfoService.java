@@ -5,7 +5,6 @@ import epss.common.enums.EnumFlowStatus;
 import epss.common.enums.EnumFlowStatusReason;
 import epss.repository.dao.FlowCtrlHisMapper;
 import epss.repository.model.model_show.ProgStlInfoShow;
-import org.springframework.beans.factory.annotation.Autowired;
 import skyline.util.ToolUtil;
 import epss.repository.dao.not_mybatis.MyProgStlInfoMapper;
 import epss.repository.dao.ProgStlInfoMapper;
@@ -14,6 +13,7 @@ import epss.repository.model.model_show.ProgStlItemSubStlmentShow;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,11 +32,15 @@ public class ProgStlInfoService {
     @Resource
     private FlowCtrlHisMapper flowCtrlHisMapper;
     @Resource
-    private ProgSubstlItemService progSubstlItemService;
+    private ProgStlItemSubQService progStlItemSubQService;
     @Resource
-    private ProgWorkqtyItemService progWorkqtyItemService;
+    private ProgStlItemSubMService progStlItemSubMService;
     @Resource
-    private ProgMatqtyItemService progMatqtyItemService;
+    private ProgStlItemSubStlmentService progStlItemSubStlmentService;
+    @Resource
+    private ProgStlItemTkEstService progStlItemTkEstService;
+    @Resource
+    private ProgStlItemTkMeaService progStlItemTkMeaService;
 
     // 判断记录是否存在
     public List<ProgStlInfo> getInitStlListByModelShow(ProgStlInfoShow progStlInfoShowPara) {
@@ -50,13 +54,43 @@ public class ProgStlInfoService {
         ProgStlInfoExample.Criteria criteria = example.createCriteria();
         criteria
                 .andStlTypeEqualTo(progStlInfoPara.getStlType())
-                .andStlPkidEqualTo(progStlInfoPara.getStlPkid())
-                .andPeriodNoEqualTo(progStlInfoPara.getPeriodNo());
+                .andStlPkidEqualTo(progStlInfoPara.getStlPkid());
         //可以为NULL的项
+        if(!ToolUtil.getStrIgnoreNull(progStlInfoPara.getPeriodNo()).equals("")){
+            criteria.andPeriodNoEqualTo(progStlInfoPara.getPeriodNo());
+        }
         if(!ToolUtil.getStrIgnoreNull(progStlInfoPara.getFlowStatus()).equals("")){
             criteria.andFlowStatusEqualTo(progStlInfoPara.getFlowStatus());
         }
         return progStlInfoMapper.selectByExample(example);
+    }
+
+    public List<ProgStlInfoShow> getInitStlShowListByModel(ProgStlInfo progStlInfoPara) {
+        ProgStlInfoExample example = new ProgStlInfoExample();
+        ProgStlInfoExample.Criteria criteria = example.createCriteria();
+        criteria
+                .andStlTypeEqualTo(progStlInfoPara.getStlType())
+                .andStlPkidEqualTo(progStlInfoPara.getStlPkid());
+        //可以为NULL的项
+        if(!ToolUtil.getStrIgnoreNull(progStlInfoPara.getPeriodNo()).equals("")){
+            criteria.andPeriodNoEqualTo(progStlInfoPara.getPeriodNo());
+        }
+        if(!ToolUtil.getStrIgnoreNull(progStlInfoPara.getFlowStatus()).equals("")){
+            criteria.andFlowStatusEqualTo(progStlInfoPara.getFlowStatus());
+        }
+        List<ProgStlInfoShow> progStlInfoShowListTemp=new ArrayList<>();
+        List<ProgStlInfo> progStlInfoListTemp=progStlInfoMapper.selectByExample(example);
+        for(ProgStlInfo progStlInfoUnit:progStlInfoListTemp){
+            ProgStlInfoShow progStlInfoShowTemp=fromModelToModelShow(progStlInfoUnit);
+
+            progStlInfoShowListTemp.add(progStlInfoShowTemp);
+        }
+        return progStlInfoShowListTemp;
+    }
+
+    public List<ProgStlInfoShow> getInitStlShowListByInfoTypePkid(
+            String infoTypePara,String infoPkidPara) {
+        return myProgStlInfoMapper.getInitStlShowListByInfoTypePkid(infoTypePara, infoPkidPara);
     }
 
     public void accountAction(ProgStlInfo progStlInfoPara) {
@@ -144,41 +178,16 @@ public class ProgStlInfoService {
     }
 
     @Transactional
-    public String insertStlQAndItemRecordAction(ProgStlInfoShow progStlInfoShowPara) {
+    public String insertStlQAndItemBeginDataAction(ProgStlInfoShow progStlInfoShowPara) {
         insertRecord(progStlInfoShowPara);
-        progWorkqtyItemService.setFromLastStageApproveDataToThisStageBeginData(progStlInfoShowPara);
+        progStlItemSubQService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
         return "新增数据完成。";
     }
     @Transactional
-    public String insertStlMAndItemRecordAction(ProgStlInfoShow progStlInfoShowPara) {
+    public String insertStlMAndItemBeginDataAction(ProgStlInfoShow progStlInfoShowPara) {
         insertRecord(progStlInfoShowPara);
-        progMatqtyItemService.setFromLastStageApproveDataToThisStageBeginData(progStlInfoShowPara);
+        progStlItemSubMService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
         return "新增数据完成。";
-    }
-    public ProgStlInfo initStlData(String strStlTypePara,CttInfo cttInfoPara){
-        ProgStlInfo progStlInfo =new ProgStlInfo();
-        progStlInfo.setId(getStrMaxStlId(strStlTypePara));
-        progStlInfo.setStlType(strStlTypePara);
-        progStlInfo.setStlPkid(cttInfoPara.getPkid());
-        progStlInfo.setPeriodNo("NULL");
-        return progStlInfo;
-    }
-    @Transactional
-    public void insertRecordForOperRes(CttInfo cttInfoPara) {
-        //结算表根据条件判断插入数据
-        if (cttInfoPara.getCttType().equals(EnumResType.RES_TYPE0.getCode())) {
-            //总包计量
-            insertRecord(initStlData(EnumResType.RES_TYPE6.getCode(), cttInfoPara));
-            //总包统计
-            insertRecord(initStlData(EnumResType.RES_TYPE7.getCode(), cttInfoPara));
-        } else if (cttInfoPara.getCttType().equals(EnumResType.RES_TYPE2.getCode())) {
-            //分包数量结算
-            insertRecord(initStlData(EnumResType.RES_TYPE3.getCode(), cttInfoPara));
-            //分包材料结算
-            insertRecord(initStlData(EnumResType.RES_TYPE4.getCode(), cttInfoPara));
-            //分包价格结算
-            insertRecord(initStlData(EnumResType.RES_TYPE5.getCode(), cttInfoPara));
-        }
     }
 
     @Transactional
@@ -198,7 +207,7 @@ public class ProgStlInfoService {
         for (int i=0;i< progStlItemSubStlmentShowListForApprovePara.size();i++){
             ProgStlItemSubStlmentShow itemUnit= progStlItemSubStlmentShowListForApprovePara.get(i);
             itemUnit.setEngPMng_RowNo(i);
-            progSubstlItemService.insertRecordDetail(itemUnit);
+            progStlItemSubStlmentService.insertRecordDetail(itemUnit);
         }
     }
     @Transactional
@@ -246,7 +255,7 @@ public class ProgStlInfoService {
                 }
             }
             if(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode().equals(progStlInfoPara.getFlowStatusReason())){
-                deleteRecord(progStlInfoSubStlmentTemp);
+                delSubStlmentStlInfoAndItem(fromModelToModelShow(progStlInfoSubStlmentTemp));
             }
         }else
         // 材料结算
@@ -276,7 +285,7 @@ public class ProgStlInfoService {
                 }
             }
             if(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode().equals(progStlInfoPara.getFlowStatusReason())){
-                deleteRecord(progStlInfoSubStlmentTemp);
+                delSubStlmentStlInfoAndItem(fromModelToModelShow(progStlInfoSubStlmentTemp));
             }
         }
     }
@@ -285,23 +294,30 @@ public class ProgStlInfoService {
         return myProgStlInfoMapper.getMaxPeriodNo(stlType,subCttPkid);
     }
 
-    public String subCttStlCheckForMng(String stlType,String cttPkid,String periodNo) {
+    public String progStlInfoMngPreCheck(String stlType,String cttPkid,String periodNo) {
         String strReturnTemp="";
-        if(EnumResType.RES_TYPE3.getCode().equals(stlType)|| EnumResType.RES_TYPE4.getCode().equals(stlType)){ //分包结算
+        if(EnumResType.RES_TYPE3.getCode().equals(stlType)||
+           EnumResType.RES_TYPE4.getCode().equals(stlType)){ //分包结算
             String quantityMaxPeriod = ToolUtil.getStrIgnoreNull(
                     getMaxPeriodNo(EnumResType.RES_TYPE3.getCode(),cttPkid));
             String materialMaxPeriod = ToolUtil.getStrIgnoreNull(
                     getMaxPeriodNo(EnumResType.RES_TYPE4.getCode(),cttPkid));
+            String quantityStatus="";
+            String materialStatus="";
             ProgStlInfo progStlInfoTemp=new ProgStlInfo();
             progStlInfoTemp.setStlType(EnumResType.RES_TYPE3.getCode());
             progStlInfoTemp.setStlPkid(cttPkid);
             progStlInfoTemp.setPeriodNo(quantityMaxPeriod);
-            String quantityStatus=ToolUtil.getStrIgnoreNull(
-                    getInitStlListByModel(progStlInfoTemp).get(0).getFlowStatus());
+            List<ProgStlInfo> progStlInfoListTemp=getInitStlListByModel(progStlInfoTemp);
+            if(progStlInfoListTemp.size()>0) {
+                quantityStatus = ToolUtil.getStrIgnoreNull(progStlInfoListTemp.get(0).getFlowStatus());
+            }
 
             progStlInfoTemp.setStlType(EnumResType.RES_TYPE4.getCode());
-            String materialStatus=ToolUtil.getStrIgnoreNull(
-                    getInitStlListByModel(progStlInfoTemp).get(0).getFlowStatus());
+            progStlInfoListTemp=getInitStlListByModel(progStlInfoTemp);
+            if(progStlInfoListTemp.size()>0) {
+                materialStatus=ToolUtil.getStrIgnoreNull(progStlInfoListTemp.get(0).getFlowStatus());
+            }
 
             System.out.println("\n数量结算最大期号："+quantityMaxPeriod+"\n材料结算最大期号："+materialMaxPeriod);
             System.out.println("\n数量结算最大期号对应状态标志："+quantityStatus+"\n材料结算最大期号对应状态标志："+materialStatus);
@@ -375,13 +391,16 @@ public class ProgStlInfoService {
             if (EnumResType.RES_TYPE6.getCode().equals(stlType)){
                 String strStaQtyMaxPeriod = ToolUtil.getStrIgnoreNull(
                         getMaxPeriodNo(EnumResType.RES_TYPE6.getCode(),cttPkid));
-
+                String strStaQtyMaxPeriodStatus="";
                 ProgStlInfo progStlInfoTemp=new ProgStlInfo();
                 progStlInfoTemp.setStlType(EnumResType.RES_TYPE6.getCode());
                 progStlInfoTemp.setStlPkid(cttPkid);
                 progStlInfoTemp.setPeriodNo(strStaQtyMaxPeriod);
-                String strStaQtyMaxPeriodStatus = ToolUtil.getStrIgnoreNull(
-                        getInitStlListByModel(progStlInfoTemp).get(0).getFlowStatus());
+                List<ProgStlInfo> progStlInfoListTemp=getInitStlListByModel(progStlInfoTemp);
+                if(progStlInfoListTemp.size()>0) {
+                    strStaQtyMaxPeriodStatus = ToolUtil.getStrIgnoreNull(
+                            progStlInfoListTemp.get(0).getFlowStatus());
+                }
 
                 if (periodNo.compareTo(strStaQtyMaxPeriod)<=0){ //首先和自身比较期号大小，如果比自身小或者等于则不能录入
                     strReturnTemp="应录入大于[" + strStaQtyMaxPeriod + "]期的总包统计数据!";
@@ -402,12 +421,17 @@ public class ProgStlInfoService {
                 if (EnumResType.RES_TYPE7.getCode().equals(stlType)){
                     String strMeaQtyMaxPeriod = ToolUtil.getStrIgnoreNull(
                             getMaxPeriodNo(EnumResType.RES_TYPE7.getCode(),cttPkid));
+                    String strMeaQtyMaxPeriodStatus="";
                     ProgStlInfo progStlInfoTemp=new ProgStlInfo();
                     progStlInfoTemp.setStlType(EnumResType.RES_TYPE7.getCode());
                     progStlInfoTemp.setStlPkid(cttPkid);
                     progStlInfoTemp.setPeriodNo(strMeaQtyMaxPeriod);
-                    String strMeaQtyMaxPeriodStatus = ToolUtil.getStrIgnoreNull(
-                            getInitStlListByModel(progStlInfoTemp).get(0).getFlowStatus());
+
+                    List<ProgStlInfo> progStlInfoListTemp=getInitStlListByModel(progStlInfoTemp);
+                    if(progStlInfoListTemp.size()>0) {
+                        strMeaQtyMaxPeriodStatus = ToolUtil.getStrIgnoreNull(
+                                progStlInfoListTemp.get(0).getFlowStatus());
+                    }
 
                     if (periodNo.compareTo(strMeaQtyMaxPeriod)<=0){ //首先和自身比较期号大小，如果比自身小或者等于则不能录入
                         strReturnTemp="应录入大于[" + strMeaQtyMaxPeriod + "]期的总包统计数据!";
@@ -432,22 +456,6 @@ public class ProgStlInfoService {
     }
 
     @Transactional
-    public void deleteRecord(ProgStlInfoShow progStlInfoShowPara){
-        ProgStlInfoExample example = new ProgStlInfoExample();
-        example.createCriteria().andStlTypeEqualTo(progStlInfoShowPara.getStlType())
-                .andStlPkidEqualTo(progStlInfoShowPara.getStlPkid())
-                .andPeriodNoEqualTo(progStlInfoShowPara.getPeriodNo());
-        progStlInfoMapper.deleteByExample(example);
-    }
-    public void deleteRecord(ProgStlInfo progStlInfoPara){
-        ProgStlInfoExample example = new ProgStlInfoExample();
-        example.createCriteria()
-                .andStlTypeEqualTo(progStlInfoPara.getStlType())
-                .andStlPkidEqualTo(progStlInfoPara.getStlPkid())
-                .andPeriodNoEqualTo(progStlInfoPara.getPeriodNo());
-        progStlInfoMapper.deleteByExample(example);
-    }
-    @Transactional
     public void deleteRecordForSubCttPApprovePass(ProgStlInfo progStlInfoPara,String powerType){
         //删除stl表中stl_type为5的记录
         ProgStlInfoExample example = new ProgStlInfoExample();
@@ -469,44 +477,152 @@ public class ProgStlInfoService {
         progStlInfoTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
         progStlInfoMapper.updateByPrimaryKey(progStlInfoTemp);
         //删除PROG_STL_ITEM_SUB_STLMENT表中的相应记录
-        progSubstlItemService.deleteRecordByExample(progStlInfoPara.getStlPkid(), progStlInfoPara.getPeriodNo());
-    }
-    public int deleteRecord(String strPkId){
-        return progStlInfoMapper.deleteByPrimaryKey(strPkId);
-    }
-    @Transactional
-    public String deleteStlMAndItemRecord(ProgStlInfoShow progStlInfoShowPara) {
-        // 删除详细数据
-        int deleteItemsNum =
-                progMatqtyItemService.deleteItemsByInitStlSubcttEng(
-                        progStlInfoShowPara.getStlPkid(),
-                        progStlInfoShowPara.getPeriodNo());
-        // 删除登记数据
-        int deleteRecordOfStlMNum = deleteRecord(progStlInfoShowPara.getPkid());
-        if (deleteItemsNum <= 0 && deleteRecordOfStlMNum <= 0) {
-            return "该记录已删除。";
-        }
-        return "删除数据完成。";
+        progStlItemSubStlmentService.deleteRecordByExample(progStlInfoPara.getStlPkid(), progStlInfoPara.getPeriodNo());
     }
 
-    public String deleteStlQAndItemRecord(ProgStlInfoShow progStlInfoShowPara) {
-        // 删除详细数据
-        int deleteItemsNum =
-                progWorkqtyItemService.deleteItemsByInitStlSubcttEng(
+    // 删除 Start
+    // 分包数量结算
+    @Transactional
+    public int delSubQStlInfoAndItem(ProgStlInfoShow progStlInfoShowPara) {
+        // 删除分包数量结算详细数据
+        int intDelSubQItemNum =
+                progStlItemSubQService.delByCttPkidAndPeriodNo(
                         progStlInfoShowPara.getStlPkid(),
                         progStlInfoShowPara.getPeriodNo());
-        // 删除登记数据
-        int deleteRecordOfStlQNum = deleteRecord(progStlInfoShowPara.getPkid());
-        if (deleteItemsNum <= 0 && deleteRecordOfStlQNum <= 0) {
-            return "该记录已删除。";
+        // 删除分包数量结算信息数据
+        ProgStlInfoExample exampleSubQStlInfo = new ProgStlInfoExample();
+        exampleSubQStlInfo.createCriteria()
+                .andStlTypeEqualTo(EnumResType.RES_TYPE3.getCode())
+                .andStlPkidEqualTo(progStlInfoShowPara.getStlPkid())
+                .andPeriodNoEqualTo(progStlInfoShowPara.getPeriodNo());
+        int intDelSubQInfoNum=progStlInfoMapper.deleteByExample(exampleSubQStlInfo);
+
+        if (intDelSubQItemNum <= 0 && intDelSubQInfoNum <= 0) {
+            return 0;
         }
-        return "删除数据完成。";
+        return 1;
     }
+    // 分包材料结算
+    @Transactional
+    public int delSubMStlInfoAndItem(ProgStlInfoShow progStlInfoShowPara) {
+        // 删除分包材料结算详细数据
+        int intDelSubMItemNum =
+                progStlItemSubMService.delByCttPkidAndPeriodNo(
+                        progStlInfoShowPara.getStlPkid(),
+                        progStlInfoShowPara.getPeriodNo());
+        // 删除分包材料结算信息数据
+        ProgStlInfoExample exampleSubMStlInfo = new ProgStlInfoExample();
+        exampleSubMStlInfo.createCriteria()
+                .andStlTypeEqualTo(EnumResType.RES_TYPE4.getCode())
+                .andStlPkidEqualTo(progStlInfoShowPara.getStlPkid())
+                .andPeriodNoEqualTo(progStlInfoShowPara.getPeriodNo());
+        int intDelSubMInfoNum=progStlInfoMapper.deleteByExample(exampleSubMStlInfo);
+
+        if (intDelSubMItemNum + intDelSubMInfoNum == 0) {
+            return 0;
+        }
+        return 1;
+    }
+    // 分包价格结算
+    @Transactional
+    public int delSubStlmentStlInfoAndItem(ProgStlInfoShow progStlInfoShowPara) {
+        // 删除分包材料结算详细数据
+        int intDelSubMItemNum =
+                progStlItemSubStlmentService.delByCttPkidAndPeriodNo(
+                        progStlInfoShowPara.getStlPkid(),
+                        progStlInfoShowPara.getPeriodNo());
+        // 删除分包材料结算信息数据
+        ProgStlInfoExample exampleSubMStlInfo = new ProgStlInfoExample();
+        exampleSubMStlInfo.createCriteria()
+                .andStlTypeEqualTo(EnumResType.RES_TYPE5.getCode())
+                .andStlPkidEqualTo(progStlInfoShowPara.getStlPkid())
+                .andPeriodNoEqualTo(progStlInfoShowPara.getPeriodNo());
+        int intDelSubMInfoNum=progStlInfoMapper.deleteByExample(exampleSubMStlInfo);
+
+        if (intDelSubMItemNum + intDelSubMInfoNum == 0) {
+            return 0;
+        }
+        return 1;
+    }
+    // 分包数量材料结算
+    @Transactional
+    public int delSubQMStlInfoAndItem(ProgStlInfoShow progStlInfoShowPara) {
+        // 删除分包数量结算详细数据
+        int intDelSubQItemNum =
+                progStlItemSubQService.delByCttPkidAndPeriodNo(
+                        progStlInfoShowPara.getStlPkid(),
+                        progStlInfoShowPara.getPeriodNo());
+        // 删除分包数量结算信息数据
+        ProgStlInfoExample exampleSubQStlInfo = new ProgStlInfoExample();
+        exampleSubQStlInfo.createCriteria()
+                .andStlTypeEqualTo(EnumResType.RES_TYPE3.getCode())
+                .andStlPkidEqualTo(progStlInfoShowPara.getStlPkid())
+                .andPeriodNoEqualTo(progStlInfoShowPara.getPeriodNo());
+        int intDelSubQInfoNum=progStlInfoMapper.deleteByExample(exampleSubQStlInfo);
+
+        // 删除分包材料结算详细数据
+        int intDelSubMItemNum =
+                progStlItemSubMService.delByCttPkidAndPeriodNo(
+                        progStlInfoShowPara.getStlPkid(),
+                        progStlInfoShowPara.getPeriodNo());
+        // 删除分包材料结算信息数据
+        ProgStlInfoExample exampleSubMStlInfo = new ProgStlInfoExample();
+        exampleSubMStlInfo.createCriteria()
+                .andStlTypeEqualTo(EnumResType.RES_TYPE4.getCode())
+                .andStlPkidEqualTo(progStlInfoShowPara.getStlPkid())
+                .andPeriodNoEqualTo(progStlInfoShowPara.getPeriodNo());
+        int intDelSubMInfoNum=progStlInfoMapper.deleteByExample(exampleSubMStlInfo);
+
+        if (intDelSubQItemNum+intDelSubQInfoNum+intDelSubMItemNum+intDelSubMInfoNum == 0) {
+            return 0;
+        }
+        return 1;
+    }
+    // 总包统计结算
+    @Transactional
+    public int delTkEstStlInfoAndItem(ProgStlInfoShow progStlInfoShowPara) {
+        // 删除详细数据
+        int intDelTkEstItemNum =
+                progStlItemTkEstService.delByCttPkidAndPeriodNo(
+                        progStlInfoShowPara.getStlPkid(),
+                        progStlInfoShowPara.getPeriodNo());
+        // 删除总包统计结算信息数据
+        ProgStlInfoExample exampleTkEstStlInfo = new ProgStlInfoExample();
+        exampleTkEstStlInfo.createCriteria()
+                .andStlTypeEqualTo(EnumResType.RES_TYPE6.getCode())
+                .andStlPkidEqualTo(progStlInfoShowPara.getStlPkid())
+                .andPeriodNoEqualTo(progStlInfoShowPara.getPeriodNo());
+        int intDelTkEstInfoNum=progStlInfoMapper.deleteByExample(exampleTkEstStlInfo);
+        if (intDelTkEstItemNum + intDelTkEstInfoNum == 0) {
+            return 0;
+        }
+        return 1;
+    }
+    // 总包计量结算
+    @Transactional
+    public int delTkMeaStlInfoAndItem(ProgStlInfoShow progStlInfoShowPara) {
+        // 删除详细数据
+        int intDelTkMeaItemNum =
+                progStlItemTkMeaService.delByCttPkidAndPeriodNo(
+                        progStlInfoShowPara.getStlPkid(),
+                        progStlInfoShowPara.getPeriodNo());
+        // 删除总包统计结算信息数据
+        ProgStlInfoExample exampleTkEstStlInfo = new ProgStlInfoExample();
+        exampleTkEstStlInfo.createCriteria()
+                .andStlTypeEqualTo(EnumResType.RES_TYPE7.getCode())
+                .andStlPkidEqualTo(progStlInfoShowPara.getStlPkid())
+                .andPeriodNoEqualTo(progStlInfoShowPara.getPeriodNo());
+        int intDelTkMeaInfoNum=progStlInfoMapper.deleteByExample(exampleTkEstStlInfo);
+        if (intDelTkMeaItemNum + intDelTkMeaInfoNum == 0) {
+            return 0;
+        }
+        return 1;
+    }
+    // 删除 End
 
     public String getStrMaxStlId(String strCttType){
         return myProgStlInfoMapper.getStrMaxStlId(strCttType) ;
     }
-
 
     public String getLatestDoubleCkeckedPeriodNo(String strPowerType,String strPowerPkid) {
         return myProgStlInfoMapper.getLatestDoubleCkeckedPeriodNo(strPowerType, strPowerPkid);

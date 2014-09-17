@@ -2,6 +2,7 @@ package epss.service;
 
 import epss.common.enums.EnumResType;
 import epss.repository.model.*;
+import epss.repository.model.model_show.ProgStlInfoShow;
 import org.springframework.transaction.annotation.Transactional;
 import skyline.util.ToolUtil;
 import epss.repository.dao.OperResMapper;
@@ -25,8 +26,6 @@ public class OperResService {
     private CttInfoService cttInfoService;
     @Resource
     private CttItemService cttItemService;
-    @Resource
-    private ProgStlInfoService progStlInfoService;
 
     public List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara){
         return myOperResMapper.selectOperaResRecordsByModelShow(operResShowPara);
@@ -34,15 +33,9 @@ public class OperResService {
     public List<OperResShow> selectOperaResRecordsByModel(OperRes operResPara){
         return myOperResMapper.selectOperaResRecordsByModelShow(fromModelToModelShow(operResPara));
     }
-    public List<OperResShow> getInfoListByOperPkid(String strInfoTypePara,String strOperPkidPara){
-        return myOperResMapper.getInfoListByOperPkid(strInfoTypePara,strOperPkidPara);
-    }
     public List<OperResShow> getInfoListByOperFlowPkid(String strInfoTypePara,String strFlowStatusPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         return myOperResMapper.getInfoListByOperFlowPkid(strInfoTypePara,strFlowStatusPara,strOperatorIdTemp);
-    }
-	public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara){
-        return  myOperResMapper.selectRecordsFromCtt(parentPkidPara);
     }
     public OperRes getOperResByPkid(String strOperResPkidPara){
         return  operResMapper.selectByPrimaryKey(strOperResPkidPara);
@@ -84,13 +77,7 @@ public class OperResService {
         criteria.andInfoPkidEqualTo(operResPara.getInfoPkid());
         operResMapper.deleteByExample(example);
     }
-    public ProgStlInfo initStlData(String strStlTypePara,CttInfoShow cttInfoShowPara){
-        ProgStlInfo progStlInfo =new ProgStlInfo();
-        progStlInfo.setStlType(strStlTypePara);
-        progStlInfo.setStlPkid(cttInfoShowPara.getPkid());
-        progStlInfo.setPeriodNo("NULL");
-        return progStlInfo;
-    }
+
     @Transactional
     public String deleteResRecord(CttInfoShow cttInfoShowPara){
         if (EnumResType.RES_TYPE0.getCode().equals(cttInfoShowPara.getCttType())
@@ -100,23 +87,7 @@ public class OperResService {
                     ||cttInfoService.getCttInfoByPkId(cttInfoShowPara.getPkid()).getFlowStatus()!=null) {
                 return "数据已被引用，不可删除！";
             }else {
-                int deleteRecordNumOfCtt = cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
-                if (EnumResType.RES_TYPE0.getCode().equals(cttInfoShowPara.getCttType())){
-                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE6.getCode(),cttInfoShowPara));
-                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE6.getCode(),cttInfoShowPara));
-                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE7.getCode(),cttInfoShowPara));
-                }else if (EnumResType.RES_TYPE2.getCode().equals(cttInfoShowPara.getCttType())){
-                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE3.getCode(),cttInfoShowPara));
-                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE4.getCode(),cttInfoShowPara));
-                    progStlInfoService.deleteRecord(initStlData(EnumResType.RES_TYPE5.getCode(),cttInfoShowPara));
-                }
-            }
-        }else {
-            if (progStlInfoService.getInitStlListByModel(
-                    initStlData(cttInfoShowPara.getCttType(), cttInfoShowPara))==null){
-                return "数据已被引用，不可删除！";
-            }else {
-                progStlInfoService.deleteRecord(initStlData(cttInfoShowPara.getCttType(),cttInfoShowPara));
+                cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
             }
         }
         OperResExample example=new OperResExample();
@@ -126,7 +97,8 @@ public class OperResService {
         operResMapper.deleteByExample(example);
         return "删除数据完成。";
     }
-    private OperRes fromOperShowToModel(OperResShow record) {
+
+    public OperRes fromOperShowToModel(OperResShow record) {
         OperRes operResPara=new OperRes();
         operResPara.setTid(record.getTid());
         operResPara.setOperPkid(record.getOperPkid());
@@ -142,7 +114,7 @@ public class OperResService {
         operResPara.setRecversion( ToolUtil.getIntIgnoreNull(record.getRecversion()));
         return operResPara;
     }
-    private OperResShow fromModelToModelShow(OperRes operResPara) {
+    public OperResShow fromModelToModelShow(OperRes operResPara) {
         OperResShow operResShowTemp=new OperResShow();
         operResShowTemp.setTid(operResPara.getTid());
         operResShowTemp.setOperPkid(operResPara.getOperPkid());

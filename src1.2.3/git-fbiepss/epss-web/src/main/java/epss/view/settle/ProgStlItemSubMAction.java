@@ -46,12 +46,12 @@ public class ProgStlItemSubMAction {
     private EsFlowControl esFlowControl;
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
-    @ManagedProperty(value = "#{progMatqtyItemService}")
-    private ProgMatqtyItemService progMatqtyItemService;
+    @ManagedProperty(value = "#{progStlItemSubMService}")
+    private ProgStlItemSubMService progStlItemSubMService;
     @ManagedProperty(value = "#{signPartService}")
     private SignPartService signPartService;
-    @ManagedProperty(value = "#{progWorkqtyItemService}")
-    private ProgWorkqtyItemService progWorkqtyItemService;
+    @ManagedProperty(value = "#{progStlItemSubQService}")
+    private ProgStlItemSubQService progStlItemSubQService;
 
     private List<ProgStlItemSubMShow> progStlItemSubMShowList;
     private ProgStlItemSubMShow progStlItemSubMShowSel;
@@ -155,7 +155,7 @@ public class ProgStlItemSubMAction {
             progStlItemSubM.setSubcttItemPkid(itemUnit.getPkid());
             progStlItemSubM.setPeriodNo(progStlInfo.getPeriodNo());
             List<ProgStlItemSubM> progStlItemSubMList =
-                    progMatqtyItemService.selectRecordsByExample(progStlItemSubM);
+                    progStlItemSubMService.selectRecordsByExample(progStlItemSubM);
             if(progStlItemSubMList.size()>0){
                 progStlItemSubM = progStlItemSubMList.get(0);
                 progStlItemSubMShowTemp.setEngMMng_Pkid(progStlItemSubM.getPkid());
@@ -245,7 +245,7 @@ public class ProgStlItemSubMAction {
                 progStlItemSubMShowTemp.setEngMMng_PeriodNo(progStlInfo.getPeriodNo());
                 progStlItemSubMShowTemp.setEngMMng_SubcttItemPkid(progStlItemSubMShowUpd.getSubctt_Pkid());
                 List<ProgStlItemSubM> progStlItemSubMListTemp =
-                        progMatqtyItemService.isExistInDb(progStlItemSubMShowTemp);
+                        progStlItemSubMService.isExistInDb(progStlItemSubMShowTemp);
                 if (progStlItemSubMListTemp.size() > 1) {
                     MessageUtil.addInfo("数据有误，数据库中存在多条记录。");
                     return;
@@ -314,7 +314,7 @@ public class ProgStlItemSubMAction {
 
     private void addRecordAction(ProgStlItemSubMShow progStlItemSubMShowPara){
         try {
-            progMatqtyItemService.insertRecord(progStlItemSubMShowPara);
+            progStlItemSubMService.insertRecord(progStlItemSubMShowPara);
             MessageUtil.addInfo("增加数据完成。");
         } catch (Exception e) {
             logger.error("增加数据失败，", e);
@@ -323,7 +323,7 @@ public class ProgStlItemSubMAction {
     }
     private void updRecordAction(ProgStlItemSubMShow progStlItemSubMShowPara){
         try {
-            progMatqtyItemService.updateRecord(progStlItemSubMShowPara);
+            progStlItemSubMService.updateRecord(progStlItemSubMShowPara);
             MessageUtil.addInfo("更新数据完成。");
         } catch (Exception e) {
             logger.error("更新数据失败，", e);
@@ -336,7 +336,7 @@ public class ProgStlItemSubMAction {
                     progStlItemSubMShowDel.getEngMMng_Pkid().equals("")){
                 MessageUtil.addError("无可删除的数据！") ;
             }else{
-                int deleteRecordNum = progMatqtyItemService.deleteRecord(
+                int deleteRecordNum = progStlItemSubMService.deleteRecord(
                         progStlItemSubMShowDel.getEngMMng_Pkid());
                 if (deleteRecordNum <= 0) {
                     MessageUtil.addInfo("该记录已删除。");
@@ -606,12 +606,12 @@ public class ProgStlItemSubMAction {
         this.progStlItemSubMShowList = progStlItemSubMShowList;
     }
 
-    public ProgMatqtyItemService getProgMatqtyItemService() {
-        return progMatqtyItemService;
+    public ProgStlItemSubMService getProgStlItemSubMService() {
+        return progStlItemSubMService;
     }
 
-    public void setProgMatqtyItemService(ProgMatqtyItemService progMatqtyItemService) {
-        this.progMatqtyItemService = progMatqtyItemService;
+    public void setProgStlItemSubMService(ProgStlItemSubMService progStlItemSubMService) {
+        this.progStlItemSubMService = progStlItemSubMService;
     }
 
     public ProgStlInfoService getProgStlInfoService() {
@@ -706,12 +706,12 @@ public class ProgStlItemSubMAction {
         this.progStlInfo = progStlInfo;
     }
 
-    public ProgWorkqtyItemService getProgWorkqtyItemService() {
-        return progWorkqtyItemService;
+    public ProgStlItemSubQService getProgStlItemSubQService() {
+        return progStlItemSubQService;
     }
 
-    public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
-        this.progWorkqtyItemService = progWorkqtyItemService;
+    public void setProgStlItemSubQService(ProgStlItemSubQService progStlItemSubQService) {
+        this.progStlItemSubQService = progStlItemSubQService;
     }
     /*智能字段End*/
 }

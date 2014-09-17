@@ -55,8 +55,8 @@ public class CstplSubcttStlQPeriodItemAction {
     private EsQueryService esQueryService;
     @ManagedProperty(value = "#{progStlInfoService}")
     private ProgStlInfoService progStlInfoService;
-    @ManagedProperty(value = "#{progWorkqtyItemService}")
-    private ProgWorkqtyItemService progWorkqtyItemService;
+    @ManagedProperty(value = "#{progStlItemSubQService}")
+    private ProgStlItemSubQService progStlItemSubQService;
     @ManagedProperty(value = "#{signPartService}")
     private SignPartService signPartService;
 
@@ -162,7 +162,7 @@ public class CstplSubcttStlQPeriodItemAction {
         recursiveDataTable("root", cttItemList, progStlItemSubQShowList);
         progStlItemSubQShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progStlItemSubQShowList);
 
-        List<String> periodList = progWorkqtyItemService.getProgWorkqtyItemPeriodsByPeriod(
+        List<String> periodList = progStlItemSubQService.getProgWorkqtyItemPeriodsByPeriod(
                                  strSubcttPkid,
                                  strStartPeriodNo,
                                  strEndPeriodNo);
@@ -179,7 +179,7 @@ public class CstplSubcttStlQPeriodItemAction {
         }
 
         List<ProgStlItemSubQ> progStlItemSubQList =
-                progWorkqtyItemService.getProgWorkqtyItemListByPeriod(
+                progStlItemSubQService.getProgWorkqtyItemListByPeriod(
                         strSubcttPkid,
                         strStartPeriodNo,
                         strEndPeriodNo);
@@ -270,7 +270,7 @@ public class CstplSubcttStlQPeriodItemAction {
                 progStlItemSubQ.setSubcttItemPkid(itemUnit.getPkid());
                 progStlItemSubQ.setPeriodNo(strLatestApprovedPeriodNo);
                 List<ProgStlItemSubQ> progStlItemSubQList =
-                        progWorkqtyItemService.selectRecordsByExample(progStlItemSubQ);
+                        progStlItemSubQService.selectRecordsByExample(progStlItemSubQ);
                 if(progStlItemSubQList.size()>0){
                     progStlItemSubQ = progStlItemSubQList.get(0);
                     progStlItemSubQShowTemp.setEngQMng_Pkid(progStlItemSubQ.getPkid());
@@ -410,12 +410,12 @@ public class CstplSubcttStlQPeriodItemAction {
         this.progStlInfoService = progStlInfoService;
     }
 
-    public ProgWorkqtyItemService getProgWorkqtyItemService() {
-        return progWorkqtyItemService;
+    public ProgStlItemSubQService getProgStlItemSubQService() {
+        return progStlItemSubQService;
     }
 
-    public void setProgWorkqtyItemService(ProgWorkqtyItemService progWorkqtyItemService) {
-        this.progWorkqtyItemService = progWorkqtyItemService;
+    public void setProgStlItemSubQService(ProgStlItemSubQService progStlItemSubQService) {
+        this.progStlItemSubQService = progStlItemSubQService;
     }
 
     public SignPartService getSignPartService() {

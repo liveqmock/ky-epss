@@ -50,8 +50,8 @@ public class TkMeaCSubStlQItemAction {
     private ProgStlInfoService progStlInfoService;
     @ManagedProperty(value = "#{esQueryService}")
     private EsQueryService esQueryService;
-    @ManagedProperty(value = "#{progMeaItemService}")
-    private ProgMeaItemService progMeaItemService;
+    @ManagedProperty(value = "#{progStlItemTkMeaService}")
+    private ProgStlItemTkMeaService progStlItemTkMeaService;
 
     /*列表显示用*/
     private List<QryTkMeaCSStlQShow> qryTkMeaCSStlQShowList;
@@ -143,7 +143,7 @@ public class TkMeaCSubStlQItemAction {
             ProgStlItemTkMea progStlItemTkMea =new ProgStlItemTkMea();
             progStlItemTkMea.setTkcttPkid(strCttInfoPkid);
             progStlItemTkMea.setPeriodNo(strMeaLatestApprovedPeriodNo);
-            progStlItemTkMeaList = progMeaItemService.selectRecordsByPkidPeriodNoExample(progStlItemTkMea);
+            progStlItemTkMeaList = progStlItemTkMeaService.selectRecordsByPkidPeriodNoExample(progStlItemTkMea);
         }
 
         /*拼装列表*/
@@ -610,12 +610,12 @@ public class TkMeaCSubStlQItemAction {
         this.beansMap = beansMap;
     }
 
-    public ProgMeaItemService getProgMeaItemService() {
-        return progMeaItemService;
+    public ProgStlItemTkMeaService getProgStlItemTkMeaService() {
+        return progStlItemTkMeaService;
     }
 
-    public void setProgMeaItemService(ProgMeaItemService progMeaItemService) {
-        this.progMeaItemService = progMeaItemService;
+    public void setProgStlItemTkMeaService(ProgStlItemTkMeaService progStlItemTkMeaService) {
+        this.progStlItemTkMeaService = progStlItemTkMeaService;
     }
     /*智能字段End*/
 }
