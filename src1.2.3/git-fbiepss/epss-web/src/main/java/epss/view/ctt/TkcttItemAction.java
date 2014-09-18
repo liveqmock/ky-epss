@@ -646,14 +646,9 @@ public class TkcttItemAction {
         }
     }
     public void onExportExcel()throws IOException, WriteException {
-        if (this.cttItemShowList.size() == 0) {
-            MessageUtil.addWarn("记录为空...");
-        } else {
-            String excelFilename = "总包合同-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
-            JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap,"oriTkctt.xls");
-            // 其他状态的票据需要添加时再修改导出文件名
-        }
+        String excelFilename = "总包合同-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+        JxlsManager jxls = new JxlsManager();
+        jxls.exportList(excelFilename, beansMap,"oriTkctt.xls");
     }
 
     // 附件

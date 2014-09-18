@@ -1166,17 +1166,10 @@ public class CstplItemAction {
         }
         return cttItemShowListPara;
     }
-    public String onExportExcel()throws IOException, WriteException {
-        if (this.cstplItemShowList.size() == 0) {
-            MessageUtil.addWarn("记录为空...");
-            return null;
-        } else {
-            String excelFilename = "成本计划-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
-            JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap,"oriCstpl.xls");
-            // 其他状态的票据需要添加时再修改导出文件名
-        }
-        return null;
+    public void onExportExcel()throws IOException, WriteException {
+        String excelFilename = "成本计划-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+        JxlsManager jxls = new JxlsManager();
+        jxls.exportList(excelFilename, beansMap,"oriCstpl.xls");
     }
 
     //附件相关方法

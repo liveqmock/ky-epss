@@ -128,7 +128,7 @@ public class SubcttItemAction {
                 cttInfo = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
                 // 附件记录变成List
                 attachmentList = attachmentStrToList(cttInfo.getAttachment());
-                beansMap.put("subcttInfo", cttInfo);
+                beansMap.put("cttInfo", cttInfo);
         /*成本计划*/
                 String strCstplPkidInInitCtt = cttInfo.getParentPkid();
                 cttItemList = cttItemService.getEsItemList(
@@ -831,17 +831,10 @@ public class SubcttItemAction {
             MessageUtil.addError(e.getMessage());
         }
     }
-    public String onExportExcel()throws IOException, WriteException {
-        if (this.cttItemShowList.size() == 0) {
-            MessageUtil.addWarn("记录为空...");
-            return null;
-        } else {
-            String excelFilename = "分包合同-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
-            JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap,"oriSubctt.xls");
-            // 其他状态的票据需要添加时再修改导出文件名
-        }
-        return null;
+    public void onExportExcel()throws IOException, WriteException {
+        String excelFilename = "分包合同-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+        JxlsManager jxls = new JxlsManager();
+        jxls.exportList(excelFilename, beansMap,"oriSubctt.xls");
     }
 
     //附件相关方法
