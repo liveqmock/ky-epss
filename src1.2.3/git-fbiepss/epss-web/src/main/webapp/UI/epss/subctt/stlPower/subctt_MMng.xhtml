@@ -47,7 +47,7 @@
                     <h:panelGrid id="pgCondition">
                         <p:commandButton id="addBtn"
                              value="增加" icon="ui-icon-plus"
-                             action="#{progStlInfoSubMSPAction.resetActionForAdd()}"
+                             action="#{progStlInfoSubMSPAction.selectRecordAction('Add','')}"
                              update="pgViewForAdd,pgCondition"
                              onclick="PF('wVDlgViewForAdd').show()">
                         </p:commandButton>
@@ -154,7 +154,9 @@
                         </h:panelGrid>
                     </h:panelGrid>
                 </p:dialog>
-                <p:dialog id="dlgViewForUpd" header="分包结算更新信息" widgetVar="wVDlgViewForUpd"
+                <p:dialog id="dlgViewForUpd"
+                          header="分包结算更新信息"
+                          widgetVar="wVDlgViewForUpd"
                           resizable="false" modal="true"
                           showEffect="clip" hideEffect="fold">
                     <h:panelGrid id="pgViewForUpd">
@@ -224,7 +226,9 @@
                         </h:panelGrid>
                     </h:panelGrid>
                 </p:dialog>
-                <p:dialog id="dlgViewForDel" header="分包结算删除信息" widgetVar="wVDlgViewForDel"
+                <p:dialog id="dlgViewForDel"
+                          header="分包结算删除信息"
+                          widgetVar="wVDlgViewForDel"
                           resizable="false" modal="true"
                           showEffect="clip" hideEffect="fold">
                     <h:panelGrid id="pgViewForDel">

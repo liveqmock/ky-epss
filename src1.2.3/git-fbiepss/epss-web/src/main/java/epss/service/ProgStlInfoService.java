@@ -93,203 +93,6 @@ public class ProgStlInfoService {
         return myProgStlInfoMapper.getInitStlShowListByInfoTypePkid(infoTypePara, infoPkidPara);
     }
 
-    public void accountAction(ProgStlInfo progStlInfoPara) {
-        progStlInfoPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS4.getCode());
-        progStlInfoPara.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON7.getCode());
-        flowCtrlHisMapper.insert(fromProgStlInfoToFlowCtrlHis(progStlInfoPara, "update"));
-    }
-
-    public FlowCtrlHis fromProgStlInfoToFlowCtrlHis(ProgStlInfo progStlInfoPara,String strOperType){
-        FlowCtrlHis flowCtrlHis =new FlowCtrlHis();
-        flowCtrlHis.setInfoType(progStlInfoPara.getStlType());
-        flowCtrlHis.setInfoPkid(progStlInfoPara.getStlPkid());
-        flowCtrlHis.setPeriodNo(progStlInfoPara.getPeriodNo());
-        flowCtrlHis.setFlowStatus(progStlInfoPara.getFlowStatus());
-        flowCtrlHis.setFlowStatusReason(progStlInfoPara.getFlowStatusReason());
-        flowCtrlHis.setCreatedTime(progStlInfoPara.getCreatedTime());
-        flowCtrlHis.setCreatedBy(progStlInfoPara.getCreatedBy());
-        flowCtrlHis.setOperType(strOperType);
-        return flowCtrlHis;
-    }
-    public ProgStlInfo fromModelShowToModel(ProgStlInfoShow progStlInfoShowPara){
-        ProgStlInfo progStlInfoTemp =new ProgStlInfo();
-        progStlInfoTemp.setPkid(progStlInfoShowPara.getPkid());
-        progStlInfoTemp.setStlType(progStlInfoShowPara.getStlType());
-        progStlInfoTemp.setStlPkid(progStlInfoShowPara.getStlPkid());
-        progStlInfoTemp.setId(progStlInfoShowPara.getId());
-        progStlInfoTemp.setPeriodNo(progStlInfoShowPara.getPeriodNo());
-        progStlInfoTemp.setRemark(progStlInfoShowPara.getRemark());
-        progStlInfoTemp.setAttachment(progStlInfoShowPara.getAttachment());
-        progStlInfoTemp.setArchivedFlag(progStlInfoShowPara.getArchivedFlag());
-        progStlInfoTemp.setCreatedBy(progStlInfoShowPara.getCreatedBy());
-        progStlInfoTemp.setCreatedTime(progStlInfoShowPara.getCreatedTime());
-        progStlInfoTemp.setLastUpdBy(progStlInfoShowPara.getLastUpdBy());
-        progStlInfoTemp.setLastUpdTime(progStlInfoShowPara.getLastUpdTime());
-        progStlInfoTemp.setRecversion(progStlInfoShowPara.getRecversion());
-        progStlInfoTemp.setAutoLinkAdd(progStlInfoShowPara.getAutoLinkAdd());
-        progStlInfoTemp.setFlowStatus(progStlInfoShowPara.getFlowStatus());
-        progStlInfoTemp.setFlowStatusReason(progStlInfoShowPara.getFlowStatusReason());
-        return progStlInfoTemp;
-    }
-    public ProgStlInfoShow fromModelToModelShow(ProgStlInfo progStlInfoPara){
-        ProgStlInfoShow progStlInfoShowTemp =new ProgStlInfoShow();
-        progStlInfoShowTemp.setPkid(progStlInfoPara.getPkid());
-        progStlInfoShowTemp.setStlType(progStlInfoPara.getStlType());
-        progStlInfoShowTemp.setStlPkid(progStlInfoPara.getStlPkid());
-        progStlInfoShowTemp.setId(progStlInfoPara.getId());
-        progStlInfoShowTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
-        progStlInfoShowTemp.setRemark(progStlInfoPara.getRemark());
-        progStlInfoShowTemp.setAttachment(progStlInfoPara.getAttachment());
-        progStlInfoShowTemp.setArchivedFlag(progStlInfoPara.getArchivedFlag());
-        progStlInfoShowTemp.setCreatedBy(progStlInfoPara.getCreatedBy());
-        progStlInfoShowTemp.setCreatedTime(progStlInfoPara.getCreatedTime());
-        progStlInfoShowTemp.setLastUpdBy(progStlInfoPara.getLastUpdBy());
-        progStlInfoShowTemp.setLastUpdTime(progStlInfoPara.getLastUpdTime());
-        progStlInfoShowTemp.setRecversion(progStlInfoPara.getRecversion());
-        progStlInfoShowTemp.setAutoLinkAdd(progStlInfoPara.getAutoLinkAdd());
-        progStlInfoShowTemp.setFlowStatus(progStlInfoPara.getFlowStatus());
-        progStlInfoShowTemp.setFlowStatusReason(progStlInfoPara.getFlowStatusReason());
-        return progStlInfoShowTemp;
-    }
-
-    public ProgStlInfo selectRecordsByPrimaryKey(String strPkId){
-        return progStlInfoMapper.selectByPrimaryKey(strPkId);
-    }
-
-    public void insertRecord(ProgStlInfoShow progStlInfoShowPara){
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
-        String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
-        progStlInfoShowPara.setCreatedBy(strOperatorIdTemp);
-        progStlInfoShowPara.setCreatedTime(strLastUpdTimeTemp);
-        progStlInfoShowPara.setArchivedFlag("0");
-        progStlInfoShowPara.setLastUpdBy(strOperatorIdTemp);
-        progStlInfoShowPara.setLastUpdTime(strLastUpdTimeTemp);
-        progStlInfoMapper.insert(fromModelShowToModel(progStlInfoShowPara)) ;
-    }
-    public void insertRecord(ProgStlInfo progStlInfoPara){
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
-        String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
-        progStlInfoPara.setCreatedBy(strOperatorIdTemp);
-        progStlInfoPara.setCreatedTime(strLastUpdTimeTemp);
-        progStlInfoPara.setArchivedFlag("0");
-        progStlInfoPara.setLastUpdBy(strOperatorIdTemp);
-        progStlInfoPara.setLastUpdTime(strLastUpdTimeTemp);
-        progStlInfoMapper.insert(progStlInfoPara) ;
-    }
-
-    @Transactional
-    public String insertStlQAndItemBeginDataAction(ProgStlInfoShow progStlInfoShowPara) {
-        insertRecord(progStlInfoShowPara);
-        progStlItemSubQService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
-        return "新增数据完成。";
-    }
-    @Transactional
-    public String insertStlMAndItemBeginDataAction(ProgStlInfoShow progStlInfoShowPara) {
-        insertRecord(progStlInfoShowPara);
-        progStlItemSubMService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
-        return "新增数据完成。";
-    }
-
-    @Transactional
-    public void updateRecordForSubCttPApprovePass(
-            ProgStlInfo progStlInfoPara,
-            List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForApprovePara){
-        //结算登记表更新
-        progStlInfoPara.setRecversion(
-                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecversion())+1);
-        progStlInfoPara.setArchivedFlag("0");
-        progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-        progStlInfoPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
-        progStlInfoPara.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
-        progStlInfoMapper.updateByPrimaryKey(progStlInfoPara) ;
-        //将价格结算的完整数据插入至PROG_STL_ITEM_SUB_STLMENT表
-        for (int i=0;i< progStlItemSubStlmentShowListForApprovePara.size();i++){
-            ProgStlItemSubStlmentShow itemUnit= progStlItemSubStlmentShowListForApprovePara.get(i);
-            itemUnit.setEngPMng_RowNo(i);
-            progStlItemSubStlmentService.insertRecordDetail(itemUnit);
-        }
-    }
-    @Transactional
-    public void updateRecord(ProgStlInfoShow progStlInfoShowPara){
-        progStlInfoShowPara.setRecversion(
-                ToolUtil.getIntIgnoreNull(progStlInfoShowPara.getRecversion())+1);
-        progStlInfoShowPara.setArchivedFlag("0");
-        progStlInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlInfoShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-        progStlInfoMapper.updateByPrimaryKey(fromModelShowToModel(progStlInfoShowPara));
-    }
-    @Transactional
-    public void updateRecord(ProgStlInfo progStlInfoPara) {
-        progStlInfoPara.setRecversion(
-                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecversion()) + 1);
-        progStlInfoPara.setArchivedFlag("0");
-        progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-        progStlInfoMapper.updateByPrimaryKey(progStlInfoPara);
-
-        // 数量结算
-        if (EnumResType.RES_TYPE3.getCode().equals(progStlInfoPara.getStlType())) {
-            // 先看本分包合同及本期的分包结算单
-            ProgStlInfo progStlInfoSubStlmentTemp=new ProgStlInfo();
-            progStlInfoSubStlmentTemp.setStlType(EnumResType.RES_TYPE5.getCode());
-            progStlInfoSubStlmentTemp.setStlPkid(progStlInfoPara.getStlPkid());
-            progStlInfoSubStlmentTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
-            // 状态为复核，且状态原因为复核通过
-            if (EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfoPara.getFlowStatus()) &&
-                    EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode().equals(progStlInfoPara.getFlowStatusReason())) {
-                // 本分包合同及本期的分包结算单不存在
-                if(getInitStlListByModel(progStlInfoSubStlmentTemp).size()<=0) {
-                    ProgStlInfo progStlInfoSubMTemp=new ProgStlInfo();
-                    progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE4.getCode());
-                    progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
-                    progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
-                    progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
-                    // 本分包合同及本期的分包材料结算也复核了
-                    if(getInitStlListByModel(progStlInfoSubMTemp).size()>0) {
-                        progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
-                        progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
-                        progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
-                        insertRecord(progStlInfoSubStlmentTemp);
-                    }
-                }
-            }
-            if(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode().equals(progStlInfoPara.getFlowStatusReason())){
-                delSubStlmentStlInfoAndItem(fromModelToModelShow(progStlInfoSubStlmentTemp));
-            }
-        }else
-        // 材料结算
-        if (EnumResType.RES_TYPE4.getCode().equals(progStlInfoPara.getStlType())) {
-            // 先看本分包合同及本期的分包结算单
-            ProgStlInfo progStlInfoSubStlmentTemp=new ProgStlInfo();
-            progStlInfoSubStlmentTemp.setStlType(EnumResType.RES_TYPE5.getCode());
-            progStlInfoSubStlmentTemp.setStlPkid(progStlInfoPara.getStlPkid());
-            progStlInfoSubStlmentTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
-            // 状态为复核，且状态原因为复核通过
-            if (EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfoPara.getFlowStatus()) &&
-                    EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode().equals(progStlInfoPara.getFlowStatusReason())) {
-                // 本分包合同及本期的分包结算单不存在
-                if(getInitStlListByModel(progStlInfoSubStlmentTemp).size()<=0) {
-                    ProgStlInfo progStlInfoSubMTemp=new ProgStlInfo();
-                    progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE3.getCode());
-                    progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
-                    progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
-                    progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
-                    // 本分包合同及本期的分包材料结算也复核了
-                    if(getInitStlListByModel(progStlInfoSubMTemp).size()>0) {
-                        progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
-                        progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
-                        progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
-                        insertRecord(progStlInfoSubStlmentTemp);
-                    }
-                }
-            }
-            if(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode().equals(progStlInfoPara.getFlowStatusReason())){
-                delSubStlmentStlInfoAndItem(fromModelToModelShow(progStlInfoSubStlmentTemp));
-            }
-        }
-    }
-
     public String getMaxPeriodNo(String stlType, String subCttPkid) {
         return myProgStlInfoMapper.getMaxPeriodNo(stlType,subCttPkid);
     }
@@ -297,7 +100,7 @@ public class ProgStlInfoService {
     public String progStlInfoMngPreCheck(String stlType,String cttPkid,String periodNo) {
         String strReturnTemp="";
         if(EnumResType.RES_TYPE3.getCode().equals(stlType)||
-           EnumResType.RES_TYPE4.getCode().equals(stlType)){ //分包结算
+                EnumResType.RES_TYPE4.getCode().equals(stlType)){ //分包结算
             String quantityMaxPeriod = ToolUtil.getStrIgnoreNull(
                     getMaxPeriodNo(EnumResType.RES_TYPE3.getCode(),cttPkid));
             String materialMaxPeriod = ToolUtil.getStrIgnoreNull(
@@ -454,6 +257,214 @@ public class ProgStlInfoService {
         }
         return strReturnTemp;
     }
+
+    public void accountAction(ProgStlInfo progStlInfoPara) {
+        progStlInfoPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS4.getCode());
+        progStlInfoPara.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON7.getCode());
+        flowCtrlHisMapper.insert(fromProgStlInfoToFlowCtrlHis(progStlInfoPara, "update"));
+    }
+
+    public FlowCtrlHis fromProgStlInfoToFlowCtrlHis(ProgStlInfo progStlInfoPara,String strOperType){
+        FlowCtrlHis flowCtrlHis =new FlowCtrlHis();
+        flowCtrlHis.setInfoType(progStlInfoPara.getStlType());
+        flowCtrlHis.setInfoPkid(progStlInfoPara.getStlPkid());
+        flowCtrlHis.setPeriodNo(progStlInfoPara.getPeriodNo());
+        flowCtrlHis.setFlowStatus(progStlInfoPara.getFlowStatus());
+        flowCtrlHis.setFlowStatusReason(progStlInfoPara.getFlowStatusReason());
+        flowCtrlHis.setCreatedTime(progStlInfoPara.getCreatedTime());
+        flowCtrlHis.setCreatedBy(progStlInfoPara.getCreatedBy());
+        flowCtrlHis.setOperType(strOperType);
+        return flowCtrlHis;
+    }
+    public ProgStlInfo fromModelShowToModel(ProgStlInfoShow progStlInfoShowPara){
+        ProgStlInfo progStlInfoTemp =new ProgStlInfo();
+        progStlInfoTemp.setPkid(progStlInfoShowPara.getPkid());
+        progStlInfoTemp.setStlType(progStlInfoShowPara.getStlType());
+        progStlInfoTemp.setStlPkid(progStlInfoShowPara.getStlPkid());
+        progStlInfoTemp.setId(progStlInfoShowPara.getId());
+        progStlInfoTemp.setPeriodNo(progStlInfoShowPara.getPeriodNo());
+        progStlInfoTemp.setRemark(progStlInfoShowPara.getRemark());
+        progStlInfoTemp.setAttachment(progStlInfoShowPara.getAttachment());
+        progStlInfoTemp.setArchivedFlag(progStlInfoShowPara.getArchivedFlag());
+        progStlInfoTemp.setCreatedBy(progStlInfoShowPara.getCreatedBy());
+        progStlInfoTemp.setCreatedTime(progStlInfoShowPara.getCreatedTime());
+        progStlInfoTemp.setLastUpdBy(progStlInfoShowPara.getLastUpdBy());
+        progStlInfoTemp.setLastUpdTime(progStlInfoShowPara.getLastUpdTime());
+        progStlInfoTemp.setRecversion(progStlInfoShowPara.getRecversion());
+        progStlInfoTemp.setAutoLinkAdd(progStlInfoShowPara.getAutoLinkAdd());
+        progStlInfoTemp.setFlowStatus(progStlInfoShowPara.getFlowStatus());
+        progStlInfoTemp.setFlowStatusReason(progStlInfoShowPara.getFlowStatusReason());
+        return progStlInfoTemp;
+    }
+    public ProgStlInfoShow fromModelToModelShow(ProgStlInfo progStlInfoPara){
+        ProgStlInfoShow progStlInfoShowTemp =new ProgStlInfoShow();
+        progStlInfoShowTemp.setPkid(progStlInfoPara.getPkid());
+        progStlInfoShowTemp.setStlType(progStlInfoPara.getStlType());
+        progStlInfoShowTemp.setStlPkid(progStlInfoPara.getStlPkid());
+        progStlInfoShowTemp.setId(progStlInfoPara.getId());
+        progStlInfoShowTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+        progStlInfoShowTemp.setRemark(progStlInfoPara.getRemark());
+        progStlInfoShowTemp.setAttachment(progStlInfoPara.getAttachment());
+        progStlInfoShowTemp.setArchivedFlag(progStlInfoPara.getArchivedFlag());
+        progStlInfoShowTemp.setCreatedBy(progStlInfoPara.getCreatedBy());
+        progStlInfoShowTemp.setCreatedTime(progStlInfoPara.getCreatedTime());
+        progStlInfoShowTemp.setLastUpdBy(progStlInfoPara.getLastUpdBy());
+        progStlInfoShowTemp.setLastUpdTime(progStlInfoPara.getLastUpdTime());
+        progStlInfoShowTemp.setRecversion(progStlInfoPara.getRecversion());
+        progStlInfoShowTemp.setAutoLinkAdd(progStlInfoPara.getAutoLinkAdd());
+        progStlInfoShowTemp.setFlowStatus(progStlInfoPara.getFlowStatus());
+        progStlInfoShowTemp.setFlowStatusReason(progStlInfoPara.getFlowStatusReason());
+        return progStlInfoShowTemp;
+    }
+
+    public ProgStlInfo selectRecordsByPrimaryKey(String strPkId){
+        return progStlInfoMapper.selectByPrimaryKey(strPkId);
+    }
+
+    public void insertRecord(ProgStlInfoShow progStlInfoShowPara){
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
+        progStlInfoShowPara.setCreatedBy(strOperatorIdTemp);
+        progStlInfoShowPara.setCreatedTime(strLastUpdTimeTemp);
+        progStlInfoShowPara.setArchivedFlag("0");
+        progStlInfoShowPara.setLastUpdBy(strOperatorIdTemp);
+        progStlInfoShowPara.setLastUpdTime(strLastUpdTimeTemp);
+        progStlInfoMapper.insert(fromModelShowToModel(progStlInfoShowPara)) ;
+    }
+    public void insertRecord(ProgStlInfo progStlInfoPara){
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
+        progStlInfoPara.setCreatedBy(strOperatorIdTemp);
+        progStlInfoPara.setCreatedTime(strLastUpdTimeTemp);
+        progStlInfoPara.setArchivedFlag("0");
+        progStlInfoPara.setLastUpdBy(strOperatorIdTemp);
+        progStlInfoPara.setLastUpdTime(strLastUpdTimeTemp);
+        progStlInfoMapper.insert(progStlInfoPara) ;
+    }
+
+    // 插入 Start
+    @Transactional
+    public void addSubStlQInfoAndItemInitDataAction(ProgStlInfoShow progStlInfoShowPara) {
+        insertRecord(progStlInfoShowPara);
+        progStlItemSubQService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
+    }
+    @Transactional
+    public void addSubStlMInfoAndItemInitDataAction(ProgStlInfoShow progStlInfoShowPara) {
+        insertRecord(progStlInfoShowPara);
+        progStlItemSubMService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
+    }
+    @Transactional
+    public void addTkStlEstInfoAndItemInitDataAction(ProgStlInfoShow progStlInfoShowPara) {
+        insertRecord(progStlInfoShowPara);
+        progStlItemTkEstService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
+    }
+    @Transactional
+    public void addTkStlMeaInfoAndItemInitDataAction(ProgStlInfoShow progStlInfoShowPara) {
+        insertRecord(progStlInfoShowPara);
+        progStlItemTkMeaService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
+    }
+    // 插入 End
+
+    @Transactional
+    public void updateRecordForSubCttPApprovePass(
+            ProgStlInfo progStlInfoPara,
+            List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForApprovePara){
+        //结算登记表更新
+        progStlInfoPara.setRecversion(
+                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecversion())+1);
+        progStlInfoPara.setArchivedFlag("0");
+        progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
+        progStlInfoPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
+        progStlInfoPara.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
+        progStlInfoMapper.updateByPrimaryKey(progStlInfoPara) ;
+        //将价格结算的完整数据插入至PROG_STL_ITEM_SUB_STLMENT表
+        for (int i=0;i< progStlItemSubStlmentShowListForApprovePara.size();i++){
+            ProgStlItemSubStlmentShow itemUnit= progStlItemSubStlmentShowListForApprovePara.get(i);
+            itemUnit.setEngPMng_RowNo(i);
+            progStlItemSubStlmentService.insertRecordDetail(itemUnit);
+        }
+    }
+    @Transactional
+    public void updateRecord(ProgStlInfoShow progStlInfoShowPara){
+        progStlInfoShowPara.setRecversion(
+                ToolUtil.getIntIgnoreNull(progStlInfoShowPara.getRecversion())+1);
+        progStlInfoShowPara.setArchivedFlag("0");
+        progStlInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlInfoShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
+        progStlInfoMapper.updateByPrimaryKey(fromModelShowToModel(progStlInfoShowPara));
+    }
+    @Transactional
+    public void updateRecord(ProgStlInfo progStlInfoPara) {
+        progStlInfoPara.setRecversion(
+                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecversion()) + 1);
+        progStlInfoPara.setArchivedFlag("0");
+        progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
+        progStlInfoMapper.updateByPrimaryKey(progStlInfoPara);
+
+        // 数量结算
+        if (EnumResType.RES_TYPE3.getCode().equals(progStlInfoPara.getStlType())) {
+            // 先看本分包合同及本期的分包结算单
+            ProgStlInfo progStlInfoSubStlmentTemp=new ProgStlInfo();
+            progStlInfoSubStlmentTemp.setStlType(EnumResType.RES_TYPE5.getCode());
+            progStlInfoSubStlmentTemp.setStlPkid(progStlInfoPara.getStlPkid());
+            progStlInfoSubStlmentTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+            // 状态为复核，且状态原因为复核通过
+            if (EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfoPara.getFlowStatus()) &&
+                    EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode().equals(progStlInfoPara.getFlowStatusReason())) {
+                // 本分包合同及本期的分包结算单不存在
+                if(getInitStlListByModel(progStlInfoSubStlmentTemp).size()<=0) {
+                    ProgStlInfo progStlInfoSubMTemp=new ProgStlInfo();
+                    progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE4.getCode());
+                    progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                    progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                    progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                    // 本分包合同及本期的分包材料结算也复核了
+                    if(getInitStlListByModel(progStlInfoSubMTemp).size()>0) {
+                        progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                        progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                        progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                        insertRecord(progStlInfoSubStlmentTemp);
+                    }
+                }
+            }
+            if(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode().equals(progStlInfoPara.getFlowStatusReason())){
+                delSubStlmentStlInfoAndItem(fromModelToModelShow(progStlInfoSubStlmentTemp));
+            }
+        }else
+        // 材料结算
+        if (EnumResType.RES_TYPE4.getCode().equals(progStlInfoPara.getStlType())) {
+            // 先看本分包合同及本期的分包结算单
+            ProgStlInfo progStlInfoSubStlmentTemp=new ProgStlInfo();
+            progStlInfoSubStlmentTemp.setStlType(EnumResType.RES_TYPE5.getCode());
+            progStlInfoSubStlmentTemp.setStlPkid(progStlInfoPara.getStlPkid());
+            progStlInfoSubStlmentTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+            // 状态为复核，且状态原因为复核通过
+            if (EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfoPara.getFlowStatus()) &&
+                    EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode().equals(progStlInfoPara.getFlowStatusReason())) {
+                // 本分包合同及本期的分包结算单不存在
+                if(getInitStlListByModel(progStlInfoSubStlmentTemp).size()<=0) {
+                    ProgStlInfo progStlInfoSubMTemp=new ProgStlInfo();
+                    progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE3.getCode());
+                    progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                    progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                    progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                    // 本分包合同及本期的分包材料结算也复核了
+                    if(getInitStlListByModel(progStlInfoSubMTemp).size()>0) {
+                        progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                        progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                        progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                        insertRecord(progStlInfoSubStlmentTemp);
+                    }
+                }
+            }
+            if(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode().equals(progStlInfoPara.getFlowStatusReason())){
+                delSubStlmentStlInfoAndItem(fromModelToModelShow(progStlInfoSubStlmentTemp));
+            }
+        }
+    }
+
 
     @Transactional
     public void deleteRecordForSubCttPApprovePass(ProgStlInfo progStlInfoPara,String powerType){

@@ -116,6 +116,7 @@ public class ProgStlInfoSubQSPAction {
         try {
             if (strSubmitTypePara.equals("Add")) {
                 progStlInfoShowAdd = new ProgStlInfoShow();
+                progStlInfoShowAdd.setStlType(operRes.getInfoType());
                 progStlInfoShowAdd.setStlPkid(operRes.getInfoPkid());
                 progStlInfoShowAdd.setStlName(cttInfoService.getCttInfoByPkId(operRes.getInfoPkid()).getName());
             }else {
@@ -152,7 +153,6 @@ public class ProgStlInfoSubQSPAction {
      */
     public void onClickForMngAction(String strSubmitType) {
         if (strSubmitType.equals("Add")) {
-            progStlInfoShowAdd.setStlType(operRes.getInfoType());
             if (!submitPreCheck(progStlInfoShowAdd)) {
                 return;
             }
@@ -170,7 +170,7 @@ public class ProgStlInfoSubQSPAction {
                 MessageUtil.addError(strTemp);
                 return;
             }else{
-                progStlInfoService.insertStlQAndItemBeginDataAction(progStlInfoShowAdd);
+                progStlInfoService.addSubStlQInfoAndItemInitDataAction(progStlInfoShowAdd);
                 if(!EnumTaskDoneFlag.TASK_DONE_FLAG1.getCode().equals(operRes.getTaskdoneFlag())){
                     operRes.setTaskdoneFlag(EnumTaskDoneFlag.TASK_DONE_FLAG1.getCode());
                     operResService.updateRecord(operRes);
@@ -178,10 +178,9 @@ public class ProgStlInfoSubQSPAction {
                 MessageUtil.addInfo("新增数据完成。");
             }
         } else if (strSubmitType.equals("Upd")) {
-            progStlInfoShowUpd.setStlType(operRes.getInfoType());
-            updRecordAction(progStlInfoShowUpd);
+            progStlInfoService.updateRecord(progStlInfoShowUpd);
+            MessageUtil.addInfo("更新数据完成。");
         } else if (strSubmitType.equals("Del")) {
-            progStlInfoShowDel.setStlType(operRes.getInfoType());
             //判断是否已关联产生了分包材料结算
             ProgStlInfo progStlInfoQryM =new ProgStlInfo();
             progStlInfoQryM.setStlType(EnumResType.RES_TYPE4.getCode());
@@ -195,18 +194,9 @@ public class ProgStlInfoSubQSPAction {
             }else{
                 progStlInfoService.delSubQStlInfoAndItem(progStlInfoShowDel);
             }
+            MessageUtil.addInfo("删除数据完成。");
         }
         onQueryAction("false");
-    }
-
-    private void updRecordAction(ProgStlInfoShow progStlInfoShowPara) {
-        try {
-            progStlInfoService.updateRecord(progStlInfoShowPara);
-            MessageUtil.addInfo("更新数据完成。");
-        } catch (Exception e) {
-            logger.error("更新数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
     }
 
     /*智能字段Start*/

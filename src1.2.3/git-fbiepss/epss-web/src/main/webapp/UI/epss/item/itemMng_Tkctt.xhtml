@@ -44,7 +44,8 @@
                                          oncomplete="window.close()">
                         </p:commandButton>
                         <p:commandButton value="导出到EXCEL"
-                                         action="#{tkcttItemAction.onExportExcel}"
+                                         action="#{tkcttItemAction.onExportExcel()}"
+                                         update="msgs"
                                          ajax="false">
                         </p:commandButton>
                     </h:panelGrid>
@@ -191,7 +192,9 @@
                             <p:graphicImage binding="#{tkcttItemAction.image}"/>
                         </h:panelGrid>
                     </p:dialog>
-                    <p:dialog id="dlgViewForAdd" header="总包合同内容增加信息" widgetVar="wVDlgViewForAdd"
+                    <p:dialog id="dlgViewForAdd"
+                              header="总包合同内容增加信息"
+                              widgetVar="wVDlgViewForAdd"
                               resizable="false" modal="true"
                               showEffect="clip" hideEffect="fold">
                         <h:panelGrid id="pgViewForAdd">
@@ -245,7 +248,9 @@
                             </h:panelGrid>
                         </h:panelGrid>
                     </p:dialog>
-                    <p:dialog id="dlgViewForUpd" header="总包合同内容更新信息" widgetVar="wVDlgViewForUpd"
+                    <p:dialog id="dlgViewForUpd"
+                              header="总包合同内容更新信息"
+                              widgetVar="wVDlgViewForUpd"
                               resizable="false" modal="true"
                               showEffect="clip" hideEffect="fold">
                         <h:panelGrid id="pgViewForUpd">
@@ -329,7 +334,9 @@
                             </h:panelGrid>
                         </h:panelGrid>
                     </p:dialog>
-                    <p:dialog id="dlgViewForDel" header="总包合同内容删除信息" widgetVar="wVDlgViewForDel"
+                    <p:dialog id="dlgViewForDel"
+                              header="总包合同内容删除信息"
+                              widgetVar="wVDlgViewForDel"
                               resizable="false" modal="true"
                               showEffect="clip" hideEffect="fold">
                         <h:panelGrid id="pgViewForDel">

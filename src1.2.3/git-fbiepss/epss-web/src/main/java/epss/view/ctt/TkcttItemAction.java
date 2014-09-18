@@ -120,7 +120,7 @@ public class TkcttItemAction {
                 // 附件记录变成List
                 attachmentList=attachmentStrToList(cttInfo.getAttachment());
                 // 输出Excel表头
-                beansMap.put("tkcttInfo", cttInfo);
+                beansMap.put("cttInfo", cttInfo);
                 cttItemList = cttItemService.getEsItemList(
                         strBelongToType, strCttInfoPkid);
                 recursiveDataTable("root", cttItemList);
@@ -645,17 +645,15 @@ public class TkcttItemAction {
             MessageUtil.addError(e.getMessage());
         }
     }
-    public String onExportExcel()throws IOException, WriteException {
+    public void onExportExcel()throws IOException, WriteException {
         if (this.cttItemShowList.size() == 0) {
             MessageUtil.addWarn("记录为空...");
-            return null;
         } else {
             String excelFilename = "总包合同-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
             JxlsManager jxls = new JxlsManager();
             jxls.exportList(excelFilename, beansMap,"oriTkctt.xls");
             // 其他状态的票据需要添加时再修改导出文件名
         }
-        return null;
     }
 
     // 附件
@@ -876,6 +874,18 @@ public class TkcttItemAction {
     public void setCttItemShowListExcel(List<CttItemShow> cttItemShowListExcel) {
         this.cttItemShowListExcel = cttItemShowListExcel;
     }
+    public void setCttInfo(CttInfo cttInfo) {
+        this.cttInfo = cttInfo;
+    }
+
+    public Map getBeansMap() {
+        return beansMap;
+    }
+
+    public void setBeansMap(Map beansMap) {
+        this.beansMap = beansMap;
+    }
+
     //文件
     public List<AttachmentModel> getAttachmentList() {
         return attachmentList;

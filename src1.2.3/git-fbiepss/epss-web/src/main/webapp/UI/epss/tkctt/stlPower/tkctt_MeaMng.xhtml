@@ -23,42 +23,31 @@
         <h:form id="form" enctype="multipart/form-data">
             <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
-                <p:focus for="stlName"/>
+                <p:focus for="periodNo"/>
                 <p:panel>
-                    <h:panelGrid id="pdQry" columns="3" style="width: 100%">
-                        <h:panelGrid columns="4">
-                            <p:outputLabel value="总包合同：" for="stlName"/>
-                            <p:inputText id="stlName"
-                                         value="#{progStlInfoTkMeaSPAction.progStlInfoShowQry.stlName}"/>
-                            <p:outputLabel value="期数编码：" for="periodNo"/>
-                            <p:inputText id="periodNo"
-                                         value="#{progStlInfoTkMeaSPAction.progStlInfoShowQry.periodNo}"
-                                         onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
-                        </h:panelGrid>
-                        <h:panelGrid columns="3">
-                            <p:commandButton id="qryBtn" value="查询"
-                                             action="#{progStlInfoTkMeaSPAction.onQueryAction('true')}"
-                                             update="pdt,msgs,pgCondition">
-                            </p:commandButton>
-                            <p:commandButton id="resetBtn" value="重置"
-                                             type="reset"
-                                             update="pdQry,msgs">
-                            </p:commandButton>
-                            <p:ajaxStatus style="width:16px;height:16px;">
-                                <f:facet name="start">
-                                    <h:graphicImage value="/images/ajaxloading.gif"/>
-                                </f:facet>
-                                <f:facet name="complete">
-                                    <h:outputText value=""/>
-                                </f:facet>
-                            </p:ajaxStatus>
-                        </h:panelGrid>
+                    <h:panelGrid id="pdQry" columns="4">
+                        <p:outputLabel value="期数编码：" for="periodNo"/>
+                        <p:inputText id="periodNo"
+                                     value="#{progStlInfoTkMeaSPAction.progStlInfoShowQry.periodNo}"
+                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
+                        <p:commandButton id="qryBtn" value="查询"
+                                         action="#{progStlInfoTkMeaSPAction.onQueryAction('true')}"
+                                         update="pdt,msgs,pgCondition">
+                        </p:commandButton>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
                     </h:panelGrid>
                 </p:panel>
                 <h:panelGrid id="pgCondition">
                     <p:commandButton id="addBtn"
                                      value="增加" icon="ui-icon-plus"
-                                     action="#{progStlInfoTkMeaSPAction.resetActionForAdd()}"
+                                     action="#{progStlInfoTkMeaSPAction.selectRecordAction('Add','')}"
                                      update="pgViewForAdd,pgCondition,pdQry"
                                      onclick="PF('wVDlgViewForAdd').show()">
                     </p:commandButton>
@@ -129,11 +118,11 @@
                             </p:commandButton>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
-                            <p:outputLabel value="总包合同：" for="tkcttPkidForAdd"/>
-                            <p:selectOneMenu id="tkcttPkidForAdd"
-                                             value="#{progStlInfoTkMeaSPAction.progStlInfoShowAdd.stlPkid}">
-                                <f:selectItems value="#{progStlInfoTkMeaSPAction.tkcttList}"/>
-                            </p:selectOneMenu>
+                            <p:outputLabel value="总包合同：" for="stlNameForAdd"/>
+                            <p:inputText id="stlNameForAdd"
+                                         value="#{progStlInfoTkMeaSPAction.progStlInfoShowAdd.stlName}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;width:328px;" />
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="期数编码：" for="periodNoForAdd"/>
@@ -146,7 +135,7 @@
                         <h:panelGrid id="pgOperBtnForAdd" columns="2">
                             <p:commandButton id="submitBtnForAdd"
                                              value="提交（增加）"
-                                             action="#{progStlInfoTkMeaSPAction.onClickForMngAction}"
+                                             action="#{progStlInfoTkMeaSPAction.onClickForMngAction('Add')}"
                                              update="pdt,msgs,pgViewForAdd">
                             </p:commandButton>
                             <p:commandButton id="resetBtnForAdd" value="重置"
@@ -209,7 +198,7 @@
                         <h:panelGrid id="pgOperBtnForUpd" columns="2">
                             <p:commandButton id="submitBtnForUpd"
                                              value="提交（更新）"
-                                             action="#{progStlInfoTkMeaSPAction.onClickForMngAction}"
+                                             action="#{progStlInfoTkMeaSPAction.onClickForMngAction('Upd')}"
                                              update="pdt,msgs,pgViewForUpd">
                             </p:commandButton>
                             <p:commandButton id="resetBtnForUpd" value="重置"
@@ -272,7 +261,7 @@
                         <h:panelGrid id="pgOperBtnForDel" columns="2">
                             <p:commandButton id="submitBtnForDel"
                                              value="提交（删除）"
-                                             action="#{progStlInfoTkMeaSPAction.onClickForMngAction}"
+                                             action="#{progStlInfoTkMeaSPAction.onClickForMngAction('Del')}"
                                              update="pdt,msgs,pgViewForDel">
                             </p:commandButton>
                         </h:panelGrid>

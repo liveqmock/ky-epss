@@ -64,8 +64,7 @@ public class ProgStlInfoTkMeaSPAction {
         String strResPkidTemp = parammap.get("strResPkid").toString();
         operRes=operResService.getOperResByPkid(strResPkidTemp);
     }
-
-    public void setMaxNoPlusOne(String strQryTypePara){
+    public void setMaxNoPlusOne(String strQryTypePara) {
         try {
             Integer intTemp;
             String strMaxId = progStlInfoService.getStrMaxStlId(operRes.getInfoType());
@@ -117,10 +116,10 @@ public class ProgStlInfoTkMeaSPAction {
         try {
             if (strSubmitTypePara.equals("Add")) {
                 progStlInfoShowAdd = new ProgStlInfoShow();
+                progStlInfoShowAdd.setStlType(operRes.getInfoType());
                 progStlInfoShowAdd.setStlPkid(operRes.getInfoPkid());
                 progStlInfoShowAdd.setStlName(cttInfoService.getCttInfoByPkId(operRes.getInfoPkid()).getName());
             }else {
-                // 查询
                 if (strSubmitTypePara.equals("Upd")) {
                     progStlInfoShowUpd = (ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
                 } else if (strSubmitTypePara.equals("Del")) {
@@ -154,7 +153,6 @@ public class ProgStlInfoTkMeaSPAction {
      */
     public void onClickForMngAction(String strSubmitType) {
         if (strSubmitType.equals("Add")) {
-            progStlInfoShowAdd.setStlType(operRes.getInfoType());
             if (!submitPreCheck(progStlInfoShowAdd)) {
                 return;
             }
@@ -172,17 +170,17 @@ public class ProgStlInfoTkMeaSPAction {
                 MessageUtil.addError(strTemp);
                 return;
             }else{
-                addRecordAction(progStlInfoShowAdd);
+                progStlInfoService.addTkStlMeaInfoAndItemInitDataAction(progStlInfoShowAdd);
                 if(!EnumTaskDoneFlag.TASK_DONE_FLAG1.getCode().equals(operRes.getTaskdoneFlag())){
                     operRes.setTaskdoneFlag(EnumTaskDoneFlag.TASK_DONE_FLAG1.getCode());
                     operResService.updateRecord(operRes);
                 }
+                MessageUtil.addInfo("新增数据完成。");
             }
         } else if (strSubmitType.equals("Upd")) {
-            progStlInfoShowUpd.setStlType(operRes.getInfoType());
-            updRecordAction(progStlInfoShowUpd);
+            progStlInfoService.updateRecord(progStlInfoShowUpd);
+            MessageUtil.addInfo("更新数据完成。");
         } else if (strSubmitType.equals("Del")) {
-            progStlInfoShowDel.setStlType(operRes.getInfoType());
             //判断是否已关联产生了分包材料结算
             ProgStlInfo progStlInfoQryM =new ProgStlInfo();
             progStlInfoQryM.setStlType(EnumResType.RES_TYPE4.getCode());
@@ -196,28 +194,9 @@ public class ProgStlInfoTkMeaSPAction {
             }else{
                 progStlInfoService.delSubQStlInfoAndItem(progStlInfoShowDel);
             }
+            MessageUtil.addInfo("删除数据完成。");
         }
         onQueryAction("false");
-    }
-    private void addRecordAction(ProgStlInfoShow progStlInfoShowPara) {
-        try {
-            progStlInfoService.insertRecord(progStlInfoShowPara) ;
-            // 从批准了的上一阶段的数据拿到这一阶段中，作为开始累计数
-            progStlItemTkMeaService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
-            MessageUtil.addInfo("新增数据完成。");
-        } catch (Exception e) {
-            logger.error("新增数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-    private void updRecordAction(ProgStlInfoShow progStlInfoShowPara) {
-        try {
-            progStlInfoService.updateRecord(progStlInfoShowPara);
-            MessageUtil.addInfo("更新数据完成。");
-        } catch (Exception e) {
-            logger.error("更新数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
     }
 
     /*智能字段Start*/
@@ -227,6 +206,14 @@ public class ProgStlInfoTkMeaSPAction {
 
     public void setProgStlItemTkMeaService(ProgStlItemTkMeaService progStlItemTkMeaService) {
         this.progStlItemTkMeaService = progStlItemTkMeaService;
+    }
+
+    public List<ProgStlInfoShow> getProgStlInfoShowList() {
+        return progStlInfoShowList;
+    }
+
+    public void setProgStlInfoShowList(List<ProgStlInfoShow> progStlInfoShowList) {
+        this.progStlInfoShowList = progStlInfoShowList;
     }
 
     public ProgStlInfoService getProgStlInfoService() {
