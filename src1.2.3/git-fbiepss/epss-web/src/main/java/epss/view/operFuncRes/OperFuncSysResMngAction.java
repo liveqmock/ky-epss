@@ -89,11 +89,12 @@ public class OperFuncSysResMngAction implements Serializable{
         recursiveOperTreeNode("ROOT", node0);
         node0.setExpanded(true);
     }
-    private void recursiveOperTreeNode(String strParentPkidPara,TreeNode parentNode){
-        List<DeptOperShow> operResShowListTemp= deptOperService.selectDeptAndOperRecords(strParentPkidPara);
-        for (int i=0;i<operResShowListTemp.size();i++){
-            TreeNode childNode = new DefaultTreeNode(operResShowListTemp.get(i), parentNode);
-            recursiveOperTreeNode(operResShowListTemp.get(i).getId(), childNode);
+
+    private void recursiveOperTreeNode(String strParentPkidPara, TreeNode parentNode) {
+        List<DeptOperShow> operResShowListTemp = deptOperService.selectDeptAndOperRecords(strParentPkidPara);
+        for (int i = 0; i < operResShowListTemp.size(); i++) {
+            TreeNode childNodeTemp = new DefaultTreeNode(operResShowListTemp.get(i), parentNode);
+            recursiveOperTreeNode(operResShowListTemp.get(i).getId(), childNodeTemp);
         }
     }
 
@@ -101,9 +102,47 @@ public class OperFuncSysResMngAction implements Serializable{
         initRes(strResTypeSeled);
     }
 
+    
+    private void recursiveOperTreeNodeForExpand(TreeNode treeNodePara,List<OperResShow> operResShowListPara) {
+        if (operResShowListPara==null||operResShowListPara.size()==0){
+            return;
+        }
+        if (treeNodePara.getChildCount() != 0) {
+            for (int i = 0; i < treeNodePara.getChildCount(); i++) {
+                TreeNode treeNodeTemp = treeNodePara.getChildren().get(i);
+                DeptOperShow deptOperShowTemp = (DeptOperShow) treeNodeTemp.getData();
+                if (deptOperShowTemp.getId()!=null&&"1".equals(deptOperShowTemp.getType())){
+                    for (int j = 0; j < operResShowListPara.size(); j++) {
+                        if (deptOperShowTemp.getId().equals(operResShowListPara.get(j).getOperPkid())) {
+                            deptOperShowTemp.setIsSeled(true);
+                            deptOperShowSeledList.add(deptOperShowTemp);
+                            while (!(treeNodeTemp.getParent()==null)){
+                                if (!(treeNodeTemp.isExpanded())&&treeNodeTemp.getChildCount()>0){
+                                    treeNodeTemp.setExpanded(true);
+                                }
+                                treeNodeTemp=treeNodeTemp.getParent();
+                            }
+                            if (treeNodeTemp.getParent()==null){
+                                operResShowListPara.remove(j);
+                                break;
+                            }
+                        }
+                    }
+                }
+                recursiveOperTreeNodeForExpand(treeNodeTemp, operResShowListPara);
+            }
+        }
+    }
+
     public void selectRecordAction(OperFuncResShow operFuncResShowPara) {
         try {
             operFuncResShowSeled=operFuncResShowPara;
+            initDeptOper();
+            OperRes operResTemp=new OperRes();
+            operResTemp.setInfoPkid(operFuncResShowSeled.getResPkid());
+            operResTemp.setType("system");
+            List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
+            recursiveOperTreeNodeForExpand(deptOperRoot,operResShowListTemp);
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
         }

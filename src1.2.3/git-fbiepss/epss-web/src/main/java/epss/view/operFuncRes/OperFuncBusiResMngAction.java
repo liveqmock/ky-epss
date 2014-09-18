@@ -523,7 +523,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                     if (operFuncResShow1.getResType().equals(operFuncResShow2.getResType())
                             &&operFuncResShow1.getResPkid().equals(operFuncResShow2.getResPkid())){
                         TreeNode treeNodeTemp=childNodeTemp;
-                        while (!(treeNodeTemp.getData().equals("ROOT"))){
+                        while (!(treeNodeTemp.getParent()==null)){
                             treeNodeTemp.setExpanded(true);
                             treeNodeTemp=treeNodeTemp.getParent();
                         }
