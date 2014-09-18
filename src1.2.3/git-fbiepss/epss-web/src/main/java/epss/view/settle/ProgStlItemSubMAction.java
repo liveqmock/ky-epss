@@ -541,7 +541,7 @@ public class ProgStlItemSubMAction {
         } else {
             String excelFilename = "分包材料结算-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
             JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap,"progMatqty.xls");
+            jxls.exportList(excelFilename, beansMap,"progStlItemSubM.xls");
             // 其他状态的票据需要添加时再修改导出文件名
         }
         return null;

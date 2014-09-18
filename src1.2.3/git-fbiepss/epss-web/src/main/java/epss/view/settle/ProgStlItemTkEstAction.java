@@ -542,7 +542,7 @@ public class ProgStlItemTkEstAction {
         } else {
             String excelFilename = "总包数量统计-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
             JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap,"progEst.xls");
+            jxls.exportList(excelFilename, beansMap,"progStlItemTkEst.xls");
             // 其他状态的票据需要添加时再修改导出文件名
         }
         return null;

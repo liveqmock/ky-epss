@@ -502,7 +502,7 @@ public class ProgStlItemSubQAction {
         } else {
             String excelFilename = "分包数量结算-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
             JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap,"progWorkqty.xls");
+            jxls.exportList(excelFilename, beansMap,"progStlItemSubQ.xls");
             // 其他状态的票据需要添加时再修改导出文件名
         }
         return null;
@@ -638,7 +638,6 @@ public class ProgStlItemSubQAction {
     public void setStrFlowType(String strFlowType) {
         this.strFlowType = strFlowType;
     }
-/*智能字段End*/
 
     public List<ProgStlItemSubQShow> getProgStlItemSubQShowListExcel() {
         return progStlItemSubQShowListExcel;
@@ -655,5 +654,6 @@ public class ProgStlItemSubQAction {
     public void setSignPartService(SignPartService signPartService) {
         this.signPartService = signPartService;
     }
+    /*智能字段End*/
 }
 

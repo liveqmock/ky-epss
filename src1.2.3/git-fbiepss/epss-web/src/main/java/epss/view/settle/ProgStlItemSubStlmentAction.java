@@ -554,7 +554,7 @@ public class ProgStlItemSubStlmentAction {
                 MessageUtil.addWarn("记录为空...");
                 return null;
             }else {
-                strExcelName = "progSubstl.xls";
+                strExcelName = "progStlItemSubStlment.xls";
             }
         }
         String excelFilename = "分包工程预结算单-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";

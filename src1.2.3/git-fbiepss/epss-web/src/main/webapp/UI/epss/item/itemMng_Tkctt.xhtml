@@ -19,7 +19,7 @@
         </script>
     </ui:define>
     <ui:define name="content">
-        <h:form id="form" enctype="multipart/form-data">
+        <h:form id="form">
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
@@ -45,7 +45,6 @@
                         </p:commandButton>
                         <p:commandButton value="导出到EXCEL"
                                          action="#{tkcttItemAction.onExportExcel()}"
-                                         update="msgs"
                                          ajax="false">
                         </p:commandButton>
                     </h:panelGrid>
