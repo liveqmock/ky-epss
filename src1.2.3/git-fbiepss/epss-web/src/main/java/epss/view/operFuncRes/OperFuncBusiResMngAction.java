@@ -73,22 +73,8 @@ public class OperFuncBusiResMngAction implements Serializable{
         cttInfoShowDel=new CttInfoShow();
         esInitCttList = new ArrayList<>();
         cttInfoShowList = new ArrayList<>();
-        taskFunctionList = new ArrayList<>();
         deptOperShowSeledList = new ArrayList<>();
         operFuncResShowFowExcelList= new ArrayList<>();
-        taskFunctionList.add(
-                new SelectItem(EnumFlowStatus.FLOW_STATUS0.getCode(), EnumFlowStatus.FLOW_STATUS0.getTitle()));
-        taskFunctionList.add(
-                new SelectItem(EnumFlowStatus.FLOW_STATUS1.getCode(), EnumFlowStatus.FLOW_STATUS1.getTitle()));
-        taskFunctionList.add(
-                new SelectItem(EnumFlowStatus.FLOW_STATUS2.getCode(), EnumFlowStatus.FLOW_STATUS2.getTitle()));
-        taskFunctionList.add(
-                new SelectItem(EnumFlowStatus.FLOW_STATUS3.getCode(), EnumFlowStatus.FLOW_STATUS3.getTitle()));
-        taskFunctionList.add(
-                new SelectItem(EnumFlowStatus.FLOW_STATUS4.getCode(), EnumFlowStatus.FLOW_STATUS4.getTitle()));
-        taskFunctionList.add(
-                new SelectItem(EnumFlowStatus.FLOW_STATUS5.getCode(), EnumFlowStatus.FLOW_STATUS5.getTitle()));
-
         // 资源-用户-功能
         initRes();
         initDeptOper();
@@ -108,8 +94,6 @@ public class OperFuncBusiResMngAction implements Serializable{
         node0.setExpanded(true);
     }
     private void initDeptOper(){
-        taskFunctionSeled = "";
-        deptOperShowSeledList.clear();
         deptOperRoot = new DefaultTreeNode("ROOT", null);
         DeptOperShow deptOperShowTemp =new DeptOperShow();
         deptOperShowTemp.setPkid("ROOT");
@@ -591,6 +575,42 @@ public class OperFuncBusiResMngAction implements Serializable{
         }
     }
 
+    private void initFuncListByResType(){
+        taskFunctionSeled="";
+        taskFunctionList = new ArrayList<>();
+        if (cttInfoShowSel.getCttType().equals(EnumResType.RES_TYPE3.getCode())
+                ||cttInfoShowSel.getCttType().equals(EnumResType.RES_TYPE4.getCode())){
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS0.getCode(), EnumFlowStatus.FLOW_STATUS0.getTitle()));
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS1.getCode(), EnumFlowStatus.FLOW_STATUS1.getTitle()));
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS2.getCode(), EnumFlowStatus.FLOW_STATUS2.getTitle()));
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS4.getCode(), EnumFlowStatus.FLOW_STATUS4.getTitle()));
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS5.getCode(), EnumFlowStatus.FLOW_STATUS5.getTitle()));
+        }else if (cttInfoShowSel.getCttType().equals(EnumResType.RES_TYPE5.getCode())){
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS3.getCode(), EnumFlowStatus.FLOW_STATUS3.getTitle()));
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS4.getCode(), EnumFlowStatus.FLOW_STATUS4.getTitle()));
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS5.getCode(), EnumFlowStatus.FLOW_STATUS5.getTitle()));
+        }else {
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS0.getCode(), EnumFlowStatus.FLOW_STATUS0.getTitle()));
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS1.getCode(), EnumFlowStatus.FLOW_STATUS1.getTitle()));
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS2.getCode(), EnumFlowStatus.FLOW_STATUS2.getTitle()));
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS3.getCode(), EnumFlowStatus.FLOW_STATUS3.getTitle()));
+            taskFunctionList.add(
+                    new SelectItem(EnumFlowStatus.FLOW_STATUS5.getCode(), EnumFlowStatus.FLOW_STATUS5.getTitle()));
+        }
+    }
+
     public void selectRecordAction(String strSubmitTypePara,OperFuncResShow operFuncResShowPara) {
         try {
             findSelectedNode(operFuncResShowPara,resRoot,strSubmitTypePara);
@@ -613,7 +633,8 @@ public class OperFuncBusiResMngAction implements Serializable{
                 cttInfoShowDel = fromResModelShowToCttInfoShow(operFuncResShowPara);
             } else if (strSubmitTypePara.equals("Sel")) {
                 cttInfoShowSel = fromResModelShowToCttInfoShow(operFuncResShowPara);
-                taskFunctionSeled="";
+                initFuncListByResType();
+                initDeptOper();
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
@@ -719,6 +740,54 @@ public class OperFuncBusiResMngAction implements Serializable{
         return null;
     }
 
+    private void recursiveOperTreeNodeForFuncChange(TreeNode treeNodePara, List<OperResShow> operResShowListPara) {
+        if (operResShowListPara==null||operResShowListPara.size()==0){
+            return;
+        }
+        if (treeNodePara.getChildCount() != 0) {
+            for (int i = 0; i < treeNodePara.getChildCount(); i++) {
+                TreeNode treeNodeTemp = treeNodePara.getChildren().get(i);
+                DeptOperShow deptOperShowTemp = (DeptOperShow) treeNodeTemp.getData();
+                if (deptOperShowTemp.getId()!=null&&"1".equals(deptOperShowTemp.getType())){
+                    for (int j = 0; j < operResShowListPara.size(); j++) {
+                        if (deptOperShowTemp.getId().equals(operResShowListPara.get(j).getOperPkid())) {
+                            deptOperShowTemp.setIsSeled(true);
+                            deptOperShowSeledList.add(deptOperShowTemp);
+                            while (!(treeNodeTemp.getParent()==null)){
+                                if (!(treeNodeTemp.isExpanded())&&treeNodeTemp.getChildCount()>0){
+                                    treeNodeTemp.setExpanded(true);
+                                }
+                                treeNodeTemp=treeNodeTemp.getParent();
+                            }
+                            if (treeNodeTemp.getParent()==null){
+                                operResShowListPara.remove(j);
+                                break;
+                            }
+                        }
+                    }
+                }
+                recursiveOperTreeNodeForFuncChange(treeNodeTemp, operResShowListPara);
+            }
+        }
+    }
+
+    public void funcValueChange() {
+        try {
+            initDeptOper();
+            deptOperShowSeledList.clear();
+            OperResShow operResShowTemp = new OperResShow();
+            operResShowTemp.setInfoType(cttInfoShowSel.getCttType());
+            operResShowTemp.setInfoPkid(cttInfoShowSel.getPkid());
+            operResShowTemp.setFlowStatus(taskFunctionSeled);
+            List<OperResShow> operResShowListTemp = operResService.selectOperaResRecordsByModelShow(operResShowTemp);
+            if (operResShowListTemp.size() > 0) {
+                recursiveOperTreeNodeForFuncChange(deptOperRoot, operResShowListTemp);
+            }
+        } catch (Exception e) {
+            MessageUtil.addError(e.getMessage());
+            logger.error("初始化失败", e);
+        }
+    }
     /*智能字段 Start*/
 
     public OperResService getOperResService() {

@@ -180,6 +180,7 @@
                                                       value="#{operFuncBusiResMngAction.taskFunctionSeled}"
                                                       layout="grid"
                                                       columns="1">
+                                    <p:ajax update=":form:msgs,:form:operTreeTable" listener="#{operFuncBusiResMngAction.funcValueChange()}" />
                                     <f:selectItems value="#{operFuncBusiResMngAction.taskFunctionList}"
                                                    var="taskRecord"
                                                    itemValue="#{taskRecord.value}"
