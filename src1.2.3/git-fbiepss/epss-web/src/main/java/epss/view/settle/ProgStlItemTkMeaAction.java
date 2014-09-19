@@ -115,8 +115,11 @@ public class ProgStlItemTkMeaAction {
         reportHeader.setStrSubcttId(cttInfoTemp.getId());
         reportHeader.setStrSubcttName(cttInfoTemp.getName());
         reportHeader.setStrSignPartPkid(cttInfoTemp.getSignPartB());
-        reportHeader.setStrSignPartName(signPartService.getEsInitCustByPkid(
-                reportHeader.getStrSignPartPkid()).getName());
+        SignPart signPartTemp=signPartService.getEsInitCustByPkid(
+                reportHeader.getStrSignPartPkid());
+        if(signPartTemp!=null) {
+            reportHeader.setStrSignPartName(signPartTemp.getName());
+        }
 
         beansMap.put("reportHeader", reportHeader);
 
@@ -204,7 +207,7 @@ public class ProgStlItemTkMeaAction {
                 progStlItemTkMeaShowTemp.setEng_LastUpdBy(progStlItemTkMea.getLastUpdBy());
                 progStlItemTkMeaShowTemp.setEng_LastUpdByName(strLastUpdByName);
                 progStlItemTkMeaShowTemp.setEng_LastUpdTime(progStlItemTkMea.getLastUpdTime());
-                progStlItemTkMeaShowTemp.setEng_Recversion(progStlItemTkMea.getRecversion());
+                progStlItemTkMeaShowTemp.setEng_RecVersion(progStlItemTkMea.getRecVersion());
             }
             sProgStlItemTkMeaShowListPara.add(progStlItemTkMeaShowTemp) ;
             recursiveDataTable(progStlItemTkMeaShowTemp.getTkctt_Pkid(), cttItemListPara, sProgStlItemTkMeaShowListPara);
@@ -535,17 +538,11 @@ public class ProgStlItemTkMeaAction {
         }
         return progStlItemTkMeaShowListPara;
     }
-    public String onExportExcel()throws IOException, WriteException {
-        if (this.progStlItemTkMeaShowList.size() == 0) {
-            MessageUtil.addWarn("记录为空...");
-            return null;
-        } else {
-            String excelFilename = "总包数量计量-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
-            JxlsManager jxls = new JxlsManager();
-            jxls.exportList(excelFilename, beansMap,"progStlItemTkMea.xls");
-            // 其他状态的票据需要添加时再修改导出文件名
-        }
-        return null;
+
+    public void onExportExcel()throws IOException, WriteException {
+        String excelFilename = "总包数量计量-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+        JxlsManager jxls = new JxlsManager();
+        jxls.exportList(excelFilename, beansMap,"progStlItemTkMea.xls");
     }
 
     /*根据数据库中层级关系数据列表得到某一节点下的子节点*/

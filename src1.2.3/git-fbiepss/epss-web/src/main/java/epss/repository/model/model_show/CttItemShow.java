@@ -61,8 +61,8 @@ public class CttItemShow implements Serializable {
     private String lastUpdBy;
     /*EPSS.ES_ITEM_INFO.LAST_UPD_TIME*/
     private String lastUpdTime;
-    /*EPSS.ES_ITEM_INFO.RECVERSION*/
-    private Integer recversion;
+    /*EPSS.ES_ITEM_INFO.REC_VERSION*/
+    private Integer recVersion;
 
     private String createdByName;
     private String lastUpdByName;
@@ -101,7 +101,7 @@ public class CttItemShow implements Serializable {
             String strLastUpdBy,
             String strLastUpdByName,
             String dtLastUpdTime,
-            Integer intRecversion,
+            Integer intRecVersion,
             String strRemark,
             String strCorrespondingPkid,
             String strNo,
@@ -148,8 +148,8 @@ public class CttItemShow implements Serializable {
         this.lastUpdByName=strLastUpdByName;
         /*EPSS.ES_ITEM_INFO.LAST_UPD_TIME*/
         this.lastUpdTime=dtLastUpdTime;
-        /*EPSS.ES_ITEM_INFO.RECVERSION*/
-        this.recversion=intRecversion;
+        /*EPSS.ES_ITEM_INFO.REC_VERSION*/
+        this.recVersion=intRecVersion;
 
         this.strNo =strNo ;
         this.strCorrespondingItemNo =strCorrespondingItemNo;
@@ -200,7 +200,7 @@ public class CttItemShow implements Serializable {
                         itemForTkcttAndCstpl.lastUpdBy .equals(this.lastUpdBy))
                     &&((itemForTkcttAndCstpl.lastUpdTime==null&&this.lastUpdTime==null)||
                         itemForTkcttAndCstpl.lastUpdTime .equals(this.lastUpdTime))
-                    &&(itemForTkcttAndCstpl.recversion==this.recversion)
+                    &&(itemForTkcttAndCstpl.recVersion==this.recVersion)
                     ;
         }
         return false;
@@ -366,12 +366,12 @@ public class CttItemShow implements Serializable {
         this.archivedFlag = archivedFlag;
     }
 
-    public Integer getRecversion() {
-        return recversion;
+    public Integer getRecVersion() {
+        return recVersion;
     }
 
-    public void setRecversion(Integer recversion) {
-        this.recversion = recversion;
+    public void setRecVersion(Integer recVersion) {
+        this.recVersion = recVersion;
     }
 
     public String getStrNo() {

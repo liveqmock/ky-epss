@@ -18,7 +18,7 @@
         <result column="LAST_UPD_BY_NAME" jdbcType="VARCHAR" property="lastUpdByName" />
         <result column="LAST_UPD_TIME" jdbcType="VARCHAR" property="lastUpdTime" />
         <result column="REMARK" jdbcType="VARCHAR" property="remark" />
-        <result column="RECVERSION" jdbcType="DECIMAL" property="recversion" />
+        <result column="REC_VERSION" jdbcType="DECIMAL" property="recVersion" />
     </resultMap>
     <select id="selectOperaResRecordsByModelShow" parameterType="epss.repository.model.model_show.OperResShow"
             resultMap="BaseResultMapOperRes">
@@ -40,7 +40,7 @@
                 (select name from oper where id=t.LAST_UPD_BY) as LAST_UPD_BY_NAME,
                 t.LAST_UPD_TIME,
                 t.REMARK,
-                t.RECVERSION
+                t.REC_VERSION
             from
                 OPER_RES t
             where

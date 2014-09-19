@@ -590,7 +590,7 @@ public class CstplItemAction {
                                 itemTkcttInsertItem.setCreatedTime(null);
                                 itemTkcttInsertItem.setLastUpdBy(null);
                                 itemTkcttInsertItem.setLastUpdTime(null);
-                                itemTkcttInsertItem.setRecversion(null);
+                                itemTkcttInsertItem.setRecVersion(null);
                                 itemTkcttInsertItem.setCorrespondingPkid(null);
                             } else
                                 //成本计划
@@ -614,7 +614,7 @@ public class CstplItemAction {
                             itemTkcttInsertItem.setCreatedTimeContrast(itemCstpl.getCreatedTime());
                             itemTkcttInsertItem.setLastUpdByContrast(itemCstpl.getLastUpdBy());
                             itemTkcttInsertItem.setLastUpdTimeContrast(itemCstpl.getLastUpdTime());
-                            itemTkcttInsertItem.setRecversionContrast(itemCstpl.getRecversion());
+                            itemTkcttInsertItem.setRecVersionContrast(itemCstpl.getRecVersion());
                             itemTkcttInsertItem.setCorrespondingPkidContrast(itemCstpl.getCorrespondingPkid());
                             if (itemTkcttInsertItem.getPkid() == null || itemTkcttInsertItem.getPkid().equals("")) {
                                 itemTkcttInsertItem.setPkid(cstplItemShowList_ForSort.size() + "");
@@ -895,7 +895,7 @@ public class CstplItemAction {
                     itemUnit.getLastUpdBy() ,
                     strLastUpdByName,
                     itemUnit.getLastUpdTime() ,
-                    itemUnit.getRecversion(),
+                    itemUnit.getRecVersion(),
                     itemUnit.getRemark(),
                     itemUnit.getCorrespondingPkid(),
                     "",
@@ -1034,7 +1034,7 @@ public class CstplItemAction {
             cttItemShowTemp.setCreatedTime(cstplItemShowPara.getCreatedTime());
             cttItemShowTemp.setLastUpdBy(cstplItemShowPara.getLastUpdBy());
             cttItemShowTemp.setLastUpdTime(cstplItemShowPara.getLastUpdTime());
-            cttItemShowTemp.setRecversion(cstplItemShowPara.getRecversion());
+            cttItemShowTemp.setRecVersion(cstplItemShowPara.getRecVersion());
             cttItemShowTemp.setCorrespondingPkid(cstplItemShowPara.getCorrespondingPkid());
             cttItemShowTemp.setStrCorrespondingItemNo(null);
         }
@@ -1060,7 +1060,7 @@ public class CstplItemAction {
             cttItemShowTemp.setCreatedTime(cstplItemShowPara.getCreatedTimeContrast());
             cttItemShowTemp.setLastUpdBy(cstplItemShowPara.getLastUpdByContrast());
             cttItemShowTemp.setLastUpdTime(cstplItemShowPara.getLastUpdTimeContrast());
-            cttItemShowTemp.setRecversion(cstplItemShowPara.getRecversionContrast());
+            cttItemShowTemp.setRecVersion(cstplItemShowPara.getRecVersionContrast());
 
             String strCorrespondingPkid= cstplItemShowPara.getCorrespondingPkidContrast();
             cttItemShowTemp.setCorrespondingPkid(strCorrespondingPkid);
@@ -1101,7 +1101,7 @@ public class CstplItemAction {
             cstplItemShowTemp.setCreatedTime(cttItemShowPara.getCreatedTime());
             cstplItemShowTemp.setLastUpdBy(cttItemShowPara.getLastUpdBy());
             cstplItemShowTemp.setLastUpdTime(cttItemShowPara.getLastUpdTime());
-            cstplItemShowTemp.setRecversion(cttItemShowPara.getRecversion());
+            cstplItemShowTemp.setRecVersion(cttItemShowPara.getRecVersion());
         }
         else if(strTkcttOrCstpl .equals("Cstpl")){
             cstplItemShowTemp.setStrNoContrast(cttItemShowPara.getStrNo());
@@ -1126,7 +1126,7 @@ public class CstplItemAction {
             cstplItemShowTemp.setCreatedTimeContrast(cttItemShowPara.getCreatedTime());
             cstplItemShowTemp.setLastUpdByContrast(cttItemShowPara.getLastUpdBy());
             cstplItemShowTemp.setLastUpdTimeContrast(cttItemShowPara.getLastUpdTime());
-            cstplItemShowTemp.setRecversionContrast(cttItemShowPara.getRecversion());
+            cstplItemShowTemp.setRecVersionContrast(cttItemShowPara.getRecVersion());
         }
         return cstplItemShowTemp;
     }

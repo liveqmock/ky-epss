@@ -92,14 +92,14 @@ public class ProgStlItemSubMService {
         progStlItemSubMTemp.setCreatedTime(progStlItemSubMShowPara.getEngMMng_CreatedTime());
         progStlItemSubMTemp.setLastUpdBy(progStlItemSubMShowPara.getEngMMng_LastUpdBy());
         progStlItemSubMTemp.setLastUpdTime(progStlItemSubMShowPara.getEngMMng_LastUpdTime());
-        progStlItemSubMTemp.setRecversion(progStlItemSubMShowPara.getEngMMng_Recversion());
+        progStlItemSubMTemp.setRecVersion(progStlItemSubMShowPara.getEngMMng_RecVersion());
         return progStlItemSubMTemp;
     }
 
     public void updateRecord(ProgStlItemSubMShow progStlItemSubMShowPara){
         ProgStlItemSubM progStlItemSubMTemp =fromModelShowToModel(progStlItemSubMShowPara);
-        progStlItemSubMTemp.setRecversion(
-                ToolUtil.getIntIgnoreNull(progStlItemSubMTemp.getRecversion())+1);
+        progStlItemSubMTemp.setRecVersion(
+                ToolUtil.getIntIgnoreNull(progStlItemSubMTemp.getRecVersion())+1);
         progStlItemSubMTemp.setArchivedFlag("0");
         progStlItemSubMTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlItemSubMTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());

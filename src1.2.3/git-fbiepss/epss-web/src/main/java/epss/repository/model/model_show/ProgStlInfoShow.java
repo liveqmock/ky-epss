@@ -29,7 +29,7 @@ public class ProgStlInfoShow {
     private String lastUpdBy;
     private String lastUpdByName;
     private String lastUpdTime;
-    private Integer recversion;
+    private Integer recVersion;
     private String type;
     private String autoLinkAdd;
 
@@ -225,11 +225,11 @@ public class ProgStlInfoShow {
         this.flowStatusReason = flowStatusReason;
     }
 
-    public Integer getRecversion() {
-        return recversion;
+    public Integer getRecVersion() {
+        return recVersion;
     }
 
-    public void setRecversion(Integer recversion) {
-        this.recversion = recversion;
+    public void setRecVersion(Integer recVersion) {
+        this.recVersion = recVersion;
     }
 }

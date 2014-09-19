@@ -293,7 +293,7 @@ public class ProgStlInfoService {
         progStlInfoTemp.setCreatedTime(progStlInfoShowPara.getCreatedTime());
         progStlInfoTemp.setLastUpdBy(progStlInfoShowPara.getLastUpdBy());
         progStlInfoTemp.setLastUpdTime(progStlInfoShowPara.getLastUpdTime());
-        progStlInfoTemp.setRecversion(progStlInfoShowPara.getRecversion());
+        progStlInfoTemp.setRecVersion(progStlInfoShowPara.getRecVersion());
         progStlInfoTemp.setAutoLinkAdd(progStlInfoShowPara.getAutoLinkAdd());
         progStlInfoTemp.setFlowStatus(progStlInfoShowPara.getFlowStatus());
         progStlInfoTemp.setFlowStatusReason(progStlInfoShowPara.getFlowStatusReason());
@@ -313,7 +313,7 @@ public class ProgStlInfoService {
         progStlInfoShowTemp.setCreatedTime(progStlInfoPara.getCreatedTime());
         progStlInfoShowTemp.setLastUpdBy(progStlInfoPara.getLastUpdBy());
         progStlInfoShowTemp.setLastUpdTime(progStlInfoPara.getLastUpdTime());
-        progStlInfoShowTemp.setRecversion(progStlInfoPara.getRecversion());
+        progStlInfoShowTemp.setRecVersion(progStlInfoPara.getRecVersion());
         progStlInfoShowTemp.setAutoLinkAdd(progStlInfoPara.getAutoLinkAdd());
         progStlInfoShowTemp.setFlowStatus(progStlInfoPara.getFlowStatus());
         progStlInfoShowTemp.setFlowStatusReason(progStlInfoPara.getFlowStatusReason());
@@ -373,8 +373,8 @@ public class ProgStlInfoService {
             ProgStlInfo progStlInfoPara,
             List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForApprovePara){
         //结算登记表更新
-        progStlInfoPara.setRecversion(
-                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecversion())+1);
+        progStlInfoPara.setRecVersion(
+                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecVersion())+1);
         progStlInfoPara.setArchivedFlag("0");
         progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
@@ -390,8 +390,8 @@ public class ProgStlInfoService {
     }
     @Transactional
     public void updateRecord(ProgStlInfoShow progStlInfoShowPara){
-        progStlInfoShowPara.setRecversion(
-                ToolUtil.getIntIgnoreNull(progStlInfoShowPara.getRecversion())+1);
+        progStlInfoShowPara.setRecVersion(
+                ToolUtil.getIntIgnoreNull(progStlInfoShowPara.getRecVersion())+1);
         progStlInfoShowPara.setArchivedFlag("0");
         progStlInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlInfoShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
@@ -399,8 +399,8 @@ public class ProgStlInfoService {
     }
     @Transactional
     public void updateRecord(ProgStlInfo progStlInfoPara) {
-        progStlInfoPara.setRecversion(
-                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecversion()) + 1);
+        progStlInfoPara.setRecVersion(
+                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecVersion()) + 1);
         progStlInfoPara.setArchivedFlag("0");
         progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());

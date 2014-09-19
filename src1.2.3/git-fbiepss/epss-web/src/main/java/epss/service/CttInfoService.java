@@ -169,8 +169,8 @@ public class CttInfoService {
     }
     public void updateRecord(CttInfo cttInfoPara,String strPowerTypePara){
         try {
-            cttInfoPara.setRecversion(
-                ToolUtil.getIntIgnoreNull(cttInfoPara.getRecversion())+1);
+            cttInfoPara.setRecVersion(
+                ToolUtil.getIntIgnoreNull(cttInfoPara.getRecVersion())+1);
             cttInfoPara.setArchivedFlag("0");
             cttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
             cttInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
@@ -200,8 +200,8 @@ public class CttInfoService {
         }
     }
     public void updateRecord(CttInfoShow cttInfoShowPara){
-        cttInfoShowPara.setRecversion(
-                ToolUtil.getIntIgnoreNull(cttInfoShowPara.getRecversion())+1);
+        cttInfoShowPara.setRecVersion(
+                ToolUtil.getIntIgnoreNull(cttInfoShowPara.getRecVersion())+1);
         cttInfoShowPara.setArchivedFlag("0");
         cttInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         cttInfoShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
@@ -210,8 +210,8 @@ public class CttInfoService {
     public void updateRecordForOperRes(CttInfoShow cttInfoShowPara){
         CttInfo cttInfoTemp = getCttInfoByPkId(cttInfoShowPara.getPkid());
         cttInfoTemp.setName(cttInfoShowPara.getName());
-        cttInfoTemp.setRecversion(
-                ToolUtil.getIntIgnoreNull(cttInfoShowPara.getRecversion())+1);
+        cttInfoTemp.setRecVersion(
+                ToolUtil.getIntIgnoreNull(cttInfoShowPara.getRecVersion())+1);
         cttInfoTemp.setArchivedFlag("0");
         cttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         cttInfoTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
@@ -247,7 +247,7 @@ public class CttInfoService {
         cttInfoTemp.setCreatedTime(cttInfoShowPara.getCreatedTime());
         cttInfoTemp.setLastUpdBy(cttInfoShowPara.getLastUpdBy());
         cttInfoTemp.setLastUpdTime(cttInfoShowPara.getLastUpdTime());
-        cttInfoTemp.setRecversion(cttInfoShowPara.getRecversion());
+        cttInfoTemp.setRecVersion(cttInfoShowPara.getRecVersion());
         cttInfoTemp.setType(cttInfoShowPara.getType());
         return cttInfoTemp;
     }
@@ -272,7 +272,7 @@ public class CttInfoService {
         cttInfoShowTemp.setCreatedTime(cttInfoPara.getCreatedTime());
         cttInfoShowTemp.setLastUpdBy(cttInfoPara.getLastUpdBy());
         cttInfoShowTemp.setLastUpdTime(cttInfoPara.getLastUpdTime());
-        cttInfoShowTemp.setRecversion(cttInfoPara.getRecversion());
+        cttInfoShowTemp.setRecVersion(cttInfoPara.getRecVersion());
         cttInfoShowTemp.setType(cttInfoPara.getType());
         return cttInfoShowTemp;
     }

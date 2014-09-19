@@ -17,7 +17,7 @@ public class SignPartShow {
     private String lastUpdBy;
     private String lastUpdByName;
     private String lastUpdTime;
-    private Integer recversion;
+    private Integer recVersion;
     private String remark;
     public String getPkid() {
         return pkid;
@@ -103,11 +103,11 @@ public class SignPartShow {
     public void setLastUpdTime(String lastUpdTime) {
         this.lastUpdTime = lastUpdTime;
     }
-    public Integer getRecversion() {
-        return recversion;
+    public Integer getRecVersion() {
+        return recVersion;
     }
-    public void setRecversion(Integer recversion) {
-        this.recversion = recversion;
+    public void setRecVersion(Integer recVersion) {
+        this.recVersion = recVersion;
     }
     public String getRemark() {
         return remark;

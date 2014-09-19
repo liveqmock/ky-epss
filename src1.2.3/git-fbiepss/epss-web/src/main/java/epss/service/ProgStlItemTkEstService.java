@@ -54,8 +54,8 @@ public class ProgStlItemTkEstService {
 
     public void updateRecord(ProgStlItemTkEstShow progStlItemTkEstShowPara){
         ProgStlItemTkEst progStlItemTkEstTemp =fromModelShowToModel(progStlItemTkEstShowPara);
-        progStlItemTkEstTemp.setRecversion(
-                ToolUtil.getIntIgnoreNull(progStlItemTkEstShowPara.getEng_Recversion())+1);
+        progStlItemTkEstTemp.setRecVersion(
+                ToolUtil.getIntIgnoreNull(progStlItemTkEstShowPara.getEng_RecVersion())+1);
         progStlItemTkEstTemp.setArchivedFlag("0");
         progStlItemTkEstTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlItemTkEstTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
@@ -105,7 +105,7 @@ public class ProgStlItemTkEstService {
         progStlItemTkEstTemp.setCreatedTime(progStlItemTkEstShowPara.getEng_CreatedTime());
         progStlItemTkEstTemp.setLastUpdBy(progStlItemTkEstShowPara.getEng_LastUpdBy());
         progStlItemTkEstTemp.setLastUpdTime(progStlItemTkEstShowPara.getEng_LastUpdTime());
-        progStlItemTkEstTemp.setRecversion(progStlItemTkEstShowPara.getEng_Recversion());
+        progStlItemTkEstTemp.setRecVersion(progStlItemTkEstShowPara.getEng_RecVersion());
         return progStlItemTkEstTemp;
     }
 

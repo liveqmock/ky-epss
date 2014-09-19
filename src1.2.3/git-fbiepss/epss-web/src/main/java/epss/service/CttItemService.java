@@ -156,7 +156,7 @@ public class CttItemService {
         cttItemTemp.setLastUpdBy(cttItemShowPara.getLastUpdBy());
         cttItemTemp.setRemark(cttItemShowPara.getRemark());
         cttItemTemp.setCorrespondingPkid(cttItemShowPara.getCorrespondingPkid());
-        cttItemTemp.setRecversion(cttItemShowPara.getRecversion());
+        cttItemTemp.setRecVersion(cttItemShowPara.getRecVersion());
         return cttItemTemp;
     }
     /*层级关系到总包合同*/
@@ -176,8 +176,8 @@ public class CttItemService {
 
     public void updateRecord(CttItemShow cttItemShowPara) {
         CttItem cttItemTemp =fromModelShowToModel(cttItemShowPara);
-        cttItemTemp.setRecversion(
-                ToolUtil.getIntIgnoreNull(cttItemTemp.getRecversion())+1);
+        cttItemTemp.setRecVersion(
+                ToolUtil.getIntIgnoreNull(cttItemTemp.getRecVersion())+1);
         cttItemTemp.setArchivedFlag("0");
         cttItemTemp.setOriginFlag("0");
         cttItemTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());

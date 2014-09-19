@@ -19,7 +19,7 @@
         <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
         <result column="LAST_UPD_TIME" jdbcType="VARCHAR" property="lastUpdTime" />
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
-        <result column="RECVERSION" jdbcType="DECIMAL" property="recversion" />
+        <result column="REC_VERSION" jdbcType="DECIMAL" property="recVersion" />
         <result column="AUTO_LINK_ADD" jdbcType="CHAR" property="autoLinkAdd" />
     </resultMap>
     <select id="selectSubcttStlQMByStatusFlagBegin_End"
@@ -41,7 +41,7 @@
                 eis.CREATED_TIME,
                 eis.LAST_UPD_BY,
                 eis.LAST_UPD_TIME,
-                eis.RECVERSION,
+                eis.REC_VERSION,
                 eis.AUTO_LINK_ADD AS autoLinkAdd,
                 eis.FLOW_STATUS,
                 eis.FLOW_STATUS_REASON
@@ -124,7 +124,7 @@
                 eis.CREATED_TIME,
                 eis.LAST_UPD_BY,
                 eis.LAST_UPD_TIME,
-                eis.RECVERSION,
+                eis.REC_VERSION,
                 eis.FLOW_STATUS,
                 eis.FLOW_STATUS_REASON
             from

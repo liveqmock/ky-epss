@@ -61,8 +61,8 @@ public class ProgStlItemTkMeaService {
 
     public void updateRecord(ProgStlItemTkMeaShow progStlItemTkMeaShowPara){
         ProgStlItemTkMea esStlTkcttEngMeaTemp=fromModelShowToModel(progStlItemTkMeaShowPara);
-        esStlTkcttEngMeaTemp.setRecversion(
-                ToolUtil.getIntIgnoreNull(esStlTkcttEngMeaTemp.getRecversion())+1);
+        esStlTkcttEngMeaTemp.setRecVersion(
+                ToolUtil.getIntIgnoreNull(esStlTkcttEngMeaTemp.getRecVersion())+1);
         esStlTkcttEngMeaTemp.setArchivedFlag("0");
         esStlTkcttEngMeaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         esStlTkcttEngMeaTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
@@ -94,7 +94,7 @@ public class ProgStlItemTkMeaService {
         progStlItemTkMeaTemp.setCreatedTime(progStlItemTkMeaShowPara.getEng_CreatedTime());
         progStlItemTkMeaTemp.setLastUpdBy(progStlItemTkMeaShowPara.getEng_LastUpdBy());
         progStlItemTkMeaTemp.setLastUpdTime(progStlItemTkMeaShowPara.getEng_LastUpdTime());
-        progStlItemTkMeaTemp.setRecversion(progStlItemTkMeaShowPara.getEng_Recversion());
+        progStlItemTkMeaTemp.setRecVersion(progStlItemTkMeaShowPara.getEng_RecVersion());
         return progStlItemTkMeaTemp;
     }
 

@@ -50,7 +50,7 @@ public class ProgStlItemSubStlmentShow implements Serializable {
     private String engPMng_LastUpdBy;
     private String engPMng_LastUpdByName;
     private String engPMng_LastUpdTime;
-    private Integer engPMng_Recversion;
+    private Integer engPMng_RecVersion;
     private Integer engPMng_RowNo;
 
     public ProgStlItemSubStlmentShow() {
@@ -321,12 +321,12 @@ public class ProgStlItemSubStlmentShow implements Serializable {
         this.engPMng_LastUpdTime = engPMng_LastUpdTime;
     }
 
-    public Integer getEngPMng_Recversion() {
-        return engPMng_Recversion;
+    public Integer getEngPMng_RecVersion() {
+        return engPMng_RecVersion;
     }
 
-    public void setEngPMng_Recversion(Integer engPMng_Recversion) {
-        this.engPMng_Recversion = engPMng_Recversion;
+    public void setEngPMng_RecVersion(Integer engPMng_RecVersion) {
+        this.engPMng_RecVersion = engPMng_RecVersion;
     }
 
     public String getEngPMng_CreatedByName() {

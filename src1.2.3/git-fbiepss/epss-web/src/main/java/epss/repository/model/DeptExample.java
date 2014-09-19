@@ -1174,63 +1174,63 @@ public class DeptExample {
             return (Criteria) this;
         }
 
-        public Criteria andRecversionIsNull() {
-            addCriterion("RECVERSION is null");
+        public Criteria andRecVersionIsNull() {
+            addCriterion("REC_VERSION is null");
             return (Criteria) this;
         }
 
-        public Criteria andRecversionIsNotNull() {
-            addCriterion("RECVERSION is not null");
+        public Criteria andRecVersionIsNotNull() {
+            addCriterion("REC_VERSION is not null");
             return (Criteria) this;
         }
 
-        public Criteria andRecversionEqualTo(Integer value) {
-            addCriterion("RECVERSION =", value, "recversion");
+        public Criteria andRecVersionEqualTo(Integer value) {
+            addCriterion("REC_VERSION =", value, "recVersion");
             return (Criteria) this;
         }
 
-        public Criteria andRecversionNotEqualTo(Integer value) {
-            addCriterion("RECVERSION <>", value, "recversion");
+        public Criteria andRecVersionNotEqualTo(Integer value) {
+            addCriterion("REC_VERSION <>", value, "recVersion");
             return (Criteria) this;
         }
 
-        public Criteria andRecversionGreaterThan(Integer value) {
-            addCriterion("RECVERSION >", value, "recversion");
+        public Criteria andRecVersionGreaterThan(Integer value) {
+            addCriterion("REC_VERSION >", value, "recVersion");
             return (Criteria) this;
         }
 
-        public Criteria andRecversionGreaterThanOrEqualTo(Integer value) {
-            addCriterion("RECVERSION >=", value, "recversion");
+        public Criteria andRecVersionGreaterThanOrEqualTo(Integer value) {
+            addCriterion("REC_VERSION >=", value, "recVersion");
             return (Criteria) this;
         }
 
-        public Criteria andRecversionLessThan(Integer value) {
-            addCriterion("RECVERSION <", value, "recversion");
+        public Criteria andRecVersionLessThan(Integer value) {
+            addCriterion("REC_VERSION <", value, "recVersion");
             return (Criteria) this;
         }
 
-        public Criteria andRecversionLessThanOrEqualTo(Integer value) {
-            addCriterion("RECVERSION <=", value, "recversion");
+        public Criteria andRecVersionLessThanOrEqualTo(Integer value) {
+            addCriterion("REC_VERSION <=", value, "recVersion");
             return (Criteria) this;
         }
 
-        public Criteria andRecversionIn(List<Integer> values) {
-            addCriterion("RECVERSION in", values, "recversion");
+        public Criteria andRecVersionIn(List<Integer> values) {
+            addCriterion("REC_VERSION in", values, "recVersion");
             return (Criteria) this;
         }
 
-        public Criteria andRecversionNotIn(List<Integer> values) {
-            addCriterion("RECVERSION not in", values, "recversion");
+        public Criteria andRecVersionNotIn(List<Integer> values) {
+            addCriterion("REC_VERSION not in", values, "recVersion");
             return (Criteria) this;
         }
 
-        public Criteria andRecversionBetween(Integer value1, Integer value2) {
-            addCriterion("RECVERSION between", value1, value2, "recversion");
+        public Criteria andRecVersionBetween(Integer value1, Integer value2) {
+            addCriterion("REC_VERSION between", value1, value2, "recVersion");
             return (Criteria) this;
         }
 
-        public Criteria andRecversionNotBetween(Integer value1, Integer value2) {
-            addCriterion("RECVERSION not between", value1, value2, "recversion");
+        public Criteria andRecVersionNotBetween(Integer value1, Integer value2) {
+            addCriterion("REC_VERSION not between", value1, value2, "recVersion");
             return (Criteria) this;
         }
     }

@@ -28,7 +28,7 @@
     <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
     <result column="LAST_UPD_TIME" jdbcType="VARCHAR" property="lastUpdTime" />
     <result column="REMARK" jdbcType="VARCHAR" property="remark" />
-    <result column="RECVERSION" jdbcType="DECIMAL" property="recversion" />
+    <result column="REC_VERSION" jdbcType="DECIMAL" property="recVersion" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -106,7 +106,7 @@
     -->
     PKID, TID, DEPT_PKID, ID, NAME, PASSWD, ISSUPER, DUTY, TYPE, SEX, EMAIL, MOBILEPHONE, 
     PHONE, OTHERPHONE, ENABLED, ARCHIVED_FLAG, CREATED_BY, CREATED_TIME, LAST_UPD_BY, 
-    LAST_UPD_TIME, REMARK, RECVERSION
+    LAST_UPD_TIME, REMARK, REC_VERSION
   </sql>
   <select id="selectByExample" parameterType="epss.repository.model.OperExample" resultMap="BaseResultMap">
     <!--
@@ -173,14 +173,14 @@
       MOBILEPHONE, PHONE, OTHERPHONE, 
       ENABLED, ARCHIVED_FLAG, CREATED_BY, 
       CREATED_TIME, LAST_UPD_BY, LAST_UPD_TIME, 
-      REMARK, RECVERSION)
+      REMARK, REC_VERSION)
     values (#{pkid,jdbcType=VARCHAR}, #{tid,jdbcType=VARCHAR}, #{deptPkid,jdbcType=VARCHAR}, 
       #{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{passwd,jdbcType=VARCHAR}, #{issuper,jdbcType=CHAR}, 
       #{duty,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{email,jdbcType=VARCHAR}, 
       #{mobilephone,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{otherphone,jdbcType=VARCHAR}, 
       #{enabled,jdbcType=CHAR}, #{archivedFlag,jdbcType=CHAR}, #{createdBy,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=VARCHAR}, #{lastUpdBy,jdbcType=VARCHAR}, #{lastUpdTime,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{recversion,jdbcType=DECIMAL})
+      #{remark,jdbcType=VARCHAR}, #{recVersion,jdbcType=DECIMAL})
   </insert>
   <insert id="insertSelective" parameterType="epss.repository.model.Oper">
     <!--
@@ -254,8 +254,8 @@
       <if test="remark != null">
         REMARK,
       </if>
-      <if test="recversion != null">
-        RECVERSION,
+      <if test="recVersion != null">
+        REC_VERSION,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -320,8 +320,8 @@
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="recversion != null">
-        #{recversion,jdbcType=DECIMAL},
+      <if test="recVersion != null">
+        #{recVersion,jdbcType=DECIMAL},
       </if>
     </trim>
   </insert>
@@ -407,8 +407,8 @@
       <if test="record.remark != null">
         REMARK = #{record.remark,jdbcType=VARCHAR},
       </if>
-      <if test="record.recversion != null">
-        RECVERSION = #{record.recversion,jdbcType=DECIMAL},
+      <if test="record.recVersion != null">
+        REC_VERSION = #{record.recVersion,jdbcType=DECIMAL},
       </if>
     </set>
     <if test="_parameter != null">
@@ -443,7 +443,7 @@
       LAST_UPD_BY = #{record.lastUpdBy,jdbcType=VARCHAR},
       LAST_UPD_TIME = #{record.lastUpdTime,jdbcType=VARCHAR},
       REMARK = #{record.remark,jdbcType=VARCHAR},
-      RECVERSION = #{record.recversion,jdbcType=DECIMAL}
+      REC_VERSION = #{record.recVersion,jdbcType=DECIMAL}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -516,8 +516,8 @@
       <if test="remark != null">
         REMARK = #{remark,jdbcType=VARCHAR},
       </if>
-      <if test="recversion != null">
-        RECVERSION = #{recversion,jdbcType=DECIMAL},
+      <if test="recVersion != null">
+        REC_VERSION = #{recVersion,jdbcType=DECIMAL},
       </if>
     </set>
     where PKID = #{pkid,jdbcType=VARCHAR}
@@ -549,7 +549,7 @@
       LAST_UPD_BY = #{lastUpdBy,jdbcType=VARCHAR},
       LAST_UPD_TIME = #{lastUpdTime,jdbcType=VARCHAR},
       REMARK = #{remark,jdbcType=VARCHAR},
-      RECVERSION = #{recversion,jdbcType=DECIMAL}
+      REC_VERSION = #{recVersion,jdbcType=DECIMAL}
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
 </mapper>

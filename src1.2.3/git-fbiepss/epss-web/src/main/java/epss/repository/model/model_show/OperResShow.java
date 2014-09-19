@@ -18,7 +18,7 @@ public class OperResShow {
     private String lastUpdByName;
     private String lastUpdTime;
     private String remark;
-    private Integer recversion;
+    private Integer recVersion;
     private Boolean isSel;
     private String type;
     public String getPkid() {
@@ -93,11 +93,11 @@ public class OperResShow {
     public void setRemark(String remark) {
         this.remark = remark == null ? null : remark.trim();
     }
-    public Integer getRecversion() {
-        return recversion;
+    public Integer getRecVersion() {
+        return recVersion;
     }
-    public void setRecversion(Integer recversion) {
-        this.recversion = recversion;
+    public void setRecVersion(Integer recVersion) {
+        this.recVersion = recVersion;
     }
 
     public String getOperName() {

@@ -46,7 +46,7 @@ public class ProgStlItemSubMShow implements Serializable {
     private String engMMng_LastUpdBy;
     private String engMMng_LastUpdByName;
     private String engMMng_LastUpdTime;
-    private Integer engMMng_Recversion;
+    private Integer engMMng_RecVersion;
 
     public ProgStlItemSubMShow() {
 
@@ -293,12 +293,12 @@ public class ProgStlItemSubMShow implements Serializable {
         this.engMMng_LastUpdTime = engMMng_LastUpdTime;
     }
 
-    public Integer getEngMMng_Recversion() {
-        return engMMng_Recversion;
+    public Integer getEngMMng_RecVersion() {
+        return engMMng_RecVersion;
     }
 
-    public void setEngMMng_Recversion(Integer engMMng_Recversion) {
-        this.engMMng_Recversion = engMMng_Recversion;
+    public void setEngMMng_RecVersion(Integer engMMng_RecVersion) {
+        this.engMMng_RecVersion = engMMng_RecVersion;
     }
 
     public String getEngMMng_LastUpdByName() {

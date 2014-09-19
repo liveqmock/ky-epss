@@ -45,7 +45,7 @@ public class ProgStlItemTkEstShow implements Serializable {
     private String eng_LastUpdBy;
     private String eng_LastUpdByName;
     private String eng_LastUpdTime;
-    private Integer eng_Recversion;
+    private Integer eng_RecVersion;
 
     public ProgStlItemTkEstShow() {
 
@@ -267,12 +267,12 @@ public class ProgStlItemTkEstShow implements Serializable {
         this.eng_LastUpdTime = eng_LastUpdTime;
     }
 
-    public Integer getEng_Recversion() {
-        return eng_Recversion;
+    public Integer getEng_RecVersion() {
+        return eng_RecVersion;
     }
 
-    public void setEng_Recversion(Integer eng_Recversion) {
-        this.eng_Recversion = eng_Recversion;
+    public void setEng_RecVersion(Integer eng_RecVersion) {
+        this.eng_RecVersion = eng_RecVersion;
     }
 
     public BigDecimal getEng_BeginToCurrentPeriodEAmount() {

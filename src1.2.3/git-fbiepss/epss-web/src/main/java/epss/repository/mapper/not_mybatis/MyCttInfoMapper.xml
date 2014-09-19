@@ -26,7 +26,7 @@
         <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
         <result column="LAST_UPD_TIME" jdbcType="VARCHAR" property="lastUpdTime" />
         <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
-        <result column="RECVERSION" jdbcType="DECIMAL" property="recversion" />
+        <result column="REC_VERSION" jdbcType="DECIMAL" property="recVersion" />
         <result column="TYPE" jdbcType="CHAR" property="type" />
     </resultMap>
     <select id="selectCttByStatusFlagBegin_End" parameterType="epss.repository.model.model_show.CttInfoShow"
@@ -52,7 +52,7 @@
                 eic.CREATED_TIME,
                 eic.LAST_UPD_BY,
                 eic.LAST_UPD_TIME,
-                eic.RECVERSION,
+                eic.REC_VERSION,
                 eic.FLOW_STATUS,
                 '' AS STR_FLOW_STATUS_BEGIN,
                 '' AS STR_FLOW_STATUS_END,

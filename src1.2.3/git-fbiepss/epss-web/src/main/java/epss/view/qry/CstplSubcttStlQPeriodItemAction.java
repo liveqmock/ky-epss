@@ -283,7 +283,7 @@ public class CstplSubcttStlQPeriodItemAction {
                     progStlItemSubQShowTemp.setEngQMng_CreatedTime(progStlItemSubQ.getCreatedTime());
                     progStlItemSubQShowTemp.setEngQMng_LastUpdBy(progStlItemSubQ.getLastUpdBy());
                     progStlItemSubQShowTemp.setEngQMng_LastUpdTime(progStlItemSubQ.getLastUpdTime());
-                    progStlItemSubQShowTemp.setEngQMng_Recversion(progStlItemSubQ.getRecversion());
+                    progStlItemSubQShowTemp.setEngQMng_RecVersion(progStlItemSubQ.getRecVersion());
                 }
             }
             sProgStlItemSubQShowListPara.add(progStlItemSubQShowTemp) ;

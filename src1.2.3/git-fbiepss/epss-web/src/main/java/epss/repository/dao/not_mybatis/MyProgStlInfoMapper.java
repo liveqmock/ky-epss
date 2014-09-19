@@ -105,7 +105,7 @@ public interface MyProgStlInfoMapper {
             "     ,psi.CREATED_TIME as createdTime" +
             "     ,psi.LAST_UPD_BY as lastUpdBy" +
             "     ,psi.LAST_UPD_TIME as lastUpdTime" +
-            "     ,psi.RECVERSION as recversion" +
+            "     ,psi.REC_VERSION as recVersion" +
             "     ,psi.AUTO_LINK_ADD as autoLinkAdd" +
             " from " +
             "      PROG_STL_INFO psi" +

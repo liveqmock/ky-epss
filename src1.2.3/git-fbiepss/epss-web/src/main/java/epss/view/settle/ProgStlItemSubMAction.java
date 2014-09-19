@@ -171,7 +171,7 @@ public class ProgStlItemSubMAction {
                 progStlItemSubMShowTemp.setEngMMng_CreatedTime(progStlItemSubM.getCreatedTime());
                 progStlItemSubMShowTemp.setEngMMng_LastUpdBy(progStlItemSubM.getLastUpdBy());
                 progStlItemSubMShowTemp.setEngMMng_LastUpdTime(progStlItemSubM.getLastUpdTime());
-                progStlItemSubMShowTemp.setEngMMng_Recversion(progStlItemSubM.getRecversion());
+                progStlItemSubMShowTemp.setEngMMng_RecVersion(progStlItemSubM.getRecVersion());
             }
             sProgStlItemSubMShowListPara.add(progStlItemSubMShowTemp) ;
             recursiveDataTable(progStlItemSubMShowTemp.getSubctt_Pkid(), cttItemListPara, sProgStlItemSubMShowListPara);

@@ -111,7 +111,7 @@ public class OperResService {
         operResPara.setLastUpdBy(record.getLastUpdBy());
         operResPara.setLastUpdTime(record.getLastUpdTime());
         operResPara.setRemark(record.getRemark());
-        operResPara.setRecversion( ToolUtil.getIntIgnoreNull(record.getRecversion()));
+        operResPara.setRecVersion( ToolUtil.getIntIgnoreNull(record.getRecVersion()));
         return operResPara;
     }
     public OperResShow fromModelToModelShow(OperRes operResPara) {
@@ -127,7 +127,7 @@ public class OperResService {
         operResShowTemp.setLastUpdBy(operResPara.getLastUpdBy());
         operResShowTemp.setLastUpdTime(operResPara.getLastUpdTime());
         operResShowTemp.setRemark(operResPara.getRemark());
-        operResShowTemp.setRecversion( ToolUtil.getIntIgnoreNull(operResPara.getRecversion()));
+        operResShowTemp.setRecVersion( ToolUtil.getIntIgnoreNull(operResPara.getRecVersion()));
         operResShowTemp.setType(operResPara.getType());
         return operResShowTemp;
     }

@@ -72,7 +72,7 @@ public interface MyTaskMapper {
             "        select" +
             "            distinct" +
             "            opr.INFO_TYPE as type," +
-            "            opr.INFO_PKID as pkid," +
+            "            eci.PKID as pkid," +
             "            opr.FLOW_STATUS as operResFlowStatus," +
             "            eci.ID as id," +
             "            eci.NAME as name," +
@@ -97,7 +97,7 @@ public interface MyTaskMapper {
             "         select" +
             "             distinct" +
             "             opr.INFO_TYPE as type," +
-            "             opr.INFO_PKID as pkid," +
+            "             stl.PKID as pkid," +
             "             opr.FLOW_STATUS as operResFlowStatus," +
             "             stl.ID as id," +
             "             (select name from CTT_INFO where pkid=stl.stl_pkid) as name," +

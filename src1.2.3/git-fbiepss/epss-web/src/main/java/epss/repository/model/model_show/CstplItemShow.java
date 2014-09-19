@@ -35,7 +35,7 @@ public class CstplItemShow implements Serializable {
     private String createdTime;
     private String lastUpdBy;
     private String lastUpdTime;
-    private Integer recversion;
+    private Integer recVersion;
 
     // 对比项
     private String pkidContrast;
@@ -60,7 +60,7 @@ public class CstplItemShow implements Serializable {
     private String createdTimeContrast;
     private String lastUpdByContrast;
     private String lastUpdTimeContrast;
-    private Integer recversionContrast;
+    private Integer recVersionContrast;
 
     /*编号，用作显示用，不在数据库里存储，动态显示。依据correspondingPkid*/
     private String correspondingItemNoContrast;
@@ -405,12 +405,12 @@ public class CstplItemShow implements Serializable {
         this.archivedFlag = archivedFlag;
     }
 
-    public Integer getRecversion() {
-        return recversion;
+    public Integer getRecVersion() {
+        return recVersion;
     }
 
-    public void setRecversion(Integer recversion) {
-        this.recversion = recversion;
+    public void setRecVersion(Integer recVersion) {
+        this.recVersion = recVersion;
     }
 
     public String getArchivedFlagContrast() {
@@ -421,12 +421,12 @@ public class CstplItemShow implements Serializable {
         this.archivedFlagContrast = archivedFlagContrast;
     }
 
-    public Integer getRecversionContrast() {
-        return recversionContrast;
+    public Integer getRecVersionContrast() {
+        return recVersionContrast;
     }
 
-    public void setRecversionContrast(Integer recversionContrast) {
-        this.recversionContrast = recversionContrast;
+    public void setRecVersionContrast(Integer recVersionContrast) {
+        this.recVersionContrast = recVersionContrast;
     }
 
     public String getStrNo() {

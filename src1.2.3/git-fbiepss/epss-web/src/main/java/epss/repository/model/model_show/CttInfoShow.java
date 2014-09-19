@@ -37,7 +37,7 @@ public class CttInfoShow implements Serializable {
     private String lastUpdByName;
     private String lastUpdTime;
     private String spareField;
-    private Integer recversion;
+    private Integer recVersion;
     private String type;
     private Boolean isSeled;
     public String getPkid() {
@@ -46,7 +46,7 @@ public class CttInfoShow implements Serializable {
 
     public CttInfoShow(String pkid, String id, String cttType, String name, String remark,
                        String flowStatus, String flowStatusReason, String lastUpdBy,
-                       String lastUpdTime, Integer recversion, Boolean isSeled) {
+                       String lastUpdTime, Integer recVersion, Boolean isSeled) {
         this.pkid = pkid;
         this.id = id;
         this.cttType=cttType;
@@ -56,7 +56,7 @@ public class CttInfoShow implements Serializable {
         this.flowStatusReason = flowStatusReason;
         this.lastUpdBy=lastUpdBy;
         this.lastUpdTime=lastUpdTime;
-        this.recversion = recversion;
+        this.recVersion = recVersion;
         this.isSeled=isSeled;
     }
 
@@ -273,12 +273,12 @@ public class CttInfoShow implements Serializable {
         this.remark = remark;
     }
 
-    public Integer getRecversion() {
-        return recversion;
+    public Integer getRecVersion() {
+        return recVersion;
     }
 
-    public void setRecversion(Integer recversion) {
-        this.recversion = recversion;
+    public void setRecVersion(Integer recVersion) {
+        this.recVersion = recVersion;
     }
 
     public String getCreatedByName() {

@@ -432,7 +432,7 @@ public class TkMeaCSubStlQItemAction {
                 itemUnit.getLastUpdBy() ,
                 strLastUpdByName,
                 itemUnit.getLastUpdTime() ,
-                itemUnit.getRecversion(),
+                itemUnit.getRecVersion(),
                 itemUnit.getRemark(),
                 itemUnit.getCorrespondingPkid(),
                 "",

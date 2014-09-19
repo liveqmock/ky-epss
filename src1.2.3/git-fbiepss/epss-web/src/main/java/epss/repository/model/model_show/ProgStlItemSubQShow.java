@@ -45,7 +45,7 @@ public class ProgStlItemSubQShow implements Serializable {
     private String engQMng_LastUpdBy;
     private String engQMng_LastUpdByName;
     private String engQMng_LastUpdTime;
-    private Integer engQMng_Recversion;
+    private Integer engQMng_RecVersion;
 
     public ProgStlItemSubQShow() {
 
@@ -299,12 +299,12 @@ public class ProgStlItemSubQShow implements Serializable {
         this.engQMng_LastUpdTime = engQMng_LastUpdTime;
     }
 
-    public Integer getEngQMng_Recversion() {
-        return engQMng_Recversion;
+    public Integer getEngQMng_RecVersion() {
+        return engQMng_RecVersion;
     }
 
-    public void setEngQMng_Recversion(Integer engQMng_Recversion) {
-        this.engQMng_Recversion = engQMng_Recversion;
+    public void setEngQMng_RecVersion(Integer engQMng_RecVersion) {
+        this.engQMng_RecVersion = engQMng_RecVersion;
     }
 
 }

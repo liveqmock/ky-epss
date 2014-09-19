@@ -101,7 +101,7 @@ public class SignPartService {
         signPartTemp.setCreatedTime(signPartShowPara.getCreatedTime());
         signPartTemp.setLastUpdBy(signPartShowPara.getLastUpdBy());
         signPartTemp.setLastUpdTime(signPartShowPara.getLastUpdTime());
-        signPartTemp.setRecversion(signPartShowPara.getRecversion());
+        signPartTemp.setRecVersion(signPartShowPara.getRecVersion());
         signPartTemp.setRemark(signPartShowPara.getRemark());
         return signPartTemp;
     }
@@ -121,14 +121,14 @@ public class SignPartService {
         signPartShowTemp.setCreatedTime(signPartPara.getCreatedTime());
         signPartShowTemp.setLastUpdBy(signPartPara.getLastUpdBy());
         signPartShowTemp.setLastUpdTime(signPartPara.getLastUpdTime());
-        signPartShowTemp.setRecversion(signPartPara.getRecversion());
+        signPartShowTemp.setRecVersion(signPartPara.getRecVersion());
         signPartShowTemp.setRemark(signPartPara.getRemark());
         return signPartShowTemp;
     }
 
     public void updateRecord(SignPartShow signPartShowPara){
-        signPartShowPara.setRecversion(
-                ToolUtil.getIntIgnoreNull(signPartShowPara.getRecversion())+1);
+        signPartShowPara.setRecVersion(
+                ToolUtil.getIntIgnoreNull(signPartShowPara.getRecVersion())+1);
         signPartShowPara.setArchivedFlag("0");
         signPartShowPara.setOriginFlag("0");
         signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
