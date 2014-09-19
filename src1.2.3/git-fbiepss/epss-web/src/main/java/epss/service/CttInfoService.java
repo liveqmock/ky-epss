@@ -131,6 +131,13 @@ public class CttInfoService {
         return cttInfoMapper.countByExample(example) >= 1;
     }
 
+    public boolean findChildRecordsByPkid(String strPkidPara) {
+        CttInfoExample example = new CttInfoExample();
+        CttInfoExample.Criteria criteria = example.createCriteria();
+        criteria.andParentPkidEqualTo(strPkidPara);
+        return (cttInfoMapper.selectByExample(example)).size()>0;
+    }
+
     public void insertRecord(CttInfoShow cttInfoShowPara) {
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();

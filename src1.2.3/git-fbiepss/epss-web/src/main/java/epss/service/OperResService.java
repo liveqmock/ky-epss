@@ -80,6 +80,9 @@ public class OperResService {
 
     @Transactional
     public String deleteResRecord(CttInfoShow cttInfoShowPara){
+        if (cttInfoService.findChildRecordsByPkid(cttInfoShowPara.getPkid())) {
+            return "该层下有分支，无法删除。";
+        }
         if (EnumResType.RES_TYPE0.getCode().equals(cttInfoShowPara.getCttType())
                 || EnumResType.RES_TYPE1.getCode().equals(cttInfoShowPara.getCttType())
                 || EnumResType.RES_TYPE2.getCode().equals(cttInfoShowPara.getCttType())){

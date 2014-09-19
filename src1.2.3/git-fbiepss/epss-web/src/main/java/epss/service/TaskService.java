@@ -115,7 +115,7 @@ public class TaskService {
                                 continue;
                             }
                         }
-                        if (taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getFlowStatus()) &&
+                        if ((((Integer.parseInt(taskShowGroupUnit.getFlowStatus()))-1)+"").equals(detailTaskShowUnit.getFlowStatus()) &&
                             taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getOperResFlowStatus())) {
                             intHasRecordCount++;
                             detailTaskShowUnit.setId(

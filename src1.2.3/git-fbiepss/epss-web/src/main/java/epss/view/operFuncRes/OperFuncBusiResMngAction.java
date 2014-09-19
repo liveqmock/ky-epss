@@ -587,8 +587,6 @@ public class OperFuncBusiResMngAction implements Serializable{
             taskFunctionList.add(
                     new SelectItem(EnumFlowStatus.FLOW_STATUS2.getCode(), EnumFlowStatus.FLOW_STATUS2.getTitle()));
             taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS4.getCode(), EnumFlowStatus.FLOW_STATUS4.getTitle()));
-            taskFunctionList.add(
                     new SelectItem(EnumFlowStatus.FLOW_STATUS5.getCode(), EnumFlowStatus.FLOW_STATUS5.getTitle()));
         }else if (cttInfoShowSel.getCttType().equals(EnumResType.RES_TYPE5.getCode())){
             taskFunctionList.add(
