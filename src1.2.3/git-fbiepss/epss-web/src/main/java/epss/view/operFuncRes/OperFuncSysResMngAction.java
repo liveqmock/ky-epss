@@ -36,26 +36,28 @@ public class OperFuncSysResMngAction implements Serializable{
     private List<OperFuncResShow> operFuncResShowList;
     private List<DeptOperShow> deptOperShowSeledList;
     private TreeNode deptOperRoot;
-    private List<SelectItem> targetMachineList;
-    private String strResTypeSeled;
+    private List<SelectItem> menuTypeList;
+    private String strMenuTypeSeled;
 
     @PostConstruct
     public void init() {
         operFuncResShowList = new ArrayList<>();
         deptOperShowSeledList = new ArrayList<>();
-        targetMachineList = new ArrayList<>();
-        strResTypeSeled="default";
-        targetMachineList.add(new SelectItem("default", "业务资源"));
-        targetMachineList.add(new SelectItem("system", "系统资源"));
+        menuTypeList = new ArrayList<>();
+        strMenuTypeSeled="default";
+        menuTypeList.add(new SelectItem("0", "查询"));
+        menuTypeList.add(new SelectItem("1", "录入"));
+        menuTypeList.add(new SelectItem("2", "流程"));
+        menuTypeList.add(new SelectItem("3", "系统"));
         // 资源-用户-功能
-        initRes(strResTypeSeled);
+        initRes(strMenuTypeSeled);
         initDeptOper();
     }
-    private void initRes(String strTargetmachinePara){
+    private void initRes(String strMenuTypePara){
         deptOperShowSeledList.clear();
         operFuncResShowList.clear();
         Ptmenu ptmenuTemp=new Ptmenu();
-        ptmenuTemp.setTargetmachine(strTargetmachinePara);
+        ptmenuTemp.setMenuType(strMenuTypePara);
         List<Ptmenu> ptmenuListTemp=menuService.selectListByModel(ptmenuTemp);
         OperRes operResTemp=new OperRes();
         operResTemp.setType("system");
@@ -99,7 +101,7 @@ public class OperFuncSysResMngAction implements Serializable{
     }
 
     public void selectAction(){
-        initRes(strResTypeSeled);
+        initRes(strMenuTypeSeled);
     }
 
     
@@ -176,7 +178,7 @@ public class OperFuncSysResMngAction implements Serializable{
                 }
                 MessageUtil.addInfo("权限添加成功!");
             }
-            initRes(strResTypeSeled);
+            initRes(strMenuTypeSeled);
             initDeptOper();
         }catch (Exception e){
             MessageUtil.addError(e.getMessage());
@@ -186,12 +188,12 @@ public class OperFuncSysResMngAction implements Serializable{
 
     /*智能字段 Start*/
 
-    public List<SelectItem> getTargetMachineList() {
-        return targetMachineList;
+    public List<SelectItem> getMenuTypeList() {
+        return menuTypeList;
     }
 
-    public void setTargetMachineList(List<SelectItem> targetMachineList) {
-        this.targetMachineList = targetMachineList;
+    public void setMenuTypeList(List<SelectItem> menuTypeList) {
+        this.menuTypeList = menuTypeList;
     }
 
     public OperResService getOperResService() {
@@ -226,12 +228,12 @@ public class OperFuncSysResMngAction implements Serializable{
         this.operFuncResShowList = operFuncResShowList;
     }
 
-    public String getStrResTypeSeled() {
-        return strResTypeSeled;
+    public String getStrMenuTypeSeled() {
+        return strMenuTypeSeled;
     }
 
-    public void setStrResTypeSeled(String strResTypeSeled) {
-        this.strResTypeSeled = strResTypeSeled;
+    public void setStrMenuTypeSeled(String strMenuTypeSeled) {
+        this.strMenuTypeSeled = strMenuTypeSeled;
     }
 
     public MenuService getMenuService() {
