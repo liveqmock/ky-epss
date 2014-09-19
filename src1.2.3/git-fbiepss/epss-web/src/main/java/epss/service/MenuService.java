@@ -32,7 +32,10 @@ public class MenuService {
         if (!ToolUtil.getStrIgnoreNull(ptmenuPara.getMenudesc()).equals("")){
             criteria.andMenudescLike("%"+ptmenuPara .getMenudesc()+"%");
         }
-        example.setOrderByClause("LEVELIDX ASC") ;
+        if (!ToolUtil.getStrIgnoreNull(ptmenuPara.getMenuType()).equals("")){
+            criteria.andMenuTypeLike("%"+ptmenuPara .getMenuType()+"%");
+        }
+        example.setOrderByClause("MENUDESC ASC") ;
         return ptmenuMapper.selectByExample(example);
     }
 

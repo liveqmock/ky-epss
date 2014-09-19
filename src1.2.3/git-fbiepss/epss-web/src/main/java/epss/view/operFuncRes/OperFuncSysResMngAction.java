@@ -44,7 +44,8 @@ public class OperFuncSysResMngAction implements Serializable{
         operFuncResShowList = new ArrayList<>();
         deptOperShowSeledList = new ArrayList<>();
         menuTypeList = new ArrayList<>();
-        strMenuTypeSeled="default";
+        strMenuTypeSeled="0";
+        menuTypeList.add(new SelectItem("",  "全部"));
         menuTypeList.add(new SelectItem("0", "查询"));
         menuTypeList.add(new SelectItem("1", "录入"));
         menuTypeList.add(new SelectItem("2", "流程"));

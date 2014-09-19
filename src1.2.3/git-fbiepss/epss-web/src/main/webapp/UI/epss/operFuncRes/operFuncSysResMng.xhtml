@@ -26,10 +26,11 @@
                     <h:panelGrid columns="2">
                         <p:outputLabel value="资源类型：" for="targetmachine"/>
                         <p:selectOneMenu id="targetmachine"
-                                         value="#{operFuncSysResMngAction.strResTypeSeled}">
+                                         value="#{operFuncSysResMngAction.strMenuTypeSeled}">
                             <p:ajax update="resDataTable,msgs"
-                            listener="#{operFuncSysResMngAction.selectAction()}"></p:ajax>
-                            <f:selectItems value="#{operFuncSysResMngAction.targetMachineList}"/>
+                                listener="#{operFuncSysResMngAction.selectAction()}">
+                            </p:ajax>
+                            <f:selectItems value="#{operFuncSysResMngAction.menuTypeList}"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
                     <p:dataTable id="resDataTable"
@@ -71,7 +72,8 @@
                                              update=":form:resDataTable,msgs"
                                              oncomplete="wVDlgViewForPower.hide()">
                             </p:commandButton>
-                            <p:outputLabel value="(不选人员,直接点击[提交]按钮,即为删除人员指派。)" for="submitBtnForPower"/>
+                            <p:outputLabel value="(不选人员,直接点击[提交]按钮,即为删除人员指派。)"
+                                for="submitBtnForPower"/>
                         </h:panelGrid>
                         <p:panel header="人员列表">
                             <p:treeTable id="operTreeTable"
@@ -90,7 +92,7 @@
                                 </p:column>
                                 <p:column headerText="选择" style="width:30px;text-align:center">
                                     <p:selectBooleanCheckbox value="#{node.isSeled}"
-                                                             rendered="#{node.type eq '0'?'false':node.pkid eq 'ROOT'?'false':'true'}">
+                                        rendered="#{node.type eq '0'?'false':node.pkid eq 'ROOT'?'false':'true'}">
                                         <p:ajax  listener="#{operFuncSysResMngAction.selOperRecordAction(node)}"/>
                                     </p:selectBooleanCheckbox>
                                 </p:column>

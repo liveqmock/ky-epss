@@ -35,6 +35,10 @@
                             <p:selectOneMenu id="targetmachine" value="#{menuAction.ptmenuQry.targetmachine}">
                                 <f:selectItems value="#{menuAction.targetMachineList}"/>
                             </p:selectOneMenu>
+                            <p:outputLabel value="菜单类型：" for="menuType"/>
+                            <p:selectOneMenu id="menuType" value="#{menuAction.ptmenuQry.menuType}">
+                                <f:selectItems value="#{menuAction.menuTypeList}"/>
+                            </p:selectOneMenu>
                         </h:panelGrid>
                         <h:panelGrid columns="3">
                             <p:commandButton id="qryBtn" value="查询"
@@ -107,6 +111,9 @@
                     <p:column headerText="资源类型" style="width:60px;text-align:center">
                         <h:outputText value="#{record.infotype}"/>
                     </p:column>
+                    <p:column headerText="菜单类型" style="width:60px;text-align:center">
+                        <h:outputText value="#{record.menuType}"/>
+                    </p:column>
                     <p:column headerText="功能分类" style="width:60px;text-align:center">
                         <h:outputText value="#{record.flowstatus}"/>
                     </p:column>
@@ -151,6 +158,9 @@
                             <p:outputLabel value="资源分类：" for="infotypeAdd"/>
                             <p:selectOneMenu id="infotypeAdd" value="#{menuAction.ptmenuAdd.infotype}">
                                 <f:selectItems value="#{esCommon.resTypeList}"/>
+                            </p:selectOneMenu>
+                            <p:selectOneMenu id="菜单类型" value="#{menuAction.ptmenuAdd.menuType}">
+                                <f:selectItems value="#{menuAction.menuTypeList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="功能类型：" for="flowstatusAdd"/>
                             <p:selectOneMenu id="flowstatusAdd" value="#{menuAction.ptmenuAdd.flowstatus}">
@@ -216,6 +226,10 @@
                             <p:outputLabel value="资源分类：" for="infotypeUpd"/>
                             <p:selectOneMenu id="infotypeUpd" value="#{menuAction.ptmenuUpd.infotype}">
                                 <f:selectItems value="#{esCommon.resTypeList}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="菜单类型：" for="menuTypeUpd"/>
+                            <p:selectOneMenu id="menuTypeUpd" value="#{menuAction.ptmenuUpd.menuType}">
+                                <f:selectItems value="#{menuAction.menuTypeList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="功能类型：" for="flowstatusUpd"/>
                             <p:selectOneMenu id="flowstatusUpd" value="#{menuAction.ptmenuUpd.flowstatus}">
@@ -284,6 +298,10 @@
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="资源分类：" for="infotypeUpd"/>
                             <p:inputText id="infotypeDel" value="#{menuAction.ptmenuDel.infotype}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                            <p:outputLabel value="菜单类型：" for="menuTypeUpd"/>
+                            <p:inputText id="menuTypeDel" value="#{menuAction.ptmenuDel.menuType}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="功能类型：" for="flowstatusUpd"/>

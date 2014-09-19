@@ -46,6 +46,7 @@ public class MenuAction {
     private List<SelectItem> isLeafList;
     private List<SelectItem> openWindowList;
     private List<SelectItem> targetMachineList;
+    private List<SelectItem> menuTypeList;
 
     @PostConstruct
     public void init() {
@@ -58,6 +59,11 @@ public class MenuAction {
         targetMachineList = new ArrayList<>();
         targetMachineList.add(new SelectItem("default", "业务资源"));
         targetMachineList.add(new SelectItem("system", "系统资源"));
+        menuTypeList = new ArrayList<>();
+        menuTypeList.add(new SelectItem("0", "查询"));
+        menuTypeList.add(new SelectItem("1", "录入"));
+        menuTypeList.add(new SelectItem("2", "流程"));
+        menuTypeList.add(new SelectItem("3", "系统"));
         resetAction();
     }
 
@@ -296,5 +302,13 @@ public class MenuAction {
 
     public void setTargetMachineList(List<SelectItem> targetMachineList) {
         this.targetMachineList = targetMachineList;
+    }
+
+    public List<SelectItem> getMenuTypeList() {
+        return menuTypeList;
+    }
+
+    public void setMenuTypeList(List<SelectItem> menuTypeList) {
+        this.menuTypeList = menuTypeList;
     }
 }
