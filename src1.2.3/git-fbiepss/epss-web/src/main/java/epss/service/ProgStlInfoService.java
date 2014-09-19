@@ -3,6 +3,7 @@ package epss.service;
 import epss.common.enums.EnumResType;
 import epss.common.enums.EnumFlowStatus;
 import epss.common.enums.EnumFlowStatusReason;
+import epss.common.enums.EnumSubcttType;
 import epss.repository.dao.FlowCtrlHisMapper;
 import epss.repository.model.model_show.ProgStlInfoShow;
 import skyline.util.ToolUtil;
@@ -31,6 +32,8 @@ public class ProgStlInfoService {
     private MyProgStlInfoMapper myProgStlInfoMapper;
     @Resource
     private FlowCtrlHisMapper flowCtrlHisMapper;
+    @Resource
+    private CttInfoService cttInfoService;
     @Resource
     private ProgStlItemSubQService progStlItemSubQService;
     @Resource
@@ -415,17 +418,26 @@ public class ProgStlInfoService {
                     EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode().equals(progStlInfoPara.getFlowStatusReason())) {
                 // 本分包合同及本期的分包结算单不存在
                 if(getInitStlListByModel(progStlInfoSubStlmentTemp).size()<=0) {
-                    ProgStlInfo progStlInfoSubMTemp=new ProgStlInfo();
-                    progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE4.getCode());
-                    progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
-                    progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
-                    progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
-                    // 本分包合同及本期的分包材料结算也复核了
-                    if(getInitStlListByModel(progStlInfoSubMTemp).size()>0) {
+                    if(EnumSubcttType.TYPE0.getCode().equals(
+                        cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
                         progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
                         progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                         progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
                         insertRecord(progStlInfoSubStlmentTemp);
+                    }else if(EnumSubcttType.TYPE3.getCode().equals(
+                            cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
+                        ProgStlInfo progStlInfoSubMTemp = new ProgStlInfo();
+                        progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE4.getCode());
+                        progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                        // 本分包合同及本期的分包材料结算也复核了
+                        if (getInitStlListByModel(progStlInfoSubMTemp).size() > 0) {
+                            progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                            progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                            progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                            insertRecord(progStlInfoSubStlmentTemp);
+                        }
                     }
                 }
             }
@@ -445,17 +457,26 @@ public class ProgStlInfoService {
                     EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode().equals(progStlInfoPara.getFlowStatusReason())) {
                 // 本分包合同及本期的分包结算单不存在
                 if(getInitStlListByModel(progStlInfoSubStlmentTemp).size()<=0) {
-                    ProgStlInfo progStlInfoSubMTemp=new ProgStlInfo();
-                    progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE3.getCode());
-                    progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
-                    progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
-                    progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
-                    // 本分包合同及本期的分包材料结算也复核了
-                    if(getInitStlListByModel(progStlInfoSubMTemp).size()>0) {
+                    if(EnumSubcttType.TYPE1.getCode().equals(
+                            cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
                         progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
                         progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                         progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
                         insertRecord(progStlInfoSubStlmentTemp);
+                    }else if(EnumSubcttType.TYPE3.getCode().equals(
+                        cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
+                        ProgStlInfo progStlInfoSubMTemp = new ProgStlInfo();
+                        progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE3.getCode());
+                        progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                        // 本分包合同及本期的分包材料结算也复核了
+                        if (getInitStlListByModel(progStlInfoSubMTemp).size() > 0) {
+                            progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                            progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                            progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                            insertRecord(progStlInfoSubStlmentTemp);
+                        }
                     }
                 }
             }

@@ -71,7 +71,7 @@ public class TaskService {
         List<TaskShow> taskShowList = new ArrayList<TaskShow>();
         //通过OperatorManager获取相应权限下菜单列表
         String strOperIdTemp = ToolUtil.getOperatorManager().getOperatorId();
-        // 以合同类型和状态为分组,取得各组的数量
+        // 以流程状态为分组
         List<TaskShow> ownTaskFlowGroupListTemp = getOwnTaskFlowGroup(strOperIdTemp);
         // 获得详细任务列表
         List<TaskShow> detailTaskShowListTemp = getDetailTodoTaskShowList(strOperIdTemp);
@@ -80,9 +80,12 @@ public class TaskService {
                     EnumFlowStatus.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
             taskShowList.add(taskShowGroupUnit);
             int intHasRecordCount=0;
+            // 录入权限时
             if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(taskShowGroupUnit.getFlowStatus())){
                 for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
-                    if(detailTaskShowUnit.getFlowStatus()==null) {
+                    // 资源录入启动且权限分配为录入状态
+                    if(detailTaskShowUnit.getFlowStatus()==null &&
+                        taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getOperResFlowStatus())) {
                         intHasRecordCount++;
                         detailTaskShowUnit.setId(
                                 "("+ EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+
@@ -103,7 +106,7 @@ public class TaskService {
                 }
                 taskShowGroupUnit.setOperResFlowStatusName(
                         taskShowGroupUnit.getOperResFlowStatusName()+"("+intHasRecordCount+")");
-            }else {
+            }else {// 审复批记归
                 for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
                     if (detailTaskShowUnit.getFlowStatus() != null) {
                         if(EnumFlowStatus.FLOW_STATUS2.getCode().equals(detailTaskShowUnit.getFlowStatus())){
@@ -112,7 +115,8 @@ public class TaskService {
                                 continue;
                             }
                         }
-                        if (taskShowGroupUnit.getFlowStatus().compareTo(detailTaskShowUnit.getFlowStatus()) == 1) {
+                        if (taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getFlowStatus()) &&
+                            taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getOperResFlowStatus())) {
                             intHasRecordCount++;
                             detailTaskShowUnit.setId(
                                     "(" + EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" +

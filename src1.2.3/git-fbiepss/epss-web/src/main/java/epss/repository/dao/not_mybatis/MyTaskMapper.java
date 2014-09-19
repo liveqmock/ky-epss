@@ -73,6 +73,7 @@ public interface MyTaskMapper {
             "            distinct" +
             "            opr.INFO_TYPE as type," +
             "            opr.INFO_PKID as pkid," +
+            "            opr.FLOW_STATUS as operResFlowStatus," +
             "            eci.ID as id," +
             "            eci.NAME as name," +
             "            '' as periodNo," +
@@ -88,8 +89,6 @@ public interface MyTaskMapper {
             "            opr.INFO_PKID=eci.PKID" +
             "        where" +
             "            opr.OPER_PKID=#{strOperPkid}" +
-         /*   "        and" +
-            "            eci.FLOW_STATUS is not null" +*/
             "        and" +
             "            opr.TYPE='business'" +
             "    ) " +
@@ -98,7 +97,8 @@ public interface MyTaskMapper {
             "         select" +
             "             distinct" +
             "             opr.INFO_TYPE as type," +
-            "             stl.PKID as pkid," +
+            "             opr.INFO_PKID as pkid," +
+            "             opr.FLOW_STATUS as operResFlowStatus," +
             "             stl.ID as id," +
             "             (select name from CTT_INFO where pkid=stl.stl_pkid) as name," +
             "             stl.PERIOD_NO as periodNo," +
@@ -114,8 +114,6 @@ public interface MyTaskMapper {
             "             opr.INFO_PKID=stl.stl_pkid" +
             "         where  " +
             "             opr.OPER_PKID=#{strOperPkid}" +
-          /*  "         and" +
-            "             stl.FLOW_STATUS is not null" +*/
             "         and" +
             "             opr.TYPE='business'" +
             "    )" +

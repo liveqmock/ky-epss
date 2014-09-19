@@ -100,6 +100,7 @@ public class ProgStlItemSubMAction {
             progStlInfoShow.setStlId(cttInfoTemp.getId());
             progStlInfoShow.setStlName(cttInfoTemp.getName());
             progStlInfoShow.setSignPartBName(signPartService.getEsInitCustByPkid(cttInfoTemp.getSignPartB()).getName());
+            progStlInfoShow.setType(EnumSubcttType.getValueByKey(cttInfoTemp.getType()).getTitle());
             beansMap.put("progStlInfoShow", progStlInfoShow);
 
             /*分包合同*/

@@ -91,7 +91,7 @@ public class CstplItemAction {
 
     @PostConstruct
     public void init() {
-        this.attachmentList=new ArrayList<AttachmentModel>();
+        this.attachmentList=new ArrayList<>();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         beansMap = new HashMap();
         strBelongToType= EnumResType.RES_TYPE1.getCode();
