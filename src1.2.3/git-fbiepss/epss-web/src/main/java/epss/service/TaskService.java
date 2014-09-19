@@ -83,24 +83,25 @@ public class TaskService {
             // 录入权限时
             if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(taskShowGroupUnit.getFlowStatus())){
                 for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
-                    // 资源录入启动且权限分配为录入状态
-                    if(detailTaskShowUnit.getFlowStatus()==null &&
-                        taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getOperResFlowStatus())) {
-                        intHasRecordCount++;
-                        detailTaskShowUnit.setId(
-                                "("+ EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle()+")"+
-                                        ToolUtil.getStrIgnoreNull(detailTaskShowUnit.getId()));
-                        if(detailTaskShowUnit.getFlowStatusReason()==null){
-                            detailTaskShowUnit.setFlowStatusReasonName(null);
-                        }else {
-                            detailTaskShowUnit.setFlowStatusReasonName(
-                                    EnumFlowStatusReason.getValueByKey(detailTaskShowUnit.getFlowStatusReason()).getTitle());
-                        }
-                        taskShowList.add(detailTaskShowUnit);
-                        if (detailTaskShowUnit.getFlowStatusReason()==null) {
-                            detailTaskShowUnit.setStrColorType("1");
-                        }else{
-                            detailTaskShowUnit.setStrColorType("2");
+                    if(taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getOperResFlowStatus())) {
+                        // 资源录入启动且权限分配为录入状态
+                        if (detailTaskShowUnit.getFlowStatus() == null) {
+                            intHasRecordCount++;
+                            detailTaskShowUnit.setId(
+                                    "(" + EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" +
+                                            ToolUtil.getStrIgnoreNull(detailTaskShowUnit.getId()));
+                            if (detailTaskShowUnit.getFlowStatusReason() == null) {
+                                detailTaskShowUnit.setFlowStatusReasonName(null);
+                            } else {
+                                detailTaskShowUnit.setFlowStatusReasonName(
+                                        EnumFlowStatusReason.getValueByKey(detailTaskShowUnit.getFlowStatusReason()).getTitle());
+                            }
+                            taskShowList.add(detailTaskShowUnit);
+                            if (detailTaskShowUnit.getFlowStatusReason() == null) {
+                                detailTaskShowUnit.setStrColorType("1");
+                            } else {
+                                detailTaskShowUnit.setStrColorType("2");
+                            }
                         }
                     }
                 }
@@ -108,32 +109,34 @@ public class TaskService {
                         taskShowGroupUnit.getOperResFlowStatusName()+"("+intHasRecordCount+")");
             }else {// 审复批记归
                 for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
-                    if (detailTaskShowUnit.getFlowStatus() != null) {
-                        if(EnumFlowStatus.FLOW_STATUS2.getCode().equals(detailTaskShowUnit.getFlowStatus())){
-                            if(EnumResType.RES_TYPE3.getCode().equals(detailTaskShowUnit.getType())||
-                                    EnumResType.RES_TYPE4.getCode().equals(detailTaskShowUnit.getType())){
-                                continue;
+                    if (taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getOperResFlowStatus())) {
+                        if (detailTaskShowUnit.getFlowStatus() != null) {
+                            if (EnumFlowStatus.FLOW_STATUS2.getCode().equals(detailTaskShowUnit.getFlowStatus())) {
+                                if (EnumResType.RES_TYPE3.getCode().equals(detailTaskShowUnit.getType()) ||
+                                        EnumResType.RES_TYPE4.getCode().equals(detailTaskShowUnit.getType())) {
+                                    continue;
+                                }
                             }
-                        }
-                        if ((((Integer.parseInt(taskShowGroupUnit.getFlowStatus()))-1)+"").equals(detailTaskShowUnit.getFlowStatus()) &&
-                            taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getOperResFlowStatus())) {
-                            intHasRecordCount++;
-                            detailTaskShowUnit.setId(
-                                    "(" + EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" +
-                                            ToolUtil.getStrIgnoreNull(detailTaskShowUnit.getId()));
-                            detailTaskShowUnit.setFlowStatusReasonName(
-                                    EnumFlowStatusReason.getValueByKey(detailTaskShowUnit.getFlowStatusReason()).getTitle());
-                            taskShowList.add(detailTaskShowUnit);
-                        }
-                        //颜色区分
-                        if ((int) (Integer.parseInt(detailTaskShowUnit.getFlowStatusReason()))
-                                > 2 * (int) (Integer.parseInt(detailTaskShowUnit.getFlowStatus()))) {
-                            detailTaskShowUnit.setStrColorType("2");
-                        } else if (
-                                (int) (Integer.parseInt(detailTaskShowUnit.getFlowStatus()) +
-                                        (int) Integer.parseInt(detailTaskShowUnit.getFlowStatus())) - 1
-                                        == (int) Integer.parseInt(detailTaskShowUnit.getFlowStatus())) {
-                            detailTaskShowUnit.setStrColorType("1");
+                            if ((((Integer.parseInt(taskShowGroupUnit.getFlowStatus())) - 1) + "")
+                                    .equals(detailTaskShowUnit.getFlowStatus())) {
+                                intHasRecordCount++;
+                                detailTaskShowUnit.setId(
+                                        "(" + EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" +
+                                                ToolUtil.getStrIgnoreNull(detailTaskShowUnit.getId()));
+                                detailTaskShowUnit.setFlowStatusReasonName(
+                                        EnumFlowStatusReason.getValueByKey(detailTaskShowUnit.getFlowStatusReason()).getTitle());
+                                taskShowList.add(detailTaskShowUnit);
+                            }
+                            //颜色区分
+                            if ((int) (Integer.parseInt(detailTaskShowUnit.getFlowStatusReason()))
+                                    > 2 * (int) (Integer.parseInt(detailTaskShowUnit.getFlowStatus()))) {
+                                detailTaskShowUnit.setStrColorType("2");
+                            } else if (
+                                    (int) (Integer.parseInt(detailTaskShowUnit.getFlowStatus()) +
+                                            (int) Integer.parseInt(detailTaskShowUnit.getFlowStatus())) - 1
+                                            == (int) Integer.parseInt(detailTaskShowUnit.getFlowStatus())) {
+                                detailTaskShowUnit.setStrColorType("1");
+                            }
                         }
                     }
                 }
