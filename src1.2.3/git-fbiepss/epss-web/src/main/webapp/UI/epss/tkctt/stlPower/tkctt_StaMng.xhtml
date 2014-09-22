@@ -144,7 +144,7 @@
                         <h:panelGrid id="pgOperBtnForAdd" columns="2">
                             <p:commandButton id="submitBtnForAdd"
                                              value="提交（增加）"
-                                             action="#{progStlInfoTkEstSPAction.onClickForMngAction}"
+                                             action="#{progStlInfoTkEstSPAction.onClickForMngAction('Add')}"
                                              update="pdt,msgs,pgViewForAdd">
                             </p:commandButton>
                             <p:commandButton id="resetBtnForAdd" value="重置"
@@ -213,7 +213,7 @@
                         <h:panelGrid id="pgOperBtnForUpd" columns="2">
                             <p:commandButton id="submitBtnForUpd"
                                              value="提交（更新）"
-                                             action="#{progStlInfoTkEstSPAction.onClickForMngAction}"
+                                             action="#{progStlInfoTkEstSPAction.onClickForMngAction('Upd')}"
                                              update="pdt,msgs,pgViewForUpd"
                                              oncomplete="wVDlgViewForUpd.hide()">
                             </p:commandButton>
@@ -282,7 +282,7 @@
                         <h:panelGrid id="pgOperBtnForDel" columns="2">
                             <p:commandButton id="submitBtnForDel"
                                              value="提交（删除）"
-                                             action="#{progStlInfoTkEstSPAction.onClickForMngAction}"
+                                             action="#{progStlInfoTkEstSPAction.onClickForMngAction('Del')}"
                                              update="pdt,msgs,pgViewForDel"
                                              oncomplete="wVDlgViewForDel.hide()">
                             </p:commandButton>
