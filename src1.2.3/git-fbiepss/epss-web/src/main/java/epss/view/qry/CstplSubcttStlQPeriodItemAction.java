@@ -118,7 +118,8 @@ public class CstplSubcttStlQPeriodItemAction {
             }
         }
         strStartPeriodNo=ToolUtil.getStrThisMonth();
-        strStartPeriodNo=(new BigDecimal(strStartPeriodNo.substring(0,4)).subtract(new BigDecimal("2"))).toString()+strStartPeriodNo.substring(4);
+        strStartPeriodNo=(new BigDecimal(strStartPeriodNo.substring(0,4)).subtract(new BigDecimal("2"))).toString()
+                +strStartPeriodNo.substring(4);
         strEndPeriodNo=ToolUtil.getStrThisMonth();
     }
 
@@ -184,7 +185,7 @@ public class CstplSubcttStlQPeriodItemAction {
                         strStartPeriodNo,
                         strEndPeriodNo);
 
-        qryCSStlQPeriodShowList =new ArrayList<QryCSStlQPeriodShow>();
+        qryCSStlQPeriodShowList =new ArrayList<>();
 
         for(ProgStlItemSubQShow itemUnit : progStlItemSubQShowList){
             QryCSStlQPeriodShow qryCSStlQPeriodShow =new QryCSStlQPeriodShow();
@@ -205,7 +206,7 @@ public class CstplSubcttStlQPeriodItemAction {
                     String proName = propertyDescriptor.getName();
                     if (proName.equals("bdCurrentPeriodEQty"+j)) {//这个地方的id可以是已知属性值的那些属性名
                         for(ProgStlItemSubQ progStlItemSubQ : progStlItemSubQList){
-                            if(strItemPkid.equals(progStlItemSubQ.getPkid())){
+                            if(strItemPkid.equals(progStlItemSubQ.getSubcttItemPkid())){
                                 if(commColSetList.get(j).getHeader().equals(progStlItemSubQ.getPeriodNo())){
                                     propertyDescriptor.getWriteMethod().invoke(qryCSStlQPeriodShow, progStlItemSubQ.getCurrentPeriodEQty());
                                 }

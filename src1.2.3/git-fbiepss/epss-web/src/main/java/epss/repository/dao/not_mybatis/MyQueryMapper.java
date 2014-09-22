@@ -43,53 +43,55 @@ public interface MyQueryMapper {
                             @Param("strParentPkid") String strParentPkid);
 
     @Select("select" +
-            " ecitem.CORRESPONDING_PKID as strCorrespondingPkid," +
-            " eissem.subctt_item_pkid as strItemPkid," +
-            " nei.name as strName," +
-            " max(ecitem.unit) as strUnit," +
-            " sum(ecitem.contract_quantity) as bdQuantity," +
-            " sum(eissem.current_period_m_qty) as bdCurrentPeriodQuantity," +
-            " sum(eissem.begin_to_current_period_m_qty) as bdBeginToCurrentPeriodQuantity," +
-            " sum(ecitem.contract_unit_price) as bdUnitPrice" +
+            "     ecitem.CORRESPONDING_PKID as strCorrespondingPkid," +
+            "     eissem.subctt_item_pkid as strItemPkid," +
+            "     nei.name as strName," +
+            "     max(ecitem.unit) as strUnit," +
+            "     sum(ecitem.contract_quantity) as bdQuantity," +
+            "     sum(eissem.current_period_m_qty) as bdCurrentPeriodQuantity," +
+            "     sum(eissem.begin_to_current_period_m_qty) as bdBeginToCurrentPeriodQuantity," +
+            "     sum(ecitem.contract_unit_price) as bdUnitPrice" +
             " from " +
-            " (" +
-            "   select " +
-            "          eis.stl_type," +
-            "          eis.stl_pkid," +
-            "          eis.period_no," +
-            "          eicust.name" +
-            "   from" +
-            "          CTT_INFO ecinfo" +
-            "   inner join " +
-            "          SIGN_PART eicust" +
-            "   on " +
-            "          ecinfo.SIGN_PART_B=eicust.PKID" +
-            "   and " +
-            "          ecinfo.FLOW_STATUS='3' " +
-            "   inner join" +
-            "          PROG_STL_INFO eis" +
-            "   on" +
-            "          eis.stl_pkid=ecinfo.pkid" +
-            "   and" +
-            "          eis.stl_type='4'" +
-            "   and " +
-            "          eis.FLOW_STATUS='3'" +
-            "   where" +
-            "          ecinfo.CTT_TYPE = '2'" +
-            "   and " +
-            "          ecinfo.PARENT_PKID = #{strParentPkid}" +
-            " )nei" +
-            " inner join" +                   //联分包工程数量详细项
+            "     (" +
+            "       select " +
+            "              eis.stl_type," +
+            "              eis.stl_pkid," +
+            "              eis.period_no," +
+            "              eicust.name" +
+            "       from" +
+            "              PROG_STL_INFO eis" +
+            "       inner join" +
+            "              CTT_INFO ecinfo" +
+            "       on" +
+            "              eis.stl_pkid=ecinfo.pkid" +
+            "       and" +
+            "              ecinfo.PARENT_PKID = #{strCstplInfoPkid}" +
+            "       inner join " +
+            "              SIGN_PART eicust" +
+            "       on " +
+            "              ecinfo.SIGN_PART_B=eicust.PKID" +
+            "       where" +
+            "              eis.stl_type='4'" +
+            "       and " +
+            "              eis.FLOW_STATUS='2'" +
+            "     )nei" +
+            " inner join" +//联分包工程数量详细项
             "    （" +
             "       select" +
             "            subctt_pkid,period_no,subctt_item_pkid,current_period_m_qty," +
             "            (" +
-            "               select max(begin_to_current_period_m_qty)" +
-            "               from PROG_STL_ITEM_SUB_M eissemnei" +
-            "               where eissemnei.subctt_pkid=eissemwai.subctt_pkid" +
-            "                     and  eissemnei.subctt_item_pkid=eissemwai.subctt_item_pkid" +
-            "                     and  eissemnei.period_no<=#{strPeriodNo}) as begin_to_current_period_m_qty" +
-            "      from" +
+            "               select " +
+            "                    max(begin_to_current_period_m_qty)" +
+            "               from " +
+            "                    PROG_STL_ITEM_SUB_M eissemnei" +
+            "               where " +
+            "                    eissemnei.subctt_pkid=eissemwai.subctt_pkid" +
+            "               and" +
+            "                    eissemnei.subctt_item_pkid=eissemwai.subctt_item_pkid" +
+            "               and" +
+            "                    eissemnei.period_no<=#{strPeriodNo}" +
+            "            ) as begin_to_current_period_m_qty" +
+            "       from" +
             "          PROG_STL_ITEM_SUB_M eissemwai" +
             "    ）eissem" +
             " on" +
@@ -108,7 +110,7 @@ public interface MyQueryMapper {
             "    eissem.subctt_pkid,nei.name,eissem.period_no,ecitem.CORRESPONDING_PKID,eissem.subctt_item_pkid" +
             " order by" +
             "    eissem.subctt_pkid,nei.name,eissem.period_no,ecitem.CORRESPONDING_PKID,eissem.subctt_item_pkid")
-    List<QryShow> getCSStlMList(@Param("strParentPkid") String strParentPkid,
+    List<QryShow> getCSStlMList(@Param("strCstplInfoPkid") String strCstplInfoPkid,
                                 @Param("strPeriodNo") String strPeriodNo);
 
     @Select("select" +

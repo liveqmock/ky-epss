@@ -20,11 +20,10 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form">
-	    <div style="margin:5px;">
+	        <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
                 <p:panel>
-                    <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
-                        <h:panelGrid columns="6">
+                    <h:panelGrid id="pgCondition" columns="9">
                             <p:outputLabel value="分包合同：" for="subcttPkid" />
                             <p:selectOneMenu id="subcttPkid"
                                              value="#{cstplSubcttStlQPeriodItemAction.strSubcttPkid}">
@@ -42,16 +41,15 @@
                                 <p:ajax event="blur" update="msgs"
                                         listener="#{cstplSubcttStlQPeriodItemAction.blurPeriodNo()}"/>
                             </p:inputText>
-                        </h:panelGrid>
-                        <h:panelGrid columns="3">
-                            <p:commandButton id="qryBtn" value="查询"
+                            <p:commandButton
+                                             value="查询"
                                              action="#{cstplSubcttStlQPeriodItemAction.onQueryAction()}"
-                                             update="pgCondition,msgs,pdt,exportToExcel">
-                            </p:commandButton>
-                            <p:commandButton id="resetBtn" value="重置"
-                                             type="reset"
-                                             update="pgCondition,msgs">
-                            </p:commandButton>
+                                             update="pgCondition,msgs,pdt"/>
+                            <p:commandButton
+                                    value="导出到EXCEL"
+                                    action="#{cstplSubcttStlQPeriodItemAction.onExportExcel}"
+                                    ajax="false"
+                                    rendered="#{cstplSubcttStlQPeriodItemAction.strExportToExcelRendered}"/>
                             <p:ajaxStatus style="width:16px;height:16px;">
                                 <f:facet name="start">
                                     <h:graphicImage value="/images/ajaxloading.gif"/>
@@ -60,17 +58,8 @@
                                     <h:outputText value=""/>
                                 </f:facet>
                             </p:ajaxStatus>
-                        </h:panelGrid>
                     </h:panelGrid>
                 </p:panel>
-                <h:panelGrid id="exportToExcel">
-                    <p:commandButton
-                                     value="导出到EXCEL"
-                                     action="#{cstplSubcttStlQPeriodItemAction.onExportExcel}"
-                                     ajax="false"
-                                     rendered="#{cstplSubcttStlQPeriodItemAction.strExportToExcelRendered}">
-                    </p:commandButton>
-                </h:panelGrid>
                 <p:dataTable id="pdt"
                              value="#{cstplSubcttStlQPeriodItemAction.qryCSStlQPeriodShowList}"
                              var="record"
@@ -80,20 +69,21 @@
                              {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              paginator="true"
                              paginatorPosition="bottom"
-                             rows="15"
-                             rowsPerPageTemplate="500,200,100,45,30,15"
+                             rows="20"
+                             rowsPerPageTemplate="500,200,100,60,40,20"
                              rowIndexVar="row"
                              emptyMessage="数据记录为空..."
                              widgetVar="dtItemDetail"
-                             rowStyleClass="#{record.bdSignPartAPrice eq 0?null:'rowGrayStyle'}"
-                             scrollable="true">
-                    <p:column style="width:10px" headerText="序号">
+                             rowStyleClass="#{record.bdSignPartAPrice eq 0 ? null:'rowGrayStyle'}"
+                             scrollable="true"
+                             scrollHeight="480">
+                    <p:column style="width:30px" headerText="序号">
                         <h:outputText value="#{row + 1}"/>
                     </p:column>
                     <p:column style="width:100px" headerText="编号">
                         <h:outputText value="#{record.strNo}" escape="false"/>
                     </p:column>
-                    <p:column style="width:200px" headerText="项目名称">
+                    <p:column style="width:400px" headerText="项目名称">
                         <h:outputText value="#{record.strName}"/>
                     </p:column>
                     <p:column style="width:30px" headerText="单位">

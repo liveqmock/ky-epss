@@ -23,8 +23,8 @@ public class EsQueryService {
         return myQueryMapper.getCSList(strCttType,strBelongToPkid) ;
     }
 
-    public List<QryShow> getCSStlMList(String strBelongToPkid,String strPeriodNo){
-        return myQueryMapper.getCSStlMList(strBelongToPkid,strPeriodNo) ;
+    public List<QryShow> getCSStlMList(String strCstplInfoPkidPara,String strPeriodNoPara){
+        return myQueryMapper.getCSStlMList(strCstplInfoPkidPara,strPeriodNoPara) ;
     }
 
     public List<QryShow> getCSStlQList(String strBelongToPkid,String strPeriodNo){

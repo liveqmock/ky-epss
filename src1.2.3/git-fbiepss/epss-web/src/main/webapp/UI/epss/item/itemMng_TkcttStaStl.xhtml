@@ -71,7 +71,8 @@
                                  rowStyleClass="#{record.tkctt_Unit eq null? 'rowGrayStyle':null}"
                                  scrollable="true"
                                  scrollHeight="460">
-                        <p:column headerText="操作" style="width:91px" rendered='#{progStlItemTkEstAction.strPassFlag}'>
+                        <p:column headerText="操作" style="width:91px;text-align: center;"
+                                  rendered='#{progStlItemTkEstAction.strPassFlag}'>
                             <p:commandButton  icon="ui-icon-pencil"
                                               style="height:18px;width:18px"
                                               rendered="#{record.tkctt_Unit eq null? 'false':'true'}"

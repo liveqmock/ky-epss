@@ -53,7 +53,8 @@ public class ProgStlItemSubQService {
 
     public List<ProgStlItemSubQ> getProgWorkqtyItemListByPeriod(
             String strSubcttPkid,String strPeriodNoBegin,String strPeriodNoEnd){
-        return myProgWorkqtyItemMapper.getProgWorkqtyItemListByPeriod(strSubcttPkid, strPeriodNoBegin, strPeriodNoEnd);
+        return myProgWorkqtyItemMapper.getProgWorkqtyItemListByPeriod(
+                strSubcttPkid, strPeriodNoBegin, strPeriodNoEnd);
     }
 
     public List<String> getProgWorkqtyItemPeriodsByPeriod(

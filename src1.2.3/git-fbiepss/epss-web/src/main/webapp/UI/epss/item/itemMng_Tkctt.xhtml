@@ -78,7 +78,8 @@
                              record.name eq '总合计'? 'rowGrayStyle':null}"
                              scrollable="true"
                              scrollHeight="450">
-                        <p:column headerText="操作" style="width:44px" rendered='#{tkcttItemAction.strPassFlag}'>
+                        <p:column headerText="操作" style="width:44px;text-align: center;"
+                                  rendered='#{tkcttItemAction.strPassFlag}'>
                             <p:commandButton icon="ui-icon-pencil"
                                              style="height:18px;width:18px"
                                              rendered="#{record.name eq '合计'?'false':record.name eq '总合计'?'false':'true'}"
@@ -169,7 +170,8 @@
                                                      title="View">
                                     </p:commandButton>
                                 </p:column>
-                                <p:column headerText="操作" style="width:62px" rendered='#{tkcttItemAction.strPassFlag}'>
+                                <p:column headerText="操作" style="width:62px;text-align: center;"
+                                          rendered='#{tkcttItemAction.strPassFlag}'>
                                     <p:commandButton icon="ui-icon-arrowrefresh-1-w"
                                                      style="height:18px;width:18px"
                                                      ajax="false"

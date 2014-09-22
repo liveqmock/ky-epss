@@ -127,7 +127,8 @@ public class CstplMeaSubStlQItemAction {
             ProgStlItemTkMea progStlItemTkMea =new ProgStlItemTkMea();
             progStlItemTkMea.setTkcttPkid(esInitCttCstpl.getParentPkid());
             progStlItemTkMea.setPeriodNo(strMeaLatestApprovedPeriodNo);
-            progStlItemTkMeaList = progStlItemTkMeaService.selectRecordsByPkidPeriodNoExample(progStlItemTkMea);
+            progStlItemTkMeaList =
+                    progStlItemTkMeaService.selectRecordsByPkidPeriodNoExample(progStlItemTkMea);
         }
 
         List<QryShow> qryShowList =esQueryService.getCSStlQList(strBelongToPkid, strPeriodNo);
@@ -137,14 +138,17 @@ public class CstplMeaSubStlQItemAction {
             qryCSMeaSubQShowList =new ArrayList<QryCSStlQShow>();
             QryCSStlQShow itemCstplInsertItem;
 
-            BigDecimal bdCstplContractUnitPrice=new BigDecimal(0);
-            BigDecimal bdTkcttStlMeaQuantity=new BigDecimal(0);
-            BigDecimal bdTkcttStlMeaAmount=new BigDecimal(0);
-            BigDecimal bdCstplContractAmount=new BigDecimal(0);
-
             for(CttItemShow itemUnit: cttItemShowListCstpl){
+                // 总包计量
+                BigDecimal bdTkcttStlMeaQuantity=new BigDecimal(0);
+                BigDecimal bdTkcttStlMeaAmount=new BigDecimal(0);
+                // 成本计划
+                BigDecimal bdCstplContractUnitPrice=new BigDecimal(0);
+                BigDecimal bdCstplContractAmount=new BigDecimal(0);
+
                 if(itemUnit.getUnit()!=null){
-                    bdCstplContractUnitPrice=ToolUtil.getBdIgnoreNull(itemUnit.getContractUnitPrice());
+                    bdCstplContractUnitPrice=
+                            ToolUtil.getBdIgnoreNull(itemUnit.getContractUnitPrice());
                 }
                 else{
                     bdCstplContractUnitPrice=itemUnit.getContractUnitPrice();
@@ -164,6 +168,7 @@ public class CstplMeaSubStlQItemAction {
                     if(ToolUtil.getStrIgnoreNull(itemUnit.getCorrespondingPkid()).equals(
                             progStlItemTkMea.getTkcttItemPkid())){
                         itemCstplInsertItem.setBdTkcttStl_MeaQuantity(progStlItemTkMea.getBeginToCurrentPeriodQty());
+
                         bdTkcttStlMeaQuantity=ToolUtil.getBdIgnoreNull(progStlItemTkMea.getBeginToCurrentPeriodQty());
                         bdTkcttStlMeaAmount=bdTkcttStlMeaQuantity.multiply(bdCstplContractUnitPrice);
                         itemCstplInsertItem.setBdTkcttStl_MeaAmount(bdTkcttStlMeaAmount);
@@ -185,13 +190,19 @@ public class CstplMeaSubStlQItemAction {
                         // 克隆目标进行处理后插接
                         QryCSStlQShow qryCSStlQShowNewInsert =(QryCSStlQShow)BeanUtils.cloneBean(itemCstplInsertItem);
                         // 目标分包合同项的合同数量，合同单价，合同金额
-                        BigDecimal bdSubcttBeginToCurrentPeriodQuantity=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdBeginToCurrentPeriodQuantity());
-                        BigDecimal bdSubcttContractUnitPrice=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdUnitPrice());
-                        BigDecimal bdSubcttBeginToCurrentPeriodAmount=bdSubcttBeginToCurrentPeriodQuantity.multiply(bdSubcttContractUnitPrice);
+                        BigDecimal bdSubcttBeginToCurrentPeriodQuantity=
+                                ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdBeginToCurrentPeriodQuantity());
+                        BigDecimal bdSubcttContractUnitPrice=
+                                ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdUnitPrice());
+                        BigDecimal bdSubcttBeginToCurrentPeriodAmount=
+                                bdSubcttBeginToCurrentPeriodQuantity.multiply(bdSubcttContractUnitPrice);
                         // 累计目标分包合同项的合同数量，合同单价，合同金额
-                        bdSubcttContractQuantityTotal=bdSubcttContractQuantityTotal.add(bdSubcttBeginToCurrentPeriodQuantity);
-                        bdSubcttContractUnitPriceTotal=bdSubcttContractUnitPriceTotal.add(bdSubcttContractUnitPrice);
-                        bdSubcttContractAmountTotal=bdSubcttContractAmountTotal.add(bdSubcttBeginToCurrentPeriodAmount);
+                        bdSubcttContractQuantityTotal=
+                                bdSubcttContractQuantityTotal.add(bdSubcttBeginToCurrentPeriodQuantity);
+                        bdSubcttContractUnitPriceTotal=
+                                bdSubcttContractUnitPriceTotal.add(bdSubcttContractUnitPrice);
+                        bdSubcttContractAmountTotal=
+                                bdSubcttContractAmountTotal.add(bdSubcttBeginToCurrentPeriodAmount);
 
                         // 分包合同
                         qryCSStlQShowNewInsert.setStrSubctt_SignPartName(qryShowList.get(i).getStrName());
@@ -235,9 +246,12 @@ public class CstplMeaSubStlQItemAction {
                             }
                         }else{
                             // 总包计量与分包结算值差
-                            qryCSStlQShowNewInsert.setBdMeaS_BeginToCurrentPeriodQQty(bdTkcttStlMeaQuantity.subtract(bdSubcttContractQuantityTotal));
-                            qryCSStlQShowNewInsert.setBdMeaS_ContractUnitPrice(bdCstplContractUnitPrice.subtract(bdSubcttContractUnitPriceTotal));
-                            qryCSStlQShowNewInsert.setBdMeaS_BeginToCurrentPeriodMAmount(bdCstplContractAmount.subtract(bdSubcttContractAmountTotal));
+                            qryCSStlQShowNewInsert.setBdMeaS_BeginToCurrentPeriodQQty(
+                                    bdTkcttStlMeaQuantity.subtract(bdSubcttContractQuantityTotal));
+                            qryCSStlQShowNewInsert.setBdMeaS_ContractUnitPrice(
+                                    bdCstplContractUnitPrice.subtract(bdSubcttContractUnitPriceTotal));
+                            qryCSStlQShowNewInsert.setBdMeaS_BeginToCurrentPeriodMAmount(
+                                    bdCstplContractAmount.subtract(bdSubcttContractAmountTotal));
                             qryCSMeaSubQShowList.add(qryCSStlQShowNewInsert);
                         }
                     }
@@ -246,7 +260,7 @@ public class CstplMeaSubStlQItemAction {
                     qryCSMeaSubQShowList.add(itemCstplInsertItem);
                 }
             }
-            qryCSMeaSubQShowListForExcel =new ArrayList<QryCSStlQShow>();
+            qryCSMeaSubQShowListForExcel =new ArrayList<>();
             for(QryCSStlQShow itemUnit: qryCSMeaSubQShowList){
                 QryCSStlQShow itemUnitTemp= (QryCSStlQShow) BeanUtils.cloneBean(itemUnit);
                 itemUnitTemp.setStrCstpl_No(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrCstpl_No()));
@@ -273,7 +287,6 @@ public class CstplMeaSubStlQItemAction {
         List<CttItem> subCttItemList =new ArrayList<CttItem>();
         // 通过父层id查找它的孩子
         subCttItemList =getEsCttItemListByParentPkid(strLevelParentId, cttItemListPara);
-        CttItem cttItem =null;
         for(CttItem itemUnit: subCttItemList){
             CttItemShow cttItemShowTemp = null;
             String strCreatedByName= ToolUtil.getUserName(itemUnit.getCreatedBy());

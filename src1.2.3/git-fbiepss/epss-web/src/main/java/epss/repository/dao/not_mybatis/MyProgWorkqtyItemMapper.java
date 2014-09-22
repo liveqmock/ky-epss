@@ -18,7 +18,7 @@ import java.util.List;
 public interface MyProgWorkqtyItemMapper {
     @Select(
             " select" +
-            "   eisseq.subctt_item_pkid as itemPkid," +
+            "   eisseq.subctt_item_pkid as subcttItemPkid," +
             "   eisseq.period_no as periodNo," +
             "   eisseq.current_period_e_qty as currentPeriodEQty" +
             " from" +
@@ -32,7 +32,7 @@ public interface MyProgWorkqtyItemMapper {
             " and" +
             "   eis.PERIOD_NO=eisseq.period_no" +
             " and" +
-            "   eis.FLOW_STATUS='3'" +
+            "   eis.FLOW_STATUS='2'" +
             " where" +
             "   eisseq.subctt_pkid = #{strSubcttPkid}"+
             " and " +
@@ -59,7 +59,7 @@ public interface MyProgWorkqtyItemMapper {
             " and" +
             "   eis.PERIOD_NO=eisseq.period_no" +
             " and" +
-            "   eis.FLOW_STATUS='3'" +
+            "   eis.FLOW_STATUS='2'" +
             " where" +
             "   eisseq.subctt_pkid = #{strSubcttPkid}"+
             "   and eisseq.period_no >= #{strPeriodNoBegin}"+

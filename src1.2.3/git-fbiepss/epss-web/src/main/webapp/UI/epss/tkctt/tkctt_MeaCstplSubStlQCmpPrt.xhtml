@@ -19,11 +19,10 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form">
-	    <div style="margin:5px;">
+	        <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
                 <p:panel>
-                    <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
-                        <h:panelGrid columns="4">
+                    <h:panelGrid id="pgCondition" columns="7">
                             <p:outputLabel value="总包合同：" for="tkcttPkid" />
                             <p:selectOneMenu id="tkcttPkid"
                                              value="#{tkMeaCSubStlQItemAction.strTkcttPkid}">
@@ -33,15 +32,15 @@
                             <p:inputText id="periodNo"
                                          value="#{tkMeaCSubStlQItemAction.strPeriodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
-                        </h:panelGrid>
-                        <h:panelGrid columns="3">
                             <p:commandButton id="qryBtn" value="查询"
                                              action="#{tkMeaCSubStlQItemAction.onQueryAction()}"
-                                             update="pdt,msgs,pgCondition,exportToExcel">
+                                             update="pdt,msgs,pgCondition">
                             </p:commandButton>
-                            <p:commandButton id="resetBtn" value="重置"
-                                             type="reset"
-                                             update="pgCondition,msgs">
+                            <p:commandButton
+                                    value="导出到EXCEL"
+                                    action="#{tkMeaCSubStlQItemAction.onExportExcel}"
+                                    ajax="false"
+                                    rendered="#{tkMeaCSubStlQItemAction.strExportToExcelRendered}">
                             </p:commandButton>
                             <p:ajaxStatus style="width:16px;height:16px;">
                                 <f:facet name="start">
@@ -51,17 +50,8 @@
                                     <h:outputText value=""/>
                                 </f:facet>
                             </p:ajaxStatus>
-                        </h:panelGrid>
                     </h:panelGrid>
                 </p:panel>
-                <h:panelGrid id="exportToExcel">
-                    <p:commandButton
-                                     value="导出到EXCEL"
-                                     action="#{tkMeaCSubStlQItemAction.onExportExcel}"
-                                     ajax="false"
-                                     rendered="#{tkMeaCSubStlQItemAction.strExportToExcelRendered}">
-                    </p:commandButton>
-                </h:panelGrid>
                 <p:dataTable id="pdt" style="width:100%;"
                              value="#{tkMeaCSubStlQItemAction.qryTkMeaCSStlQShowList}"
                              var="record"
@@ -75,7 +65,8 @@
                              rowsPerPageTemplate="500,200,100,45,30,15"
                              rowIndexVar="row"
                              emptyMessage="数据记录为空..."
-                             scrollable="true">
+                             scrollable="true"
+                             scrollHeight="340">
                     <p:column style="width:30px" headerText="序号">
                         <h:outputText value="#{row + 1}"/>
                     </p:column>

@@ -62,20 +62,17 @@
                                 <p:commandButton id="ApprovePassBtn" value="批准通过"
                                                  action="#{progStlItemSubStlmentAction.onClickForPowerAction('ApprovePass')}"
                                                  update="ApproveBtn,msgs"
-                                                 rendered="#{progStlItemSubStlmentAction.strApproveBtnRendered}"
-                                                 oncomplete="window.close()">
+                                                 rendered="#{progStlItemSubStlmentAction.strApproveBtnRendered}">
                                 </p:commandButton>
                                 <p:commandButton id="ApproveFailToQBtn" value="批准未过至分包数量结算"
                                                  action="#{progStlItemSubStlmentAction.onClickForPowerAction('ApproveFailToQ')}"
                                                  update="ApproveBtn,msgs"
-                                                 rendered="#{progStlItemSubStlmentAction.strApprovedNotBtnRenderedForStlQ}"
-                                                 oncomplete="window.close()">
+                                                 rendered="#{progStlItemSubStlmentAction.strApprovedNotBtnRenderedForStlQ}">
                                 </p:commandButton>
                                 <p:commandButton id="ApproveFailToMBtn" value="批准未过至分包材料结算"
                                                  action="#{progStlItemSubStlmentAction.onClickForPowerAction('ApproveFailToM')}"
                                                  update="ApproveBtn,msgs"
-                                                 rendered="#{progStlItemSubStlmentAction.strApprovedNotBtnRenderedForStlM}"
-                                                 oncomplete="window.close()">
+                                                 rendered="#{progStlItemSubStlmentAction.strApprovedNotBtnRenderedForStlM}">
                                 </p:commandButton>
                             </h:panelGrid>
                             <p:ajaxStatus style="width:16px;height:16px;">

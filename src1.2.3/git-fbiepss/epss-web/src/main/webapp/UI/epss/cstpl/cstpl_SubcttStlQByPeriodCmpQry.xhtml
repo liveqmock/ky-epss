@@ -32,32 +32,24 @@
                 <p:growl id="msgs" showDetail="true"/>
                 <p:focus for="id"/>
                 <p:panel>
-                    <h:panelGrid columns="2" style="width: 100%">
-                        <h:panelGrid id="pgCondition" columns="4">
-                            <p:outputLabel value="计划编号：" for="id"/>
-                            <p:inputText id="id" value="#{cstplInfoAction.cttInfoShowQry.id}"/>
-                            <p:outputLabel value="计划名称：" for="cstplName"/>
-                            <p:inputText id="cstplName" value="#{cstplInfoAction.cttInfoShowQry.name}"/>
-                        </h:panelGrid>
-                        <h:panelGrid columns="3">
-                            <p:commandButton id="qryBtn" value="查询"
-                                             action="#{cstplInfoAction.onQueryAction('ApprovedQry','true')}"
-                                             update="pdt,msgs">
-                            </p:commandButton>
-                            <p:commandButton id="resetBtn" value="重置"
-                                             type="reset"
-                                             update="pgCondition,msgs">
-                            </p:commandButton>
-                            <p:ajaxStatus style="width:16px;height:16px;">
-                                <f:facet name="start">
-                                    <h:graphicImage value="/images/ajaxloading.gif"/>
-                                </f:facet>
-                                <f:facet name="complete">
-                                    <h:outputText value=""/>
-                                </f:facet>
-                            </p:ajaxStatus>
-                        </h:panelGrid>
-                     </h:panelGrid>
+                    <h:panelGrid id="pgCondition" columns="6">
+                        <p:outputLabel value="计划编号：" for="id"/>
+                        <p:inputText id="id" value="#{cstplInfoAction.cttInfoShowQry.id}"/>
+                        <p:outputLabel value="计划名称：" for="cstplName"/>
+                        <p:inputText id="cstplName" value="#{cstplInfoAction.cttInfoShowQry.name}"/>
+                        <p:commandButton id="qryBtn" value="查询"
+                                         action="#{cstplInfoAction.onQueryAction('ApprovedQry','true')}"
+                                         update="pdt,msgs">
+                        </p:commandButton>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </h:panelGrid>
                 </p:panel>
                 <p:dataTable id="pdt" style="width:100%;"
                              value="#{cstplInfoAction.cttInfoShowList}"
@@ -73,8 +65,9 @@
                              rowsPerPageTemplate="500,200,100,45,30,15"
                              emptyMessage="数据记录为空..."
                              widgetVar="DtInitCstplList"
-                             scrollable="true">
-                    <p:column headerText="操作" style="width:40px" >
+                             scrollable="true"
+                             scrollHeight="340">
+                    <p:column headerText="操作" style="width:40px;text-align: center;" >
                         <p:commandButton  icon="ui-icon-triangle-1-e"
                                           style="height:18px;width:18px"
                                           onclick="actSelect('#{record.pkid}')">

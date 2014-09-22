@@ -92,9 +92,9 @@ public class CstplSubcttStlMItemAction {
         }
         return null;
     }
-    private void initData(String strBelongToPkid) {
+    private void initData(String strCstplInfoPkidPara) {
         beansMap.put("strThisMonth", ToolUtil.getStrThisMonth());
-        CttInfo cttInfo = cttInfoService.getCttInfoByPkId(strBelongToPkid);
+        CttInfo cttInfo = cttInfoService.getCttInfoByPkId(strCstplInfoPkidPara);
         reportHeader.setStrCstplId(cttInfo.getId());
         reportHeader.setStrCstplName(cttInfo.getName());
         beansMap.put("reportHeader", reportHeader);
@@ -107,27 +107,13 @@ public class CstplSubcttStlMItemAction {
         recursiveDataTable("root", cttItemListCstpl, cttItemShowListCstpl);
         cttItemShowListCstpl =getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowListCstpl);
 
-        List<QryShow> qryShowList =esQueryService.getCSStlMList(strBelongToPkid, strPeriodNo);
+        List<QryShow> qryShowList =esQueryService.getCSStlMList(strCstplInfoPkidPara, strPeriodNo);
 
         /*Æ´×°ÁÐ±í*/
         try {
-            qryCSStlMShowList =new ArrayList<QryCSStlMShow>();
+            qryCSStlMShowList =new ArrayList<>();
             QryCSStlMShow itemCstplInsertItem;
-            BigDecimal bdCstplContractQuantity=null;
-            BigDecimal bdCstplContractUnitPrice=null;
-            BigDecimal bdCstplContractAmount=null;
             for(CttItemShow itemUnit: cttItemShowListCstpl){
-                if(itemUnit.getUnit()!=null){
-                    bdCstplContractQuantity=ToolUtil.getBdIgnoreNull(itemUnit.getContractQuantity());
-                    bdCstplContractUnitPrice=ToolUtil.getBdIgnoreNull(itemUnit.getContractUnitPrice());
-                    bdCstplContractAmount=ToolUtil.getBdIgnoreNull(itemUnit.getContractAmount());
-                }
-                else{
-                    bdCstplContractQuantity=itemUnit.getContractQuantity();
-                    bdCstplContractUnitPrice=itemUnit.getContractUnitPrice();
-                    bdCstplContractAmount=itemUnit.getContractAmount();
-                }
-
                 itemCstplInsertItem=new QryCSStlMShow();
                 itemCstplInsertItem.setStrPkid(itemUnit.getPkid());
                 itemCstplInsertItem.setStrParentPkid(itemUnit.getParentPkid());
