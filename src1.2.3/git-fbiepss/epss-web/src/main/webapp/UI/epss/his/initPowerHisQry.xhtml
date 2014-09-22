@@ -57,7 +57,8 @@
                             </h:panelGrid>
                             <h:panelGrid columns="6">
                                 <p:outputLabel value="期数编码：" for="pno"/>
-                                <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHis.periodNo}"/>
+                                <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHis.periodNo}"
+                                    onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                                 <p:outputLabel value="状态标志：" for="sf"/>
                                 <p:selectOneMenu id="sf" value="#{flowCtrlHisAction.flowCtrlHis.flowStatus}">
                                     <f:selectItems value="#{esCommon.flowStatusList}"/>

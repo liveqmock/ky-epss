@@ -68,8 +68,8 @@ public class ProgStlInfoSubStlmentAction {
 
     @PostConstruct
     public void init() {
-        progStlInfoShowList = new ArrayList<ProgStlInfoShow>();
-        progStlInfoShowNotFormList = new ArrayList<ProgStlInfoShow>();
+        progStlInfoShowList = new ArrayList<>();
+        progStlInfoShowNotFormList = new ArrayList<>();
         strCttInfoPkid="";
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if (parammap.containsKey("strCttInfoPkid")){

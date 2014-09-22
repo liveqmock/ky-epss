@@ -73,9 +73,9 @@
                              rowsPerPageTemplate="500,200,100,45,30,15"
                              emptyMessage="数据记录为空..."
                              widgetVar="DtInitSubcttList"
-                             rowStyleClass="#{record.flowStatus eq '3'?'rowGrayStyle':null}"
-                             scrollable="true">
-                    <p:column headerText="操作" style="width:31px">
+                             scrollable="true"
+                             scrollHeight="340">
+                    <p:column headerText="操作" style="width:31px;text-align: center;">
                         <p:commandButton icon="ui-icon-triangle-1-e"
                                          style="height:18px;width:18px"
                                          onclick="actSelect('#{record.pkid}')">

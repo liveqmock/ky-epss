@@ -180,62 +180,21 @@ public class ProgStlInfoTkEstAction {
         }
     }
 
-    public void selectRecordAction(String strPowerTypePara,
-                                   String strSubmitTypePara,
-                                   ProgStlInfoShow progStlInfoShowPara){
+    public void selectRecordAction(String strSubmitTypePara,
+                                     ProgStlInfoShow progStlInfoShowPara){
         try {
             strSubmitType=strSubmitTypePara;
-            String strStatusFlagCode=ToolUtil.getStrIgnoreNull(progStlInfoShowPara.getFlowStatus());
-            String strStatusFlagName= esFlowControl.getLabelByValueInStatusFlaglist(progStlInfoShowPara.getFlowStatus());
             progStlInfoShowPara.setCreatedByName(ToolUtil.getUserName(progStlInfoShowPara.getCreatedBy()));
             progStlInfoShowPara.setLastUpdByName(ToolUtil.getUserName(progStlInfoShowPara.getLastUpdBy()));
             // 查询
-            if(strPowerTypePara.equals("Qry")){
+            if(strSubmitTypePara.equals("Sel")){
                 progStlInfoShowSel =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
-            }else if(strPowerTypePara.equals("Mng")){// 维护
-                if(strSubmitTypePara.equals("Sel")){
-                    progStlInfoShowSel =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
-                }else if(strSubmitTypePara.equals("Add")){
-                }else{
-                    if(!strStatusFlagCode.equals("")&&
-                            !strStatusFlagCode.equals(EnumFlowStatus.FLOW_STATUS0.getCode())){
-                        MessageUtil.addInfo("数据已经"+strStatusFlagName+"，您无权进行编辑操作！");
-                        return;
-                    }
-                    if(strSubmitTypePara.equals("Upd")){
-                        progStlInfoShowUpd =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
-                    }else if(strSubmitTypePara.equals("Del")){
-                        progStlInfoShowDel =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
-                    }
-                }
-            }else{// 权限控制
-                progStlInfoShowSel =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
-                if(strPowerTypePara.equals("Check")){
-                    if(strStatusFlagCode.equals("")){
-                        MessageUtil.addInfo("本期数据还未录入完毕，您暂时不能进行审核操作！");
-                    }else if(!strStatusFlagCode.equals(EnumFlowStatus.FLOW_STATUS0.getCode())&&!
-                            strStatusFlagCode.equals(EnumFlowStatus.FLOW_STATUS1.getCode())){
-                        MessageUtil.addInfo("本期数据已经"+strStatusFlagName+"，您无权进行编辑操作！");
-                    }
-                }else if(strPowerTypePara.equals("DoubleCheck")){
-                    if(strStatusFlagCode.equals("")){
-                        MessageUtil.addInfo("本期数据还未录入完毕，您暂时不能进行复核操作！");
-                    }else if(strStatusFlagCode.equals(EnumFlowStatus.FLOW_STATUS0.getCode())){
-                        MessageUtil.addInfo("本期数据刚刚录入，还未审核，您暂时不能进行复核！");
-                    }else if(!strStatusFlagCode.equals(EnumFlowStatus.FLOW_STATUS1.getCode())&&!
-                            strStatusFlagCode.equals(EnumFlowStatus.FLOW_STATUS2.getCode())){
-                        MessageUtil.addInfo("本期数据已经"+strStatusFlagName+"，您无权进行编辑操作！");
-                    }
-                }else if(strPowerTypePara.equals("Approve")){
-                    if(strStatusFlagCode.equals("")){
-                        MessageUtil.addInfo("本期数据还未录入完毕，您暂时不能进行批准操作！");
-                    }else if(strStatusFlagCode.equals(EnumFlowStatus.FLOW_STATUS0.getCode())){
-                        MessageUtil.addInfo("本期数据刚刚录入，还未审核，您暂时不能进行批准！");
-                    }else if(!strStatusFlagCode.equals(EnumFlowStatus.FLOW_STATUS2.getCode())&&!
-                            strStatusFlagCode.equals(EnumFlowStatus.FLOW_STATUS3.getCode())){
-                        MessageUtil.addInfo("本期数据已经"+strStatusFlagName+"，您无权进行编辑操作！");
-                    }
-                }
+            }else if(strSubmitTypePara.equals("Add")){
+                progStlInfoShowAdd =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
+            }else if(strSubmitTypePara.equals("Upd")){
+                progStlInfoShowUpd =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
+            }else if(strSubmitTypePara.equals("Del")){
+                progStlInfoShowDel =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());

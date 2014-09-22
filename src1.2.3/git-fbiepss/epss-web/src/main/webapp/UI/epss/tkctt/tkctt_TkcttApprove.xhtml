@@ -107,10 +107,12 @@
                         <h:outputText value="#{esCommon.getCustNameByCustIdFromList(record.signPartB)}"/>
                     </p:column>
                     <p:column headerText="状态标志" style="width:60px;text-align:center">
-                        <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
+                        <h:outputText
+                            value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
                     </p:column>
                     <p:column headerText="原因" style="width:60px;text-align:center">
-                        <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
+                        <h:outputText
+                            value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
                     </p:column>
                     <p:column headerText="开始时间" style="width:66px;text-align:center">
                         <h:outputText value="#{record.cttStartDate}"/>
@@ -128,40 +130,48 @@
                     <h:panelGrid id="pgView">
                         <h:panelGrid columns="2">
                             <p:outputLabel value="合同编号：" for="idForDlg"/>
-                            <p:inputText id="idForDlg" value="#{tkcttInfoAction.cttInfoShowSel.id}"
+                            <p:inputText id="idForDlg"
+                                         value="#{tkcttInfoAction.cttInfoShowSel.id}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="合同名称：" for="cttNameForDlg"/>
-                            <p:inputText id="cttNameForDlg" value="#{tkcttInfoAction.cttInfoShowSel.name}"
+                            <p:inputText id="cttNameForDlg"
+                                         value="#{tkcttInfoAction.cttInfoShowSel.name}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:328px;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="备注内容：" for="remarkForDlg"/>
-                            <p:inputText id="remarkForDlg" value="#{tkcttInfoAction.cttInfoShowSel.remark}"
+                            <p:inputText id="remarkForDlg"
+                                         value="#{tkcttInfoAction.cttInfoShowSel.remark}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="签订日期：" for="signDateForDlg"/>
-                            <p:inputText id="signDateForDlg" value="#{tkcttInfoAction.cttInfoShowSel.signDate}"
+                            <p:inputText id="signDateForDlg"
+                                         value="#{tkcttInfoAction.cttInfoShowSel.signDate}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="开始时间：" for="cttStartDateForDlg"/>
-                            <p:inputText id="cttStartDateForDlg" value="#{tkcttInfoAction.cttInfoShowSel.cttStartDate}"
+                            <p:inputText id="cttStartDateForDlg"
+                                         value="#{tkcttInfoAction.cttInfoShowSel.cttStartDate}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                             <p:outputLabel value="截止时间：" for="cttEndDateForDlg"/>
-                            <p:inputText id="cttEndDateForDlg" value="#{tkcttInfoAction.cttInfoShowSel.cttEndDate}"
+                            <p:inputText id="cttEndDateForDlg"
+                                         value="#{tkcttInfoAction.cttInfoShowSel.cttEndDate}"
                                          readonly="true"
                                          style="background-color:gainsboro;"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:outputLabel value="签订甲方：" for="signPartAForDlg"/>
-                            <p:inputText id="signPartAForDlg" value="#{tkcttInfoAction.cttInfoShowSel.signPartAName}"
+                            <p:inputText id="signPartAForDlg"
+                                         value="#{tkcttInfoAction.cttInfoShowSel.signPartAName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:328px;">
                             </p:inputText>
                             <p:outputLabel value="签订乙方：" for="signPartBForDlg"/>
-                            <p:inputText id="signPartBForDlg" value="#{tkcttInfoAction.cttInfoShowSel.signPartBName}"
+                            <p:inputText id="signPartBForDlg"
+                                         value="#{tkcttInfoAction.cttInfoShowSel.signPartBName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:328px;">
                             </p:inputText>

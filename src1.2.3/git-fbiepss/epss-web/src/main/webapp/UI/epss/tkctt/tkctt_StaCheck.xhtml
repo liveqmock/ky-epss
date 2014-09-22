@@ -37,13 +37,16 @@
                     <h:panelGrid id="pdQry" columns="3" style="width: 100%">
                         <h:panelGrid columns="8">
                             <p:outputLabel value="结算编号：" for="id" />
-                            <p:inputText id="id" value="#{progStlInfoTkEstAction.progStlInfoShowQry.id}"/>
+                            <p:inputText id="id"
+                                         value="#{progStlInfoTkEstAction.progStlInfoShowQry.id}"/>
                             <p:outputLabel value="总包合同：" for="tkcttPkid" />
-                            <p:selectOneMenu id="tkcttPkid" value="#{progStlInfoTkEstAction.progStlInfoShowQry.stlPkid}">
+                            <p:selectOneMenu id="tkcttPkid"
+                                         value="#{progStlInfoTkEstAction.progStlInfoShowQry.stlPkid}">
                                 <f:selectItems value="#{progStlInfoTkEstAction.tkcttList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="期数编码：" for="periodNo"/>
-                            <p:inputText id="periodNo" value="#{progStlInfoTkEstAction.progStlInfoShowQry.periodNo}"
+                            <p:inputText id="periodNo"
+                                         value="#{progStlInfoTkEstAction.progStlInfoShowQry.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         </h:panelGrid>
                         <h:panelGrid columns="3">

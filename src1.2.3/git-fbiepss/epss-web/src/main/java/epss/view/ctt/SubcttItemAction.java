@@ -885,7 +885,10 @@ public class SubcttItemAction {
                 String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload")+"/"+strAttachment;
                 File file = new File(fileName);
                 InputStream stream = new FileInputStream(fileName);
-                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), new String(strAttachment.getBytes("gbk"),"iso8859-1"));
+                downloadFile = new DefaultStreamedContent(
+                        stream,
+                        new MimetypesFileTypeMap().getContentType(file),
+                        new String(strAttachment.getBytes("gbk"),"iso8859-1"));
             }
         } catch (Exception e) {
             logger.error("ÏÂÔØÎÄ¼þÊ§°Ü", e);

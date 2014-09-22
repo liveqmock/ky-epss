@@ -131,7 +131,7 @@ public class ProgStlItemSubMAction {
                                     List<CttItem> cttItemListPara,
                                     List<ProgStlItemSubMShow> sProgStlItemSubMShowListPara){
         // 根据父层级号获得该父层级下的子节点
-        List<CttItem> subCttItemList =new ArrayList<CttItem>();
+        List<CttItem> subCttItemList =new ArrayList<>();
         // 通过父层id查找它的孩子
         subCttItemList =getEsCttItemListByParentPkid(strLevelParentId, cttItemListPara);
         for(CttItem itemUnit: subCttItemList){

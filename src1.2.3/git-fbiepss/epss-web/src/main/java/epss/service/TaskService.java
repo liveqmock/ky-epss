@@ -164,7 +164,8 @@ public class TaskService {
                 if (taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getFlowStatus())) {
                     intHasRecordCount++;
                     detailTaskShowUnit.setId(
-                            "(" + EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" + detailTaskShowUnit.getId());
+                            "(" + EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")"
+                                    + detailTaskShowUnit.getId());
                     detailTaskShowUnit.setFlowStatusName(
                             EnumFlowStatus.getValueByKey(detailTaskShowUnit.getFlowStatus()).getTitle());
                     detailTaskShowUnit.setFlowStatusReasonName(

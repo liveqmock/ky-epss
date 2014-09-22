@@ -194,7 +194,7 @@ public class ProgStlInfoSubMAction {
             if(strSubmitTypePara.equals("Sel")){
                 progStlInfoShowSel =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
             }else if(strSubmitTypePara.equals("Add")){
-
+                progStlInfoShowAdd =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
             }else if(strSubmitTypePara.equals("Upd")){
                 progStlInfoShowUpd =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
             }else if(strSubmitTypePara.equals("Del")){
