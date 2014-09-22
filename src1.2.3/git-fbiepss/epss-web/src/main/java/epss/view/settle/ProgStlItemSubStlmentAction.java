@@ -75,7 +75,7 @@ public class ProgStlItemSubStlmentAction {
     private String strApproveBtnRendered;
     private String strApprovedNotBtnRenderedForStlQ;
     private String strApprovedNotBtnRenderedForStlM;
-    private String strSubmitType;
+    private String strFlowType;
 
     @PostConstruct
     public void init() {
@@ -85,15 +85,15 @@ public class ProgStlItemSubStlmentAction {
         if (parammap.containsKey("strStlInfoPkid")) {
             strStlInfoPkid = parammap.get("strStlInfoPkid").toString();
         }
-        if (parammap.containsKey("strSubmitType")) {
-            strSubmitType = parammap.get("strSubmitType").toString();
+        if (parammap.containsKey("strFlowType")) {
+            strFlowType = parammap.get("strFlowType").toString();
         }
         initData();
     }
 
     /*初始化操作*/
     private void initData() {
-        progStlItemSubStlmentShowList = new ArrayList<ProgStlItemSubStlmentShow>();
+        progStlItemSubStlmentShowList = new ArrayList<>();
         progStlInfo = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
         initHeadMsg();
         CttInfo cttInfo =cttInfoService.getCttInfoByPkId(progStlInfo.getStlPkid());
@@ -121,7 +121,7 @@ public class ProgStlItemSubStlmentAction {
 
         if (EnumFlowStatus.FLOW_STATUS3.getCode().compareTo(ToolUtil.getStrIgnoreNull(progStlInfo.getFlowStatus())) <= 0) {
             initMsgForExcel();
-            if ("Account".equals(strSubmitType) || "Qry".equals(strSubmitType)) {
+            if ("Account".equals(strFlowType) || "Qry".equals(strFlowType)) {
                 if (EnumFlowStatus.FLOW_STATUS4.getCode().equals(progStlInfo.getFlowStatus())) {
                     strAccountBtnRendered = "false";
                 } else {
@@ -133,7 +133,7 @@ public class ProgStlItemSubStlmentAction {
                         progStlItemSubStlmentService.selectRecordsForAccount(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
                 return;
             }
-            if ("Approve".equals(strSubmitType)) {
+            if ("Approve".equals(strFlowType)) {
                 strExportToExcelRendered = "true";
                 strApproveBtnRendered = "false";
                 List<ProgStlItemSubStlment> progStlItemSubStlmentList =
@@ -189,7 +189,8 @@ public class ProgStlItemSubStlmentAction {
         List<ProgStlItemSubStlment> progSubstlItemShowListForApproveTemp =
                 progStlItemSubStlmentService.selectRecordsForAccount(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
         for (ProgStlItemSubStlment progStlItemSubStlment : progSubstlItemShowListForApproveTemp) {
-            ProgStlItemSubStlmentShow progStlItemSubStlmentShowTemp = progStlItemSubStlmentService.fromModelToShow(progStlItemSubStlment);
+            ProgStlItemSubStlmentShow progStlItemSubStlmentShowTemp =
+                    progStlItemSubStlmentService.fromModelToShow(progStlItemSubStlment);
             if (EnumResType.RES_TYPE3.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
                 if (progStlItemSubStlmentShowTemp.getSubctt_ItemPkid().contains("stl")) {
                     beansMap.put(progStlItemSubStlmentShowTemp.getSubctt_ItemPkid(), progStlItemSubStlmentShowTemp);
@@ -238,7 +239,7 @@ public class ProgStlItemSubStlmentAction {
                 } else if (EnumFlowStatus.FLOW_STATUS2.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
                     beansMap.put("esInitPowerHisForSubcttStlMDoubleCheck", flowCtrlHisTemp);
                 }
-            } else if (("Account".equals(strSubmitType) || "Qry".equals(strSubmitType)) &&
+            } else if (("Account".equals(strFlowType) || "Qry".equals(strFlowType)) &&
                     EnumResType.RES_TYPE5.getCode().equals(flowCtrlHisTemp.getInfoType())) {
                 if (EnumFlowStatus.FLOW_STATUS3.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
                     beansMap.put("esInitPowerHisForSubcttStlPApprove", flowCtrlHisTemp);
@@ -312,7 +313,7 @@ public class ProgStlItemSubStlmentAction {
                             bdRates[1] = ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount());
                         }
                     } else {
-                        if ("Approve".equals(strSubmitType)) {
+                        if ("Approve".equals(strFlowType)) {
                             progStlItemSubStlmentShowListForApprove.add(itemUnit);
                         }
                     }
@@ -388,7 +389,7 @@ public class ProgStlItemSubStlmentAction {
                 itemUnit.setEngPMng_PeriodNo(progStlInfo.getPeriodNo());
                 itemUnit.setEngPMng_SubStlType(EnumResType.RES_TYPE4.getCode());
                 if (progStlItemSubMList.size() <= 0) {
-                    if ("Approve".equals(strSubmitType)) {
+                    if ("Approve".equals(strFlowType)) {
                         progStlItemSubStlmentShowListForApprove.add(itemUnit);
                     }
                 } else {
@@ -536,13 +537,16 @@ public class ProgStlItemSubStlmentAction {
             progStlItemSubStlmentShowTemp.setSubctt_Remark(itemUnit.getRemark());
             progStlItemSubStlmentShowTemp.setSubctt_SpareField(itemUnit.getSpareField());
             sProgStlItemSubStlmentShowListPara.add(progStlItemSubStlmentShowTemp);
-            recursiveDataTable(progStlItemSubStlmentShowTemp.getSubctt_ItemPkid(), cttItemListPara, sProgStlItemSubStlmentShowListPara);
+            recursiveDataTable(
+                    progStlItemSubStlmentShowTemp.getSubctt_ItemPkid(),
+                    cttItemListPara,
+                    sProgStlItemSubStlmentShowListPara);
         }
     }
 
     public String onExportExcel() throws IOException, WriteException {
         String strExcelName;
-        if ("Account".equals(strSubmitType) || "Qry".equals(strSubmitType)) {
+        if ("Account".equals(strFlowType) || "Qry".equals(strFlowType)) {
             if (this.progSubstlItemShowListForAccountAndQry.size() == 0) {
                 MessageUtil.addWarn("记录为空...");
                 return null;
@@ -773,14 +777,6 @@ public class ProgStlItemSubStlmentAction {
 
     public void setStrAccountBtnRendered(String strAccountBtnRendered) {
         this.strAccountBtnRendered = strAccountBtnRendered;
-    }
-
-    public String getStrSubmitType() {
-        return strSubmitType;
-    }
-
-    public void setStrSubmitType(String strSubmitType) {
-        this.strSubmitType = strSubmitType;
     }
 
     public String getStrApproveBtnRendered() {

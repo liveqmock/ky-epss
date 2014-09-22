@@ -29,31 +29,38 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <h:inputHidden id="hiPkid" value="#{progStlItemSubStlmentAction.reportHeader.strSubcttPkid}"/>
+                    <h:inputHidden id="hiPkid"
+                            value="#{progStlItemSubStlmentAction.reportHeader.strSubcttPkid}"/>
                     <h:panelGrid id="pgCondition">
                         <h:panelGrid columns="4">
                             <p:outputLabel value="工程名称：" for="id"/>
-                            <p:inputText id="id" value="#{progStlItemSubStlmentAction.reportHeader.strTkcttName}"
+                            <p:inputText id="id"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strTkcttName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:500px;"/>
                             <p:outputLabel value="结算单编号：" for="strStlId"/>
-                            <p:inputText id="strStlId" value="#{progStlItemSubStlmentAction.reportHeader.strStlId}"
+                            <p:inputText id="strStlId"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strStlId}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:200px;"/>
                             <p:outputLabel value="工程项目：" for="strSubcttName"/>
-                            <p:inputText id="strSubcttName" value="#{progStlItemSubStlmentAction.reportHeader.strSubcttName}"
+                            <p:inputText id="strSubcttName"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strSubcttName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:500px;"/>
                             <p:outputLabel value="协作合同编号：" for="strSubcttId"/>
-                            <p:inputText id="strSubcttId" value="#{progStlItemSubStlmentAction.reportHeader.strSubcttId}"
+                            <p:inputText id="strSubcttId"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strSubcttId}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:200px;"/>
                             <p:outputLabel value="协作队伍：" for="strSignPartName"/>
-                            <p:inputText id="strSignPartName" value="#{progStlItemSubStlmentAction.reportHeader.strSignPartName}"
+                            <p:inputText id="strSignPartName"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strSignPartName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:500px;"/>
                             <p:outputLabel value="日期：" for="strDate"/>
-                            <p:inputText id="strDate" value="#{progStlItemSubStlmentAction.reportHeader.strDate}"
+                            <p:inputText id="strDate"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strDate}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:200px;"/>
                         </h:panelGrid>
@@ -95,19 +102,6 @@
                                                  record.subcttItemName eq '质保金'? 'rowTotalStyle':null}"
                              scrollable="true"
                              scrollHeight="410">
-                        <p:column headerText="操作" style="width:30px;text-align: center;">
-                            <p:commandButton  icon="ui-icon-search"
-                                              style="height:18px;width:18px"
-                                              rendered="#{record.subcttItemName eq '小计'? 'false':
-                                                 record.subcttItemName eq '本期净结算额'? 'false':
-                                                 record.subcttItemName eq '合计(扣除其它栏款项后本期结算价值)'?'false':
-                                                 record.subcttItemName eq '其中:安全施工措施费'?'false':
-                                                 record.subcttItemName eq '质保金'? 'false':'true'}"
-                                              update="pdt,:form:msgs"
-                                              onclick="PF('wVDlgView').show()">
-                                <!--action="#{progSubstlItemAction.selectRecordAction('Sel',record)}"-->
-                            </p:commandButton>
-                        </p:column>
                         <p:column headerText="序号" style="width:30px">
                             <h:outputText value="#{row + 1}"/>
                         </p:column>

@@ -112,33 +112,6 @@ public class ProgStlInfoSubStlmentAction {
         strRowSelectedFlag="false";
     }
 
-    private String getMaxIdPlusOne(){
-        try {
-            Integer intTemp;
-            String strMaxTkStlId= progStlInfoService.getStrMaxStlId(strStlType);
-            if(StringUtils .isEmpty(ToolUtil.getStrIgnoreNull(strMaxTkStlId))){
-                strMaxTkStlId="STLP"+ ToolUtil.getStrToday()+"001";
-            }
-            else{
-                if(strMaxTkStlId .length()>3){
-                    String strTemp=strMaxTkStlId.substring(strMaxTkStlId .length() -3).replaceFirst("^0+","");
-                    if(ToolUtil.strIsDigit(strTemp)){
-                        intTemp=Integer.parseInt(strTemp) ;
-                        intTemp=intTemp+1;
-                        strMaxTkStlId=strMaxTkStlId.substring(0,strMaxTkStlId.length()-3)+StringUtils.leftPad(intTemp.toString(),3,"0");
-                    }else{
-                        strMaxTkStlId+="001";
-                    }
-                }
-            }
-            return strMaxTkStlId ;
-        } catch (Exception e) {
-            logger.error("结算信息查询失败", e);
-            MessageUtil.addError("结算信息查询失败");
-            return "";
-        }
-    }
-
     public void onQueryFormPreAction(String strQryFlag) {
         try {
             progStlInfoShowNotFormList.clear();

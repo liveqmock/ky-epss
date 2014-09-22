@@ -29,31 +29,38 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <h:inputHidden id="hiPkid" value="#{progStlItemSubStlmentAction.reportHeader.strSubcttPkid}"/>
+                    <h:inputHidden id="hiPkid"
+                                   value="#{progStlItemSubStlmentAction.reportHeader.strSubcttPkid}"/>
                     <h:panelGrid id="pgCondition">
                         <h:panelGrid columns="4">
                             <p:outputLabel value="工程名称：" for="id"/>
-                            <p:inputText id="id" value="#{progStlItemSubStlmentAction.reportHeader.strTkcttName}"
+                            <p:inputText id="id"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strTkcttName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:500px;"/>
                             <p:outputLabel value="结算单编号：" for="strStlId"/>
-                            <p:inputText id="strStlId" value="#{progStlItemSubStlmentAction.reportHeader.strStlId}"
+                            <p:inputText id="strStlId"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strStlId}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:200px;"/>
                             <p:outputLabel value="工程项目：" for="strSubcttName"/>
-                            <p:inputText id="strSubcttName" value="#{progStlItemSubStlmentAction.reportHeader.strSubcttName}"
+                            <p:inputText id="strSubcttName"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strSubcttName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:500px;"/>
                             <p:outputLabel value="协作合同编号：" for="strSubcttId"/>
-                            <p:inputText id="strSubcttId" value="#{progStlItemSubStlmentAction.reportHeader.strSubcttId}"
+                            <p:inputText id="strSubcttId"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strSubcttId}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:200px;"/>
                             <p:outputLabel value="协作队伍：" for="strSignPartName"/>
-                            <p:inputText id="strSignPartName" value="#{progStlItemSubStlmentAction.reportHeader.strSignPartName}"
+                            <p:inputText id="strSignPartName"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strSignPartName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:500px;"/>
                             <p:outputLabel value="日期：" for="strDate"/>
-                            <p:inputText id="strDate" value="#{progStlItemSubStlmentAction.reportHeader.strDate}"
+                            <p:inputText id="strDate"
+                                         value="#{progStlItemSubStlmentAction.reportHeader.strDate}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:200px;"/>
                         </h:panelGrid>

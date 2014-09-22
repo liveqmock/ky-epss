@@ -36,20 +36,20 @@
                         <h:panelGrid columns="4">
                             <p:outputLabel value="分包合同：" for="id" />
                             <p:selectOneMenu id="id"
-                                         value="#{progStlItemSubStlmentTTAction.progStlInfoShow.stlPkid}"
-                                         disabled="#{progStlItemSubStlmentTTAction.styleModel.disabled_Flag}"
-                                         style="#{progStlItemSubStlmentTTAction.styleModel.disabled_Style};">
-                                <f:selectItems value="#{progStlItemSubStlmentTTAction.subcttList}"/>
+                                         value="#{progStlInfoSubStlmentTTAction.progStlInfoShow.stlPkid}"
+                                         disabled="#{progStlInfoSubStlmentTTAction.styleModel.disabled_Flag}"
+                                         style="#{progStlInfoSubStlmentTTAction.styleModel.disabled_Style};">
+                                <f:selectItems value="#{progStlInfoSubStlmentTTAction.subcttList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="期数编码：" for="periodNo"/>
-                            <p:inputText id="periodNo" value="#{progStlItemSubStlmentTTAction.progStlInfoShow.periodNo}"
+                            <p:inputText id="periodNo" value="#{progStlInfoSubStlmentTTAction.progStlInfoShow.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"
-                                         disabled="#{progStlItemSubStlmentTTAction.styleModel.disabled_Flag}"
-                                         style="#{progStlItemSubStlmentTTAction.styleModel.disabled_Style};"/>
+                                         disabled="#{progStlInfoSubStlmentTTAction.styleModel.disabled_Flag}"
+                                         style="#{progStlInfoSubStlmentTTAction.styleModel.disabled_Style};"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:commandButton id="qryBtn" value="查询"
-                                             action="#{progStlItemSubStlmentTTAction.onQueryFormedAction('Approve','true')}"
+                                             action="#{progStlInfoSubStlmentTTAction.onQueryFormedAction('Approve','true')}"
                                              update="pdt,msgs">
                             </p:commandButton>
                             <p:commandButton id="resetBtn" value="重置"
@@ -59,7 +59,7 @@
                         </h:panelGrid>
                     </h:panelGrid>
                     <p:dataTable id="pdt" style="width:100%;"
-                                 value="#{progStlItemSubStlmentTTAction.progStlInfoShowList}"
+                                 value="#{progStlInfoSubStlmentTTAction.progStlInfoShowList}"
                                  var="record"
                                  rowKey="#{record.pkid}"
                                  selectionMode="single"
