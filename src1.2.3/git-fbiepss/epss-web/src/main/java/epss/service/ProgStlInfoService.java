@@ -1,9 +1,6 @@
 package epss.service;
 
-import epss.common.enums.EnumResType;
-import epss.common.enums.EnumFlowStatus;
-import epss.common.enums.EnumFlowStatusReason;
-import epss.common.enums.EnumSubcttType;
+import epss.common.enums.*;
 import epss.repository.dao.FlowCtrlHisMapper;
 import epss.repository.model.model_show.ProgStlInfoShow;
 import skyline.util.ToolUtil;
@@ -31,7 +28,7 @@ public class ProgStlInfoService {
     @Resource
     private MyProgStlInfoMapper myProgStlInfoMapper;
     @Resource
-    private FlowCtrlHisMapper flowCtrlHisMapper;
+    private FlowCtrlHisService flowCtrlHisService;
     @Resource
     private CttInfoService cttInfoService;
     @Resource
@@ -264,7 +261,7 @@ public class ProgStlInfoService {
     public void accountAction(ProgStlInfo progStlInfoPara) {
         progStlInfoPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS4.getCode());
         progStlInfoPara.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON7.getCode());
-        flowCtrlHisMapper.insert(fromProgStlInfoToFlowCtrlHis(progStlInfoPara, "update"));
+        flowCtrlHisService.insertRecord(fromProgStlInfoToFlowCtrlHis(progStlInfoPara, "update"));
     }
 
     public FlowCtrlHis fromProgStlInfoToFlowCtrlHis(ProgStlInfo progStlInfoPara,String strOperType){
@@ -276,6 +273,18 @@ public class ProgStlInfoService {
         flowCtrlHis.setFlowStatusReason(progStlInfoPara.getFlowStatusReason());
         flowCtrlHis.setCreatedTime(progStlInfoPara.getCreatedTime());
         flowCtrlHis.setCreatedBy(progStlInfoPara.getCreatedBy());
+        flowCtrlHis.setOperType(strOperType);
+        return flowCtrlHis;
+    }
+    public FlowCtrlHis fromProgStlInfoShowToFlowCtrlHis(ProgStlInfoShow progStlInfoShowPara,String strOperType){
+        FlowCtrlHis flowCtrlHis =new FlowCtrlHis();
+        flowCtrlHis.setInfoType(progStlInfoShowPara.getStlType());
+        flowCtrlHis.setInfoPkid(progStlInfoShowPara.getStlPkid());
+        flowCtrlHis.setPeriodNo(progStlInfoShowPara.getPeriodNo());
+        flowCtrlHis.setFlowStatus(progStlInfoShowPara.getFlowStatus());
+        flowCtrlHis.setFlowStatusReason(progStlInfoShowPara.getFlowStatusReason());
+        flowCtrlHis.setCreatedTime(progStlInfoShowPara.getCreatedTime());
+        flowCtrlHis.setCreatedBy(progStlInfoShowPara.getCreatedBy());
         flowCtrlHis.setOperType(strOperType);
         return flowCtrlHis;
     }
@@ -324,6 +333,7 @@ public class ProgStlInfoService {
         return progStlInfoMapper.selectByPrimaryKey(strPkId);
     }
 
+    // 插入 Start
     public void insertRecord(ProgStlInfoShow progStlInfoShowPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
@@ -333,6 +343,8 @@ public class ProgStlInfoService {
         progStlInfoShowPara.setLastUpdBy(strOperatorIdTemp);
         progStlInfoShowPara.setLastUpdTime(strLastUpdTimeTemp);
         progStlInfoMapper.insert(fromModelShowToModel(progStlInfoShowPara)) ;
+        flowCtrlHisService.insertRecord(
+                fromProgStlInfoShowToFlowCtrlHis(progStlInfoShowPara, EnumOperType.OPER_TYPE0.getCode()));
     }
     public void insertRecord(ProgStlInfo progStlInfoPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
@@ -343,9 +355,9 @@ public class ProgStlInfoService {
         progStlInfoPara.setLastUpdBy(strOperatorIdTemp);
         progStlInfoPara.setLastUpdTime(strLastUpdTimeTemp);
         progStlInfoMapper.insert(progStlInfoPara) ;
+        flowCtrlHisService.insertRecord(
+                fromProgStlInfoToFlowCtrlHis(progStlInfoPara, EnumOperType.OPER_TYPE1.getCode()));
     }
-
-    // 插入 Start
     @Transactional
     public void addSubStlQInfoAndItemInitDataAction(ProgStlInfoShow progStlInfoShowPara) {
         insertRecord(progStlInfoShowPara);
@@ -368,19 +380,16 @@ public class ProgStlInfoService {
     }
     // 插入 End
 
+    // 更新 Start
     @Transactional
-    public void updateRecordForSubCttPApprovePass(
+    public void updSubCttPApprovePass(
             ProgStlInfo progStlInfoPara,
             List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForApprovePara){
         //结算登记表更新
-        progStlInfoPara.setRecVersion(
-                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecVersion())+1);
-        progStlInfoPara.setArchivedFlag("0");
-        progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-        progStlInfoPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
-        progStlInfoPara.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
-        progStlInfoMapper.updateByPrimaryKey(progStlInfoPara) ;
+        ProgStlInfoShow progStlInfoShowTemp=fromModelToModelShow(progStlInfoPara);
+        progStlInfoShowTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
+        progStlInfoShowTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
+        updateRecord(progStlInfoShowTemp) ;
         //将价格结算的完整数据插入至PROG_STL_ITEM_SUB_STLMENT表
         for (int i=0;i< progStlItemSubStlmentShowListForApprovePara.size();i++){
             ProgStlItemSubStlmentShow itemUnit= progStlItemSubStlmentShowListForApprovePara.get(i);
@@ -396,15 +405,12 @@ public class ProgStlInfoService {
         progStlInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         progStlInfoShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlInfoMapper.updateByPrimaryKey(fromModelShowToModel(progStlInfoShowPara));
+        flowCtrlHisService.insertRecord(
+                fromProgStlInfoShowToFlowCtrlHis(progStlInfoShowPara, EnumOperType.OPER_TYPE1.getCode()));
     }
     @Transactional
-    public void updateRecord(ProgStlInfo progStlInfoPara) {
-        progStlInfoPara.setRecVersion(
-                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecVersion()) + 1);
-        progStlInfoPara.setArchivedFlag("0");
-        progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-        progStlInfoMapper.updateByPrimaryKey(progStlInfoPara);
+    public void updAutoLinkTask(ProgStlInfo progStlInfoPara) {
+        updateRecord(fromModelToModelShow(progStlInfoPara));
 
         // 数量结算
         if (EnumResType.RES_TYPE3.getCode().equals(progStlInfoPara.getStlType())) {
@@ -485,32 +491,7 @@ public class ProgStlInfoService {
             }
         }
     }
-
-
-    @Transactional
-    public void deleteRecordForSubCttPApprovePass(ProgStlInfo progStlInfoPara,String powerType){
-        //删除stl表中stl_type为5的记录
-        ProgStlInfoExample example = new ProgStlInfoExample();
-        example.createCriteria()
-                .andStlTypeEqualTo(progStlInfoPara.getStlType())
-                .andStlPkidEqualTo(progStlInfoPara.getStlPkid())
-                .andPeriodNoEqualTo(progStlInfoPara.getPeriodNo());
-        progStlInfoMapper.deleteByExample(example);
-
-        //更新power表中power_type为3或者4的记录状态为审核状态
-        example = new ProgStlInfoExample();
-        example.createCriteria()
-                .andStlTypeEqualTo(powerType)
-                .andStlPkidEqualTo(progStlInfoPara.getStlPkid())
-                .andPeriodNoEqualTo(progStlInfoPara.getPeriodNo());
-        List<ProgStlInfo> progStlInfoListTemp = progStlInfoMapper.selectByExample(example);
-        ProgStlInfo progStlInfoTemp = progStlInfoListTemp.get(0);
-        progStlInfoTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
-        progStlInfoTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
-        progStlInfoMapper.updateByPrimaryKey(progStlInfoTemp);
-        //删除PROG_STL_ITEM_SUB_STLMENT表中的相应记录
-        progStlItemSubStlmentService.deleteRecordByExample(progStlInfoPara.getStlPkid(), progStlInfoPara.getPeriodNo());
-    }
+    // 更新 End
 
     // 删除 Start
     // 分包数量结算
@@ -609,6 +590,31 @@ public class ProgStlInfoService {
             return 0;
         }
         return 1;
+    }
+    //分包价格结算
+    @Transactional
+    public void delSubCttPApprovePass(ProgStlInfo progStlInfoPara,String powerType){
+        //删除stl表中stl_type为5的记录
+        ProgStlInfoExample example = new ProgStlInfoExample();
+        example.createCriteria()
+                .andStlTypeEqualTo(progStlInfoPara.getStlType())
+                .andStlPkidEqualTo(progStlInfoPara.getStlPkid())
+                .andPeriodNoEqualTo(progStlInfoPara.getPeriodNo());
+        progStlInfoMapper.deleteByExample(example);
+
+        //更新power表中power_type为3或者4的记录状态为审核状态
+        example = new ProgStlInfoExample();
+        example.createCriteria()
+                .andStlTypeEqualTo(powerType)
+                .andStlPkidEqualTo(progStlInfoPara.getStlPkid())
+                .andPeriodNoEqualTo(progStlInfoPara.getPeriodNo());
+        List<ProgStlInfo> progStlInfoListTemp = progStlInfoMapper.selectByExample(example);
+        ProgStlInfo progStlInfoTemp = progStlInfoListTemp.get(0);
+        progStlInfoTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
+        progStlInfoTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
+        progStlInfoMapper.updateByPrimaryKey(progStlInfoTemp);
+        //删除PROG_STL_ITEM_SUB_STLMENT表中的相应记录
+        progStlItemSubStlmentService.deleteRecordByExample(progStlInfoPara.getStlPkid(), progStlInfoPara.getPeriodNo());
     }
     // 总包统计结算
     @Transactional

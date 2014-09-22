@@ -293,7 +293,7 @@ public class ProgStlInfoTkMeaAction {
         }
         else if(strSubmitType.equals("Del")){
             progStlInfoShowDel.setStlType(strStlType);
-            progStlInfoService.delSubMStlInfoAndItem(progStlInfoShowDel);
+            progStlInfoService.delTkMeaStlInfoAndItem(progStlInfoShowDel);
         }
         ProgStlInfoShow progStlInfoShowTemp =new ProgStlInfoShow();
         progStlInfoShowTemp.setStlType(strStlType);

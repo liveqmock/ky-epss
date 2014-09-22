@@ -126,12 +126,12 @@ public class CstplItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
                     // 原因：录入完毕
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode());
-                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
                     cttInfo.setFlowStatus(null);
                     cttInfo.setFlowStatusReason(null);
-                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }// 审核
@@ -141,14 +141,14 @@ public class CstplItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
                     // 原因：审核通过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON1.getCode());
-                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
                     // 状态标志：初始
                     cttInfo.setFlowStatus(null);
                     // 原因：审核未过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON2.getCode());
-                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据审核未过！");
                 }
             } // 复核
@@ -158,7 +158,7 @@ public class CstplItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                     // 原因：复核通过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
-                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
                     // 这样写可以实现越级退回
@@ -169,7 +169,7 @@ public class CstplItemAction {
                     }
                     // 原因：复核未过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode());
-                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据复核未过！");
                 }
             }// 批准
@@ -179,7 +179,7 @@ public class CstplItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
                     // 原因：批准通过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
-                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
+                    cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerTypePara.equals("ApproveFail")) {
                     // 检查是否被使用
@@ -200,7 +200,7 @@ public class CstplItemAction {
                     }
                     // 原因：批准未过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
-                    cttInfoService.updateRecord(cttInfo,strPowerTypePara);
+                    cttInfoService.updateRecord(cttInfo);
 
                     List<ProgStlInfo> progStlInfoListTemp =
                             progStlInfoService.selectIsUsedInQMPBySubcttPkid(cttInfo.getPkid());
@@ -1203,7 +1203,7 @@ public class CstplItemAction {
             }
 
             cttInfo.setAttachment(sbTemp.toString());
-            cttInfoService.updateRecord(cttInfo,"AttachRemove");
+            cttInfoService.updateRecord(cttInfo);
         } catch (Exception e) {
             logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -1261,7 +1261,7 @@ public class CstplItemAction {
                 return;
             }
             cttInfo.setAttachment(sb.toString());
-            cttInfoService.updateRecord(cttInfo,"AttachAdd");
+            cttInfoService.updateRecord(cttInfo);
             try {
                 inStream = new BufferedInputStream(uploadedFile.getInputstream());
                 fileOutputStream = new FileOutputStream(descFile);

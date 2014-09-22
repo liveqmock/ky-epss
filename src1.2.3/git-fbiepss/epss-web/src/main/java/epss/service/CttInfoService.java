@@ -7,6 +7,7 @@ import epss.repository.model.*;
 import epss.repository.model.model_show.CttInfoShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import skyline.util.ToolUtil;
 
 import javax.annotation.Resource;
@@ -138,16 +139,37 @@ public class CttInfoService {
         return (cttInfoMapper.selectByExample(example)).size()>0;
     }
 
+    public FlowCtrlHis fromCttInfoToFlowCtrlHis(CttInfo cttInfoPara,String strOperTypePara){
+        FlowCtrlHis flowCtrlHisTemp =new FlowCtrlHis();
+        flowCtrlHisTemp.setInfoType(cttInfoPara.getCttType());
+        flowCtrlHisTemp.setInfoPkid(cttInfoPara.getPkid());
+        flowCtrlHisTemp.setInfoId(cttInfoPara.getId());
+        flowCtrlHisTemp.setInfoName(cttInfoPara.getName());
+        flowCtrlHisTemp.setFlowStatus(cttInfoPara.getFlowStatus());
+        flowCtrlHisTemp.setFlowStatusReason(cttInfoPara.getFlowStatusReason());
+        flowCtrlHisTemp.setCreatedBy(cttInfoPara.getCreatedBy());
+        flowCtrlHisTemp.setCreatedByName(ToolUtil.getUserName(cttInfoPara.getCreatedBy()));
+        flowCtrlHisTemp.setCreatedTime(cttInfoPara.getCreatedTime());
+        flowCtrlHisTemp.setRemark(cttInfoPara.getRemark());
+        flowCtrlHisTemp.setOperType(strOperTypePara);
+        return flowCtrlHisTemp;
+    }
+
+    @Transactional
     public void insertRecord(CttInfoShow cttInfoShowPara) {
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
-        cttInfoShowPara.setArchivedFlag("0");
-        cttInfoShowPara.setCreatedBy(strOperatorIdTemp);
-        cttInfoShowPara.setCreatedTime(strLastUpdTimeTemp);
-        cttInfoShowPara.setLastUpdBy(strOperatorIdTemp);
-        cttInfoShowPara.setLastUpdTime(strLastUpdTimeTemp);
-        cttInfoMapper.insertSelective(fromModelShowToModel(cttInfoShowPara));
+        CttInfo cttInfoTemp=fromModelShowToModel(cttInfoShowPara);
+        cttInfoTemp.setArchivedFlag("0");
+        cttInfoTemp.setCreatedBy(strOperatorIdTemp);
+        cttInfoTemp.setCreatedTime(strLastUpdTimeTemp);
+        cttInfoTemp.setLastUpdBy(strOperatorIdTemp);
+        cttInfoTemp.setLastUpdTime(strLastUpdTimeTemp);
+        cttInfoMapper.insertSelective(cttInfoTemp);
+        flowCtrlHisService.insertRecord(
+                fromCttInfoToFlowCtrlHis(cttInfoTemp,EnumOperType.OPER_TYPE0.getCode()));
     }
+    @Transactional
     public void insertRecord(CttInfo cttInfoPara) {
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
@@ -157,76 +179,50 @@ public class CttInfoService {
         cttInfoPara.setLastUpdBy(strOperatorIdTemp);
         cttInfoPara.setLastUpdTime(strLastUpdTimeTemp);
         cttInfoMapper.insertSelective(cttInfoPara);
+        flowCtrlHisService.insertRecord(
+                fromCttInfoToFlowCtrlHis(cttInfoPara,EnumOperType.OPER_TYPE0.getCode()));
     }
-
-    public FlowCtrlHis fromCttInfoToFlowCtrlHis(CttInfo cttInfoPara){
-        FlowCtrlHis flowCtrlHisTemp =new FlowCtrlHis();
-        flowCtrlHisTemp.setInfoType(cttInfoPara.getCttType());
-        flowCtrlHisTemp.setInfoPkid(cttInfoPara.getPkid());
-        flowCtrlHisTemp.setInfoId(cttInfoPara.getId());
-        flowCtrlHisTemp.setInfoName(cttInfoPara.getName());
-        //flowCtrlHisTemp.setPeriodNo();
-        flowCtrlHisTemp.setFlowStatus(cttInfoPara.getFlowStatus());
-        flowCtrlHisTemp.setFlowStatusReason(cttInfoPara.getFlowStatusReason());
-        flowCtrlHisTemp.setCreatedBy(cttInfoPara.getCreatedBy());
-        flowCtrlHisTemp.setCreatedByName(ToolUtil.getUserName(cttInfoPara.getCreatedBy()));
-        flowCtrlHisTemp.setCreatedTime(cttInfoPara.getCreatedTime());
-        flowCtrlHisTemp.setRemark(cttInfoPara.getRemark());
-        return flowCtrlHisTemp;
-    }
-    public void updateRecord(CttInfo cttInfoPara,String strPowerTypePara){
-        try {
-            cttInfoPara.setRecVersion(
-                ToolUtil.getIntIgnoreNull(cttInfoPara.getRecVersion())+1);
-            cttInfoPara.setArchivedFlag("0");
-            cttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-            cttInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-            cttInfoMapper.updateByPrimaryKey(cttInfoPara);
-            FlowCtrlHis flowCtrlHisTemp=fromCttInfoToFlowCtrlHis(cttInfoPara);
-            List<Oper> operListTemp=flowCtrlHisService.selectOperByExample(ToolUtil.getOperatorManager().getOperatorId());
-            for(Oper operTemp:operListTemp){
-                if (ToolUtil.getOperatorManager().getOperatorId().equals(operTemp.getId())){
-                    flowCtrlHisTemp.setTid(operTemp.getTid());
-                }
-            }
-            if(strPowerTypePara.contains("Pass")){
-                flowCtrlHisService.insertRecord(flowCtrlHisTemp, EnumOperType.OPER_TYPE0.getCode());
-            }else if(strPowerTypePara.contains("Fail")){
-                flowCtrlHisService.insertRecord(flowCtrlHisTemp, EnumOperType.OPER_TYPE1.getCode());
-            }else if(strPowerTypePara.contains("Del")){
-                flowCtrlHisService.insertRecord(flowCtrlHisTemp, EnumOperType.OPER_TYPE2.getCode());
-            }else if(strPowerTypePara.equals("AttachAdd")){
-                flowCtrlHisTemp.setRemark(flowCtrlHisTemp.getRemark()+"AttachAdd");
-                flowCtrlHisService.insertRecord(flowCtrlHisTemp, EnumOperType.OPER_TYPE1.getCode());
-            }else if(strPowerTypePara.equals("AttachRemove")){
-                flowCtrlHisTemp.setRemark(flowCtrlHisTemp.getRemark()+"AttachRemove");
-                flowCtrlHisService.insertRecord(flowCtrlHisTemp, EnumOperType.OPER_TYPE2.getCode());
-            }
-        } catch (Exception e) {
-            throw e;
-        }
-    }
+    @Transactional
     public void updateRecord(CttInfoShow cttInfoShowPara){
-        cttInfoShowPara.setRecVersion(
-                ToolUtil.getIntIgnoreNull(cttInfoShowPara.getRecVersion())+1);
-        cttInfoShowPara.setArchivedFlag("0");
-        cttInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        cttInfoShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-        cttInfoMapper.updateByPrimaryKey(fromModelShowToModel(cttInfoShowPara));
-    }
-    public void updateRecordForOperRes(CttInfoShow cttInfoShowPara){
-        CttInfo cttInfoTemp = getCttInfoByPkId(cttInfoShowPara.getPkid());
-        cttInfoTemp.setName(cttInfoShowPara.getName());
+        CttInfo cttInfoTemp=fromModelShowToModel(cttInfoShowPara);
         cttInfoTemp.setRecVersion(
-                ToolUtil.getIntIgnoreNull(cttInfoShowPara.getRecVersion())+1);
+                ToolUtil.getIntIgnoreNull(cttInfoTemp.getRecVersion())+1);
         cttInfoTemp.setArchivedFlag("0");
         cttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
         cttInfoTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         cttInfoMapper.updateByPrimaryKey(cttInfoTemp);
+        flowCtrlHisService.insertRecord(
+                fromCttInfoToFlowCtrlHis(cttInfoTemp,EnumOperType.OPER_TYPE1.getCode()));
     }
-
-    public int deleteRecord(String strPkId){
-        return cttInfoMapper.deleteByPrimaryKey(strPkId);
+    @Transactional
+    public void updateRecord(CttInfo cttInfoPara){
+        cttInfoPara.setRecVersion(
+                ToolUtil.getIntIgnoreNull(cttInfoPara.getRecVersion())+1);
+        cttInfoPara.setArchivedFlag("0");
+        cttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
+        cttInfoMapper.updateByPrimaryKey(cttInfoPara);
+        flowCtrlHisService.insertRecord(
+                fromCttInfoToFlowCtrlHis(cttInfoPara,EnumOperType.OPER_TYPE1.getCode()));
+    }
+    @Transactional
+    public void updateRecordForOperRes(String strCttInfoPkidPara){
+        CttInfo cttInfoTemp = getCttInfoByPkId(strCttInfoPkidPara);
+        cttInfoTemp.setRecVersion(
+                ToolUtil.getIntIgnoreNull(cttInfoTemp.getRecVersion())+1);
+        cttInfoTemp.setArchivedFlag("0");
+        cttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttInfoTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
+        cttInfoMapper.updateByPrimaryKey(cttInfoTemp);
+        flowCtrlHisService.insertRecord(
+                fromCttInfoToFlowCtrlHis(cttInfoTemp,EnumOperType.OPER_TYPE1.getCode()));
+    }
+    @Transactional
+    public int deleteRecord(String strCttInfoPkidPara){
+        CttInfo cttInfoTemp = getCttInfoByPkId(strCttInfoPkidPara);
+        flowCtrlHisService.insertRecord(
+                fromCttInfoToFlowCtrlHis(cttInfoTemp,EnumOperType.OPER_TYPE1.getCode()));
+        return cttInfoMapper.deleteByPrimaryKey(strCttInfoPkidPara);
     }
 
     public String getStrMaxCttId(String strCttType){

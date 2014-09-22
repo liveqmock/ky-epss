@@ -370,7 +370,7 @@ public class ProgStlItemSubQAction {
                                     progStlInfoService.selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryM);
                             if (progStlInfoShowConstructsTemp.size()==0){
                                 progStlInfo.setAutoLinkAdd("0");
-                                progStlInfoService.updateRecord(progStlInfo);
+                                progStlInfoService.updAutoLinkTask(progStlInfo);
                                 progStlInfoShowQryM.setAutoLinkAdd("1");
                                 progStlInfoShowQryM.setId(getMaxId( progStlInfoShowQryM.getStlType()));
                                 progStlInfoService.insertRecord(progStlInfoShowQryM);
@@ -378,7 +378,7 @@ public class ProgStlItemSubQAction {
                                 for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
                                     if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
                                         progStlInfo.setAutoLinkAdd("0");
-                                        progStlInfoService.updateRecord(progStlInfo);
+                                        progStlInfoService.updAutoLinkTask(progStlInfo);
                                         progStlInfoShowQryM.setAutoLinkAdd("1");
                                         progStlInfoService.updateRecord(progStlInfoShowQryM);
                                     }else{
@@ -387,7 +387,7 @@ public class ProgStlItemSubQAction {
                                         }else{
                                             progStlInfo.setAutoLinkAdd("1");
                                         }
-                                        progStlInfoService.updateRecord(progStlInfo);
+                                        progStlInfoService.updAutoLinkTask(progStlInfo);
                                     }
                                 }
                             }
@@ -396,14 +396,14 @@ public class ProgStlItemSubQAction {
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
                     // 原因：录入完毕
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode());
-                    progStlInfoService.updateRecord(progStlInfo);
+                    progStlInfoService.updAutoLinkTask(progStlInfo);
                     strPassFlag="false";
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerType.equals("MngFail")) {
                     progStlInfo.setAutoLinkAdd("");
                     progStlInfo.setFlowStatus(null);
                     progStlInfo.setFlowStatusReason(null);
-                    progStlInfoService.updateRecord(progStlInfo);
+                    progStlInfoService.updAutoLinkTask(progStlInfo);
                     strPassFlag="true";
                     MessageUtil.addInfo("数据录入未完！");
                 }
@@ -413,14 +413,14 @@ public class ProgStlItemSubQAction {
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
                     // 原因：审核通过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON1.getCode());
-                    progStlInfoService.updateRecord(progStlInfo);
+                    progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerType.equals("CheckFail")) {
                     // 状态标志：初始
                     progStlInfo.setFlowStatus(null);
                     // 原因：审核未过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON2.getCode());
-                    progStlInfoService.updateRecord(progStlInfo);
+                    progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据审核未过！");
                 }
             } else if (strPowerType.contains("DoubleCheck")) {// 复核
@@ -430,7 +430,7 @@ public class ProgStlItemSubQAction {
                         progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                         // 原因：复核通过
                         progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
-                        progStlInfoService.updateRecord(progStlInfo);
+                        progStlInfoService.updAutoLinkTask(progStlInfo);
                         MessageUtil.addInfo("数据复核通过！");
                     }catch (Exception e) {
                         logger.error("复核通过操作失败。", e);
@@ -461,7 +461,7 @@ public class ProgStlItemSubQAction {
 
                         // 原因：复核未过
                         progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode());
-                        progStlInfoService.updateRecord(progStlInfo);
+                        progStlInfoService.updAutoLinkTask(progStlInfo);
                         MessageUtil.addInfo("数据复核未过！");
                     }catch (Exception e) {
                         logger.error("删除数据失败,复核未过操作失败。", e);
@@ -474,7 +474,7 @@ public class ProgStlItemSubQAction {
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
                     // 原因：批准通过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
-                    progStlInfoService.updateRecord(progStlInfo);
+                    progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerType.equals("ApproveFail")) {
                     // 这样写可以实现越级退回
@@ -487,7 +487,7 @@ public class ProgStlItemSubQAction {
                     }
                     // 原因：批准未过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
-                    progStlInfoService.updateRecord(progStlInfo);
+                    progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据批准未过！");
                 }
             }

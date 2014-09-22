@@ -65,8 +65,12 @@ public class FlowCtrlHisService {
         return flowCtrlHisMapper.selectByExample(example);
     }
 
-    public void insertRecord(FlowCtrlHis flowCtrlHisPara,String strOperType) {
-        flowCtrlHisPara.setOperType(strOperType);
+    public void insertRecord(FlowCtrlHis flowCtrlHisPara) {
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
+        flowCtrlHisPara.setCreatedBy(strOperatorIdTemp);
+        flowCtrlHisPara.setCreatedTime(strLastUpdTimeTemp);
+        flowCtrlHisPara.setArchivedFlag("0");
         flowCtrlHisMapper.insertSelective(flowCtrlHisPara);
     }
 
