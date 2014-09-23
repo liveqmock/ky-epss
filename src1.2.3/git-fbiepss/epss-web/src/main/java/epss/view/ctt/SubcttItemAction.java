@@ -127,7 +127,7 @@ public class SubcttItemAction {
         /*分包合同*/
                 cttInfo = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
                 // 附件记录变成List
-                attachmentList = attachmentStrToList(cttInfo.getAttachment());
+                attachmentList = ToolUtil.getListAttachmentByStrAttachment(cttInfo.getAttachment());
                 beansMap.put("cttInfo", cttInfo);
         /*成本计划*/
                 String strCstplPkidInInitCtt = cttInfo.getParentPkid();
@@ -838,21 +838,6 @@ public class SubcttItemAction {
     }
 
     //附件相关方法
-    public List<AttachmentModel> attachmentStrToList(String strAttachmentPara){
-        List<AttachmentModel> attachmentListTemp=new ArrayList<>();
-        if(strAttachmentPara!=null){
-            attachmentListTemp.clear();
-            if (!StringUtils.isEmpty(strAttachmentPara)) {
-                String strTemps[] = strAttachmentPara.split(";");
-                for (int i = 0; i < strTemps.length; i++) {
-                    AttachmentModel attachmentModelTemp = new AttachmentModel(i + "", strTemps[i], strTemps[i]);
-                    attachmentListTemp.add(attachmentModelTemp);
-                }
-            }
-        }
-        return attachmentListTemp;
-    }
-
     public void onViewAttachment(AttachmentModel attachmentModelPara) {
         image.setValue("/upload/" + attachmentModelPara.getCOLUMN_NAME());
     }

@@ -3,8 +3,14 @@ package epss.view.settle;
 import epss.common.enums.EnumResType;
 import epss.common.enums.EnumFlowStatus;
 import epss.common.enums.EnumSubcttType;
+import epss.repository.model.model_show.AttachmentModel;
+import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.ProgStlItemSubStlmentShow;
 import epss.repository.model.model_show.ReportHeader;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
@@ -17,12 +23,14 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
+import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -77,8 +85,15 @@ public class ProgStlItemSubStlmentAction {
     private String strApprovedNotBtnRenderedForStlM;
     private String strFlowType;
 
+    //附件
+    private List<AttachmentModel> attachmentList;
+    private HtmlGraphicImage image;
+    //上传下载文件
+    private StreamedContent downloadFile;
+
     @PostConstruct
     public void init() {
+        this.attachmentList=new ArrayList<>();
         beansMap = new HashMap();
         reportHeader = new ReportHeader();
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
@@ -97,6 +112,8 @@ public class ProgStlItemSubStlmentAction {
         progStlInfo = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
         initHeadMsg();
         CttInfo cttInfo =cttInfoService.getCttInfoByPkId(progStlInfo.getStlPkid());
+        // 附件记录变成List
+        attachmentList = ToolUtil.getListAttachmentByStrAttachment(cttInfo.getAttachment());
         if ("".equals(ToolUtil.getStrIgnoreNull(cttInfo.getType()))){
             strApprovedNotBtnRenderedForStlQ="true";
             strApprovedNotBtnRenderedForStlM="true";
@@ -614,6 +631,31 @@ public class ProgStlItemSubStlmentAction {
         return tempCttItemList;
     }
 
+    public void onViewAttachment(AttachmentModel attachmentModelPara) {
+        image.setValue("/upload/" + attachmentModelPara.getCOLUMN_NAME());
+    }
+
+    public void download(String strAttachment){
+        try{
+            if(StringUtils .isEmpty(strAttachment) ){
+                MessageUtil.addError("路径为空，无法下载！");
+                logger.error("路径为空，无法下载！");
+            }
+            else {
+                String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload")+"/"+strAttachment;
+                File file = new File(fileName);
+                InputStream stream = new FileInputStream(fileName);
+                downloadFile = new DefaultStreamedContent(
+                        stream,
+                        new MimetypesFileTypeMap().getContentType(file),
+                        new String(strAttachment.getBytes("gbk"),"iso8859-1"));
+            }
+        } catch (Exception e) {
+            logger.error("下载文件失败", e);
+            MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
+        }
+    }
+
     /**
      * 根据权限进行审核
      *
@@ -817,6 +859,22 @@ public class ProgStlItemSubStlmentAction {
 
     public void setStrApprovedNotBtnRenderedForStlM(String strApprovedNotBtnRenderedForStlM) {
         this.strApprovedNotBtnRenderedForStlM = strApprovedNotBtnRenderedForStlM;
+    }
+
+    public List<AttachmentModel> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public HtmlGraphicImage getImage() {
+        return image;
+    }
+
+    public StreamedContent getDownloadFile() {
+        return downloadFile;
+    }
+
+    public void setImage(HtmlGraphicImage image) {
+        this.image = image;
     }
 /*智能字段End*/
 }

@@ -1,5 +1,7 @@
 package skyline.util;
 
+import epss.repository.model.model_show.AttachmentModel;
+import org.apache.commons.lang.*;
 import org.jdom.Element;
 import skyline.platform.db.ConnectionManager;
 import skyline.platform.db.DBUtil;
@@ -83,6 +85,22 @@ public class ToolUtil {
             stringBuffer.append("   ");
         }
         return stringBuffer.toString()+strTemp;
+    }
+
+    //附件相关方法
+    public static List<AttachmentModel> getListAttachmentByStrAttachment(String strAttachmentPara){
+        List<AttachmentModel> attachmentListTemp=new ArrayList<>();
+        if(strAttachmentPara!=null){
+            attachmentListTemp.clear();
+            if (!org.apache.commons.lang.StringUtils.isEmpty(strAttachmentPara)) {
+                String strTemps[] = strAttachmentPara.split(";");
+                for (int i = 0; i < strTemps.length; i++) {
+                    AttachmentModel attachmentModelTemp = new AttachmentModel(i + "", strTemps[i], strTemps[i]);
+                    attachmentListTemp.add(attachmentModelTemp);
+                }
+            }
+        }
+        return attachmentListTemp;
     }
 
     /*字符串忽略空的情况*/

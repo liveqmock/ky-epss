@@ -118,14 +118,20 @@
                                  rowIndexVar="row"
                                  rowKey="#{row + 1}"
                                  emptyMessage="数据记录为空..."
-                                 rowStyleClass="#{record.id eq null?'rowGrayStyle':
-                                  record.flowStatus eq record.operResFlowStatus?'rowGreenyellowStyle':'rowRedStyle'}"
+                                 rowStyleClass="#{record.isOwnTaskFlowFlag eq null?'rowGrayStyle':
+                                  record.isOwnTaskFlowFlag eq 'true'?'rowGreenyellowStyle':'rowRedStyle'}"
                                  scrollable="true"
                                  scrollHeight="442">
                         <p:column headerText="操作" style="width:30px;text-align: center;">
                             <p:commandButton icon="ui-icon-triangle-1-e"
                                              style="height:16px;width:30px;"
                                              rendered="#{record.isOwnTaskFlowFlag eq 'true'?'true':'false'}"
+                                             onclick="actSelect('#{record.type}','#{record.flowStatus}','#{record.pkid}')">
+                            </p:commandButton>
+                            <p:commandButton icon="ui-icon-search"
+                                             style="height:16px;width:30px;"
+                                             rendered="#{record.isOwnTaskFlowFlag eq null?'false'
+                                             :record.isOwnTaskFlowFlag eq 'true'?'false':'true'}"
                                              onclick="actSelect('#{record.type}','#{record.flowStatus}','#{record.pkid}')">
                             </p:commandButton>
                         </p:column>
