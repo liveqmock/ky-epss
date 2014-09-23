@@ -19,7 +19,7 @@
         </script>
     </ui:define>
     <ui:define name="content">
-        <h:form id="form">
+        <h:form id="form" enctype="multipart/form-data">
             <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
                 <p:commandButton value="导出到EXCEL"
@@ -213,11 +213,17 @@
                                 </p:selectOneMenu>
                                 <p:outputLabel value="备注：" for="operRemarkForOperAdd"/>
                                 <p:inputText id="operRemarkForOperAdd" value="#{deptOperAction.operAdd.remark}"/>
+                                <p:outputLabel value="图片签名：" for="operAttachmentForOperAdd"/>
+                                <p:fileUpload id="operAttachmentForOperAdd"
+                                              value="#{deptOperAction.operAdd.file}"
+                                              mode="simple"
+                                              allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid id="pgOperBtnForOperAdd" columns="2">
                             <p:commandButton id="submitBtnForOperAdd"
                                              value="提交（增加）"
+                                             ajax="false"
                                              action="#{deptOperAction.onClickForMngAction()}"
                                              update="pdt,msgs,pgViewForOperAdd"
                                              oncomplete="wVDlgViewForOperAdd.hide()">
@@ -263,11 +269,21 @@
                             </p:selectOneMenu>
                             <p:outputLabel value="备注：" for="operRemarkForOperUpd"/>
                             <p:inputText id="operRemarkForOperUpd" value="#{deptOperAction.operUpd.remark}"/>
+                            <p:outputLabel value="图片签名：" for="operAttachmentForOperUpd"/>
+                            <p:fileUpload id="operAttachmentForOperUpd"
+                                          value="#{deptOperAction.operUpd.file}"
+                                          mode="simple"
+                                          sizeLimit="100000"
+                                          allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
+                        </h:panelGrid>
+                        <h:panelGrid>
+                            <p:graphicImage  value="/upload/operPicture/#{deptOperAction.operUpd.attachment}"/>
                         </h:panelGrid>
                         <h:panelGrid id="pgOperBtnForOperUpd" columns="2">
                             <p:commandButton id="submitBtnForOperUpd"
                                              value="提交（更新）"
                                              action="#{deptOperAction.onClickForMngAction()}"
+                                             ajax="false"
                                              update="pdt,msgs,pgViewForOperUpd"
                                              oncomplete="wVDlgViewForOperUpd.hide()">
                             </p:commandButton>
@@ -316,6 +332,10 @@
                                 <p:inputText id="operRemarkForOperDel" value="#{deptOperAction.operDel.remark}"
                                              readonly="true"
                                              style="background-color:gainsboro;"/>
+                            </h:panelGrid>
+                            <h:panelGrid >
+                                <p:outputLabel value="图片签名：" for="operAttachmentForOperDel"/>
+                                <p:graphicImage id="operAttachmentForOperDel" value="/upload/operPicture/#{deptOperAction.operDel.attachment}"/>
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid id="pgOperBtnForOperDel" columns="2">

@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.NodeCollapseEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.security.MD5Helper;
@@ -20,7 +21,9 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
@@ -260,12 +263,16 @@ public class DeptOperAction implements Serializable {
                         return;
                     }
                     operAdd.setPasswd(MD5Helper.getMD5String(operAdd.getPasswd()));
+                    operAdd.setTid("126");
+                    operAdd.setAttachment(operAdd.getFile().getFileName());
                     deptOperService.insertOperRecord(operAdd);
                 } else if (strSubmitType.contains("Upd")) {
                     if (!submitOperPreCheck(operUpd)) {
                         return;
                     }
                     operUpd.setPasswd(MD5Helper.getMD5String(operUpd.getPasswd()));
+                    operUpd.setTid("126");
+                    operUpd.setAttachment(operUpd.getFile().getFileName());
                     deptOperService.updateOperRecord(operUpd);
                 } else if (strSubmitType.contains("Del")) {
                     deptOperService.deleteOperRecord(operDel);
@@ -304,6 +311,16 @@ public class DeptOperAction implements Serializable {
             MessageUtil.addInfo("请输入操作员密码！");
             return false;
         }
+        if (StringUtils.isEmpty(operPara.getFile().getFileName())) {
+            MessageUtil.addInfo("请上传图片签名！");
+            return false;
+        }
+        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
+        File file = new File(path+"/"+operPara.getFile().getFileName());
+        if (file.exists()) {
+            MessageUtil.addInfo("文件已存在，请重命名文件！");
+            return false;
+        }
         return true;
     }
     public String onExportExcel()throws IOException, WriteException {
@@ -318,7 +335,6 @@ public class DeptOperAction implements Serializable {
         }
         return null;
     }
-
     /*智能字段 Start*/
 
     public TidkeysService getTidkeysService() {
@@ -448,4 +464,5 @@ public class DeptOperAction implements Serializable {
     public void setBeansMap(Map beansMap) {
         this.beansMap = beansMap;
     }
+
 }
