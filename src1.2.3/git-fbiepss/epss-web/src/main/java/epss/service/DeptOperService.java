@@ -132,11 +132,14 @@ public class DeptOperService {
             }
             Oper operTemp=operMapper.selectByPrimaryKey(operPara.getPkid());
             String strDbFileName=operTemp.getAttachment();
-            File file = new File(dirFile, strDbFileName);
-            if (file.exists()) {
-                file.delete();
-                file = new File(dirFile, strUpdFileName);
+            File file=null;
+            if (strDbFileName!=null){
+                file = new File(dirFile, strDbFileName);
+                if (file.exists()) {
+                    file.delete();
+                }
             }
+            file = new File(dirFile, strUpdFileName);
             inputStream = new BufferedInputStream(uploadedFile.getInputstream());
             fileOutputStream = new FileOutputStream(file);
             byte[] buf = new byte[1024];

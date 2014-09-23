@@ -276,7 +276,7 @@
                                           sizeLimit="100000"
                                           allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
                         </h:panelGrid>
-                        <h:panelGrid>
+                        <h:panelGrid rendered="#{deptOperAction.operUpd.attachment eq null?'false':'true'}">
                             <p:graphicImage  value="/upload/operPicture/#{deptOperAction.operUpd.attachment}"/>
                         </h:panelGrid>
                         <h:panelGrid id="pgOperBtnForOperUpd" columns="2">
