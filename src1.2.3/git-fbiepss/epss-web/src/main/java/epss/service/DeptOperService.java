@@ -181,4 +181,15 @@ public class DeptOperService {
         }
         operMapper.deleteByPrimaryKey(operPara.getPkid());
     }
+    public List<Oper> selectByExample(String operIdPara){
+        OperExample example=new OperExample();
+        OperExample.Criteria criteria = example.createCriteria();
+        if (operIdPara!=null){
+            criteria.andIdEqualTo(operIdPara);
+        }
+        return operMapper.selectByExample(example);
+    }
+    public void updateRecord(Oper operPara){
+        operMapper.updateByPrimaryKey(operPara);
+    }
 }

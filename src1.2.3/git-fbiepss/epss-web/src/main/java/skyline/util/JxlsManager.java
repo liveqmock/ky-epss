@@ -40,7 +40,7 @@ public class JxlsManager {
         return null;
     }
 
-    private void outputExcel(Map beansMap, String templateFileName, String excelFilename) throws IOException {
+    /*private void outputExcel(Map beansMap, String templateFileName, String excelFilename) throws IOException {
         ServletOutputStream os = null;
         InputStream is = null;
         try {
@@ -64,9 +64,9 @@ public class JxlsManager {
                 is.close();
             }
         }
-    }
+    }*/
 
-    private void outputExcel1(Map beansMap, String templateFileName, String excelFilename) throws IOException {
+    private void outputExcel(Map beansMap, String templateFileName, String excelFilename) throws IOException {
         ServletOutputStream os = null;
         InputStream is = null;
         try {
@@ -90,8 +90,9 @@ public class JxlsManager {
                 ByteArrayOutputStream byteArrayOutPApprove = new ByteArrayOutputStream();
                 ByteArrayOutputStream byteArrayOutPAct = new ByteArrayOutputStream();
                 ByteArrayOutputStream byteArrayOutPFile = new ByteArrayOutputStream();
-                String imagPath = PropertyManager.getProperty("prj_root_dir") + "/signature/";
+                String imagPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");                
                 if (templateFileName.contains("actSubstl.xls")) {
+                    short rowNum=(Short)beansMap.get("actSubstlNum");
                     XLSTransformer transformer = new XLSTransformer();
                     is = new BufferedInputStream(new FileInputStream(templateFileName));
                     HSSFWorkbook wb = (HSSFWorkbook) transformer.transformXLS(is, beansMap);
@@ -100,55 +101,55 @@ public class JxlsManager {
                     if (beansMap.get("qMngImagName") != null) {
                         BufferedImage bufferImgQMng = getImg(imagPath, String.valueOf(beansMap.get("qMngImagName")));
                         ImageIO.write(bufferImgQMng, "png", byteArrayOutQMng);
-                        HSSFClientAnchor anchorQMng = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, beansMap.size() - 9, (short) 4, beansMap.size() - 8);
+                        HSSFClientAnchor anchorQMng = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum+9, (short) 4, rowNum+10);
                         patriarch.createPicture(anchorQMng, wb.addPicture(byteArrayOutQMng.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     if (beansMap.get("qCheckImagName") != null) {
                         BufferedImage bufferImgQCheck = getImg(imagPath, String.valueOf(beansMap.get("qCheckImagName")));
                         ImageIO.write(bufferImgQCheck, "png", byteArrayOutQCheck);
-                        HSSFClientAnchor anchorQCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, beansMap.size() - 8, (short) 4, beansMap.size() - 7);
+                        HSSFClientAnchor anchorQCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum+10, (short) 4, rowNum+11);
                         patriarch.createPicture(anchorQCheck, wb.addPicture(byteArrayOutQMng.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     if (beansMap.get("qDoubleCheckImagName") != null) {
                         BufferedImage bufferImgQDoubleCheck = getImg(imagPath, String.valueOf(beansMap.get("qDoubleCheckImagName")));
                         ImageIO.write(bufferImgQDoubleCheck, "png", byteArrayOutQDoubleCheck);
-                        HSSFClientAnchor anchorQDoubleCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, beansMap.size() - 7, (short) 4, beansMap.size() - 6);
+                        HSSFClientAnchor anchorQDoubleCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum+11, (short) 4, rowNum+12);
                         patriarch.createPicture(anchorQDoubleCheck, wb.addPicture(byteArrayOutQDoubleCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
-                    if (beansMap.get("mMngImagName") != null) {
-                        BufferedImage bufferImgMMng = getImg(imagPath, String.valueOf(beansMap.get("mMngImagName")));
+                    if (beansMap.get("qMngImagName") != null) {
+                        BufferedImage bufferImgMMng = getImg(imagPath, String.valueOf(beansMap.get("qMngImagName")));
                         ImageIO.write(bufferImgMMng, "png", byteArrayOutMMng);
-                        HSSFClientAnchor anchorMMng = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, beansMap.size() - 9, (short) 9, beansMap.size() - 8);
+                        HSSFClientAnchor anchorMMng = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum+9, (short) 9, rowNum+10);
                         patriarch.createPicture(anchorMMng, wb.addPicture(byteArrayOutMMng.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     if (beansMap.get("mCheckImagName") != null) {
                         BufferedImage bufferImgMCheck = getImg(imagPath, String.valueOf(beansMap.get("mCheckImagName")));
                         ImageIO.write(bufferImgMCheck, "png", byteArrayOutMCheck);
-                        HSSFClientAnchor anchorMCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, beansMap.size() - 8, (short) 9, beansMap.size() - 7);
+                        HSSFClientAnchor anchorMCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum+10, (short) 9, rowNum+11);
                         patriarch.createPicture(anchorMCheck, wb.addPicture(byteArrayOutMCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     if (beansMap.get("mDoubleCheckImagName") != null) {
                         BufferedImage bufferImgMDoubleCheck = getImg(imagPath, String.valueOf(beansMap.get("mDoubleCheckImagName")));
                         ImageIO.write(bufferImgMDoubleCheck, "png", byteArrayOutMDoubleCheck);
-                        HSSFClientAnchor anchorMDoubleCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, beansMap.size() - 7, (short) 9, beansMap.size() - 6);
+                        HSSFClientAnchor anchorMDoubleCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum+11, (short) 9, rowNum+12);
                         patriarch.createPicture(anchorMDoubleCheck, wb.addPicture(byteArrayOutMDoubleCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     if (beansMap.get("pApproveImagName") != null) {
                         BufferedImage bufferImgPApprove = getImg(imagPath, String.valueOf(beansMap.get("pApproveImagName")));
                         ImageIO.write(bufferImgPApprove, "png", byteArrayOutPApprove);
-                        HSSFClientAnchor anchorPApprove = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, beansMap.size() - 4, (short) 4, beansMap.size() - 3);
+                        HSSFClientAnchor anchorPApprove = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum+14, (short) 4, rowNum+15);
                         patriarch.createPicture(anchorPApprove, wb.addPicture(byteArrayOutPApprove.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     if (beansMap.get("pActImagName") != null) {
                         BufferedImage bufferImgPAct = getImg(imagPath, String.valueOf(beansMap.get("pActImagName")));
                         ImageIO.write(bufferImgPAct, "png", byteArrayOutPAct);
-                        HSSFClientAnchor anchorPAct = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, beansMap.size() - 3, (short) 4, beansMap.size() - 2);
+                        HSSFClientAnchor anchorPAct = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum+15, (short) 4, rowNum+16);
                         patriarch.createPicture(anchorPAct, wb.addPicture(byteArrayOutPAct.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
-                    if (beansMap.get("pFileCheckImagName") != null) {
-                        BufferedImage bufferImgPFile = getImg(imagPath, String.valueOf(beansMap.get("pFileCheckImagName")));
+                    if (beansMap.get("pFileImagName") != null) {
+                        BufferedImage bufferImgPFile = getImg(imagPath, String.valueOf(beansMap.get("pFileImagName")));
                         ImageIO.write(bufferImgPFile, "png", byteArrayOutPFile);
-                        HSSFClientAnchor anchorPFile = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, beansMap.size() - 2, (short) 4, beansMap.size() - 1);
+                        HSSFClientAnchor anchorPFile = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum+16, (short) 4, rowNum+17);
                         patriarch.createPicture(anchorPFile, wb.addPicture(byteArrayOutPFile.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
@@ -158,6 +159,7 @@ public class JxlsManager {
                     response.setContentType("application/msexcel");
                     wb.write(os);
                 } else {
+                    short rowNum=(Short)beansMap.get("progStlItemSubStlmentNum");
                     XLSTransformer transformer = new XLSTransformer();
                     is = new BufferedInputStream(new FileInputStream(templateFileName));
                     HSSFWorkbook wb = (HSSFWorkbook) transformer.transformXLS(is, beansMap);
@@ -166,37 +168,37 @@ public class JxlsManager {
                     if (beansMap.get("qMngImagName") != null) {
                         BufferedImage bufferImgQMng = getImg(imagPath, String.valueOf(beansMap.get("qMngImagName")));
                         ImageIO.write(bufferImgQMng, "png", byteArrayOutQMng);
-                        HSSFClientAnchor anchorQMng = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, beansMap.size() - 5, (short) 4, beansMap.size() - 4);
+                        HSSFClientAnchor anchorQMng = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum+9, (short) 4, rowNum+10);
                         patriarch.createPicture(anchorQMng, wb.addPicture(byteArrayOutQMng.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     if (beansMap.get("qCheckImagName") != null) {
                         BufferedImage bufferImgQCheck = getImg(imagPath, String.valueOf(beansMap.get("qCheckImagName")));
                         ImageIO.write(bufferImgQCheck, "png", byteArrayOutQCheck);
-                        HSSFClientAnchor anchorQCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, beansMap.size() - 4, (short) 4, beansMap.size() - 3);
+                        HSSFClientAnchor anchorQCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum+10, (short) 4, rowNum+11);
                         patriarch.createPicture(anchorQCheck, wb.addPicture(byteArrayOutQCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     if (beansMap.get("qDoubleCheckImagName") != null) {
                         BufferedImage bufferImgQDoubleCheck = getImg(imagPath, String.valueOf(beansMap.get("qDoubleCheckImagName")));
                         ImageIO.write(bufferImgQDoubleCheck, "png", byteArrayOutQDoubleCheck);
-                        HSSFClientAnchor anchorQDoubleCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, beansMap.size() - 3, (short) 4, beansMap.size() - 2);
+                        HSSFClientAnchor anchorQDoubleCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum+11, (short) 4, rowNum+12);
                         patriarch.createPicture(anchorQDoubleCheck, wb.addPicture(byteArrayOutQDoubleCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
-                    if (beansMap.get("mMngImagName") != null) {
-                        BufferedImage bufferImgMMng = getImg(imagPath, String.valueOf(beansMap.get("mMngImagName")));
+                    if (beansMap.get("qMngImagName") != null) {
+                        BufferedImage bufferImgMMng = getImg(imagPath, String.valueOf(beansMap.get("qMngImagName")));
                         ImageIO.write(bufferImgMMng, "png", byteArrayOutMMng);
-                        HSSFClientAnchor anchorMMng = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, beansMap.size() - 5, (short) 9, beansMap.size() - 4);
+                        HSSFClientAnchor anchorMMng = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum+9, (short) 9, rowNum+10);
                         patriarch.createPicture(anchorMMng, wb.addPicture(byteArrayOutMMng.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     if (beansMap.get("mCheckImagName") != null) {
                         BufferedImage bufferImgMCheck = getImg(imagPath, String.valueOf(beansMap.get("mCheckImagName")));
                         ImageIO.write(bufferImgMCheck, "png", byteArrayOutMCheck);
-                        HSSFClientAnchor anchorMCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, beansMap.size() - 4, (short) 9, beansMap.size() - 3);
+                        HSSFClientAnchor anchorMCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum+10, (short) 9, rowNum+11);
                         patriarch.createPicture(anchorMCheck, wb.addPicture(byteArrayOutMCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     if (beansMap.get("mDoubleCheckImagName") != null) {
                         BufferedImage bufferImgMDoubleCheck = getImg(imagPath, String.valueOf(beansMap.get("mDoubleCheckImagName")));
                         ImageIO.write(bufferImgMDoubleCheck, "png", byteArrayOutMDoubleCheck);
-                        HSSFClientAnchor anchorMDoubleCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, beansMap.size() - 3, (short) 9, beansMap.size() - 2);
+                        HSSFClientAnchor anchorMDoubleCheck = new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum+11, (short) 9, rowNum+12);
                         patriarch.createPicture(anchorMDoubleCheck, wb.addPicture(byteArrayOutMDoubleCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                     }
                     HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
@@ -221,7 +223,7 @@ public class JxlsManager {
     }
     private BufferedImage getImg(String imgPathpara, String imgNamePara) {
         try {
-            return ImageIO.read(new File(imgPathpara + imgNamePara));
+            return ImageIO.read(new File(imgPathpara +"/"+ imgNamePara));
         } catch (IOException e) {
             e.printStackTrace();
         }

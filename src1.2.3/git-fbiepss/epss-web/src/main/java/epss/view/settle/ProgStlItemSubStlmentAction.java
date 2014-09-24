@@ -4,13 +4,10 @@ import epss.common.enums.EnumResType;
 import epss.common.enums.EnumFlowStatus;
 import epss.common.enums.EnumSubcttType;
 import epss.repository.model.model_show.AttachmentModel;
-import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.ProgStlItemSubStlmentShow;
 import epss.repository.model.model_show.ReportHeader;
-import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
@@ -64,6 +61,8 @@ public class ProgStlItemSubStlmentAction {
     private ProgStlItemSubQService progStlItemSubQService;
     @ManagedProperty(value = "#{flowCtrlHisService}")
     private FlowCtrlHisService flowCtrlHisService;
+    @ManagedProperty(value = "#{deptOperService}")
+    private DeptOperService deptOperService;
 
     private List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowList;
     private List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForApprove;
@@ -239,7 +238,7 @@ public class ProgStlItemSubStlmentAction {
         List<FlowCtrlHis> flowCtrlHisForSubcttStlList =
                 flowCtrlHisService.getSubStlListByFlowCtrlHis(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
         for (FlowCtrlHis flowCtrlHisTemp : flowCtrlHisForSubcttStlList) {
-            flowCtrlHisTemp.setCreatedBy(ToolUtil.getUserName(ToolUtil.getStrIgnoreNull(flowCtrlHisTemp.getCreatedBy())));
+            flowCtrlHisTemp.setCreatedBy(flowCtrlHisTemp.getCreatedBy());
             if (EnumResType.RES_TYPE3.getCode().equals(flowCtrlHisTemp.getInfoType())) {
                 if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
                     beansMap.put("esInitPowerHisForSubcttStlQMng", flowCtrlHisTemp);
@@ -563,11 +562,51 @@ public class ProgStlItemSubStlmentAction {
 
     public String onExportExcel() throws IOException, WriteException {
         String strExcelName;
+        if (beansMap.get("esInitPowerHisForSubcttStlQMng") != null) {
+            String qMngImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlQMng"));
+            beansMap.put("qMngImagName",qMngImagName);
+        }
+
+        if (beansMap.get("esInitPowerHisForSubcttStlQCheck") != null) {
+            String qCheckImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlQCheck"));
+            beansMap.put("qCheckImagName",qCheckImagName);
+        }
+
+        if (beansMap.get("esInitPowerHisForSubcttStlQDoubleCheck") != null) {
+            String qDoubleCheckImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlQDoubleCheck"));
+            beansMap.put("qDoubleCheckImagName",qDoubleCheckImagName);
+        }
+        if (beansMap.get("esInitPowerHisForSubcttStlMCheck") != null) {
+            String mCheckImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMCheck"));
+            beansMap.put("mCheckImagName",mCheckImagName);
+        }
+        if (beansMap.get("esInitPowerHisForSubcttStlMDoubleCheck") != null) {
+            String mDoubleCheckImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMDoubleCheck"));
+            beansMap.put("mDoubleCheckImagName",mDoubleCheckImagName);
+        }
+
+        if (beansMap.get("esInitPowerHisForSubcttStlPApprove") != null) {
+            String pApproveImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlPApprove"));
+            beansMap.put("pApproveImagName",pApproveImagName);
+        }
+
+        if (beansMap.get("esInitPowerHisForSubcttStlPAct") != null) {
+            String pActImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlPAct"));
+            beansMap.put("pActImagName",pActImagName);
+        }
+
+        if (beansMap.get("esInitPowerHisForSubcttStlPFile") != null) {
+            String pFileImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlPFile"));
+            beansMap.put("pFileCheckImagName",pFileImagName);
+        }
         if ("Account".equals(strFlowType) || "Qry".equals(strFlowType)) {
             if (this.progSubstlItemShowListForAccountAndQry.size() == 0) {
                 MessageUtil.addWarn("记录为空...");
                 return null;
             }else {
+                String  stractSubstlNum=this.progSubstlItemShowListForAccountAndQry.size()+"";
+                short actSubstlNum=Short.parseShort(stractSubstlNum);
+                beansMap.put("actSubstlNum",actSubstlNum);
                 strExcelName = "actSubstl.xls";
             }
         } else {
@@ -575,6 +614,9 @@ public class ProgStlItemSubStlmentAction {
                 MessageUtil.addWarn("记录为空...");
                 return null;
             }else {
+                String strprogStlItemSubStlmentNum=this.progStlItemSubStlmentShowList.size()+"";
+                short progStlItemSubStlmentNum=Short.parseShort(strprogStlItemSubStlmentNum);
+                beansMap.put("progStlItemSubStlmentNum",progStlItemSubStlmentNum);
                 strExcelName = "progStlItemSubStlment.xls";
             }
         }
@@ -724,6 +766,19 @@ public class ProgStlItemSubStlmentAction {
         }
     }
 
+    private String getOperAttachment(Object obj) {
+        List<Oper> operListTemp =new ArrayList<>();
+        if(((FlowCtrlHis) obj).getCreatedBy()!=null){
+            operListTemp =deptOperService.selectByExample(((FlowCtrlHis) obj).getCreatedBy());
+        }
+        if (operListTemp.size()>0){
+            for(Oper operTemp:operListTemp){
+                return operTemp.getAttachment();
+            }
+        }
+        return null;
+    }
+
     /* 智能字段Start*/
     public CttItemService getCttItemService() {
         return cttItemService;
@@ -861,7 +916,14 @@ public class ProgStlItemSubStlmentAction {
         this.strApprovedNotBtnRenderedForStlM = strApprovedNotBtnRenderedForStlM;
     }
 
-    public List<AttachmentModel> getAttachmentList() {
+    public DeptOperService getDeptOperService() {
+        return deptOperService;
+    }
+
+    public void setDeptOperService(DeptOperService deptOperService) {
+        this.deptOperService = deptOperService;
+    }
+	public List<AttachmentModel> getAttachmentList() {
         return attachmentList;
     }
 
