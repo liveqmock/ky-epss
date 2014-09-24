@@ -131,7 +131,6 @@ public class SqlWhere implements Comparable {
     public boolean equals(Object o) {
         if ( o instanceof SqlWhere ) {
             SqlWhere tmp = (SqlWhere)o;
-//            System.out.println("================="+tmp.getFldname()+"="+tmp.getTblname()+"="+this.fldname+"="+this.tblname);
             if ( tmp.getTblname() != null && tmp.getTblname().equals(this.tblname) &&
                  tmp.getFldname() != null && tmp.getFldname().equals(this.fldname) )
                 return true;

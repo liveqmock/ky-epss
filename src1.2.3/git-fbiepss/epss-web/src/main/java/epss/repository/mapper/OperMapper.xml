@@ -30,6 +30,7 @@
     <result column="REMARK" jdbcType="VARCHAR" property="remark" />
     <result column="REC_VERSION" jdbcType="DECIMAL" property="recVersion" />
     <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment" />
+    <result column="ONLINE_SITUATION" jdbcType="VARCHAR" property="onlineSituation" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -107,7 +108,7 @@
     -->
     PKID, TID, DEPT_PKID, ID, NAME, PASSWD, ISSUPER, DUTY, TYPE, SEX, EMAIL, MOBILEPHONE, 
     PHONE, OTHERPHONE, ENABLED, ARCHIVED_FLAG, CREATED_BY, CREATED_TIME, LAST_UPD_BY, 
-    LAST_UPD_TIME, REMARK, REC_VERSION, ATTACHMENT
+    LAST_UPD_TIME, REMARK, REC_VERSION, ATTACHMENT, ONLINE_SITUATION
   </sql>
   <select id="selectByExample" parameterType="epss.repository.model.OperExample" resultMap="BaseResultMap">
     <!--
@@ -174,16 +175,16 @@
       MOBILEPHONE, PHONE, OTHERPHONE, 
       ENABLED, ARCHIVED_FLAG, CREATED_BY, 
       CREATED_TIME, LAST_UPD_BY, LAST_UPD_TIME, 
-      REMARK, REC_VERSION, ATTACHMENT
-      )
+      REMARK, REC_VERSION, ATTACHMENT, 
+      ONLINE_SITUATION)
     values (#{pkid,jdbcType=VARCHAR}, #{tid,jdbcType=VARCHAR}, #{deptPkid,jdbcType=VARCHAR}, 
       #{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{passwd,jdbcType=VARCHAR}, #{issuper,jdbcType=CHAR}, 
       #{duty,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{email,jdbcType=VARCHAR}, 
       #{mobilephone,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{otherphone,jdbcType=VARCHAR}, 
       #{enabled,jdbcType=CHAR}, #{archivedFlag,jdbcType=CHAR}, #{createdBy,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=VARCHAR}, #{lastUpdBy,jdbcType=VARCHAR}, #{lastUpdTime,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{recVersion,jdbcType=DECIMAL}, #{attachment,jdbcType=VARCHAR}
-      )
+      #{remark,jdbcType=VARCHAR}, #{recVersion,jdbcType=DECIMAL}, #{attachment,jdbcType=VARCHAR}, 
+      #{onlineSituation,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="epss.repository.model.Oper">
     <!--
@@ -263,6 +264,9 @@
       <if test="attachment != null">
         ATTACHMENT,
       </if>
+      <if test="onlineSituation != null">
+        ONLINE_SITUATION,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       #{pkid,jdbcType=VARCHAR},
@@ -331,6 +335,9 @@
       </if>
       <if test="attachment != null">
         #{attachment,jdbcType=VARCHAR},
+      </if>
+      <if test="onlineSituation != null">
+        #{onlineSituation,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -422,6 +429,9 @@
       <if test="record.attachment != null">
         ATTACHMENT = #{record.attachment,jdbcType=VARCHAR},
       </if>
+      <if test="record.onlineSituation != null">
+        ONLINE_SITUATION = #{record.onlineSituation,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -456,7 +466,8 @@
       LAST_UPD_TIME = #{record.lastUpdTime,jdbcType=VARCHAR},
       REMARK = #{record.remark,jdbcType=VARCHAR},
       REC_VERSION = #{record.recVersion,jdbcType=DECIMAL},
-      ATTACHMENT = #{record.attachment,jdbcType=VARCHAR}
+      ATTACHMENT = #{record.attachment,jdbcType=VARCHAR},
+      ONLINE_SITUATION = #{record.onlineSituation,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -535,6 +546,9 @@
       <if test="attachment != null">
         ATTACHMENT = #{attachment,jdbcType=VARCHAR},
       </if>
+      <if test="onlineSituation != null">
+        ONLINE_SITUATION = #{onlineSituation,jdbcType=VARCHAR},
+      </if>
     </set>
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
@@ -566,7 +580,8 @@
       LAST_UPD_TIME = #{lastUpdTime,jdbcType=VARCHAR},
       REMARK = #{remark,jdbcType=VARCHAR},
       REC_VERSION = #{recVersion,jdbcType=DECIMAL},
-      ATTACHMENT = #{attachment,jdbcType=VARCHAR}
+      ATTACHMENT = #{attachment,jdbcType=VARCHAR},
+      ONLINE_SITUATION = #{onlineSituation,jdbcType=VARCHAR}
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
 </mapper>

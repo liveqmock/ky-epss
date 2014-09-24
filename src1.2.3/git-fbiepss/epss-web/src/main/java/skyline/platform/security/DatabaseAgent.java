@@ -25,7 +25,6 @@ import java.util.Map;
  */
 public class DatabaseAgent {
     /**
-     * Retrieve all the basic information of a Operator, Except password.
      *
      * @param
      * @return Map which includes all the basic info in a HashMap with Key & Value pare.
@@ -68,8 +67,6 @@ public class DatabaseAgent {
         String enabledOfOperator = null;
         String combinedSequence = null;
         String isCombined = null;
-
-        int statusOfOperator = 0;
 
         if (rs == null)
             rs = new RecordSet();
@@ -314,7 +311,9 @@ public class DatabaseAgent {
                 } else {
                     childcount = "";
                 }
-                listTemp.add(new MenuItemBean(menuItemId, menuItemPId, menuLevel, menuItemLabel, menuItemIsLeaf, menuItemUrl, menuItemDescription, menuItemOpenWindow, menuItemWindowWidth, menuItemWindowHeight, targetmachine, childcount));
+                listTemp.add(new MenuItemBean(menuItemId, menuItemPId, menuLevel,
+                        menuItemLabel, menuItemIsLeaf, menuItemUrl, menuItemDescription,
+                        menuItemOpenWindow, menuItemWindowWidth, menuItemWindowHeight, targetmachine, childcount));
             }
         } catch (Exception ex) {
             System.err.println("[" + ex + "] ");

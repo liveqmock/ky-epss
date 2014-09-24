@@ -59,6 +59,7 @@ public class DeptOperAction implements Serializable {
     private String strConfirmPasswd;
     private List<DeptOperShow> deptOperShowFowExcelList;
     private Map beansMap;
+    private String strPasswd;
 
     @PostConstruct
     public void init() {
@@ -120,7 +121,8 @@ public class DeptOperAction implements Serializable {
         node0.setExpanded(true);
     }
 
-    private void recursiveTreeNode(String strParentPkidPara, TreeNode parentNode) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    private void recursiveTreeNode(String strParentPkidPara, TreeNode parentNode)
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         List<DeptOperShow> deptOperShowTempList= deptOperService.selectDeptAndOperRecords(strParentPkidPara);
         for (int i = 0; i < deptOperShowTempList.size(); i++) {
             TreeNode childNodeTemp = new DefaultTreeNode(deptOperShowTempList.get(i), parentNode);
@@ -207,11 +209,10 @@ public class DeptOperAction implements Serializable {
                 }else if (strSubmitTypePara.contains("Upd")) {
                     operUpd = new Oper();
                     operUpd = (Oper) deptOperService.selectRecordByPkid(deptOperShowPara);
-                    operUpd.setPasswd(MD5Helper.getMD5String(operUpd.getPasswd()));
+                    strPasswd=operUpd.getPasswd();
                 } else if (strSubmitTypePara.contains("Del")) {
                     operDel = new Oper();
                     operDel = (Oper) deptOperService.selectRecordByPkid(deptOperShowPara);
-                    operDel.setPasswd(MD5Helper.getMD5String(operUpd.getPasswd()));
                 }
             }
         } catch (Exception e) {
@@ -270,7 +271,9 @@ public class DeptOperAction implements Serializable {
                     if (!submitOperPreCheck(operUpd)) {
                         return;
                     }
-                    operUpd.setPasswd(MD5Helper.getMD5String(operUpd.getPasswd()));
+                    if(!strPasswd.equals(operUpd.getPasswd())) {
+                        operUpd.setPasswd(MD5Helper.getMD5String(operUpd.getPasswd()));
+                    }
                     operUpd.setTid("126");
                     operUpd.setAttachment(operUpd.getFile().getFileName());
                     deptOperService.updateOperRecord(operUpd);
@@ -309,10 +312,6 @@ public class DeptOperAction implements Serializable {
         }
         if (StringUtils.isEmpty(operPara.getPasswd())) {
             MessageUtil.addInfo("请输入操作员密码！");
-            return false;
-        }
-        if (StringUtils.isEmpty(operPara.getFile().getFileName())) {
-            MessageUtil.addInfo("请上传图片签名！");
             return false;
         }
         String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");

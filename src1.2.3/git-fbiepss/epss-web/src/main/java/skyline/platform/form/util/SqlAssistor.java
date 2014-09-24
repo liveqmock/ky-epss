@@ -558,7 +558,6 @@ public class SqlAssistor {
    */
   public static String crtWhereValue(String p_value, int p_tp, int p_opt) {
     //需要加'的值组合
-    String operator = new OperatorType().getOperator(p_opt);
     if (p_tp == DataType.STRING_TYPE &&
         (p_opt == OperatorType.LIKE_OPERATOR_TYPE ||
          p_opt == OperatorType.NOT_LIKE_OPERATOR_TYPE)) {

@@ -98,11 +98,11 @@ public class ProgStlItemSubStlmentAction {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if (parammap.containsKey("strStlInfoPkid")) {
             strStlInfoPkid = parammap.get("strStlInfoPkid").toString();
+            initData();
         }
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
         }
-        initData();
     }
 
     /*³õÊ¼»¯²Ù×÷*/
