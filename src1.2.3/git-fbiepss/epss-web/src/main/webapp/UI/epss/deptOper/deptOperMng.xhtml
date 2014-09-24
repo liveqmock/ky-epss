@@ -181,18 +181,18 @@
                 <p:dialog id="dlgViewForOperAdd" header="增加人员信息" widgetVar="wVDlgViewForOperAdd"
                           esizable="false" modal="true"
                           showEffect="clip" hideEffect="fold">
-                    <h:panelGrid id="idViewForOperAdd">
+                    <h:panelGrid>
                         <h:panelGrid id="pgViewForOperAdd">
                             <h:panelGrid columns="4">
-                                <p:outputLabel value="操作员级别：" for="operTypeForOperAdd"/>
+                                <p:outputLabel value="用户级别：" for="operTypeForOperAdd"/>
                                 <p:selectOneMenu id="operTypeForOperAdd" value="#{deptOperAction.operAdd.type}">
                                     <f:selectItems value="#{deptOperAction.operTypeList}"/>
                                 </p:selectOneMenu>
-                                <p:outputLabel value="操作员号*  ：" for="operIdForOperAdd"/>
+                                <p:outputLabel value="操作员号：" for="operIdForOperAdd"/>
                                 <p:inputText id="operIdForOperAdd" value="#{deptOperAction.operAdd.id}"/>
-                                <p:outputLabel value="操作员密码*：" for="operPasswdForOperAdd"/>
+                                <p:outputLabel value="用户密码：" for="operPasswdForOperAdd"/>
                                 <h:inputSecret id="operPasswdForOperAdd" value="#{deptOperAction.operAdd.passwd}"/>
-                                <p:outputLabel value="操作员姓名*：" for="operNameForOperAdd"/>
+                                <p:outputLabel value="用户姓名：" for="operNameForOperAdd"/>
                                 <p:inputText id="operNameForOperAdd" value="#{deptOperAction.operAdd.name}"/>
                                 <p:outputLabel value="性别：" for="operSexForOperAdd"/>
                                 <p:selectOneMenu id="operSexForOperAdd" value="#{deptOperAction.operAdd.sex}">
@@ -213,6 +213,8 @@
                                 </p:selectOneMenu>
                                 <p:outputLabel value="备注：" for="operRemarkForOperAdd"/>
                                 <p:inputText id="operRemarkForOperAdd" value="#{deptOperAction.operAdd.remark}"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
                                 <p:outputLabel value="图片签名：" for="operAttachmentForOperAdd"/>
                                 <p:fileUpload id="operAttachmentForOperAdd"
                                               value="#{deptOperAction.operAdd.file}"
@@ -225,8 +227,7 @@
                                              value="提交（增加）"
                                              ajax="false"
                                              action="#{deptOperAction.onClickForMngAction()}"
-                                             update="pdt,msgs,pgViewForOperAdd"
-                                             oncomplete="wVDlgViewForOperAdd.hide()">
+                                             update="pdt,msgs,pgViewForOperAdd">
                             </p:commandButton>
                             <p:commandButton id="resetBtnForOperAdd" value="重置"
                                              type="reset"
