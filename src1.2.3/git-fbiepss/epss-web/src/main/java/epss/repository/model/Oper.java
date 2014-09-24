@@ -184,7 +184,6 @@ public class Oper extends AbstractBasicBean implements Cloneable {
     private Integer recVersion;
 
     private String sessionKey;
-    private String onlineSituation;
 	private String attachment;
 	private UploadedFile file;
 
@@ -218,7 +217,6 @@ public class Oper extends AbstractBasicBean implements Cloneable {
         abb.lastUpdTime = rs.getString("last_upd_time");
         abb.remark = rs.getString("remark");
         abb.recVersion = rs.getInt("recVersion");
-        abb.recVersion = rs.getInt("onlineSituation");
         abb.recVersion = rs.getInt("attachment");
         list.add(abb);
     }
@@ -765,14 +763,6 @@ public class Oper extends AbstractBasicBean implements Cloneable {
 
     public void setSessionKey(String sessionKey) {
         this.sessionKey = sessionKey;
-    }
-
-    public String getOnlineSituation() {
-        return onlineSituation;
-    }
-
-    public void setOnlineSituation(String onlineSituation) {
-        this.onlineSituation = onlineSituation == null ? null : onlineSituation.trim();
     }
 
     /**
