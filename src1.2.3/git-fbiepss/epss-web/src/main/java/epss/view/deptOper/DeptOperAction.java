@@ -265,7 +265,6 @@ public class DeptOperAction implements Serializable {
                     }
                     operAdd.setPasswd(MD5Helper.getMD5String(operAdd.getPasswd()));
                     operAdd.setTid("126");
-                    operAdd.setAttachment(operAdd.getFile().getFileName());
                     deptOperService.insertOperRecord(operAdd);
                 } else if (strSubmitType.contains("Upd")) {
                     if (!submitOperPreCheck(operUpd)) {
@@ -275,7 +274,6 @@ public class DeptOperAction implements Serializable {
                         operUpd.setPasswd(MD5Helper.getMD5String(operUpd.getPasswd()));
                     }
                     operUpd.setTid("126");
-                    operUpd.setAttachment(operUpd.getFile().getFileName());
                     deptOperService.updateOperRecord(operUpd);
                 } else if (strSubmitType.contains("Del")) {
                     deptOperService.deleteOperRecord(operDel);
@@ -314,11 +312,13 @@ public class DeptOperAction implements Serializable {
             MessageUtil.addInfo("请输入操作员密码！");
             return false;
         }
-        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
-        File file = new File(path+"/"+operPara.getFile().getFileName());
-        if (file.exists()) {
-            MessageUtil.addInfo("文件已存在，请重命名文件！");
-            return false;
+        if (!(StringUtils.isEmpty(operPara.getFile().getFileName()))) {
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
+            File file = new File(path+"/"+operPara.getFile().getFileName());
+            if (file.exists()) {
+                MessageUtil.addInfo("文件已存在，请重命名文件！");
+                return false;
+            }
         }
         return true;
     }

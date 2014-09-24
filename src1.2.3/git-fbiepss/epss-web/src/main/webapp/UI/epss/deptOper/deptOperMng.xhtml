@@ -278,7 +278,9 @@
                                           allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>
                         </h:panelGrid>
                         <h:panelGrid rendered="#{deptOperAction.operUpd.attachment eq null?'false':'true'}">
-                            <p:graphicImage  value="/upload/operPicture/#{deptOperAction.operUpd.attachment}"/>
+                            <p:graphicImage  value="/upload/operPicture/#{deptOperAction.operUpd.attachment}"
+                                             width="200"
+                                             height="100"/>
                         </h:panelGrid>
                         <h:panelGrid id="pgOperBtnForOperUpd" columns="2">
                             <p:commandButton id="submitBtnForOperUpd"
@@ -335,7 +337,10 @@
                             </h:panelGrid>
                             <h:panelGrid >
                                 <p:outputLabel value="图片签名：" for="operAttachmentForOperDel"/>
-                                <p:graphicImage id="operAttachmentForOperDel" value="/upload/operPicture/#{deptOperAction.operDel.attachment}"/>
+                                <p:graphicImage id="operAttachmentForOperDel"
+                                                value="/upload/operPicture/#{deptOperAction.operDel.attachment}"
+                                                width="200"
+                                                height="100"/>
                             </h:panelGrid>
                         </h:panelGrid>
                         <h:panelGrid id="pgOperBtnForOperDel" columns="2">

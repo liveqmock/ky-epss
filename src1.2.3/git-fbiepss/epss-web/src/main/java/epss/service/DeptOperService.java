@@ -8,9 +8,11 @@ import epss.repository.model.DeptExample;
 import epss.repository.model.Oper;
 import epss.repository.model.OperExample;
 import epss.repository.model.model_show.DeptOperShow;
+import org.apache.poi.util.StringUtil;
 import org.primefaces.model.UploadedFile;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import skyline.platform.utils.PropertyManager;
 import skyline.util.ToolUtil;
 
@@ -75,39 +77,42 @@ public class DeptOperService {
     public void insertOperRecord(Oper operPara) {
         UploadedFile uploadedFile=operPara.getFile();
         String strFileName = uploadedFile.getFileName();
-        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
-        BufferedInputStream inputStream = null;
-        FileOutputStream fileOutputStream = null;
-        try {
-            File dirFile = new File(path);
-            if (!dirFile.exists()) {
-                dirFile.mkdirs();
-            }
-            File file = new File(dirFile, strFileName);
-            inputStream = new BufferedInputStream(uploadedFile.getInputstream());
-            fileOutputStream = new FileOutputStream(file);
-            byte[] buf = new byte[1024];
-            int num;
-            while ((num = inputStream.read(buf)) != -1) {
-                fileOutputStream.write(buf, 0, num);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
+        if (!(StringUtils.isEmpty(strFileName))){
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
+            BufferedInputStream inputStream = null;
+            FileOutputStream fileOutputStream = null;
+            try {
+                File dirFile = new File(path);
+                if (!dirFile.exists()) {
+                    dirFile.mkdirs();
+                }
+                File file = new File(dirFile, strFileName);
+                inputStream = new BufferedInputStream(uploadedFile.getInputstream());
+                fileOutputStream = new FileOutputStream(file);
+                byte[] buf = new byte[1024];
+                int num;
+                while ((num = inputStream.read(buf)) != -1) {
+                    fileOutputStream.write(buf, 0, num);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
-            if (fileOutputStream != null) {
-                try {
-                    fileOutputStream.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
+            operPara.setAttachment(strFileName);
         }
         operPara.setArchivedFlag("0");
         operPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
@@ -121,49 +126,52 @@ public class DeptOperService {
     }
     public void updateOperRecord(Oper operPara){
         UploadedFile uploadedFile=operPara.getFile();
-        String strUpdFileName = uploadedFile.getFileName();
-        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
-        BufferedInputStream inputStream = null;
-        FileOutputStream fileOutputStream = null;
-        try {
-            File dirFile = new File(path);
-            if (!dirFile.exists()) {
-                dirFile.mkdirs();
-            }
-            Oper operTemp=operMapper.selectByPrimaryKey(operPara.getPkid());
-            String strDbFileName=operTemp.getAttachment();
-            File file=null;
-            if (strDbFileName!=null){
-                file = new File(dirFile, strDbFileName);
-                if (file.exists()) {
-                    file.delete();
+        String strFileName = uploadedFile.getFileName();
+        if (!(StringUtils.isEmpty(strFileName))){
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
+            BufferedInputStream inputStream = null;
+            FileOutputStream fileOutputStream = null;
+            try {
+                File dirFile = new File(path);
+                if (!dirFile.exists()) {
+                    dirFile.mkdirs();
+                }
+                Oper operTemp=operMapper.selectByPrimaryKey(operPara.getPkid());
+                String strDbFileName=operTemp.getAttachment();
+                File file=null;
+                if (strDbFileName!=null){
+                    file = new File(dirFile, strDbFileName);
+                    if (file.exists()) {
+                        file.delete();
+                    }
+                }
+                file = new File(dirFile, strFileName);
+                inputStream = new BufferedInputStream(uploadedFile.getInputstream());
+                fileOutputStream = new FileOutputStream(file);
+                byte[] buf = new byte[1024];
+                int num;
+                while ((num = inputStream.read(buf)) != -1) {
+                    fileOutputStream.write(buf, 0, num);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (inputStream != null) {
+                    try {
+                        inputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
                 }
             }
-            file = new File(dirFile, strUpdFileName);
-            inputStream = new BufferedInputStream(uploadedFile.getInputstream());
-            fileOutputStream = new FileOutputStream(file);
-            byte[] buf = new byte[1024];
-            int num;
-            while ((num = inputStream.read(buf)) != -1) {
-                fileOutputStream.write(buf, 0, num);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (inputStream != null) {
-                try {
-                    inputStream.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-            if (fileOutputStream != null) {
-                try {
-                    fileOutputStream.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
+            operPara.setAttachment(strFileName);
         }
         operPara.setArchivedFlag("0");
         operPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
@@ -174,10 +182,13 @@ public class DeptOperService {
         deptMapper.deleteByPrimaryKey(deptPara.getPkid());
     }
     public void deleteOperRecord(Oper operPara){
-        String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
-        File file = new File(path+"/"+operPara.getAttachment());
-        if (file.exists()) {
-            file.delete();
+        String strDbFileName=operPara.getAttachment();
+        if (strDbFileName!=null&&!(StringUtils.isEmpty(strDbFileName))){
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
+            File file = new File(path+"/"+strDbFileName);
+            if (file.exists()) {
+                file.delete();
+            }
         }
         operMapper.deleteByPrimaryKey(operPara.getPkid());
     }
