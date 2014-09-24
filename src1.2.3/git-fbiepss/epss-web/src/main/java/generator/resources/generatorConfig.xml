@@ -107,6 +107,5 @@
         <table schema="epss" tableName="SYS_LOCK">
         </table>
         <table tableName="all_tab_columns"/>-->
-
     </context>
 </generatorConfiguration>
