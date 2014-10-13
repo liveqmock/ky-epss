@@ -16,31 +16,37 @@ import java.util.List;
  */
 @Component
 public interface MyDeptAndOperMapper {
-    @Select("select " +
-            "    pkid, " +
-            "    id, " +
-            "    name, " +
-            "    type " +
-            "from " +
+    @Select("select max(id) from DEPT")
+    String getStrMaxDeptId();
+
+    @Select("select max(id) from OPER")
+    String getStrMaxOperId();
+
+    @Select("   (select " +
+            "        pkid, " +
+            "        id, " +
+            "        name, " +
+            "        1 as type," +
+            "        type as operType " +
+            "     from " +
+            "        oper " +
+            "     where " +
+            "        dept_pkid=#{parentPkid}" +
+            "     and" +
+            "        type !='0'" +
+            "    ) " +
+            " union " +
             "    (select " +
             "        pkid, " +
             "        id, " +
             "        name, " +
-            "        1 as type " +
-            "     from " +
-            "        oper " +
-            "     where " +
-            "        dept_pkid=#{parentPkid} " +
-            "     union " +
-            "     select " +
-            "        pkid, " +
-            "        id, " +
-            "        name, " +
-            "        0 as type  " +
+            "        0 as type," +
+            "        '' as operType" +
             "     from " +
             "        dept ta " +
             "     where  " +
-            "        parentpkid=#{parentPkid}) ss " +
-            "order by type desc")
+            "        parentpkid=#{parentPkid}" +
+            "     ) " +
+            " order by type,name desc")
     List<DeptOperShow> selectDeptAndOperRecords(@Param("parentPkid") String parentPkidPara);
 }

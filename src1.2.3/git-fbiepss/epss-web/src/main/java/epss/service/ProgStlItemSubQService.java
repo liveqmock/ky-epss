@@ -91,17 +91,17 @@ public class ProgStlItemSubQService {
         progStlItemSubQTemp.setRecVersion(
                 ToolUtil.getIntIgnoreNull(progStlItemSubQTemp.getRecVersion())+1);
         progStlItemSubQTemp.setArchivedFlag("0");
-        progStlItemSubQTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemSubQTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         progStlItemSubQTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubQMapper.updateByPrimaryKey(progStlItemSubQTemp) ;
     }
 
     public void insertRecord(ProgStlItemSubQShow progStlItemSubQShowPara){
         ProgStlItemSubQ progStlItemSubQTemp =fromModelShowToModel(progStlItemSubQShowPara);
-        progStlItemSubQTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemSubQTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         progStlItemSubQTemp.setCreatedTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubQTemp.setArchivedFlag("0");
-        progStlItemSubQTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemSubQTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         progStlItemSubQTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubQMapper.insert(progStlItemSubQTemp);
     }

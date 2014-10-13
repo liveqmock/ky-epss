@@ -28,24 +28,21 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form" enctype="multipart/form-data">
-	    <div style="margin:5px;">
+	        <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
                 <p:panel>
                     <h:panelGrid id="pgCondition" columns="5">
                         <p:outputLabel value="分包合同：" for="id" />
                         <p:selectOneMenu id="id"
-                                         value="#{progStlInfoSubStlmentAction.progStlInfoShow.stlPkid}"
-                                         disabled="#{progStlInfoSubStlmentAction.styleModel.disabled_Flag}"
-                                         style="#{progStlInfoSubStlmentAction.styleModel.disabled_Style};">
+                                         value="#{progStlInfoSubStlmentAction.progStlInfoShowQry.stlPkid}">
                             <f:selectItems value="#{progStlInfoSubStlmentAction.subcttList}"/>
                         </p:selectOneMenu>
                         <p:outputLabel value="期数编码：" for="periodNo"/>
-                        <p:inputText id="periodNo" value="#{progStlInfoSubStlmentAction.progStlInfoShow.periodNo}"
-                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"
-                                     disabled="#{progStlInfoSubStlmentAction.styleModel.disabled_Flag}"
-                                     style="#{progStlInfoSubStlmentAction.styleModel.disabled_Style};"/>
+                        <p:inputText id="periodNo"
+                                     value="#{progStlInfoSubStlmentAction.progStlInfoShowQry.periodNo}"
+                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{progStlInfoSubStlmentAction.onQueryFormedAction('Qry','true')}"
+                                         action="#{progStlInfoSubStlmentAction.queryAction('Qry')}"
                                          update="pdt,msgs">
                         </p:commandButton>
                     </h:panelGrid>

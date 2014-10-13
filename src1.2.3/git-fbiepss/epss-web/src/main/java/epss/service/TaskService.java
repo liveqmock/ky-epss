@@ -47,9 +47,9 @@ public class TaskService {
     public List<TaskShow> initRecentlyPowerTaskShowList(){
         List<TaskShow> taskShowList = new ArrayList<TaskShow>();
         //通过OperatorManager获取相应权限下菜单列表
-        String strOperIdTemp = ToolUtil.getOperatorManager().getOperatorId();
+        String strOperPkidTemp = ToolUtil.getOperatorManager().getOperator().getPkid();
         // 获得详细任务列表
-        List<TaskShow> detailTaskShowListTemp = getRencentlyPowerDetailTaskShowList(strOperIdTemp);
+        List<TaskShow> detailTaskShowListTemp = getRencentlyPowerDetailTaskShowList(strOperPkidTemp);
         TaskShow taskShowTemp=new TaskShow();
         taskShowTemp.setOperResFlowStatusName("待录入(" + detailTaskShowListTemp.size() + ")");
         taskShowList.add(taskShowTemp);
@@ -70,11 +70,11 @@ public class TaskService {
     public List<TaskShow> initTodoTaskShowList(){
         List<TaskShow> taskShowList = new ArrayList<TaskShow>();
         //通过OperatorManager获取相应权限下菜单列表
-        String strOperIdTemp = ToolUtil.getOperatorManager().getOperatorId();
+        String strOperPkidTemp = ToolUtil.getOperatorManager().getOperator().getPkid();
         // 以流程状态为分组
-        List<TaskShow> ownTaskFlowGroupListTemp = getOwnTaskFlowGroup(strOperIdTemp);
+        List<TaskShow> ownTaskFlowGroupListTemp = getOwnTaskFlowGroup(strOperPkidTemp);
         // 获得详细任务列表
-        List<TaskShow> detailTaskShowListTemp = getDetailTodoTaskShowList(strOperIdTemp);
+        List<TaskShow> detailTaskShowListTemp = getDetailTodoTaskShowList(strOperPkidTemp);
         for (TaskShow taskShowGroupUnit : ownTaskFlowGroupListTemp) {
             taskShowGroupUnit.setOperResFlowStatusName(
                     EnumFlowStatus.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
@@ -151,10 +151,10 @@ public class TaskService {
         // 以合同类型和状态为分组,取得各组的数量
         List<TaskShow> taskFlowGroupListTemp = getTaskFlowGroup();
         //通过OperatorManager获取相应权限下资源列表
-        String strOperIdTemp = ToolUtil.getOperatorManager().getOperatorId();
+        String strOperPkidTemp = ToolUtil.getOperatorManager().getOperator().getPkid();
 
         // 获得详细任务列表
-        List<TaskShow> detailTaskShowListTemp = getDetailDoneTaskShowList(strOperIdTemp);
+        List<TaskShow> detailTaskShowListTemp = getDetailDoneTaskShowList(strOperPkidTemp);
         for (TaskShow taskShowGroupUnit : taskFlowGroupListTemp) {
             taskShowGroupUnit.setOperResFlowStatusName(
                     EnumFlowStatus.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());

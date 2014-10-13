@@ -110,7 +110,7 @@ public class CttItemService {
     }
 
     public void insertRecord(CttItemShow cttItemShowPara) {
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         CttItem cttItemTemp =fromModelShowToModel(cttItemShowPara);
         cttItemTemp.setArchivedFlag("0");
@@ -122,7 +122,7 @@ public class CttItemService {
         cttItemMapper.insertSelective(cttItemTemp);
     }
     public void insertRecord(CttItem cttItemPara){
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         cttItemPara.setArchivedFlag("0");
         cttItemPara.setOriginFlag("0");
@@ -180,7 +180,7 @@ public class CttItemService {
                 ToolUtil.getIntIgnoreNull(cttItemTemp.getRecVersion())+1);
         cttItemTemp.setArchivedFlag("0");
         cttItemTemp.setOriginFlag("0");
-        cttItemTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttItemTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         cttItemTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         cttItemMapper.updateByPrimaryKey(cttItemTemp) ;
     }

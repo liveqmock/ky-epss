@@ -258,12 +258,6 @@ public class ProgStlInfoService {
         return strReturnTemp;
     }
 
-    public void accountAction(ProgStlInfo progStlInfoPara) {
-        progStlInfoPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS4.getCode());
-        progStlInfoPara.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON7.getCode());
-        flowCtrlHisService.insertRecord(fromProgStlInfoToFlowCtrlHis(progStlInfoPara, "update"));
-    }
-
     public FlowCtrlHis fromProgStlInfoToFlowCtrlHis(ProgStlInfo progStlInfoPara,String strOperType){
         FlowCtrlHis flowCtrlHis =new FlowCtrlHis();
         flowCtrlHis.setInfoType(progStlInfoPara.getStlType());
@@ -335,7 +329,7 @@ public class ProgStlInfoService {
 
     // 插入 Start
     public void insertRecord(ProgStlInfoShow progStlInfoShowPara){
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         progStlInfoShowPara.setCreatedBy(strOperatorIdTemp);
         progStlInfoShowPara.setCreatedTime(strLastUpdTimeTemp);
@@ -347,7 +341,7 @@ public class ProgStlInfoService {
                 fromProgStlInfoShowToFlowCtrlHis(progStlInfoShowPara, EnumOperType.OPER_TYPE0.getCode()));
     }
     public void insertRecord(ProgStlInfo progStlInfoPara){
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         progStlInfoPara.setCreatedBy(strOperatorIdTemp);
         progStlInfoPara.setCreatedTime(strLastUpdTimeTemp);
@@ -382,7 +376,7 @@ public class ProgStlInfoService {
 
     // 更新 Start
     @Transactional
-    public void updSubCttPApprovePass(
+    public void updSubPApprovePass(
             ProgStlInfo progStlInfoPara,
             List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForApprovePara){
         //结算登记表更新
@@ -402,11 +396,14 @@ public class ProgStlInfoService {
         progStlInfoShowPara.setRecVersion(
                 ToolUtil.getIntIgnoreNull(progStlInfoShowPara.getRecVersion())+1);
         progStlInfoShowPara.setArchivedFlag("0");
-        progStlInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         progStlInfoShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlInfoMapper.updateByPrimaryKey(fromModelShowToModel(progStlInfoShowPara));
         flowCtrlHisService.insertRecord(
                 fromProgStlInfoShowToFlowCtrlHis(progStlInfoShowPara, EnumOperType.OPER_TYPE1.getCode()));
+    }
+    public void updateRecord(ProgStlInfo progStlInfoPara){
+        updateRecord(fromModelToModelShow(progStlInfoPara));
     }
     @Transactional
     public void updAutoLinkTask(ProgStlInfo progStlInfoPara) {
@@ -593,7 +590,7 @@ public class ProgStlInfoService {
     }
     //分包价格结算
     @Transactional
-    public void delSubCttPApprovePass(ProgStlInfo progStlInfoPara,String powerType){
+    public void delSubPApprovePass(ProgStlInfo progStlInfoPara,String powerType){
         //删除stl表中stl_type为5的记录
         ProgStlInfoExample example = new ProgStlInfoExample();
         example.createCriteria()
@@ -682,15 +679,15 @@ public class ProgStlInfoService {
         return myProgStlInfoMapper.selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowPara);
     }
 
-    public List<ProgStlInfoShow> selectNotFormEsInitSubcttStlP(String strParentPkid,
+    public List<ProgStlInfoShow> getNotFormSubcttStlP(String strParentPkid,
                                                                String strStlPkid,
                                                                String strPeriodNo){
-        return myProgStlInfoMapper.selectNotFormEsInitSubcttStlP(strParentPkid, strStlPkid, strPeriodNo);
+        return myProgStlInfoMapper.getNotFormSubcttStlP(strParentPkid, strStlPkid, strPeriodNo);
     }
-    public List<ProgStlInfoShow> selectFormPreEsInitSubcttStlP(String strParentPkid,
+    public List<ProgStlInfoShow> getFormPreSubcttStlP(String strParentPkid,
                                                                String strStlPkid,
                                                                String strPeriodNo){
-        return myProgStlInfoMapper.selectFormPreEsInitSubcttStlP(strParentPkid,strStlPkid,strPeriodNo);
+        return myProgStlInfoMapper.getFormPreSubcttStlP(strParentPkid,strStlPkid,strPeriodNo);
     }
     public List<ProgStlInfoShow> selectFormingEsInitSubcttStlP(String strParentPkid,
                                                                String strStlPkid,

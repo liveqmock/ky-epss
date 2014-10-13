@@ -144,7 +144,6 @@ public class CstplMeaSubStlQItemAction {
                 BigDecimal bdTkcttStlMeaAmount=new BigDecimal(0);
                 // 成本计划
                 BigDecimal bdCstplContractUnitPrice=new BigDecimal(0);
-                BigDecimal bdCstplContractAmount=new BigDecimal(0);
 
                 if(itemUnit.getUnit()!=null){
                     bdCstplContractUnitPrice=
@@ -164,12 +163,12 @@ public class CstplMeaSubStlQItemAction {
                 itemCstplInsertItem.setBdCstpl_ContractUnitPrice(bdCstplContractUnitPrice);
 
                 // 统计计量
-                for(ProgStlItemTkMea progStlItemTkMea : progStlItemTkMeaList){
+                for(ProgStlItemTkMea progStlItemTkMeaUnit : progStlItemTkMeaList){
                     if(ToolUtil.getStrIgnoreNull(itemUnit.getCorrespondingPkid()).equals(
-                            progStlItemTkMea.getTkcttItemPkid())){
-                        itemCstplInsertItem.setBdTkcttStl_MeaQuantity(progStlItemTkMea.getBeginToCurrentPeriodQty());
+                            progStlItemTkMeaUnit.getTkcttItemPkid())){
+                        itemCstplInsertItem.setBdTkcttStl_MeaQuantity(progStlItemTkMeaUnit.getBeginToCurrentPeriodQty());
 
-                        bdTkcttStlMeaQuantity=ToolUtil.getBdIgnoreNull(progStlItemTkMea.getBeginToCurrentPeriodQty());
+                        bdTkcttStlMeaQuantity=ToolUtil.getBdIgnoreNull(progStlItemTkMeaUnit.getBeginToCurrentPeriodQty());
                         bdTkcttStlMeaAmount=bdTkcttStlMeaQuantity.multiply(bdCstplContractUnitPrice);
                         itemCstplInsertItem.setBdTkcttStl_MeaAmount(bdTkcttStlMeaAmount);
                         break;
@@ -251,12 +250,18 @@ public class CstplMeaSubStlQItemAction {
                             qryCSStlQShowNewInsert.setBdMeaS_ContractUnitPrice(
                                     bdCstplContractUnitPrice.subtract(bdSubcttContractUnitPriceTotal));
                             qryCSStlQShowNewInsert.setBdMeaS_BeginToCurrentPeriodMAmount(
-                                    bdCstplContractAmount.subtract(bdSubcttContractAmountTotal));
+                                    bdTkcttStlMeaAmount.subtract(bdSubcttContractAmountTotal));
                             qryCSMeaSubQShowList.add(qryCSStlQShowNewInsert);
                         }
                     }
                 }
                 if(isInThisCirculateHasSame.equals(false)){
+                    itemCstplInsertItem.setBdMeaS_BeginToCurrentPeriodQQty(
+                            itemCstplInsertItem.getBdTkcttStl_MeaQuantity());
+                    itemCstplInsertItem.setBdMeaS_ContractUnitPrice(
+                            itemCstplInsertItem.getBdCstpl_ContractUnitPrice());
+                    itemCstplInsertItem.setBdMeaS_BeginToCurrentPeriodMAmount(
+                            itemCstplInsertItem.getBdTkcttStl_MeaAmount());
                     qryCSMeaSubQShowList.add(itemCstplInsertItem);
                 }
             }

@@ -18,7 +18,8 @@
             }
             function actSelect(obj) {
                 var pkid=obj;
-                var sfeature = "dialogwidth:1100px;dialogheight:700px;center:yes;location:no;help:no;resizable:yes;scroll:yes;status:no";
+                var sfeature = "dialogwidth:1100px;dialogheight:700px;center:yes;location:no;help:no;" +
+                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
                 // 分包合同
@@ -77,7 +78,7 @@
                              widgetVar="DtInitCstplList"
                              scrollable="true">
                     <p:column headerText="操作" style="width:40px;text-align: center;" >
-                        <p:commandButton   icon="ui-icon-search"
+                        <p:commandButton icon="ui-icon-search"
                                            style="height:18px;width:18px"
                                            actionListener="#{cstplInfoAction.selectRecordAction('Sel',record)}"
                                            update=":form:pdt,:form:pgView,:form:msgs"

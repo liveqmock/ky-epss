@@ -157,7 +157,7 @@ public class CttInfoService {
 
     @Transactional
     public void insertRecord(CttInfoShow cttInfoShowPara) {
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         CttInfo cttInfoTemp=fromModelShowToModel(cttInfoShowPara);
         cttInfoTemp.setArchivedFlag("0");
@@ -171,7 +171,7 @@ public class CttInfoService {
     }
     @Transactional
     public void insertRecord(CttInfo cttInfoPara) {
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         cttInfoPara.setArchivedFlag("0");
         cttInfoPara.setCreatedBy(strOperatorIdTemp);
@@ -188,7 +188,7 @@ public class CttInfoService {
         cttInfoTemp.setRecVersion(
                 ToolUtil.getIntIgnoreNull(cttInfoTemp.getRecVersion())+1);
         cttInfoTemp.setArchivedFlag("0");
-        cttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         cttInfoTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         cttInfoMapper.updateByPrimaryKey(cttInfoTemp);
         flowCtrlHisService.insertRecord(
@@ -199,7 +199,7 @@ public class CttInfoService {
         cttInfoPara.setRecVersion(
                 ToolUtil.getIntIgnoreNull(cttInfoPara.getRecVersion())+1);
         cttInfoPara.setArchivedFlag("0");
-        cttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         cttInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         cttInfoMapper.updateByPrimaryKey(cttInfoPara);
         flowCtrlHisService.insertRecord(
@@ -211,7 +211,7 @@ public class CttInfoService {
         cttInfoTemp.setRecVersion(
                 ToolUtil.getIntIgnoreNull(cttInfoTemp.getRecVersion())+1);
         cttInfoTemp.setArchivedFlag("0");
-        cttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        cttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         cttInfoTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         cttInfoMapper.updateByPrimaryKey(cttInfoTemp);
         flowCtrlHisService.insertRecord(

@@ -12,22 +12,23 @@ import java.math.BigDecimal;
  */
 
 public class QryCSStlQShow implements Serializable {
+    // 成本计划
     private String strCstpl_Pkid;
     private String strCstpl_ParentPkid;
     private String strCstpl_No;
     private String strCstpl_Name;
     private String strCstpl_Unit;
     private BigDecimal bdCstpl_ContractUnitPrice;
-
+    // 计量
     private BigDecimal bdTkcttStl_MeaQuantity;
     private BigDecimal bdTkcttStl_MeaAmount;
-
+    // 分包合同
     private String    strSubctt_SignPartName;
     private BigDecimal bdSubctt_ContractUnitPrice;
-
+    // 分包结算
     private BigDecimal bdSubcttStl_BeginToCurrentPeriodQQty;
     private BigDecimal bdSubcttStl_BeginToCurrentPeriodMAmount;
-
+    // 计量与分包差
     private BigDecimal bdMeaS_ContractUnitPrice;
     private BigDecimal bdMeaS_BeginToCurrentPeriodQQty;
     private BigDecimal bdMeaS_BeginToCurrentPeriodMAmount;

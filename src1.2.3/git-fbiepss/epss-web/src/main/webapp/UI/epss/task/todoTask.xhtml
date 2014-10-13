@@ -84,7 +84,7 @@
                 }else
                 if(flowStatus=="3") { // 待记账
                     if (infoType == '5'){
-                        var rtn = dialog("../item/itemAct_SubcttEngPStl.xhtml?strStlInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../item/itemAct_SubcttPStl.xhtml?strFlowType=Account&amp;strStlInfoPkid=" + infoPkid, arg, sfeature);
                     }
                 }
                 document.getElementById("form:qryBtn").click();
@@ -120,7 +120,7 @@
                                  rowStyleClass="#{record.pkid eq null?'rowGrayStyle':
                                  record.strColorType eq '2'?'rowRedStyle':'rowGreenyellowStyle'}"
                                  scrollable="true"
-                                 scrollHeight="442">
+                                 scrollHeight="400">
                         <p:column headerText="操作" style="width:30px;text-align: center;">
                             <p:commandButton icon="ui-icon-triangle-1-e"
                                  style="height:16px;width:30px;"

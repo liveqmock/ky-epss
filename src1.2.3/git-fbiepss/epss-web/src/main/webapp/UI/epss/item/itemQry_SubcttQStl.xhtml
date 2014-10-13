@@ -23,12 +23,10 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <h:panelGrid  columns="1">
-                        <p:commandButton value="导出到EXCEL"
-                                         action="#{progStlItemSubQAction.onExportExcel}"
-                                         ajax="false">
-                        </p:commandButton>
-                    </h:panelGrid>
+                    <p:commandButton value="导出到EXCEL"
+                                     action="#{progStlItemSubQAction.onExportExcel}"
+                                     ajax="false">
+                    </p:commandButton>
                     <h:panelGrid columns="8">
                         <p:outputLabel value="分包合同编号：" for="stlId"/>
                         <p:inputText id="stlId" value="#{progStlItemSubQAction.progStlInfoShow.stlId}"
@@ -45,7 +43,7 @@
                         <p:inputText id="periodNo" value="#{progStlItemSubQAction.progStlInfoShow.periodNo}"
                                      readonly="true" style="background-color:gainsboro;"/>
                         <p:outputLabel value="数量结算编号：" for="id"/>
-                        <p:inputText id="id" value="#{progStlItemSubMAction.progStlInfoShow.id}"
+                        <p:inputText id="id" value="#{progStlItemSubQAction.progStlInfoShow.id}"
                                      readonly="true" style="background-color:gainsboro;"/>
                     </h:panelGrid>
                     <p:dataTable id="pdt" style="width:100%;"
@@ -63,7 +61,7 @@
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="440">
-                        <p:column headerText="操作" style="width:22px">
+                        <p:column headerText="操作" style="width:30px;text-align: center;">
                             <p:commandButton  icon="ui-icon-search"
                                               style="height:18px;width:18px"
                                               action="#{progStlItemSubQAction.selectRecordAction('Sel',record)}"

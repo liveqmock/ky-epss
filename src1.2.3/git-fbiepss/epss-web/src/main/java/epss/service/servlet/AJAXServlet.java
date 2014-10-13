@@ -30,7 +30,7 @@ public class AJAXServlet extends HttpServlet {
         MenuBean menuBean=new MenuBean();
         try {
             String strJson=menuBean.generateJsonStream(
-                    ((OperatorManager)request.getSession().getAttribute(SystemAttributeNames.USER_INFO_NAME)).getOperatorId()
+                    ((OperatorManager)request.getSession().getAttribute(SystemAttributeNames.USER_INFO_NAME)).getOperator().getPkid()
                     ,"default");
             response.getWriter().write(strJson);
         } catch (Exception e) {

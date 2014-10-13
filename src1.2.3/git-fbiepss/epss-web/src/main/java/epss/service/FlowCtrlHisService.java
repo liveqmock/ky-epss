@@ -66,7 +66,7 @@ public class FlowCtrlHisService {
     }
 
     public void insertRecord(FlowCtrlHis flowCtrlHisPara) {
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
         flowCtrlHisPara.setCreatedBy(strOperatorIdTemp);
         flowCtrlHisPara.setCreatedTime(strLastUpdTimeTemp);

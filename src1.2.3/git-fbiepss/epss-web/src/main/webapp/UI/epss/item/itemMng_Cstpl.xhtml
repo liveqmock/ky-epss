@@ -82,16 +82,18 @@
                                   rendered='#{cstplItemAction.strMngNotFinishFlag}'>
                             <p:commandButton  icon="ui-icon-pencil"
                                         style="height:18px;width:18px"
-                                        rendered="#{record.name eq '合计'? 'false': record.nameContrast eq '合计'? 'false':
-                                                      record.name eq '总合计'? 'false':record.nameContrast eq '总合计'? 'false':'true'}"
+                                        rendered="#{record.nameContrast eq null ?'false':
+                                                     (record.name eq '合计'? 'false': record.nameContrast eq '合计'? 'false':
+                                                      record.name eq '总合计'? 'false':record.nameContrast eq '总合计'? 'false':'true')}"
                                         actionListener="#{cstplItemAction.selectRecordAction('Upd',record)}"
                                         update="pdt,:form:pgViewForUpd"
                                         oncomplete="PF('wVDlgViewForUpd').show()">
                             </p:commandButton>
                             <p:commandButton  icon="ui-icon-trash"
                                         style="height:18px;width:18px"
-                                        rendered="#{record.name eq '合计'? 'false': record.nameContrast eq '合计'? 'false':
-                                                      record.name eq '总合计'? 'false':record.nameContrast eq '总合计'? 'false':'true'}"
+                                        rendered="#{record.nameContrast eq null ?'false':
+                                                     (record.name eq '合计'? 'false': record.nameContrast eq '合计'? 'false':
+                                                      record.name eq '总合计'? 'false':record.nameContrast eq '总合计'? 'false':'true')}"
                                         actionListener="#{cstplItemAction.selectRecordAction('Del',record)}"
                                         update="pdt,:form:pgViewForDel"
                                         oncomplete="PF('wVDlgViewForDel').show()">

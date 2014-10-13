@@ -87,6 +87,34 @@ public class ToolUtil {
         return stringBuffer.toString()+strTemp;
     }
 
+    public static String getMaxIdPlusOne(String strPreMaxIdPara,String strMaxIdPara){
+        try {
+            String strMaxId;
+
+            strMaxId= strMaxIdPara;
+            if(org.apache.commons.lang.StringUtils.isEmpty(strMaxId)){
+                strMaxId=strPreMaxIdPara+ ToolUtil.getStrToday()+"001";
+            }
+            else if(strIsDigit(strMaxId)) {
+                Integer intTemp=Integer.parseInt(strMaxId) ;
+                intTemp=intTemp+1;
+                strMaxId=intTemp.toString();
+            }else if(strMaxId .length()>3){
+                String strTemp=strMaxId.substring(strMaxId .length() -3).replaceFirst("^0+","");
+                if(strIsDigit(strTemp)){
+                    Integer intTemp=Integer.parseInt(strTemp) ;
+                    intTemp=intTemp+1;
+                    strMaxId=strMaxId.substring(0,strMaxId.length()-3)+ org.apache.commons.lang.StringUtils.leftPad(intTemp.toString(), 3, "0");
+                }else{
+                    strMaxId+="001";
+                }
+            }
+            return strMaxId;
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     //附件相关方法
     public static List<AttachmentModel> getListAttachmentByStrAttachment(String strAttachmentPara){
         List<AttachmentModel> attachmentListTemp=new ArrayList<>();
@@ -222,12 +250,12 @@ public class ToolUtil {
         return getFieldMax(dc,Keyfield,tableName,"");
     }
 
-    public static String getUserName(String operID){
+    public static String getUserName(String operPkidPara){
         ConnectionManager cm  = ConnectionManager.getInstance();
         DatabaseConnection dc = cm.get();
         String username ="";
         try{
-            String SQLStr = "select NAME as username from OPER  where ID='"+operID+"'";
+            String SQLStr = "select NAME as username from OPER  where PKID='"+operPkidPara+"'";
             RecordSet rs = dc.executeQuery(SQLStr);
             if(rs.next())
                 username = rs.getString(0);

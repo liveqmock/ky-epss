@@ -11,8 +11,9 @@ public class DeptOperShow {
     private String isDisabled;
     private Boolean isSeled;
     private String deptId;
-    private String operId;
     private String deptName;
+    private String operId;
+    private String operType;
     private String operName;
     public String getPkid() {
         return pkid;
@@ -92,5 +93,13 @@ public class DeptOperShow {
 
     public void setOperName(String operName) {
         this.operName = operName;
+    }
+
+    public String getOperType() {
+        return operType;
+    }
+
+    public void setOperType(String operType) {
+        this.operType = operType;
     }
 }

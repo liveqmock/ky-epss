@@ -40,7 +40,7 @@
                         <p:inputText id="periodNo" value="#{progStlItemTkEstAction.progStlInfoShow.periodNo}"
                                      readonly="true" style="background-color:gainsboro;"/>
                         <p:outputLabel value="总包统计结算编号：" for="id"/>
-                        <p:inputText id="id" value="#{progStlItemSubMAction.progStlInfoShow.id}"
+                        <p:inputText id="id" value="#{progStlItemTkEstAction.progStlInfoShow.id}"
                                      readonly="true" style="background-color:gainsboro;"/>
                     </h:panelGrid>
                     <p:dataTable id="pdt" style="width:100%;"
@@ -58,7 +58,7 @@
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="460">
-                        <p:column headerText="操作" style="width:30px">
+                        <p:column headerText="操作" style="width:30px;text-align: center;">
                             <p:commandButton  icon="ui-icon-search"
                                               style="height:18px;width:18px"
                                               action="#{progStlItemTkEstAction.selectRecordAction('Sel',record)}"

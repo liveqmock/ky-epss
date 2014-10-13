@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import skyline.security.MD5Helper;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
+import skyline.util.ToolUtil;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -51,11 +52,11 @@ public class DeptOperAction implements Serializable {
     private Oper operAdd;
     private Oper operUpd;
     private Oper operDel;
-    private List<SelectItem> operSexList;
-    private List<SelectItem> operIsSuperList;
-    private List<SelectItem> typeList;
-    private List<SelectItem> enableList;
-    private List<SelectItem> operTypeList;
+    private List<SelectItem> deptSIList;
+    private List<SelectItem> operSexSIList;
+    private List<SelectItem> operIsSuperSIList;
+    private List<SelectItem> enableSIList;
+    private List<SelectItem> operTypeSIList;
     private String strConfirmPasswd;
     private List<DeptOperShow> deptOperShowFowExcelList;
     private Map beansMap;
@@ -80,22 +81,23 @@ public class DeptOperAction implements Serializable {
     }
 
     private void initData() {
-        operSexList = new ArrayList<SelectItem>();
-        operSexList.add(new SelectItem("1", "男"));
-        operSexList.add(new SelectItem("0", "女"));
-        operIsSuperList = new ArrayList<SelectItem>();
-        operIsSuperList.add(new SelectItem("0", "否"));
-        operIsSuperList.add(new SelectItem("1", "是"));
-        typeList = new ArrayList<SelectItem>();
-        typeList.add(new SelectItem("0", "增加机构信息"));
-        typeList.add(new SelectItem("1", "增加人员信息"));
-        enableList= new ArrayList<SelectItem>();
-        enableList.add(new SelectItem("1", "可用"));
-        enableList.add(new SelectItem("0", "不可用"));
-        operTypeList= new ArrayList<SelectItem>();
-        operTypeList.add(new SelectItem("2", "业务人员"));
-        operTypeList.add(new SelectItem("1", "系统管理员"));
-        operTypeList.add(new SelectItem("0", "超级系统管理员"));
+        operSexSIList = new ArrayList<>();
+        operSexSIList.add(new SelectItem("1", "男"));
+        operSexSIList.add(new SelectItem("0", "女"));
+        operIsSuperSIList = new ArrayList<>();
+        operIsSuperSIList.add(new SelectItem("0", "否"));
+        operIsSuperSIList.add(new SelectItem("1", "是"));
+        enableSIList= new ArrayList<>();
+        enableSIList.add(new SelectItem("1", "可用"));
+        enableSIList.add(new SelectItem("0", "不可用"));
+        operTypeSIList= new ArrayList<>();
+        operTypeSIList.add(new SelectItem("2", "业务人员"));
+        operTypeSIList.add(new SelectItem("1", "系统管理员"));
+        deptSIList=new ArrayList<>();
+        List<Dept> deptListTemp=deptOperService.getDeptList();
+        for(Dept dept:deptListTemp){
+            deptSIList.add(new SelectItem(dept.getPkid(),dept.getName()));
+        }
         initDeptOper();
     }
 
@@ -121,6 +123,31 @@ public class DeptOperAction implements Serializable {
         node0.setExpanded(true);
     }
 
+    public void setMaxDeptIdPlusOne(String strMngTypePara){
+        try {
+            if("Add".equals(strMngTypePara)) {
+                deptAdd.setId(deptOperService.getStrMaxOperId());
+            }else if("Upd".equals(strMngTypePara)) {
+                deptUpd.setId(deptOperService.getStrMaxOperId());
+            }
+        } catch (Exception e) {
+            logger.error("取得最大部门号失败", e);
+            MessageUtil.addError("取得最大部门号失败。");
+        }
+    }
+    public void setMaxOperIdPlusOne(String strMngTypePara){
+        try {
+            if("Add".equals(strMngTypePara)) {
+                operAdd.setId(deptOperService.getStrMaxOperId());
+            }else if("Upd".equals(strMngTypePara)) {
+                operUpd.setId(deptOperService.getStrMaxOperId());
+            }
+        } catch (Exception e) {
+            logger.error("取得最大用户号失败", e);
+            MessageUtil.addError("取得最大用户号失败。");
+        }
+    }
+
     private void recursiveTreeNode(String strParentPkidPara, TreeNode parentNode)
             throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         List<DeptOperShow> deptOperShowTempList= deptOperService.selectDeptAndOperRecords(strParentPkidPara);
@@ -128,12 +155,12 @@ public class DeptOperAction implements Serializable {
             TreeNode childNodeTemp = new DefaultTreeNode(deptOperShowTempList.get(i), parentNode);
             DeptOperShow deptOperShowForExcelTemp= (DeptOperShow)BeanUtils.cloneBean(deptOperShowTempList.get(i));
             DeptOperShow deptOperShowForExcelTemp2=new DeptOperShow();
-            if(("0").equals(deptOperShowTempList.get(i).getType())){
-                deptOperShowForExcelTemp2.setDeptId(deptOperShowTempList.get(i).getId());
-                deptOperShowForExcelTemp2.setDeptName(deptOperShowTempList.get(i).getName());
+            if(("0").equals(deptOperShowForExcelTemp.getType())){
+                deptOperShowForExcelTemp2.setDeptId(deptOperShowForExcelTemp.getId());
+                deptOperShowForExcelTemp2.setDeptName(deptOperShowForExcelTemp.getName());
             }else{
-                deptOperShowForExcelTemp2.setOperId(deptOperShowTempList.get(i).getId());
-                deptOperShowForExcelTemp2.setOperName(deptOperShowTempList.get(i).getName());
+                deptOperShowForExcelTemp2.setOperId(deptOperShowForExcelTemp.getId());
+                deptOperShowForExcelTemp2.setOperName(deptOperShowForExcelTemp.getName());
             }
             deptOperShowFowExcelList.add(deptOperShowForExcelTemp2);
             if (currentSelectedNode!=null){
@@ -151,7 +178,7 @@ public class DeptOperAction implements Serializable {
                     }
                 }
             }
-            recursiveTreeNode(deptOperShowTempList.get(i).getId(), childNodeTemp);
+            recursiveTreeNode(deptOperShowForExcelTemp.getPkid(), childNodeTemp);
         }
     }
 
@@ -192,7 +219,8 @@ public class DeptOperAction implements Serializable {
             if (strSubmitTypePara.contains("Dept")) {
                 if (strSubmitTypePara.contains("Add")) {
                     deptAdd = new Dept();
-                    deptAdd.setParentpkid(deptOperShowPara.getId());
+                    deptAdd.setId(deptOperService.getStrMaxDeptId());
+                    deptAdd.setParentpkid(deptOperShowPara.getPkid());
                 } else {
                     if (strSubmitTypePara.contains("Upd")) {
                         deptUpd = new Dept();
@@ -205,7 +233,8 @@ public class DeptOperAction implements Serializable {
             } else if (strSubmitTypePara.contains("Oper")) {
                 if (strSubmitTypePara.contains("Add")){
                     operAdd = new Oper();
-                    operAdd.setDeptPkid(deptOperShowPara.getId());
+                    operAdd.setId(deptOperService.getStrMaxOperId());
+                    operAdd.setDeptPkid(deptOperShowPara.getPkid());
                 }else if (strSubmitTypePara.contains("Upd")) {
                     operUpd = new Oper();
                     operUpd = (Oper) deptOperService.selectRecordByPkid(deptOperShowPara);
@@ -408,36 +437,44 @@ public class DeptOperAction implements Serializable {
         this.operDel = operDel;
     }
 
-    public List<SelectItem> getOperSexList() {
-        return operSexList;
+    public List<SelectItem> getDeptSIList() {
+        return deptSIList;
     }
 
-    public void setOperSexList(List<SelectItem> operSexList) {
-        this.operSexList = operSexList;
+    public void setDeptSIList(List<SelectItem> deptSIList) {
+        this.deptSIList = deptSIList;
     }
 
-    public List<SelectItem> getOperIsSuperList() {
-        return operIsSuperList;
+    public List<SelectItem> getOperSexSIList() {
+        return operSexSIList;
     }
 
-    public void setOperIsSuperList(List<SelectItem> operIsSuperList) {
-        this.operIsSuperList = operIsSuperList;
+    public void setOperSexSIList(List<SelectItem> operSexSIList) {
+        this.operSexSIList = operSexSIList;
     }
 
-    public List<SelectItem> getTypeList() {
-        return typeList;
+    public List<SelectItem> getOperIsSuperSIList() {
+        return operIsSuperSIList;
     }
 
-    public void setTypeList(List<SelectItem> typeList) {
-        this.typeList = typeList;
+    public void setOperIsSuperSIList(List<SelectItem> operIsSuperSIList) {
+        this.operIsSuperSIList = operIsSuperSIList;
     }
 
-    public List<SelectItem> getEnableList() {
-        return enableList;
+    public List<SelectItem> getEnableSIList() {
+        return enableSIList;
     }
 
-    public void setEnableList(List<SelectItem> enableList) {
-        this.enableList = enableList;
+    public void setEnableSIList(List<SelectItem> enableSIList) {
+        this.enableSIList = enableSIList;
+    }
+
+    public List<SelectItem> getOperTypeSIList() {
+        return operTypeSIList;
+    }
+
+    public void setOperTypeSIList(List<SelectItem> operTypeSIList) {
+        this.operTypeSIList = operTypeSIList;
     }
 
     public String getStrConfirmPasswd() {
@@ -446,14 +483,6 @@ public class DeptOperAction implements Serializable {
 
     public void setStrConfirmPasswd(String strConfirmPasswd) {
         this.strConfirmPasswd = strConfirmPasswd;
-    }
-
-    public List<SelectItem> getOperTypeList() {
-        return operTypeList;
-    }
-
-    public void setOperTypeList(List<SelectItem> operTypeList) {
-        this.operTypeList = operTypeList;
     }
 
     public Map getBeansMap() {

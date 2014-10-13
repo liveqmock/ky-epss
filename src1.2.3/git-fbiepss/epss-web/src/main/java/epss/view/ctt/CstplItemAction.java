@@ -276,14 +276,7 @@ public class CstplItemAction {
                         ToolUtil.getIgnoreSpaceOfStr(cttItemShowUpd.getStrCorrespondingItemNo()));
             }
             else if(strSubmitTypePara.equals("Del")){
-                if(cstplItemShowPara.getStrNoContrast()==null) {
-                    MessageUtil.addInfo("没有可删除的数据！");
-                    cttItemShowDel =new CttItemShow(strBelongToType ,strCttInfoPkid);
-                    return;
-                }
-                else{
-                    cttItemShowDel =getItemOfEsItemHieRelapByItem(cstplItemShowPara,"Cstpl");
-                }
+                cttItemShowDel =getItemOfEsItemHieRelapByItem(cstplItemShowPara,"Cstpl");
                 cttItemShowDel.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemShowDel.getStrNo())) ;
                 cttItemShowDel.setStrCorrespondingItemNo(
                         ToolUtil.getIgnoreSpaceOfStr(cttItemShowDel.getStrCorrespondingItemNo()));
@@ -537,9 +530,8 @@ public class CstplItemAction {
     private void initData() {
         try {
         /*总包合同列表*/
-            List<CttItem> cttItemListTkctt =new ArrayList<CttItem>();
-            if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
-                    ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
+            List<CttItem> cttItemListTkctt =new ArrayList<>();
+            if(ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
                 // 附件记录变成List
                 attachmentList=ToolUtil.getListAttachmentByStrAttachment(cttInfo.getAttachment());
 
@@ -660,7 +652,10 @@ public class CstplItemAction {
                 }
                 cstplItemShowList = new ArrayList<CstplItemShow>();
                 cstplItemShowList.addAll(cstplItemShowList_ForSort);
-                cstplItemShowListExcel = new ArrayList<CstplItemShow>();
+                // 添加合计
+                setCstplItemList_AddTotal();
+
+                cstplItemShowListExcel = new ArrayList<>();
                 for (CstplItemShow itemUnit : cstplItemShowList) {
                     CstplItemShow itemUnitTemp = (CstplItemShow) BeanUtils.cloneBean(itemUnit);
                     itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
@@ -668,9 +663,6 @@ public class CstplItemAction {
                     cstplItemShowListExcel.add(itemUnitTemp);
                 }
                 beansMap.put("cstplItemShowListExcel", cstplItemShowListExcel);
-                // 添加合计
-                setCstplItemList_AddTotal();
-                beansMap.put("cstplItemShowList", cstplItemShowList);
                 resetActionForAdd();
             }
         }catch (Exception e) {

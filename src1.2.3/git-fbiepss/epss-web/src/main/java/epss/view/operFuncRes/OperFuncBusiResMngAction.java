@@ -112,7 +112,8 @@ public class OperFuncBusiResMngAction implements Serializable{
             OperResShow operResShowTemp=new OperResShow();
             operResShowTemp.setInfoType(cttInfoShowTemp.getCttType());
             operResShowTemp.setInfoPkid(cttInfoShowTemp.getPkid());
-            List<OperResShow> operResShowListTemp = operResService.selectOperaResRecordsByModelShow(operResShowTemp);
+            List<OperResShow> operResShowListTemp =
+                    operResService.selectOperaResRecordsByModelShow(operResShowTemp);
             String strInputOperName="";
             String strCheckOperName="";
             String strDoubleCheckOperName="";
@@ -122,37 +123,37 @@ public class OperFuncBusiResMngAction implements Serializable{
             for(OperResShow operResShowUnit:operResShowListTemp){
                 if("0".equals(operResShowUnit.getFlowStatus())){
                     if(strInputOperName.length()==0){
-                        strInputOperName = operResShowUnit.getOperName();
+                        strInputOperName = ToolUtil.getStrIgnoreNull(operResShowUnit.getOperName());
                     }else {
                         strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
                     }
                 }else if("1".equals(operResShowUnit.getFlowStatus())){
                     if(strCheckOperName.length()==0){
-                        strCheckOperName = operResShowUnit.getOperName();
+                        strCheckOperName = ToolUtil.getStrIgnoreNull(operResShowUnit.getOperName());
                     }else {
                         strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
                     }
                 }else if("2".equals(operResShowUnit.getFlowStatus())){
                     if(strDoubleCheckOperName.length()==0){
-                        strDoubleCheckOperName = operResShowUnit.getOperName();
+                        strDoubleCheckOperName = ToolUtil.getStrIgnoreNull(operResShowUnit.getOperName());
                     }else {
                         strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
                     }
                 }else if("3".equals(operResShowUnit.getFlowStatus())){
                     if(strApproveOperName.length()==0){
-                        strApproveOperName = operResShowUnit.getOperName();
+                        strApproveOperName = ToolUtil.getStrIgnoreNull(operResShowUnit.getOperName());
                     }else {
                         strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
                     }
                 }else if("4".equals(operResShowUnit.getFlowStatus())){
                     if(strAccountOperName.length()==0){
-                        strAccountOperName = operResShowUnit.getOperName();
+                        strAccountOperName = ToolUtil.getStrIgnoreNull(operResShowUnit.getOperName());
                     }else {
                         strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
                     }
                 }else if("5".equals(operResShowUnit.getFlowStatus())){
                     if(strPlaceOnFileOperName.length()==0){
-                        strPlaceOnFileOperName = operResShowUnit.getOperName();
+                        strPlaceOnFileOperName = ToolUtil.getStrIgnoreNull(operResShowUnit.getOperName());
                     }else {
                         strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
                     }
@@ -538,7 +539,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                 deptOperService.selectDeptAndOperRecords(strParentPkidPara);
         for (int i=0;i<operResShowListTemp.size();i++){
             TreeNode childNode = new DefaultTreeNode(operResShowListTemp.get(i), parentNode);
-            recursiveOperTreeNode(operResShowListTemp.get(i).getId(), childNode);
+            recursiveOperTreeNode(operResShowListTemp.get(i).getPkid(), childNode);
         }
     }
 
@@ -691,7 +692,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                 operResService.deleteRecord(operResTemp);
                 for (DeptOperShow deptOperShowUnit:deptOperShowSeledList) {
                     operResTemp = new OperRes();
-                    operResTemp.setOperPkid(deptOperShowUnit.getId());
+                    operResTemp.setOperPkid(deptOperShowUnit.getPkid());
                     operResTemp.setFlowStatus(taskFunctionSeled);
                     operResTemp.setInfoType(cttInfoShowSel.getCttType());
                     operResTemp.setInfoPkid(cttInfoShowSel.getPkid());
@@ -746,9 +747,9 @@ public class OperFuncBusiResMngAction implements Serializable{
             for (int i = 0; i < treeNodePara.getChildCount(); i++) {
                 TreeNode treeNodeTemp = treeNodePara.getChildren().get(i);
                 DeptOperShow deptOperShowTemp = (DeptOperShow) treeNodeTemp.getData();
-                if (deptOperShowTemp.getId()!=null&&"1".equals(deptOperShowTemp.getType())){
+                if (deptOperShowTemp.getPkid()!=null&&"1".equals(deptOperShowTemp.getType())){
                     for (int j = 0; j < operResShowListPara.size(); j++) {
-                        if (deptOperShowTemp.getId().equals(operResShowListPara.get(j).getOperPkid())) {
+                        if (deptOperShowTemp.getPkid().equals(operResShowListPara.get(j).getOperPkid())) {
                             deptOperShowTemp.setIsSeled(true);
                             deptOperShowSeledList.add(deptOperShowTemp);
                             while (!(treeNodeTemp.getParent()==null)){
@@ -757,10 +758,8 @@ public class OperFuncBusiResMngAction implements Serializable{
                                 }
                                 treeNodeTemp=treeNodeTemp.getParent();
                             }
-                            if (treeNodeTemp.getParent()==null){
-                                operResShowListPara.remove(j);
-                                break;
-                            }
+                            operResShowListPara.remove(j);
+                            break;
                         }
                     }
                 }

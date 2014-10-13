@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import skyline.platform.utils.PropertyManager;
+import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 
 import javax.annotation.Resource;
@@ -37,6 +38,11 @@ public class DeptOperService {
         return myDeptAndOperMapper.selectDeptAndOperRecords(parentPkidPara);
     }
 
+    public List<Dept> getDeptList() {
+        DeptExample example=new DeptExample();
+        return deptMapper.selectByExample(example);
+    }
+
     public boolean findChildRecordsByPkid(String strDeptOperPkidPara) {
         DeptExample example = new DeptExample();
         example.createCriteria()
@@ -55,6 +61,13 @@ public class DeptOperService {
         }
     }
 
+    public String getStrMaxDeptId(){
+        return ToolUtil.getMaxIdPlusOne("DEPT",myDeptAndOperMapper.getStrMaxDeptId()) ;
+    }
+    public String getStrMaxOperId(){
+        return ToolUtil.getMaxIdPlusOne("OPER",myDeptAndOperMapper.getStrMaxOperId()) ;
+    }
+
     public boolean isExistInDeptDb(Dept deptPara) {
             DeptExample deptExample=new DeptExample();
             deptExample.createCriteria()
@@ -70,7 +83,7 @@ public class DeptOperService {
         return operMapper.selectByExample(operExample).size();
     }
     public void insertDeptRecord(Dept deptPara){
-        deptPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        deptPara.setCreatedBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         deptPara.setCreatedTime(ToolUtil.getStrLastUpdTime());
         deptMapper.insert(deptPara);
     }
@@ -115,12 +128,12 @@ public class DeptOperService {
             operPara.setAttachment(strFileName);
         }
         operPara.setArchivedFlag("0");
-        operPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        operPara.setCreatedBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         operPara.setCreatedTime(ToolUtil.getStrLastUpdTime());
         operMapper.insert(operPara);
     }
     public void updateDeptRecord(Dept deptPara){
-        deptPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        deptPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         deptPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         deptMapper.updateByPrimaryKey(deptPara);
     }
@@ -174,7 +187,7 @@ public class DeptOperService {
             operPara.setAttachment(strFileName);
         }
         operPara.setArchivedFlag("0");
-        operPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        operPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         operPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         operMapper.updateByPrimaryKey(operPara);
     }

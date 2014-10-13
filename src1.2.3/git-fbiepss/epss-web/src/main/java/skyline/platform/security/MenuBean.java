@@ -24,10 +24,10 @@ public class MenuBean
      * @return
      * @throws Exception
      */
-    public String generateJsonStream(String operatorIdPara, String targetPara)
+    public String generateJsonStream(String strOperPkidPara, String targetPara)
             throws Exception {
         database = new DatabaseAgent();
-        List<MenuItemBean> menuItems = database.getMenuItems(operatorIdPara,targetPara);
+        List<MenuItemBean> menuItems = database.getMenuItems(strOperPkidPara,targetPara);
         TreeNode treenode = new TreeNode();
         treenode.setId("0");
         assembleTreeNode(treenode, menuItems);

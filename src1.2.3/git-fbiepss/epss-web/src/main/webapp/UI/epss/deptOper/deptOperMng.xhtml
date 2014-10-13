@@ -38,7 +38,8 @@
                                  rowStyleClass="#{node.type  eq '1' ? null:'rowGrayStyle'}"
                                  scrollable="true"
                                  scrollHeight="400">
-                        <p:ajax event="collapse" update=":form:msgs" listener="#{deptOperAction.onNodeCollapse}"/>
+                        <p:ajax event="collapse" update=":form:msgs"
+                                listener="#{deptOperAction.onNodeCollapse}"/>
                         <p:column headerText="机构名称" style="width:200px;text-align:left">
                             <h:outputText value="#{node.type eq '0'?node.name:''}"/>
                         </p:column>
@@ -96,13 +97,21 @@
                         </p:column>
                     </p:treeTable>
                 </p:panel>
-                <p:dialog id="dlgViewForDeptAdd" header="增加机构信息" widgetVar="wVDlgViewForDeptAdd"
+                <p:dialog id="dlgViewForDeptAdd" header="增加机构信息"
+                          widgetVar="wVDlgViewForDeptAdd"
                           esizable="false" modal="true"
                           showEffect="clip" hideEffect="fold">
                     <h:panelGrid id="pgViewForDeptAdd">
-                        <h:panelGrid columns="2">
+                        <h:panelGrid columns="3">
                             <p:outputLabel value="机构编号：" for="deptIdForDeptAdd"/>
                             <p:inputText id="deptIdForDeptAdd" value="#{deptOperAction.deptAdd.id}"/>
+                            <p:commandButton id="autoSetIdBtnForDeptAdd" icon="ui-icon-plus"
+                                             action="#{deptOperAction.setMaxDeptIdPlusOne('Add')}"
+                                             update="deptIdForDeptAdd"
+                                             style="height:20px">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid  columns="2">
                             <p:outputLabel value="机构名称：" for="deptNameForDeptAdd"/>
                             <p:inputText id="deptNameForDeptAdd" value="#{deptOperAction.deptAdd.name}"
                                          style="width:328px"/>
@@ -124,13 +133,21 @@
                         </h:panelGrid>
                     </h:panelGrid>
                 </p:dialog>
-                <p:dialog id="dlgViewForDeptUpd" header="更新机构信息" widgetVar="wVDlgViewForDeptUpd"
+                <p:dialog id="dlgViewForDeptUpd" header="更新机构信息"
+                          widgetVar="wVDlgViewForDeptUpd"
                           esizable="false" modal="true"
                           showEffect="clip" hideEffect="fold">
                     <h:panelGrid id="pgViewForDeptUpd">
-                        <h:panelGrid  columns="2">
+                        <h:panelGrid  columns="3">
                             <p:outputLabel value="机构编号：" for="deptIdForDeptUpd"/>
                             <p:inputText id="deptIdForDeptUpd" value="#{deptOperAction.deptUpd.id}"/>
+                            <p:commandButton id="autoSetIdBtnForDeptUpd" icon="ui-icon-plus"
+                                             action="#{deptOperAction.setMaxDeptIdPlusOne('Upd')}"
+                                             update="deptIdForDeptUpd"
+                                             style="height:20px">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
                             <p:outputLabel value="机构名称：" for="deptNameForDeptUpd"/>
                             <p:inputText id="deptNameForDeptUpd" value="#{deptOperAction.deptUpd.name}"
                                          style="width:328px"/>
@@ -152,7 +169,8 @@
                         </h:panelGrid>
                     </h:panelGrid>
                 </p:dialog>
-                <p:dialog id="dlgViewForDeptDel" header="删除机构信息" widgetVar="wVDlgViewForDeptDel"
+                <p:dialog id="dlgViewForDeptDel" header="删除机构信息"
+                          widgetVar="wVDlgViewForDeptDel"
                           esizable="false" modal="true"
                           showEffect="clip" hideEffect="fold">
                     <h:panelGrid id="pgViewForDeptDel">
@@ -178,38 +196,46 @@
                         </p:commandButton>
                     </h:panelGrid>
                 </p:dialog>
-                <p:dialog id="dlgViewForOperAdd" header="增加人员信息" widgetVar="wVDlgViewForOperAdd"
+                <p:dialog id="dlgViewForOperAdd" header="增加人员信息"
+                          widgetVar="wVDlgViewForOperAdd"
                           esizable="false" modal="true"
                           showEffect="clip" hideEffect="fold">
                     <h:panelGrid>
                         <h:panelGrid id="pgViewForOperAdd">
-                            <h:panelGrid columns="4">
-                                <p:outputLabel value="用户级别：" for="operTypeForOperAdd"/>
-                                <p:selectOneMenu id="operTypeForOperAdd" value="#{deptOperAction.operAdd.type}">
-                                    <f:selectItems value="#{deptOperAction.operTypeList}"/>
-                                </p:selectOneMenu>
-                                <p:outputLabel value="操作员号：" for="operIdForOperAdd"/>
+                            <h:panelGrid columns="3">
+                                <p:outputLabel value="用户编号：" for="operIdForOperAdd"/>
                                 <p:inputText id="operIdForOperAdd" value="#{deptOperAction.operAdd.id}"/>
+                                <p:commandButton id="autoSetIdBtnForOperAdd" icon="ui-icon-plus"
+                                                 action="#{deptOperAction.setMaxOperIdPlusOne('Add')}"
+                                                 update="operIdForOperAdd"
+                                                 style="height:20px">
+                                </p:commandButton>
+                             </h:panelGrid>
+                            <h:panelGrid columns="4">
                                 <p:outputLabel value="用户密码：" for="operPasswdForOperAdd"/>
                                 <h:inputSecret id="operPasswdForOperAdd" value="#{deptOperAction.operAdd.passwd}"/>
                                 <p:outputLabel value="用户姓名：" for="operNameForOperAdd"/>
                                 <p:inputText id="operNameForOperAdd" value="#{deptOperAction.operAdd.name}"/>
                                 <p:outputLabel value="性别：" for="operSexForOperAdd"/>
                                 <p:selectOneMenu id="operSexForOperAdd" value="#{deptOperAction.operAdd.sex}">
-                                    <f:selectItems value="#{deptOperAction.operSexList}"/>
+                                    <f:selectItems value="#{deptOperAction.operSexSIList}"/>
                                 </p:selectOneMenu>
                                 <p:outputLabel value="电子邮件：" for="operEmailForOperAdd"/>
                                 <p:inputText id="operEmailForOperAdd" value="#{deptOperAction.operAdd.email}"/>
+                                <p:outputLabel value="是否领导：" for="operIsSuperForOperAdd"/>
+                                <p:selectOneMenu id="operIsSuperForOperAdd" value="#{deptOperAction.operAdd.issuper}">
+                                    <f:selectItems value="#{deptOperAction.operIsSuperSIList}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="用户级别：" for="operTypeForOperAdd"/>
+                                <p:selectOneMenu id="operTypeForOperAdd" value="#{deptOperAction.operAdd.type}">
+                                    <f:selectItems value="#{deptOperAction.operTypeSIList}"/>
+                                </p:selectOneMenu>
                                 <p:outputLabel value="手机号：" for="operMobilePhoneForOperAdd"/>
                                 <p:inputText id="operMobilePhoneForOperAdd"
                                              value="#{deptOperAction.operAdd.mobilephone}"/>
-                                <p:outputLabel value="是否领导：" for="operIsSuperForOperAdd"/>
-                                <p:selectOneMenu id="operIsSuperForOperAdd" value="#{deptOperAction.operAdd.issuper}">
-                                    <f:selectItems value="#{deptOperAction.operIsSuperList}"/>
-                                </p:selectOneMenu>
                                 <p:outputLabel value="是否可用：" for="operIsEnableForOperAdd"/>
                                 <p:selectOneMenu id="operIsEnableForOperAdd" value="#{deptOperAction.operAdd.enabled}">
-                                    <f:selectItems value="#{deptOperAction.enableList}"/>
+                                    <f:selectItems value="#{deptOperAction.enableSIList}"/>
                                 </p:selectOneMenu>
                                 <p:outputLabel value="备注：" for="operRemarkForOperAdd"/>
                                 <p:inputText id="operRemarkForOperAdd" value="#{deptOperAction.operAdd.remark}"/>
@@ -240,36 +266,52 @@
                           esizable="false" modal="true"
                           showEffect="clip" hideEffect="fold">
                     <h:panelGrid id="pgViewForOperUpd">
-                        <h:panelGrid columns="4">
-                            <p:outputLabel value="操作员级别：" for="operTypeForOperUpd"/>
-                            <p:selectOneMenu id="operTypeForOperUpd" value="#{deptOperAction.operUpd.type}">
-                                <f:selectItems value="#{deptOperAction.operTypeList}"/>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="所属机构：" for="deptSIForOperUpd"/>
+                            <p:selectOneMenu id="deptSIForOperUpd"
+                                             value="#{deptOperAction.operUpd.deptPkid}">
+                                <f:selectItems value="#{deptOperAction.deptSIList}"/>
                             </p:selectOneMenu>
-                            <p:outputLabel value="操作员号*  ：" for="operIdForOperUpd"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3">
+                            <p:outputLabel value="用户编号：" for="operIdForOperUpd"/>
                             <p:inputText id="operIdForOperUpd" value="#{deptOperAction.operUpd.id}" />
-                            <p:outputLabel value="操作员密码*：" for="operPasswdForOperUpd"/>
+                            <p:commandButton id="autoSetIdBtnForOperUpd" icon="ui-icon-plus"
+                                             action="#{deptOperAction.setMaxOperIdPlusOne('Upd')}"
+                                             update="operIdForOperUpd"
+                                             style="height:20px">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="用户密码：" for="operPasswdForOperUpd"/>
                             <p:inputText id="operPasswdForOperUpd" type="password"
                                          value="#{deptOperAction.operUpd.passwd}"/>
-                            <p:outputLabel value="操作员姓名*：" for="operNameForOperUpd"/>
+                            <p:outputLabel value="用户姓名：" for="operNameForOperUpd"/>
                             <p:inputText id="operNameForOperUpd" value="#{deptOperAction.operUpd.name}"/>
                             <p:outputLabel value="性别：" for="operSexForOperUpd"/>
                             <p:selectOneMenu id="operSexForOperUpd" value="#{deptOperAction.operUpd.sex}">
-                                <f:selectItems value="#{deptOperAction.operSexList}"/>
+                                <f:selectItems value="#{deptOperAction.operSexSIList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="电子邮件：" for="operEmailForOperUpd"/>
                             <p:inputText id="operEmailForOperUpd" value="#{deptOperAction.operUpd.email}"/>
-                            <p:outputLabel value="手机号：" for="operMobilePhoneForOperUpd"/>
-                            <p:inputText id="operMobilePhoneForOperUpd" value="#{deptOperAction.operUpd.mobilephone}"/>
                             <p:outputLabel value="是否领导：" for="operIsSuperForOperUpd"/>
                             <p:selectOneMenu id="operIsSuperForOperUpd" value="#{deptOperAction.operUpd.issuper}">
-                                <f:selectItems value="#{deptOperAction.operIsSuperList}"/>
+                                <f:selectItems value="#{deptOperAction.operIsSuperSIList}"/>
                             </p:selectOneMenu>
+                            <p:outputLabel value="用户级别：" for="operTypeForOperUpd"/>
+                            <p:selectOneMenu id="operTypeForOperUpd" value="#{deptOperAction.operUpd.type}">
+                                <f:selectItems value="#{deptOperAction.operTypeSIList}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="手机号：" for="operMobilePhoneForOperUpd"/>
+                            <p:inputText id="operMobilePhoneForOperUpd" value="#{deptOperAction.operUpd.mobilephone}"/>
                             <p:outputLabel value="是否可用：" for="operIsEnableForOperUpd"/>
                             <p:selectOneMenu id="operIsEnableForOperUpd" value="#{deptOperAction.operUpd.enabled}">
-                                <f:selectItems value="#{deptOperAction.enableList}"/>
+                                <f:selectItems value="#{deptOperAction.enableSIList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="备注：" for="operRemarkForOperUpd"/>
                             <p:inputText id="operRemarkForOperUpd" value="#{deptOperAction.operUpd.remark}"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
                             <p:outputLabel value="图片签名：" for="operAttachmentForOperUpd"/>
                             <p:fileUpload id="operAttachmentForOperUpd"
                                           value="#{deptOperAction.operUpd.file}"
@@ -302,20 +344,22 @@
                     <h:panelGrid id="pgViewForDel">
                         <h:panelGrid  id="pgViewForOperDel" >
                             <h:panelGrid columns="4">
-                                <p:outputLabel value="操作员号*：" for="operIdForOperDel"/>
+                                <p:outputLabel value="用户编号：" for="operIdForOperDel"/>
                                 <p:inputText id="operIdForOperDel" value="#{deptOperAction.operDel.id}"
                                              readonly="true"
                                              style="background-color:gainsboro;"/>
-                                <p:outputLabel value="操作员密码*：" for="operPasswdForOperDel"/>
-                                <p:inputText id="operPasswdForOperDel" type="password" value="#{deptOperAction.operDel.passwd}"
+                                <p:outputLabel value="用户密码：" for="operPasswdForOperDel"/>
+                                <p:inputText id="operPasswdForOperDel" type="password"
+                                             value="#{deptOperAction.operDel.passwd}"
                                              readonly="true"
                                              style="background-color:gainsboro;"/>
-                                <p:outputLabel value="操作员姓名*：" for="operNameForOperDel"/>
+                                <p:outputLabel value="用户姓名：" for="operNameForOperDel"/>
                                 <p:inputText id="operNameForOperDel" value="#{deptOperAction.operDel.name}"
                                              readonly="true"
                                              style="background-color:gainsboro;"/>
                                 <p:outputLabel value="性别：" for="operSexForOperDel"/>
-                                <p:inputText id="operSexForOperDel" value="#{deptOperAction.operDel.sex eq '0'?'女':'男'}"
+                                <p:inputText id="operSexForOperDel"
+                                             value="#{deptOperAction.operDel.sex eq '0'?'女':'男'}"
                                              readonly="true"
                                              style="background-color:gainsboro;"/>
                                 <p:outputLabel value="电子邮件：" for="operEmailForOperDel"/>
@@ -327,7 +371,8 @@
                                              readonly="true"
                                              style="background-color:gainsboro;"/>
                                 <p:outputLabel value="是否领导：" for="operIsSuperForOperDel"/>
-                                <p:inputText id="operIsSuperForOperDel" value="#{deptOperAction.operDel.issuper eq '0'?'否':'是'}"
+                                <p:inputText id="operIsSuperForOperDel"
+                                             value="#{deptOperAction.operDel.issuper eq '0'?'否':'是'}"
                                              readonly="true"
                                              style="background-color:gainsboro;"/>
                                 <p:outputLabel value="备注：" for="operRemarkForOperDel"/>

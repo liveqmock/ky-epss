@@ -304,6 +304,6 @@ public interface MyQueryMapper {
             " and " +
             "      period_no=#{strPeriodNo}"+
             " order by row_no")
-    List<ProgStlItemSubStlment> selectRecordsForAccount(@Param("strSubcttPkid") String strSubcttPkid,
-                                                        @Param("strPeriodNo") String strPeriodNo);
+    List<ProgStlItemSubStlment> getProgStlItemSubStlmentListAccount(@Param("strSubcttPkid") String strSubcttPkid,
+                                                                    @Param("strPeriodNo") String strPeriodNo);
 }

@@ -69,7 +69,7 @@ public interface MyCttInfoMapper {
             "    t.name as name," +
             "    t.remark as remark," +
             "    t.created_by as createdBy," +
-            "    (select name from oper where id=t.created_by) as createdByName," +
+            "    (select NAME from oper where PKID=t.created_by) as createdByName," +
             "    t.CREATED_TIME as createdTime " +
             " from" +
             "    CTT_INFO t" +

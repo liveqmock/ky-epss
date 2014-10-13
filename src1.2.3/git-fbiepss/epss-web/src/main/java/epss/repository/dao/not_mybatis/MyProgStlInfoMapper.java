@@ -169,7 +169,7 @@ public interface MyProgStlInfoMapper {
             "     ecinfo.PARENT_PKID = #{strParentPkid}" +
             " order by" +
             "     eispower.STL_PKID,eispower.PERIOD_NO")
-    List<ProgStlInfoShow> selectNotFormEsInitSubcttStlP(@Param("strParentPkid") String strParentPkid,
+    List<ProgStlInfoShow> getNotFormSubcttStlP(@Param("strParentPkid") String strParentPkid,
                                                         @Param("strStlPkid") String strStlPkid,
                                                         @Param("strPeriodNo") String strPeriodNo);
     @Select("select" +
@@ -233,9 +233,9 @@ public interface MyProgStlInfoMapper {
             " ecinfo.PARENT_PKID = #{strParentPkid}" +
             " order by" +
             " eispower.STL_PKID,eispower.PERIOD_NO")
-    List<ProgStlInfoShow> selectFormPreEsInitSubcttStlP(@Param("strParentPkid") String strParentPkid,
-                                                        @Param("strStlPkid") String strStlPkid,
-                                                        @Param("strPeriodNo") String strPeriodNo);
+    List<ProgStlInfoShow> getFormPreSubcttStlP(@Param("strParentPkid") String strParentPkid,
+                                               @Param("strStlPkid") String strStlPkid,
+                                               @Param("strPeriodNo") String strPeriodNo);
     @Select("select distinct" +
             " eispower.PKID as pkid" +
             ",eispower.STL_PKID as stlPkid" +

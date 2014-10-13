@@ -1,5 +1,6 @@
 package epss.view.settle;
 
+import epss.common.enums.EnumFlowStatusReason;
 import epss.common.enums.EnumResType;
 import epss.common.enums.EnumFlowStatus;
 import epss.common.enums.EnumSubcttType;
@@ -98,16 +99,19 @@ public class ProgStlItemSubStlmentAction {
         Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
         if (parammap.containsKey("strStlInfoPkid")) {
             strStlInfoPkid = parammap.get("strStlInfoPkid").toString();
-            initData();
         }
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
         }
+        initData();
     }
 
     /*初始化操作*/
     private void initData() {
         progStlItemSubStlmentShowList = new ArrayList<>();
+        if(strStlInfoPkid == null){
+            return;
+        }
         progStlInfo = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
         initHeadMsg();
         CttInfo cttInfo =cttInfoService.getCttInfoByPkId(progStlInfo.getStlPkid());
@@ -136,6 +140,8 @@ public class ProgStlItemSubStlmentAction {
         }
 
         if (EnumFlowStatus.FLOW_STATUS3.getCode().compareTo(ToolUtil.getStrIgnoreNull(progStlInfo.getFlowStatus())) <= 0) {
+            // 批准之后，在抽明细数据就从明细表中抽出了，将不再拼数据，为了报表的输出
+            // 需要重新生成结算项stl2,stl3,stl4,stl5,stl6
             initMsgForExcel();
             if ("Account".equals(strFlowType) || "Qry".equals(strFlowType)) {
                 if (EnumFlowStatus.FLOW_STATUS4.getCode().equals(progStlInfo.getFlowStatus())) {
@@ -146,17 +152,19 @@ public class ProgStlItemSubStlmentAction {
                 /*表内容设定,查询和记账，查P表*/
                 progSubstlItemShowListForAccountAndQry = new ArrayList<ProgStlItemSubStlment>();
                 progSubstlItemShowListForAccountAndQry =
-                        progStlItemSubStlmentService.selectRecordsForAccount(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
-                return;
-            }
+                        progStlItemSubStlmentService.getProgStlItemSubStlmentListAccount(
+                                progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
+            }else
             if ("Approve".equals(strFlowType)) {
                 strExportToExcelRendered = "true";
                 strApproveBtnRendered = "false";
                 List<ProgStlItemSubStlment> progStlItemSubStlmentList =
-                        progStlItemSubStlmentService.selectRecordsForAccount(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
+                        progStlItemSubStlmentService.getProgStlItemSubStlmentListAccount(
+                                progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
                 /*表内容设定，批准，查P表*/
                 for (ProgStlItemSubStlment progStlItemSubStlment : progStlItemSubStlmentList) {
-                    progStlItemSubStlmentShowList.add(progStlItemSubStlmentService.fromModelToShow(progStlItemSubStlment));
+                    progStlItemSubStlmentShowList.add(
+                            progStlItemSubStlmentService.fromModelToShow(progStlItemSubStlment));
                 }
             }
         } else {
@@ -165,9 +173,10 @@ public class ProgStlItemSubStlmentAction {
                     EnumResType.RES_TYPE2.getCode(), progStlInfo.getStlPkid());
             if (cttItemList.size() > 0) {
                 recursiveDataTable("root", cttItemList, progStlItemSubStlmentShowList);
-                progStlItemSubStlmentShowList = getStlSubCttEngPMngConstructList_DoFromatNo(progStlItemSubStlmentShowList);
+                progStlItemSubStlmentShowList =
+                        getStlSubCttEngPMngConstructList_DoFromatNo(progStlItemSubStlmentShowList);
                 /*表内容设定,复核，查询拼装*/
-                progStlItemSubStlmentShowListForApprove = new ArrayList<ProgStlItemSubStlmentShow>();
+                progStlItemSubStlmentShowListForApprove = new ArrayList<>();
                 setStlSubCttEngPMngConstructList_AddSettle();
             } else {
                 strExportToExcelRendered = "false";
@@ -203,38 +212,25 @@ public class ProgStlItemSubStlmentAction {
         List<ProgStlItemSubStlmentShow> records0 = new ArrayList<ProgStlItemSubStlmentShow>();
         List<ProgStlItemSubStlmentShow> records1 = new ArrayList<ProgStlItemSubStlmentShow>();
         List<ProgStlItemSubStlment> progSubstlItemShowListForApproveTemp =
-                progStlItemSubStlmentService.selectRecordsForAccount(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
+                progStlItemSubStlmentService.getProgStlItemSubStlmentListAccount(
+                        progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
         for (ProgStlItemSubStlment progStlItemSubStlment : progSubstlItemShowListForApproveTemp) {
             ProgStlItemSubStlmentShow progStlItemSubStlmentShowTemp =
                     progStlItemSubStlmentService.fromModelToShow(progStlItemSubStlment);
-            if (EnumResType.RES_TYPE3.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
-                if (progStlItemSubStlmentShowTemp.getSubctt_ItemPkid().contains("stl")) {
-                    beansMap.put(progStlItemSubStlmentShowTemp.getSubctt_ItemPkid(), progStlItemSubStlmentShowTemp);
-                } else {
+            if (progStlItemSubStlmentShowTemp.getSubctt_ItemPkid().contains("stl")) {
+                beansMap.put(progStlItemSubStlmentShowTemp.getSubctt_ItemPkid(), progStlItemSubStlmentShowTemp);
+            }else{
+                if (EnumResType.RES_TYPE3.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
                     records0.add(progStlItemSubStlmentShowTemp);
                 }
-            }
-            if (EnumResType.RES_TYPE4.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
-                if (progStlItemSubStlmentShowTemp.getSubctt_ItemPkid().contains("stl")) {
-                    beansMap.put(progStlItemSubStlmentShowTemp.getSubctt_ItemPkid(), progStlItemSubStlmentShowTemp);
-                } else {
+                if (EnumResType.RES_TYPE4.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
                     records1.add(progStlItemSubStlmentShowTemp);
                 }
             }
         }
         beansMap.put("records0", records0);
         beansMap.put("records1", records1);
-        //
-        FlowCtrlHis flowCtrlHis = new FlowCtrlHis();
-        beansMap.put("esInitPowerHisForSubcttStlQMng", flowCtrlHis);
-        beansMap.put("esInitPowerHisForSubcttStlQCheck", flowCtrlHis);
-        beansMap.put("esInitPowerHisForSubcttStlQDoubleCheck", flowCtrlHis);
-        beansMap.put("esInitPowerHisForSubcttStlMMng", flowCtrlHis);
-        beansMap.put("esInitPowerHisForSubcttStlMCheck", flowCtrlHis);
-        beansMap.put("esInitPowerHisForSubcttStlMDoubleCheck", flowCtrlHis);
-        beansMap.put("esInitPowerHisForSubcttStlPApprove", flowCtrlHis);
-        beansMap.put("esInitPowerHisForSubcttStlPAct", flowCtrlHis);
-        beansMap.put("esInitPowerHisForSubcttStlPFile", flowCtrlHis);
+
         List<FlowCtrlHis> flowCtrlHisForSubcttStlList =
                 flowCtrlHisService.getSubStlListByFlowCtrlHis(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
         for (FlowCtrlHis flowCtrlHisTemp : flowCtrlHisForSubcttStlList) {
@@ -265,20 +261,6 @@ public class ProgStlItemSubStlmentAction {
                     beansMap.put("esInitPowerHisForSubcttStlPFile", flowCtrlHisTemp);
                 }
             }
-        }
-    }
-    /**
-     * 根据权限进行审核
-     */
-    @Transactional
-    public void accountAction() {
-        try {
-            progStlInfoService.accountAction(progStlInfo);
-            strAccountBtnRendered = "false";
-            MessageUtil.addInfo("结算数据记账成功！");
-        } catch (Exception e) {
-            logger.error("结算数据记账失败，", e);
-            MessageUtil.addError(e.getMessage());
         }
     }
 
@@ -560,7 +542,7 @@ public class ProgStlItemSubStlmentAction {
         }
     }
 
-    public String onExportExcel() throws IOException, WriteException {
+    public void onExportExcel() throws IOException, WriteException {
         String strExcelName;
         if (beansMap.get("esInitPowerHisForSubcttStlQMng") != null) {
             String qMngImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlQMng"));
@@ -575,6 +557,10 @@ public class ProgStlItemSubStlmentAction {
         if (beansMap.get("esInitPowerHisForSubcttStlQDoubleCheck") != null) {
             String qDoubleCheckImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlQDoubleCheck"));
             beansMap.put("qDoubleCheckImagName",qDoubleCheckImagName);
+        }
+        if (beansMap.get("esInitPowerHisForSubcttStlMMng") != null) {
+            String mMngImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMMng"));
+            beansMap.put("mMngImagName",mMngImagName);
         }
         if (beansMap.get("esInitPowerHisForSubcttStlMCheck") != null) {
             String mCheckImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMCheck"));
@@ -602,29 +588,28 @@ public class ProgStlItemSubStlmentAction {
         if ("Account".equals(strFlowType) || "Qry".equals(strFlowType)) {
             if (this.progSubstlItemShowListForAccountAndQry.size() == 0) {
                 MessageUtil.addWarn("记录为空...");
-                return null;
+                return ;
             }else {
                 String  stractSubstlNum=this.progSubstlItemShowListForAccountAndQry.size()+"";
                 short actSubstlNum=Short.parseShort(stractSubstlNum);
                 beansMap.put("actSubstlNum",actSubstlNum);
-                strExcelName = "actSubstl.xls";
+                strExcelName = "progStlItemSubStlmentAccount.xls";
             }
         } else {
             if (this.progStlItemSubStlmentShowList.size() == 0) {
                 MessageUtil.addWarn("记录为空...");
-                return null;
+                return ;
             }else {
                 String strprogStlItemSubStlmentNum=this.progStlItemSubStlmentShowList.size()+"";
                 short progStlItemSubStlmentNum=Short.parseShort(strprogStlItemSubStlmentNum);
                 beansMap.put("progStlItemSubStlmentNum",progStlItemSubStlmentNum);
-                strExcelName = "progStlItemSubStlment.xls";
+                strExcelName = "progStlItemSubStlmentApprove.xls";
             }
         }
         String excelFilename = "分包工程预结算单-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
         JxlsManager jxls = new JxlsManager();
-        jxls.exportList(excelFilename, beansMap, strExcelName);
+        String strTrue=jxls.exportList(excelFilename, beansMap, strExcelName);
         // 其他状态的票据需要添加时再修改导出文件名
-        return null;
     }
 
     /*根据group和orderid临时编制编码strNo*/
@@ -712,7 +697,7 @@ public class ProgStlItemSubStlmentAction {
                     ProgStlInfo progStlInfoTemp = (ProgStlInfo) BeanUtils.cloneBean(progStlInfo);
                     // 结算登记表和Power表更新,并将价格结算的完整数据插入至PROG_STL_ITEM_SUB_STLMENT表
                     progStlInfoTemp.setId(getMaxIdPlusOne());
-                    progStlInfoService.updSubCttPApprovePass(
+                    progStlInfoService.updSubPApprovePass(
                             progStlInfoTemp, progStlItemSubStlmentShowListForApprove);
                     strApproveBtnRendered = "false";
                     strApprovedNotBtnRenderedForStlQ = "true";
@@ -720,19 +705,27 @@ public class ProgStlItemSubStlmentAction {
                 } else if (strPowerType.equals("ApproveFailToQ")) {
                     ProgStlInfo progStlInfoTemp = (ProgStlInfo) BeanUtils.cloneBean(progStlInfo);
                     progStlInfoTemp.setStlType(EnumResType.RES_TYPE5.getCode());
-                    progStlInfoService.delSubCttPApprovePass(progStlInfoTemp, EnumResType.RES_TYPE3.getCode());
+                    progStlInfoService.delSubPApprovePass(progStlInfoTemp, EnumResType.RES_TYPE3.getCode());
                     strApproveBtnRendered = "false";
                     strApprovedNotBtnRenderedForStlQ = "false";
                     strApprovedNotBtnRenderedForStlM = "false";
                 } else if (strPowerType.equals("ApproveFailToM")) {
                     ProgStlInfo progStlInfoTemp = (ProgStlInfo) BeanUtils.cloneBean(progStlInfo);
                     progStlInfoTemp.setStlType(EnumResType.RES_TYPE5.getCode());
-                    progStlInfoService.delSubCttPApprovePass(progStlInfoTemp, EnumResType.RES_TYPE4.getCode());
+                    progStlInfoService.delSubPApprovePass(progStlInfoTemp, EnumResType.RES_TYPE4.getCode());
                     strApproveBtnRendered = "false";
                     strApprovedNotBtnRenderedForStlQ = "false";
                     strApprovedNotBtnRenderedForStlM = "false";
                 }
                 MessageUtil.addInfo("批准数据完成。");
+            }else if (strPowerType.contains("AccountPass")) {
+                ProgStlInfo progStlInfoTemp = (ProgStlInfo) BeanUtils.cloneBean(progStlInfo);
+                // 结算登记表和Power表更新,并将价格结算的完整数据插入至PROG_STL_ITEM_SUB_STLMENT表
+                progStlInfoTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS4.getCode());
+                progStlInfoTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON7.getCode());
+                progStlInfoService.updateRecord(progStlInfoTemp);
+                strAccountBtnRendered = "false";
+                MessageUtil.addInfo("数据记账成功。");
             }
         } catch (Exception e) {
             logger.error("批准数据失败，", e);

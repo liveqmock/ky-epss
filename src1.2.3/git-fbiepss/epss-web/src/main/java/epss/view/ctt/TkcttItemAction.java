@@ -114,9 +114,7 @@ public class TkcttItemAction {
             cttItemShowList =new ArrayList<>();
             attachmentList=new ArrayList<>();
         /*初始化流程状态列表*/
-            if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
-                    ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
-                esFlowControl.getBackToStatusFlagList(strFlowType);
+            if(ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
                 // 附件记录变成List
                 attachmentList=ToolUtil.getListAttachmentByStrAttachment(cttInfo.getAttachment());
                 // 输出Excel表头
@@ -125,15 +123,14 @@ public class TkcttItemAction {
                         strBelongToType, strCttInfoPkid);
                 recursiveDataTable("root", cttItemList);
                 cttItemShowList = getTkcttItemList_DoFromatNo(cttItemShowList);
-                cttItemShowListExcel = new ArrayList<CttItemShow>();
+                setTkcttItemList_AddTotal();
+                cttItemShowListExcel = new ArrayList<>();
                 for (CttItemShow itemUnit : cttItemShowList) {
                     CttItemShow itemUnitTemp = (CttItemShow) BeanUtils.cloneBean(itemUnit);
                     itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
                     cttItemShowListExcel.add(itemUnitTemp);
                 }
                 beansMap.put("cttItemShowListExcel", cttItemShowListExcel);
-                setTkcttItemList_AddTotal();
-                beansMap.put("cttItemShowList", cttItemShowList);
             }
         }catch (Exception e){
             logger.error("初始化失败", e);
@@ -244,7 +241,6 @@ public class TkcttItemAction {
                     bdTotal = new BigDecimal(0);
                 }
             } else if (i + 1 == cttItemShowListTemp.size()) {
-                itemUnitNext = cttItemShowListTemp.get(i);
                 CttItemShow cttItemShowTemp = new CttItemShow();
                 cttItemShowTemp.setName("合计");
                 cttItemShowTemp.setPkid("total" + i);

@@ -42,8 +42,9 @@ public class ProgStlItemSubStlmentService {
         example.setOrderByClause("ROW_NO ASC") ;
         return progStlItemSubStlmentMapper.selectByExample(example);
     }
-    public List<ProgStlItemSubStlment> selectRecordsForAccount(String strSubcttPkidPara,String strPeriodNoPara){
-        return myQueryMapper.selectRecordsForAccount(strSubcttPkidPara,strPeriodNoPara);
+    public List<ProgStlItemSubStlment> getProgStlItemSubStlmentListAccount(
+            String strSubcttPkidPara,String strPeriodNoPara){
+        return myQueryMapper.getProgStlItemSubStlmentListAccount(strSubcttPkidPara,strPeriodNoPara);
     }
 
     public void deleteRecordDetail(String strPkId){
@@ -54,17 +55,17 @@ public class ProgStlItemSubStlmentService {
         progStlItemSubStlmentPara.setRecVersion(
                 ToolUtil.getIntIgnoreNull(progStlItemSubStlmentPara.getRecVersion())+1);
         progStlItemSubStlmentPara.setArchivedFlag("0");
-        progStlItemSubStlmentPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemSubStlmentPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         progStlItemSubStlmentPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubStlmentMapper.updateByPrimaryKey(progStlItemSubStlmentPara) ;
     }
 
     public void insertRecordDetail(ProgStlItemSubStlmentShow progStlItemSubStlmentShowPara){
-        progStlItemSubStlmentShowPara.setEngPMng_CreatedBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemSubStlmentShowPara.setEngPMng_CreatedByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperatorId()));
+        progStlItemSubStlmentShowPara.setEngPMng_CreatedBy(ToolUtil.getOperatorManager().getOperator().getPkid());
+        progStlItemSubStlmentShowPara.setEngPMng_CreatedByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperator().getPkid()));
         progStlItemSubStlmentShowPara.setEngPMng_CreatedTime(ToolUtil.getStrLastUpdTime());
-        progStlItemSubStlmentShowPara.setEngPMng_LastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
-        progStlItemSubStlmentShowPara.setEngPMng_LastUpdByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperatorId()));
+        progStlItemSubStlmentShowPara.setEngPMng_LastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
+        progStlItemSubStlmentShowPara.setEngPMng_LastUpdByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperator().getPkid()));
         progStlItemSubStlmentShowPara.setEngPMng_LastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubStlmentMapper.insert(fromModelShowToModel(progStlItemSubStlmentShowPara));
     }

@@ -57,17 +57,17 @@ public class ProgStlItemTkEstService {
         progStlItemTkEstTemp.setRecVersion(
                 ToolUtil.getIntIgnoreNull(progStlItemTkEstShowPara.getEng_RecVersion())+1);
         progStlItemTkEstTemp.setArchivedFlag("0");
-        progStlItemTkEstTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemTkEstTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         progStlItemTkEstTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemTkEstMapper.updateByPrimaryKey(progStlItemTkEstTemp) ;
     }
 
     public void insertRecord(ProgStlItemTkEstShow progStlItemTkEstShowPara){
         ProgStlItemTkEst progStlItemTkEstTemp =fromModelShowToModel(progStlItemTkEstShowPara);
-        progStlItemTkEstTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemTkEstTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         progStlItemTkEstTemp.setCreatedTime(ToolUtil.getStrLastUpdTime());
         progStlItemTkEstTemp.setArchivedFlag("0");
-        progStlItemTkEstTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        progStlItemTkEstTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         progStlItemTkEstTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemTkEstMapper.insert(progStlItemTkEstTemp);
     }

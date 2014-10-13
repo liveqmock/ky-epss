@@ -122,8 +122,7 @@ public class SubcttItemAction {
     private void initData() {
         try{
             cttItemShowList_Cstpl =new ArrayList<>();
-            if(ToolUtil.getStrIgnoreNull(strFlowType).length()!=0&&
-                    ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
+            if(ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
         /*分包合同*/
                 cttInfo = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
                 // 附件记录变成List
@@ -153,6 +152,8 @@ public class SubcttItemAction {
                         }
                     }
                 }
+                // 添加合计
+                setItemOfCstplAndSubcttList_AddTotal();
                 cttItemShowListExcel = new ArrayList<CttItemShow>();
                 for (CttItemShow itemUnit : cttItemShowList) {
                     CttItemShow itemUnitTemp = (CttItemShow) BeanUtils.cloneBean(itemUnit);
@@ -161,9 +162,6 @@ public class SubcttItemAction {
                     cttItemShowListExcel.add(itemUnitTemp);
                 }
                 beansMap.put("cttItemShowListExcel", cttItemShowListExcel);
-                beansMap.put("cttItemShowList", cttItemShowList);
-                // 添加合计
-                setItemOfCstplAndSubcttList_AddTotal();
             }
         }catch (Exception e){
             logger.error("初始化失败", e);

@@ -153,7 +153,7 @@
                         <div onclick="myRequest();tabbarclk(this);"
                              active="false" id="biz" class="tabs-item"
                              style="float:left;width:80px;display: none">
-                            <span style="width:100%;">业务查询</span>
+                            <span style="width:100%;">综合业务</span>
                         </div>
                         <div id="middleId4" style="float:left;width:2px;"></div>
                         <div onclick="tabbarclk(this);"

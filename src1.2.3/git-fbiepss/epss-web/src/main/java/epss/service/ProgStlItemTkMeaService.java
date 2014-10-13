@@ -64,17 +64,17 @@ public class ProgStlItemTkMeaService {
         esStlTkcttEngMeaTemp.setRecVersion(
                 ToolUtil.getIntIgnoreNull(esStlTkcttEngMeaTemp.getRecVersion())+1);
         esStlTkcttEngMeaTemp.setArchivedFlag("0");
-        esStlTkcttEngMeaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esStlTkcttEngMeaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         esStlTkcttEngMeaTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemTkMeaMapper.updateByPrimaryKey(esStlTkcttEngMeaTemp) ;
     }
 
     public void insertRecord(ProgStlItemTkMeaShow progStlItemTkMeaShowPara){
         ProgStlItemTkMea esStlTkcttEngMeaTemp=fromModelShowToModel(progStlItemTkMeaShowPara);
-        esStlTkcttEngMeaTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        esStlTkcttEngMeaTemp.setCreatedBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         esStlTkcttEngMeaTemp.setCreatedTime(ToolUtil.getStrLastUpdTime());
         esStlTkcttEngMeaTemp.setArchivedFlag("0");
-        esStlTkcttEngMeaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        esStlTkcttEngMeaTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         esStlTkcttEngMeaTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemTkMeaMapper.insert(esStlTkcttEngMeaTemp) ;
     }

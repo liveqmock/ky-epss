@@ -31,19 +31,22 @@
                     <p:treeTable id="resTreeTable"
                                  value="#{operFuncBusiResMngAction.resRoot}"
                                  var="document"
+                                 selectionMode="single"
                                  rowStyleClass="
-                            #{document.resType eq '0' ? 'rowLavenderStyle':document.resType eq '6' ? 'rowLavenderStyle':document.resType eq '7' ? 'rowLavenderStyle'
-                                 :document.resType eq '1' ? 'rowGreenyellowStyle'
-                                 :document.resType eq '2' ? 'rowKhakiStyle':document.resType eq '3' ? 'rowKhakiStyle'
-                                 :document.resType eq '4' ? 'rowKhakiStyle':document.resType eq '5' ? 'rowKhakiStyle':'rowLavenderStyle'}"
+                            #{document.resType eq '1' ? 'rowGreenyellowStyle'
+                                 :document.resType eq '2' ? 'rowLavenderStyle':document.resType eq '3' ? 'rowLavenderStyle'
+                                 :document.resType eq '4' ? 'rowLavenderStyle':document.resType eq '5' ? 'rowLavenderStyle':null}"
                                  emptyMessage="数据记录为空..."
                              scrollable="true"
                              scrollHeight="500">
-                        <p:ajax event="collapse" update=":form:msgs" listener="#{operFuncBusiResMngAction.onNodeCollapse}" />
+                        <!--document.resType eq '0' ? 'rowLavenderStyle':document.resType eq '6' ? 'rowLavenderStyle':document.resType eq '7' ? 'rowLavenderStyle'
+                        :-->
+                        <p:ajax event="collapse" update=":form:msgs"
+                                listener="#{operFuncBusiResMngAction.onNodeCollapse}" />
                             <p:column headerText="名称" style="width:400px;">
                             <h:outputText value="#{document.resName}"/>
                         </p:column>
-                        <p:column headerText="操作" style="width:75px;">
+                        <p:column headerText="操作" style="width:75px;text-align: left;">
                             <p:commandButton
                                     icon="ui-icon-plus"
                                     style="height:18px;width:18px"
@@ -180,7 +183,8 @@
                                                       value="#{operFuncBusiResMngAction.taskFunctionSeled}"
                                                       layout="grid"
                                                       columns="1">
-                                    <p:ajax update=":form:msgs,:form:operTreeTable" listener="#{operFuncBusiResMngAction.funcValueChange()}" />
+                                    <p:ajax update=":form:msgs,:form:operTreeTable"
+                                            listener="#{operFuncBusiResMngAction.funcValueChange()}" />
                                     <f:selectItems value="#{operFuncBusiResMngAction.taskFunctionList}"
                                                    var="taskRecord"
                                                    itemValue="#{taskRecord.value}"

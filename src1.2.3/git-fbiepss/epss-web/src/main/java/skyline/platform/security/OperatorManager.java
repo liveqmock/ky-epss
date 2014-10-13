@@ -112,6 +112,7 @@ public class OperatorManager implements Serializable {
                     + " 机器名称 : " + remoteHost;
 
             oper.setOnlineSituation(sss);
+
             Dept ptpdet = new Dept();
             oper.setDept((Dept) ptpdet
                     .findFirstByWhere("where id='" + oper.getDeptPkid() + "'"));
@@ -119,8 +120,8 @@ public class OperatorManager implements Serializable {
             // 初始化菜单。
             try {
                 mb = new MenuBean();
-                this.jsonMap.put("default", mb.generateJsonStream(idPara,"default"));
-                this.jsonMap.put("system", mb.generateJsonStream(idPara,"system"));
+                this.jsonMap.put("default", mb.generateJsonStream(oper.getPkid(),"default"));
+                this.jsonMap.put("system", mb.generateJsonStream(oper.getPkid(),"system"));
             } catch (Exception ex3) {
                 ex3.printStackTrace();
                 System.err.println("Wrong when getting menus of oper: [ "

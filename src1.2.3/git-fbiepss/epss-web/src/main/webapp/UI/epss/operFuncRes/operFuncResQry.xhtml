@@ -69,8 +69,9 @@
                              rowsPerPageTemplate="500,200,100,45,30,15"
                              emptyMessage="数据记录为空..."
                              widgetVar="DtInitTkcttList"
-                             scrollable="true">
-                    <p:column headerText="操作" style="width:10px">
+                             scrollable="true"
+                             scrollHeight="320">
+                    <p:column headerText="操作" style="width:10px;text-align: center;">
                         <p:commandButton  icon="ui-icon-search"
                                           style="height:18px;width:18px"
                                           action="#{operFuncResQryAction.selectRecordAction(record)}"

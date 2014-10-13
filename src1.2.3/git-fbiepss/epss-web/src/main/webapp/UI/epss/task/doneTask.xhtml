@@ -85,7 +85,89 @@
                 }else
                 if(flowStatus=="4") { // 刚记帐
                     if (infoType == '5') {// 分包价格结算
-                        var rtn = dialog("../item/itemFlw_SubcttPStl.xhtml?strFlowType=Account&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../item/itemAct_SubcttPStl.xhtml?strFlowType=Account&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }
+                }
+                document.getElementById("form:qryBtn").click();
+            }
+            function actSelectQry(infoType,flowStatus,infoPkid) {
+                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
+                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
+                var arg = new Object();
+                arg.doType = "select";
+                if(flowStatus=="0") { // 刚录入
+                    if (infoType == '0') {// 总包合同
+                        var rtn = dialog("../item/itemQry_Tkctt.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                    }else if (infoType == '1') {// 成本计划
+                        var rtn = dialog("../item/itemQry_Cstpl.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '2') {// 分包合同
+                        var rtn = dialog("../item/itemQry_Subctt.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '3') {// 分包数量结算
+                        var rtn = dialog("../item/itemQry_SubcttQStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '4') {// 分包材料结算
+                        var rtn = dialog("../item/itemQry_SubcttMStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '6') {// 总包统计结算
+                        var rtn = dialog("../item/itemQry_TkcttStaStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '7') {// 总包计量结算
+                        var rtn = dialog("../item/itemQry_TkcttMeaStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }
+                }else
+                if(flowStatus=="1") { // 刚审核
+                    if (infoType == '0') {// 总包合同
+                        var rtn = dialog("../item/itemQry_Tkctt.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                    }else if (infoType == '1') {// 成本计划
+                        var rtn = dialog("../item/itemQry_Cstpl.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '2') {// 分包合同
+                        var rtn = dialog("../item/itemQry_Subctt.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '3') {// 分包数量结算
+                        var rtn = dialog("../item/itemQry_SubcttQStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '4') {// 分包材料结算
+                        var rtn = dialog("../item/itemQry_SubcttMStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '6') {// 总包统计结算
+                        var rtn = dialog("../item/itemQry_TkcttStaStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '7') {// 总包计量结算
+                        var rtn = dialog("../item/itemQry_TkcttMeaStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }
+                }else
+                if(flowStatus=="2") { // 刚复核
+                    if (infoType == '0') {// 总包合同
+                        var rtn = dialog("../item/itemQry_Tkctt.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                    }else if (infoType == '1') {// 成本计划
+                        var rtn = dialog("../item/itemQry_Cstpl.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '2') {// 分包合同
+                        var rtn = dialog("../item/itemQry_Subctt.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '3') {// 分包数量结算
+                        var rtn = dialog("../item/itemQry_SubcttQStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '4') {// 分包材料结算
+                        var rtn = dialog("../item/itemQry_SubcttMStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '6') {// 总包统计结算
+                        var rtn = dialog("../item/itemQry_TkcttStaStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '7') {// 总包计量结算
+                        var rtn = dialog("../item/itemQry_TkcttMeaStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }
+                }else
+                if(flowStatus=="3") { // 刚批准
+                    if (infoType == '0') {// 总包合同
+                        var rtn = dialog("../item/itemQry_Tkctt.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                    } else if (infoType == '1') {// 成本计划
+                        var rtn = dialog("../item/itemQry_Cstpl.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                    } else if (infoType == '2') {// 分包合同
+                        var rtn = dialog("../item/itemQry_Subctt.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                    } else if (infoType == '3') {// 分包数量结算
+                        var rtn = dialog("../item/itemQry_SubcttQStl.xhtml?strStlInfoPkid=" + infoPkid, arg, sfeature);
+                    } else if (infoType == '4') {// 分包价格结算
+                        var rtn = dialog("../item/itemQry_SubcttMStl.xhtml?strStlInfoPkid=" + infoPkid, arg, sfeature);
+                    } else if (infoType == '5') {// 分包材料结算
+                        var rtn = dialog("../item/itemQry_SubcttPStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    } else if (infoType == '6') {// 总包统计结算
+                        var rtn = dialog("../item/itemQry_TkcttStaStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    } else if (infoType == '7') {// 总包计量结算
+                        var rtn = dialog("../item/itemQry_TkcttMeaStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }
+                }else
+                if(flowStatus=="4") { // 刚记帐
+                    if (infoType == '5') {// 分包价格结算
+                        var rtn = dialog("../item/itemQry_SubcttPStl.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }
                 document.getElementById("form:qryBtn").click();
@@ -121,7 +203,7 @@
                                  rowStyleClass="#{record.isOwnTaskFlowFlag eq null?'rowGrayStyle':
                                   record.isOwnTaskFlowFlag eq 'true'?'rowGreenyellowStyle':'rowRedStyle'}"
                                  scrollable="true"
-                                 scrollHeight="442">
+                                 scrollHeight="400">
                         <p:column headerText="操作" style="width:30px;text-align: center;">
                             <p:commandButton icon="ui-icon-triangle-1-e"
                                              style="height:16px;width:30px;"
@@ -132,7 +214,7 @@
                                              style="height:16px;width:30px;"
                                              rendered="#{record.isOwnTaskFlowFlag eq null?'false'
                                              :record.isOwnTaskFlowFlag eq 'true'?'false':'true'}"
-                                             onclick="actSelect('#{record.type}','#{record.flowStatus}','#{record.pkid}')">
+                                             onclick="actSelectQry('#{record.type}','#{record.flowStatus}','#{record.pkid}')">
                             </p:commandButton>
                         </p:column>
                         <p:column headerText="序号" style="width:30px">

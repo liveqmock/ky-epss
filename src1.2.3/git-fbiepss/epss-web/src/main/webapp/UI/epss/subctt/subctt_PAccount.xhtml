@@ -21,7 +21,7 @@
                         "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
-                var rtn =dialog("../item/itemAct_SubcttEngPStl.xhtml?strFlowType=Account&amp;strStlInfoPkid="+pkid+"",arg,sfeature);
+                var rtn =dialog("../item/itemAct_SubcttPStl.xhtml?strFlowType=Account&amp;strStlInfoPkid="+pkid+"",arg,sfeature);
                 document.getElementById("form:qryBtn").click();
             }
         </script>
@@ -35,20 +35,17 @@
                         <h:panelGrid columns="4">
                             <p:outputLabel value="分包合同：" for="id" />
                             <p:selectOneMenu id="id"
-                                             value="#{progStlInfoSubStlmentAction.progStlInfoShow.stlPkid}"
-                                             disabled="#{progStlInfoSubStlmentAction.styleModel.disabled_Flag}"
-                                             style="#{progStlInfoSubStlmentAction.styleModel.disabled_Style};">
+                                             value="#{progStlInfoSubStlmentAction.progStlInfoShowQry.stlPkid}">
                                 <f:selectItems value="#{progStlInfoSubStlmentAction.subcttList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="期数编码：" for="periodNo"/>
-                            <p:inputText id="periodNo" value="#{progStlInfoSubStlmentAction.progStlInfoShow.periodNo}"
-                                         onclick="WdatePicker({dateFmt:'yyyyMM'})"
-                                         disabled="#{progStlInfoSubStlmentAction.styleModel.disabled_Flag}"
-                                         style="#{progStlInfoSubStlmentAction.styleModel.disabled_Style};"/>
+                            <p:inputText id="periodNo"
+                                         value="#{progStlInfoSubStlmentAction.progStlInfoShowQry.periodNo}"
+                                         onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:commandButton id="qryBtn" value="查询"
-                                             action="#{progStlInfoSubStlmentAction.onQueryFormedAction('Account','true')}"
+                                             action="#{progStlInfoSubStlmentAction.queryAction('Account')}"
                                              update="pdt,msgs">
                             </p:commandButton>
                             <p:commandButton id="resetBtn" value="重置"

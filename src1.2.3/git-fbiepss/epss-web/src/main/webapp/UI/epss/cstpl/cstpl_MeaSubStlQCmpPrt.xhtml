@@ -71,61 +71,61 @@
                     <p:column style="width:100px" headerText="成本_编号">
                         <h:outputText value="#{record.strCstpl_No}" escape="false"/>
                     </p:column>
-                      <p:column style="width:150px" headerText="成本_项目名称">
-                          <h:outputText value="#{record.strCstpl_Name}"/>
-                      </p:column>
-                      <p:column style="width:60px" headerText="成本_单位">
-                          <h:outputText value="#{record.strCstpl_Unit}"/>
-                      </p:column>
-                      <p:column style="width:80px" headerText="成本_单价">
-                          <h:outputText value="#{record.bdCstpl_ContractUnitPrice}" style="float: right" >
-                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                          </h:outputText>
-                      </p:column>
-                      <p:column style="width:80px" headerText="计量_数量">
-                          <h:outputText value="#{record.bdTkcttStl_MeaQuantity}" style="float: right" >
-                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                          </h:outputText>
-                      </p:column>
-                      <p:column style="width:100px" headerText="计量_合计">
-                          <h:outputText value="#{record.bdTkcttStl_MeaAmount}" style="float: right" >
-                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                          </h:outputText>
-                      </p:column>
-                      <p:column style="width:250px" headerText="分包_协作单位">
-                          <h:outputText value="#{record.strSubctt_SignPartName}" style="text-align:left">
-                          </h:outputText>
-                      </p:column>
-                      <p:column style="width:80px" headerText="分包_单价">
-                          <h:outputText value="#{record.bdSubctt_ContractUnitPrice}" style="float: right" >
-                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                          </h:outputText>
-                      </p:column>
-                      <p:column style="width:100px" headerText="分包结算＿数量">
-                          <h:outputText value="#{record.bdSubcttStl_BeginToCurrentPeriodQQty}" style="float: right" >
-                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                          </h:outputText>
-                      </p:column>
-                      <p:column style="width:100px" headerText="分包结算＿合计">
-                          <h:outputText value="#{record.bdSubcttStl_BeginToCurrentPeriodMAmount}" style="float: right" >
-                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                          </h:outputText>
-                      </p:column>
-                      <p:column style="width:160px" headerText="计量与分包结算比较_数量">
-                          <h:outputText value="#{record.bdMeaS_BeginToCurrentPeriodQQty}" style="float: right" >
-                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                          </h:outputText>
-                      </p:column>
-                      <p:column style="width:160px" headerText="计量与分包结算比较_单价">
-                          <h:outputText value="#{record.bdMeaS_ContractUnitPrice}" style="float: right" >
-                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                          </h:outputText>
-                      </p:column>
-                      <p:column style="width:160px" headerText="计量与分包结算比较_合计">
-                          <h:outputText value="#{record.bdMeaS_BeginToCurrentPeriodMAmount}" style="float: right" >
-                              <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                          </h:outputText>
-                      </p:column>
+                    <p:column style="width:150px" headerText="成本_项目名称">
+                        <h:outputText value="#{record.strCstpl_Name}"/>
+                    </p:column>
+                    <p:column style="width:60px" headerText="成本_单位">
+                        <h:outputText value="#{record.strCstpl_Unit}"/>
+                    </p:column>
+                    <p:column style="width:80px" headerText="成本_单价">
+                        <h:outputText value="#{record.bdCstpl_ContractUnitPrice}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px" headerText="计量_数量">
+                        <h:outputText value="#{record.bdTkcttStl_MeaQuantity}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:100px" headerText="计量_合计">
+                        <h:outputText value="#{record.bdTkcttStl_MeaAmount}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:250px" headerText="分包_协作单位">
+                        <h:outputText value="#{record.strSubctt_SignPartName}" style="text-align:left">
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:80px" headerText="分包_单价">
+                        <h:outputText value="#{record.bdSubctt_ContractUnitPrice}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:100px" headerText="分包结算＿数量">
+                        <h:outputText value="#{record.bdSubcttStl_BeginToCurrentPeriodQQty}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:100px" headerText="分包结算＿合计">
+                        <h:outputText value="#{record.bdSubcttStl_BeginToCurrentPeriodMAmount}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:160px" headerText="计量与分包结算比较_单价">
+                        <h:outputText value="#{record.bdMeaS_ContractUnitPrice}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:160px" headerText="计量与分包结算比较_数量">
+                        <h:outputText value="#{record.bdMeaS_BeginToCurrentPeriodQQty}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:160px" headerText="计量与分包结算比较_合计">
+                        <h:outputText value="#{record.bdMeaS_BeginToCurrentPeriodMAmount}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
                 </p:dataTable>
             </div>
         </h:form>

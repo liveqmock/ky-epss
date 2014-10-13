@@ -12,6 +12,7 @@ import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.util.MessageUtil;
+import skyline.util.ToolUtil;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -41,18 +42,23 @@ public class OperFuncSysResMngAction implements Serializable{
 
     @PostConstruct
     public void init() {
-        operFuncResShowList = new ArrayList<>();
-        deptOperShowSeledList = new ArrayList<>();
-        menuTypeList = new ArrayList<>();
-        strMenuTypeSeled="0";
-        menuTypeList.add(new SelectItem("",  "全部"));
-        menuTypeList.add(new SelectItem("0", "查询"));
-        menuTypeList.add(new SelectItem("1", "录入"));
-        menuTypeList.add(new SelectItem("2", "流程"));
-        menuTypeList.add(new SelectItem("3", "系统"));
-        // 资源-用户-功能
-        initRes(strMenuTypeSeled);
-        initDeptOper();
+        try {
+            operFuncResShowList = new ArrayList<>();
+            deptOperShowSeledList = new ArrayList<>();
+            menuTypeList = new ArrayList<>();
+            strMenuTypeSeled = "0";
+            menuTypeList.add(new SelectItem("", "全部"));
+            menuTypeList.add(new SelectItem("0", "查询"));
+            menuTypeList.add(new SelectItem("1", "录入"));
+            menuTypeList.add(new SelectItem("2", "流程"));
+            menuTypeList.add(new SelectItem("3", "系统"));
+            // 资源-用户-功能
+            initRes(strMenuTypeSeled);
+            initDeptOper();
+        }catch (Exception e){
+            MessageUtil.addError(e.getMessage());
+            logger.error("初始化失败", e);
+        }
     }
     private void initRes(String strMenuTypePara){
         deptOperShowSeledList.clear();
@@ -68,9 +74,11 @@ public class OperFuncSysResMngAction implements Serializable{
             for(OperResShow operResShowUnit:operResShowListTemp){
                 if(ptmenuUnit.getPkid().equals(operResShowUnit.getInfoPkid())){
                     if(strInputOperName.length()==0){
-                        strInputOperName = operResShowUnit.getOperName();
+                        strInputOperName =
+                                ToolUtil.getStrIgnoreNull(operResShowUnit.getOperName());
                     }else {
-                        strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
+                        strInputOperName = strInputOperName + "," +
+                                ToolUtil.getStrIgnoreNull(operResShowUnit.getOperName());
                     }
                 }
             }
@@ -95,18 +103,18 @@ public class OperFuncSysResMngAction implements Serializable{
 
     private void recursiveOperTreeNode(String strParentPkidPara, TreeNode parentNode) {
         List<DeptOperShow> operResShowListTemp = deptOperService.selectDeptAndOperRecords(strParentPkidPara);
-        for (int i = 0; i < operResShowListTemp.size(); i++) {
-            TreeNode childNodeTemp = new DefaultTreeNode(operResShowListTemp.get(i), parentNode);
-            recursiveOperTreeNode(operResShowListTemp.get(i).getId(), childNodeTemp);
+        for (DeptOperShow anOperResShowListTemp : operResShowListTemp) {
+            TreeNode childNodeTemp = new DefaultTreeNode(anOperResShowListTemp, parentNode);
+            recursiveOperTreeNode(anOperResShowListTemp.getPkid(), childNodeTemp);
         }
     }
 
     public void selectAction(){
         initRes(strMenuTypeSeled);
     }
-
     
-    private void recursiveOperTreeNodeForExpand(TreeNode treeNodePara,List<OperResShow> operResShowListPara) {
+    private void recursiveOperTreeNodeForExpand(
+            TreeNode treeNodePara,List<OperResShow> operResShowListPara) {
         if (operResShowListPara==null||operResShowListPara.size()==0){
             return;
         }
@@ -114,9 +122,9 @@ public class OperFuncSysResMngAction implements Serializable{
             for (int i = 0; i < treeNodePara.getChildCount(); i++) {
                 TreeNode treeNodeTemp = treeNodePara.getChildren().get(i);
                 DeptOperShow deptOperShowTemp = (DeptOperShow) treeNodeTemp.getData();
-                if (deptOperShowTemp.getId()!=null&&"1".equals(deptOperShowTemp.getType())){
+                if (deptOperShowTemp.getPkid()!=null&&"1".equals(deptOperShowTemp.getType())){
                     for (int j = 0; j < operResShowListPara.size(); j++) {
-                        if (deptOperShowTemp.getId().equals(operResShowListPara.get(j).getOperPkid())) {
+                        if (deptOperShowTemp.getPkid().equals(operResShowListPara.get(j).getOperPkid())) {
                             deptOperShowTemp.setIsSeled(true);
                             deptOperShowSeledList.add(deptOperShowTemp);
                             while (!(treeNodeTemp.getParent()==null)){
@@ -125,10 +133,8 @@ public class OperFuncSysResMngAction implements Serializable{
                                 }
                                 treeNodeTemp=treeNodeTemp.getParent();
                             }
-                            if (treeNodeTemp.getParent()==null){
-                                operResShowListPara.remove(j);
-                                break;
-                            }
+                            operResShowListPara.remove(j);
+                            break;
                         }
                     }
                 }
@@ -169,12 +175,10 @@ public class OperFuncSysResMngAction implements Serializable{
                 OperRes operResTemp = new OperRes();
                 operResTemp.setInfoPkid(operFuncResShowSeled.getResPkid());
                 operResService.deleteRecord(operResTemp);
+                operResTemp.setArchivedFlag(EnumArchivedFlag.ARCHIVED_FLAG0.getCode());
+                operResTemp.setType("system");
                 for (DeptOperShow deptOperShowUnit : deptOperShowSeledList) {
-                    operResTemp = new OperRes();
-                    operResTemp.setOperPkid(deptOperShowUnit.getId());
-                    operResTemp.setInfoPkid(operFuncResShowSeled.getResPkid());
-                    operResTemp.setArchivedFlag(EnumArchivedFlag.ARCHIVED_FLAG0.getCode());
-                    operResTemp.setType("system");
+                    operResTemp.setOperPkid(deptOperShowUnit.getPkid());
                     operResService.insertRecord(operResTemp);
                 }
                 MessageUtil.addInfo("权限添加成功!");

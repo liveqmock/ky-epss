@@ -78,9 +78,9 @@ public class SignPartService {
     public void insertRecord(SignPartShow signPartShowPara) {
         signPartShowPara.setArchivedFlag("0");
         signPartShowPara.setOriginFlag("0");
-        signPartShowPara.setCreatedBy(ToolUtil.getOperatorManager().getOperatorId());
+        signPartShowPara.setCreatedBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         signPartShowPara.setCreatedTime(ToolUtil.getStrLastUpdTime());
-        signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         signPartShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         signPartMapper.insertSelective(fromShowToModel(signPartShowPara));
     }
@@ -131,7 +131,7 @@ public class SignPartService {
                 ToolUtil.getIntIgnoreNull(signPartShowPara.getRecVersion())+1);
         signPartShowPara.setArchivedFlag("0");
         signPartShowPara.setOriginFlag("0");
-        signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperatorId());
+        signPartShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         signPartShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         signPartMapper.updateByPrimaryKey(fromShowToModel(signPartShowPara));
     }

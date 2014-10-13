@@ -34,7 +34,7 @@
                  arg.doType = "select";
                  var rtn = dialog("../item/itemQry_Tkctt.xhtml?strFlowType=Qry&amp;strCttInfoPkid=" + pkid + "", arg, sfeature);
             }
-             function actSelect(obj, ind) {
+            /*function actSelect(obj, ind) {
                 // 寻找当前行的PKID思路：从此节点直到找到Table再找到相应的行和列
                 var pkid=obj.parentNode.parentNode.parentNode.childNodes[ind].childNodes[11].innerHTML;
                 var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;"+
@@ -42,7 +42,7 @@
                 var arg = new Object();
                 arg.doType = "select";
                 var rtn = dialog("../item/itemQry_Tkctt.xhtml?strType=0&amp;strTkCttPkid=" + pkid + "", arg, sfeature);
-            }
+            }*/
         </script>
     </ui:define>
     <ui:define name="content">
@@ -114,7 +114,7 @@
                              emptyMessage="数据记录为空..."
                              widgetVar="DtInitTkcttList"
                              scrollable="true">
-                    <p:column headerText="操作" style="width:40px">
+                    <p:column headerText="操作" style="width:40px;text-align: center;">
                         <p:commandButton  icon="ui-icon-search"
                                           style="height:18px;width:18px"
                                           action="#{tkcttInfoAction.selectRecordAction('Sel',record)}"

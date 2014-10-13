@@ -34,14 +34,14 @@ public class OperResService {
         return myOperResMapper.selectOperaResRecordsByModelShow(fromModelToModelShow(operResPara));
     }
     public List<OperResShow> getInfoListByOperFlowPkid(String strInfoTypePara,String strFlowStatusPara){
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         return myOperResMapper.getInfoListByOperFlowPkid(strInfoTypePara,strFlowStatusPara,strOperatorIdTemp);
     }
     public OperRes getOperResByPkid(String strOperResPkidPara){
         return  operResMapper.selectByPrimaryKey(strOperResPkidPara);
     }
     public void insertRecord(OperResShow operResShowPara){
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         String strLastUpdTime=ToolUtil.getStrLastUpdTime();
         operResShowPara.setCreatedBy(strOperatorIdTemp);
         operResShowPara.setCreatedTime(strLastUpdTime);
@@ -50,7 +50,7 @@ public class OperResService {
         operResMapper.insert(fromOperShowToModel(operResShowPara));
     }
     public void insertRecord(OperRes operResPara){
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         String strLastUpdTime=ToolUtil.getStrLastUpdTime();
         operResPara.setCreatedBy(strOperatorIdTemp);
         operResPara.setCreatedTime(strLastUpdTime);
@@ -59,7 +59,7 @@ public class OperResService {
         operResMapper.insertSelective(operResPara);
     }
     public void updateRecord(OperRes operResPara){
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperatorId();
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         String strLastUpdTime=ToolUtil.getStrLastUpdTime();
         operResPara.setLastUpdBy(strOperatorIdTemp);
         operResPara.setLastUpdTime(strLastUpdTime);

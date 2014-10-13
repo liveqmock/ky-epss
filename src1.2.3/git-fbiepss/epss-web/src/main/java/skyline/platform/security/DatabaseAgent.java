@@ -172,7 +172,7 @@ public class DatabaseAgent {
      * @return
      * @throws Exception
      */
-    public List<MenuItemBean> getMenuItems(String operatorIdPara,String targetMachinePara) throws Exception {
+    public List<MenuItemBean> getMenuItems(String strOperPkidPara,String targetMachinePara) throws Exception {
         String SQL_GetMenuItemsForAnOperator = "" +
                 " SELECT DISTINCT m.menuid            AS menuItemId," +
                 "                 m.parentmenuid      AS menuItemPId," +
@@ -217,7 +217,7 @@ public class DatabaseAgent {
                 " ON" +
                 "       r.TYPE='system'" +
                 " and" +
-                "       r.OPER_PKID='" + operatorIdPara + "' " +
+                "       r.OPER_PKID='" + strOperPkidPara + "' " +
                 " and" +
                 "       r.INFO_PKID=m.PKID" +
                 " and" +
