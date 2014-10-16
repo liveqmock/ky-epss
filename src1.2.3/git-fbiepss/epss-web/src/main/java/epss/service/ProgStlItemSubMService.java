@@ -39,7 +39,7 @@ public class ProgStlItemSubMService {
         return progStlItemSubMMapper.selectByExample(example);
     }
 
-    public ProgStlItemSubM selectRecordsByPrimaryKey(String strPkId){
+    public ProgStlItemSubM getProgStlInfoByPkid(String strPkId){
         return progStlItemSubMMapper.selectByPrimaryKey(strPkId);
     }
 

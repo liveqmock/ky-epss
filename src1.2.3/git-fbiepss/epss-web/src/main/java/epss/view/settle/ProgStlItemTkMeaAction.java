@@ -89,7 +89,7 @@ public class ProgStlItemTkMeaAction {
         }
         if(parammap.containsKey("strStlInfoPkid")){
             strStlInfoPkid=parammap.get("strStlInfoPkid").toString();
-            this.progStlInfo = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
+            this.progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
             strTkcttPkid= this.progStlInfo.getStlPkid();
         }
 
@@ -106,7 +106,7 @@ public class ProgStlItemTkMeaAction {
     private void initData() {
         /*分包合同数据*/
         // From StlPkid To SubcttPkid
-        ProgStlInfo progStlInfo = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
+        ProgStlInfo progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
         reportHeader.setStrSubcttPkid(progStlInfo.getStlPkid());
         reportHeader.setStrStlId(progStlInfo.getId());
         // From SubcttPkid To CstplPkid

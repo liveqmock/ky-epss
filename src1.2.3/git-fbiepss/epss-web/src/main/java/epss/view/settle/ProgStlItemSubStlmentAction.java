@@ -112,7 +112,7 @@ public class ProgStlItemSubStlmentAction {
         if(strStlInfoPkid == null){
             return;
         }
-        progStlInfo = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
+        progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
         initHeadMsg();
         CttInfo cttInfo =cttInfoService.getCttInfoByPkId(progStlInfo.getStlPkid());
         // 附件记录变成List

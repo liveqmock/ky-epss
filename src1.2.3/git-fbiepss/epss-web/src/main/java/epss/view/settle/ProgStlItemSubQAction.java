@@ -77,7 +77,7 @@ public class ProgStlItemSubQAction {
         }
         if(parammap.containsKey("strStlInfoPkid")){
             String strStlInfoPkidTemp=parammap.get("strStlInfoPkid").toString();
-            progStlInfo = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkidTemp);
+            progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkidTemp);
             strSubcttPkid= progStlInfo.getStlPkid();
         }
 

@@ -52,7 +52,7 @@ public class ProgStlInfoSubQTTAction {
     }
 
     public void initData() {
-        ProgStlInfo progStlInfoTemp = progStlInfoService.selectRecordsByPrimaryKey(strStlInfoPkid);
+        ProgStlInfo progStlInfoTemp = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
         progStlInfoShowUpd =progStlInfoService.fromModelToModelShow(progStlInfoTemp);
         CttInfo cttInfoTemp =cttInfoService.getCttInfoByPkId(progStlInfoShowUpd.getStlPkid());
         progStlInfoShowUpd.setStlName(cttInfoTemp.getName());

@@ -170,8 +170,8 @@ public class CstplInfoAction {
     }
 
     public void selectRecordAction(
-                                   String strSubmitTypePara,
-                                   CttInfoShow cttInfoShowSelected) {
+                  String strSubmitTypePara,
+                  CttInfoShow cttInfoShowSelected) {
         try {
             strSubmitType = strSubmitTypePara;
             cttInfoShowSelected.setCreatedByName(ToolUtil.getUserName(cttInfoShowSelected.getCreatedBy()));
@@ -226,59 +226,55 @@ public class CstplInfoAction {
             if (!submitPreCheck(cttInfoShowAdd)) {
                 return;
             }
-            if (cttInfoService.isExistInDb(cttInfoShowAdd)) {
+            CttInfoShow cttInfoShowTemp=new CttInfoShow();
+            cttInfoShowTemp.setCttType(cttInfoShowAdd.getCttType());
+            cttInfoShowTemp.setName(cttInfoShowAdd.getName());
+            if (cttInfoService.getListByModelShow(cttInfoShowTemp).size()>0) {
                 MessageUtil.addError("该记录已存在，请重新录入！");
+                return;
             } else {
-                addRecordAction(cttInfoShowAdd);
-                resetActionForAdd();
+                try {
+                    if (cttInfoShowAdd.getCttType().equals(EnumResType.RES_TYPE0.getCode())) {
+                        cttInfoShowAdd.setParentPkid("ROOT");
+                    }
+                    cttInfoService.insertRecord(cttInfoShowAdd);
+                    MessageUtil.addInfo("新增数据完成。");
+                    resetActionForAdd();
+                } catch (Exception e) {
+                    logger.error("新增数据失败，", e);
+                    MessageUtil.addError(e.getMessage());
+                    return;
+                }
             }
         } else if (strSubmitType.equals("Upd")) {
             cttInfoShowUpd.setCttType(EnumResType.RES_TYPE1.getCode());
-            updRecordAction(cttInfoShowUpd);
+            try {
+                cttInfoService.updateRecord(cttInfoShowUpd);
+                MessageUtil.addInfo("更新数据完成。");
+            } catch (Exception e) {
+                logger.error("更新数据失败，", e);
+                MessageUtil.addError(e.getMessage());
+                return;
+            }
         } else if (strSubmitType.equals("Del")) {
             cttInfoShowDel.setCttType(EnumResType.RES_TYPE1.getCode());
-            deleteRecordAction(cttInfoShowDel);
+            try {
+                cttInfoShowDel.setCttType(EnumResType.RES_TYPE1.getCode());
+                int deleteRecordNumOfCttItem= cttItemService.deleteRecord(cttInfoShowDel);
+                int deleteRecordNumOfCtt= cttInfoService.deleteRecord(cttInfoShowDel.getPkid());
+                if (deleteRecordNumOfCtt<=0&&deleteRecordNumOfCttItem<=0){
+                    MessageUtil.addInfo("该记录已删除。");
+                    return;
+                }
+                MessageUtil.addInfo("删除数据完成。");
+            } catch (Exception e) {
+                logger.error("删除数据失败，", e);
+                MessageUtil.addError(e.getMessage());
+                return;
+            }
         }
         onQueryAction("Mng","false");
     }
-
-    private void addRecordAction(CttInfoShow cttInfoShowPara) {
-        try {
-            if (cttInfoShowPara.getCttType().equals(EnumResType.RES_TYPE0.getCode())) {
-                cttInfoShowPara.setParentPkid("ROOT");
-            }
-            cttInfoService.insertRecord(cttInfoShowPara);
-            MessageUtil.addInfo("新增数据完成。");
-        } catch (Exception e) {
-            logger.error("新增数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-    private void updRecordAction(CttInfoShow cttInfoShowPara) {
-        try {
-            cttInfoService.updateRecord(cttInfoShowPara);
-            MessageUtil.addInfo("更新数据完成。");
-        } catch (Exception e) {
-            logger.error("更新数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-    private void deleteRecordAction(CttInfoShow cttInfoShowPara) {
-        try {
-            cttInfoShowPara.setCttType(EnumResType.RES_TYPE1.getCode());
-            int deleteRecordNumOfCttItem= cttItemService.deleteRecord(cttInfoShowPara);
-            int deleteRecordNumOfCtt= cttInfoService.deleteRecord(cttInfoShowPara.getPkid());
-            if (deleteRecordNumOfCtt<=0&&deleteRecordNumOfCttItem<=0){
-                MessageUtil.addInfo("该记录已删除。");
-                return;
-            }
-            MessageUtil.addInfo("删除数据完成。");
-        } catch (Exception e) {
-            logger.error("删除数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-   
 
     /*智能字段 Start*/
     public CttInfoService getCttInfoService() {

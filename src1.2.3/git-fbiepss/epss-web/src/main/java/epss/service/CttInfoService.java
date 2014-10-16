@@ -8,6 +8,7 @@ import epss.repository.model.model_show.CttInfoShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import skyline.util.MsgContent;
 import skyline.util.ToolUtil;
 
 import javax.annotation.Resource;
@@ -29,15 +30,21 @@ public class CttInfoService {
     @Resource
     private FlowCtrlHisService flowCtrlHisService;
 
-    public List<CttInfo> selectListByModel(CttInfoShow cttInfoShowPara) {
+    public List<CttInfo> getListByModelShow(CttInfoShow cttInfoShowPara) {
         CttInfoExample example= new CttInfoExample();
         CttInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttType()))
-                .andIdLike("%" + ToolUtil.getStrIgnoreNull(cttInfoShowPara.getId()) + "%")
-                .andNameLike("%" + ToolUtil.getStrIgnoreNull(cttInfoShowPara.getName()) + "%");
         //可以为NULL的项
+        if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttType()).equals("")){
+            criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttType()));
+        }
+        if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getId()).equals("")){
+            criteria.andIdEqualTo(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getId()));
+        }
+        if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getName()).equals("")){
+            criteria.andNameEqualTo(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getName()));
+        }
         if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getParentPkid()).equals("")){
-            criteria.andParentPkidLike(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getParentPkid()));
+            criteria.andParentPkidEqualTo(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getParentPkid()));
         }
         if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getSignDate()).equals("")){
             criteria.andSignDateLike(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getSignDate()));
@@ -57,8 +64,12 @@ public class CttInfoService {
         example.setOrderByClause("ID ASC") ;
         return cttInfoMapper.selectByExample(example);
     }
+    public List<CttInfo> getListByModel(CttInfo cttInfoPara) {
+        return getListByModelShow(fromModelToModelShow(cttInfoPara));
+    }
 
-    public List<CttInfoShow> getCttInfoListByCttType_Status(String strCttyTypePara,String strStatusPara) {
+    public List<CttInfoShow> getCttInfoListByCttType_Status(
+            String strCttyTypePara,String strStatusPara) {
         return myCttInfoMapper.getCttInfoListByCttType_Status(strCttyTypePara,strStatusPara);
     }
 
@@ -95,41 +106,6 @@ public class CttInfoService {
 
     public CttInfo getCttInfoByPkId(String strPkid) {
         return cttInfoMapper.selectByPrimaryKey(strPkid);
-    }
-
-    /**
-     * 判断记录是否已存在
-     *
-     * @param   cttInfoShowPara
-     * @return
-     */
-    public boolean isExistInDb(CttInfoShow cttInfoShowPara) {
-        CttInfoExample example = new CttInfoExample();
-        CttInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andCttTypeEqualTo(cttInfoShowPara.getCttType())
-                .andNameEqualTo(cttInfoShowPara.getName());
-        return cttInfoMapper.countByExample(example) >= 1;
-    }
-    public boolean isExistInDb(CttInfo cttInfoPara) {
-        CttInfoExample example = new CttInfoExample();
-        CttInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andCttTypeEqualTo(cttInfoPara.getCttType())
-                .andIdEqualTo(cttInfoPara.getId())
-                .andNameEqualTo(cttInfoPara.getName());
-        return cttInfoMapper.countByExample(example) >= 1;
-    }
-    //验证合同编号和名称是否已存在
-    public boolean IdisExistInDb(CttInfoShow cttInfoShowPara) {
-        CttInfoExample example = new CttInfoExample();
-        CttInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andIdEqualTo(cttInfoShowPara.getId());
-        return cttInfoMapper.countByExample(example) >= 1;
-    }
-    public boolean NameisExistInDb(CttInfoShow cttInfoShowPara) {
-        CttInfoExample example = new CttInfoExample();
-        CttInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andNameEqualTo(cttInfoShowPara.getName());
-        return cttInfoMapper.countByExample(example) >= 1;
     }
 
     public boolean findChildRecordsByPkid(String strPkidPara) {
@@ -183,19 +159,16 @@ public class CttInfoService {
                 fromCttInfoToFlowCtrlHis(cttInfoPara,EnumOperType.OPER_TYPE0.getCode()));
     }
     @Transactional
-    public void updateRecord(CttInfoShow cttInfoShowPara){
-        CttInfo cttInfoTemp=fromModelShowToModel(cttInfoShowPara);
-        cttInfoTemp.setRecVersion(
-                ToolUtil.getIntIgnoreNull(cttInfoTemp.getRecVersion())+1);
-        cttInfoTemp.setArchivedFlag("0");
-        cttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
-        cttInfoTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-        cttInfoMapper.updateByPrimaryKey(cttInfoTemp);
-        flowCtrlHisService.insertRecord(
-                fromCttInfoToFlowCtrlHis(cttInfoTemp,EnumOperType.OPER_TYPE1.getCode()));
+    public String updateRecord(CttInfoShow cttInfoShowPara){
+        // 为了防止异步操作数据
+        return updateRecord(fromModelShowToModel(cttInfoShowPara));
     }
     @Transactional
-    public void updateRecord(CttInfo cttInfoPara){
+    public String updateRecord(CttInfo cttInfoPara){
+        CttInfo cttInfoTemp=getCttInfoByPkId(cttInfoPara.getPkid());
+        if(cttInfoTemp!=null&& !cttInfoTemp.getRecVersion().equals(cttInfoPara.getRecVersion())){
+            return "1";
+        }
         cttInfoPara.setRecVersion(
                 ToolUtil.getIntIgnoreNull(cttInfoPara.getRecVersion())+1);
         cttInfoPara.setArchivedFlag("0");
@@ -204,6 +177,7 @@ public class CttInfoService {
         cttInfoMapper.updateByPrimaryKey(cttInfoPara);
         flowCtrlHisService.insertRecord(
                 fromCttInfoToFlowCtrlHis(cttInfoPara,EnumOperType.OPER_TYPE1.getCode()));
+        return "0";
     }
     @Transactional
     public void updateRecordForOperRes(String strCttInfoPkidPara){

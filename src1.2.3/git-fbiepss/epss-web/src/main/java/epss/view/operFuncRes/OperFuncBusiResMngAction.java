@@ -659,7 +659,10 @@ public class OperFuncBusiResMngAction implements Serializable{
                     MessageUtil.addError("请输入名称！");
                     return;
                 }
-                if (cttInfoService.isExistInDb(cttInfoShowAdd)) {
+                CttInfoShow cttInfoShowTemp=new CttInfoShow();
+                cttInfoShowTemp.setCttType(cttInfoShowAdd.getCttType());
+                cttInfoShowTemp.setName(cttInfoShowAdd.getName());
+                if (cttInfoService.getListByModelShow(cttInfoShowTemp).size()>0) {
                     MessageUtil.addError("该记录已存在，请重新录入！");
                     return;
                 } else {

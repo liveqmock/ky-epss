@@ -206,7 +206,10 @@ public class TkcttInfoAction {
             if (!submitPreCheck(cttInfoShowAdd)) {
                 return;
             }
-            if (cttInfoService.isExistInDb(cttInfoShowAdd)) {
+            CttInfoShow cttInfoShowTemp=new CttInfoShow();
+            cttInfoShowTemp.setCttType(cttInfoShowAdd.getCttType());
+            cttInfoShowTemp.setCttType(cttInfoShowAdd.getCttType());
+            if (cttInfoService.getListByModelShow(cttInfoShowTemp).size()>0) {
                 MessageUtil.addError("该记录已存在，请重新录入！");
             } else {
                 addRecordAction(cttInfoShowAdd);

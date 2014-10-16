@@ -323,7 +323,7 @@ public class ProgStlInfoService {
         return progStlInfoShowTemp;
     }
 
-    public ProgStlInfo selectRecordsByPrimaryKey(String strPkId){
+    public ProgStlInfo getProgStlInfoByPkid(String strPkId){
         return progStlInfoMapper.selectByPrimaryKey(strPkId);
     }
 
@@ -373,7 +373,6 @@ public class ProgStlInfoService {
         progStlItemTkMeaService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
     }
     // 插入 End
-
     // 更新 Start
     @Transactional
     public void updSubPApprovePass(
@@ -392,18 +391,26 @@ public class ProgStlInfoService {
         }
     }
     @Transactional
-    public void updateRecord(ProgStlInfoShow progStlInfoShowPara){
-        progStlInfoShowPara.setRecVersion(
-                ToolUtil.getIntIgnoreNull(progStlInfoShowPara.getRecVersion())+1);
-        progStlInfoShowPara.setArchivedFlag("0");
-        progStlInfoShowPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
-        progStlInfoShowPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-        progStlInfoMapper.updateByPrimaryKey(fromModelShowToModel(progStlInfoShowPara));
-        flowCtrlHisService.insertRecord(
-                fromProgStlInfoShowToFlowCtrlHis(progStlInfoShowPara, EnumOperType.OPER_TYPE1.getCode()));
+    public String updateRecord(ProgStlInfoShow progStlInfoShowPara){
+        // 为了防止异步操作数据
+        return updateRecord(fromModelShowToModel(progStlInfoShowPara));
     }
-    public void updateRecord(ProgStlInfo progStlInfoPara){
-        updateRecord(fromModelToModelShow(progStlInfoPara));
+    public String updateRecord(ProgStlInfo progStlInfoPara){
+        // 为了防止异步操作数据
+        ProgStlInfo progStlInfoTemp=getProgStlInfoByPkid(progStlInfoPara.getPkid());
+        if(progStlInfoTemp!=null&& !
+                progStlInfoTemp.getRecVersion().equals(progStlInfoPara.getRecVersion())){
+            return "1";
+        }
+        progStlInfoPara.setRecVersion(
+                ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecVersion())+1);
+        progStlInfoPara.setArchivedFlag("0");
+        progStlInfoPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
+        progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
+        progStlInfoMapper.updateByPrimaryKey(progStlInfoPara);
+        flowCtrlHisService.insertRecord(
+                fromProgStlInfoToFlowCtrlHis(progStlInfoPara, EnumOperType.OPER_TYPE1.getCode()));
+        return "0";
     }
     @Transactional
     public void updAutoLinkTask(ProgStlInfo progStlInfoPara) {

@@ -62,10 +62,14 @@ public class ProgStlItemSubStlmentService {
 
     public void insertRecordDetail(ProgStlItemSubStlmentShow progStlItemSubStlmentShowPara){
         progStlItemSubStlmentShowPara.setEngPMng_CreatedBy(ToolUtil.getOperatorManager().getOperator().getPkid());
-        progStlItemSubStlmentShowPara.setEngPMng_CreatedByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperator().getPkid()));
-        progStlItemSubStlmentShowPara.setEngPMng_CreatedTime(ToolUtil.getStrLastUpdTime());
-        progStlItemSubStlmentShowPara.setEngPMng_LastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
-        progStlItemSubStlmentShowPara.setEngPMng_LastUpdByName(ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperator().getPkid()));
+        progStlItemSubStlmentShowPara.setEngPMng_CreatedByName(
+                ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperator().getPkid()));
+        progStlItemSubStlmentShowPara.setEngPMng_CreatedTime(
+                ToolUtil.getStrLastUpdTime());
+        progStlItemSubStlmentShowPara.setEngPMng_LastUpdBy(
+                ToolUtil.getOperatorManager().getOperator().getPkid());
+        progStlItemSubStlmentShowPara.setEngPMng_LastUpdByName(
+                ToolUtil.getUserName(ToolUtil.getOperatorManager().getOperator().getPkid()));
         progStlItemSubStlmentShowPara.setEngPMng_LastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlItemSubStlmentMapper.insert(fromModelShowToModel(progStlItemSubStlmentShowPara));
     }

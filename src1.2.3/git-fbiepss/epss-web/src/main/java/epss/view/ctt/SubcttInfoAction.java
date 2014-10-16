@@ -77,7 +77,7 @@ public class SubcttInfoAction {
     }
 
     public void initData() {
-        this.cttInfoShowList = new ArrayList<CttInfoShow>();
+        this.cttInfoShowList = new ArrayList<>();
         cttInfoShowQry = new CttInfoShow();
         cttInfoShowQry.setCttType(EnumResType.RES_TYPE2.getCode());
         cttInfoShowQry.setParentPkid(strBelongToPkid);
@@ -96,23 +96,25 @@ public class SubcttInfoAction {
     //分包合同录入时，验证分包合同编号是否合法重复
     public void validSubCttId() {
         strWarnMsg = "";
+        CttInfoShow cttInfoShowTemp=new CttInfoShow();
         String subCttIdFromPage = cttInfoShowAdd.getId();
         if (!(subCttIdFromPage.matches("^[a-zA-Z0-9]+$"))) {
             strWarnMsg = "合同编号应以字母数字开头，请重新输入。";
         } else {
-            if (cttInfoService.IdisExistInDb(cttInfoShowAdd)) {
+            cttInfoShowTemp.setId(cttInfoShowAdd.getId());
+            if (cttInfoService.getListByModelShow(cttInfoShowTemp).size()>0) {
                 strWarnMsg = "该合同编号已存在，请重新输入。";
-
             }
         }
     }
 
-    //分包合同录入时，验证分包合同编号是否合法重复
+    //分包合同录入时，验证分包合同名称是否合法重复
     public void validSubCttName() {
         strWarnMsg = "";
-
-        if (cttInfoService.NameisExistInDb(cttInfoShowAdd)) {
-            strWarnMsg = "该合同编号已存在，请重新输入。";
+        CttInfoShow cttInfoShowTemp=new CttInfoShow();
+        cttInfoShowTemp.setName(cttInfoShowAdd.getName());
+        if (cttInfoService.getListByModelShow(cttInfoShowTemp).size()>0) {
+            strWarnMsg = "该合同名已存在，请重新输入。";
         }
     }
 
