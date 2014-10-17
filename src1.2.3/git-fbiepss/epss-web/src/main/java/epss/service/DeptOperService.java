@@ -205,13 +205,16 @@ public class DeptOperService {
         }
         operMapper.deleteByPrimaryKey(operPara.getPkid());
     }
-    public List<Oper> selectByExample(String operIdPara){
+    public List<Oper> selectByExample(Oper operPara){
         OperExample example=new OperExample();
         OperExample.Criteria criteria = example.createCriteria();
-        if (operIdPara!=null){
-            criteria.andIdEqualTo(operIdPara);
+        if (operPara.getId()!=null){
+            criteria.andIdEqualTo(operPara.getId());
         }
         return operMapper.selectByExample(example);
+    }
+    public Oper getOperByPkid(String strPkidPara){
+        return operMapper.selectByPrimaryKey(strPkidPara);
     }
     public void updateRecord(Oper operPara){
         operMapper.updateByPrimaryKey(operPara);

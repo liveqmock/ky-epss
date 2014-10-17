@@ -139,7 +139,8 @@ public class ProgStlItemSubStlmentAction {
 
         }
 
-        if (EnumFlowStatus.FLOW_STATUS3.getCode().compareTo(ToolUtil.getStrIgnoreNull(progStlInfo.getFlowStatus())) <= 0) {
+        if (EnumFlowStatus.FLOW_STATUS3.getCode().compareTo(
+                ToolUtil.getStrIgnoreNull(progStlInfo.getFlowStatus())) <= 0) {
             // 批准之后，在抽明细数据就从明细表中抽出了，将不再拼数据，为了报表的输出
             // 需要重新生成结算项stl2,stl3,stl4,stl5,stl6
             initMsgForExcel();
@@ -545,44 +546,53 @@ public class ProgStlItemSubStlmentAction {
     public void onExportExcel() throws IOException, WriteException {
         String strExcelName;
         if (beansMap.get("esInitPowerHisForSubcttStlQMng") != null) {
-            String qMngImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlQMng"));
+            String qMngImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlQMng"));
             beansMap.put("qMngImagName",qMngImagName);
         }
 
         if (beansMap.get("esInitPowerHisForSubcttStlQCheck") != null) {
-            String qCheckImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlQCheck"));
+            String qCheckImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlQCheck"));
             beansMap.put("qCheckImagName",qCheckImagName);
         }
 
         if (beansMap.get("esInitPowerHisForSubcttStlQDoubleCheck") != null) {
-            String qDoubleCheckImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlQDoubleCheck"));
+            String qDoubleCheckImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlQDoubleCheck"));
             beansMap.put("qDoubleCheckImagName",qDoubleCheckImagName);
         }
         if (beansMap.get("esInitPowerHisForSubcttStlMMng") != null) {
-            String mMngImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMMng"));
+            String mMngImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMMng"));
             beansMap.put("mMngImagName",mMngImagName);
         }
         if (beansMap.get("esInitPowerHisForSubcttStlMCheck") != null) {
-            String mCheckImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMCheck"));
+            String mCheckImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMCheck"));
             beansMap.put("mCheckImagName",mCheckImagName);
         }
         if (beansMap.get("esInitPowerHisForSubcttStlMDoubleCheck") != null) {
-            String mDoubleCheckImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMDoubleCheck"));
+            String mDoubleCheckImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMDoubleCheck"));
             beansMap.put("mDoubleCheckImagName",mDoubleCheckImagName);
         }
 
         if (beansMap.get("esInitPowerHisForSubcttStlPApprove") != null) {
-            String pApproveImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlPApprove"));
+            String pApproveImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlPApprove"));
             beansMap.put("pApproveImagName",pApproveImagName);
         }
 
         if (beansMap.get("esInitPowerHisForSubcttStlPAct") != null) {
-            String pActImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlPAct"));
+            String pActImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlPAct"));
             beansMap.put("pActImagName",pActImagName);
         }
 
         if (beansMap.get("esInitPowerHisForSubcttStlPFile") != null) {
-            String pFileImagName = getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlPFile"));
+            String pFileImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlPFile"));
             beansMap.put("pFileCheckImagName",pFileImagName);
         }
         if ("Account".equals(strFlowType) || "Qry".equals(strFlowType)) {
@@ -760,14 +770,8 @@ public class ProgStlItemSubStlmentAction {
     }
 
     private String getOperAttachment(Object obj) {
-        List<Oper> operListTemp =new ArrayList<>();
         if(((FlowCtrlHis) obj).getCreatedBy()!=null){
-            operListTemp =deptOperService.selectByExample(((FlowCtrlHis) obj).getCreatedBy());
-        }
-        if (operListTemp.size()>0){
-            for(Oper operTemp:operListTemp){
-                return operTemp.getAttachment();
-            }
+            return deptOperService.getOperByPkid(((FlowCtrlHis) obj).getCreatedBy()).getAttachment();
         }
         return null;
     }

@@ -24,6 +24,7 @@ public interface MyFlowCtrlHisMapper {
             "     eipwai.FLOW_STATUS as flowStatus,  " +
             "     eipwai.REMARK as remark," +
             "     eipwai.CREATED_BY as createdBy, " +
+            "     eipwai.CREATED_BY_NAME as createdByName, " +
             "     eipwai.CREATED_TIME as createdTime" +
             " from " +
             "     FLOW_CTRL_HIS eipwai  " +

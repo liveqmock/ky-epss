@@ -166,8 +166,13 @@ public class CttInfoService {
     @Transactional
     public String updateRecord(CttInfo cttInfoPara){
         CttInfo cttInfoTemp=getCttInfoByPkId(cttInfoPara.getPkid());
-        if(cttInfoTemp!=null&& !cttInfoTemp.getRecVersion().equals(cttInfoPara.getRecVersion())){
-            return "1";
+        if(cttInfoTemp!=null){
+            //此条记录目前在数据库中的版本
+            int intRecVersionInDB=ToolUtil.getIntIgnoreNull(cttInfoTemp.getRecVersion());
+            int intRecVersion=cttInfoPara.getRecVersion();
+            if(intRecVersionInDB!=intRecVersion) {
+                return "1";
+            }
         }
         cttInfoPara.setRecVersion(
                 ToolUtil.getIntIgnoreNull(cttInfoPara.getRecVersion())+1);
@@ -178,18 +183,6 @@ public class CttInfoService {
         flowCtrlHisService.insertRecord(
                 fromCttInfoToFlowCtrlHis(cttInfoPara,EnumOperType.OPER_TYPE1.getCode()));
         return "0";
-    }
-    @Transactional
-    public void updateRecordForOperRes(String strCttInfoPkidPara){
-        CttInfo cttInfoTemp = getCttInfoByPkId(strCttInfoPkidPara);
-        cttInfoTemp.setRecVersion(
-                ToolUtil.getIntIgnoreNull(cttInfoTemp.getRecVersion())+1);
-        cttInfoTemp.setArchivedFlag("0");
-        cttInfoTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
-        cttInfoTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-        cttInfoMapper.updateByPrimaryKey(cttInfoTemp);
-        flowCtrlHisService.insertRecord(
-                fromCttInfoToFlowCtrlHis(cttInfoTemp,EnumOperType.OPER_TYPE1.getCode()));
     }
     @Transactional
     public int deleteRecord(String strCttInfoPkidPara){

@@ -398,9 +398,13 @@ public class ProgStlInfoService {
     public String updateRecord(ProgStlInfo progStlInfoPara){
         // 为了防止异步操作数据
         ProgStlInfo progStlInfoTemp=getProgStlInfoByPkid(progStlInfoPara.getPkid());
-        if(progStlInfoTemp!=null&& !
-                progStlInfoTemp.getRecVersion().equals(progStlInfoPara.getRecVersion())){
-            return "1";
+        if(progStlInfoTemp!=null){
+            //此条记录目前在数据库中的版本
+            int intRecVersionInDB=ToolUtil.getIntIgnoreNull(progStlInfoTemp.getRecVersion());
+            int intRecVersion=progStlInfoPara.getRecVersion();
+            if(intRecVersionInDB!=intRecVersion) {
+                return "1";
+            }
         }
         progStlInfoPara.setRecVersion(
                 ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecVersion())+1);

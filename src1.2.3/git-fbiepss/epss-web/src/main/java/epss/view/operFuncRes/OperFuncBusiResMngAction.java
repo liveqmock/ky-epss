@@ -675,7 +675,9 @@ public class OperFuncBusiResMngAction implements Serializable{
                     MessageUtil.addError("请输入名称！");
                     return;
                 }
-                cttInfoService.updateRecordForOperRes(cttInfoShowUpd.getPkid());
+                CttInfo cttInfoTemp=cttInfoService.getCttInfoByPkId(cttInfoShowUpd.getPkid());
+                cttInfoTemp.setName(cttInfoShowUpd.getName());
+                cttInfoService.updateRecord(cttInfoTemp);
                 MessageUtil.addInfo("更新数据完成。");
             } else if (strSubmitTypePara.equals("Del")) {
                 if (!submitPreCheck(cttInfoShowDel)) {
