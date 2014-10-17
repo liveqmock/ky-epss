@@ -70,7 +70,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQMng =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum + 9, (short) 4, rowNum + 10);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 9, (short) 5, rowNum + 10);
                             patriarch.createPicture(anchorQMng,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -80,7 +80,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQCheck =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum + 10, (short) 4, rowNum + 11);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 10, (short) 5, rowNum + 11);
                             patriarch.createPicture(anchorQCheck,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -90,7 +90,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQDoubleCheck =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum + 11, (short) 4, rowNum + 12);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 11, (short) 5, rowNum + 12);
                             patriarch.createPicture(anchorQDoubleCheck,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -100,7 +100,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMMng =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum + 9, (short) 9, rowNum + 10);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 9, (short) 10, rowNum + 10);
                             patriarch.createPicture(anchorMMng,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -110,7 +110,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMCheck =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum + 10, (short) 9, rowNum + 11);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 10, (short) 10, rowNum + 11);
                             patriarch.createPicture(anchorMCheck,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -120,7 +120,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMDoubleCheck =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum + 11, (short) 9, rowNum + 12);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 11, (short) 10, rowNum + 12);
                             patriarch.createPicture(anchorMDoubleCheck,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -130,7 +130,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorPApprove =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum + 14, (short) 4, rowNum + 15);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 14, (short) 5, rowNum + 15);
                             patriarch.createPicture(anchorPApprove,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -140,7 +140,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorPAct =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum + 15, (short) 4, rowNum + 16);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 15, (short) 5, rowNum + 16);
                             patriarch.createPicture(anchorPAct,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -149,7 +149,7 @@ public class JxlsManager {
                         BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("pFileImagName")));
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
-                            HSSFClientAnchor anchorPFile = new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum + 16, (short) 4, rowNum + 17);
+                            HSSFClientAnchor anchorPFile = new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 16, (short) 5, rowNum + 17);
                             patriarch.createPicture(anchorPFile,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -172,7 +172,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQMng =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum + 13, (short) 4, rowNum + 14);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 13, (short) 5, rowNum + 14);
                             patriarch.createPicture(anchorQMng,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -182,7 +182,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQCheck =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum + 14, (short) 4, rowNum + 15);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 14, (short) 5, rowNum + 15);
                             patriarch.createPicture(anchorQCheck,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -192,7 +192,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQDoubleCheck =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 5, rowNum + 15, (short) 4, rowNum + 16);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 15, (short) 5, rowNum + 16);
                             patriarch.createPicture(anchorQDoubleCheck,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -202,7 +202,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMMng =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum + 13, (short) 9, rowNum + 14);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 13, (short) 10, rowNum + 14);
                             patriarch.createPicture(anchorMMng,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -212,7 +212,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMCheck =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum + 14, (short) 9, rowNum + 15);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 14, (short) 10, rowNum + 15);
                             patriarch.createPicture(anchorMCheck,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -222,7 +222,7 @@ public class JxlsManager {
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMDoubleCheck =
-                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 10, rowNum + 15, (short) 9, rowNum + 16);
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 15, (short) 10, rowNum + 16);
                             patriarch.createPicture(anchorMDoubleCheck,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
