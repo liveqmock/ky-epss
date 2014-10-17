@@ -401,7 +401,7 @@ public class ProgStlInfoService {
         if(progStlInfoTemp!=null){
             //此条记录目前在数据库中的版本
             int intRecVersionInDB=ToolUtil.getIntIgnoreNull(progStlInfoTemp.getRecVersion());
-            int intRecVersion=progStlInfoPara.getRecVersion();
+            int intRecVersion=ToolUtil.getIntIgnoreNull(progStlInfoPara.getRecVersion());
             if(intRecVersionInDB!=intRecVersion) {
                 return "1";
             }

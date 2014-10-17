@@ -169,7 +169,7 @@ public class CttInfoService {
         if(cttInfoTemp!=null){
             //此条记录目前在数据库中的版本
             int intRecVersionInDB=ToolUtil.getIntIgnoreNull(cttInfoTemp.getRecVersion());
-            int intRecVersion=cttInfoPara.getRecVersion();
+            int intRecVersion=ToolUtil.getIntIgnoreNull(cttInfoPara.getRecVersion());
             if(intRecVersionInDB!=intRecVersion) {
                 return "1";
             }
