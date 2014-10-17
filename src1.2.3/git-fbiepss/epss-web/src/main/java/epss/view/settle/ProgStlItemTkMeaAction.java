@@ -208,6 +208,10 @@ public class ProgStlItemTkMeaAction {
                 progStlItemTkMeaShowTemp.setEng_LastUpdByName(strLastUpdByName);
                 progStlItemTkMeaShowTemp.setEng_LastUpdTime(progStlItemTkMea.getLastUpdTime());
                 progStlItemTkMeaShowTemp.setEng_RecVersion(progStlItemTkMea.getRecVersion());
+                if (progStlItemTkMeaShowTemp.getEng_BeginToCurrentPeriodEQty()
+                        .equals(progStlItemTkMeaShowTemp.getTkctt_ContractQuantity())){
+                    progStlItemTkMeaShowTemp.setIsUptoCttContentFlag(true);
+                }
             }
             sProgStlItemTkMeaShowListPara.add(progStlItemTkMeaShowTemp) ;
             recursiveDataTable(progStlItemTkMeaShowTemp.getTkctt_Pkid(), cttItemListPara, sProgStlItemTkMeaShowListPara);

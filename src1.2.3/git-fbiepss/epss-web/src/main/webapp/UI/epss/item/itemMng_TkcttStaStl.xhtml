@@ -68,7 +68,8 @@
                                  rowsPerPageTemplate="500,200,100,45,30,15"
                                  rowIndexVar="row"
                                  emptyMessage="数据记录为空..."
-                                 rowStyleClass="#{record.tkctt_Unit eq null? 'rowGrayStyle':null}"
+                                 rowStyleClass="#{record.tkctt_Unit eq null? 'rowGrayStyle':
+                                                  record.isUptoCttContentFlag? 'rowGreenyellowStyle':null}"
                                  scrollable="true"
                                  scrollHeight="460">
                         <p:column headerText="操作" style="width:91px;text-align: center;"

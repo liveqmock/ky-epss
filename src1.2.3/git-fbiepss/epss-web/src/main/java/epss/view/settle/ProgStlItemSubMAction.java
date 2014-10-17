@@ -172,6 +172,10 @@ public class ProgStlItemSubMAction {
                 progStlItemSubMShowTemp.setEngMMng_LastUpdBy(progStlItemSubM.getLastUpdBy());
                 progStlItemSubMShowTemp.setEngMMng_LastUpdTime(progStlItemSubM.getLastUpdTime());
                 progStlItemSubMShowTemp.setEngMMng_RecVersion(progStlItemSubM.getRecVersion());
+                if (progStlItemSubMShowTemp.getEngMMng_BeginToCurrentPeriodMQty()
+                        .equals(progStlItemSubMShowTemp.getSubctt_ContractQuantity())){
+                    progStlItemSubMShowTemp.setIsUptoCttContentFlag(true);
+                }
             }
             sProgStlItemSubMShowListPara.add(progStlItemSubMShowTemp) ;
             recursiveDataTable(progStlItemSubMShowTemp.getSubctt_Pkid(), cttItemListPara, sProgStlItemSubMShowListPara);
@@ -714,5 +718,6 @@ public class ProgStlItemSubMAction {
     public void setProgStlItemSubQService(ProgStlItemSubQService progStlItemSubQService) {
         this.progStlItemSubQService = progStlItemSubQService;
     }
+
     /*ÖÇÄÜ×Ö¶ÎEnd*/
 }

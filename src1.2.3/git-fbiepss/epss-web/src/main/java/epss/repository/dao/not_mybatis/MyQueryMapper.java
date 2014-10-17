@@ -76,7 +76,7 @@ public interface MyQueryMapper {
             "              eis.FLOW_STATUS='2'" +
             "     )nei" +
             " inner join" +//联分包工程数量详细项
-            "    （" +
+            "    (" +
             "       select" +
             "            subctt_pkid,period_no,subctt_item_pkid,current_period_m_qty," +
             "            (" +
@@ -93,7 +93,7 @@ public interface MyQueryMapper {
             "            ) as begin_to_current_period_m_qty" +
             "       from" +
             "          PROG_STL_ITEM_SUB_M eissemwai" +
-            "    ）eissem" +
+            "    )eissem" +
             " on" +
             "    eissem.subctt_pkid=nei.stl_pkid" +
             " and" +
@@ -119,7 +119,7 @@ public interface MyQueryMapper {
             " nei.name as strName," +
             " max(ecitem.unit) as strUnit," +
             " sum(ecitem.contract_quantity) as bdQuantity," +
-            " sum(ecitem.contract_unit_price) as bdUnitPrice，" +
+            " sum(ecitem.contract_unit_price) as bdUnitPrice," +
             " sum(eisseq.begin_to_current_period_e_qty) as bdBeginToCurrentPeriodQuantity" +
             " from " +
             " (" +
@@ -150,7 +150,7 @@ public interface MyQueryMapper {
             "          ecinfo.PARENT_PKID = #{strParentPkid}" +
             " )nei" +
             " inner join" +                   //联分包工程数量详细项
-            "    （" +
+            "    (" +
             "       select" +
             "            subctt_pkid,period_no,subctt_item_pkid," +
             "            (" +
@@ -161,7 +161,7 @@ public interface MyQueryMapper {
             "                     and   eisseqnei.period_no<=#{strPeriodNo}) as begin_to_current_period_e_qty" +
             "      from" +
             "          PROG_STL_ITEM_SUB_Q eisseqwai" +
-            "    ）eisseq" +
+            "    )eisseq" +
             " on" +
             "    eisseq.subctt_pkid=nei.stl_pkid" +
             " and" +

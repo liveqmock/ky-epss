@@ -74,7 +74,8 @@
                                  rowIndexVar="row"
                                  emptyMessage="数据记录为空..."
                                  rowStyleClass="#{record.subctt_SignPartAPrice eq 0? 'rowGrayStyle':
-                                                     record.subctt_SignPartAPrice eq null? 'rowGrayStyle':null}"
+                                                     record.subctt_SignPartAPrice eq null? 'rowGrayStyle':
+                                                     record.isUptoCttContentFlag? 'rowGreenyellowStyle':null}"
                                  scrollable="true"
                                  scrollHeight="440">
                         <p:column headerText="操作" style="width:91px;text-align: center;"

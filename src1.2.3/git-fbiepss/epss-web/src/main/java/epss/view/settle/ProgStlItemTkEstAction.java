@@ -206,6 +206,10 @@ public class ProgStlItemTkEstAction {
                 progStlItemTkEstShowTemp.setEng_LastUpdByName(strLastUpdByName);
                 progStlItemTkEstShowTemp.setEng_LastUpdTime(progStlItemTkEst.getLastUpdTime());
                 progStlItemTkEstShowTemp.setEng_RecVersion(progStlItemTkEst.getRecVersion());
+                if (progStlItemTkEstShowTemp.getEng_BeginToCurrentPeriodEQty()
+                        .equals(progStlItemTkEstShowTemp.getTkctt_ContractQuantity())){
+                    progStlItemTkEstShowTemp.setIsUptoCttContentFlag(true);
+                }
             }
             sprogStlItemTkEstShowListPara.add(progStlItemTkEstShowTemp) ;
             recursiveDataTable(progStlItemTkEstShowTemp.getTkctt_Pkid(), cttItemListPara, sprogStlItemTkEstShowListPara);
