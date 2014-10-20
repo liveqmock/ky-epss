@@ -46,6 +46,7 @@ public class ProgStlItemSubQShow implements Serializable {
     private String engQMng_LastUpdByName;
     private String engQMng_LastUpdTime;
     private Integer engQMng_RecVersion;
+    private Boolean isUptoCttContentFlag;
 
     public ProgStlItemSubQShow() {
 
@@ -307,4 +308,11 @@ public class ProgStlItemSubQShow implements Serializable {
         this.engQMng_RecVersion = engQMng_RecVersion;
     }
 
+    public Boolean getIsUptoCttContentFlag() {
+        return isUptoCttContentFlag;
+    }
+
+    public void setIsUptoCttContentFlag(Boolean isUptoCttContentFlag) {
+        this.isUptoCttContentFlag = isUptoCttContentFlag;
+    }
 }

@@ -235,7 +235,6 @@ public class ProgStlItemSubStlmentAction {
         List<FlowCtrlHis> flowCtrlHisForSubcttStlList =
                 flowCtrlHisService.getSubStlListByFlowCtrlHis(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
         for (FlowCtrlHis flowCtrlHisTemp : flowCtrlHisForSubcttStlList) {
-            flowCtrlHisTemp.setCreatedBy(flowCtrlHisTemp.getCreatedBy());
             if (EnumResType.RES_TYPE3.getCode().equals(flowCtrlHisTemp.getInfoType())) {
                 if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
                     beansMap.put("esInitPowerHisForSubcttStlQMng", flowCtrlHisTemp);
@@ -276,8 +275,10 @@ public class ProgStlItemSubStlmentAction {
             List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForSubcttEngQ = new ArrayList<ProgStlItemSubStlmentShow>();
             List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForSubcttEngM = new ArrayList<ProgStlItemSubStlmentShow>();
             for (ProgStlItemSubStlmentShow itemUnit : progStlItemSubStlmentShowList) {
-                ProgStlItemSubStlmentShow progStlItemSubStlmentShowForSubcttEngQ = (ProgStlItemSubStlmentShow) BeanUtils.cloneBean(itemUnit);
-                ProgStlItemSubStlmentShow progStlItemSubStlmentShowForSubcttEngM = (ProgStlItemSubStlmentShow) BeanUtils.cloneBean(itemUnit);
+                ProgStlItemSubStlmentShow progStlItemSubStlmentShowForSubcttEngQ =
+                        (ProgStlItemSubStlmentShow) BeanUtils.cloneBean(itemUnit);
+                ProgStlItemSubStlmentShow progStlItemSubStlmentShowForSubcttEngM =
+                        (ProgStlItemSubStlmentShow) BeanUtils.cloneBean(itemUnit);
                 progStlItemSubStlmentShowListForSubcttEngQ.add(progStlItemSubStlmentShowForSubcttEngQ);
                 progStlItemSubStlmentShowListForSubcttEngM.add(progStlItemSubStlmentShowForSubcttEngM);
             }

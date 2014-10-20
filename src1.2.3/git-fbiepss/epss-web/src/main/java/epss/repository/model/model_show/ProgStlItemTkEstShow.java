@@ -46,6 +46,7 @@ public class ProgStlItemTkEstShow implements Serializable {
     private String eng_LastUpdByName;
     private String eng_LastUpdTime;
     private Integer eng_RecVersion;
+    private Boolean isUptoCttContentFlag;
 
     public ProgStlItemTkEstShow() {
 
@@ -305,5 +306,13 @@ public class ProgStlItemTkEstShow implements Serializable {
 
     public void setEng_LastUpdByName(String eng_LastUpdByName) {
         this.eng_LastUpdByName = eng_LastUpdByName;
+    }
+
+    public Boolean getIsUptoCttContentFlag() {
+        return isUptoCttContentFlag;
+    }
+
+    public void setIsUptoCttContentFlag(Boolean isUptoCttContentFlag) {
+        this.isUptoCttContentFlag = isUptoCttContentFlag;
     }
 }

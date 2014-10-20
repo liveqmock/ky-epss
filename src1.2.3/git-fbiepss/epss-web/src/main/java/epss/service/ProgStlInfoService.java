@@ -258,28 +258,33 @@ public class ProgStlInfoService {
         return strReturnTemp;
     }
 
-    public FlowCtrlHis fromProgStlInfoToFlowCtrlHis(ProgStlInfo progStlInfoPara,String strOperType){
+    public FlowCtrlHis fromProgStlInfoToFlowCtrlHis(ProgStlInfo progStlInfoPara){
         FlowCtrlHis flowCtrlHis =new FlowCtrlHis();
         flowCtrlHis.setInfoType(progStlInfoPara.getStlType());
         flowCtrlHis.setInfoPkid(progStlInfoPara.getStlPkid());
+        CttInfo cttInfoTemp=cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid());
+        flowCtrlHis.setInfoId(cttInfoTemp.getId());
+        flowCtrlHis.setInfoName(cttInfoTemp.getName());
         flowCtrlHis.setPeriodNo(progStlInfoPara.getPeriodNo());
         flowCtrlHis.setFlowStatus(progStlInfoPara.getFlowStatus());
         flowCtrlHis.setFlowStatusReason(progStlInfoPara.getFlowStatusReason());
         flowCtrlHis.setCreatedTime(progStlInfoPara.getCreatedTime());
         flowCtrlHis.setCreatedBy(progStlInfoPara.getCreatedBy());
-        flowCtrlHis.setOperType(strOperType);
+        flowCtrlHis.setOperType(EnumOperType.OPER_TYPE0.getCode());
         return flowCtrlHis;
     }
-    public FlowCtrlHis fromProgStlInfoShowToFlowCtrlHis(ProgStlInfoShow progStlInfoShowPara,String strOperType){
+    public FlowCtrlHis fromProgStlInfoShowToFlowCtrlHis(ProgStlInfoShow progStlInfoShowPara){
         FlowCtrlHis flowCtrlHis =new FlowCtrlHis();
         flowCtrlHis.setInfoType(progStlInfoShowPara.getStlType());
         flowCtrlHis.setInfoPkid(progStlInfoShowPara.getStlPkid());
+        flowCtrlHis.setInfoId(progStlInfoShowPara.getStlId());
+        flowCtrlHis.setInfoName(progStlInfoShowPara.getStlName());
         flowCtrlHis.setPeriodNo(progStlInfoShowPara.getPeriodNo());
         flowCtrlHis.setFlowStatus(progStlInfoShowPara.getFlowStatus());
         flowCtrlHis.setFlowStatusReason(progStlInfoShowPara.getFlowStatusReason());
         flowCtrlHis.setCreatedTime(progStlInfoShowPara.getCreatedTime());
         flowCtrlHis.setCreatedBy(progStlInfoShowPara.getCreatedBy());
-        flowCtrlHis.setOperType(strOperType);
+        flowCtrlHis.setOperType(EnumOperType.OPER_TYPE0.getCode());
         return flowCtrlHis;
     }
     public ProgStlInfo fromModelShowToModel(ProgStlInfoShow progStlInfoShowPara){
@@ -338,7 +343,7 @@ public class ProgStlInfoService {
         progStlInfoShowPara.setLastUpdTime(strLastUpdTimeTemp);
         progStlInfoMapper.insert(fromModelShowToModel(progStlInfoShowPara)) ;
         flowCtrlHisService.insertRecord(
-                fromProgStlInfoShowToFlowCtrlHis(progStlInfoShowPara, EnumOperType.OPER_TYPE0.getCode()));
+                fromProgStlInfoShowToFlowCtrlHis(progStlInfoShowPara));
     }
     public void insertRecord(ProgStlInfo progStlInfoPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
@@ -350,7 +355,7 @@ public class ProgStlInfoService {
         progStlInfoPara.setLastUpdTime(strLastUpdTimeTemp);
         progStlInfoMapper.insert(progStlInfoPara) ;
         flowCtrlHisService.insertRecord(
-                fromProgStlInfoToFlowCtrlHis(progStlInfoPara, EnumOperType.OPER_TYPE1.getCode()));
+                fromProgStlInfoToFlowCtrlHis(progStlInfoPara));
     }
     @Transactional
     public void addSubStlQInfoAndItemInitDataAction(ProgStlInfoShow progStlInfoShowPara) {
@@ -413,7 +418,7 @@ public class ProgStlInfoService {
         progStlInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         progStlInfoMapper.updateByPrimaryKey(progStlInfoPara);
         flowCtrlHisService.insertRecord(
-                fromProgStlInfoToFlowCtrlHis(progStlInfoPara, EnumOperType.OPER_TYPE1.getCode()));
+                fromProgStlInfoToFlowCtrlHis(progStlInfoPara));
         return "0";
     }
     @Transactional

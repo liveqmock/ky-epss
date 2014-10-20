@@ -66,9 +66,11 @@ public class FlowCtrlHisService {
     }
 
     public void insertRecord(FlowCtrlHis flowCtrlHisPara) {
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
+        String strOperatorPkidTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
+        String strOperatorNameTemp=ToolUtil.getOperatorManager().getOperator().getName();
         String strLastUpdTimeTemp=ToolUtil.getStrLastUpdTime();
-        flowCtrlHisPara.setCreatedBy(strOperatorIdTemp);
+        flowCtrlHisPara.setCreatedBy(strOperatorPkidTemp);
+        flowCtrlHisPara.setCreatedByName(strOperatorNameTemp);
         flowCtrlHisPara.setCreatedTime(strLastUpdTimeTemp);
         flowCtrlHisPara.setArchivedFlag("0");
         flowCtrlHisMapper.insertSelective(flowCtrlHisPara);

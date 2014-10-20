@@ -57,7 +57,8 @@ public class JxlsManager {
                 wb.write(os);
             } else {//结算单上实现签名图片功能，图片的位置取决于beansMap.size()及表头所占的列数
                 ByteArrayOutputStream byteArrayOutputStreamTemp = new ByteArrayOutputStream();
-                String imagPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");                
+                String imagPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
+                // 记账
                 if (templateFileName.contains("progStlItemSubStlmentAccount.xls")) {
                     short rowNum=(Short)beansMap.get("actSubstlNum");
                     XLSTransformer transformer = new XLSTransformer();
@@ -149,7 +150,8 @@ public class JxlsManager {
                         BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("pFileImagName")));
                         if(bufferedImageTemp!=null) {
                             ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
-                            HSSFClientAnchor anchorPFile = new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 16, (short) 5, rowNum + 17);
+                            HSSFClientAnchor anchorPFile =
+                                    new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 16, (short) 5, rowNum + 17);
                             patriarch.createPicture(anchorPFile,
                                     wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
@@ -160,7 +162,9 @@ public class JxlsManager {
                     response.setHeader("Content-disposition", "attachment; filename=" + java.net.URLEncoder.encode(excelFilename, "UTF-8"));
                     response.setContentType("application/msexcel");
                     wb.write(os);
-                } else {
+                }
+                // 批准
+                else {
                     short rowNum=(Short)beansMap.get("progStlItemSubStlmentNum");
                     XLSTransformer transformer = new XLSTransformer();
                     is = new BufferedInputStream(new FileInputStream(templateFileName));

@@ -718,6 +718,5 @@ public class ProgStlItemSubMAction {
     public void setProgStlItemSubQService(ProgStlItemSubQService progStlItemSubQService) {
         this.progStlItemSubQService = progStlItemSubQService;
     }
-
     /*ÖÇÄÜ×Ö¶ÎEnd*/
 }

@@ -47,6 +47,7 @@ public class ProgStlItemSubMShow implements Serializable {
     private String engMMng_LastUpdByName;
     private String engMMng_LastUpdTime;
     private Integer engMMng_RecVersion;
+    private Boolean isUptoCttContentFlag;
 
     public ProgStlItemSubMShow() {
 
@@ -315,5 +316,13 @@ public class ProgStlItemSubMShow implements Serializable {
 
     public void setEngMMng_CreatedByName(String engMMng_CreatedByName) {
         this.engMMng_CreatedByName = engMMng_CreatedByName;
+    }
+
+    public Boolean getIsUptoCttContentFlag() {
+        return isUptoCttContentFlag;
+    }
+
+    public void setIsUptoCttContentFlag(Boolean isUptoCttContentFlag) {
+        this.isUptoCttContentFlag = isUptoCttContentFlag;
     }
 }
