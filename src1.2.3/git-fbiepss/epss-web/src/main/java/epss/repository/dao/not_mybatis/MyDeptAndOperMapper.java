@@ -47,6 +47,6 @@ public interface MyDeptAndOperMapper {
             "     where  " +
             "        parentpkid=#{parentPkid}" +
             "     ) " +
-            " order by type,name desc")
+            " order by name asc")
     List<DeptOperShow> selectDeptAndOperRecords(@Param("parentPkid") String parentPkidPara);
 }

@@ -584,9 +584,30 @@ public class CstplItemAction {
                                 itemTkcttInsertItem.setLastUpdTime(null);
                                 itemTkcttInsertItem.setRecVersion(null);
                                 itemTkcttInsertItem.setCorrespondingPkid(null);
-                            } else
-                                //成本计划
-                                itemTkcttInsertItem.setStrNoContrast(itemCstpl.getStrNo());
+                            } else {
+                                if (itemTkcttInsertItem.getContractUnitPrice() != null) {
+                                    itemTkcttInsertItem.setContractUnitPrice(
+                                            ToolUtil.getBdFrom0ToNull(itemTkcttInsertItem.getContractUnitPrice()));
+                                }else{
+                                    itemTkcttInsertItem.setContractUnitPrice(null);
+                                }
+
+                                if (itemTkcttInsertItem.getContractQuantity() != null) {
+                                    itemTkcttInsertItem.setContractQuantity(
+                                            ToolUtil.getBdFrom0ToNull(itemTkcttInsertItem.getContractQuantity()));
+                                }else{
+                                    itemTkcttInsertItem.setContractQuantity(null);
+                                }
+
+                                if(itemTkcttInsertItem.getContractAmount()!=null) {
+                                    itemTkcttInsertItem.setContractAmount(
+                                            ToolUtil.getBdFrom0ToNull(itemTkcttInsertItem.getContractAmount()));
+                                }else{
+                                    itemTkcttInsertItem.setContractAmount(null);
+                                }
+                            }
+                            //成本计划
+                            itemTkcttInsertItem.setStrNoContrast(itemCstpl.getStrNo());
                             itemTkcttInsertItem.setPkidContrast(itemCstpl.getPkid());
                             itemTkcttInsertItem.setBelongToTypeContrast(itemCstpl.getBelongToType());
                             itemTkcttInsertItem.setBelongToPkidContrast(itemCstpl.getBelongToPkid());
@@ -596,9 +617,26 @@ public class CstplItemAction {
                             itemTkcttInsertItem.setNameContrast(itemCstpl.getName());
                             itemTkcttInsertItem.setRemarkContrast(itemCstpl.getRemark());
                             itemTkcttInsertItem.setUnitContrast(itemCstpl.getUnit());
-                            itemTkcttInsertItem.setContractUnitPriceContrast(itemCstpl.getContractUnitPrice());
-                            itemTkcttInsertItem.setContractQuantityContrast(itemCstpl.getContractQuantity());
-                            itemTkcttInsertItem.setContractAmountContrast(itemCstpl.getContractAmount());
+                            if (itemCstpl.getContractUnitPrice() != null) {
+                                itemTkcttInsertItem.setContractUnitPriceContrast(
+                                        ToolUtil.getBdFrom0ToNull(itemCstpl.getContractUnitPrice()));
+                            }else{
+                                itemTkcttInsertItem.setContractUnitPriceContrast(null);
+                            }
+
+                            if (itemCstpl.getContractQuantity() != null) {
+                                itemTkcttInsertItem.setContractQuantityContrast(
+                                        ToolUtil.getBdFrom0ToNull(itemCstpl.getContractQuantity()));
+                            }else{
+                                itemTkcttInsertItem.setContractQuantityContrast(null);
+                            }
+
+                            if(itemCstpl.getContractAmount()!=null) {
+                                itemTkcttInsertItem.setContractAmountContrast(
+                                        ToolUtil.getBdFrom0ToNull(itemCstpl.getContractAmount()));
+                            }else{
+                                itemTkcttInsertItem.setContractAmountContrast(null);
+                            }
                             itemTkcttInsertItem.setSignPartAPriceContrast(itemCstpl.getSignPartAPrice());
                             itemTkcttInsertItem.setArchivedFlagContrast(itemCstpl.getArchivedFlag());
                             itemTkcttInsertItem.setOriginFlagContrast(itemCstpl.getOriginFlag());
@@ -640,7 +678,8 @@ public class CstplItemAction {
 
                 for (CstplItemShow itemUnit : cstplItemShowList_ForSort) {
                     if (itemUnit.getStrNoContrast() != null) {
-                        String correspondingItemNoContrast = itemUnit.getCorrespondingPkidContrast() == null ? "" : itemUnit.getCorrespondingPkidContrast();
+                        String correspondingItemNoContrast =
+                                itemUnit.getCorrespondingPkidContrast() == null ? "" : itemUnit.getCorrespondingPkidContrast();
                         CstplItemShow cstplItemShowTemp =
                                 getItemOfTkcttAndCstplByPkid(correspondingItemNoContrast, cstplItemShowList_ForSort, "Tkctt");
                         if (cstplItemShowTemp != null) {

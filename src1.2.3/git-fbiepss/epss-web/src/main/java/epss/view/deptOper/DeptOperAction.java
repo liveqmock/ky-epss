@@ -268,7 +268,7 @@ public class DeptOperAction implements Serializable {
                     }
                     deptOperService.updateDeptRecord(deptUpd);
                 } else if (strSubmitType.contains("Del")) {
-                    if (deptOperService.findChildRecordsByPkid(deptDel.getId())) {
+                    if (deptOperService.findChildRecordsByPkid(deptDel.getPkid())) {
                         MessageUtil.addInfo("该部门下有分支机构或员工，无法删除。");
                         return;
                     }
