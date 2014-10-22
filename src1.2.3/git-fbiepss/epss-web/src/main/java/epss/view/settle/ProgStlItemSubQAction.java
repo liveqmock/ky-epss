@@ -374,7 +374,6 @@ public class ProgStlItemSubQAction {
                                     progStlInfoService.selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryM);
                             if (progStlInfoShowConstructsTemp.size()==0){
                                 progStlInfo.setAutoLinkAdd("0");
-                                progStlInfoService.updAutoLinkTask(progStlInfo);
                                 progStlInfoShowQryM.setAutoLinkAdd("1");
                                 progStlInfoShowQryM.setId(getMaxId( progStlInfoShowQryM.getStlType()));
                                 progStlInfoService.insertRecord(progStlInfoShowQryM);
@@ -382,7 +381,6 @@ public class ProgStlItemSubQAction {
                                 for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
                                     if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
                                         progStlInfo.setAutoLinkAdd("0");
-                                        progStlInfoService.updAutoLinkTask(progStlInfo);
                                         progStlInfoShowQryM.setAutoLinkAdd("1");
                                         progStlInfoService.updateRecord(progStlInfoShowQryM);
                                     }else{
@@ -391,7 +389,6 @@ public class ProgStlItemSubQAction {
                                         }else{
                                             progStlInfo.setAutoLinkAdd("1");
                                         }
-                                        progStlInfoService.updAutoLinkTask(progStlInfo);
                                     }
                                 }
                             }
@@ -450,7 +447,7 @@ public class ProgStlItemSubQAction {
                         List<ProgStlInfo> progStlInfoListTemp=progStlInfoService.getInitStlListByModel(progStlInfoTemp);
                         if(progStlInfoListTemp.size()>0) {
                             String SubcttStlPStatus = ToolUtil.getStrIgnoreNull(progStlInfoListTemp.get(0).getFlowStatus());
-                            if (!(EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(SubcttStlPStatus) < 0)) {
+                            if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(SubcttStlPStatus) < 0) {
                                 MessageUtil.addInfo("该数据已被分包价格结算批准，您无权进行操作！");
                                 return;
                             }

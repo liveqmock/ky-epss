@@ -411,7 +411,6 @@ public class ProgStlItemSubMAction {
                                 progStlInfoService.selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryQ);
                         if (progStlInfoShowConstructsTemp.size()==0){
                             progStlInfo.setAutoLinkAdd("0");
-                            progStlInfoService.updAutoLinkTask(progStlInfo);
                             progStlInfoShowQryQ.setAutoLinkAdd("1");
                             progStlInfoShowQryQ.setId(getMaxId(progStlInfoShowQryQ.getStlType()));
                             progStlInfoService.insertRecord(progStlInfoShowQryQ);
@@ -419,7 +418,6 @@ public class ProgStlItemSubMAction {
                             for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
                                 if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
                                     progStlInfo.setAutoLinkAdd("0");
-                                    progStlInfoService.updAutoLinkTask(progStlInfo);
                                     progStlInfoShowQryQ.setAutoLinkAdd("1");
                                     progStlInfoService.updateRecord(progStlInfoShowQryQ);
                                 }else{
@@ -428,7 +426,6 @@ public class ProgStlItemSubMAction {
                                     }else{
                                         progStlInfo.setAutoLinkAdd("1");
                                     }
-                                    progStlInfoService.updAutoLinkTask(progStlInfo);
                                 }
                             }
                         }

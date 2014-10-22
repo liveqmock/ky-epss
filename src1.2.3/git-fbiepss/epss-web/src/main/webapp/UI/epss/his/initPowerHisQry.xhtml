@@ -70,7 +70,7 @@
                             </h:panelGrid>
                             <h:panelGrid columns="4">
                                 <p:outputLabel value="创建人名：" for="createid"/>
-                                <p:inputText id="createid" value="#{flowCtrlHisAction.flowCtrlHis.createdBy}"/>
+                                <p:inputText id="createid" value="#{flowCtrlHisAction.flowCtrlHis.createdByName}"/>
                                 <p:outputLabel value="创建时间：" for="createdate"/>
                                 <p:inputText id="createdate" value="#{flowCtrlHisAction.flowCtrlHis.createdTime}"
                                              onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
@@ -132,7 +132,7 @@
                         <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
                     </p:column>
                     <p:column headerText="创建人" style="text-align:center">
-                        <h:outputText value="#{record.createdBy}"/>
+                        <h:outputText value="#{record.createdByName}"/>
                     </p:column>
                     <p:column headerText="创建时间" style="text-align:center">
                         <h:outputText value="#{record.createdTime}"/>

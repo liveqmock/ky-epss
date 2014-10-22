@@ -423,7 +423,7 @@ public class ProgStlInfoService {
     }
     @Transactional
     public void updAutoLinkTask(ProgStlInfo progStlInfoPara) {
-        updateRecord(fromModelToModelShow(progStlInfoPara));
+        updateRecord(progStlInfoPara);
 
         // 数量结算
         if (EnumResType.RES_TYPE3.getCode().equals(progStlInfoPara.getStlType())) {
@@ -626,6 +626,7 @@ public class ProgStlInfoService {
         progStlInfoTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
         progStlInfoTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
         progStlInfoMapper.updateByPrimaryKey(progStlInfoTemp);
+        updateRecord(progStlInfoTemp);
         //删除PROG_STL_ITEM_SUB_STLMENT表中的相应记录
         progStlItemSubStlmentService.deleteRecordByExample(progStlInfoPara.getStlPkid(), progStlInfoPara.getPeriodNo());
     }

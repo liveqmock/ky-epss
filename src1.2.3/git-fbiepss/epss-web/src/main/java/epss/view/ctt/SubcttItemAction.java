@@ -673,14 +673,14 @@ public class SubcttItemAction {
                     for (CttItem cttItemTemp : cttItemList) {
                         //甲供材、数量、安全措施费非零非空时等于1，否则等于0
                         if (!(cttItemTemp.getSignPartAPrice() == null)){
-                            if (!(cttItemTemp.getSignPartAPrice().equals(new BigDecimal(0)))){
+                            if (cttItemTemp.getSignPartAPrice().compareTo(new BigDecimal(0))!=0){
                                 checkPriceZero=1;
                             }
                         }else{
                                 checkPriceZero=0;
                         }
                         if (!(cttItemTemp.getContractQuantity() == null)){
-                            if (!(cttItemTemp.getContractQuantity().equals(new BigDecimal(0)))){
+                            if (cttItemTemp.getContractQuantity().compareTo(new BigDecimal(0))!=0){
                                 checkQuantiyZero=1;
                             }
                         }else{
@@ -688,7 +688,7 @@ public class SubcttItemAction {
                         }
                         if (("安全施工措施费率").equals(cttItemTemp.getName())){
                             if (!(cttItemTemp.getContractAmount()==null)){
-                                if (!(cttItemTemp.getContractAmount().equals(new BigDecimal(0)))){
+                                if (!(cttItemTemp.getContractAmount().compareTo(new BigDecimal(0))!=0){
                                     checkSecurityZero=1;
                                 }
                             }
