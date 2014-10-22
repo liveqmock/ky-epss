@@ -688,7 +688,7 @@ public class SubcttItemAction {
                         }
                         if (("安全施工措施费率").equals(cttItemTemp.getName())){
                             if (!(cttItemTemp.getContractAmount()==null)){
-                                if (!(cttItemTemp.getContractAmount().compareTo(new BigDecimal(0))!=0){
+                                if (cttItemTemp.getContractAmount().compareTo(new BigDecimal(0))!=0){
                                     checkSecurityZero=1;
                                 }
                             }
