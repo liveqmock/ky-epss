@@ -692,8 +692,6 @@ public class SubcttItemAction {
                                     checkSecurityZero=1;
                                 }
                             }
-                        }else{
-                            checkSecurityZero=0;
                         }
                     }
                     if (checkQuantiyZero==1&&checkPriceZero == 0&&checkSecurityZero==0) {
