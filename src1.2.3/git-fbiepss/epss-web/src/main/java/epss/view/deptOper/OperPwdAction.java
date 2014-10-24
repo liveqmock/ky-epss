@@ -39,7 +39,10 @@ public class OperPwdAction implements Serializable {
     private DeptOperService deptOperService;
 
     private Oper operUpd;
+    private String strPasswd;
+    private String strNewPasswd;
     private String strConfirmPasswd;
+
 
     @PostConstruct
     public void init() {
@@ -59,11 +62,7 @@ public class OperPwdAction implements Serializable {
             if (!submitOperPreCheck(operUpd)) {
                 return;
             }
-            if(!operUpd.getPasswd().equals(strConfirmPasswd)){
-                MessageUtil.addInfo("两次输入密码不相同，请重新输入！！");
-                return;
-            }
-            operUpd.setPasswd(MD5Helper.getMD5String(operUpd.getPasswd()));
+            operUpd.setPasswd(MD5Helper.getMD5String(strNewPasswd));
             deptOperService.updateOperRecord(operUpd);
             MessageUtil.addInfo("数据处理成功！");
         }catch (Exception e){
@@ -73,8 +72,24 @@ public class OperPwdAction implements Serializable {
     }
 
     private boolean submitOperPreCheck(Oper operPara) {
-        if (StringUtils.isEmpty(operPara.getPasswd())) {
-            MessageUtil.addInfo("请输入操作员密码！");
+        if (StringUtils.isEmpty(strPasswd)) {
+            MessageUtil.addInfo("请输入原密码！");
+            return false;
+        }
+        if (StringUtils.isEmpty(strNewPasswd)) {
+            MessageUtil.addInfo("请输入新密码！");
+            return false;
+        }
+        if (StringUtils.isEmpty(strConfirmPasswd)) {
+            MessageUtil.addInfo("请输入新密码确认！");
+            return false;
+        }
+        if(!operPara.getPasswd().equals(MD5Helper.getMD5String(strPasswd))){
+            MessageUtil.addInfo("原密码错误，请重新输入或联系管理员修改密码！！");
+            return false;
+        }
+        if(!strNewPasswd.equals(strConfirmPasswd)){
+            MessageUtil.addInfo("两次输入密码不相同，请重新输入！！");
             return false;
         }
         return true;
@@ -104,5 +119,21 @@ public class OperPwdAction implements Serializable {
 
     public void setStrConfirmPasswd(String strConfirmPasswd) {
         this.strConfirmPasswd = strConfirmPasswd;
+    }
+
+    public String getStrPasswd() {
+        return strPasswd;
+    }
+
+    public void setStrPasswd(String strPasswd) {
+        this.strPasswd = strPasswd;
+    }
+
+    public String getStrNewPasswd() {
+        return strNewPasswd;
+    }
+
+    public void setStrNewPasswd(String strNewPasswd) {
+        this.strNewPasswd = strNewPasswd;
     }
 }

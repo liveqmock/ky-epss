@@ -5,6 +5,7 @@ import epss.common.enums.EnumFlowStatus;
 import epss.common.enums.EnumFlowStatusReason;
 import epss.common.enums.EnumTaskDoneFlag;
 import epss.repository.dao.not_mybatis.MyTaskMapper;
+import epss.repository.model.ProgStlInfo;
 import epss.repository.model.model_show.TaskShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ import java.util.List;
 public class TaskService {
     @Autowired
     private MyTaskMapper myTaskMapper;
+    @Autowired
+    private ProgStlInfoService progStlInfoService;
 
     public List<TaskShow> getTaskFlowGroup() {
         return myTaskMapper.getTaskFlowGroup();
@@ -172,6 +175,20 @@ public class TaskService {
                             EnumFlowStatusReason.getValueByKey(detailTaskShowUnit.getFlowStatusReason()).getTitle());
                     if(detailTaskShowUnit.getOperResFlowStatus().equals(detailTaskShowUnit.getFlowStatus())) {
                         detailTaskShowUnit.setIsOwnTaskFlowFlag("true");
+                        if (EnumResType.RES_TYPE3.getCode().equals(detailTaskShowUnit.getType())
+                                ||EnumResType.RES_TYPE4.getCode().equals(detailTaskShowUnit.getType())){
+                            ProgStlInfo progStlInfoTemp=new ProgStlInfo();
+                            progStlInfoTemp.setStlType(EnumResType.RES_TYPE5.getCode());
+                            progStlInfoTemp.setStlPkid(detailTaskShowUnit.getStlPkid());
+                            progStlInfoTemp.setPeriodNo(detailTaskShowUnit.getPeriodNo());
+                            List<ProgStlInfo> progStlInfoListTemp= progStlInfoService.getInitStlListByModel(progStlInfoTemp);
+                            if (progStlInfoListTemp.size()!=0){
+                                if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(
+                                        ToolUtil.getStrIgnoreNull(progStlInfoListTemp.get(0).getFlowStatus()))<0){
+                                    detailTaskShowUnit.setIsOwnTaskFlowFlag("false");
+                                }
+                            }
+                        }
                     }else{
                         detailTaskShowUnit.setIsOwnTaskFlowFlag("false");
                     }

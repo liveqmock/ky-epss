@@ -139,52 +139,54 @@ public class DeptOperService {
     }
     public void updateOperRecord(Oper operPara){
         UploadedFile uploadedFile=operPara.getFile();
-        String strFileName = uploadedFile.getFileName();
-        if (!(StringUtils.isEmpty(strFileName))){
-            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
-            BufferedInputStream inputStream = null;
-            FileOutputStream fileOutputStream = null;
-            try {
-                File dirFile = new File(path);
-                if (!dirFile.exists()) {
-                    dirFile.mkdirs();
-                }
-                Oper operTemp=operMapper.selectByPrimaryKey(operPara.getPkid());
-                String strDbFileName=operTemp.getAttachment();
-                File file=null;
-                if (strDbFileName!=null){
-                    file = new File(dirFile, strDbFileName);
-                    if (file.exists()) {
-                        file.delete();
+        if (uploadedFile!=null){
+            String strFileName = uploadedFile.getFileName();
+            if (!(StringUtils.isEmpty(strFileName))){
+                String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
+                BufferedInputStream inputStream = null;
+                FileOutputStream fileOutputStream = null;
+                try {
+                    File dirFile = new File(path);
+                    if (!dirFile.exists()) {
+                        dirFile.mkdirs();
+                    }
+                    Oper operTemp=operMapper.selectByPrimaryKey(operPara.getPkid());
+                    String strDbFileName=operTemp.getAttachment();
+                    File file=null;
+                    if (strDbFileName!=null){
+                        file = new File(dirFile, strDbFileName);
+                        if (file.exists()) {
+                            file.delete();
+                        }
+                    }
+                    file = new File(dirFile, strFileName);
+                    inputStream = new BufferedInputStream(uploadedFile.getInputstream());
+                    fileOutputStream = new FileOutputStream(file);
+                    byte[] buf = new byte[1024];
+                    int num;
+                    while ((num = inputStream.read(buf)) != -1) {
+                        fileOutputStream.write(buf, 0, num);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    if (inputStream != null) {
+                        try {
+                            inputStream.close();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
+                    if (fileOutputStream != null) {
+                        try {
+                            fileOutputStream.close();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
                     }
                 }
-                file = new File(dirFile, strFileName);
-                inputStream = new BufferedInputStream(uploadedFile.getInputstream());
-                fileOutputStream = new FileOutputStream(file);
-                byte[] buf = new byte[1024];
-                int num;
-                while ((num = inputStream.read(buf)) != -1) {
-                    fileOutputStream.write(buf, 0, num);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                if (inputStream != null) {
-                    try {
-                        inputStream.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
-                if (fileOutputStream != null) {
-                    try {
-                        fileOutputStream.close();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                }
+                operPara.setAttachment(strFileName);
             }
-            operPara.setAttachment(strFileName);
         }
         operPara.setArchivedFlag("0");
         operPara.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());

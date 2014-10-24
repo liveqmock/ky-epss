@@ -124,6 +124,7 @@ public interface MyTaskMapper {
     @Select(" select" +
             "    type, " +
             "    pkid, " +
+			"    stlPkid,  " +
             "    id, " +
             "    name, " +
             "    max(operResFlowStatus) as operResFlowStatus, " +
@@ -137,6 +138,7 @@ public interface MyTaskMapper {
             "               distinct" +
             "               opr.INFO_TYPE as type," +
             "               opr.INFO_PKID as pkid," +
+            "               '' as stlPkid,    " +
             "               eci.ID as id," +
             "               eci.NAME as name," +
             "               opr.FLOW_STATUS as operResFlowStatus," +
@@ -164,6 +166,7 @@ public interface MyTaskMapper {
             "                distinct" +
             "                opr.INFO_TYPE as type," +
             "                stl.PKID as pkid," +
+            "                stl.STL_PKID as stlPkid,    " +
             "                stl.ID as id," +
             "                (select name from CTT_INFO where pkid=stl.stl_pkid) as name," +
             "                opr.FLOW_STATUS as operResFlowStatus," +
@@ -191,6 +194,7 @@ public interface MyTaskMapper {
             " group by" +
             "    type," +
             "    pkid," +
+			"    stlPkid,    " +
             "    id," +
             "    name," +
             "    periodNo," +

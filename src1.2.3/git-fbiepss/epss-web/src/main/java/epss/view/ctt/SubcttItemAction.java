@@ -667,61 +667,28 @@ public class SubcttItemAction {
                         MessageUtil.addInfo("无详细内容！");
                         return;
                     }
-                    int checkPriceZero = 0;
-                    int checkQuantiyZero=0;
-                    int checkSecurityZero=0;
                     for (CttItem cttItemTemp : cttItemList) {
-                        //甲供材、数量、安全措施费非零非空时等于1，否则等于0
-                        if (!(cttItemTemp.getSignPartAPrice() == null)){
+                        if (cttItemTemp.getSignPartAPrice() != null){
                             if (cttItemTemp.getSignPartAPrice().compareTo(new BigDecimal(0))!=0){
-                                checkPriceZero=1;
+                                if (cttItemTemp.getContractQuantity() != null){
+                                    if (cttItemTemp.getContractQuantity().compareTo(new BigDecimal(0))!=0){
+                                        cttInfo.setType(EnumSubcttType.TYPE3.getCode());
+                                        break;
+                                    }
+                                }else{
+                                    if (cttItemTemp.getContractQuantity().compareTo(new BigDecimal(0))!=0) {
+                                        cttInfo.setType(EnumSubcttType.TYPE1.getCode());
+                                        break;
+                                    }
+                                }
                             }
                         }else{
-                                checkPriceZero=0;
-                        }
-                        if (!(cttItemTemp.getContractQuantity() == null)){
-                            if (cttItemTemp.getContractQuantity().compareTo(new BigDecimal(0))!=0){
-                                checkQuantiyZero=1;
-                            }
-                        }else{
-                            checkQuantiyZero=0;
-                        }
-                        if (("安全施工措施费率").equals(cttItemTemp.getName())){
-                            if (!(cttItemTemp.getContractAmount()==null)){
-                                if (cttItemTemp.getContractAmount().compareTo(new BigDecimal(0))!=0){
-                                    checkSecurityZero=1;
+                            if (cttItemTemp.getContractQuantity() != null) {
+                                if (cttItemTemp.getContractQuantity().compareTo(new BigDecimal(0)) != 0) {
+                                    cttInfo.setType(EnumSubcttType.TYPE0.getCode());
                                 }
                             }
                         }
-                    }
-                    if (checkQuantiyZero==1&&checkPriceZero == 0&&checkSecurityZero==0) {
-                        cttInfo.setType("0");
-                        cttInfo.setPkid(cttInfo.getPkid());
-                        cttInfoService.updateByPKid(cttInfo);
-                    } else if (checkQuantiyZero==0&&checkPriceZero == 1&&checkSecurityZero==0){
-                        cttInfo.setType("1");
-                        cttInfo.setPkid(cttInfo.getPkid());
-                        cttInfoService.updateByPKid(cttInfo);
-                    } else if (checkQuantiyZero==0&&checkPriceZero == 0&&checkSecurityZero==1){
-                        cttInfo.setType("2");
-                        cttInfo.setPkid(cttInfo.getPkid());
-                        cttInfoService.updateByPKid(cttInfo);
-                    }else if (checkQuantiyZero==1&&checkPriceZero == 1&&checkSecurityZero==0){
-                        cttInfo.setType("3");
-                        cttInfo.setPkid(cttInfo.getPkid());
-                        cttInfoService.updateByPKid(cttInfo);
-                    }else if (checkQuantiyZero==1&&checkPriceZero == 0&&checkSecurityZero==1){
-                        cttInfo.setType("4");
-                        cttInfo.setPkid(cttInfo.getPkid());
-                        cttInfoService.updateByPKid(cttInfo);
-                    }else if (checkQuantiyZero==0&&checkPriceZero == 1&&checkSecurityZero==1){
-                        cttInfo.setType("5");
-                        cttInfo.setPkid(cttInfo.getPkid());
-                        cttInfoService.updateByPKid(cttInfo);
-                    }else if (checkQuantiyZero==1&&checkPriceZero == 1&&checkSecurityZero==1){
-                        cttInfo.setType("6");
-                        cttInfo.setPkid(cttInfo.getPkid());
-                        cttInfoService.updateByPKid(cttInfo);
                     }
                     // 状态标志：初始
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());

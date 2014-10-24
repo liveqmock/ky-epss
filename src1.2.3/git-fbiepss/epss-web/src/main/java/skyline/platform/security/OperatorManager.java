@@ -115,7 +115,7 @@ public class OperatorManager implements Serializable {
 
             Dept ptpdet = new Dept();
             oper.setDept((Dept) ptpdet
-                    .findFirstByWhere("where id='" + oper.getDeptPkid() + "'"));
+                    .findFirstByWhere("where pkid='" + oper.getDeptPkid() + "'"));
             isLogin = true;
             // ≥ı ºªØ≤Àµ•°£
             try {

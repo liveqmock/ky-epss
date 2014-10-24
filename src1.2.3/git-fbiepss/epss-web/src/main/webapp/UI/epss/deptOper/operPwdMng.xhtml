@@ -32,11 +32,14 @@
                         <p:inputText id="operNameForOperUpd" value="#{operPwdAction.operUpd.name}"
                                      readonly="true"
                                      style="background-color:gainsboro;"/>
-                        <p:outputLabel value="操作员密码*：" for="operPasswdForOperUpd"/>
+                        <p:outputLabel value="原密码*：" for="operPasswdForOperUpd"/>
                         <p:inputText id="operPasswdForOperUpd" type="password"
-                                     value="#{operPwdAction.operUpd.passwd}"/>
-                        <p:outputLabel value="密码确认*：" for="operRePasswdForOperUpd"/>
-                        <p:inputText id="operRePasswdForOperUpd" type="password"
+                                     value="#{operPwdAction.strPasswd}"/>
+                        <p:outputLabel value="新密码*：" for="operNewPasswdForOperUpd"/>
+                        <p:inputText id="operNewPasswdForOperUpd" type="password"
+                                     value="#{operPwdAction.strNewPasswd}"/>
+                        <p:outputLabel value="新密码确认*：" for="operReNewPasswdForOperUpd"/>
+                        <p:inputText id="operReNewPasswdForOperUpd" type="password"
                                      value="#{operPwdAction.strConfirmPasswd}"/>
                     </h:panelGrid>
                     <h:panelGrid id="pgOperBtnForOperUpd" columns="2">
