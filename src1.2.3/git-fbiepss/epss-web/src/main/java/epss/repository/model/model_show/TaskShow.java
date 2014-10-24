@@ -3,6 +3,7 @@ package epss.repository.model.model_show;
 public class TaskShow {
     private String type;
     private String pkid;
+    private String stlPkid;
     private String id;
     private String name;
     private String periodNo;
@@ -135,5 +136,13 @@ public class TaskShow {
 
     public void setTaskDoneFlagName(String taskDoneFlagName) {
         this.taskDoneFlagName = taskDoneFlagName;
+    }
+
+    public String getStlPkid() {
+        return stlPkid;
+    }
+
+    public void setStlPkid(String stlPkid) {
+        this.stlPkid = stlPkid;
     }
 }
