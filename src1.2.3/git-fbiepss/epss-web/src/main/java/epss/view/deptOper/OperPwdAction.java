@@ -43,7 +43,6 @@ public class OperPwdAction implements Serializable {
     private String strNewPasswd;
     private String strConfirmPasswd;
 
-
     @PostConstruct
     public void init() {
         operUpd = new Oper();

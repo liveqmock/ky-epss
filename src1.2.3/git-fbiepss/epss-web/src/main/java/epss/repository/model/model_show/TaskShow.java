@@ -6,6 +6,7 @@ public class TaskShow {
     private String stlPkid;
     private String id;
     private String name;
+    private String signPartBName;
     private String periodNo;
     private String flowStatus;
     private String flowStatusName;
@@ -48,6 +49,14 @@ public class TaskShow {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSignPartBName() {
+        return signPartBName;
+    }
+
+    public void setSignPartBName(String signPartBName) {
+        this.signPartBName = signPartBName;
     }
 
     public String getPeriodNo() {

@@ -44,16 +44,18 @@ public interface MyTaskMapper {
             "           DISTINCT" +
             "           opr.PKID," +
             "           opr.INFO_TYPE as type," +
-            "           eci.ID," +
-            "           eci.NAME," +
+            "           ci.ID," +
+            "           ci.NAME," +
             "           opr.FLOW_STATUS as flowStatus," +
             "           opr.TASKDONE_FLAG as taskDoneFlag" +
             "      FROM" +
             "           OPER_RES opr" +
             "      INNER JOIN" +
-            "           CTT_INFO eci" +
+            "           CTT_INFO ci" +
             "      ON" +
-            "           opr.INFO_PKID=eci.PKID" +
+            "           ci.PKID=opr.INFO_PKID" +
+            "      AND " +
+            "           ci.flow_status='3'" +
             "      where" +
             "           opr.OPER_PKID=#{strOperPkid}" +
             "      and" +
@@ -72,21 +74,26 @@ public interface MyTaskMapper {
             "        select" +
             "            distinct" +
             "            opr.INFO_TYPE as type," +
-            "            eci.PKID as pkid," +
+            "            ci.PKID as pkid," +
             "            opr.FLOW_STATUS as operResFlowStatus," +
-            "            eci.ID as id," +
-            "            eci.NAME as name," +
+            "            ci.ID as id," +
+            "            ci.NAME as name," +
+            "            sp.NAME as signPartBName," +
             "            '' as periodNo," +
-            "            eci.FLOW_STATUS as flowStatus," +
-            "            eci.FLOW_STATUS_REASON as flowStatusReason" +
+            "            ci.FLOW_STATUS as flowStatus," +
+            "            ci.FLOW_STATUS_REASON as flowStatusReason" +
             "        from" +
             "            OPER_RES opr" +
             "        inner join  " +
-            "            CTT_INFO eci" +
+            "            CTT_INFO ci" +
             "        on" +
-            "            opr.INFO_TYPE=eci.CTT_TYPE" +
+            "            opr.INFO_TYPE=ci.CTT_TYPE" +
             "        and" +
-            "            opr.INFO_PKID=eci.PKID" +
+            "            opr.INFO_PKID=ci.PKID" +
+            "        left join" +
+            "            SIGN_PART sp" +
+            "        on" +
+            "            sp.PKID=ci.SIGN_PART_B" +
             "        where" +
             "            opr.OPER_PKID=#{strOperPkid}" +
             "        and" +
@@ -100,7 +107,8 @@ public interface MyTaskMapper {
             "             stl.PKID as pkid," +
             "             opr.FLOW_STATUS as operResFlowStatus," +
             "             stl.ID as id," +
-            "             (select name from CTT_INFO where pkid=stl.stl_pkid) as name," +
+            "             ci.name as name," +
+            "             sp.name as signPartBName," +
             "             stl.PERIOD_NO as periodNo," +
             "             stl.FLOW_STATUS as flowStatus," +
             "             stl.FLOW_STATUS_REASON as flowStatusReason" +
@@ -112,6 +120,14 @@ public interface MyTaskMapper {
             "             opr.INFO_TYPE=stl.stl_type" +
             "         and" +
             "             opr.INFO_PKID=stl.stl_pkid" +
+                    "  inner join " +
+                    "      CTT_INFO ci" +
+                    "  on" +
+                    "      ci.PKID=stl.STL_PKID" +
+                    "  left join " +
+                    "      SIGN_PART sp " +
+                    "  on " +
+                    "      sp.PKID=ci.SIGN_PART_B" +
             "         where  " +
             "             opr.OPER_PKID=#{strOperPkid}" +
             "         and" +
@@ -124,9 +140,9 @@ public interface MyTaskMapper {
     @Select(" select" +
             "    type, " +
             "    pkid, " +
-			"    stlPkid,  " +
             "    id, " +
             "    name, " +
+            "    signPartBName£¬" +
             "    max(operResFlowStatus) as operResFlowStatus, " +
             "    periodNo, " +
             "    flowStatus, " +
@@ -138,25 +154,29 @@ public interface MyTaskMapper {
             "               distinct" +
             "               opr.INFO_TYPE as type," +
             "               opr.INFO_PKID as pkid," +
-            "               '' as stlPkid,    " +
-            "               eci.ID as id," +
-            "               eci.NAME as name," +
+            "               ci.ID as id," +
+            "               ci.NAME as name," +
+            "               sp.NAME as signPartBName," +
             "               opr.FLOW_STATUS as operResFlowStatus," +
             "               '' as periodNo," +
-            "               eci.FLOW_STATUS as flowStatus," +
-            "               eci.FLOW_STATUS_REASON as flowStatusReason" +
+            "               ci.FLOW_STATUS as flowStatus," +
+            "               ci.FLOW_STATUS_REASON as flowStatusReason" +
             "           from" +
             "               OPER_RES opr" +
             "           inner join  " +
-            "               CTT_INFO eci" +
+            "               CTT_INFO ci" +
             "           on" +
-            "               opr.INFO_TYPE=eci.CTT_TYPE" +
+            "               opr.INFO_TYPE=ci.CTT_TYPE" +
             "           and" +
-            "               opr.INFO_PKID=eci.PKID" +
+            "               opr.INFO_PKID=ci.PKID" +
+            "           left join" +
+            "               SIGN_PART sp" +
+            "           on" +
+            "               sp.PKID=ci.SIGN_PART_B" +
             "           where" +
             "               opr.OPER_PKID=#{strOperPkid}" +
             "           and" +
-            "               eci.FLOW_STATUS is not null" +
+            "               ci.FLOW_STATUS is not null" +
             "           and" +
             "               opr.TYPE='business'" +
             "        ) " +
@@ -168,7 +188,8 @@ public interface MyTaskMapper {
             "                stl.PKID as pkid," +
             "                stl.STL_PKID as stlPkid,    " +
             "                stl.ID as id," +
-            "                (select name from CTT_INFO where pkid=stl.stl_pkid) as name," +
+            "                ci.name as name," +
+            "                sp.name as signPartBName," +
             "                opr.FLOW_STATUS as operResFlowStatus," +
             "                stl.PERIOD_NO as periodNo," +
             "                stl.FLOW_STATUS as flowStatus," +
@@ -181,6 +202,14 @@ public interface MyTaskMapper {
             "                opr.INFO_TYPE=stl.stl_type" +
             "            and" +
             "                opr.INFO_PKID=stl.stl_pkid" +
+            "            inner join " +
+            "                CTT_INFO ci" +
+            "            on" +
+            "                ci.PKID=stl.STL_PKID" +
+            "            left join " +
+            "                SIGN_PART sp " +
+            "            on " +
+            "                sp.PKID=ci.SIGN_PART_B" +
             "            where  " +
             "                opr.OPER_PKID=#{strOperPkid}" +
             "            and" +
@@ -197,6 +226,7 @@ public interface MyTaskMapper {
 			"    stlPkid,    " +
             "    id," +
             "    name," +
+            "    signPartBName," +
             "    periodNo," +
             "    flowStatus," +
             "    flowStatusReason" +
