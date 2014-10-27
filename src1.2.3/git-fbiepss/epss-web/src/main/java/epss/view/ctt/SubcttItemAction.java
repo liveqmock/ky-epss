@@ -667,28 +667,24 @@ public class SubcttItemAction {
                         MessageUtil.addInfo("无详细内容！");
                         return;
                     }
+                    int checkQZero=0;
+                    int checkMZero=0;
                     for (CttItem cttItemTemp : cttItemList) {
-                        if (cttItemTemp.getSignPartAPrice() != null){
-                            if (cttItemTemp.getSignPartAPrice().compareTo(new BigDecimal(0))!=0){
-                                if (cttItemTemp.getContractQuantity() != null){
-                                    if (cttItemTemp.getContractQuantity().compareTo(new BigDecimal(0))!=0){
-                                        cttInfo.setType(EnumSubcttType.TYPE3.getCode());
-                                        break;
-                                    }
-                                }else{
-                                    if (cttItemTemp.getContractQuantity().compareTo(new BigDecimal(0))!=0) {
-                                        cttInfo.setType(EnumSubcttType.TYPE1.getCode());
-                                        break;
-                                    }
-                                }
-                            }
-                        }else{
-                            if (cttItemTemp.getContractQuantity() != null) {
-                                if (cttItemTemp.getContractQuantity().compareTo(new BigDecimal(0)) != 0) {
-                                    cttInfo.setType(EnumSubcttType.TYPE0.getCode());
-                                }
-                            }
+                        if (ToolUtil.bigDecimal0.compareTo(ToolUtil.getBdIgnoreNull(cttItemTemp.getSignPartAPrice()))!=0){
+                                checkMZero=1;
                         }
+                        if (ToolUtil.bigDecimal0.compareTo(ToolUtil.getBdIgnoreNull(cttItemTemp.getContractQuantity()))!=0){
+                                checkQZero=1;
+                        }
+                    }
+                    if(checkQZero==1&&checkMZero==0){
+                        cttInfo.setType(EnumSubcttType.TYPE0.getCode());
+                    }
+                    if(checkQZero==0&&checkMZero==1){
+                        cttInfo.setType(EnumSubcttType.TYPE1.getCode());
+                    }
+                    if(checkQZero==1&&checkMZero==1){
+                        cttInfo.setType(EnumSubcttType.TYPE3.getCode());
                     }
                     // 状态标志：初始
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
