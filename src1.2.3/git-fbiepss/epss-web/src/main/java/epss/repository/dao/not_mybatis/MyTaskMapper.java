@@ -140,9 +140,10 @@ public interface MyTaskMapper {
     @Select(" select" +
             "    type, " +
             "    pkid, " +
+            "    stlPkid," +
             "    id, " +
             "    name, " +
-            "    signPartBName£¬" +
+            "    signPartBName," +
             "    max(operResFlowStatus) as operResFlowStatus, " +
             "    periodNo, " +
             "    flowStatus, " +
@@ -154,6 +155,7 @@ public interface MyTaskMapper {
             "               distinct" +
             "               opr.INFO_TYPE as type," +
             "               opr.INFO_PKID as pkid," +
+            "               '' as stlPkid," +
             "               ci.ID as id," +
             "               ci.NAME as name," +
             "               sp.NAME as signPartBName," +
@@ -223,7 +225,7 @@ public interface MyTaskMapper {
             " group by" +
             "    type," +
             "    pkid," +
-			"    stlPkid,    " +
+			"    stlPkid," +
             "    id," +
             "    name," +
             "    signPartBName," +

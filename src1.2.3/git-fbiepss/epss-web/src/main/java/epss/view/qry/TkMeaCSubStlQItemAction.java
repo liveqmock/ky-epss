@@ -277,7 +277,8 @@ public class TkMeaCSubStlQItemAction {
             }
 
             // 4。分包结算
-            List<QryTkMeaCSStlQShow> subcttStlQBySignPartList=esQueryService.getCSStlQBySignPartList(esCstplInfo.getPkid(), strPeriodNo);
+            List<QryTkMeaCSStlQShow> subcttStlQBySignPartList=
+                    esQueryService.getCSStlQBySignPartList(esCstplInfo.getPkid(), strPeriodNo);
 
             // 根据成本计划项插接分包合同项
             List<QryTkMeaCSStlQShow> qryTkMeaCSStlQShowListTemp=new ArrayList<>();
@@ -385,8 +386,10 @@ public class TkMeaCSubStlQItemAction {
             // 将分析活动数据装填到Excel中
             qryTkMeaCSStlQShowListForExcel =new ArrayList<QryTkMeaCSStlQShow>();
             for(QryTkMeaCSStlQShow itemOfEsItemHieRelapTkctt: qryTkMeaCSStlQShowList){
-                QryTkMeaCSStlQShow itemOfEsItemHieRelapTkcttTemp= (QryTkMeaCSStlQShow) BeanUtils.cloneBean(itemOfEsItemHieRelapTkctt);
-                itemOfEsItemHieRelapTkcttTemp.setTkcttItem_No(ToolUtil.getIgnoreSpaceOfStr(itemOfEsItemHieRelapTkcttTemp.getTkcttItem_No()));
+                QryTkMeaCSStlQShow itemOfEsItemHieRelapTkcttTemp=
+                        (QryTkMeaCSStlQShow) BeanUtils.cloneBean(itemOfEsItemHieRelapTkctt);
+                itemOfEsItemHieRelapTkcttTemp.setTkcttItem_No(
+                        ToolUtil.getIgnoreSpaceOfStr(itemOfEsItemHieRelapTkcttTemp.getTkcttItem_No()));
                 qryTkMeaCSStlQShowListForExcel.add(itemOfEsItemHieRelapTkcttTemp);
             }
         } catch (Exception e) {
