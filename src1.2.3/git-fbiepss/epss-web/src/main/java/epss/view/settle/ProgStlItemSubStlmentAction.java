@@ -319,7 +319,6 @@ public class ProgStlItemSubStlmentAction {
                     }
                 } else {
                     progStlItemSubQTemp = progStlItemSubQList.get(0);
-                    itemUnit.setSubctt_ItemPkid(progStlItemSubQTemp.getPkid());
                     itemUnit.setEngPMng_BeginToCurrentPeriodEQty(progStlItemSubQTemp.getBeginToCurrentPeriodEQty());
                     itemUnit.setEngPMng_CurrentPeriodEQty(progStlItemSubQTemp.getCurrentPeriodEQty());
 
@@ -394,7 +393,6 @@ public class ProgStlItemSubStlmentAction {
                     }
                 } else {
                     progStlItemSubM = progStlItemSubMList.get(0);
-                    itemUnit.setSubctt_ItemPkid(progStlItemSubM.getPkid());
                     itemUnit.setSubctt_ContractUnitPrice(itemUnit.getSubctt_SignPartAPrice());
                     itemUnit.setEngPMng_BeginToCurrentPeriodEQty(progStlItemSubM.getBeginToCurrentPeriodMQty());
                     itemUnit.setEngPMng_CurrentPeriodEQty(progStlItemSubM.getCurrentPeriodMQty());
