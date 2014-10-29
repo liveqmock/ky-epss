@@ -149,6 +149,18 @@ public class TkMeaCSubStlQItemAction {
         /*拼装列表*/
         try {
             qryTkMeaCSStlQShowList =new ArrayList<QryTkMeaCSStlQShow>();
+            QryTkMeaCSStlQShow qryTkMeaCSStlQShowForTotalAmtOfAllItem=new QryTkMeaCSStlQShow();
+            BigDecimal tkcttItem_CttAmt_TotalAmtOfAllItem=new BigDecimal(0);
+            BigDecimal tkcttStlItem_ThisStageAmt_TotalAmtOfAllItem=new BigDecimal(0);
+            BigDecimal tkcttStlItem_AddUpAmt__TotalAmtOfAllItem=new BigDecimal(0);
+            BigDecimal cstplItem_Amt_TotalAmtOfAllItem=new BigDecimal(0);
+            BigDecimal cstplTkcttItem_TotalAmt_TotalAmtOfAllItem=new BigDecimal(0);
+            BigDecimal tkcttStlCstplItem_ThisStageAmt_TotalAmtOfAllItem=new BigDecimal(0);
+            BigDecimal tkcttStlCstplItem_AddUpAmt_TotalAmtOfAllItem=new BigDecimal(0);
+            BigDecimal subcttStlItem_ThisStageAmt_TotalAmtOfAllItem=new BigDecimal(0);
+            BigDecimal subcttStlItem_AddUpAmt_TotalAmtOfAllItem=new BigDecimal(0);
+            BigDecimal meaSItem_AddUpAmt_TotalAmtOfAllItem=new BigDecimal(0);
+            BigDecimal meaSCstplItem_AddUpAmt_TotalAmtOfAllItem=new BigDecimal(0);
             for(CttItemShow tkcttItemShowUnit : tkcttItemShowList){
                 Boolean insertedFlag=false ;
                 QryTkMeaCSStlQShow qryTkMeaCSStlQShowTemp =new QryTkMeaCSStlQShow();
@@ -165,6 +177,8 @@ public class TkMeaCSubStlQItemAction {
                         tkcttItemShowUnit.getContractQuantity()!=null) {
                     qryTkMeaCSStlQShowTemp.setTkcttItem_CttAmt(
                             tkcttItemShowUnit.getContractUnitPrice().multiply(tkcttItemShowUnit.getContractQuantity()));
+                    tkcttItem_CttAmt_TotalAmtOfAllItem=tkcttItem_CttAmt_TotalAmtOfAllItem.add(
+                            qryTkMeaCSStlQShowTemp.getTkcttItem_CttAmt());
                 }
                 // 计量
                 for(ProgStlItemTkMea progStlItemTkMea : progStlItemTkMeaList){
@@ -179,9 +193,11 @@ public class TkMeaCSubStlQItemAction {
                         // 当期计量数量和金额
                         qryTkMeaCSStlQShowTemp.setTkcttStlItem_ThisStageQty(bdTkcttStlCMeaQty);
                         qryTkMeaCSStlQShowTemp.setTkcttStlItem_ThisStageAmt(bdTkcttStlCMeaAmount);
+                        tkcttStlItem_ThisStageAmt_TotalAmtOfAllItem=tkcttStlItem_ThisStageAmt_TotalAmtOfAllItem.add(bdTkcttStlCMeaAmount);
                         // 开累计量数量和金额
                         qryTkMeaCSStlQShowTemp.setTkcttStlItem_AddUpQty(bdTkcttStlBToCMeaQuantity);
                         qryTkMeaCSStlQShowTemp.setTkcttStlItem_AddUpAmt(bdTkcttStlBToCMeaAmount);
+                        tkcttStlItem_AddUpAmt__TotalAmtOfAllItem=tkcttStlItem_AddUpAmt__TotalAmtOfAllItem.add(bdTkcttStlBToCMeaAmount);
                         break;
                     }
                 }
@@ -217,6 +233,7 @@ public class TkMeaCSubStlQItemAction {
                         }
                         if(tkMeaCstplUnitTemp.getCstplItem_Amt()!=null) {
                             bdCstplTkcttItem_TotalAmt=bdCstplTkcttItem_TotalAmt.add(tkMeaCstplUnitTemp.getCstplItem_Amt()) ;
+                            cstplItem_Amt_TotalAmtOfAllItem=cstplItem_Amt_TotalAmtOfAllItem.add(tkMeaCstplUnitTemp.getCstplItem_Amt());
                         }
                         qryTkMeaCSStlQShowList.add(tkMeaCstplUnitTemp);
                     }
@@ -228,6 +245,8 @@ public class TkMeaCSubStlQItemAction {
 
                 if(bdCstplTkcttItem_TotalAmt.compareTo(new BigDecimal(0))>0) {
                     qryTkMeaCSStlQShowList.get(qryTkMeaCSStlQShowList.size()-1).setCstplTkcttItem_TotalAmt(bdCstplTkcttItem_TotalAmt);
+                    cstplTkcttItem_TotalAmt_TotalAmtOfAllItem=cstplTkcttItem_TotalAmt_TotalAmtOfAllItem.add(
+                            qryTkMeaCSStlQShowList.get(qryTkMeaCSStlQShowList.size()-1).getCstplTkcttItem_TotalAmt());
                     if(ToolUtil.getBdIgnoreNull(tkcttItemShowUnit.getContractQuantity()).compareTo(ToolUtil.bigDecimal0)>0) {
                         // 算出机量产值单价
                         BigDecimal bdCstplTkcttItem_TotalUnitPrice=
@@ -239,10 +258,14 @@ public class TkMeaCSubStlQItemAction {
                                 if(qryTkMeaCSStlQShowList.get(i).getTkcttStlItem_ThisStageQty()!=null) {
                                     qryTkMeaCSStlQShowList.get(i).setTkcttStlCstplItem_ThisStageAmt(
                                             bdCstplTkcttItem_TotalUnitPrice.multiply(qryTkMeaCSStlQShowList.get(i).getTkcttStlItem_ThisStageQty()));
+                                    tkcttStlCstplItem_ThisStageAmt_TotalAmtOfAllItem=tkcttStlCstplItem_ThisStageAmt_TotalAmtOfAllItem.add(
+                                            qryTkMeaCSStlQShowList.get(i).getTkcttStlCstplItem_ThisStageAmt());
                                 }
                                 if(qryTkMeaCSStlQShowList.get(i).getTkcttStlItem_AddUpQty()!=null) {
                                     qryTkMeaCSStlQShowList.get(i).setTkcttStlCstplItem_AddUpAmt(
                                             bdCstplTkcttItem_TotalUnitPrice.multiply(qryTkMeaCSStlQShowList.get(i).getTkcttStlItem_AddUpQty()));
+                                    tkcttStlCstplItem_AddUpAmt_TotalAmtOfAllItem=tkcttStlCstplItem_AddUpAmt_TotalAmtOfAllItem.add(
+                                            qryTkMeaCSStlQShowList.get(i).getTkcttStlCstplItem_AddUpAmt());
                                 }
                                 break;
                             }
@@ -272,6 +295,8 @@ public class TkMeaCSubStlQItemAction {
                                     cstplItemShowUnit.getContractUnitPrice().multiply(cstplItemShowUnit.getContractQuantity()));
                         }
                     }
+                    cstplItem_Amt_TotalAmtOfAllItem=cstplItem_Amt_TotalAmtOfAllItem.add(
+                            qryTkMeaCSStlQShowTempRe.getCstplItem_Amt());
                     qryTkMeaCSStlQShowList.add(qryTkMeaCSStlQShowTempRe);
                 }
             }
@@ -342,8 +367,12 @@ public class TkMeaCSubStlQItemAction {
                         // 分包结算
                         tkMeaCstplUnitTemp.setSubcttStlItem_ThisStageQty(bdThisStageQty);
                         tkMeaCstplUnitTemp.setSubcttStlItem_ThisStageAmt(bdThisStageAmt);
+                        subcttStlItem_ThisStageAmt_TotalAmtOfAllItem=subcttStlItem_ThisStageAmt_TotalAmtOfAllItem.add(
+                                tkMeaCstplUnitTemp.getSubcttStlItem_ThisStageAmt());
                         tkMeaCstplUnitTemp.setSubcttStlItem_AddUpQty(bdAddUpToQty);
                         tkMeaCstplUnitTemp.setSubcttStlItem_AddUpAmt(bdAddUpToAmt);
+                        subcttStlItem_AddUpAmt_TotalAmtOfAllItem=subcttStlItem_AddUpAmt_TotalAmtOfAllItem.add(
+                                tkMeaCstplUnitTemp.getSubcttStlItem_AddUpAmt());
 
                         // 最后一项之前的项
                         if(i<subcttStlQBySignPartList.size()-1){
@@ -361,6 +390,10 @@ public class TkMeaCSubStlQItemAction {
                                 tkMeaCstplUnitTemp.setMeaSCstplItem_AddUpAmt(
                                         ToolUtil.getBdIgnoreNull(bdTkcttStlCstplBToCMeaAmt).subtract(bdSubcttCttAmtTotal));
                                 qryTkMeaCSStlQShowList.add(tkMeaCstplUnitTemp);
+                                meaSItem_AddUpAmt_TotalAmtOfAllItem=meaSItem_AddUpAmt_TotalAmtOfAllItem.add(
+                                        ToolUtil.getBdIgnoreNull(tkMeaCstplUnitTemp.getMeaSItem_AddUpAmt()));
+                                meaSCstplItem_AddUpAmt_TotalAmtOfAllItem=meaSCstplItem_AddUpAmt_TotalAmtOfAllItem.add(
+                                        ToolUtil.getBdIgnoreNull(tkMeaCstplUnitTemp.getMeaSCstplItem_AddUpAmt()));
                                 break;
                             }
                         }else{
@@ -372,6 +405,10 @@ public class TkMeaCSubStlQItemAction {
                             tkMeaCstplUnitTemp.setMeaSCstplItem_AddUpAmt(
                                     bdTkcttStlCstplBToCMeaAmt.subtract(bdSubcttCttAmtTotal));
                             qryTkMeaCSStlQShowList.add(tkMeaCstplUnitTemp);
+                            meaSItem_AddUpAmt_TotalAmtOfAllItem=meaSItem_AddUpAmt_TotalAmtOfAllItem.add(
+                                    ToolUtil.getBdIgnoreNull(tkMeaCstplUnitTemp.getMeaSItem_AddUpAmt()));
+                            meaSCstplItem_AddUpAmt_TotalAmtOfAllItem=meaSCstplItem_AddUpAmt_TotalAmtOfAllItem.add(
+                                    ToolUtil.getBdIgnoreNull(tkMeaCstplUnitTemp.getMeaSCstplItem_AddUpAmt()));
                         }
                     }
                 }
@@ -381,8 +418,25 @@ public class TkMeaCSubStlQItemAction {
                     tkMeaCstplUnit.setMeaSItem_AddUpAmt(tkMeaCstplUnit.getTkcttStlItem_AddUpAmt());
                     tkMeaCstplUnit.setMeaSCstplItem_AddUpAmt(tkMeaCstplUnit.getTkcttStlCstplItem_AddUpAmt());
                     qryTkMeaCSStlQShowList.add(tkMeaCstplUnit);
+                    meaSItem_AddUpAmt_TotalAmtOfAllItem=meaSItem_AddUpAmt_TotalAmtOfAllItem.add(
+                            ToolUtil.getBdIgnoreNull(tkMeaCstplUnit.getMeaSItem_AddUpAmt()));
+                    meaSCstplItem_AddUpAmt_TotalAmtOfAllItem=meaSCstplItem_AddUpAmt_TotalAmtOfAllItem.add(
+                            ToolUtil.getBdIgnoreNull(tkMeaCstplUnit.getMeaSCstplItem_AddUpAmt()));
                 }
             }
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setTkcttItem_Name("合计");
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setTkcttItem_CttAmt(tkcttItem_CttAmt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setTkcttStlItem_ThisStageAmt(tkcttStlItem_ThisStageAmt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setTkcttStlItem_AddUpAmt(tkcttStlItem_AddUpAmt__TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setCstplItem_Amt(cstplItem_Amt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setCstplTkcttItem_TotalAmt(cstplTkcttItem_TotalAmt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setTkcttStlCstplItem_ThisStageAmt(tkcttStlCstplItem_ThisStageAmt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setTkcttStlCstplItem_AddUpAmt(tkcttStlCstplItem_AddUpAmt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setSubcttStlItem_ThisStageAmt(subcttStlItem_ThisStageAmt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setSubcttStlItem_AddUpAmt(subcttStlItem_AddUpAmt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setMeaSItem_AddUpAmt(meaSItem_AddUpAmt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setMeaSCstplItem_AddUpAmt(meaSCstplItem_AddUpAmt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowList.add(qryTkMeaCSStlQShowForTotalAmtOfAllItem);
             // 将分析活动数据装填到Excel中
             qryTkMeaCSStlQShowListForExcel =new ArrayList<QryTkMeaCSStlQShow>();
             for(QryTkMeaCSStlQShow itemOfEsItemHieRelapTkctt: qryTkMeaCSStlQShowList){
