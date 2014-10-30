@@ -58,15 +58,7 @@ public class JxlsManager {
                 response.setContentType("application/msexcel");
                 wb.write(os);
             } else {//结算单上实现签名图片功能，图片的位置取决于beansMap.size()及表头所占的列数
-                ByteArrayOutputStream byteArrayOutputStreamTempQMng = new ByteArrayOutputStream();
-                ByteArrayOutputStream byteArrayOutputStreamTempQCheck = new ByteArrayOutputStream();
-                ByteArrayOutputStream byteArrayOutputStreamTempQDoubleCheck = new ByteArrayOutputStream();
-                ByteArrayOutputStream byteArrayOutputStreamTempMMng = new ByteArrayOutputStream();
-                ByteArrayOutputStream byteArrayOutputStreamTempMCheck = new ByteArrayOutputStream();
-                ByteArrayOutputStream byteArrayOutputStreamTempMDoubleCheck = new ByteArrayOutputStream();
-                ByteArrayOutputStream byteArrayOutputStreamTempPApprove = new ByteArrayOutputStream();
-                ByteArrayOutputStream byteArrayOutputStreamTempPAct = new ByteArrayOutputStream();
-                ByteArrayOutputStream byteArrayOutputStreamTempPFile = new ByteArrayOutputStream();
+                ByteArrayOutputStream byteArrayOutputStreamTemp = null;
                 String imagPath = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/operPicture");
                 // 记账
                 if (templateFileName.contains("progStlItemSubStlmentAccount.xls")) {
@@ -75,103 +67,104 @@ public class JxlsManager {
                     is = new BufferedInputStream(new FileInputStream(templateFileName));
                     HSSFWorkbook wb = (HSSFWorkbook) transformer.transformXLS(is, beansMap);
                     HSSFSheet sheet1 = wb.getSheet("Sheet0");
+                    HSSFPatriarch patriarch = sheet1.createDrawingPatriarch();
                     if (beansMap.get("qMngImagName") != null) {
-                        BufferedImage bufferedImageTempQMng = getImg(imagPath, String.valueOf(beansMap.get("qMngImagName")));
-                        if(bufferedImageTempQMng!=null) {
-                            ImageIO.write(bufferedImageTempQMng, "jpg", byteArrayOutputStreamTempQMng);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("qMngImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQMng =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 9, (short) 5, rowNum + 10);
-                            HSSFPatriarch patriarchQMng = sheet1.createDrawingPatriarch();
-                            patriarchQMng.createPicture(anchorQMng,
-                                    wb.addPicture(byteArrayOutputStreamTempQMng.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorQMng,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("qCheckImagName") != null) {
-                        BufferedImage bufferedImageTempQCheck = getImg(imagPath, String.valueOf(beansMap.get("qCheckImagName")));
-                        if(bufferedImageTempQCheck!=null) {
-                            ImageIO.write(bufferedImageTempQCheck, "jpg", byteArrayOutputStreamTempQCheck);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("qCheckImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQCheck =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 10, (short) 5, rowNum + 11);
-                            HSSFPatriarch patriarchQCheck = sheet1.createDrawingPatriarch();
-                            patriarchQCheck.createPicture(anchorQCheck,
-                                    wb.addPicture(byteArrayOutputStreamTempQCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorQCheck,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("qDoubleCheckImagName") != null) {
-                        BufferedImage bufferedImageTempQDoubleCheck = getImg(imagPath, String.valueOf(beansMap.get("qDoubleCheckImagName")));
-                        if(bufferedImageTempQDoubleCheck!=null) {
-                            ImageIO.write(bufferedImageTempQDoubleCheck, "jpg", byteArrayOutputStreamTempQDoubleCheck);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("qDoubleCheckImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQDoubleCheck =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 11, (short) 5, rowNum + 12);
-                            HSSFPatriarch patriarchQDoubleCheck = sheet1.createDrawingPatriarch();
-                            patriarchQDoubleCheck.createPicture(anchorQDoubleCheck,
-                                    wb.addPicture(byteArrayOutputStreamTempQDoubleCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorQDoubleCheck,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("mMngImagName") != null) {
-                        BufferedImage bufferedImageTempMMng = getImg(imagPath, String.valueOf(beansMap.get("mMngImagName")));
-                        if(bufferedImageTempMMng!=null) {
-                            ImageIO.write(bufferedImageTempMMng, "jpg", byteArrayOutputStreamTempMMng);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("mMngImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMMng =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 9, (short) 10, rowNum + 10);
-                            HSSFPatriarch patriarchMMng = sheet1.createDrawingPatriarch();
-                            patriarchMMng.createPicture(anchorMMng,
-                                    wb.addPicture(byteArrayOutputStreamTempMMng.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorMMng,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("mCheckImagName") != null) {
-                        BufferedImage bufferedImageTempMCheck = getImg(imagPath, String.valueOf(beansMap.get("mCheckImagName")));
-                        if(bufferedImageTempMCheck!=null) {
-                            ImageIO.write(bufferedImageTempMCheck, "jpg", byteArrayOutputStreamTempMCheck);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("mCheckImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMCheck =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 10, (short) 10, rowNum + 11);
-                            HSSFPatriarch patriarchMCheck = sheet1.createDrawingPatriarch();
-                            patriarchMCheck.createPicture(anchorMCheck,
-                                    wb.addPicture(byteArrayOutputStreamTempMCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorMCheck,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("mDoubleCheckImagName") != null) {
-                        BufferedImage bufferedImageTempMDoubleCheck = getImg(imagPath, String.valueOf(beansMap.get("mDoubleCheckImagName")));
-                        if(bufferedImageTempMDoubleCheck!=null) {
-                            ImageIO.write(bufferedImageTempMDoubleCheck, "jpg", byteArrayOutputStreamTempMDoubleCheck);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("mDoubleCheckImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMDoubleCheck =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 11, (short) 10, rowNum + 12);
-                            HSSFPatriarch patriarchMDoubleCheck = sheet1.createDrawingPatriarch();
-                            patriarchMDoubleCheck.createPicture(anchorMDoubleCheck,
-                                    wb.addPicture(byteArrayOutputStreamTempMDoubleCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorMDoubleCheck,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("pApproveImagName") != null) {
-                        BufferedImage bufferedImageTempPApprove = getImg(imagPath, String.valueOf(beansMap.get("pApproveImagName")));
-                        if(bufferedImageTempPApprove!=null) {
-                            ImageIO.write(bufferedImageTempPApprove, "jpg", byteArrayOutputStreamTempPApprove);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("pApproveImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorPApprove =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 14, (short) 5, rowNum + 15);
-                            HSSFPatriarch patriarchPApprove = sheet1.createDrawingPatriarch();
-                            patriarchPApprove.createPicture(anchorPApprove,
-                                    wb.addPicture(byteArrayOutputStreamTempPApprove.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorPApprove,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("pActImagName") != null) {
-                        BufferedImage bufferedImageTempPAct = getImg(imagPath, String.valueOf(beansMap.get("pActImagName")));
-                        if(bufferedImageTempPAct!=null) {
-                            ImageIO.write(bufferedImageTempPAct, "jpg", byteArrayOutputStreamTempPAct);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("pActImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorPAct =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 15, (short) 5, rowNum + 16);
-                            HSSFPatriarch patriarchPAct = sheet1.createDrawingPatriarch();
-                            patriarchPAct.createPicture(anchorPAct,
-                                    wb.addPicture(byteArrayOutputStreamTempPAct.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorPAct,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("pFileImagName") != null) {
-                        BufferedImage bufferedImageTempPFile = getImg(imagPath, String.valueOf(beansMap.get("pFileImagName")));
-                        if(bufferedImageTempPFile!=null) {
-                            ImageIO.write(bufferedImageTempPFile, "jpg", byteArrayOutputStreamTempPFile);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("pFileImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorPFile =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 16, (short) 5, rowNum + 17);
-                            HSSFPatriarch patriarchPFile = sheet1.createDrawingPatriarch();
-                            patriarchPFile.createPicture(anchorPFile,
-                                    wb.addPicture(byteArrayOutputStreamTempPFile.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorPFile,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     HttpServletResponse response = (HttpServletResponse) FacesContext.getCurrentInstance().getExternalContext().getResponse();
@@ -188,70 +181,71 @@ public class JxlsManager {
                     is = new BufferedInputStream(new FileInputStream(templateFileName));
                     HSSFWorkbook wb = (HSSFWorkbook) transformer.transformXLS(is, beansMap);
                     HSSFSheet sheet1 = wb.getSheet("Sheet0");
+                    HSSFPatriarch patriarch = sheet1.createDrawingPatriarch();
                     if (beansMap.get("qMngImagName") != null) {
-                        BufferedImage bufferedImageTempQMng = getImg(imagPath, String.valueOf(beansMap.get("qMngImagName")));
-                        if(bufferedImageTempQMng!=null) {
-                            ImageIO.write(bufferedImageTempQMng, "jpg", byteArrayOutputStreamTempQMng);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("qMngImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQMng =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 13, (short) 5, rowNum + 14);
-                            HSSFPatriarch patriarchQMng = sheet1.createDrawingPatriarch();
-                            patriarchQMng.createPicture(anchorQMng,
-                                    wb.addPicture(byteArrayOutputStreamTempQMng.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorQMng,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("qCheckImagName") != null) {
-                        BufferedImage bufferedImageTempQCheck = getImg(imagPath, String.valueOf(beansMap.get("qCheckImagName")));
-                        if(bufferedImageTempQCheck!=null) {
-                            ImageIO.write(bufferedImageTempQCheck, "jpg", byteArrayOutputStreamTempQCheck);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("qCheckImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQCheck =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 14, (short) 5, rowNum + 15);
-                            HSSFPatriarch patriarchQCheck = sheet1.createDrawingPatriarch();
-                            patriarchQCheck.createPicture(anchorQCheck,
-                                    wb.addPicture(byteArrayOutputStreamTempQCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorQCheck,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("qDoubleCheckImagName") != null) {
-                        BufferedImage bufferedImageTempQDoubleCheck = getImg(imagPath, String.valueOf(beansMap.get("qDoubleCheckImagName")));
-                        if(bufferedImageTempQDoubleCheck!=null) {
-                            ImageIO.write(bufferedImageTempQDoubleCheck, "jpg", byteArrayOutputStreamTempQDoubleCheck);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("qDoubleCheckImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorQDoubleCheck =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 4, rowNum + 15, (short) 5, rowNum + 16);
-                            HSSFPatriarch patriarchQDoubleCheck = sheet1.createDrawingPatriarch();
-                            patriarchQDoubleCheck.createPicture(anchorQDoubleCheck,
-                                    wb.addPicture(byteArrayOutputStreamTempQDoubleCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorQDoubleCheck,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("mMngImagName") != null) {
-                        BufferedImage bufferedImageTempMMng = getImg(imagPath, String.valueOf(beansMap.get("mMngImagName")));
-                        if(bufferedImageTempMMng!=null) {
-                            ImageIO.write(bufferedImageTempMMng, "jpg", byteArrayOutputStreamTempMMng);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("mMngImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMMng =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 13, (short) 10, rowNum + 14);
-                            HSSFPatriarch patriarchMMng = sheet1.createDrawingPatriarch();
-                            patriarchMMng.createPicture(anchorMMng,
-                                    wb.addPicture(byteArrayOutputStreamTempMMng.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorMMng,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("mCheckImagName") != null) {
-                        BufferedImage bufferedImageTempMCheck = getImg(imagPath, String.valueOf(beansMap.get("mCheckImagName")));
-                        if(bufferedImageTempMCheck!=null) {
-                            ImageIO.write(bufferedImageTempMCheck, "jpg", byteArrayOutputStreamTempMCheck);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("mCheckImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMCheck =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 14, (short) 10, rowNum + 15);
-                            HSSFPatriarch patriarchMCheck = sheet1.createDrawingPatriarch();
-                            patriarchMCheck.createPicture(anchorMCheck,
-                                    wb.addPicture(byteArrayOutputStreamTempMCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorMCheck,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     if (beansMap.get("mDoubleCheckImagName") != null) {
-                        BufferedImage bufferedImageTempMDoubleCheck = getImg(imagPath, String.valueOf(beansMap.get("mDoubleCheckImagName")));
-                        if(bufferedImageTempMDoubleCheck!=null) {
-                            ImageIO.write(bufferedImageTempMDoubleCheck, "jpg", byteArrayOutputStreamTempMDoubleCheck);
+                        BufferedImage bufferedImageTemp = getImg(imagPath, String.valueOf(beansMap.get("mDoubleCheckImagName")));
+                        if(bufferedImageTemp!=null) {
+                            byteArrayOutputStreamTemp = new ByteArrayOutputStream();
+                            ImageIO.write(bufferedImageTemp, "png", byteArrayOutputStreamTemp);
                             HSSFClientAnchor anchorMDoubleCheck =
                                     new HSSFClientAnchor(0, 0, 2, 2, (short) 9, rowNum + 15, (short) 10, rowNum + 16);
-                            HSSFPatriarch patriarchMDoubleCheck = sheet1.createDrawingPatriarch();
-                            patriarchMDoubleCheck.createPicture(anchorMDoubleCheck,
-                                    wb.addPicture(byteArrayOutputStreamTempMDoubleCheck.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+                            patriarch.createPicture(anchorMDoubleCheck,
+                                    wb.addPicture(byteArrayOutputStreamTemp.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
                         }
                     }
                     HttpServletResponse response =
