@@ -78,7 +78,6 @@ public interface MyTaskMapper {
             "            opr.FLOW_STATUS as operResFlowStatus," +
             "            ci.ID as id," +
             "            ci.NAME as name," +
-            "            sp.NAME as signPartBName," +
             "            '' as periodNo," +
             "            ci.FLOW_STATUS as flowStatus," +
             "            ci.FLOW_STATUS_REASON as flowStatusReason" +
@@ -90,10 +89,6 @@ public interface MyTaskMapper {
             "            opr.INFO_TYPE=ci.CTT_TYPE" +
             "        and" +
             "            opr.INFO_PKID=ci.PKID" +
-            "        left join" +
-            "            SIGN_PART sp" +
-            "        on" +
-            "            sp.PKID=ci.SIGN_PART_B" +
             "        where" +
             "            opr.OPER_PKID=#{strOperPkid}" +
             "        and" +
@@ -108,7 +103,6 @@ public interface MyTaskMapper {
             "             opr.FLOW_STATUS as operResFlowStatus," +
             "             stl.ID as id," +
             "             ci.name as name," +
-            "             sp.name as signPartBName," +
             "             stl.PERIOD_NO as periodNo," +
             "             stl.FLOW_STATUS as flowStatus," +
             "             stl.FLOW_STATUS_REASON as flowStatusReason" +
@@ -120,14 +114,10 @@ public interface MyTaskMapper {
             "             opr.INFO_TYPE=stl.stl_type" +
             "         and" +
             "             opr.INFO_PKID=stl.stl_pkid" +
-                    "  inner join " +
-                    "      CTT_INFO ci" +
-                    "  on" +
-                    "      ci.PKID=stl.STL_PKID" +
-                    "  left join " +
-                    "      SIGN_PART sp " +
-                    "  on " +
-                    "      sp.PKID=ci.SIGN_PART_B" +
+            "         inner join " +
+            "             CTT_INFO ci" +
+            "         on" +
+            "             ci.PKID=stl.STL_PKID" +
             "         where  " +
             "             opr.OPER_PKID=#{strOperPkid}" +
             "         and" +
@@ -143,7 +133,6 @@ public interface MyTaskMapper {
             "    stlPkid," +
             "    id, " +
             "    name, " +
-            "    signPartBName," +
             "    max(operResFlowStatus) as operResFlowStatus, " +
             "    periodNo, " +
             "    flowStatus, " +
@@ -158,7 +147,6 @@ public interface MyTaskMapper {
             "               '' as stlPkid," +
             "               ci.ID as id," +
             "               ci.NAME as name," +
-            "               sp.NAME as signPartBName," +
             "               opr.FLOW_STATUS as operResFlowStatus," +
             "               '' as periodNo," +
             "               ci.FLOW_STATUS as flowStatus," +
@@ -191,7 +179,6 @@ public interface MyTaskMapper {
             "                stl.STL_PKID as stlPkid,    " +
             "                stl.ID as id," +
             "                ci.name as name," +
-            "                sp.name as signPartBName," +
             "                opr.FLOW_STATUS as operResFlowStatus," +
             "                stl.PERIOD_NO as periodNo," +
             "                stl.FLOW_STATUS as flowStatus," +
@@ -208,10 +195,6 @@ public interface MyTaskMapper {
             "                CTT_INFO ci" +
             "            on" +
             "                ci.PKID=stl.STL_PKID" +
-            "            left join " +
-            "                SIGN_PART sp " +
-            "            on " +
-            "                sp.PKID=ci.SIGN_PART_B" +
             "            where  " +
             "                opr.OPER_PKID=#{strOperPkid}" +
             "            and" +
@@ -228,11 +211,10 @@ public interface MyTaskMapper {
 			"    stlPkid," +
             "    id," +
             "    name," +
-            "    signPartBName," +
             "    periodNo," +
             "    flowStatus," +
             "    flowStatusReason" +
             " order by" +
-            "    flowStatus,name,periodNo")
+            "    flowStatus,type,name,periodNo")
     List<TaskShow> getDetailDoneTaskShowList(@Param("strOperPkid") String strOperPkid);
 }

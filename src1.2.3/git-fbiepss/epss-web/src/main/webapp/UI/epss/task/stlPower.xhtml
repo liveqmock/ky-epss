@@ -59,11 +59,14 @@
                         <p:column headerText="任务类别" style="width:60px;text-align:left;">
                             <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
                         </p:column>
-                        <p:column headerText="待处理任务ID" style="width:200px;text-align:left;">
+                        <p:column headerText="任务编号" style="width:200px;text-align:left;">
                             <h:outputText value="#{record.id}"/>
                         </p:column>
-                        <p:column headerText="待处理任务名称" style="width:500px;text-align:left;">
+                        <p:column headerText="任务名称" style="width:300px;text-align:left;">
                             <h:outputText value="#{record.name}"/>
+                        </p:column>
+                        <p:column headerText="任务备注" style="width:300px;text-align:left;">
+                            <h:outputText value="#{record.signPartBName}"/>
                         </p:column>
                         <p:column headerText="授权状态" style="width:100px;text-align:center;">
                             <h:outputText value="#{record.flowStatusName}"/>

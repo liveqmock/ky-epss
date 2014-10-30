@@ -4,8 +4,13 @@ import epss.common.enums.EnumResType;
 import epss.common.enums.EnumFlowStatus;
 import epss.common.enums.EnumFlowStatusReason;
 import epss.common.enums.EnumTaskDoneFlag;
+import epss.repository.dao.CttInfoMapper;
+import epss.repository.dao.ProgStlInfoMapper;
+import epss.repository.dao.SignPartMapper;
 import epss.repository.dao.not_mybatis.MyTaskMapper;
+import epss.repository.model.CttInfo;
 import epss.repository.model.ProgStlInfo;
+import epss.repository.model.SignPart;
 import epss.repository.model.model_show.TaskShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +28,12 @@ import java.util.List;
  */
 @Service
 public class TaskService {
+    @Autowired
+    private CttInfoMapper cttInfoMapper;
+    @Autowired
+    private SignPartMapper signPartMapper;
+    @Autowired
+    private ProgStlInfoMapper progStlInfoMapper;
     @Autowired
     private MyTaskMapper myTaskMapper;
     @Autowired
@@ -53,6 +64,7 @@ public class TaskService {
         String strOperPkidTemp = ToolUtil.getOperatorManager().getOperator().getPkid();
         // 获得详细任务列表
         List<TaskShow> detailTaskShowListTemp = getRencentlyPowerDetailTaskShowList(strOperPkidTemp);
+        setTaskShowListOfSignPart(detailTaskShowListTemp);
         TaskShow taskShowTemp=new TaskShow();
         taskShowTemp.setOperResFlowStatusName("待录入(" + detailTaskShowListTemp.size() + ")");
         taskShowList.add(taskShowTemp);
@@ -78,6 +90,7 @@ public class TaskService {
         List<TaskShow> ownTaskFlowGroupListTemp = getOwnTaskFlowGroup(strOperPkidTemp);
         // 获得详细任务列表
         List<TaskShow> detailTaskShowListTemp = getDetailTodoTaskShowList(strOperPkidTemp);
+        setTaskShowListOfSignPart(detailTaskShowListTemp);
         for (TaskShow taskShowGroupUnit : ownTaskFlowGroupListTemp) {
             taskShowGroupUnit.setOperResFlowStatusName(
                     EnumFlowStatus.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
@@ -158,6 +171,7 @@ public class TaskService {
 
         // 获得详细任务列表
         List<TaskShow> detailTaskShowListTemp = getDetailDoneTaskShowList(strOperPkidTemp);
+        setTaskShowListOfSignPart(detailTaskShowListTemp);
         for (TaskShow taskShowGroupUnit : taskFlowGroupListTemp) {
             taskShowGroupUnit.setOperResFlowStatusName(
                     EnumFlowStatus.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
@@ -199,5 +213,67 @@ public class TaskService {
                     taskShowGroupUnit.getOperResFlowStatusName()+"("+intHasRecordCount+")");
         }
         return taskShowList;
+    }
+    private List<TaskShow> setTaskShowListOfSignPart(List<TaskShow> taskShowListPara){
+        for(TaskShow taskShowUnit:taskShowListPara){
+            String strTypeTemp = ToolUtil.getStrIgnoreNull(taskShowUnit.getType());
+            if (strTypeTemp.equals(EnumResType.RES_TYPE0.getCode())) {
+                CttInfo cttInfoTemp=cttInfoMapper.selectByPrimaryKey(taskShowUnit.getPkid());
+                if(cttInfoTemp!=null) {
+                    String strSignPartAPkidTemp = ToolUtil.getStrIgnoreNull(cttInfoTemp.getSignPartA());
+                    SignPart signPartTemp = signPartMapper.selectByPrimaryKey(strSignPartAPkidTemp);
+                    if (signPartTemp != null) {
+                        taskShowUnit.setSignPartBName(signPartTemp.getName());
+                    }
+                }
+            }// 成本计划，取对应的总包合同的甲方信息
+            else if (strTypeTemp.equals(EnumResType.RES_TYPE1.getCode())) {
+                CttInfo cttInfoTemp=cttInfoMapper.selectByPrimaryKey(taskShowUnit.getPkid());
+                if(cttInfoTemp!=null) {
+                    CttInfo tkCttInfoTemp = cttInfoMapper.selectByPrimaryKey(cttInfoTemp.getParentPkid());
+                    String strSignPartAPkidTemp = ToolUtil.getStrIgnoreNull(tkCttInfoTemp.getSignPartA());
+                    SignPart signPartTemp = signPartMapper.selectByPrimaryKey(strSignPartAPkidTemp);
+                    if (signPartTemp != null) {
+                        taskShowUnit.setSignPartBName(signPartTemp.getName());
+                    }
+                }
+            }// 分包合同,取对应的乙方信息
+            else if (strTypeTemp.equals(EnumResType.RES_TYPE2.getCode())) {
+                CttInfo cttInfoTemp=cttInfoMapper.selectByPrimaryKey(taskShowUnit.getPkid());
+                if(cttInfoTemp!=null) {
+                    String strSignPartBPkidTemp = ToolUtil.getStrIgnoreNull(cttInfoTemp.getSignPartB());
+                    SignPart signPartTemp = signPartMapper.selectByPrimaryKey(strSignPartBPkidTemp);
+                    if (signPartTemp != null) {
+                        taskShowUnit.setSignPartBName(signPartTemp.getName());
+                    }
+                }
+            }// 分包合同及衍生的结算，取对应的分包合同的乙方信息
+            else if (strTypeTemp.equals(EnumResType.RES_TYPE3.getCode())||
+                      strTypeTemp.equals(EnumResType.RES_TYPE4.getCode())||
+                      strTypeTemp.equals(EnumResType.RES_TYPE5.getCode()))  {
+                ProgStlInfo progStlInfoTemp=progStlInfoMapper.selectByPrimaryKey(taskShowUnit.getPkid());
+                if(progStlInfoTemp!=null) {
+                    CttInfo cttInfoTemp = cttInfoMapper.selectByPrimaryKey(progStlInfoTemp.getStlPkid());
+                    String strSignPartBPkidTemp = ToolUtil.getStrIgnoreNull(cttInfoTemp.getSignPartB());
+                    SignPart signPartTemp = signPartMapper.selectByPrimaryKey(strSignPartBPkidTemp);
+                    if (signPartTemp != null) {
+                        taskShowUnit.setSignPartBName(signPartTemp.getName());
+                    }
+                }
+            }// 总包合同及衍生的结算，取对应的总包合同的甲方信息
+            else if (strTypeTemp.equals(EnumResType.RES_TYPE6.getCode())||
+                      strTypeTemp.equals(EnumResType.RES_TYPE7.getCode()))  {
+                ProgStlInfo progStlInfoTemp=progStlInfoMapper.selectByPrimaryKey(taskShowUnit.getPkid());
+                if(progStlInfoTemp!=null) {
+                    CttInfo cttInfoTemp = cttInfoMapper.selectByPrimaryKey(progStlInfoTemp.getStlPkid());
+                    String strSignPartAPkidTemp = ToolUtil.getStrIgnoreNull(cttInfoTemp.getSignPartA());
+                    SignPart signPartTemp = signPartMapper.selectByPrimaryKey(strSignPartAPkidTemp);
+                    if (signPartTemp != null) {
+                        taskShowUnit.setSignPartBName(signPartTemp.getName());
+                    }
+                }
+            }
+        }
+        return taskShowListPara;
     }
 }
