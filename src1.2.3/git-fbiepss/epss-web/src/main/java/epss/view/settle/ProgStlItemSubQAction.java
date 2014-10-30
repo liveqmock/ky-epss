@@ -364,35 +364,6 @@ public class ProgStlItemSubQAction {
             strPowerType=strFlowType+strPowerType;
             if (strPowerType.contains("Mng")) {
                 if (strPowerType.equals("MngPass")) {
-                        CttInfo cttInfoTemp =cttInfoService.getCttInfoByPkId(progStlInfo.getStlPkid());
-                        if (("3").equals(cttInfoTemp.getType())||("6").equals(cttInfoTemp.getType())){
-                            ProgStlInfoShow progStlInfoShowQryM =new ProgStlInfoShow();
-                            progStlInfoShowQryM.setStlType("4");
-                            progStlInfoShowQryM.setStlPkid(progStlInfo.getStlPkid());
-                            progStlInfoShowQryM.setPeriodNo(progStlInfo.getPeriodNo());
-                            List<ProgStlInfoShow> progStlInfoShowConstructsTemp =
-                                    progStlInfoService.selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryM);
-                            if (progStlInfoShowConstructsTemp.size()==0){
-                                progStlInfo.setAutoLinkAdd("0");
-                                progStlInfoShowQryM.setAutoLinkAdd("1");
-                                progStlInfoShowQryM.setId(getMaxId( progStlInfoShowQryM.getStlType()));
-                                progStlInfoService.insertRecord(progStlInfoShowQryM);
-                            }else{
-                                for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
-                                    if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
-                                        progStlInfo.setAutoLinkAdd("0");
-                                        progStlInfoShowQryM.setAutoLinkAdd("1");
-                                        progStlInfoService.updateRecord(progStlInfoShowQryM);
-                                    }else{
-                                        if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
-                                            progStlInfo.setAutoLinkAdd("0");
-                                        }else{
-                                            progStlInfo.setAutoLinkAdd("1");
-                                        }
-                                    }
-                                }
-                            }
-                        }
                     // 状态标志：初始
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
                     // 原因：录入完毕
@@ -508,25 +479,6 @@ public class ProgStlItemSubQAction {
             // 其他状态的票据需要添加时再修改导出文件名
         }
         return null;
-    }
-    public String getMaxId(String strStlType) {
-            Integer intTemp;
-            String strMaxId = progStlInfoService.getStrMaxStlId(strStlType);
-            if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
-                strMaxId = "STLQ" + ToolUtil.getStrToday() + "001";
-            } else {
-                if (strMaxId.length() > 3) {
-                    String strTemp = strMaxId.substring(strMaxId.length() - 3).replaceFirst("^0+", "");
-                    if (ToolUtil.strIsDigit(strTemp)) {
-                        intTemp = Integer.parseInt(strTemp);
-                        intTemp = intTemp + 1;
-                        strMaxId = strMaxId.substring(0, strMaxId.length() - 3) + StringUtils.leftPad(intTemp.toString(), 3, "0");
-                    } else {
-                        strMaxId += "001";
-                    }
-                }
-            }
-        return strMaxId;
     }
     /* 智能字段Start*/
     public CttInfoService getCttInfoService() {

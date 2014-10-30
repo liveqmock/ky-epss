@@ -401,35 +401,6 @@ public class ProgStlItemSubMAction {
             strPowerType=strFlowType+strPowerType;
             if(strPowerType.contains("Mng")){
                 if(strPowerType.equals("MngPass")){
-                    CttInfo cttInfoTemp =cttInfoService.getCttInfoByPkId(progStlInfo.getStlPkid());
-                    if (("3").equals(cttInfoTemp.getType())||("6").equals(cttInfoTemp.getType())){
-                        ProgStlInfoShow progStlInfoShowQryQ =new ProgStlInfoShow();
-                        progStlInfoShowQryQ.setStlPkid(progStlInfo.getStlPkid());
-                        progStlInfoShowQryQ.setStlType("3");
-                        progStlInfoShowQryQ.setPeriodNo(progStlInfo.getPeriodNo());
-                        List<ProgStlInfoShow> progStlInfoShowConstructsTemp =
-                                progStlInfoService.selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryQ);
-                        if (progStlInfoShowConstructsTemp.size()==0){
-                            progStlInfo.setAutoLinkAdd("0");
-                            progStlInfoShowQryQ.setAutoLinkAdd("1");
-                            progStlInfoShowQryQ.setId(getMaxId(progStlInfoShowQryQ.getStlType()));
-                            progStlInfoService.insertRecord(progStlInfoShowQryQ);
-                        }else{
-                            for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
-                                if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
-                                    progStlInfo.setAutoLinkAdd("0");
-                                    progStlInfoShowQryQ.setAutoLinkAdd("1");
-                                    progStlInfoService.updateRecord(progStlInfoShowQryQ);
-                                }else{
-                                    if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
-                                        progStlInfo.setAutoLinkAdd("0");
-                                    }else{
-                                        progStlInfo.setAutoLinkAdd("1");
-                                    }
-                                }
-                            }
-                        }
-                    }
                     // 状态标志：初始
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
                     // 原因：录入完毕
@@ -484,7 +455,7 @@ public class ProgStlItemSubMAction {
                         List<ProgStlInfo> progStlInfoListTemp=progStlInfoService.getInitStlListByModel(progStlInfoTemp);
                         if(progStlInfoListTemp.size()>0) {
                             String SubcttStlPStatus = ToolUtil.getStrIgnoreNull(progStlInfoListTemp.get(0).getFlowStatus());
-                            if (!(EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(SubcttStlPStatus) < 0)) {
+                            if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(SubcttStlPStatus) < 0) {
                                 MessageUtil.addInfo("该数据已被分包价格结算批准，您无权进行操作！");
                                 return;
                             }

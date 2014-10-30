@@ -73,7 +73,7 @@
                                  rowsPerPageTemplate="500,200,100,45,30,15"
                                  rowIndexVar="row"
                                  emptyMessage="数据记录为空..."
-                                 rowStyleClass="#{record.subctt_SignPartAPrice eq 0? 'rowGrayStyle':
+                                 rowStyleClass="#{record.subctt_SignPartAPrice le 0? 'rowGrayStyle':
                                                      record.subctt_SignPartAPrice eq null? 'rowGrayStyle':
                                                      record.isUptoCttContentFlag? 'rowGreenyellowStyle':null}"
                                  scrollable="true"
@@ -82,7 +82,7 @@
                                   rendered='#{progStlItemSubMAction.strPassFlag}'>
                             <p:commandButton  icon="ui-icon-pencil"
                                               style="height:18px;width:18px"
-                                              rendered="#{record.subctt_SignPartAPrice eq 0? 'false':
+                                              rendered="#{record.subctt_SignPartAPrice le 0? 'false':
                                                             record.subctt_SignPartAPrice eq null? 'false':'true'}"
                                               actionListener="#{progStlItemSubMAction.selectRecordAction('Upd',record)}"
                                               update="pdt,:form:pgViewForUpd"
@@ -90,7 +90,7 @@
                             </p:commandButton>
                             <p:commandButton  icon="ui-icon-trash"
                                               style="height:18px;width:18px"
-                                              rendered="#{record.subctt_SignPartAPrice eq 0? 'false':
+                                              rendered="#{record.subctt_SignPartAPrice le 0? 'false':
                                                             record.subctt_SignPartAPrice eq null? 'false':'true'}"
                                               actionListener="#{progStlItemSubMAction.selectRecordAction('Del',record)}"
                                               update="pdt,:form:pgViewForDel"
