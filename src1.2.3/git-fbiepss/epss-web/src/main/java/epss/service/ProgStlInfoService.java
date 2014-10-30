@@ -492,13 +492,14 @@ public class ProgStlInfoService {
                     }
                 }
                 if (EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode().equals(progStlInfoPara.getFlowStatusReason())) {
-                // 删除分包结算单信息数据
-                ProgStlInfoExample exampleSubMStlInfo = new ProgStlInfoExample();
-                exampleSubMStlInfo.createCriteria()
-                        .andStlTypeEqualTo(EnumResType.RES_TYPE5.getCode())
-                        .andStlPkidEqualTo(progStlInfoSubStlmentTemp.getStlPkid())
-                        .andPeriodNoEqualTo(progStlInfoSubStlmentTemp.getPeriodNo());
-                progStlInfoMapper.deleteByExample(exampleSubMStlInfo);
+                    // 删除分包结算单信息数据
+                    ProgStlInfoExample exampleSubMStlInfo = new ProgStlInfoExample();
+                    exampleSubMStlInfo.createCriteria()
+                            .andStlTypeEqualTo(EnumResType.RES_TYPE5.getCode())
+                            .andStlPkidEqualTo(progStlInfoSubStlmentTemp.getStlPkid())
+                            .andPeriodNoEqualTo(progStlInfoSubStlmentTemp.getPeriodNo());
+                    progStlInfoMapper.deleteByExample(exampleSubMStlInfo);
+                }
             }
         }else
         // 材料结算
@@ -568,14 +569,15 @@ public class ProgStlInfoService {
                         }
                     }
                 }
-                if(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode().equals(progStlInfoPara.getFlowStatusReason())){
-                // 删除分包结算单信息数据
-                ProgStlInfoExample exampleSubMStlInfo = new ProgStlInfoExample();
-                exampleSubMStlInfo.createCriteria()
-                        .andStlTypeEqualTo(EnumResType.RES_TYPE5.getCode())
-                        .andStlPkidEqualTo(progStlInfoSubStlmentTemp.getStlPkid())
-                        .andPeriodNoEqualTo(progStlInfoSubStlmentTemp.getPeriodNo());
-                progStlInfoMapper.deleteByExample(exampleSubMStlInfo);
+                if(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode().equals(progStlInfoPara.getFlowStatusReason())) {
+                    // 删除分包结算单信息数据
+                    ProgStlInfoExample exampleSubMStlInfo = new ProgStlInfoExample();
+                    exampleSubMStlInfo.createCriteria()
+                            .andStlTypeEqualTo(EnumResType.RES_TYPE5.getCode())
+                            .andStlPkidEqualTo(progStlInfoSubStlmentTemp.getStlPkid())
+                            .andPeriodNoEqualTo(progStlInfoSubStlmentTemp.getPeriodNo());
+                    progStlInfoMapper.deleteByExample(exampleSubMStlInfo);
+                }
             }
         }
         updateRecord(progStlInfoPara);
