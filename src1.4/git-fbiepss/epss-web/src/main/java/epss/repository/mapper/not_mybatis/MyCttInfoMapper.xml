@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="epss.repository.dao.not_mybatis.MyCttInfoMapper">
+    <resultMap id="BaseResultMapCtt" type="epss.repository.model.model_show.CttInfoShow">
+        <id column="PKID" jdbcType="VARCHAR" property="pkid" />
+        <result column="CTT_TYPE" jdbcType="VARCHAR" property="cttType" />
+        <result column="PARENT_PKID" jdbcType="VARCHAR" property="parentPkid" />
+        <result column="ID" jdbcType="VARCHAR" property="id" />
+        <result column="NAME" jdbcType="VARCHAR" property="name" />
+        <result column="SIGN_DATE" jdbcType="VARCHAR" property="signDate" />
+        <result column="SIGN_PART_A" jdbcType="VARCHAR" property="signPartA" />
+        <result column="SIGN_PART_A_NAME" jdbcType="VARCHAR" property="signPartAName" />
+        <result column="SIGN_PART_B" jdbcType="VARCHAR" property="signPartB" />
+        <result column="SIGN_PART_B_NAME" jdbcType="VARCHAR" property="signPartBName" />
+        <result column="CTT_START_DATE" jdbcType="VARCHAR" property="cttStartDate" />
+        <result column="CTT_END_DATE" jdbcType="VARCHAR" property="cttEndDate" />
+        <result column="ATTACHMENT" jdbcType="VARCHAR" property="attachment" />
+        <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+        <result column="FLOW_STATUS" jdbcType="VARCHAR" property="flowStatus" />
+        <result column="STR_FLOW_STATUS_BEGIN" jdbcType="VARCHAR" property="strStatusFlagBegin" />
+        <result column="STR_FLOW_STATUS_END" jdbcType="VARCHAR" property="strStatusFlagEnd" />
+        <result column="FLOW_STATUS_REASON" jdbcType="VARCHAR" property="flowStatusReason"/>
+        <result column="ARCHIVED_FLAG" jdbcType="VARCHAR" property="archivedFlag"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+        <result column="CREATED_TIME" jdbcType="VARCHAR" property="createdTime" />
+        <result column="LAST_UPD_BY" jdbcType="VARCHAR" property="lastUpdBy" />
+        <result column="LAST_UPD_TIME" jdbcType="VARCHAR" property="lastUpdTime" />
+        <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
+        <result column="REC_VERSION" jdbcType="DECIMAL" property="recVersion" />
+        <result column="TYPE" jdbcType="CHAR" property="type" />
+    </resultMap>
+    <select id="selectCttByStatusFlagBegin_End" parameterType="epss.repository.model.model_show.CttInfoShow"
+            resultMap="BaseResultMapCtt">
+        <![CDATA[
+            select
+                eic.PKID,
+                eic.CTT_TYPE,
+                eic.PARENT_PKID,
+                eic.ID,
+                eic.NAME,
+                eic.SIGN_DATE,
+                eic.SIGN_PART_A,
+                (select Max(Name) from SIGN_PART where PKID=eic.SIGN_PART_A) as SIGN_PART_A_NAME,
+                eic.SIGN_PART_B,
+                (select Max(Name) from SIGN_PART where PKID=eic.SIGN_PART_B) as SIGN_PART_B_NAME,
+                eic.CTT_START_DATE,
+                eic.CTT_END_DATE,
+                eic.ATTACHMENT,
+                eic.REMARK,
+                eic.ARCHIVED_FLAG,
+                eic.CREATED_BY,
+                eic.CREATED_TIME,
+                eic.LAST_UPD_BY,
+                eic.LAST_UPD_TIME,
+                eic.REC_VERSION,
+                eic.FLOW_STATUS,
+                '' AS STR_FLOW_STATUS_BEGIN,
+                '' AS STR_FLOW_STATUS_END,
+                eic.FLOW_STATUS_REASON,
+                eic.TYPE
+            from
+                CTT_INFO eic
+            where
+                1=1
+        ]]>
+        <if test="pkid != null and pkid != ''">
+            and eic.pkid like CONCAT('%',CONCAT(trim(#{pkid}),'%'))
+        </if>
+        <if test="cttType != null and cttType != ''">
+            and eic.CTT_TYPE like CONCAT('%',CONCAT(trim(#{cttType}),'%'))
+        </if>
+        <if test="parentPkid != null and parentPkid != ''">
+            and eic.PARENT_PKID like CONCAT('%',CONCAT(trim(#{parentPkid}),'%'))
+        </if>
+        <if test="id != null and id != ''">
+            and eic.id like CONCAT('%',CONCAT(trim(#{id}),'%'))
+        </if>
+        <if test="name != null and name != ''">
+            and eic.name like CONCAT('%',CONCAT(trim(#{name}),'%'))
+        </if>
+        <if test="signDate != null and signDate != ''">
+            and eic.SIGN_DATE = #{signDate}
+        </if>
+        <if test="signPartA != null and signPartA != ''">
+            and eic.SIGN_PART_A = #{signPartA}
+        </if>
+        <if test="signPartB != null and signPartB != ''">
+            and eic.SIGN_PART_B = #{signPartB}
+        </if>
+        <if test="cttStartDate != null and cttStartDate != ''">
+            and eic.CTT_START_DATE = #{cttStartDate}
+        </if>
+        <if test="cttEndDate != null and cttEndDate != ''">
+            and eic.CTT_END_DATE = #{cttEndDate}
+        </if>
+        <if test="attachment != null and attachment != ''">
+            and eic.attachment like CONCAT('%',CONCAT(trim(#{attachment}),'%'))
+        </if>
+        <if test="remark != null and remark != ''">
+            and eic.remark like CONCAT('%',CONCAT(trim(#{remark}),'%'))
+        </if>
+        <if test="archivedFlag != null and archivedFlag != ''">
+            and eic.ARCHIVED_FLAG = #{archivedFlag}
+        </if>
+
+        <!--<if test='strStatusFlagBegin == null and strStatusFlagEnd == "0"'>-->
+        <if test="strStatusFlagBegin == null and strStatusFlagEnd == '0'.toString()">
+            and (eic.FLOW_STATUS is null
+            or eic.FLOW_STATUS='0')
+        </if>
+
+        <if test="strStatusFlagBegin != null and strStatusFlagBegin !='' and
+                       strStatusFlagEnd != null and strStatusFlagEnd != ''">
+            and eic.FLOW_STATUS <![CDATA[>=]]> #{strStatusFlagBegin}
+            and eic.FLOW_STATUS <![CDATA[<=]]> #{strStatusFlagEnd}
+        </if>
+
+        <if test="flowStatusReason != null and flowStatusReason != ''">
+            and eic.FLOW_STATUS_REASON = #{flowStatusReason}
+        </if>
+        order by eic.FLOW_STATUS asc,eic.NAME asc
+    </select>
+</mapper>

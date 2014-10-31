@@ -1,0 +1,179 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
+        <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+            function actSelect(obj) {
+                var pkid=obj;
+                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
+                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
+                var arg = new Object();
+                arg.doType = "select";
+                var rtn =dialog("../item/itemFlw_SubcttQStl.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid="+pkid+"",arg,sfeature);
+                document.getElementById("form:qryBtn").click();
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form" enctype="multipart/form-data">
+	    <div style="margin:5px;">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:focus for="id"/>
+                <p:panel>
+                    <h:panelGrid id="pdQry" columns="2" style="width: 100%">
+                        <h:panelGrid columns="6">
+                            <p:outputLabel value="结算编号：" for="id" />
+                            <p:inputText id="id" value="#{progStlInfoSubQAction.progStlInfoShowQry.id}"/>
+                            <p:outputLabel value="分包合同：" for="stlPkid" />
+                            <p:selectOneMenu id="stlPkid"
+                                             value="#{progStlInfoSubQAction.progStlInfoShowQry.stlPkid}">
+                                <f:selectItems value="#{progStlInfoSubQAction.subcttList}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="期数编码：" for="periodNo"/>
+                            <p:inputText id="periodNo"
+                                        value="#{progStlInfoSubQAction.progStlInfoShowQry.periodNo}"
+                                        onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="3">
+                            <p:commandButton id="qryBtn" value="查询"
+                                             action="#{progStlInfoSubQAction.onQueryAction('DoubleCheck','true')}"
+                                             update="pdt,msgs">
+                            </p:commandButton>
+                            <p:commandButton id="resetBtn" value="重置"
+                                             type="reset"
+                                             update="pdQry,msgs">
+                            </p:commandButton>
+                            <p:ajaxStatus style="width:16px;height:16px;">
+                                <f:facet name="start">
+                                    <h:graphicImage value="/images/ajaxloading.gif"/>
+                                </f:facet>
+                                <f:facet name="complete">
+                                    <h:outputText value=""/>
+                                </f:facet>
+                            </p:ajaxStatus>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:panel>
+                <p:dataTable id="pdt" style="width:100%;"
+                             value="#{progStlInfoSubQAction.progStlInfoShowList}"
+                             var="record"
+                             rowKey="#{record.pkid}"
+                             selectionMode="single"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="15"
+                             rowIndexVar="row"
+                             rowsPerPageTemplate="500,200,100,45,30,15"
+                             emptyMessage="数据记录为空..."
+                             widgetVar="DtInitSubcttList"
+                             rowStyleClass="#{record.flowStatus eq '1'? null :'rowGrayStyle'}"
+                             scrollable="true">
+                    <p:column headerText="操作" style="width:61px;text-align: center;">
+                        <p:commandButton  icon="ui-icon-search"
+                                          style="height:18px;width:18px"
+                                          actionListener="#{progStlInfoSubQAction.selectRecordAction('Sel',record)}"
+                                          update="pdt,:form:msgs,:form:pgView"
+                                          onclick="PF('wVDlgView').show()">
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-triangle-1-e"
+                                         style="height:18px;width:18px"
+                                         onclick="actSelect('#{record.pkid}')">
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="序号" style="width:30px">
+                        <h:outputText value="#{row + 1}"/>
+                    </p:column>
+                    <p:column headerText="结算编号" style="text-align:center;width:120px">
+                        <h:outputText value="#{record.id}"/>
+                    </p:column>
+                    <p:column headerText="分包合同" style="text-align:left;width:200px">
+                        <h:outputText value="#{record.stlName}"/>
+                    </p:column>
+                    <p:column headerText="协作单位" style="text-align:left;width:200px">
+                        <h:outputText value="#{record.signPartBName}"/>
+                    </p:column>
+                    <p:column headerText="期数编码" style="text-align:center;width:66px">
+                        <h:outputText value="#{record.periodNo}"/>
+                    </p:column>
+                    <p:column headerText="状态" style="text-align:center;width:66px;">
+                        <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
+                    </p:column>
+                    <p:column headerText="原因" style="text-align:center;width:66px;">
+                        <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
+                    </p:column>
+                </p:dataTable>
+                <p:dialog id="dlgView" header="分包合同结算信息" widgetVar="wVDlgView"
+                          resizable="false" modal="true"
+                          showEffect="clip" hideEffect="fold">
+                    <h:panelGrid id="pgView">
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="结算编号：" for="idForDlg"/>
+                            <p:inputText id="idForDlg"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.id}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="分包合同：" for="cttNameForDlg"/>
+                            <p:inputText id="cttNameForDlg"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.signPartBName}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;width:328px;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="协作单位：" for="remarkForDlg"/>
+                            <p:inputText id="remarkForDlg"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.remark}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                            <p:outputLabel value="期数编码：" for="signDateForDlg"/>
+                            <p:inputText id="signDateForDlg"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.periodNo}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel for="createdByNameSel" value="创建人：" />
+                            <h:inputText id="createdByNameSel"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.createdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="createdTimeSel" value="创建时间：" />
+                            <h:inputText id="createdTimeSel"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.createdTime}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdByNameSel" value="修改人：" />
+                            <h:inputText id="lastUpdByNameSel"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.lastUpdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdTimeSel" value="修改时间：" />
+                            <h:inputText id="lastUpdTimeSel"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.lastUpdTime}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="recVersionSel" value="修改次数：" />
+                            <h:inputText id="recVersionSel"
+                                         value="#{progStlInfoSubQAction.progStlInfoShowSel.recVersion}"
+                                         style="background-color:gainsboro;text-align:right;" readonly="true">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                            </h:inputText>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:dialog>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE  html  PUBLIC  "-//W3C//DTD  XHTML  1.0  Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html">
+        <h:head>
+            <script type="text/javascript" language="javascript">
+                function run() {
+                    document.getElementById("form:qryBtn").click();
+                    window.setTimeout( "run()", 10000 );
+                }
+                /*加载完毕之后延迟执行*/
+                document.onreadystatechange = function init(){
+                    if(document.readyState=="complete") {
+                        window.setTimeout( "run()", 2000);
+                    }
+                }
+            </script>
+        </h:head>
+        <h:body style="background-color:transparent">
+            <h:form id="form" style="background-color:transparent" >
+                <div style="display:none">
+                    <p:commandButton id="qryBtn"
+                                     action="#{scrollInfoAction.getViewMsg()}"
+                                     update=":form:mytest">
+                    </p:commandButton>
+                </div>
+                <div style="CURSOR: hand;
+                             height: 25px;
+                             vertical-align: bottom;
+                             font-family: verdana;
+                             color: #7387A0;
+                             FONT-SIZE: 9pt;
+                             background-color:transparent">
+                    <marquee width="100%" height="18px" direction="left" scrollamount="2"
+                             onmouseover="this.stop()" onmouseout="this.start()" style="cursor: hand">
+                        <h:outputText id="mytest" value="#{scrollInfoAction.strCurrentViewMng}" style="vertical-align: bottom;"/>
+                    </marquee>
+                </div>
+            </h:form>
+        </h:body>
+    </f:view>
+</html>

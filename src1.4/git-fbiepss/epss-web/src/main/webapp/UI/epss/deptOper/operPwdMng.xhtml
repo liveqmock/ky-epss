@@ -1,0 +1,60 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
+        <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <div style="margin:5px;">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:panel value="用户密码修改">
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="操作员编号：" for="operIdForOperUpd"/>
+                        <p:inputText id="operIdForOperUpd" value="#{operPwdAction.operUpd.id}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="操作员姓名：" for="operNameForOperUpd"/>
+                        <p:inputText id="operNameForOperUpd" value="#{operPwdAction.operUpd.name}"
+                                     readonly="true"
+                                     style="background-color:gainsboro;"/>
+                        <p:outputLabel value="原密码*：" for="operPasswdForOperUpd"/>
+                        <p:inputText id="operPasswdForOperUpd" type="password"
+                                     value="#{operPwdAction.strPasswd}"/>
+                        <p:outputLabel value="新密码*：" for="operNewPasswdForOperUpd"/>
+                        <p:inputText id="operNewPasswdForOperUpd" type="password"
+                                     value="#{operPwdAction.strNewPasswd}"/>
+                        <p:outputLabel value="新密码确认*：" for="operReNewPasswdForOperUpd"/>
+                        <p:inputText id="operReNewPasswdForOperUpd" type="password"
+                                     value="#{operPwdAction.strConfirmPasswd}"/>
+                    </h:panelGrid>
+                    <h:panelGrid id="pgOperBtnForOperUpd" columns="2">
+                        <p:commandButton id="submitBtnForOperUpd"
+                                         value="提交（更新）"
+                                         action="#{operPwdAction.onClickForMngAction()}"
+                                         update="msgs"
+                                         oncomplete="wVDlgViewForOperUpd.hide()">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtnForOperUpd" value="重置"
+                                         type="reset">
+                        </p:commandButton>
+                    </h:panelGrid>
+                </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
