@@ -215,6 +215,6 @@ public interface MyTaskMapper {
             "    flowStatus," +
             "    flowStatusReason" +
             " order by" +
-            "    flowStatus,type,name,periodNo")
+            "    flowStatus,type,periodNo desc")
     List<TaskShow> getDetailDoneTaskShowList(@Param("strOperPkid") String strOperPkid);
 }

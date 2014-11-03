@@ -64,7 +64,9 @@ public class TaskService {
         String strOperPkidTemp = ToolUtil.getOperatorManager().getOperator().getPkid();
         // 获得详细任务列表
         List<TaskShow> detailTaskShowListTemp = getRencentlyPowerDetailTaskShowList(strOperPkidTemp);
+        //添加任务甲方乙方信息
         setTaskShowListOfSignPart(detailTaskShowListTemp);
+
         TaskShow taskShowTemp=new TaskShow();
         taskShowTemp.setOperResFlowStatusName("待录入(" + detailTaskShowListTemp.size() + ")");
         taskShowList.add(taskShowTemp);
@@ -90,7 +92,9 @@ public class TaskService {
         List<TaskShow> ownTaskFlowGroupListTemp = getOwnTaskFlowGroup(strOperPkidTemp);
         // 获得详细任务列表
         List<TaskShow> detailTaskShowListTemp = getDetailTodoTaskShowList(strOperPkidTemp);
+        //添加任务甲方乙方信息
         setTaskShowListOfSignPart(detailTaskShowListTemp);
+
         for (TaskShow taskShowGroupUnit : ownTaskFlowGroupListTemp) {
             taskShowGroupUnit.setOperResFlowStatusName(
                     EnumFlowStatus.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
@@ -171,7 +175,10 @@ public class TaskService {
 
         // 获得详细任务列表
         List<TaskShow> detailTaskShowListTemp = getDetailDoneTaskShowList(strOperPkidTemp);
+
+        //添加任务甲方乙方信息
         setTaskShowListOfSignPart(detailTaskShowListTemp);
+
         for (TaskShow taskShowGroupUnit : taskFlowGroupListTemp) {
             taskShowGroupUnit.setOperResFlowStatusName(
                     EnumFlowStatus.getValueByKey(taskShowGroupUnit.getFlowStatus()).getTitle());
@@ -214,9 +221,12 @@ public class TaskService {
         }
         return taskShowList;
     }
+
     private List<TaskShow> setTaskShowListOfSignPart(List<TaskShow> taskShowListPara){
+        // 添加任务甲方乙方信息
         for(TaskShow taskShowUnit:taskShowListPara){
             String strTypeTemp = ToolUtil.getStrIgnoreNull(taskShowUnit.getType());
+            // 总包合同，取对应的甲方信息
             if (strTypeTemp.equals(EnumResType.RES_TYPE0.getCode())) {
                 CttInfo cttInfoTemp=cttInfoMapper.selectByPrimaryKey(taskShowUnit.getPkid());
                 if(cttInfoTemp!=null) {

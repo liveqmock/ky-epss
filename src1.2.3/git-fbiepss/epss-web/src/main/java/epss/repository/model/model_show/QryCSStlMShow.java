@@ -17,10 +17,11 @@ public class QryCSStlMShow implements Serializable {
     private String strNo;
     private String strName;
 
-    private String    strSubctt_SignPartName;
-    private String    strSubctt_Unit;
-    private BigDecimal bdSubctt_ContractUnitPrice;
+    private String strSubctt_SignPartName;
+    private String strSubctt_Unit;
     private BigDecimal bdSubctt_ContractQuantity;
+    private BigDecimal bdSubctt_ContractUnitPrice;
+    private BigDecimal bdSubctt_SignPartAMPrice;
 
     private BigDecimal bdSubctt_BeginToCurrentPeriodMQty;
     private BigDecimal bdSubctt_CurrentPeriodMQty;
@@ -121,5 +122,13 @@ public class QryCSStlMShow implements Serializable {
 
     public void setBdSubctt_CurrentPeriodMAmount(BigDecimal bdSubctt_CurrentPeriodMAmount) {
         this.bdSubctt_CurrentPeriodMAmount = bdSubctt_CurrentPeriodMAmount;
+    }
+
+    public BigDecimal getBdSubctt_SignPartAMPrice() {
+        return bdSubctt_SignPartAMPrice;
+    }
+
+    public void setBdSubctt_SignPartAMPrice(BigDecimal bdSubctt_SignPartAMPrice) {
+        this.bdSubctt_SignPartAMPrice = bdSubctt_SignPartAMPrice;
     }
 }
