@@ -208,8 +208,8 @@ public class ProgStlItemTkMeaAction {
                 progStlItemTkMeaShowTemp.setEng_LastUpdByName(strLastUpdByName);
                 progStlItemTkMeaShowTemp.setEng_LastUpdTime(progStlItemTkMea.getLastUpdTime());
                 progStlItemTkMeaShowTemp.setEng_RecVersion(progStlItemTkMea.getRecVersion());
-                if (progStlItemTkMeaShowTemp.getEng_BeginToCurrentPeriodEQty()
-                        .equals(progStlItemTkMeaShowTemp.getTkctt_ContractQuantity())){
+                if (ToolUtil.getBdIgnoreNull(progStlItemTkMeaShowTemp.getEng_BeginToCurrentPeriodEQty())
+                        .compareTo(progStlItemTkMeaShowTemp.getTkctt_ContractQuantity())==0){
                     progStlItemTkMeaShowTemp.setIsUptoCttContentFlag(true);
                 }
             }
