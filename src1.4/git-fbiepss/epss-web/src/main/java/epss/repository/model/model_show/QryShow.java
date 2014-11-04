@@ -19,6 +19,7 @@ public class QryShow {
     private String strUnit;
     private String strName;
     private BigDecimal bdUnitPrice;
+    private BigDecimal bdSignPartAMPrice;
     private BigDecimal bdQuantity;
     private BigDecimal bdCurrentPeriodQuantity;
     private BigDecimal bdBeginToCurrentPeriodQuantity;
@@ -110,5 +111,13 @@ public class QryShow {
 
     public void setBdAmount(BigDecimal bdAmount) {
         this.bdAmount = bdAmount;
+    }
+
+    public BigDecimal getBdSignPartAMPrice() {
+        return bdSignPartAMPrice;
+    }
+
+    public void setBdSignPartAMPrice(BigDecimal bdSignPartAMPrice) {
+        this.bdSignPartAMPrice = bdSignPartAMPrice;
     }
 }

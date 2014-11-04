@@ -82,32 +82,37 @@
                     <p:column style="width:60px" headerText="分包_单位">
                         <h:outputText value="#{record.strSubctt_Unit}" escape="false"/>
                     </p:column>
-                    <p:column style="width:80px" headerText="分包_数量">
+                    <p:column style="width:80px" headerText="分包_工程量">
                         <h:outputText value="#{record.bdSubctt_ContractQuantity}" style="float: right" >
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:outputText>
                     </p:column>
-                    <p:column style="width:60px" headerText="分包_单价">
+                    <p:column style="width:60px" headerText="分包_工程单价">
                         <h:outputText value="#{record.bdSubctt_ContractUnitPrice}" style="float: right" >
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:outputText>
                     </p:column>
-                    <p:column style="width:140px" headerText="分包结算_开累材料数量">
+                    <p:column style="width:60px" headerText="分包_甲供材单价">
+                        <h:outputText value="#{record.bdSubctt_SignPartAMPrice}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:140px" headerText="结算_开累材料供应数量">
                         <h:outputText value="#{record.bdSubctt_BeginToCurrentPeriodMQty}" style="float: right" >
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:outputText>
                     </p:column>
-                    <p:column style="width:140px" headerText="分包结算_本期材料数量">
+                    <p:column style="width:140px" headerText="结算_本期材料供应数量">
                         <h:outputText value="#{record.bdSubctt_CurrentPeriodMQty}" style="float: right" >
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:outputText>
                     </p:column>
-                    <p:column style="width:140px" headerText="分包结算_开累材料金额">
+                    <p:column style="width:140px" headerText="结算_开累材料供应金额">
                         <h:outputText value="#{record.bdSubctt_BeginToCurrentPeriodMAmount}" style="float: right" >
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:outputText>
                     </p:column>
-                    <p:column style="width:140px" headerText="分包结算_本期材料金额">
+                    <p:column style="width:140px" headerText="结算_本期材料供应金额">
                         <h:outputText value="#{record.bdSubctt_CurrentPeriodMAmount}" style="float: right" >
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:outputText>

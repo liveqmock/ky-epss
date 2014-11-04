@@ -339,9 +339,9 @@ public class ProgStlItemSubStlmentAction {
                         itemUnit.setEngPMng_CurrentPeriodAmt(bdContractUnitPriceInSubctt.multiply(bdCurrentPeriodEQty));
                     }
                     bdCurrentPeriodTotalAmtTemp = bdCurrentPeriodTotalAmtTemp.add(
-                            getBdIgnoreNull(itemUnit.getEngPMng_CurrentPeriodAmt()));
+                            ToolUtil.getBdIgnoreNull(itemUnit.getEngPMng_CurrentPeriodAmt()));
                     bdBeginToCurrentPeriodTotalAmtTemp = bdBeginToCurrentPeriodTotalAmtTemp.add(
-                            getBdIgnoreNull(itemUnit.getEngPMng_BeginToCurrentPeriodAmt()));
+                            ToolUtil.getBdIgnoreNull(itemUnit.getEngPMng_BeginToCurrentPeriodAmt()));
                     progStlItemSubStlmentShowList.add(itemUnit);
                     progStlItemSubStlmentShowListForApprove.add(itemUnit);
                 }
@@ -430,7 +430,7 @@ public class ProgStlItemSubStlmentAction {
             stl4.setEngPMng_PeriodNo(progStlInfo.getPeriodNo());
             stl4.setSubctt_ContractUnitPrice(bdRates[0]);
             stl4.setEngPMng_CurrentPeriodAmt(stl2.getEngPMng_CurrentPeriodAmt().multiply(bdRates[0]));
-            stl4.setEngPMng_BeginToCurrentPeriodAmt(stl2.getEngPMng_CurrentPeriodAmt().multiply(bdRates[0]));
+            stl4.setEngPMng_BeginToCurrentPeriodAmt(stl2.getEngPMng_BeginToCurrentPeriodAmt().multiply(bdRates[0]));
             progStlItemSubStlmentShowList.add(stl4);
             progStlItemSubStlmentShowListForApprove.add(stl4);
 
@@ -501,10 +501,6 @@ public class ProgStlItemSubStlmentAction {
         } catch (Exception e) {
             MessageUtil.addInfo("结算数据引取失败！" + e.getMessage());
         }
-    }
-
-    private BigDecimal getBdIgnoreNull(BigDecimal bigDecimalPara) {
-        return bigDecimalPara == null ? new BigDecimal(0) : bigDecimalPara;
     }
 
     /*根据数据库中层级关系数据列表得到总包合同*/

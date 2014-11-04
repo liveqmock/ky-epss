@@ -83,9 +83,6 @@ public class SubcttItemAction {
     /*控制控件在画面上的可用与现实Start*/
     //显示的控制
     private StyleModel styleModel;
-    // 固定项输入时控制控件的可用
-    private StyleModel styleModelCttQty;
-    private StyleModel styleModelCttAmount;
     /*控制控件在画面上的可用与现实End*/
     private Map beansMap;
     private List<CttItemShow> cttItemShowListExcel;
@@ -269,10 +266,6 @@ public class SubcttItemAction {
         strSubmitType="Add";
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
-        styleModelCttQty=new StyleModel();
-        styleModelCttQty.setDisabled_Flag("false");
-        styleModelCttAmount=new StyleModel();
-        styleModelCttAmount.setDisabled_Flag("true");
         cttItemShowSel =new CttItemShow(strBelongToType ,strCttInfoPkid);
         cttItemShowAdd =new CttItemShow(strBelongToType ,strCttInfoPkid);
         cttItemShowUpd =new CttItemShow(strBelongToType ,strCttInfoPkid);
@@ -318,28 +311,6 @@ public class SubcttItemAction {
             logger.error("选择数据失败，", e);
             MessageUtil.addError(e.getMessage());
         }
-    }
-
-    public Boolean blurStrName(){
-        if(!ToolUtil.getStrIgnoreNull(cttItemShowSel.getName()).equals("")){
-            Integer intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowSel.getName());
-            if(intIndex>=0){
-                styleModelCttQty.setDisabled_Flag("true");
-                styleModelCttAmount.setDisabled_Flag("false");
-                cttItemShowSel.setUnit(null);
-                cttItemShowSel.setContractUnitPrice(null);
-                cttItemShowSel.setContractQuantity(null);
-                cttItemShowSel.setSignPartAPrice(null);
-                cttItemShowSel.setCorrespondingPkid(null);
-                cttItemShowSel.setStrCorrespondingItemNo(null);
-                cttItemShowSel.setStrCorrespondingItemName(null);
-            }
-            else{
-                styleModelCttQty.setDisabled_Flag("false");
-                styleModelCttAmount.setDisabled_Flag("true");
-            }
-        }
-        return true;
     }
     public void blurCalculateAmountAction(){
         BigDecimal bigDecimal;
@@ -503,9 +474,21 @@ public class SubcttItemAction {
                 }
 
                 if(strSubmitType.equals("Add")){
+                    if(!ToolUtil.getStrIgnoreNull(cttItemShowAdd.getName()).equals("")){
+                        Integer intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowAdd.getName());
+                        if(intIndex>=0){
+                            cttItemShowAdd.setSpareField(intIndex.toString());
+                        }
+                    }
                     addRecordAction(cttItemShowAdd);
                     resetActionForAdd();
                 }else if(strSubmitType.equals("Upd")){
+                    if(!ToolUtil.getStrIgnoreNull(cttItemShowUpd.getName()).equals("")){
+                        Integer intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowUpd.getName());
+                        if(intIndex>=0){
+                            cttItemShowUpd.setSpareField(intIndex.toString());
+                        }
+                    }
                     updRecordAction(cttItemShowUpd);
                 }
             }
@@ -997,14 +980,6 @@ public class SubcttItemAction {
 
     public StyleModel getStyleModel() {
         return styleModel;
-    }
-
-    public StyleModel getStyleModelCttAmount() {
-        return styleModelCttAmount;
-    }
-
-    public StyleModel getStyleModelCttQty() {
-        return styleModelCttQty;
     }
 
     public CttItemShow getCttItemShowAdd() {

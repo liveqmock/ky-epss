@@ -50,7 +50,8 @@ public interface MyQueryMapper {
             "     sum(ecitem.contract_quantity) as bdQuantity," +
             "     sum(eissem.current_period_m_qty) as bdCurrentPeriodQuantity," +
             "     sum(eissem.begin_to_current_period_m_qty) as bdBeginToCurrentPeriodQuantity," +
-            "     sum(ecitem.contract_unit_price) as bdUnitPrice" +
+            "     sum(ecitem.contract_unit_price) as bdUnitPrice," +
+            "     sum(ecitem.SIGN_PART_A_PRICE) as bdSignPartAMPrice" +
             " from " +
             "     (" +
             "       select " +

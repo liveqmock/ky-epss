@@ -157,6 +157,7 @@ public class CttItemService {
         cttItemTemp.setRemark(cttItemShowPara.getRemark());
         cttItemTemp.setCorrespondingPkid(cttItemShowPara.getCorrespondingPkid());
         cttItemTemp.setRecVersion(cttItemShowPara.getRecVersion());
+        cttItemTemp.setSpareField(cttItemShowPara.getSpareField());
         return cttItemTemp;
     }
     /*层级关系到总包合同*/

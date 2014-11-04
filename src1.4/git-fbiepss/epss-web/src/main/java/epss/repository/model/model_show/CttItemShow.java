@@ -66,6 +66,8 @@ public class CttItemShow implements Serializable {
 
     private String createdByName;
     private String lastUpdByName;
+    // 主要针对金额率
+    private String spareField;
 
     public CttItemShow() {
 
@@ -412,5 +414,13 @@ public class CttItemShow implements Serializable {
 
     public void setLastUpdByName(String lastUpdByName) {
         this.lastUpdByName = lastUpdByName;
+    }
+
+    public String getSpareField() {
+        return spareField;
+    }
+
+    public void setSpareField(String spareField) {
+        this.spareField = spareField;
     }
 }

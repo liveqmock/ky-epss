@@ -279,9 +279,7 @@
                                                  value="#{subcttItemAction.cttItemShowAdd.name}"
                                                  editable="true">
                                     <f:selectItems value="#{esCommon.subcttItemNamelist}" />
-                                    <p:ajax update="msgs,contractQuantityForAdd,contractUnitPriceForAdd,contractAmountForAdd"
-                                            listener="#{subcttItemAction.blurStrName()}"/>
-                                </p:selectOneMenu>
+                                  </p:selectOneMenu>
                                 <p:outputLabel  value="*固定项输入时,选择左面下拉框中的项目*" />
                             </h:panelGrid>
                             <h:panelGrid columns="2">
@@ -374,8 +372,6 @@
                                                  value="#{subcttItemAction.cttItemShowUpd.name}"
                                                  editable="true">
                                     <f:selectItems value="#{esCommon.subcttItemNamelist}" />
-                                    <p:ajax update="msgs,contractQuantityForUpd,contractUnitPriceForUpd,contractAmountForUpd"
-                                            listener="#{subcttItemAction.blurStrName()}"/>
                                 </p:selectOneMenu>
                                 <p:outputLabel  value="*固定项输入时,选择左面下拉框中的项目*" />
                             </h:panelGrid>
@@ -416,9 +412,8 @@
                                 </h:inputText>
                                 <p:outputLabel for="contractAmountForUpd" value="合同金额："/>
                                 <h:inputText id="contractAmountForUpd"
-                                             readonly="true"
-                                             value="#{subcttItemAction.cttItemShowUpd.contractAmount}"
-                                             style="background-color:gainsboro;text-align:right;">
+                                             style="text-align:right;"
+                                             value="#{subcttItemAction.cttItemShowUpd.contractAmount}">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:inputText>
                                 <p:outputLabel for="signPartAPriceForUpd" value="甲供材价："/>

@@ -135,6 +135,7 @@ public class CstplSubcttStlMItemAction {
                         QryCSStlMShow qryCSStlMShowNewInsert =(QryCSStlMShow)BeanUtils.cloneBean(itemCstplInsertItem);
                         // 目标分包合同项的合同数量，合同单价，合同金额
                         BigDecimal bdSubcttContractUnitPrice=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdUnitPrice());
+                        BigDecimal bdSignPartAMPrice=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdSignPartAMPrice());
                         BigDecimal bdSubcttCurrentPeriodQuantity=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdQuantity());
                         BigDecimal bdSubcttBeginToCurrentPeriodQuantity=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdBeginToCurrentPeriodQuantity());
                         BigDecimal bdSubcttCurrentPeriodAmount=bdSubcttCurrentPeriodQuantity.multiply(bdSubcttContractUnitPrice);
@@ -158,6 +159,7 @@ public class CstplSubcttStlMItemAction {
                         qryCSStlMShowNewInsert.setStrSubctt_Unit(qryShowList.get(i).getStrUnit());
                         qryCSStlMShowNewInsert.setBdSubctt_ContractQuantity(qryShowList.get(i).getBdQuantity());
                         qryCSStlMShowNewInsert.setBdSubctt_ContractUnitPrice(bdSubcttContractUnitPrice);
+                        qryCSStlMShowNewInsert.setBdSubctt_SignPartAMPrice(bdSignPartAMPrice);
 
                         if(intGroup>1){
                             qryCSStlMShowNewInsert.setStrNo("");
