@@ -56,32 +56,27 @@
                                          readonly="true"
                                          style="background-color:gainsboro;width:200px;"/>
                         </h:panelGrid>
-                        <h:panelGrid columns="4">
-                            <h:panelGrid id="ApproveBtn" columns="3">
-                                <p:commandButton id="ApprovePassBtn" value="批准通过"
-                                                 action="#{progStlItemSubStlmentAction.onClickForPowerAction('ApprovePass')}"
-                                                 update="ApproveBtn,msgs"
-                                                 rendered="#{progStlItemSubStlmentAction.strApproveBtnRendered}">
-                                </p:commandButton>
-                                <p:commandButton id="ApproveFailToQBtn" value="批准未过至分包数量结算"
-                                                 action="#{progStlItemSubStlmentAction.onClickForPowerAction('ApproveFailToQ')}"
-                                                 update="ApproveBtn,msgs"
-                                                 rendered="#{progStlItemSubStlmentAction.strApprovedNotBtnRenderedForStlQ}">
-                                </p:commandButton>
-                                <p:commandButton id="ApproveFailToMBtn" value="批准未过至分包材料结算"
-                                                 action="#{progStlItemSubStlmentAction.onClickForPowerAction('ApproveFailToM')}"
-                                                 update="ApproveBtn,msgs"
-                                                 rendered="#{progStlItemSubStlmentAction.strApprovedNotBtnRenderedForStlM}">
-                                </p:commandButton>
-                            </h:panelGrid>
-                            <p:ajaxStatus style="width:16px;height:16px;">
-                                <f:facet name="start">
-                                    <h:graphicImage value="/images/ajaxloading.gif"/>
-                                </f:facet>
-                                <f:facet name="complete">
-                                    <h:outputText value=""/>
-                                </f:facet>
-                            </p:ajaxStatus>
+                        <h:panelGrid id="ApproveBtn" columns="7">
+                            <p:commandButton id="ApprovePassBtn" value="批准通过"
+                                             action="#{progStlItemSubStlmentAction.onClickForPowerAction('ApprovePass')}"
+                                             update="ApproveBtn,msgs"
+                                             rendered="#{progStlItemSubStlmentAction.strApproveBtnRendered}">
+                            </p:commandButton>
+                            <p:commandButton id="ApproveFailToQBtn" value="批准未过至分包数量结算"
+                                             action="#{progStlItemSubStlmentAction.onClickForPowerAction('ApproveFailToQ')}"
+                                             update="ApproveBtn,msgs"
+                                             rendered="#{progStlItemSubStlmentAction.strApprovedNotBtnRenderedForStlQ}">
+                            </p:commandButton>
+                            <p:commandButton id="ApproveFailToMBtn" value="批准未过至分包材料结算"
+                                             action="#{progStlItemSubStlmentAction.onClickForPowerAction('ApproveFailToM')}"
+                                             update="ApproveBtn,msgs"
+                                             rendered="#{progStlItemSubStlmentAction.strApprovedNotBtnRenderedForStlM}">
+                            </p:commandButton>
+                            <p:commandButton id="AccountPassBtn" value="记账"
+                                             action="#{progStlItemSubStlmentAction.onClickForPowerAction('AccountPass')}"
+                                             update="ApproveBtn,msgs"
+                                             rendered="#{progStlItemSubStlmentAction.strAccountBtnRendered}">
+                            </p:commandButton>
                             <p:commandButton value="导出到EXCEL"
                                              action="#{progStlItemSubStlmentAction.onExportExcel}"
                                              ajax="false">
@@ -91,6 +86,14 @@
                                              update="msgs"
                                              onclick="PF('wvAttachmentList').show()">
                             </p:commandButton>
+                            <p:ajaxStatus style="width:16px;height:16px;">
+                                <f:facet name="start">
+                                    <h:graphicImage value="/images/ajaxloading.gif"/>
+                                </f:facet>
+                                <f:facet name="complete">
+                                    <h:outputText value=""/>
+                                </f:facet>
+                            </p:ajaxStatus>
                         </h:panelGrid>
                     </h:panelGrid>
                     <p:dataTable id="pdt" style="heiht:100%;width:100%;"
