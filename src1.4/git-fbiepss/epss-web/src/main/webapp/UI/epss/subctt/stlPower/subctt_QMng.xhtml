@@ -76,7 +76,7 @@
                                   update=":form:pdt,:form:pgViewForUpd,:form:msgs"
                                   onclick="PF('wVDlgViewForUpd').show()">
                             </p:commandButton>
-                            <p:commandButton  icon="ui-icon-trash"
+                            <p:commandButton value="详细内容"
                                   style="height:18px;width:18px"
                                   actionListener="#{progStlInfoSubQSPAction.selectRecordAction('Del',record)}"
                                   rendered="#{record.flowStatus eq null? 'true':'false'}"

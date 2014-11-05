@@ -148,8 +148,8 @@ public class ProgStlItemTkEstAction {
     }
     /*根据数据库中层级关系数据列表得到总包合同*/
     private void recursiveDataTable(String strLevelParentId,
-                                    List<CttItem> cttItemListPara,
-                                    List<ProgStlItemTkEstShow> sprogStlItemTkEstShowListPara){
+                                      List<CttItem> cttItemListPara,
+                                      List<ProgStlItemTkEstShow> sprogStlItemTkEstShowListPara){
         // 根据父层级号获得该父层级下的子节点
         List<CttItem> subCttItemList =new ArrayList<CttItem>();
         // 通过父层id查找它的孩子
@@ -206,8 +206,8 @@ public class ProgStlItemTkEstAction {
                 progStlItemTkEstShowTemp.setEng_LastUpdByName(strLastUpdByName);
                 progStlItemTkEstShowTemp.setEng_LastUpdTime(progStlItemTkEst.getLastUpdTime());
                 progStlItemTkEstShowTemp.setEng_RecVersion(progStlItemTkEst.getRecVersion());
-                if (progStlItemTkEstShowTemp.getEng_BeginToCurrentPeriodEQty()
-                        .equals(progStlItemTkEstShowTemp.getTkctt_ContractQuantity())){
+                if (ToolUtil.getBdIgnoreNull(progStlItemTkEstShowTemp.getEng_BeginToCurrentPeriodEQty())
+                        .compareTo(progStlItemTkEstShowTemp.getTkctt_ContractQuantity())==0){
                     progStlItemTkEstShowTemp.setIsUptoCttContentFlag(true);
                 }
             }

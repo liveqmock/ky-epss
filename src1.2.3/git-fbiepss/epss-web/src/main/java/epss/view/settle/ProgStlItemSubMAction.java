@@ -242,9 +242,6 @@ public class ProgStlItemSubMAction {
     public void submitThisRecordAction(){
         try{
             if(strSubmitType.equals("Upd")){
-                if(!blurEngMMng_CurrentPeriodMQty("submit")){
-                    return;
-                }
                 ProgStlItemSubMShow progStlItemSubMShowTemp =new ProgStlItemSubMShow();
                 progStlItemSubMShowTemp.setEngMMng_SubcttPkid(progStlInfo.getStlPkid());
                 progStlItemSubMShowTemp.setEngMMng_PeriodNo(progStlInfo.getPeriodNo());
@@ -276,44 +273,18 @@ public class ProgStlItemSubMAction {
         }
     }
 
-    public boolean blurEngMMng_CurrentPeriodMQty(String strBlurOrSubmitFlag){
-
-        if(ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getSubctt_ContractQuantity()).equals( new BigDecimal(0))){
-            return true;
+    public boolean blurEngMMng_CurrentPeriodMQty() {
+        String strTemp = progStlItemSubMShowUpd.getEngMMng_CurrentPeriodMQty().toString();
+        String strRegex = "[-]?[0-9]+\\.?[0-9]*";
+        if (!progStlItemSubMShowUpd.getEngMMng_CurrentPeriodMQty().toString().matches(strRegex)) {
+            MessageUtil.addError("请确认输入的数据，" + strTemp + "不是正确的数据格式！");
+            return false;
         }
-        else{
-            String strTemp= progStlItemSubMShowUpd.getEngMMng_CurrentPeriodMQty().toString();
-            String strRegex = "[-]?[0-9]+\\.?[0-9]*";
-            if (!progStlItemSubMShowUpd.getEngMMng_CurrentPeriodMQty().toString().matches(strRegex) ){
-                MessageUtil.addError("请确认输入的数据，" + strTemp + "不是正确的数据格式！");
-                return false;
-            }
-
-            BigDecimal bDEngQMng_CurrentPeriodMQtyTemp= 
-			ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getEngMMng_CurrentPeriodMQty());
-
-            BigDecimal bigDecimalTemp= 
-			         bDEngMMng_BeginToCurrentPeriodMQtyInDB.add(bDEngQMng_CurrentPeriodMQtyTemp).subtract(bDEngMMng_CurrentPeriodMQtyInDB);
-
-            BigDecimal bDSubctt_ContractQuantity= ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getSubctt_ContractQuantity());
-
-            if(strBlurOrSubmitFlag.equals("blur")) {
-                if(bigDecimalTemp.compareTo(bDSubctt_ContractQuantity)>0){
-                    MessageUtil.addInfo("上期材料累计供应数量+本期材料供应数量>合同数量，确认输入的本期材料供应数量（"
-                            + bDEngQMng_CurrentPeriodMQtyTemp.toString() + "）是否正确！");
-                 }
-                progStlItemSubMShowUpd.setEngMMng_BeginToCurrentPeriodMQty(bigDecimalTemp);
-            }else if (strBlurOrSubmitFlag.equals("submit")) {
-                BigDecimal bDEngQMng_BeginToCurrentPeriodMQtyTemp=
-                        ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getEngMMng_BeginToCurrentPeriodMQty());
-                if(bDEngQMng_BeginToCurrentPeriodMQtyTemp.compareTo(bDEngMMng_BeginToCurrentPeriodMQtyInDB)==0){
-                    if(bigDecimalTemp.compareTo(bDSubctt_ContractQuantity)>0){
-                        MessageUtil.addInfo("上期材料累计供应数量+本期材料供应数量>合同数量，确认输入的本期材料供应数量（"
-                                + bDEngQMng_CurrentPeriodMQtyTemp.toString() + "）是否正确！");
-                    }
-                }
-            }
-        }
+        BigDecimal bDEngQMng_CurrentPeriodMQtyTemp =
+                ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getEngMMng_CurrentPeriodMQty());
+        BigDecimal bigDecimalTemp =
+                bDEngMMng_BeginToCurrentPeriodMQtyInDB.add(bDEngQMng_CurrentPeriodMQtyTemp).subtract(bDEngMMng_CurrentPeriodMQtyInDB);
+        progStlItemSubMShowUpd.setEngMMng_BeginToCurrentPeriodMQty(bigDecimalTemp);
         return true;
     }
 
@@ -358,20 +329,11 @@ public class ProgStlItemSubMAction {
     public void selectRecordAction(String strSubmitTypePara,ProgStlItemSubMShow progStlItemSubMShowPara){
         try {
             strSubmitType=strSubmitTypePara;
-            BigDecimal bdSubctt_SignPartAPrice= ToolUtil.getBdIgnoreNull(
-                    progStlItemSubMShowPara.getSubctt_SignPartAPrice());
-            BigDecimal bdSubctt_ContractQuantity= ToolUtil.getBdIgnoreNull(
-                    progStlItemSubMShowPara.getSubctt_ContractQuantity());
             if(strSubmitTypePara.equals("Sel")){
                 progStlItemSubMShowSel =(ProgStlItemSubMShow)BeanUtils.cloneBean(progStlItemSubMShowPara) ;
                 progStlItemSubMShowSel.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progStlItemSubMShowSel.getSubctt_StrNo()));
             }else
             if(strSubmitTypePara.equals("Upd")){
-                if(bdSubctt_SignPartAPrice.compareTo(ToolUtil.bigDecimal0)==0||
-                        bdSubctt_ContractQuantity.compareTo(ToolUtil.bigDecimal0)==0) {
-                    MessageUtil.addInfo("该数据不是工程材料数据，无法更新");
-                    return;
-                }
                 progStlItemSubMShowUpd =(ProgStlItemSubMShow) BeanUtils.cloneBean(progStlItemSubMShowPara) ;
                 progStlItemSubMShowUpd.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progStlItemSubMShowUpd.getSubctt_StrNo()));
 
@@ -380,11 +342,6 @@ public class ProgStlItemSubMAction {
                         ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getEngMMng_BeginToCurrentPeriodMQty());
             }else
             if(strSubmitTypePara.equals("Del")){
-                if(bdSubctt_SignPartAPrice.compareTo(ToolUtil.bigDecimal0)==0||
-                        bdSubctt_ContractQuantity.compareTo(ToolUtil.bigDecimal0)==0) {
-                    MessageUtil.addInfo("该数据不是工程材料数据，无法删除");
-                    return;
-                }
                 progStlItemSubMShowDel =(ProgStlItemSubMShow) BeanUtils.cloneBean(progStlItemSubMShowPara) ;
                 progStlItemSubMShowDel.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progStlItemSubMShowDel.getSubctt_StrNo()));
             }

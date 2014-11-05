@@ -187,7 +187,7 @@
                                          style="text-align:right;float:left">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 <p:ajax event="blur" update="msgs,engMMng_BeginToCurrentPeriodMQtyForUpd"
-                                        listener="#{progStlItemSubMAction.blurEngMMng_CurrentPeriodMQty('blur')}"/>
+                                        listener="#{progStlItemSubMAction.blurEngMMng_CurrentPeriodMQty}"/>
                             </h:inputText>
                             <p:outputLabel for="contractAmountItemInfoForUpd" value="合同金额:" rendered="false"/>
                             <h:inputText id="contractAmountItemInfoForUpd"
