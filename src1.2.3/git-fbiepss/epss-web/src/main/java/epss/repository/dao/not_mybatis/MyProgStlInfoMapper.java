@@ -366,7 +366,7 @@ public interface MyProgStlInfoMapper {
             " where " +
             "     ecinfo.PARENT_PKID = #{strParentPkid}" +
             " order by " +
-            "     eispower.FLOW_STATUS£¬eispower.PERIOD_NO desc£¬eispower.ID asc")
+            "     eispower.FLOW_STATUS,eispower.PERIOD_NO desc,eispower.ID asc")
     List<ProgStlInfoShow> selectFormedEsInitSubcttStlPList(@Param("strParentPkid") String strParentPkid,
                                                            @Param("strStlPkid") String strStlPkid,
                                                            @Param("strPeriodNo") String strPeriodNo);
@@ -426,7 +426,7 @@ public interface MyProgStlInfoMapper {
             " where " +
             "     ecinfo.PARENT_PKID = #{strParentPkid}" +
             " order by " +
-            "     eispower.FLOW_STATUS£¬eispower.PERIOD_NO desc£¬eispower.ID asc")
+            "     eispower.FLOW_STATUS,eispower.PERIOD_NO desc,eispower.ID asc")
     List<ProgStlInfoShow> getFormedAfterEsInitSubcttStlPList(@Param("strParentPkid") String strParentPkid,
                                                              @Param("strStlPkid") String strStlPkid,
                                                              @Param("strPeriodNo") String strPeriodNo);
