@@ -78,7 +78,7 @@
                     <p:dataTable id="pdt" style="heiht:100%;width:100%;"
                              value="#{progStlItemSubStlmentAction.progStlItemSubStlmentShowList}"
                              var="record"
-                             rowKey="#{record.pkid}"
+                             rowKey="#{record.subctt_ItemPkid}"
                              selectionMode="single"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
                              {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -89,11 +89,11 @@
                              rowIndexVar="row"
                              emptyMessage="数据记录为空..."
                              widgetVar="dtItemDetail"
-                             rowStyleClass="#{record.subcttItemName eq '小计'? 'rowGrayStyle':
-                                                 record.subcttItemName eq '本期净结算额'? 'rowTotalStyle':
-                                                 record.subcttItemName eq '合计(扣除其它栏款项后本期结算价值)'?'rowTotalStyle':
-                                                 record.subcttItemName eq '其中:安全施工措施费'?'rowGrayStyle':
-                                                 record.subcttItemName eq '质保金'? 'rowTotalStyle':null}"
+                             rowStyleClass="#{record.subctt_ItemName eq '小计'? 'rowGrayStyle':
+                                                 record.subctt_ItemName eq '本期净结算额'? 'rowTotalStyle':
+                                                 record.subctt_ItemName eq '合计(扣除其它栏款项后本期结算价值)'?'rowTotalStyle':
+                                                 record.subctt_ItemName eq '其中:安全施工措施费'?'rowGrayStyle':
+                                                 record.subctt_ItemName eq '质保金'? 'rowTotalStyle':null}"
                              scrollable="true">
                         <p:column headerText="序号" style="width:30px">
                             <h:outputText value="#{row + 1}"/>
