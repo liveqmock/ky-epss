@@ -141,10 +141,10 @@ public class ProgStlItemSubStlmentAction {
             }
             if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(
                     ToolUtil.getStrIgnoreNull(progStlInfo.getFlowStatus())) == 0) {
-                strAccountBtnRendered = "true";
+                strApproveBtnRendered = "false";
             }else if (EnumFlowStatus.FLOW_STATUS3.getCode().compareTo(
                     ToolUtil.getStrIgnoreNull(progStlInfo.getFlowStatus())) == 0){
-                strAccountBtnRendered = "false";
+                strApproveBtnRendered = "false";
             }
         }else if ("Account".equals(strFlowType)){
             strApproveBtnRendered = "false";
