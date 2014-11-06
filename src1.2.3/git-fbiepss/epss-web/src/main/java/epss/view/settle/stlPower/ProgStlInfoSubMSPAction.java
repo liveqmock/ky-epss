@@ -192,7 +192,7 @@ public class ProgStlInfoSubMSPAction {
             if (progStlInfoShowConstructsTemp.size()>0){
                 progStlInfoService.delSubQMStlInfoAndItem(progStlInfoShowDel);
             }else{
-                progStlInfoService.delSubQStlInfoAndItem(progStlInfoShowDel);
+                progStlInfoService.delSubMStlInfoAndItem(progStlInfoShowDel);
             }
             MessageUtil.addInfo("删除数据完成。");
         }
