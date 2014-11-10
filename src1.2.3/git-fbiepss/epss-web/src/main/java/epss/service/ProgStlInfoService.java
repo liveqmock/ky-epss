@@ -79,6 +79,9 @@ public class ProgStlInfoService {
         if(!ToolUtil.getStrIgnoreNull(progStlInfoPara.getFlowStatus()).equals("")){
             criteria.andFlowStatusEqualTo(progStlInfoPara.getFlowStatus());
         }
+        if(!ToolUtil.getStrIgnoreNull(progStlInfoPara.getAutoLinkAdd()).equals("")){
+            criteria.andAutoLinkAddEqualTo(progStlInfoPara.getAutoLinkAdd());
+        }
         List<ProgStlInfoShow> progStlInfoShowListTemp=new ArrayList<>();
         List<ProgStlInfo> progStlInfoListTemp=progStlInfoMapper.selectByExample(example);
         for(ProgStlInfo progStlInfoUnit:progStlInfoListTemp){
@@ -98,7 +101,10 @@ public class ProgStlInfoService {
         return myProgStlInfoMapper.getMaxPeriodNo(stlType,subCttPkid);
     }
 
-    public String progStlInfoMngPreCheck(String stlType,String cttPkid,String periodNo) {
+    public String progStlInfoMngPreCheck(ProgStlInfoShow progStlInfoShowPara) {
+        String stlType=progStlInfoShowPara.getStlType();
+        String cttPkid=progStlInfoShowPara.getStlPkid();
+        String periodNo=progStlInfoShowPara.getPeriodNo();
         String strReturnTemp="";
         if(EnumResType.RES_TYPE3.getCode().equals(stlType)||
                 EnumResType.RES_TYPE4.getCode().equals(stlType)){ //分包结算
@@ -106,8 +112,11 @@ public class ProgStlInfoService {
                     getMaxPeriodNo(EnumResType.RES_TYPE3.getCode(),cttPkid));
             String materialMaxPeriod = ToolUtil.getStrIgnoreNull(
                     getMaxPeriodNo(EnumResType.RES_TYPE4.getCode(),cttPkid));
+            String stlmentMaxPeriod = ToolUtil.getStrIgnoreNull(
+                    getMaxPeriodNo(EnumResType.RES_TYPE5.getCode(),cttPkid));
             String quantityStatus="";
             String materialStatus="";
+            String stlmentStatus="";
             ProgStlInfo progStlInfoTemp=new ProgStlInfo();
             progStlInfoTemp.setStlType(EnumResType.RES_TYPE3.getCode());
             progStlInfoTemp.setStlPkid(cttPkid);
@@ -118,76 +127,81 @@ public class ProgStlInfoService {
             }
 
             progStlInfoTemp.setStlType(EnumResType.RES_TYPE4.getCode());
+            progStlInfoTemp.setPeriodNo(materialMaxPeriod);
             progStlInfoListTemp=getInitStlListByModel(progStlInfoTemp);
             if(progStlInfoListTemp.size()>0) {
                 materialStatus=ToolUtil.getStrIgnoreNull(progStlInfoListTemp.get(0).getFlowStatus());
             }
 
-            System.out.println("\n数量结算最大期号："+quantityMaxPeriod+"\n材料结算最大期号："+materialMaxPeriod);
-            System.out.println("\n数量结算最大期号对应状态标志："+quantityStatus+"\n材料结算最大期号对应状态标志："+materialStatus);
+            progStlInfoTemp.setStlType(EnumResType.RES_TYPE5.getCode());
+            progStlInfoTemp.setPeriodNo(stlmentMaxPeriod);
+            progStlInfoListTemp=getInitStlListByModel(progStlInfoTemp);
+            if(progStlInfoListTemp.size()>0) {
+                stlmentStatus=ToolUtil.getStrIgnoreNull(progStlInfoListTemp.get(0).getFlowStatus());
+            }
+
+            System.out.println("\n数量结算最大期号："+quantityMaxPeriod+"\n材料结算最大期号："+materialMaxPeriod+"\n结算单最大期号："+stlmentMaxPeriod);
+            System.out.println("\n数量结算最大期号对应状态标志："+quantityStatus+"\n材料结算最大期号对应状态标志："+materialStatus+"\n结算单最大期号对应状态标志："+stlmentStatus);
 
             if (EnumResType.RES_TYPE3.getCode().equals(stlType)){
-                if ("".equals(quantityMaxPeriod)){
-                    return strReturnTemp;
-                }
-                if (periodNo.compareTo(quantityMaxPeriod)<=0){ //首先和自身比较期号大小，如果比自身小或者等于则不能录入
+                //和自身比较
+                if (periodNo.compareTo(quantityMaxPeriod)<=0){//1.和自身期号比较
                     strReturnTemp="应录入大于[" + quantityMaxPeriod + "]期的分包数量结算数据!";
                     return strReturnTemp;
                 }else {
-                    if (quantityStatus.equals("")&&!quantityMaxPeriod.equals("")){
-                        strReturnTemp="分包数量结算第["+quantityMaxPeriod+"]期数据还未批准通过，不能录入新数据!";
+                    if (!("".equals(quantityMaxPeriod))&&
+                            EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus)>0){//2.和自身状态比较
+                        strReturnTemp="分包数量结算第["+quantityMaxPeriod+"]期数据还未复合通过，不能录入新数据!";
                         return strReturnTemp;
                     }
-                    if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus)>0){ //判断是否有非批准状态的数据存在，如果有不能录入
-                        if (!quantityStatus.equals("")){
-                            strReturnTemp="分包数量结算第["+quantityMaxPeriod+"]期数据还未批准通过，不能录入新数据！";
-                            return strReturnTemp;
-                        }else {
-                            if (quantityMaxPeriod.compareTo(materialMaxPeriod)<0&&periodNo.compareTo(materialMaxPeriod)!=0){
-                                strReturnTemp="第["+materialMaxPeriod+"]期分包材料结算已经开始，请录入["+materialMaxPeriod+"]期的分包数量结算数据！";
-                                return strReturnTemp;
-                            }
-                        }
-                    } else{//（>quantityMaxPeriod &&=3）在以上两个条件均不满足的情况下，此时说明和自身比较没有问题，接下来要和材料结算比较
-                        if (quantityMaxPeriod.compareTo(materialMaxPeriod)<0){
-                            if (periodNo.compareTo(materialMaxPeriod)!=0){
-                                strReturnTemp="第["+materialMaxPeriod+"]期分包材料结算已经开始，请录入["+materialMaxPeriod+"]期的分包数量结算数据！";
-                                return strReturnTemp;
-                            }
-                        }
+                }
+                //和材料比较
+                if (!("".equals(materialMaxPeriod))&&periodNo.compareTo(materialMaxPeriod)!=0){
+                    if (quantityMaxPeriod.compareTo(materialMaxPeriod)!=0){
+                        strReturnTemp="第["+materialMaxPeriod+"]期分包材料结算已经开始，请录入["+materialMaxPeriod+"]期的分包数量结算数据！";
+                        return strReturnTemp;
+                    }
+                    if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus)>0){
+                        strReturnTemp="材料结算第["+materialMaxPeriod+"]期数据还未复合通过，不能录入新数据!";
+                        return strReturnTemp;
+                    }
+                }
+                //和结算单比较
+                if (!("".equals(stlmentMaxPeriod))&&periodNo.compareTo(stlmentMaxPeriod)>0){
+                    if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(stlmentStatus)>=0){//2.和自身状态比较
+                        strReturnTemp="结算单第["+stlmentMaxPeriod+"]期数据还未批准通过，不能录入新数据!";
+                        return strReturnTemp;
                     }
                 }
             }
             if (EnumResType.RES_TYPE4.getCode().equals(stlType)){
-                if ("".equals(materialMaxPeriod)){
-                    return strReturnTemp;
-                }
-                if (periodNo.compareTo(materialMaxPeriod)<=0){ //首先和自身比较期号大小，如果比自身小或者等于则不能录入
-                    strReturnTemp="应录入大于["+materialMaxPeriod+"]期的分包材料结算数据!";
+                //和自身比较
+                if (periodNo.compareTo(materialMaxPeriod)<=0){//1.和自身期号比较
+                    strReturnTemp="应录入大于[" + materialMaxPeriod + "]期的分包材料结算数据!";
                     return strReturnTemp;
                 }else {
-                    if (materialStatus.equals("")&&!materialMaxPeriod.equals("")){
-                        strReturnTemp="分包材料结算第["+materialMaxPeriod+"]期数据还未批准通过，不能录入新数据!";
+                    if (!("".equals(materialMaxPeriod))&&
+                            EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus)>0){//2.和自身状态比较
+                        strReturnTemp="分包材料结算第["+materialMaxPeriod+"]期数据还未复合通过，不能录入新数据!";
                         return strReturnTemp;
                     }
-
-                    if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus)>0){ //判断是否有非批准状态的数据存在，如果有不能录入
-                        if (!materialMaxPeriod.equals("")){
-                            strReturnTemp="分包材料结算第["+materialMaxPeriod+"]期数据还未批准通过，不能录入新数据！";
-                            return strReturnTemp;
-                        }else {
-                            if (materialMaxPeriod.compareTo(quantityMaxPeriod)<0&&periodNo.compareTo(quantityMaxPeriod)!=0){
-                                strReturnTemp="第["+quantityMaxPeriod+"]期分包数量结算已经开始，请录入["+quantityMaxPeriod+"]期的分包材料结算数据！";
-                                return strReturnTemp;
-                            }
-                        }
-                    } else{//（>materialMaxPeriod &&=3）在以上两个条件均不满足的情况下，此时说明和自身比较没有问题，接下来要和材料结算比较
-                        if (materialMaxPeriod.compareTo(quantityMaxPeriod)<0){
-                            if (periodNo.compareTo(quantityMaxPeriod)!=0){
-                                strReturnTemp="第["+quantityMaxPeriod+"]期分包数量结算已经开始，请录入["+quantityMaxPeriod+"]期的分包材料结算数据！";
-                                return strReturnTemp;
-                            }
-                        }
+                }
+                //和数量比较
+                if (!("".equals(quantityMaxPeriod))&&periodNo.compareTo(quantityMaxPeriod)!=0){
+                    if (quantityMaxPeriod.compareTo(materialMaxPeriod)!=0){
+                        strReturnTemp="第["+quantityMaxPeriod+"]期分包数量结算已经开始，请录入["+quantityMaxPeriod+"]期的分包材料结算数据！";
+                        return strReturnTemp;
+                    }
+                    if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus)>0){
+                        strReturnTemp="数量结算第["+quantityMaxPeriod+"]期数据还未复合通过，不能录入新数据!";
+                        return strReturnTemp;
+                    }
+                }
+                //和结算单比较
+                if (!("".equals(stlmentMaxPeriod))&&periodNo.compareTo(stlmentMaxPeriod)>0){
+                    if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(stlmentStatus)>=0){//2.和自身状态比较
+                        strReturnTemp="结算单第["+stlmentMaxPeriod+"]期数据还未批准通过，不能录入新数据!";
+                        return strReturnTemp;
                     }
                 }
             }

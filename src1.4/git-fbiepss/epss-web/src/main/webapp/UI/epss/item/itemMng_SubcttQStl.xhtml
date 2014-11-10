@@ -71,7 +71,9 @@
                                  paginatorPosition="bottom"
                                  rows="15"
                                  rowsPerPageTemplate="500,200,100,45,30,15"
-                                 rowStyleClass="#{record.isUptoCttContentFlag? 'rowGreenyellowStyle':null}"
+                                 rowStyleClass="#{record.subctt_ContractAmount le 0? 'rowGrayStyle':
+                                                     record.subctt_ContractAmount eq null? 'rowGrayStyle':
+                                                     record.isUptoCttContentFlag? 'rowGreenyellowStyle':null}"
                                  rowIndexVar="row"
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
@@ -80,12 +82,16 @@
                                   rendered='#{progStlItemSubQAction.strPassFlag}'>
                             <p:commandButton  icon="ui-icon-pencil"
                                               style="height:18px;width:18px"
+                                              rendered="#{record.subctt_ContractAmount le 0? 'false':
+                                                            record.subctt_ContractAmount eq null? 'false':'true'}"
                                               actionListener="#{progStlItemSubQAction.selectRecordAction('Upd',record)}"
                                               update="pdt,:form:pgViewForUpd"
                                               onclick="PF('wVDlgViewForUpd').show()">
                             </p:commandButton>
                             <p:commandButton  icon="ui-icon-trash"
                                               style="height:18px;width:18px"
+                                              rendered="#{record.subctt_ContractAmount le 0? 'false':
+                                                            record.subctt_ContractAmount eq null? 'false':'true'}"
                                               actionListener="#{progStlItemSubQAction.selectRecordAction('Del',record)}"
                                               update="pdt,:form:pgViewForDel"
                                               onclick="PF('wVDlgViewForDel').show()">

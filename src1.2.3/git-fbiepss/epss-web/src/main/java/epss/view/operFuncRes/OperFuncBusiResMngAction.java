@@ -5,6 +5,7 @@ import epss.common.enums.EnumArchivedFlag;
 import epss.common.enums.EnumFlowStatus;
 import epss.common.enums.EnumTaskDoneFlag;
 import epss.repository.model.CttInfo;
+import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.NodeCollapseEvent;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
@@ -625,7 +626,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                     cttInfoShowAdd.setCttType(EnumResType.RES_TYPE2.getCode());
                     cttInfoShowAdd.setParentPkid(operFuncResShowPara.getResPkid());
                 }
-                cttInfoShowAdd.setId(cttInfoService.getStrMaxCttId(cttInfoShowAdd.getCttType()));
+                cttInfoShowAdd.setId(setMaxNoPlusOne(cttInfoShowAdd.getCttType()));
             } else if (strSubmitTypePara.equals("Upd")){
                 cttInfoShowUpd = fromResModelShowToCttInfoShow(operFuncResShowPara);
             } else if (strSubmitTypePara.equals("Del")) {
@@ -647,6 +648,33 @@ public class OperFuncBusiResMngAction implements Serializable{
         }
     }
 
+    public String setMaxNoPlusOne(String strResType) {
+        Integer intTemp;
+        String strType = null;
+        if (EnumResType.RES_TYPE0.getCode().equals(strResType)){
+            strType="TKCTT";
+        }else if (EnumResType.RES_TYPE1.getCode().equals(strResType)){
+            strType="CSTPL";
+        }else if (EnumResType.RES_TYPE2.getCode().equals(strResType)){
+            strType="SUBCTT";
+        }
+        String strMaxId = cttInfoService.getStrMaxCttId(strResType);
+        if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
+            strMaxId = strType + ToolUtil.getStrToday() + "001";
+        } else {
+            if (strMaxId.length() > 3) {
+                String strTemp = strMaxId.substring(strMaxId.length() - 3).replaceFirst("^0+", "");
+                if (ToolUtil.strIsDigit(strTemp)) {
+                    intTemp = Integer.parseInt(strTemp);
+                    intTemp = intTemp + 1;
+                    strMaxId = strMaxId.substring(0, strMaxId.length() - 3) + StringUtils.leftPad(intTemp.toString(), 3, "0");
+                } else {
+                    strMaxId += "001";
+                }
+            }
+        }
+        return strMaxId;
+    }
 
     /**
      * 提交维护权限
@@ -674,7 +702,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                     cttInfoShowAdd = new CttInfoShow();
 					cttInfoShowAdd.setCttType(strCttTypeTemp);
                     cttInfoShowAdd.setParentPkid(strParentPkidTemp);
-                    cttInfoShowAdd.setId(cttInfoService.getStrMaxCttId(cttInfoShowAdd.getCttType()));
+                    cttInfoShowAdd.setId(setMaxNoPlusOne(cttInfoShowAdd.getCttType()));
                 }
             } else if (strSubmitTypePara.equals("Upd")) {
                 if (!submitPreCheck(cttInfoShowUpd)) {

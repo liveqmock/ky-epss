@@ -66,8 +66,6 @@ public class OperFuncBusiResMngAction implements Serializable{
     private TreeNode resRoot;
     private TreeNode deptOperRoot;
     private TreeNode currentSelectedNode;
-    private String strCttType;
-    private String strParentPkid;
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
@@ -621,19 +619,14 @@ public class OperFuncBusiResMngAction implements Serializable{
                 if(operFuncResShowPara.getResPkid().equals("ROOT")) {
                     cttInfoShowAdd.setCttType(EnumResType.RES_TYPE0.getCode());
                     cttInfoShowAdd.setParentPkid("ROOT");
-                    strCttType=EnumResType.RES_TYPE0.getCode();
-                    strParentPkid="ROOT";
                 }else if(operFuncResShowPara.getResType().equals(EnumResType.RES_TYPE0.getCode())) {
                     cttInfoShowAdd.setCttType(EnumResType.RES_TYPE1.getCode());
                     cttInfoShowAdd.setParentPkid(operFuncResShowPara.getResPkid());
-                    strCttType=EnumResType.RES_TYPE1.getCode();
-                    strParentPkid=operFuncResShowPara.getResPkid();
                 }else if(operFuncResShowPara.getResType().equals(EnumResType.RES_TYPE1.getCode())) {
                     cttInfoShowAdd.setCttType(EnumResType.RES_TYPE2.getCode());
                     cttInfoShowAdd.setParentPkid(operFuncResShowPara.getResPkid());
-                    strCttType=EnumResType.RES_TYPE2.getCode();
-                    strParentPkid=operFuncResShowPara.getResPkid();
                 }
+                cttInfoShowAdd.setId(setMaxNoPlusOne(cttInfoShowAdd.getCttType()));
             } else if (strSubmitTypePara.equals("Upd")){
                 cttInfoShowUpd = fromResModelShowToCttInfoShow(operFuncResShowPara);
             } else if (strSubmitTypePara.equals("Del")) {
@@ -696,18 +689,20 @@ public class OperFuncBusiResMngAction implements Serializable{
                     return;
                 }
                 CttInfoShow cttInfoShowTemp=new CttInfoShow();
-                cttInfoShowTemp.setCttType(strCttType);
+                cttInfoShowTemp.setCttType(cttInfoShowAdd.getCttType());
                 cttInfoShowTemp.setName(cttInfoShowAdd.getName());
                 if (cttInfoService.getListByModelShow(cttInfoShowTemp).size()>0) {
                     MessageUtil.addError("该记录已存在，请重新录入！");
                     return;
                 } else {
-                    cttInfoShowAdd.setCttType(strCttType);
-                    cttInfoShowAdd.setParentPkid(strParentPkid);
-                    cttInfoShowAdd.setId(setMaxNoPlusOne(strCttType));
                     cttInfoService.insertRecord(cttInfoShowAdd);
                     MessageUtil.addInfo("新增数据完成。");
+					String strCttTypeTemp=cttInfoShowAdd.getCttType();
+					String strParentPkidTemp=cttInfoShowAdd.getParentPkid();
                     cttInfoShowAdd = new CttInfoShow();
+					cttInfoShowAdd.setCttType(strCttTypeTemp);
+                    cttInfoShowAdd.setParentPkid(strParentPkidTemp);
+                    cttInfoShowAdd.setId(setMaxNoPlusOne(cttInfoShowAdd.getCttType()));
                 }
             } else if (strSubmitTypePara.equals("Upd")) {
                 if (!submitPreCheck(cttInfoShowUpd)) {

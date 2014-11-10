@@ -235,10 +235,7 @@ public class ProgStlInfoSubMAction {
                 MessageUtil.addError("该记录已存在，请重新录入！");
                 return;
             }
-            String strTemp=progStlInfoService.progStlInfoMngPreCheck(
-                    EnumResType.RES_TYPE4.getCode(),
-                    progStlInfoShowAdd.getStlPkid(),
-                    progStlInfoShowAdd.getPeriodNo());
+            String strTemp=progStlInfoService.progStlInfoMngPreCheck(progStlInfoShowAdd);
             if(!"".equals(strTemp)){
                 MessageUtil.addError(strTemp);
                 return;
