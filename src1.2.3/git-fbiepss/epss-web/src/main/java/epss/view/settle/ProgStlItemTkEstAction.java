@@ -467,6 +467,7 @@ public class ProgStlItemTkEstAction {
                 progStlItemTkEstShowTemp.setEng_CurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEAmountTotal));
                 progStlItemTkEstShowList.add(progStlItemTkEstShowTemp);
+                progStlItemTkEstShowListForExcel.add(progStlItemTkEstShowTemp);
                 bdQuantityTotal=new BigDecimal(0);
                 bdAmountTotal=new BigDecimal(0);
                 bdBeginToCurrentPeriodEQtyTotal=new BigDecimal(0);
@@ -492,6 +493,7 @@ public class ProgStlItemTkEstAction {
                 progStlItemTkEstShowTemp.setEng_CurrentPeriodEAmount(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEAmountAllTotal));
                 progStlItemTkEstShowList.add(progStlItemTkEstShowTemp);
+                progStlItemTkEstShowListForExcel.add(progStlItemTkEstShowTemp);
             }
         }
     }
