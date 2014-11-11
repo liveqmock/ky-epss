@@ -21,6 +21,7 @@ public class QryCSShow implements Serializable {
     private BigDecimal bdCstpl_ContractQuantity;
     private BigDecimal bdCstpl_ContractAmount;
 
+    private String strSubctt_Name;
     private BigDecimal bdSubctt_ContractUnitPrice;
     private BigDecimal bdSubctt_ContractQuantity;
     private BigDecimal bdSubctt_ContractAmount;
@@ -148,5 +149,13 @@ public class QryCSShow implements Serializable {
 
     public void setBdC_S_ContractAmount(BigDecimal bdC_S_ContractAmount) {
         this.bdC_S_ContractAmount = bdC_S_ContractAmount;
+    }
+
+    public String getStrSubctt_Name() {
+        return strSubctt_Name;
+    }
+
+    public void setStrSubctt_Name(String strSubctt_Name) {
+        this.strSubctt_Name = strSubctt_Name;
     }
 }

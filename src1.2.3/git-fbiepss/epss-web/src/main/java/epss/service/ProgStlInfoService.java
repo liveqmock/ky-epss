@@ -86,7 +86,6 @@ public class ProgStlInfoService {
         List<ProgStlInfo> progStlInfoListTemp=progStlInfoMapper.selectByExample(example);
         for(ProgStlInfo progStlInfoUnit:progStlInfoListTemp){
             ProgStlInfoShow progStlInfoShowTemp=fromModelToModelShow(progStlInfoUnit);
-
             progStlInfoShowListTemp.add(progStlInfoShowTemp);
         }
         return progStlInfoShowListTemp;
@@ -139,7 +138,6 @@ public class ProgStlInfoService {
             if(progStlInfoListTemp.size()>0) {
                 stlmentStatus=ToolUtil.getStrIgnoreNull(progStlInfoListTemp.get(0).getFlowStatus());
             }
-
             System.out.println("\n数量结算最大期号："+quantityMaxPeriod+"\n材料结算最大期号："+materialMaxPeriod+"\n结算单最大期号："+stlmentMaxPeriod);
             System.out.println("\n数量结算最大期号对应状态标志："+quantityStatus+"\n材料结算最大期号对应状态标志："+materialStatus+"\n结算单最大期号对应状态标志："+stlmentStatus);
 
