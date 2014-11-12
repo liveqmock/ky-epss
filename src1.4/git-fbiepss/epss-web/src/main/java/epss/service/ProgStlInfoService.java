@@ -86,7 +86,6 @@ public class ProgStlInfoService {
         List<ProgStlInfo> progStlInfoListTemp=progStlInfoMapper.selectByExample(example);
         for(ProgStlInfo progStlInfoUnit:progStlInfoListTemp){
             ProgStlInfoShow progStlInfoShowTemp=fromModelToModelShow(progStlInfoUnit);
-
             progStlInfoShowListTemp.add(progStlInfoShowTemp);
         }
         return progStlInfoShowListTemp;
@@ -99,9 +98,6 @@ public class ProgStlInfoService {
 
     public String getMaxPeriodNo(String stlType, String subCttPkid) {
         return myProgStlInfoMapper.getMaxPeriodNo(stlType,subCttPkid);
-    }
-	public String getSubcttMaxPeriodNo(String subCttPkid) {
-        return myProgStlInfoMapper.getSubcttMaxPeriodNo(subCttPkid);
     }
 
     public String progStlInfoMngPreCheck(ProgStlInfoShow progStlInfoShowPara) {
@@ -142,7 +138,6 @@ public class ProgStlInfoService {
             if(progStlInfoListTemp.size()>0) {
                 stlmentStatus=ToolUtil.getStrIgnoreNull(progStlInfoListTemp.get(0).getFlowStatus());
             }
-
             System.out.println("\n数量结算最大期号："+quantityMaxPeriod+"\n材料结算最大期号："+materialMaxPeriod+"\n结算单最大期号："+stlmentMaxPeriod);
             System.out.println("\n数量结算最大期号对应状态标志："+quantityStatus+"\n材料结算最大期号对应状态标志："+materialStatus+"\n结算单最大期号对应状态标志："+stlmentStatus);
 
@@ -272,31 +267,6 @@ public class ProgStlInfoService {
                 }
             }
 
-        }
-        return strReturnTemp;
-    }
-	public String progStlInfoAppFailPreCheck(String stlType,String cttPkid,String periodNo) {
-        String strReturnTemp="";
-        if(EnumResType.RES_TYPE3.getCode().equals(stlType)|| EnumResType.RES_TYPE4.getCode().equals(stlType)) {
-            String subCttMaxPeriod = ToolUtil.getStrIgnoreNull(getSubcttMaxPeriodNo(cttPkid));
-            if (periodNo.compareTo(subCttMaxPeriod)<0) {
-                strReturnTemp="此合同分包结算第[" + subCttMaxPeriod + "]期数据已存在，不能退回该数据，请核对近期结算数据!";
-                return strReturnTemp;
-            }
-        }
-        if (EnumResType.RES_TYPE6.getCode().equals(stlType)) {
-            String strStaQtyMaxPeriod = ToolUtil.getStrIgnoreNull(getMaxPeriodNo(EnumResType.RES_TYPE6.getCode(), cttPkid));
-            if (periodNo.compareTo(strStaQtyMaxPeriod)<0) {
-                strReturnTemp = "总包统计结算第[" + strStaQtyMaxPeriod + "]期数据已存在，不能退回该数据!";
-                return strReturnTemp;
-            }
-        }
-        if(EnumResType.RES_TYPE7.getCode().equals(stlType)){
-            String strMeaQtyMaxPeriod = ToolUtil.getStrIgnoreNull(getMaxPeriodNo(EnumResType.RES_TYPE7.getCode(),cttPkid));
-            if (periodNo.compareTo(strMeaQtyMaxPeriod)<0){
-                strReturnTemp="总包计量结算第["+strMeaQtyMaxPeriod+"]期数据已存在，不能退回该数据!";
-                return strReturnTemp;
-            }
         }
         return strReturnTemp;
     }

@@ -89,6 +89,9 @@
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                         </h:outputText>
                     </p:column>
+                    <p:column style="width:200px" headerText="分包_项目名称">
+                        <h:outputText value="#{record.strSubctt_Name}" escape="false"/>
+                    </p:column>
                     <p:column style="width:80px" headerText="分包_数量">
                         <h:outputText value="#{record.bdSubctt_ContractQuantity}" style="float: right" >
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>

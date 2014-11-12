@@ -16,9 +16,6 @@
                         event.srcElement.click();
                 }
             }
-            function closeWindow(){
-                window.setTimeout( "window.close()", 5500)
-            }
         </script>
     </ui:define>
     <ui:define name="content">
@@ -39,7 +36,7 @@
                         <p:commandButton id="startInputBtn" value="未过"
                                          action="#{progStlItemTkEstAction.onClickForPowerAction('Fail')}"
                                          update="msgs,pgCondition"
-                                         onclick="closeWindow()">
+                                         oncomplete="window.close()">
                         </p:commandButton>
                         <p:commandButton value="导出到EXCEL"
                                          action="#{progStlItemTkEstAction.onExportExcel}"

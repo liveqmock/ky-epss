@@ -18,7 +18,8 @@ import java.util.List;
 @Component
 public interface MyQueryMapper {
     @Select("select ecitem.CORRESPONDING_PKID as strCorrespondingPkid," +
-            "     max(eicust.NAME) as strName," +
+            "     max(eicust.NAME) as strSignPartName," +
+            "     max(ecitem.NAME) as strName," +
             "     sum(ecitem.Contract_Unit_Price) as bdUnitPrice," +
             "     sum(ecitem.Contract_Quantity) as bdQuantity," +
             "     sum(ecitem.Contract_Amount) as bdAmount" +
@@ -37,7 +38,7 @@ public interface MyQueryMapper {
             " where"+
             "     ecinfo.CTT_TYPE = #{strCttType}"+
             "     and ecinfo.PARENT_PKID = #{strParentPkid}" +
-            " group by ecitem.CORRESPONDING_PKID,ecinfo.SIGN_PART_B" +
+            " group by ecitem.CORRESPONDING_PKID,ecinfo.SIGN_PART_B,ecitem.PKID" +
             " order by ecitem.CORRESPONDING_PKID,ecinfo.SIGN_PART_B")
     List<QryShow> getCSList(@Param("strCttType") String strCttType,
                             @Param("strParentPkid") String strParentPkid);
@@ -45,7 +46,7 @@ public interface MyQueryMapper {
     @Select("select" +
             "     ecitem.CORRESPONDING_PKID as strCorrespondingPkid," +
             "     eissem.subctt_item_pkid as strItemPkid," +
-            "     nei.name as strName," +
+            "     nei.name as strSignPartName," +
             "     max(ecitem.unit) as strUnit," +
             "     sum(ecitem.contract_quantity) as bdQuantity," +
             "     sum(eissem.current_period_m_qty) as bdCurrentPeriodQuantity," +
@@ -117,7 +118,7 @@ public interface MyQueryMapper {
     @Select("select" +
             " ecitem.CORRESPONDING_PKID as strCorrespondingPkid," +
             " eisseq.subctt_item_pkid as strItemPkid," +
-            " nei.name as strName," +
+            " nei.name as strSignPartName," +
             " max(ecitem.unit) as strUnit," +
             " sum(ecitem.contract_quantity) as bdQuantity," +
             " sum(ecitem.contract_unit_price) as bdUnitPrice," +

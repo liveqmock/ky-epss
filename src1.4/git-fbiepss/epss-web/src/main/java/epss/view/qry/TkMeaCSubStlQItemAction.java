@@ -449,16 +449,16 @@ public class TkMeaCSubStlQItemAction {
                         ToolUtil.getIgnoreSpaceOfStr(itemOfEsItemHieRelapTkcttTemp.getTkcttItem_No()));
                 qryTkMeaCSStlQShowListForExcel.add(itemOfEsItemHieRelapTkcttTemp);
             }
-        } catch (Exception e) {
-            logger.error("信息查询失败", e);
-            MessageUtil.addError("信息查询失败");
-        }
         if(qryTkMeaCSStlQShowList.size()>0){
             strExportToExcelRendered="true";
         }else{
             strExportToExcelRendered="false";
         }
         beansMap.put("qryTkMeaCSStlQShowListForExcel", qryTkMeaCSStlQShowListForExcel);
+        } catch (Exception e) {
+            logger.error("信息查询失败", e);
+            MessageUtil.addError("信息查询失败");
+        }
     }
 
     /*递归排序*/

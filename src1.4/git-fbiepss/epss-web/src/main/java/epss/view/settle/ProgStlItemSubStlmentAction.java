@@ -694,34 +694,16 @@ public class ProgStlItemSubStlmentAction {
                     strApproveBtnRendered = "false";
                 } else if (strPowerType.equals("ApproveFailToQ")) {
                     ProgStlInfo progStlInfoTemp = (ProgStlInfo) BeanUtils.cloneBean(progStlInfo);
-                    String strTemp = progStlInfoService.progStlInfoAppFailPreCheck(
-                            EnumResType.RES_TYPE3.getCode(),
-                            progStlInfoTemp.getStlPkid(),
-                            progStlInfoTemp.getPeriodNo());
-                    if (!"".equals(strTemp)) {
-                        MessageUtil.addError(strTemp);
-                        return;
-                    }else {
-                        progStlInfoTemp.setStlType(EnumResType.RES_TYPE5.getCode());
-                        progStlInfoService.delSubPApproveFailTo(progStlInfoTemp, EnumResType.RES_TYPE3.getCode());
-                        strApprovedNotBtnRenderedForStlQ = "false";
-                        strApprovedNotBtnRenderedForStlM = "false";
-                    }
+                    progStlInfoTemp.setStlType(EnumResType.RES_TYPE5.getCode());
+                    progStlInfoService.delSubPApproveFailTo(progStlInfoTemp, EnumResType.RES_TYPE3.getCode());
+                    strApprovedNotBtnRenderedForStlQ = "false";
+                    strApprovedNotBtnRenderedForStlM = "false";
                 } else if (strPowerType.equals("ApproveFailToM")) {
                     ProgStlInfo progStlInfoTemp = (ProgStlInfo) BeanUtils.cloneBean(progStlInfo);
-                    String strTemp = progStlInfoService.progStlInfoAppFailPreCheck(
-                            EnumResType.RES_TYPE4.getCode(),
-                            progStlInfoTemp.getStlPkid(),
-                            progStlInfoTemp.getPeriodNo());
-                    if (!"".equals(strTemp)) {
-                        MessageUtil.addError(strTemp);
-                        return;
-                    }else {
-                        progStlInfoTemp.setStlType(EnumResType.RES_TYPE5.getCode());
-                        progStlInfoService.delSubPApproveFailTo(progStlInfoTemp, EnumResType.RES_TYPE4.getCode());
-                        strApprovedNotBtnRenderedForStlQ = "false";
-                        strApprovedNotBtnRenderedForStlM = "false";
-                    }
+                    progStlInfoTemp.setStlType(EnumResType.RES_TYPE5.getCode());
+                    progStlInfoService.delSubPApproveFailTo(progStlInfoTemp, EnumResType.RES_TYPE4.getCode());
+                    strApprovedNotBtnRenderedForStlQ = "false";
+                    strApprovedNotBtnRenderedForStlM = "false";
                 }
                 MessageUtil.addInfo("批准数据完成。");
             }else if (strPowerType.contains("AccountPass")) {

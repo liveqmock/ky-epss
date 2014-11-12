@@ -31,14 +31,6 @@ public interface MyProgStlInfoMapper {
     String getMaxPeriodNo(@Param("stlType") String stlType,
                           @Param("subCttPkid") String subCttPkid);
 
-    @Select("select " +
-            "      max(s.period_no)"+
-            " from " +
-            "      PROG_STL_INFO s"+
-            " where"+
-            "      s.stl_pkid=#{subCttPkid}")
-    String getSubcttMaxPeriodNo(@Param("subCttPkid") String subCttPkid);
-
     @Select("select"+
             "      PKID as pkid" +
             "     ,ID as id" +

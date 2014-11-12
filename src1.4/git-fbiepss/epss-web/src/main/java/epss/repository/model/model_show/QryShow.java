@@ -18,6 +18,7 @@ public class QryShow {
     private String strPeriodNo;
     private String strUnit;
     private String strName;
+    private String strSignPartName;
     private BigDecimal bdUnitPrice;
     private BigDecimal bdSignPartAMPrice;
     private BigDecimal bdQuantity;
@@ -71,6 +72,14 @@ public class QryShow {
 
     public void setStrName(String strName) {
         this.strName = strName;
+    }
+
+    public String getStrSignPartName() {
+        return strSignPartName;
+    }
+
+    public void setStrSignPartName(String strSignPartName) {
+        this.strSignPartName = strSignPartName;
     }
 
     public BigDecimal getBdUnitPrice() {

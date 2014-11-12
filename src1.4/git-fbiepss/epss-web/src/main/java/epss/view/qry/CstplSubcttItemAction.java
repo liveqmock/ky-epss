@@ -136,15 +136,16 @@ public class CstplSubcttItemAction {
                 // 根据成本计划项插接分包合同项
                 for(int i=0;i< qryShowList.size();i++) {
                     // 成本计划项遇到目标分包合同项
-                    if(itemUnit.getPkid().equals(qryShowList.get(i).getStrCorrespondingPkid())) {
+                    QryShow qryShowTemp=qryShowList.get(i);
+                    if(itemUnit.getPkid().equals(qryShowTemp.getStrCorrespondingPkid())) {
                         isInThisCirculateHasSame=true;
                         intGroup++;
                         // 克隆目标进行处理后插接
                         QryCSShow qryCSShowNewInsert =(QryCSShow)BeanUtils.cloneBean(itemCstplInsertItem);
                         // 目标分包合同项的合同数量，合同单价，合同金额
-                        BigDecimal bdSubcttContractQuantity=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdQuantity());
-                        BigDecimal bdSubcttContractUnitPrice=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdUnitPrice());
-                        BigDecimal bdSubcttContractAmount=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdAmount());
+                        BigDecimal bdSubcttContractQuantity=ToolUtil.getBdIgnoreNull(qryShowTemp.getBdQuantity());
+                        BigDecimal bdSubcttContractUnitPrice=ToolUtil.getBdIgnoreNull(qryShowTemp.getBdUnitPrice());
+                        BigDecimal bdSubcttContractAmount=ToolUtil.getBdIgnoreNull(qryShowTemp.getBdAmount());
                         // 累计目标分包合同项的合同数量，合同单价，合同金额
                         bdSubcttContractQuantityTotal=bdSubcttContractQuantityTotal.add(bdSubcttContractQuantity);
                         bdSubcttContractUnitPriceTotal=bdSubcttContractUnitPriceTotal.add(bdSubcttContractUnitPrice);
@@ -154,8 +155,9 @@ public class CstplSubcttItemAction {
                         qryCSShowNewInsert.setBdSubctt_ContractQuantity(bdSubcttContractQuantity);
                         qryCSShowNewInsert.setBdSubctt_ContractUnitPrice(bdSubcttContractUnitPrice);
                         qryCSShowNewInsert.setBdSubctt_ContractAmount(bdSubcttContractAmount);
-                        qryCSShowNewInsert.setStrSubctt_SignPartName(qryShowList.get(i).getStrName());
-                        qryCSShowNewInsert.setStrCstpl_Pkid(qryShowList.get(i).getStrCorrespondingPkid() + "/" + intGroup.toString());
+                        qryCSShowNewInsert.setStrSubctt_Name(qryShowTemp.getStrName());
+                        qryCSShowNewInsert.setStrSubctt_SignPartName(qryShowTemp.getStrSignPartName());
+                        qryCSShowNewInsert.setStrCstpl_Pkid(qryShowTemp.getStrCorrespondingPkid() + "/" + intGroup.toString());
                         qryCSShowNewInsert.setStrCstpl_ParentPkid(itemUnit.getParentPkid());
 
                         if(intGroup>1){
@@ -192,7 +194,9 @@ public class CstplSubcttItemAction {
                         }else{
                             // 成分值差
                             qryCSShowNewInsert.setBdC_S_ContractQuantity(bdCstplContractQuantity.subtract(bdSubcttContractQuantityTotal));
-                            qryCSShowNewInsert.setBdC_S_ContractUnitPrice(bdCstplContractUnitPrice.subtract(bdSubcttContractUnitPriceTotal));
+                            if(intGroup==1) {
+                                qryCSShowNewInsert.setBdC_S_ContractUnitPrice(bdCstplContractUnitPrice.subtract(bdSubcttContractUnitPriceTotal));
+                            }
                             if(bdCstplContractAmount!=null) {
                                 qryCSShowNewInsert.setBdC_S_ContractAmount(bdCstplContractAmount.subtract(bdSubcttContractAmountTotal));
                             }
@@ -205,6 +209,17 @@ public class CstplSubcttItemAction {
                 }
             }
 
+            // 添加合计
+            setItemOfCSForQueryList_AddTotal();
+
+            if(qryCSShowList.size()>0){
+                strExportToExcelRendered="true";
+            }else{
+                strExportToExcelRendered="false";
+            }
+
+            beansMap.put("qryCSShowList", qryCSShowList);
+
             qryCSShowListForExcel =new ArrayList<QryCSShow>();
             for(QryCSShow itemUnit: qryCSShowList){
                 QryCSShow itemUnitTemp= (QryCSShow) BeanUtils.cloneBean(itemUnit);
@@ -216,16 +231,6 @@ public class CstplSubcttItemAction {
             logger.error("信息查询失败", e);
             MessageUtil.addError("信息查询失败");
         }
-        // 添加合计
-        setItemOfCSForQueryList_AddTotal();
-
-        if(qryCSShowList.size()>0){
-            strExportToExcelRendered="true";
-        }else{
-            strExportToExcelRendered="false";
-        }
-
-        beansMap.put("qryCSShowList", qryCSShowList);
     }
     private void setItemOfCSForQueryList_AddTotal(){
         List<QryCSShow> qryCSShowListTemp =new ArrayList<QryCSShow>();
@@ -254,7 +259,7 @@ public class CstplSubcttItemAction {
                 itemUnitNext = qryCSShowListTemp.get(i+1);
                 QryCSShow qryCSShowTemp =new QryCSShow();
                 Boolean isRoot=false;
-                if(itemUnitNext.getStrCstpl_ParentPkid()!=null&&itemUnitNext.getStrCstpl_ParentPkid().equals("root")){
+                if(!("".equals(itemUnitNext.getStrCstpl_No()))&&itemUnitNext.getStrCstpl_ParentPkid().equals("root")){
                     qryCSShowTemp.setStrCstpl_Name("合计");
                     qryCSShowTemp.setStrCstpl_Pkid("total"+i);
                     qryCSShowTemp.setBdCstpl_ContractAmount(bdTotal);

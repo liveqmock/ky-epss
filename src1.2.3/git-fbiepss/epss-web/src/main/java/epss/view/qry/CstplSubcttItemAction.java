@@ -194,7 +194,9 @@ public class CstplSubcttItemAction {
                         }else{
                             // 成分值差
                             qryCSShowNewInsert.setBdC_S_ContractQuantity(bdCstplContractQuantity.subtract(bdSubcttContractQuantityTotal));
-                            qryCSShowNewInsert.setBdC_S_ContractUnitPrice(bdCstplContractUnitPrice.subtract(bdSubcttContractUnitPriceTotal));
+                            if(intGroup==1) {
+                                qryCSShowNewInsert.setBdC_S_ContractUnitPrice(bdCstplContractUnitPrice.subtract(bdSubcttContractUnitPriceTotal));
+                            }
                             if(bdCstplContractAmount!=null) {
                                 qryCSShowNewInsert.setBdC_S_ContractAmount(bdCstplContractAmount.subtract(bdSubcttContractAmountTotal));
                             }
@@ -257,7 +259,7 @@ public class CstplSubcttItemAction {
                 itemUnitNext = qryCSShowListTemp.get(i+1);
                 QryCSShow qryCSShowTemp =new QryCSShow();
                 Boolean isRoot=false;
-                if(itemUnitNext.getStrCstpl_ParentPkid()!=null&&itemUnitNext.getStrCstpl_ParentPkid().equals("root")){
+                if(!("".equals(itemUnitNext.getStrCstpl_No()))&&itemUnitNext.getStrCstpl_ParentPkid().equals("root")){
                     qryCSShowTemp.setStrCstpl_Name("合计");
                     qryCSShowTemp.setStrCstpl_Pkid("total"+i);
                     qryCSShowTemp.setBdCstpl_ContractAmount(bdTotal);

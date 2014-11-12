@@ -226,10 +226,6 @@ public class CstplSubcttStlQPeriodItemAction {
                 itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
                 qryCSStlQPeriodShowListForExcel.add(itemUnitTemp);
             }
-        } catch (Exception e) {
-            logger.error("信息查询失败", e);
-            MessageUtil.addError("信息查询失败");
-        }
 
         if(qryCSStlQPeriodShowListForExcel.size()>0){
             strExportToExcelRendered="true";
@@ -239,6 +235,10 @@ public class CstplSubcttStlQPeriodItemAction {
         beansMap.put("columnHeaderList", columnHeaderList);
         beansMap.put("columnSetList", commColSetList);
         beansMap.put("qryCSStlQPeriodShowListForExcel", qryCSStlQPeriodShowListForExcel);
+        } catch (Exception e) {
+            logger.error("信息查询失败", e);
+            MessageUtil.addError("信息查询失败");
+        }
     }
 
     /*根据数据库中层级关系数据列表得到总包合同*/
