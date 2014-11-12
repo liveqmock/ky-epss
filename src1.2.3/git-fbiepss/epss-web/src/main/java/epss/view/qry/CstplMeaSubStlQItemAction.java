@@ -265,23 +265,24 @@ public class CstplMeaSubStlQItemAction {
                     qryCSMeaSubQShowList.add(itemCstplInsertItem);
                 }
             }
+
             qryCSMeaSubQShowListForExcel =new ArrayList<>();
             for(QryCSStlQShow itemUnit: qryCSMeaSubQShowList){
                 QryCSStlQShow itemUnitTemp= (QryCSStlQShow) BeanUtils.cloneBean(itemUnit);
                 itemUnitTemp.setStrCstpl_No(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrCstpl_No()));
                 qryCSMeaSubQShowListForExcel.add(itemUnitTemp);
             }
-        } catch (Exception e) {
-            logger.error("信息查询失败", e);
-            MessageUtil.addError("信息查询失败");
-        }
-
         if(qryCSMeaSubQShowList.size()>0){
             strExportToExcelRendered="true";
         }else{
             strExportToExcelRendered="false";
         }
         beansMap.put("qryCSMeaSubQShowListForExcel", qryCSMeaSubQShowListForExcel);
+
+        } catch (Exception e) {
+            logger.error("信息查询失败", e);
+            MessageUtil.addError("信息查询失败");
+        }
     }
 
     /*递归排序*/

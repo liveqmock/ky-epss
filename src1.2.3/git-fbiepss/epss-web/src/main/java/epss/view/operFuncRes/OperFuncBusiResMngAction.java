@@ -163,7 +163,15 @@ public class OperFuncBusiResMngAction implements Serializable{
             OperFuncResShow operFuncResShowTemp=new OperFuncResShow();
             operFuncResShowTemp.setResType(cttInfoShowTemp.getCttType());
             operFuncResShowTemp.setResPkid(cttInfoShowTemp.getPkid());
-            operFuncResShowTemp.setResName(cttInfoShowTemp.getName());
+            String strResTypeName="";
+            if(EnumResType.RES_TYPE0.getCode().equals(cttInfoShowTemp.getCttType())){
+                strResTypeName="总包合同_";
+            }else if(EnumResType.RES_TYPE1.getCode().equals(cttInfoShowTemp.getCttType())){
+                strResTypeName="成本计划_";
+            }else if(EnumResType.RES_TYPE2.getCode().equals(cttInfoShowTemp.getCttType())){
+                strResTypeName="分包合同_";
+            }
+            operFuncResShowTemp.setResName(strResTypeName+cttInfoShowTemp.getName());
             operFuncResShowTemp.setInputOperName(strInputOperName);
             operFuncResShowTemp.setCheckOperName(strCheckOperName);
             operFuncResShowTemp.setDoubleCheckOperName(strDoubleCheckOperName);
@@ -233,14 +241,15 @@ public class OperFuncBusiResMngAction implements Serializable{
                 operFuncResShowForStlTemp.setResType(operResShowTemp.getInfoType());
                 operFuncResShowForStlTemp.setResPkid(operResShowTemp.getInfoPkid());
                 /*operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__统计");*/
-                operFuncResShowForStlTemp.setResName("统计");
+                operFuncResShowForStlTemp.setResName("总包进度_统计");
                 operFuncResShowForStlTemp.setInputOperName(strInputOperName);
                 operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
                 operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
                 operFuncResShowForStlTemp.setApproveOperName(strApproveOperName);
                 operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
                 operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
-                new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+                // 安装树节点
+                new DefaultTreeNode(operFuncResShowForStlTemp, childNodeTemp);
                 operFuncResShowForExcelTemp = (OperFuncResShow) BeanUtils.cloneBean(operFuncResShowForStlTemp);
                 operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
 
@@ -299,14 +308,15 @@ public class OperFuncBusiResMngAction implements Serializable{
                 operFuncResShowForStlTemp.setResType(operResShowTemp.getInfoType());
                 operFuncResShowForStlTemp.setResPkid(operResShowTemp.getInfoPkid());
                 /*operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__计量");*/
-                operFuncResShowForStlTemp.setResName("计量");
+                operFuncResShowForStlTemp.setResName("总包进度_计量");
                 operFuncResShowForStlTemp.setInputOperName(strInputOperName);
                 operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
                 operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
                 operFuncResShowForStlTemp.setApproveOperName(strApproveOperName);
                 operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
                 operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
-                new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+                // 安装树节点
+                new DefaultTreeNode(operFuncResShowForStlTemp, childNodeTemp);
                 operFuncResShowForExcelTemp = (OperFuncResShow) BeanUtils.cloneBean(operFuncResShowForStlTemp);
                 operFuncResShowFowExcelList.add(operFuncResShowForExcelTemp);
             }else if(cttInfoShowTemp.getCttType().equals(EnumResType.RES_TYPE2.getCode())) {
@@ -365,14 +375,15 @@ public class OperFuncBusiResMngAction implements Serializable{
                 operFuncResShowForStlTemp.setResType(operResShowTemp.getInfoType());
                 operFuncResShowForStlTemp.setResPkid(operResShowTemp.getInfoPkid());
                 /*operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__数量结算");*/
-                operFuncResShowForStlTemp.setResName("数量结算");
+                operFuncResShowForStlTemp.setResName("分包进度_工程量结算");
                 operFuncResShowForStlTemp.setInputOperName(strInputOperName);
                 operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
                 operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
                 operFuncResShowForStlTemp.setApproveOperName(strApproveOperName);
                 operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
                 operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
-                new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+                // 安装树节点
+                new DefaultTreeNode(operFuncResShowForStlTemp, childNodeTemp);
 
                 operFuncResShowForExcelTemp = (OperFuncResShow) BeanUtils.cloneBean(operFuncResShowForStlTemp);
                 operFuncResShowForExcelTemp.setResName(
@@ -434,14 +445,15 @@ public class OperFuncBusiResMngAction implements Serializable{
                 operFuncResShowForStlTemp.setResType(operResShowTemp.getInfoType());
                 operFuncResShowForStlTemp.setResPkid(operResShowTemp.getInfoPkid());
                 /*operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__材料结算");*/
-                operFuncResShowForStlTemp.setResName("材料结算");
+                operFuncResShowForStlTemp.setResName("分包进度_材料消耗量结算");
                 operFuncResShowForStlTemp.setInputOperName(strInputOperName);
                 operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
                 operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
                 operFuncResShowForStlTemp.setApproveOperName(strApproveOperName);
                 operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
                 operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
-                new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+                // 安装树节点
+                new DefaultTreeNode(operFuncResShowForStlTemp, childNodeTemp);
 
                 operFuncResShowForExcelTemp = (OperFuncResShow) BeanUtils.cloneBean(operFuncResShowForStlTemp);
                 operFuncResShowForExcelTemp.setResName(
@@ -502,14 +514,15 @@ public class OperFuncBusiResMngAction implements Serializable{
                 operFuncResShowForStlTemp.setResType(operResShowTemp.getInfoType());
                 operFuncResShowForStlTemp.setResPkid(operResShowTemp.getInfoPkid());
                 /*operFuncResShowForStlTemp.setResName(cttInfoShowTemp.getName() + "__结算单");*/
-                operFuncResShowForStlTemp.setResName("结算单");
+                operFuncResShowForStlTemp.setResName("分包进度＿结算单");
                 operFuncResShowForStlTemp.setInputOperName(strInputOperName);
                 operFuncResShowForStlTemp.setCheckOperName(strCheckOperName);
                 operFuncResShowForStlTemp.setDoubleCheckOperName(strDoubleCheckOperName);
                 operFuncResShowForStlTemp.setApproveOperName(strApproveOperName);
                 operFuncResShowForStlTemp.setAccountOperName(strAccountOperName);
                 operFuncResShowForStlTemp.setPlaceOnFileOperName(strPlaceOnFileOperName);
-                new DefaultTreeNode(operFuncResShowForStlTemp, parentNode);
+                // 安装树节点
+                new DefaultTreeNode(operFuncResShowForStlTemp, childNodeTemp);
 
                 operFuncResShowForExcelTemp = (OperFuncResShow) BeanUtils.cloneBean(operFuncResShowForStlTemp);
                 operFuncResShowForExcelTemp.setResName(

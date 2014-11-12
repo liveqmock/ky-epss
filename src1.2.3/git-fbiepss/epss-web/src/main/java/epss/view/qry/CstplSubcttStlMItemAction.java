@@ -194,17 +194,17 @@ public class CstplSubcttStlMItemAction {
                 itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
                 qryCSStlMShowListForExcel.add(itemUnitTemp);
             }
-        } catch (Exception e) {
-            logger.error("信息查询失败", e);
-            MessageUtil.addError("信息查询失败");
-        }
-
         if(qryCSStlMShowList.size()>0){
             strExportToExcelRendered="true";
         }else{
             strExportToExcelRendered="false";
         }
         beansMap.put("qryCSStlMShowListForExcel", qryCSStlMShowListForExcel);
+
+        } catch (Exception e) {
+            logger.error("信息查询失败", e);
+            MessageUtil.addError("信息查询失败");
+        }
     }
 
     /*递归排序*/
