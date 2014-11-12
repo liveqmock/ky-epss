@@ -630,19 +630,28 @@ public class ProgStlItemTkMeaAction {
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerType.equals("ApproveFail")) {
-                    // 这样写可以实现越级退回
-                    if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS2.getCode())) {
-                        progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
-                    }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS1.getCode())) {
-                        progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
-                    }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS0.getCode())) {
-                        progStlInfo.setFlowStatus(null);
-                    }
+                    String strTemp = progStlInfoService.progStlInfoAppFailPreCheck(
+                            EnumResType.RES_TYPE7.getCode(),
+                            progStlInfo.getStlPkid(),
+                            progStlInfo.getPeriodNo());
+                    if (!"".equals(strTemp)) {
+                        MessageUtil.addError(strTemp);
+                        return;
+                    } else {
+                        // 这样写可以实现越级退回
+                        if (strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS2.getCode())) {
+                            progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
+                        } else if (strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS1.getCode())) {
+                            progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
+                        } else if (strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS0.getCode())) {
+                            progStlInfo.setFlowStatus(null);
+                        }
 
-                    // 原因：批准未过
-                    progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
-                    progStlInfoService.updAutoLinkTask(progStlInfo);
-                    MessageUtil.addInfo("数据批准未过！");
+                        // 原因：批准未过
+                        progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
+                        progStlInfoService.updAutoLinkTask(progStlInfo);
+                        MessageUtil.addInfo("数据批准未过！");
+                    }
                 }
             }
         } catch (Exception e) {

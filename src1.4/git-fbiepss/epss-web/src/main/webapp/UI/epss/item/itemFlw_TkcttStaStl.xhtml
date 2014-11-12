@@ -35,8 +35,8 @@
                         </p:selectOneMenu>
                         <p:commandButton id="startInputBtn" value="未过"
                                          action="#{progStlItemTkEstAction.onClickForPowerAction('Fail')}"
-                                         update="msgs,pgCondition"
-                                         oncomplete="window.close()">
+                                         oncomplete="window.setTimeout( 'window.close()', 2000)"
+                                         update="pgCondition,msgs">
                         </p:commandButton>
                         <p:commandButton value="导出到EXCEL"
                                          action="#{progStlItemTkEstAction.onExportExcel}"
