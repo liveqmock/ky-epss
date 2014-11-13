@@ -7,6 +7,8 @@ import epss.common.enums.EnumTaskDoneFlag;
 import epss.repository.model.CttInfo;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.NodeCollapseEvent;
+import org.primefaces.event.NodeSelectEvent;
+import org.primefaces.event.SelectEvent;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
@@ -49,7 +51,6 @@ public class OperFuncBusiResMngAction implements Serializable{
     private ProgStlInfoService progStlInfoService;
 
     private List<SelectItem> taskFunctionList;
-    private String taskFunctionSeled;
     private List<DeptOperShow> deptOperShowSeledList;
 
     private List<OperFuncResShow> operFuncResShowFowExcelList;
@@ -66,6 +67,10 @@ public class OperFuncBusiResMngAction implements Serializable{
     private TreeNode resRoot;
     private TreeNode deptOperRoot;
     private TreeNode currentSelectedNode;
+    private TreeNode currentSelectedResNode;
+    private TreeNode lastSelectedResNode;
+
+    private String strBtnRender;
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
@@ -76,8 +81,10 @@ public class OperFuncBusiResMngAction implements Serializable{
         cttInfoShowList = new ArrayList<>();
         deptOperShowSeledList = new ArrayList<>();
         operFuncResShowFowExcelList= new ArrayList<>();
+        strBtnRender="false";
         // 资源-用户-功能
         initRes();
+        initFuncListByResType(resRoot);
         initDeptOper();
         beansMap.put("operFuncResShowFowExcelList", operFuncResShowFowExcelList);
     }
@@ -566,6 +573,34 @@ public class OperFuncBusiResMngAction implements Serializable{
         }
     }
 
+    public void initFuncListByResType(TreeNode treeNodePara) {
+        if (!treeNodePara.getData().toString().equals("ROOT")){
+            OperFuncResShow operFuncResShowTemp = ((OperFuncResShow) treeNodePara.getData());
+            if (EnumResType.RES_TYPE3.getCode().equals(operFuncResShowTemp.getResType())
+                    || EnumResType.RES_TYPE4.getCode().equals(operFuncResShowTemp.getResType())) {
+                operFuncResShowTemp.setIsMng(EnumFlowStatus.FLOW_STATUS0.getCode());
+                operFuncResShowTemp.setIsCheck(EnumFlowStatus.FLOW_STATUS1.getCode());
+                operFuncResShowTemp.setIsDoubleCheck(EnumFlowStatus.FLOW_STATUS2.getCode());
+                operFuncResShowTemp.setIsPlaceOnFile(EnumFlowStatus.FLOW_STATUS5.getCode());
+            } else if (EnumResType.RES_TYPE5.getCode().equals(operFuncResShowTemp.getResType())) {
+                operFuncResShowTemp.setIsApprove(EnumFlowStatus.FLOW_STATUS3.getCode());
+                operFuncResShowTemp.setIsAccount(EnumFlowStatus.FLOW_STATUS4.getCode());
+                operFuncResShowTemp.setIsPlaceOnFile(EnumFlowStatus.FLOW_STATUS5.getCode());
+            } else {
+                operFuncResShowTemp.setIsMng(EnumFlowStatus.FLOW_STATUS0.getCode());
+                operFuncResShowTemp.setIsCheck(EnumFlowStatus.FLOW_STATUS1.getCode());
+                operFuncResShowTemp.setIsDoubleCheck(EnumFlowStatus.FLOW_STATUS2.getCode());
+                operFuncResShowTemp.setIsApprove(EnumFlowStatus.FLOW_STATUS3.getCode());
+                operFuncResShowTemp.setIsPlaceOnFile(EnumFlowStatus.FLOW_STATUS5.getCode());
+            }
+        }
+        if (treeNodePara.getChildCount() != 0) {
+            for (int i = 0; i < treeNodePara.getChildCount(); i++) {
+                initFuncListByResType(treeNodePara.getChildren().get(i));
+            }
+        }
+    }
+
     public void onNodeCollapse(NodeCollapseEvent event) {
         recursiveResTreeNode(event.getTreeNode());
     }
@@ -590,40 +625,6 @@ public class OperFuncBusiResMngAction implements Serializable{
         }
     }
 
-    private void initFuncListByResType(){
-        taskFunctionSeled="";
-        taskFunctionList = new ArrayList<>();
-        if (cttInfoShowSel.getCttType().equals(EnumResType.RES_TYPE3.getCode())
-                ||cttInfoShowSel.getCttType().equals(EnumResType.RES_TYPE4.getCode())){
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS0.getCode(), EnumFlowStatus.FLOW_STATUS0.getTitle()));
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS1.getCode(), EnumFlowStatus.FLOW_STATUS1.getTitle()));
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS2.getCode(), EnumFlowStatus.FLOW_STATUS2.getTitle()));
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS5.getCode(), EnumFlowStatus.FLOW_STATUS5.getTitle()));
-        }else if (cttInfoShowSel.getCttType().equals(EnumResType.RES_TYPE5.getCode())){
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS3.getCode(), EnumFlowStatus.FLOW_STATUS3.getTitle()));
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS4.getCode(), EnumFlowStatus.FLOW_STATUS4.getTitle()));
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS5.getCode(), EnumFlowStatus.FLOW_STATUS5.getTitle()));
-        }else {
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS0.getCode(), EnumFlowStatus.FLOW_STATUS0.getTitle()));
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS1.getCode(), EnumFlowStatus.FLOW_STATUS1.getTitle()));
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS2.getCode(), EnumFlowStatus.FLOW_STATUS2.getTitle()));
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS3.getCode(), EnumFlowStatus.FLOW_STATUS3.getTitle()));
-            taskFunctionList.add(
-                    new SelectItem(EnumFlowStatus.FLOW_STATUS5.getCode(), EnumFlowStatus.FLOW_STATUS5.getTitle()));
-        }
-    }
-
     public void selectRecordAction(String strSubmitTypePara,OperFuncResShow operFuncResShowPara) {
         try {
             findSelectedNode(operFuncResShowPara,resRoot,strSubmitTypePara);
@@ -644,10 +645,28 @@ public class OperFuncBusiResMngAction implements Serializable{
                 cttInfoShowUpd = fromResModelShowToCttInfoShow(operFuncResShowPara);
             } else if (strSubmitTypePara.equals("Del")) {
                 cttInfoShowDel = fromResModelShowToCttInfoShow(operFuncResShowPara);
-            } else if (strSubmitTypePara.equals("Sel")) {
+            }
+        } catch (Exception e) {
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+
+    public void selectRecordAction(String strSubmitTypePara, OperFuncResShow operFuncResShowPara, String strResFlowStatus) {
+        try {
+            findSelectedNode(operFuncResShowPara, resRoot, strSubmitTypePara);
+            if (strSubmitTypePara.equals("Sel")) {
                 cttInfoShowSel = fromResModelShowToCttInfoShow(operFuncResShowPara);
-                initFuncListByResType();
+                cttInfoShowSel.setFlowStatus(strResFlowStatus);
                 initDeptOper();
+                deptOperShowSeledList.clear();
+                OperResShow operResShowTemp = new OperResShow();
+                operResShowTemp.setInfoType(operFuncResShowPara.getResType());
+                operResShowTemp.setInfoPkid(operFuncResShowPara.getResPkid());
+                operResShowTemp.setFlowStatus(strResFlowStatus);
+                List<OperResShow> operResShowListTemp = operResService.selectOperaResRecordsByModelShow(operResShowTemp);
+                if (operResShowListTemp.size() > 0) {
+                    recursiveOperTreeNodeForFuncChange(deptOperRoot, operResShowListTemp);
+                }
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
@@ -733,21 +752,17 @@ public class OperFuncBusiResMngAction implements Serializable{
                 }
                 MessageUtil.addInfo(operResService.deleteResRecord(cttInfoShowDel));
             } else if (strSubmitTypePara.equals("Power")) {
-                if (taskFunctionSeled.length()==0) {
-                    MessageUtil.addError("功能列表不能为空，请选择");
-                    return;
-                }
                 OperRes operResTemp = new OperRes();
                 operResTemp.setInfoType(cttInfoShowSel.getCttType());
                 operResTemp.setInfoPkid(cttInfoShowSel.getPkid());
-                operResTemp.setFlowStatus(taskFunctionSeled);
+                operResTemp.setFlowStatus(cttInfoShowSel.getFlowStatus());
                 operResService.deleteRecord(operResTemp);
                 for (DeptOperShow deptOperShowUnit:deptOperShowSeledList) {
                     operResTemp = new OperRes();
                     operResTemp.setOperPkid(deptOperShowUnit.getPkid());
-                    operResTemp.setFlowStatus(taskFunctionSeled);
                     operResTemp.setInfoType(cttInfoShowSel.getCttType());
                     operResTemp.setInfoPkid(cttInfoShowSel.getPkid());
+                    operResTemp.setFlowStatus(cttInfoShowSel.getFlowStatus());
                     operResTemp.setArchivedFlag(EnumArchivedFlag.ARCHIVED_FLAG0.getCode());
                     operResTemp.setType("business");
                     operResTemp.setTaskdoneFlag(EnumTaskDoneFlag.TASK_DONE_FLAG0.getCode());
@@ -756,7 +771,7 @@ public class OperFuncBusiResMngAction implements Serializable{
                 MessageUtil.addInfo("权限添加成功!");
             }
             initRes();
-            initDeptOper();
+            initFuncListByResType(resRoot);
         }catch (Exception e){
             MessageUtil.addError(e.getMessage());
             logger.error("初始化失败", e);
@@ -820,22 +835,16 @@ public class OperFuncBusiResMngAction implements Serializable{
         }
     }
 
-    public void funcValueChange() {
-        try {
-            initDeptOper();
-            deptOperShowSeledList.clear();
-            OperResShow operResShowTemp = new OperResShow();
-            operResShowTemp.setInfoType(cttInfoShowSel.getCttType());
-            operResShowTemp.setInfoPkid(cttInfoShowSel.getPkid());
-            operResShowTemp.setFlowStatus(taskFunctionSeled);
-            List<OperResShow> operResShowListTemp = operResService.selectOperaResRecordsByModelShow(operResShowTemp);
-            if (operResShowListTemp.size() > 0) {
-                recursiveOperTreeNodeForFuncChange(deptOperRoot, operResShowListTemp);
-            }
-        } catch (Exception e) {
-            MessageUtil.addError(e.getMessage());
-            logger.error("初始化失败", e);
+    public void onRowSelect(NodeSelectEvent event) {
+        currentSelectedResNode=event.getTreeNode();
+        if (lastSelectedResNode==null){
+            lastSelectedResNode=currentSelectedResNode;
+        }else {
+            ((OperFuncResShow)lastSelectedResNode.getData()).setIsActived("false");
+            lastSelectedResNode=currentSelectedResNode;
         }
+        ((OperFuncResShow)currentSelectedResNode.getData()).setIsActived("true");
+        strBtnRender="true";
     }
     /*智能字段 Start*/
 
@@ -861,14 +870,6 @@ public class OperFuncBusiResMngAction implements Serializable{
 
     public void setCttItemService(CttItemService cttItemService) {
         this.cttItemService = cttItemService;
-    }
-
-    public String getTaskFunctionSeled() {
-        return taskFunctionSeled;
-    }
-
-    public void setTaskFunctionSeled(String taskFunctionSeled) {
-        this.taskFunctionSeled = taskFunctionSeled;
     }
 
     public List<SelectItem> getTaskFunctionList() {
@@ -957,5 +958,13 @@ public class OperFuncBusiResMngAction implements Serializable{
 
     public void setProgStlInfoService(ProgStlInfoService progStlInfoService) {
         this.progStlInfoService = progStlInfoService;
+    }
+
+    public String getStrBtnRender() {
+        return strBtnRender;
+    }
+
+    public void setStrBtnRender(String strBtnRender) {
+        this.strBtnRender = strBtnRender;
     }
 }

@@ -18,6 +18,13 @@ public class OperFuncResShow {
     private String placeOnFileOperName;
     private String remark;
     private Boolean isSeled;
+    private String isActived;
+    private String isMng;
+    private String isCheck;
+    private String isDoubleCheck;
+    private String isApprove;
+    private String isAccount;
+    private String isPlaceOnFile;
 
     public String getResType() {
         return resType;
@@ -153,5 +160,61 @@ public class OperFuncResShow {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public String getIsActived() {
+        return isActived;
+    }
+
+    public void setIsActived(String isActived) {
+        this.isActived = isActived;
+    }
+
+    public String getIsMng() {
+        return isMng;
+    }
+
+    public void setIsMng(String isMng) {
+        this.isMng = isMng;
+    }
+
+    public String getIsCheck() {
+        return isCheck;
+    }
+
+    public void setIsCheck(String isCheck) {
+        this.isCheck = isCheck;
+    }
+
+    public String getIsDoubleCheck() {
+        return isDoubleCheck;
+    }
+
+    public void setIsDoubleCheck(String isDoubleCheck) {
+        this.isDoubleCheck = isDoubleCheck;
+    }
+
+    public String getIsApprove() {
+        return isApprove;
+    }
+
+    public void setIsApprove(String isApprove) {
+        this.isApprove = isApprove;
+    }
+
+    public String getIsAccount() {
+        return isAccount;
+    }
+
+    public void setIsAccount(String isAccount) {
+        this.isAccount = isAccount;
+    }
+
+    public String getIsPlaceOnFile() {
+        return isPlaceOnFile;
+    }
+
+    public void setIsPlaceOnFile(String isPlaceOnFile) {
+        this.isPlaceOnFile = isPlaceOnFile;
     }
 }
