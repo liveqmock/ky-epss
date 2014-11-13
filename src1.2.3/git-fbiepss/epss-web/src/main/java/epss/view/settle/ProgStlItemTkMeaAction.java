@@ -151,7 +151,7 @@ public class ProgStlItemTkMeaAction {
                         ToolUtil.getBdFrom0ToNull(itemUnit.getTkctt_ContractQuantity()));
                 itemUnit.setTkctt_ContractAmount(
                         ToolUtil.getBdFrom0ToNull(itemUnit.getTkctt_ContractAmount()));
-                // 总包工程材料消耗量结算
+                // 总包进度工程量计量结算
                 itemUnit.setEng_BeginToCurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(itemUnit.getEng_BeginToCurrentPeriodEQty()));
                 itemUnit.setEng_BeginToCurrentPeriodEQty(

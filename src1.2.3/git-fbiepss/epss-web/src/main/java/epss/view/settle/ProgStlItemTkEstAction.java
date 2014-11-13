@@ -61,7 +61,6 @@ public class ProgStlItemTkEstAction {
     private BigDecimal bDEng_CurrentPeriodEQtyInDB;
 
     private ReportHeader reportHeader;
-    private String strMsg;
 
     /*所属号*/
     private String strStlInfoPkid;
@@ -151,7 +150,7 @@ public class ProgStlItemTkEstAction {
                         ToolUtil.getBdFrom0ToNull(itemUnit.getTkctt_ContractQuantity()));
                 itemUnit.setTkctt_ContractAmount(
                         ToolUtil.getBdFrom0ToNull(itemUnit.getTkctt_ContractAmount()));
-                // 总包工程材料消耗量结算
+                // 总包进度工程量统计结算
                 itemUnit.setEng_BeginToCurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(itemUnit.getEng_BeginToCurrentPeriodEQty()));
                 itemUnit.setEng_BeginToCurrentPeriodEQty(
@@ -662,8 +661,7 @@ public class ProgStlItemTkEstAction {
                             progStlInfo.getStlPkid(),
                             progStlInfo.getPeriodNo());
                     if (!"".equals(strTemp)) {
-                       strMsg="1";
-                       MessageUtil.addError(strTemp);
+                        MessageUtil.addError(strTemp);
                         return;
                     }else{
                     // 这样写可以实现越级退回
@@ -855,14 +853,6 @@ public class ProgStlItemTkEstAction {
 
     public void setStrNotPassToStatus(String strNotPassToStatus) {
         this.strNotPassToStatus = strNotPassToStatus;
-    }
-
-    public String getStrMsg() {
-        return strMsg;
-    }
-
-    public void setStrMsg(String strMsg) {
-        this.strMsg = strMsg;
     }
 /*智能字段End*/
 }

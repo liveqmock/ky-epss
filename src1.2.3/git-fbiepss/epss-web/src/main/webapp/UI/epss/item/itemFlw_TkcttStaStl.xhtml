@@ -26,8 +26,7 @@
                     <h:panelGrid id="pgCondition" columns="5">
                         <p:commandButton id="endInputBtn" value="通过"
                                          action="#{progStlItemTkEstAction.onClickForPowerAction('Pass')}"
-                                         update="msgs,pgCondition"
-                                         oncomplete="window.close()">
+                                         update="msgs,pgCondition">
                         </p:commandButton>
                         <p:outputLabel value="未过至状态:"/>
                         <p:selectOneMenu id="flowStatus" value="#{progStlItemTkEstAction.strNotPassToStatus}">
@@ -35,8 +34,7 @@
                         </p:selectOneMenu>
                         <p:commandButton id="startInputBtn" value="未过"
                                          action="#{progStlItemTkEstAction.onClickForPowerAction('Fail')}"
-                                         oncomplete="window.setTimeout( 'window.close()', 2000)"
-                                         update="pgCondition,msgs">
+                                         update="msgs,pgCondition">
                         </p:commandButton>
                         <p:commandButton value="导出到EXCEL"
                                          action="#{progStlItemTkEstAction.onExportExcel}"
