@@ -104,48 +104,73 @@ public class ProgStlItemTkMeaAction {
 
     /*初始化操作*/
     private void initData() {
-        /*分包合同数据*/
-        // From StlPkid To SubcttPkid
-        ProgStlInfo progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
-        reportHeader.setStrSubcttPkid(progStlInfo.getStlPkid());
-        reportHeader.setStrStlId(progStlInfo.getId());
-        // From SubcttPkid To CstplPkid
-        CttInfo cttInfoTemp = cttInfoService.getCttInfoByPkId(reportHeader.getStrSubcttPkid());
-        reportHeader.setStrCstplPkid(cttInfoTemp.getParentPkid());
-        reportHeader.setStrSubcttId(cttInfoTemp.getId());
-        reportHeader.setStrSubcttName(cttInfoTemp.getName());
-        reportHeader.setStrSignPartPkid(cttInfoTemp.getSignPartB());
-        SignPart signPartTemp=signPartService.getEsInitCustByPkid(
-                reportHeader.getStrSignPartPkid());
-        if(signPartTemp!=null) {
-            reportHeader.setStrSignPartName(signPartTemp.getName());
-        }
+        try{
+            /*分包合同数据*/
+            // From StlPkid To SubcttPkid
+            ProgStlInfo progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
+            reportHeader.setStrSubcttPkid(progStlInfo.getStlPkid());
+            reportHeader.setStrStlId(progStlInfo.getId());
+            // From SubcttPkid To CstplPkid
+            CttInfo cttInfoTemp = cttInfoService.getCttInfoByPkId(reportHeader.getStrSubcttPkid());
+            reportHeader.setStrCstplPkid(cttInfoTemp.getParentPkid());
+            reportHeader.setStrSubcttId(cttInfoTemp.getId());
+            reportHeader.setStrSubcttName(cttInfoTemp.getName());
+            reportHeader.setStrSignPartPkid(cttInfoTemp.getSignPartB());
+            SignPart signPartTemp=signPartService.getEsInitCustByPkid(
+                    reportHeader.getStrSignPartPkid());
+            if(signPartTemp!=null) {
+                reportHeader.setStrSignPartName(signPartTemp.getName());
+            }
 
-        beansMap.put("reportHeader", reportHeader);
+            beansMap.put("reportHeader", reportHeader);
 
-        progStlInfoShow =progStlInfoService.fromModelToModelShow(progStlInfo);
-        progStlInfoShow.setStlId(cttInfoTemp.getId());
-        progStlInfoShow.setStlName(cttInfoTemp.getName());
-        progStlInfoShow.setSignPartBName(reportHeader.getStrSignPartName());
+            progStlInfoShow =progStlInfoService.fromModelToModelShow(progStlInfo);
+            progStlInfoShow.setStlId(cttInfoTemp.getId());
+            progStlInfoShow.setStlName(cttInfoTemp.getName());
+            progStlInfoShow.setSignPartBName(reportHeader.getStrSignPartName());
 
-        /*分包合同*/
-        List<CttItem> cttItemList =new ArrayList<CttItem>();
-        progStlItemTkMeaShowListForExcel =new ArrayList<ProgStlItemTkMeaShow>();
-        cttItemList = cttItemService.getEsItemList(
-                EnumResType.RES_TYPE0.getCode(), strTkcttPkid);
-        if(cttItemList.size()<=0){
-            return;
-        }
-        progStlItemTkMeaShowList =new ArrayList<ProgStlItemTkMeaShow>();
-        recursiveDataTable("root", cttItemList, progStlItemTkMeaShowList);
-        progStlItemTkMeaShowList =getItemStlTkcttEngSMList_DoFromatNo(progStlItemTkMeaShowList);
-        setItemOfEsItemHieRelapList_AddTotal();
-        beansMap.put("progStlItemTkMeaShowListForExcel", progStlItemTkMeaShowListForExcel);
-        // 表内容设定
-        if(progStlItemTkMeaShowList.size()>0){
-            strExportToExcelRendered="true";
-        }else{
-            strExportToExcelRendered="false";
+            /*分包合同*/
+            List<CttItem> cttItemList =new ArrayList<CttItem>();
+            progStlItemTkMeaShowListForExcel =new ArrayList<ProgStlItemTkMeaShow>();
+            cttItemList = cttItemService.getEsItemList(
+                    EnumResType.RES_TYPE0.getCode(), strTkcttPkid);
+            if(cttItemList.size()<=0){
+                return;
+            }
+            progStlItemTkMeaShowList =new ArrayList<ProgStlItemTkMeaShow>();
+            recursiveDataTable("root", cttItemList, progStlItemTkMeaShowList);
+            progStlItemTkMeaShowList =getItemStlTkcttEngSMList_DoFromatNo(progStlItemTkMeaShowList);
+            setItemOfEsItemHieRelapList_AddTotal();
+            // Excel报表形成
+            progStlItemTkMeaShowListForExcel =new ArrayList<>();
+            for(ProgStlItemTkMeaShow itemUnit: progStlItemTkMeaShowList){
+                // 分包合同
+                itemUnit.setTkctt_ContractUnitPrice(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getTkctt_ContractUnitPrice()));
+                itemUnit.setTkctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getTkctt_ContractQuantity()));
+                itemUnit.setTkctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getTkctt_ContractAmount()));
+                // 总包工程材料消耗量结算
+                itemUnit.setEng_BeginToCurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getEng_BeginToCurrentPeriodEQty()));
+                itemUnit.setEng_BeginToCurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getEng_BeginToCurrentPeriodEQty()));
+
+                ProgStlItemTkMeaShow itemUnitTemp= (ProgStlItemTkMeaShow) BeanUtils.cloneBean(itemUnit);
+                itemUnitTemp.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getTkctt_StrNo()));
+                progStlItemTkMeaShowListForExcel.add(itemUnitTemp);
+            }
+            beansMap.put("progStlItemTkMeaShowListForExcel", progStlItemTkMeaShowListForExcel);
+            // 表内容设定
+            if(progStlItemTkMeaShowList.size()>0){
+                strExportToExcelRendered="true";
+            }else{
+                strExportToExcelRendered="false";
+            }
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
         }
     }
     /*根据数据库中层级关系数据列表得到总包合同*/
@@ -153,7 +178,7 @@ public class ProgStlItemTkMeaAction {
                                     List<CttItem> cttItemListPara,
                                     List<ProgStlItemTkMeaShow> sProgStlItemTkMeaShowListPara){
         // 根据父层级号获得该父层级下的子节点
-        List<CttItem> subCttItemList =new ArrayList<CttItem>();
+        List<CttItem> subCttItemList =new ArrayList<>();
         // 通过父层id查找它的孩子
         subCttItemList =getEsCttItemListByParentPkid(strLevelParentId, cttItemListPara);
         BigDecimal bdContractUnitPrice=new BigDecimal(0);

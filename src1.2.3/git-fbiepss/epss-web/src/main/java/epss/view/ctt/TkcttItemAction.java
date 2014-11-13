@@ -113,7 +113,7 @@ public class TkcttItemAction {
             cttItemList =new ArrayList<>();
             cttItemShowList =new ArrayList<>();
             attachmentList=new ArrayList<>();
-        /*初始化流程状态列表*/
+            /*初始化流程状态列表*/
             if(ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
                 // 附件记录变成List
                 attachmentList=ToolUtil.getListAttachmentByStrAttachment(cttInfo.getAttachment());
@@ -124,8 +124,17 @@ public class TkcttItemAction {
                 recursiveDataTable("root", cttItemList);
                 cttItemShowList = getTkcttItemList_DoFromatNo(cttItemShowList);
                 setTkcttItemList_AddTotal();
+                // Excel报表形成
                 cttItemShowListExcel = new ArrayList<>();
                 for (CttItemShow itemUnit : cttItemShowList) {
+                    // 合同单价，工程量，金额
+                    itemUnit.setContractUnitPrice(
+                                ToolUtil.getBdFrom0ToNull(itemUnit.getContractUnitPrice()));
+                    itemUnit.setContractQuantity(
+                                ToolUtil.getBdFrom0ToNull(itemUnit.getContractQuantity()));
+                    itemUnit.setContractAmount(
+                                ToolUtil.getBdFrom0ToNull(itemUnit.getContractAmount()));
+
                     CttItemShow itemUnitTemp = (CttItemShow) BeanUtils.cloneBean(itemUnit);
                     itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
                     cttItemShowListExcel.add(itemUnitTemp);
@@ -271,41 +280,6 @@ public class TkcttItemAction {
         cttItemShowDel = new CttItemShow(strBelongToType, strCttInfoPkid);
     }
 
-    public void resetActionForAdd() {
-        strSubmitType = "Add";
-        cttItemShowAdd = new CttItemShow(strBelongToType, strCttInfoPkid);
-    }
-
-    /*提交前的检查：必须项的输入*/
-    private Boolean subMitActionPreCheck() {
-        CttItemShow cttItemShowTemp = new CttItemShow(strBelongToType, strCttInfoPkid);
-        if (strSubmitType.equals("Add")) {
-            cttItemShowTemp = cttItemShowAdd;
-        }
-        if (strSubmitType.equals("Upd")) {
-            cttItemShowTemp = cttItemShowUpd;
-        }
-        if (StringUtils.isEmpty(cttItemShowTemp.getStrNo())) {
-            MessageUtil.addError("请输入编号！");
-            return false;
-        }
-        if (StringUtils.isEmpty(cttItemShowTemp.getName())) {
-            MessageUtil.addError("请输入名称！");
-            return false;
-        }
-        if ((cttItemShowTemp.getContractUnitPrice() != null &&
-                cttItemShowTemp.getContractUnitPrice().compareTo(BigDecimal.ZERO) != 0) ||
-                (cttItemShowTemp.getContractQuantity() != null &&
-                        cttItemShowTemp.getContractQuantity().compareTo(BigDecimal.ZERO) != 0)) {
-            /*绑定前台控件,可输入的BigDecimal类型本来为null的，自动转换为0，不可输入的，还是null*/
-            if (StringUtils.isEmpty(cttItemShowTemp.getUnit())) {
-                MessageUtil.addError("请输入单位！");
-                return false;
-            }
-        }
-        return true;
-    }
-
     public void blurCalculateAmountAction() {
         BigDecimal bigDecimal;
         if (strSubmitType.equals("Add")) {
@@ -348,28 +322,6 @@ public class TkcttItemAction {
             }
         } catch (Exception e) {
             logger.error("选择数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
-
-    /*删除*/
-    public void delThisRecordAction(CttItemShow cttItemShowPara) {
-        try {
-            int deleteRecordNum = cttItemService.deleteRecord(cttItemShowPara.getPkid());
-            if (deleteRecordNum <= 0) {
-                MessageUtil.addInfo("该记录已删除。");
-                return;
-            }
-            cttItemService.setAfterThisOrderidSubOneByNode(
-                    cttItemShowPara.getBelongToType(),
-                    cttItemShowPara.getBelongToPkid(),
-                    cttItemShowPara.getParentPkid(),
-                    cttItemShowPara.getGrade(),
-                    cttItemShowPara.getOrderid());
-            MessageUtil.addInfo("删除数据完成。");
-            initData();
-        } catch (Exception e) {
-            logger.error("删除数据失败，", e);
             MessageUtil.addError(e.getMessage());
         }
     }
@@ -452,11 +404,40 @@ public class TkcttItemAction {
         }
         return true ;
     }
+    /*提交前的检查：必须项的输入*/
+    private Boolean subMitActionPreCheck() {
+        CttItemShow cttItemShowTemp = new CttItemShow(strBelongToType, strCttInfoPkid);
+        if (strSubmitType.equals("Add")) {
+            cttItemShowTemp = cttItemShowAdd;
+        }
+        if (strSubmitType.equals("Upd")) {
+            cttItemShowTemp = cttItemShowUpd;
+        }
+        if (StringUtils.isEmpty(cttItemShowTemp.getStrNo())) {
+            MessageUtil.addError("请输入编号！");
+            return false;
+        }
+        if (StringUtils.isEmpty(cttItemShowTemp.getName())) {
+            MessageUtil.addError("请输入名称！");
+            return false;
+        }
+        if ((cttItemShowTemp.getContractUnitPrice() != null &&
+                cttItemShowTemp.getContractUnitPrice().compareTo(BigDecimal.ZERO) != 0) ||
+                (cttItemShowTemp.getContractQuantity() != null &&
+                        cttItemShowTemp.getContractQuantity().compareTo(BigDecimal.ZERO) != 0)) {
+            /*绑定前台控件,可输入的BigDecimal类型本来为null的，自动转换为0，不可输入的，还是null*/
+            if (StringUtils.isEmpty(cttItemShowTemp.getUnit())) {
+                MessageUtil.addError("请输入单位！");
+                return false;
+            }
+        }
+        return true;
+    }
     public void submitThisRecordAction(){
         try{
             /*提交前的检查*/
             if(strSubmitType .equals("Del")) {
-                delThisRecordAction(cttItemShowDel);
+                cttItemService.setAfterThisOrderidSubOneByNode(cttItemShowDel);
             }else{
                 if(!subMitActionPreCheck()){
                     return ;
@@ -474,20 +455,26 @@ public class TkcttItemAction {
                         MessageUtil.addInfo("该编号对应记录已存在，请重新录入。");
                         return;
                     }
-                    cttItemService.setAfterThisOrderidPlusOneByNode(
-                            cttItemShowAdd.getBelongToType(),
-                            cttItemShowAdd.getBelongToPkid(),
-                            cttItemShowAdd.getParentPkid(),
-                            cttItemShowAdd.getGrade(),
-                            cttItemShowAdd.getOrderid());
-                    cttItemService.insertRecord(cttItemShowAdd);
+                    cttItemService.setAfterThisOrderidPlusOneByNode(cttItemShowAdd);
                     resetAction();
                 }
-                MessageUtil.addInfo("提交数据完成。");
-                initData();
             }
+            switch (strSubmitType){
+                case "Add" : MessageUtil.addInfo("增加数据完成。");
+                    break;
+                case "Upd" : MessageUtil.addInfo("更新数据完成。");
+                    break;
+                case "Del" : MessageUtil.addInfo("删除数据完成。");
+            }
+            initData();
         } catch (Exception e) {
-            MessageUtil.addError("提交数据失败，" + e.getMessage());
+            switch (strSubmitType){
+                case "Add" : MessageUtil.addError("增加数据失败，"+ e.getMessage());
+                    break;
+                case "Upd" : MessageUtil.addError("更新数据失败，"+ e.getMessage());
+                    break;
+                case "Del" : MessageUtil.addError("删除数据失败，"+ e.getMessage());
+            }
         }
     }
 
@@ -651,7 +638,6 @@ public class TkcttItemAction {
     public void onViewAttachment(AttachmentModel attachmentModelPara) {
         image.setValue("/upload/" + attachmentModelPara.getCOLUMN_NAME());
     }
-
     public void delAttachmentRecordAction(AttachmentModel attachmentModelPara){
         try {
             File deletingFile = new File(attachmentModelPara.getCOLUMN_PATH());
@@ -668,7 +654,6 @@ public class TkcttItemAction {
             MessageUtil.addError(e.getMessage());
         }
     }
-
     public void download(String strAttachment){
         try{
             if(StringUtils .isEmpty(strAttachment) ){
@@ -686,7 +671,6 @@ public class TkcttItemAction {
             MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
         }
     }
-
     public void upload(FileUploadEvent event) {
         BufferedInputStream inStream = null;
         FileOutputStream fileOutputStream = null;

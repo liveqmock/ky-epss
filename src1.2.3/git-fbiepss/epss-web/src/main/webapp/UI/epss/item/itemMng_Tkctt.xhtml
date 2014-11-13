@@ -27,7 +27,7 @@
                         <p:commandButton id="addBtn"
                                          value="增加" icon="ui-icon-plus"
                                          rendered='#{tkcttItemAction.strPassFlag}'
-                                         action="#{tkcttItemAction.resetActionForAdd()}"
+                                         action="#{tkcttItemAction.resetAction()}"
                                          update="pgViewForAdd,pdt,msgs"
                                          onclick="PF('wVDlgViewForAdd').show()">
                         </p:commandButton>
@@ -39,7 +39,7 @@
                         </p:commandButton>
                         <p:commandButton id="startInputBtn" value="录入未完"
                                          action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
-                                         rendered="#{tkcttItemAction.strPassFlag  eq false ? 'true': 'false'}"
+                                         rendered="#{tkcttItemAction.strPassFlag eq false ? 'true': 'false'}"
                                          update="msgs,pgCondition,pdt"
                                          oncomplete="window.close()">
                         </p:commandButton>
@@ -104,7 +104,7 @@
                         <p:column style="width:360px" headerText="名称">
                             <h:outputText value="#{record.name}" />
                         </p:column>
-                        <p:column style="width:30px" headerText="单位">
+                        <p:column style="width:60px" headerText="单位">
                             <h:outputText value="#{record.unit}" style="text-align:right"/>
                         </p:column>
                         <p:column style="width:80px" headerText="合同单价">

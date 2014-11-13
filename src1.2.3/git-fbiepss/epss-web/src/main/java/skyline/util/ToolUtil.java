@@ -60,7 +60,7 @@ public class ToolUtil {
     }
 
     public static BigDecimal getBdFrom0ToNull(BigDecimal bigDecimalPara){
-        return bigDecimalPara.equals(new BigDecimal(0))?null:bigDecimalPara;
+        return bigDecimalPara==null?null:(bigDecimal0.compareTo(bigDecimalPara)==0?null:bigDecimalPara);
     }
 
     public static String getStrIgnoreNull(String strValue){

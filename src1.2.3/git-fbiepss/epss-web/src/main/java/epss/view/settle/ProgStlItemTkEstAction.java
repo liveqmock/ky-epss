@@ -20,6 +20,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.*;
 import skyline.util.JxlsManager;
@@ -103,48 +104,74 @@ public class ProgStlItemTkEstAction {
 
     /*初始化操作*/
     private void initData() {
-         /*分包合同数据*/
-        // From StlPkid To SubcttPkid
-        ProgStlInfo progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
-        reportHeader.setStrSubcttPkid(progStlInfo.getStlPkid());
-        reportHeader.setStrStlId(progStlInfo.getId());
-        // From SubcttPkid To CstplPkid
-        CttInfo cttInfoTemp = cttInfoService.getCttInfoByPkId(reportHeader.getStrSubcttPkid());
-        reportHeader.setStrCstplPkid(cttInfoTemp.getParentPkid());
-        reportHeader.setStrSubcttId(cttInfoTemp.getId());
-        reportHeader.setStrSubcttName(cttInfoTemp.getName());
-        reportHeader.setStrSignPartPkid(cttInfoTemp.getSignPartB());
-        SignPart signPartTemp=signPartService.getEsInitCustByPkid(
-                reportHeader.getStrSignPartPkid());
-        if(signPartTemp!=null) {
-            reportHeader.setStrSignPartName(signPartTemp.getName());
-        }
+        try{
+             /*分包合同数据*/
+            // From StlPkid To SubcttPkid
+            ProgStlInfo progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
+            reportHeader.setStrSubcttPkid(progStlInfo.getStlPkid());
+            reportHeader.setStrStlId(progStlInfo.getId());
+            // From SubcttPkid To CstplPkid
+            CttInfo cttInfoTemp = cttInfoService.getCttInfoByPkId(reportHeader.getStrSubcttPkid());
+            reportHeader.setStrCstplPkid(cttInfoTemp.getParentPkid());
+            reportHeader.setStrSubcttId(cttInfoTemp.getId());
+            reportHeader.setStrSubcttName(cttInfoTemp.getName());
+            reportHeader.setStrSignPartPkid(cttInfoTemp.getSignPartB());
+            SignPart signPartTemp=signPartService.getEsInitCustByPkid(
+                    reportHeader.getStrSignPartPkid());
+            if(signPartTemp!=null) {
+                reportHeader.setStrSignPartName(signPartTemp.getName());
+            }
 
-        beansMap.put("reportHeader", reportHeader);
+            beansMap.put("reportHeader", reportHeader);
 
-        progStlInfoShow =progStlInfoService.fromModelToModelShow(progStlInfo);
-        progStlInfoShow.setStlId(cttInfoTemp.getId());
-        progStlInfoShow.setStlName(cttInfoTemp.getName());
-        progStlInfoShow.setSignPartBName(reportHeader.getStrSignPartName());
+            progStlInfoShow =progStlInfoService.fromModelToModelShow(progStlInfo);
+            progStlInfoShow.setStlId(cttInfoTemp.getId());
+            progStlInfoShow.setStlName(cttInfoTemp.getName());
+            progStlInfoShow.setSignPartBName(reportHeader.getStrSignPartName());
 
-        /*分包合同*/
-        List<CttItem> cttItemList =new ArrayList<CttItem>();
-        progStlItemTkEstShowListForExcel =new ArrayList<ProgStlItemTkEstShow>();
-        cttItemList = cttItemService.getEsItemList(
-                EnumResType.RES_TYPE0.getCode(), strTkcttPkid);
-        if(cttItemList.size()<=0){
-            return;
-        }
-        progStlItemTkEstShowList =new ArrayList<ProgStlItemTkEstShow>();
-        recursiveDataTable("root", cttItemList, progStlItemTkEstShowList);
-        progStlItemTkEstShowList =getItemStlTkcttEngSMList_DoFromatNo(progStlItemTkEstShowList);
-        setItemOfEsItemHieRelapList_AddTotal();
-        beansMap.put("progStlItemTkEstShowListForExcel", progStlItemTkEstShowListForExcel);
-        // 表内容设定
-        if(progStlItemTkEstShowList.size()>0){
-            strExportToExcelRendered="true";
-        }else{
-            strExportToExcelRendered="false";
+            /*分包合同*/
+            List<CttItem> cttItemList =new ArrayList<>();
+            progStlItemTkEstShowListForExcel =new ArrayList<>();
+            cttItemList = cttItemService.getEsItemList(
+                    EnumResType.RES_TYPE0.getCode(), strTkcttPkid);
+            if(cttItemList.size()<=0){
+                return;
+            }
+            progStlItemTkEstShowList =new ArrayList<>();
+            recursiveDataTable("root", cttItemList, progStlItemTkEstShowList);
+            progStlItemTkEstShowList =getItemStlTkcttEngSMList_DoFromatNo(progStlItemTkEstShowList);
+            setItemOfEsItemHieRelapList_AddTotal();
+            // Excel报表形成
+            progStlItemTkEstShowListForExcel =new ArrayList<>();
+            for(ProgStlItemTkEstShow itemUnit: progStlItemTkEstShowList){
+                // 分包合同
+                itemUnit.setTkctt_ContractUnitPrice(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getTkctt_ContractUnitPrice()));
+                itemUnit.setTkctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getTkctt_ContractQuantity()));
+                itemUnit.setTkctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getTkctt_ContractAmount()));
+                // 总包工程材料消耗量结算
+                itemUnit.setEng_BeginToCurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getEng_BeginToCurrentPeriodEQty()));
+                itemUnit.setEng_BeginToCurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getEng_BeginToCurrentPeriodEQty()));
+
+                ProgStlItemTkEstShow itemUnitTemp= null;
+                itemUnitTemp = (ProgStlItemTkEstShow) BeanUtils.cloneBean(itemUnit);
+                itemUnitTemp.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getTkctt_StrNo()));
+                progStlItemTkEstShowListForExcel.add(itemUnitTemp);
+            }
+            beansMap.put("progStlItemTkEstShowListForExcel", progStlItemTkEstShowListForExcel);
+            // 表内容设定
+            if(progStlItemTkEstShowList.size()>0){
+                strExportToExcelRendered="true";
+            }else{
+                strExportToExcelRendered="false";
+            }
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
         }
     }
     /*根据数据库中层级关系数据列表得到总包合同*/
@@ -532,10 +559,6 @@ public class ProgStlItemTkEstAction {
                 }
                 intBeforeGrade=itemUnit.getTkctt_Grade() ;
                 itemUnit.setTkctt_StrNo(ToolUtil.padLeft_DoLevel(itemUnit.getTkctt_Grade(), strTemp)) ;
-
-                ProgStlItemTkEstShow itemUnitTemp= (ProgStlItemTkEstShow) BeanUtils.cloneBean(itemUnit);
-                itemUnitTemp.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getTkctt_StrNo()));
-                progStlItemTkEstShowListForExcel.add(itemUnitTemp);
             }
         }
         catch (Exception e) {
@@ -638,24 +661,24 @@ public class ProgStlItemTkEstAction {
                             EnumResType.RES_TYPE6.getCode(),
                             progStlInfo.getStlPkid(),
                             progStlInfo.getPeriodNo());
-                        if (!"".equals(strTemp)) {
-                            strMsg="1";
-                            MessageUtil.addError(strTemp);
-                            return;
-                        }else{
-                            // 这样写可以实现越级退回
-                            if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS2.getCode())) {
-                                progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
-                            }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS1.getCode())) {
-                                progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
-                            }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS0.getCode())) {
-                                progStlInfo.setFlowStatus(null);
-                            }
+                    if (!"".equals(strTemp)) {
+                       strMsg="1";
+                       MessageUtil.addError(strTemp);
+                        return;
+                    }else{
+                    // 这样写可以实现越级退回
+                    if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS2.getCode())) {
+                        progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
+                    }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS1.getCode())) {
+                        progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
+                    }else if(strNotPassToStatus.equals(EnumFlowStatus.FLOW_STATUS0.getCode())) {
+                        progStlInfo.setFlowStatus(null);
+                    }
 
-                            // 原因：批准未过
-                            progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
-                            progStlInfoService.updAutoLinkTask(progStlInfo);
-                            MessageUtil.addInfo("数据批准未过！");
+                    // 原因：批准未过
+                    progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
+                    progStlInfoService.updAutoLinkTask(progStlInfo);
+                    MessageUtil.addInfo("数据批准未过！");
                     }
                 }
             }
@@ -841,5 +864,5 @@ public class ProgStlItemTkEstAction {
     public void setStrMsg(String strMsg) {
         this.strMsg = strMsg;
     }
-    /*智能字段End*/
+/*智能字段End*/
 }

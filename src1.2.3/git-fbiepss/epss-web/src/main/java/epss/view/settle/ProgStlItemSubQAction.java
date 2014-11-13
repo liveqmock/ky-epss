@@ -111,8 +111,24 @@ public class ProgStlItemSubQAction {
             progStlItemSubQShowList =new ArrayList<>();
             recursiveDataTable("root", cttItemList, progStlItemSubQShowList);
             progStlItemSubQShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progStlItemSubQShowList);
+            // Excel报表形成
             progStlItemSubQShowListExcel =new ArrayList<>();
             for(ProgStlItemSubQShow itemUnit: progStlItemSubQShowList){
+                // 分包合同
+                itemUnit.setSubctt_ContractUnitPrice(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_ContractUnitPrice()));
+                itemUnit.setSubctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_ContractQuantity()));
+                itemUnit.setSubctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_ContractAmount()));
+                itemUnit.setSubctt_SignPartAPrice(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_SignPartAPrice()));
+                // 分包工程量结算
+                itemUnit.setEngQMng_CurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getEngQMng_CurrentPeriodEQty()));
+                itemUnit.setEngQMng_BeginToCurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()));
+
                 ProgStlItemSubQShow itemUnitTemp= (ProgStlItemSubQShow) BeanUtils.cloneBean(itemUnit);
                 itemUnitTemp.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getSubctt_StrNo()));
                 progStlItemSubQShowListExcel.add(itemUnitTemp);
