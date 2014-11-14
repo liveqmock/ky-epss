@@ -207,11 +207,11 @@ public class DeptOperService {
         }
         operMapper.deleteByPrimaryKey(operPara.getPkid());
     }
-    public List<Oper> selectByExample(Oper operPara){
+    public List<Oper> getOperListByOperId(String strOperIdPara){
         OperExample example=new OperExample();
         OperExample.Criteria criteria = example.createCriteria();
-        if (operPara.getId()!=null){
-            criteria.andIdEqualTo(operPara.getId());
+        if (strOperIdPara!=null){
+            criteria.andIdEqualTo(strOperIdPara);
         }
         return operMapper.selectByExample(example);
     }

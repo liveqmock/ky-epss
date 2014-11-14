@@ -3,6 +3,7 @@ package epss.repository.model.model_show;
 public class OperResShow {
     private String pkid;
     private String tid;
+    private String operId;
     private String operPkid;
     private String operName;
     private String flowStatus;
@@ -32,6 +33,12 @@ public class OperResShow {
     }
     public void setTid(String tid) {
         this.tid = tid == null ? null : tid.trim();
+    }
+    public String getOperId() {
+        return operId;
+    }
+    public void setOperId(String operId) {
+        this.operId = operId;
     }
     public String getOperPkid() {
         return operPkid;

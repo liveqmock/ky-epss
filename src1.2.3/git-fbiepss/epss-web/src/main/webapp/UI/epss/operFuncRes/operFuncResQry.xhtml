@@ -32,7 +32,7 @@
                                 <f:selectItems value="#{operFuncResQryAction.taskFunctionList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="人员编号：" for="persionId"/>
-                            <p:inputText id="persionId" value="#{operFuncResQryAction.operResShowQry.operPkid}"/>
+                            <p:inputText id="persionId" value="#{operFuncResQryAction.operResShowQry.operId}"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <h:panelGrid columns="2">
@@ -89,7 +89,7 @@
                         <h:outputText value="#{record.flowStatusName}"/>
                     </p:column>
                     <p:column headerText="人员编号" style="width:50px;text-align:left">
-                        <h:outputText value="#{record.operPkid}"/>
+                        <h:outputText value="#{record.operId}"/>
                     </p:column>
                     <p:column headerText="人员名称" style="width:100px;text-align:left">
                         <h:outputText value="#{record.operName}"/>

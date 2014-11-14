@@ -2,7 +2,9 @@ package epss.view.operFuncRes;
 
 import epss.common.enums.EnumResType;
 import epss.common.enums.EnumFlowStatus;
+import epss.repository.model.Oper;
 import epss.repository.model.model_show.OperResShow;
+import epss.service.DeptOperService;
 import epss.service.OperResService;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
@@ -27,6 +29,8 @@ public class OperFuncResQryAction implements Serializable{
     private static final Logger logger = LoggerFactory.getLogger(OperFuncResQryAction.class);
     @ManagedProperty(value = "#{operResService}")
     private OperResService operResService;
+    @ManagedProperty(value = "#{deptOperService}")
+    private DeptOperService deptOperService;
 
     private OperResShow operResShowQry;
     private OperResShow operResShowSel;
@@ -72,6 +76,13 @@ public class OperFuncResQryAction implements Serializable{
             if (!("".equals(ToolUtil.getStrIgnoreNull(operResShowQry.getInfoPkidName()).trim()))) {
                 operResShowQry.setInfoPkidName("%"+operResShowQry.getInfoPkidName()+"%");
             }
+            String strOperIdTemp=ToolUtil.getStrIgnoreNull(operResShowQry.getOperId()).trim();
+            if (!("".equals(strOperIdTemp))) {
+                List<Oper> operListTemp=deptOperService.getOperListByOperId(strOperIdTemp);
+                if(operListTemp.size()>0) {
+                    operResShowQry.setOperPkid(operListTemp.get(0).getPkid());
+                }
+            }
             List<OperResShow> operResShowQryTempList = operResService.selectOperaResRecordsByModelShow(operResShowQry);
             if (!(operResShowQryTempList.size() > 0)) {
                 MessageUtil.addInfo("没有查询到数据。");
@@ -98,6 +109,15 @@ public class OperFuncResQryAction implements Serializable{
     }
 
     /*智能字段 Start*/
+
+    public DeptOperService getDeptOperService() {
+        return deptOperService;
+    }
+
+    public void setDeptOperService(DeptOperService deptOperService) {
+        this.deptOperService = deptOperService;
+    }
+
     public OperResService getOperResService() {
         return operResService;
     }
