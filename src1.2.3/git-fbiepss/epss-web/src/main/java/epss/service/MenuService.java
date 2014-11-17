@@ -35,7 +35,7 @@ public class MenuService {
         if (!ToolUtil.getStrIgnoreNull(ptmenuPara.getMenuType()).equals("")){
             criteria.andMenuTypeLike("%"+ptmenuPara .getMenuType()+"%");
         }
-        example.setOrderByClause("MENUDESC ASC") ;
+        example.setOrderByClause("LEVELIDX ASC") ;
         return ptmenuMapper.selectByExample(example);
     }
 
