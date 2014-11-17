@@ -76,7 +76,8 @@ public class SubcttItemAction {
 
     /*提交类型*/
     private String strSubmitType;
-    private String strPassFlag;
+    private String strPassVisible;
+    private String strPassFailVisible;
     private String strFlowType;
     private String strNotPassToStatus;
 
@@ -107,9 +108,20 @@ public class SubcttItemAction {
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
         }
-        strPassFlag="true";
-        if("Mng".equals(strFlowType)&& EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())) {
-            strPassFlag="false";
+        strPassVisible = "true";
+        strPassFailVisible = "true";
+        if ("Mng".equals(strFlowType)) {
+            if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())){
+                strPassVisible = "false";
+            }else {
+                strPassFailVisible = "false";
+            }
+        }else {
+            if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(cttInfo.getFlowStatus()))
+                    ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(cttInfo.getFlowStatus()))
+                    ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(cttInfo.getFlowStatus()))){
+                strPassVisible = "false";
+            }
         }
         resetAction();
         initData() ;
@@ -753,6 +765,8 @@ public class SubcttItemAction {
                     }
                 }
             }
+            strPassVisible="false";
+            strPassFailVisible="false";
         } catch (Exception e) {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -956,10 +970,6 @@ public class SubcttItemAction {
         this.esFlowControl = esFlowControl;
     }
 
-    public String getStrPassFlag() {
-        return strPassFlag;
-    }
-
     public StyleModel getStyleModel() {
         return styleModel;
     }
@@ -1052,4 +1062,12 @@ public class SubcttItemAction {
         this.image = image;
     }
     /*智能字段End*/
+
+    public String getStrPassVisible() {
+        return strPassVisible;
+    }
+
+    public String getStrPassFailVisible() {
+        return strPassFailVisible;
+    }
 }

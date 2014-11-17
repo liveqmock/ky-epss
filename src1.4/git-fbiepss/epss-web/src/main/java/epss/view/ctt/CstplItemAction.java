@@ -73,7 +73,8 @@ public class CstplItemAction {
 
     /*提交类型*/
     private String strSubmitType;
-    private String strPassFlag;
+    private String strPassVisible;
+    private String strPassFailVisible;
     private String strNotPassToStatus;
     private String strFlowType;
     /*控制控件在画面上的可用与现实Start*/
@@ -103,9 +104,20 @@ public class CstplItemAction {
             strFlowType = parammap.get("strFlowType").toString();
         }
 
-        strPassFlag = "true";
-        if ("Mng".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())) {
-            strPassFlag = "false";
+        strPassVisible = "true";
+        strPassFailVisible = "true";
+        if ("Mng".equals(strFlowType)) {
+            if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())){
+                strPassVisible = "false";
+            }else {
+                strPassFailVisible = "false";
+            }
+        }else {
+            if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(cttInfo.getFlowStatus()))
+                    ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(cttInfo.getFlowStatus()))
+                    ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(cttInfo.getFlowStatus()))){
+                strPassVisible = "false";
+            }
         }
 
         resetAction();
@@ -219,6 +231,8 @@ public class CstplItemAction {
                     }
                 }
             }
+            strPassVisible="false";
+            strPassFailVisible="false";
         } catch (Exception e) {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -233,11 +247,6 @@ public class CstplItemAction {
         cttItemShowAdd =new CttItemShow(strBelongToType ,strCttInfoPkid);
         cttItemShowUpd =new CttItemShow(strBelongToType ,strCttInfoPkid);
         cttItemShowDel =new CttItemShow(strBelongToType ,strCttInfoPkid);
-    }
-
-    public void resetActionForAdd(){
-        strSubmitType="Add";
-        cttItemShowAdd =new CttItemShow(strBelongToType ,strCttInfoPkid);
     }
 
     public Boolean blurStrName(){
@@ -449,63 +458,7 @@ public class CstplItemAction {
         }
         return true ;
     }
-    public void delThisRecordAction(CttItemShow cttItemShowPara) {
-        try {
-            cttItemService.deleteRecord(cttItemShowPara.getPkid()) ;
-            cttItemService.setAfterThisOrderidSubOneByNode(
-                    cttItemShowPara.getBelongToType(),
-                    cttItemShowPara.getBelongToPkid(),
-                    cttItemShowPara.getParentPkid(),
-                    cttItemShowPara.getGrade(),
-                    cttItemShowPara.getOrderid());
-            initData();
-            MessageUtil.addInfo("删除数据完成。");
-        } catch (Exception e) {
-            logger.error("删除数据失败，", e);
-            MessageUtil.addError(e.getMessage());
-        }
-    }
 
-    public void submitThisRecordAction(){
-        try{
-            /*提交前的检查*/
-            if (strSubmitType.equals("Del")) {
-                delThisRecordAction(cttItemShowDel);
-            } else {
-                if (!subMitActionPreCheck()) {
-                    return;
-                }
-            /*编码验证*/
-                if (!blurStrNoToGradeAndOrderid("false")) {
-                    return;
-                }
-            /*对应编码验证*/
-                if (!blurCorrespondingPkid()) {
-                    return;
-                }
-                if (strSubmitType.equals("Upd")) {
-                    cttItemService.updateRecord(cttItemShowUpd);
-                } else if (strSubmitType.equals("Add")) {
-                    CttItem cttItemTemp = cttItemService.fromModelShowToModel(cttItemShowAdd);
-                    if (cttItemService.isExistSameRecordInDb(cttItemTemp)) {
-                        MessageUtil.addInfo("该编号对应记录已存在，请重新录入。");
-                        return;
-                    }
-                    cttItemService.setAfterThisOrderidPlusOneByNode(
-                            cttItemShowAdd.getBelongToType(),
-                            cttItemShowAdd.getBelongToPkid(),
-                            cttItemShowAdd.getParentPkid(),
-                            cttItemShowAdd.getGrade(),
-                            cttItemShowAdd.getOrderid());
-                    cttItemService.insertRecord(cttItemShowAdd);
-                }
-                MessageUtil.addInfo("提交数据完成。");
-                initData();
-            }
-        } catch (Exception e) {
-            MessageUtil.addError("提交数据失败，" + e.getMessage());
-        }
-    }
     /*提交前的检查：必须项的输入*/
     private Boolean subMitActionPreCheck(){
         CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCttInfoPkid);
@@ -526,10 +479,57 @@ public class CstplItemAction {
         }
         return true;
     }
+    public void submitThisRecordAction(){
+        try{
+            /*提交前的检查*/
+            if (strSubmitType.equals("Del")) {
+                cttItemService.setAfterThisOrderidSubOneByNode(cttItemShowDel);
+            } else {
+                if (!subMitActionPreCheck()) {
+                    return;
+                }
+            /*编码验证*/
+                if (!blurStrNoToGradeAndOrderid("false")) {
+                    return;
+                }
+            /*对应编码验证*/
+                if (!blurCorrespondingPkid()) {
+                    return;
+                }
+                if (strSubmitType.equals("Upd")) {
+                    cttItemService.updateRecord(cttItemShowUpd);
+                } else if (strSubmitType.equals("Add")) {
+                    CttItem cttItemTemp = cttItemService.fromModelShowToModel(cttItemShowAdd);
+                    if (cttItemService.isExistSameRecordInDb(cttItemTemp)) {
+                        MessageUtil.addInfo("该编号对应记录已存在，请重新录入。");
+                        return;
+                    }
+                    cttItemService.setAfterThisOrderidPlusOneByNode(cttItemShowAdd);
+                    resetAction();
+                }
+            }
+            switch (strSubmitType){
+                case "Add" : MessageUtil.addInfo("增加数据完成。");
+                    break;
+                case "Upd" : MessageUtil.addInfo("更新数据完成。");
+                    break;
+                case "Del" : MessageUtil.addInfo("删除数据完成。");
+            }
+            initData();
+        } catch (Exception e) {
+            switch (strSubmitType){
+                case "Add" : MessageUtil.addError("增加数据失败，"+ e.getMessage());
+                    break;
+                case "Upd" : MessageUtil.addError("更新数据失败，"+ e.getMessage());
+                    break;
+                case "Del" : MessageUtil.addError("删除数据失败，"+ e.getMessage());
+            }
+        }
+    }
 
     private void initData() {
         try {
-        /*总包合同列表*/
+            /*总包合同列表*/
             List<CttItem> cttItemListTkctt =new ArrayList<>();
             if(ToolUtil.getStrIgnoreNull(strCttInfoPkid).length()!=0) {
                 // 附件记录变成List
@@ -543,7 +543,7 @@ public class CstplItemAction {
                 recursiveDataTable("root", cttItemListTkctt, cttItemShowListTkctt);
                 cttItemShowListTkctt = getCstplItemList_DoFromatNo(cttItemShowListTkctt);
 
-        /*成本计划列表*/
+            /*成本计划列表*/
                 List<CttItem> cttItemListCstpl = cttItemService.getEsItemList(
                         strBelongToType, strCttInfoPkid);
 
@@ -552,7 +552,7 @@ public class CstplItemAction {
                 cttItemShowListCstpl = getCstplItemList_DoFromatNo(
                         cttItemShowListCstpl);
 
-        /*拼装列表*/
+            /*拼装列表*/
                 List<CstplItemShow> cstplItemShowList_ForSort = new ArrayList<>();
 
                 for (CttItemShow itemTkctt : cttItemShowListTkctt) {
@@ -585,26 +585,10 @@ public class CstplItemAction {
                                 itemTkcttInsertItem.setRecVersion(null);
                                 itemTkcttInsertItem.setCorrespondingPkid(null);
                             } else {
-                                if (itemTkcttInsertItem.getContractUnitPrice() != null) {
-                                    itemTkcttInsertItem.setContractUnitPrice(
-                                            ToolUtil.getBdFrom0ToNull(itemTkcttInsertItem.getContractUnitPrice()));
-                                }else{
-                                    itemTkcttInsertItem.setContractUnitPrice(null);
-                                }
-
-                                if (itemTkcttInsertItem.getContractQuantity() != null) {
-                                    itemTkcttInsertItem.setContractQuantity(
-                                            ToolUtil.getBdFrom0ToNull(itemTkcttInsertItem.getContractQuantity()));
-                                }else{
-                                    itemTkcttInsertItem.setContractQuantity(null);
-                                }
-
-                                if(itemTkcttInsertItem.getContractAmount()!=null) {
-                                    itemTkcttInsertItem.setContractAmount(
-                                            ToolUtil.getBdFrom0ToNull(itemTkcttInsertItem.getContractAmount()));
-                                }else{
-                                    itemTkcttInsertItem.setContractAmount(null);
-                                }
+                                // 总包合同中的单价，数量，金额
+                                itemTkcttInsertItem.setContractUnitPrice(itemTkcttInsertItem.getContractUnitPrice());
+                                itemTkcttInsertItem.setContractQuantity(itemTkcttInsertItem.getContractQuantity());
+                                itemTkcttInsertItem.setContractAmount(itemTkcttInsertItem.getContractAmount());
                             }
                             //成本计划
                             itemTkcttInsertItem.setStrNoContrast(itemCstpl.getStrNo());
@@ -617,26 +601,10 @@ public class CstplItemAction {
                             itemTkcttInsertItem.setNameContrast(itemCstpl.getName());
                             itemTkcttInsertItem.setRemarkContrast(itemCstpl.getRemark());
                             itemTkcttInsertItem.setUnitContrast(itemCstpl.getUnit());
-                            if (itemCstpl.getContractUnitPrice() != null) {
-                                itemTkcttInsertItem.setContractUnitPriceContrast(
-                                        ToolUtil.getBdFrom0ToNull(itemCstpl.getContractUnitPrice()));
-                            }else{
-                                itemTkcttInsertItem.setContractUnitPriceContrast(null);
-                            }
-
-                            if (itemCstpl.getContractQuantity() != null) {
-                                itemTkcttInsertItem.setContractQuantityContrast(
-                                        ToolUtil.getBdFrom0ToNull(itemCstpl.getContractQuantity()));
-                            }else{
-                                itemTkcttInsertItem.setContractQuantityContrast(null);
-                            }
-
-                            if(itemCstpl.getContractAmount()!=null) {
-                                itemTkcttInsertItem.setContractAmountContrast(
-                                        ToolUtil.getBdFrom0ToNull(itemCstpl.getContractAmount()));
-                            }else{
-                                itemTkcttInsertItem.setContractAmountContrast(null);
-                            }
+                            // 成本计划中的单价，数量，金额，甲供材单价
+                            itemTkcttInsertItem.setContractUnitPriceContrast(itemCstpl.getContractUnitPrice());
+                            itemTkcttInsertItem.setContractQuantityContrast(itemCstpl.getContractQuantity());
+                            itemTkcttInsertItem.setContractAmountContrast(itemCstpl.getContractAmount());
                             itemTkcttInsertItem.setSignPartAPriceContrast(itemCstpl.getSignPartAPrice());
                             itemTkcttInsertItem.setArchivedFlagContrast(itemCstpl.getArchivedFlag());
                             itemTkcttInsertItem.setOriginFlagContrast(itemCstpl.getOriginFlag());
@@ -689,20 +657,38 @@ public class CstplItemAction {
                         itemUnit.setCorrespondingItemNoContrast(itemUnit.getStrNo());
                     }
                 }
-                cstplItemShowList = new ArrayList<CstplItemShow>();
+                cstplItemShowList = new ArrayList<>();
                 cstplItemShowList.addAll(cstplItemShowList_ForSort);
                 // 添加合计
                 setCstplItemList_AddTotal();
-
+                // Excel报表形成
                 cstplItemShowListExcel = new ArrayList<>();
                 for (CstplItemShow itemUnit : cstplItemShowList) {
+                    // 总包合同中的单价，数量，金额
+                    itemUnit.setContractUnitPrice(
+                            ToolUtil.getBdFrom0ToNull(itemUnit.getContractUnitPrice()));
+                    itemUnit.setContractQuantity(
+                            ToolUtil.getBdFrom0ToNull(itemUnit.getContractQuantity()));
+                    itemUnit.setContractAmount(
+                            ToolUtil.getBdFrom0ToNull(itemUnit.getContractAmount()));
+
+                    // 成本计划中的综合单价，工程量，金额，甲供材单价
+                    itemUnit.setContractUnitPriceContrast(
+                            ToolUtil.getBdFrom0ToNull(itemUnit.getContractUnitPriceContrast()));
+                    itemUnit.setContractQuantityContrast(
+                            ToolUtil.getBdFrom0ToNull(itemUnit.getContractQuantityContrast()));
+                    itemUnit.setContractAmountContrast(
+                            ToolUtil.getBdFrom0ToNull(itemUnit.getContractAmountContrast()));
+                    itemUnit.setSignPartAPriceContrast(
+                            ToolUtil.getBdFrom0ToNull(itemUnit.getSignPartAPriceContrast()));
+
                     CstplItemShow itemUnitTemp = (CstplItemShow) BeanUtils.cloneBean(itemUnit);
                     itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
                     itemUnitTemp.setStrNoContrast(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNoContrast()));
                     cstplItemShowListExcel.add(itemUnitTemp);
                 }
                 beansMap.put("cstplItemShowListExcel", cstplItemShowListExcel);
-                resetActionForAdd();
+                resetAction();
             }
         }catch (Exception e) {
             logger.error("初始化失败", e);
@@ -848,23 +834,26 @@ public class CstplItemAction {
         String strThisCorrespondingItemNoContrast;
         String strThisCorrespondingItemNoContrastAfter;
         for(;i<modelList.size();i++){      //外层循环实现对整个list的遍历
-            int startI=i;                    //保存当前元素的初始位置i,因为在内层循环中会改变i的值
-            int countParent=0;               //统计和当前元素（即父元素）相同的元素个数，父元素只能是顺序相同
-            int countChild=0;                //统计匹配父元素的孩子元素的个数，孩子元素也是顺序出现
-            int positionOfChild=0;           //记录下和父元素匹配的第一个孩子的位置
+            int startI=i;                  //保存当前元素的初始位置i,因为在内层循环中会改变i的值
+            int countParent=0;             //统计和当前元素（即父元素）相同的元素个数，父元素只能是顺序相同
+            int countChild=0;              //统计匹配父元素的孩子元素的个数，孩子元素也是顺序出现
+            int positionOfChild=0;         //记录下和父元素匹配的第一个孩子的位置
             strThisCorrespondingItemNoContrast=ToolUtil.getIgnoreSpaceOfStr(modelList.get(i).getCorrespondingItemNoContrast());
             for(int j=i+1; j<modelList.size();j++){
                 strThisCorrespondingItemNoContrastAfter=ToolUtil.getIgnoreSpaceOfStr(modelList.get(j).getCorrespondingItemNoContrast());
-                if(strThisCorrespondingItemNoContrast.equals(strThisCorrespondingItemNoContrastAfter)){//判断内层循环中是否有和外层循环中的元素相同的元素，并记录下来保存在countParent
-                    if(countParent==0){        //如果内层循环中存在和外层中相同的元素，并且是第一次遇到，由于countParent初值设置为0，
-                        countParent+=2;          //故首次碰到时内层中需要将countParent+2
+                if(strThisCorrespondingItemNoContrast.equals(strThisCorrespondingItemNoContrastAfter)){
+                //判断内层循环中是否有和外层循环中的元素相同的元素，并记录下来保存在countParent
+                    if(countParent==0){     //如果内层循环中存在和外层中相同的元素，并且是第一次遇到，由于countParent初值设置为0，
+                        countParent+=2;     //故首次碰到时内层中需要将countParent+2
                         continue;
                     }
                     ++countParent;
                 }
-                else{                        //else下分为三种情况
+                else{                       //else下分为三种情况
                     if(countParent==0||!strThisCorrespondingItemNoContrastAfter.startsWith(strThisCorrespondingItemNoContrast))
-                        break;//1.内层中没有和外层中元素相同的元素，由已知条件的list知，这种情况直接退出内层循环即可；||2.内层中有和外层中元素相同的元素，但是内层中没有其孩子，由已知条件的list知，这种情况直接退出内层循环即可
+                        break;
+                        //1.内层中没有和外层中元素相同的元素，由已知条件的list知，这种情况直接退出内层循环即可；
+                        // ||2.内层中有和外层中元素相同的元素，但是内层中没有其孩子，由已知条件的list知，这种情况直接退出内层循环即可
                     if((strThisCorrespondingItemNoContrastAfter.startsWith(strThisCorrespondingItemNoContrast)&&
                             strThisCorrespondingItemNoContrastAfter.compareTo(strThisCorrespondingItemNoContrast)>0)){
                         if(positionOfChild==0){//内层中有和外层中元素相同的元素，
@@ -1358,10 +1347,6 @@ public class CstplItemAction {
     public StyleModel getStyleModel() {
         return styleModel;
     }
-    public String getStrMngNotFinishFlag() {
-        return strPassFlag;
-    }
-
     public CttItemShow getCttItemShowAdd() {
         return cttItemShowAdd;
     }
@@ -1410,10 +1395,6 @@ public class CstplItemAction {
         this.strNotPassToStatus = strNotPassToStatus;
     }
 
-    public String getStrPassFlag() {
-        return strPassFlag;
-    }
-
     public String getStrFlowType() {
         return strFlowType;
     }
@@ -1454,4 +1435,12 @@ public class CstplItemAction {
         this.downloadFile = downloadFile;
     }
     /*智能字段End*/
+
+    public String getStrPassVisible() {
+        return strPassVisible;
+    }
+
+    public String getStrPassFailVisible() {
+        return strPassFailVisible;
+    }
 }

@@ -26,17 +26,18 @@
                     <h:panelGrid id="pgCondition" columns="5">
                         <p:commandButton id="endInputBtn" value="通过"
                                          action="#{tkcttItemAction.onClickForPowerAction('Pass')}"
-                                         update="msgs,pgCondition"
-                                         oncomplete="window.close()">
+                                         rendered='#{tkcttItemAction.strPassVisible}'
+                                         update="msgs,pgCondition">
                         </p:commandButton>
-                        <p:outputLabel value="未过至状态:"/>
-                        <p:selectOneMenu id="flowStatus" value="#{tkcttItemAction.strNotPassToStatus}">
+                        <p:outputLabel value="未过至状态:" rendered="#{tkcttItemAction.strPassFailVisible}"/>
+                        <p:selectOneMenu id="flowStatus" value="#{tkcttItemAction.strNotPassToStatus}"
+                                         rendered="#{tkcttItemAction.strPassFailVisible}">
                             <f:selectItems value="#{esFlowControl.getBackToStatusFlagList(tkcttItemAction.strFlowType)}"/>
                         </p:selectOneMenu>
                         <p:commandButton id="startInputBtn" value="未过"
                                          action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
-                                         update="msgs,pgCondition"
-                                         oncomplete="window.close()">
+                                         rendered="#{tkcttItemAction.strPassFailVisible}"
+                                         update="msgs,pgCondition">
                         </p:commandButton>
                         <p:commandButton value="导出到EXCEL"
                                          action="#{tkcttItemAction.onExportExcel}"

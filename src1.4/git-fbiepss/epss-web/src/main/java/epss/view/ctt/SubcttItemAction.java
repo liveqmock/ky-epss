@@ -76,7 +76,8 @@ public class SubcttItemAction {
 
     /*提交类型*/
     private String strSubmitType;
-    private String strPassFlag;
+    private String strPassVisible;
+    private String strPassFailVisible;
     private String strFlowType;
     private String strNotPassToStatus;
 
@@ -107,9 +108,20 @@ public class SubcttItemAction {
         if (parammap.containsKey("strFlowType")) {
             strFlowType = parammap.get("strFlowType").toString();
         }
-        strPassFlag="true";
-        if("Mng".equals(strFlowType)&& EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())) {
-            strPassFlag="false";
+        strPassVisible = "true";
+        strPassFailVisible = "true";
+        if ("Mng".equals(strFlowType)) {
+            if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())){
+                strPassVisible = "false";
+            }else {
+                strPassFailVisible = "false";
+            }
+        }else {
+            if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(cttInfo.getFlowStatus()))
+                    ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(cttInfo.getFlowStatus()))
+                    ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(cttInfo.getFlowStatus()))){
+                strPassVisible = "false";
+            }
         }
         resetAction();
         initData() ;
@@ -132,8 +144,8 @@ public class SubcttItemAction {
                 recursiveDataTable("root", cttItemList, cttItemShowList_Cstpl);
                 cttItemShowList_Cstpl = getItemOfEsItemHieRelapList_DoFromatNo(cttItemShowList_Cstpl);
         /*分包合同*/
-                cttItemList = new ArrayList<CttItem>();
-                cttItemShowList = new ArrayList<CttItemShow>();
+                cttItemList = new ArrayList<>();
+                cttItemShowList = new ArrayList<>();
                 cttItemList = cttItemService.getEsItemList(
                         strBelongToType, strCttInfoPkid);
                 cttItemShowList.clear();
@@ -151,8 +163,18 @@ public class SubcttItemAction {
                 }
                 // 添加合计
                 setItemOfCstplAndSubcttList_AddTotal();
+
                 cttItemShowListExcel = new ArrayList<CttItemShow>();
                 for (CttItemShow itemUnit : cttItemShowList) {
+                    // 分包合同中合同单价，工程量，金额，甲供材单价
+                    itemUnit.setContractUnitPrice(
+                            ToolUtil.getBdFrom0ToNull(itemUnit.getContractUnitPrice()));
+                    itemUnit.setContractQuantity(
+                            ToolUtil.getBdFrom0ToNull(itemUnit.getContractQuantity()));
+                    itemUnit.setContractAmount(
+                            ToolUtil.getBdFrom0ToNull(itemUnit.getContractAmount()));
+                    itemUnit.setSignPartAPrice(
+                            ToolUtil.getBdFrom0ToNull(itemUnit.getSignPartAPrice()));
                     CttItemShow itemUnitTemp = (CttItemShow) BeanUtils.cloneBean(itemUnit);
                     itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
                     itemUnitTemp.setStrCorrespondingItemNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrCorrespondingItemNo()));
@@ -270,10 +292,6 @@ public class SubcttItemAction {
         cttItemShowAdd =new CttItemShow(strBelongToType ,strCttInfoPkid);
         cttItemShowUpd =new CttItemShow(strBelongToType ,strCttInfoPkid);
         cttItemShowDel =new CttItemShow(strBelongToType ,strCttInfoPkid);
-    }
-    public void resetActionForAdd(){
-        strSubmitType="Add";
-        cttItemShowAdd =new CttItemShow(strBelongToType ,strCttInfoPkid);
     }
     /*右单击事件*/
     public void selectRecordAction(String strSubmitTypePara,CttItemShow cttItemShowSeledPara){
@@ -453,11 +471,7 @@ public class SubcttItemAction {
     public void submitThisRecordAction(){
         try{
             if(strSubmitType.equals("Del")){
-                int delRecordNum=delRecordAction(cttItemShowDel);
-                if (delRecordNum<=0){
-                    MessageUtil.addInfo("该记录已删除。");
-                    return;
-                }
+                cttItemService.setAfterThisOrderidSubOneByNode(cttItemShowDel);
             }
             else {
                  /*提交前的检查*/
@@ -480,8 +494,8 @@ public class SubcttItemAction {
                             cttItemShowAdd.setSpareField(intIndex.toString());
                         }
                     }
-                    addRecordAction(cttItemShowAdd);
-                    resetActionForAdd();
+                    cttItemService.setAfterThisOrderidPlusOneByNode(cttItemShowAdd);
+                    resetAction();
                 }else if(strSubmitType.equals("Upd")){
                     if(!ToolUtil.getStrIgnoreNull(cttItemShowUpd.getName()).equals("")){
                         Integer intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowUpd.getName());
@@ -489,11 +503,11 @@ public class SubcttItemAction {
                             cttItemShowUpd.setSpareField(intIndex.toString());
                         }
                     }
-                    updRecordAction(cttItemShowUpd);
+                    cttItemService.updateRecord(cttItemShowUpd);
                 }
             }
             switch (strSubmitType){
-                case "Add" : MessageUtil.addInfo("提交数据完成。");
+                case "Add" : MessageUtil.addInfo("增加数据完成。");
                     break;
                 case "Upd" : MessageUtil.addInfo("更新数据完成。");
                     break;
@@ -502,30 +516,14 @@ public class SubcttItemAction {
             initData();
         }
         catch (Exception e){
-            MessageUtil.addError("提交数据失败，" + e.getMessage());
+            switch (strSubmitType){
+                case "Add" : MessageUtil.addError("增加数据失败，"+ e.getMessage());
+                    break;
+                case "Upd" : MessageUtil.addError("更新数据失败，"+ e.getMessage());
+                    break;
+                case "Del" : MessageUtil.addError("删除数据失败，"+ e.getMessage());
+            }
         }
-    }
-    private void addRecordAction(CttItemShow cttItemShowPara){
-        cttItemService.setAfterThisOrderidPlusOneByNode(
-                cttItemShowPara.getBelongToType(),
-                cttItemShowPara.getBelongToPkid(),
-                cttItemShowPara.getParentPkid(),
-                cttItemShowPara.getGrade(),
-                cttItemShowPara.getOrderid());
-        cttItemService.insertRecord(cttItemShowPara);
-    }
-    private void updRecordAction(CttItemShow cttItemShowPara){
-        cttItemService.updateRecord(cttItemShowPara) ;
-    }
-    private int delRecordAction(CttItemShow cttItemShowPara) {
-        int deleteRecordNum= cttItemService.deleteRecord(cttItemShowPara.getPkid()) ;
-        cttItemService.setAfterThisOrderidSubOneByNode(
-                cttItemShowPara.getBelongToType(),
-                cttItemShowPara.getBelongToPkid(),
-                cttItemShowPara.getParentPkid(),
-                cttItemShowPara.getGrade(),
-                cttItemShowPara.getOrderid());
-        return deleteRecordNum;
     }
 
     /*提交前的检查：必须项的输入*/
@@ -571,8 +569,7 @@ public class SubcttItemAction {
     }
 
     /*根据group和orderid临时编制编码strNo*/
-    private List<CttItemShow> getItemOfEsItemHieRelapList_DoFromatNo(
-             List<CttItemShow> cttItemShowListPara){
+    private List<CttItemShow> getItemOfEsItemHieRelapList_DoFromatNo(List<CttItemShow> cttItemShowListPara){
         String strTemp="";
         Integer intBeforeGrade=-1;
         for(CttItemShow itemUnit: cttItemShowListPara){
@@ -768,6 +765,8 @@ public class SubcttItemAction {
                     }
                 }
             }
+            strPassVisible="false";
+            strPassFailVisible="false";
         } catch (Exception e) {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -783,7 +782,6 @@ public class SubcttItemAction {
     public void onViewAttachment(AttachmentModel attachmentModelPara) {
         image.setValue("/upload/" + attachmentModelPara.getCOLUMN_NAME());
     }
-
     public void delAttachmentRecordAction(AttachmentModel attachmentModelPara){
         try {
             File deletingFile = new File(attachmentModelPara.getCOLUMN_PATH());
@@ -801,7 +799,6 @@ public class SubcttItemAction {
             MessageUtil.addError(e.getMessage());
         }
     }
-
     public void download(String strAttachment){
         try{
             if(StringUtils .isEmpty(strAttachment) ){
@@ -822,7 +819,6 @@ public class SubcttItemAction {
             MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
         }
     }
-
     public void upload(FileUploadEvent event) {
         BufferedInputStream inStream = null;
         FileOutputStream fileOutputStream = null;
@@ -974,10 +970,6 @@ public class SubcttItemAction {
         this.esFlowControl = esFlowControl;
     }
 
-    public String getStrPassFlag() {
-        return strPassFlag;
-    }
-
     public StyleModel getStyleModel() {
         return styleModel;
     }
@@ -1070,4 +1062,12 @@ public class SubcttItemAction {
         this.image = image;
     }
     /*智能字段End*/
+
+    public String getStrPassVisible() {
+        return strPassVisible;
+    }
+
+    public String getStrPassFailVisible() {
+        return strPassFailVisible;
+    }
 }

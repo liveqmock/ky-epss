@@ -26,22 +26,20 @@
                     <h:panelGrid id="pgCondition" columns="4">
                         <p:commandButton id="addBtn"
                                          value="增加" icon="ui-icon-plus"
-                                         rendered='#{subcttItemAction.strPassFlag}'
-                                         action="#{subcttItemAction.resetActionForAdd()}"
+                                         rendered='#{subcttItemAction.strPassVisible}'
+                                         action="#{subcttItemAction.resetAction()}"
                                          update="pgViewForAdd,pdt,msgs"
                                          onclick="PF('wVDlgViewForAdd').show()">
                         </p:commandButton>
                         <p:commandButton id="endInputBtn" value="录入完成"
                                          action="#{subcttItemAction.onClickForPowerAction('Pass')}"
                                          update="pgCondition,pdt,msgs"
-                                         rendered="#{subcttItemAction.strPassFlag}"
-                                         oncomplete="window.close()">
+                                         rendered="#{subcttItemAction.strPassVisible}">
                         </p:commandButton>
                         <p:commandButton id="startInputBtn" value="录入未完"
                                          action="#{subcttItemAction.onClickForPowerAction('Fail')}"
                                          update="pgCondition,pdt,msgs"
-                                         rendered="#{!subcttItemAction.strPassFlag}"
-                                         oncomplete="window.close()">
+                                         rendered="#{subcttItemAction.strPassFailVisible}">
                         </p:commandButton>
                         <p:commandButton value="导出到EXCEL"
                                          action="#{subcttItemAction.onExportExcel}"
@@ -78,7 +76,7 @@
                              scrollable="true"
                              scrollHeight="450">
                         <p:column headerText="操作" style="width:65px;text-align: center;"
-                                  rendered='#{subcttItemAction.strPassFlag}'>
+                                  rendered='#{subcttItemAction.strPassVisible}'>
                             <p:commandButton  icon="ui-icon-pencil"
                                               style="height:18px;width:18px"
                                               rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
@@ -187,7 +185,7 @@
                                     </p:commandButton>
                                 </p:column>
                                 <p:column headerText="操作" style="width:62px;text-align: center;"
-                                          rendered='#{subcttItemAction.strPassFlag}'>
+                                          rendered='#{subcttItemAction.strPassVisible}'>
                                     <p:commandButton icon="ui-icon-arrowrefresh-1-w"
                                                      style="height:18px;width:18px"
                                                      ajax="false"

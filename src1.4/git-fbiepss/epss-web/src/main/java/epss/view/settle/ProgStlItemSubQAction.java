@@ -63,7 +63,8 @@ public class ProgStlItemSubQAction {
     private ProgStlInfoShow progStlInfoShow;
 
     /*控制维护画面层级部分的显示*/
-    private String strPassFlag;
+    private String strPassVisible;
+    private String strPassFailVisible;
     private String strFlowType;
     private String strNotPassToStatus;
     private List<ProgStlItemSubQShow> progStlItemSubQShowListExcel;
@@ -80,10 +81,19 @@ public class ProgStlItemSubQAction {
             progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkidTemp);
             strSubcttPkid= progStlInfo.getStlPkid();
         }
-
-        strPassFlag="true";
-        if("Mng".equals(strFlowType)&& EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfo.getFlowStatus())) {
-            strPassFlag="false";
+        strPassVisible = "true";
+        strPassFailVisible = "true";
+        if ("Mng".equals(strFlowType)) {
+            if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfo.getFlowStatus())){
+                strPassVisible = "false";
+            }else {
+                strPassFailVisible = "false";
+            }
+        }else {
+            if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(progStlInfo.getFlowStatus()))
+                    ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfo.getFlowStatus()))){
+                strPassVisible = "false";
+            }
         }
         resetAction();
         initData();
@@ -97,8 +107,14 @@ public class ProgStlItemSubQAction {
             progStlInfoShow =progStlInfoService.fromModelToModelShow(progStlInfo);
             progStlInfoShow.setStlId(cttInfoTemp.getId());
             progStlInfoShow.setStlName(cttInfoTemp.getName());
-            progStlInfoShow.setSignPartBName(signPartService.getEsInitCustByPkid(cttInfoTemp.getSignPartB()).getName());
-            progStlInfoShow.setType(EnumSubcttType.getValueByKey(cttInfoTemp.getType()).getTitle());
+            SignPart signPartTemp=signPartService.getEsInitCustByPkid(cttInfoTemp.getSignPartB());
+            if (signPartTemp!=null){
+                progStlInfoShow.setSignPartBName(signPartTemp.getName());
+            }
+            EnumSubcttType subcttTypeTemp=EnumSubcttType.getValueByKey(cttInfoTemp.getType());
+            if (subcttTypeTemp!=null){
+                progStlInfoShow.setType(subcttTypeTemp.getTitle());
+            }
             beansMap.put("progStlInfoShow", progStlInfoShow);
 
             /*分包合同*/
@@ -111,8 +127,24 @@ public class ProgStlItemSubQAction {
             progStlItemSubQShowList =new ArrayList<>();
             recursiveDataTable("root", cttItemList, progStlItemSubQShowList);
             progStlItemSubQShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progStlItemSubQShowList);
+            // Excel报表形成
             progStlItemSubQShowListExcel =new ArrayList<>();
             for(ProgStlItemSubQShow itemUnit: progStlItemSubQShowList){
+                // 分包合同
+                itemUnit.setSubctt_ContractUnitPrice(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_ContractUnitPrice()));
+                itemUnit.setSubctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_ContractQuantity()));
+                itemUnit.setSubctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_ContractAmount()));
+                itemUnit.setSubctt_SignPartAPrice(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_SignPartAPrice()));
+                // 分包工程量结算
+                itemUnit.setEngQMng_CurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getEngQMng_CurrentPeriodEQty()));
+                itemUnit.setEngQMng_BeginToCurrentPeriodEQty(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()));
+
                 ProgStlItemSubQShow itemUnitTemp= (ProgStlItemSubQShow) BeanUtils.cloneBean(itemUnit);
                 itemUnitTemp.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getSubctt_StrNo()));
                 progStlItemSubQShowListExcel.add(itemUnitTemp);
@@ -369,14 +401,12 @@ public class ProgStlItemSubQAction {
                     // 原因：录入完毕
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode());
                     progStlInfoService.updAutoLinkTask(progStlInfo);
-                    strPassFlag="false";
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerType.equals("MngFail")) {
                     progStlInfo.setAutoLinkAdd("");
                     progStlInfo.setFlowStatus(null);
                     progStlInfo.setFlowStatusReason(null);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
-                    strPassFlag="true";
                     MessageUtil.addInfo("数据录入未完！");
                 }
             } else if (strPowerType.contains("Check") && !strPowerType.contains("DoubleCheck")) {// 审核
@@ -463,6 +493,8 @@ public class ProgStlItemSubQAction {
                     MessageUtil.addInfo("数据批准未过！");
                 }
             }
+            strPassVisible="false";
+            strPassFailVisible="false";
         } catch (Exception e) {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -569,14 +601,6 @@ public class ProgStlItemSubQAction {
         this.progStlItemSubQShowUpd = progStlItemSubQShowUpd;
     }
 
-    public String getStrPassFlag() {
-        return strPassFlag;
-    }
-
-    public void setStrPassFlag(String strPassFlag) {
-        this.strPassFlag = strPassFlag;
-    }
-
     public String getStrNotPassToStatus() {
         return strNotPassToStatus;
     }
@@ -609,5 +633,13 @@ public class ProgStlItemSubQAction {
         this.signPartService = signPartService;
     }
     /*智能字段End*/
+
+    public String getStrPassVisible() {
+        return strPassVisible;
+    }
+
+    public String getStrPassFailVisible() {
+        return strPassFailVisible;
+    }
 }
 

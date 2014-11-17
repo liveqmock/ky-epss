@@ -26,17 +26,18 @@
                 <h:panelGrid id="pgCondition" columns="5">
                     <p:commandButton id="endInputBtn" value="通过"
                                      action="#{progStlItemSubMAction.onClickForPowerAction('Pass')}"
-                                     update="msgs,pgCondition"
-                                     oncomplete="window.close()">
+                                     rendered='#{progStlItemSubMAction.strPassVisible}'
+                                     update="msgs,pgCondition">
                     </p:commandButton>
-                    <p:outputLabel value="未过至状态:"/>
-                    <p:selectOneMenu id="flowStatus" value="#{progStlItemSubMAction.strNotPassToStatus}">
+                    <p:outputLabel value="未过至状态:" rendered='#{progStlItemSubMAction.strPassFailVisible}'/>
+                    <p:selectOneMenu id="flowStatus" value="#{progStlItemSubMAction.strNotPassToStatus}"
+                                     rendered='#{progStlItemSubMAction.strPassFailVisible}'>
                         <f:selectItems value="#{esFlowControl.getBackToStatusFlagList(progStlItemSubMAction.strFlowType)}"/>
                     </p:selectOneMenu>
                     <p:commandButton id="startInputBtn" value="未过"
                                      action="#{progStlItemSubMAction.onClickForPowerAction('Fail')}"
-                                     update="msgs,pgCondition"
-                                     oncomplete="window.close()">
+                                     rendered='#{progStlItemSubMAction.strPassFailVisible}'
+                                     update="msgs,pgCondition">
                     </p:commandButton>
                     <p:commandButton value="导出到EXCEL"
                                      action="#{progStlItemSubMAction.onExportExcel}"
@@ -99,7 +100,7 @@
                     <p:column style="width:300px" headerText="名称">
                         <h:outputText value="#{record.subctt_Name}"/>
                     </p:column>
-                    <p:column style="width:30px" headerText="单位">
+                    <p:column style="width:60px" headerText="单位">
                         <h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
                     </p:column>
                     <p:column style="width:100px" headerText="合同单价">

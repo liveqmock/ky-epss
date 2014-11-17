@@ -197,27 +197,22 @@ public class CttItemService {
         return cttItemMapper.deleteByExample(example);
     }
 
-    public void setAfterThisOrderidPlusOneByNode(String strBelongToType,
-                                                   String strBelongToPkid,
-                                                   String strParentPkid,
-                                                   Integer intGrade,
-                                                   Integer intOrderid){
-        myCttItemMapper.setAfterThisOrderidPlusOneByNode(strBelongToType,
-                strBelongToPkid,
-                strParentPkid,
-                intGrade,
-                intOrderid);
+    public void setAfterThisOrderidPlusOneByNode(CttItemShow cttItemShowPara){
+        myCttItemMapper.setAfterThisOrderidPlusOneByNode(cttItemShowPara.getBelongToType(),
+                cttItemShowPara.getBelongToPkid(),
+                cttItemShowPara.getParentPkid(),
+                cttItemShowPara.getGrade(),
+                cttItemShowPara.getOrderid());
+        insertRecord(cttItemShowPara);
     }
 
-    public void setAfterThisOrderidSubOneByNode(String strBelongToType,
-                                                String strBelongToPkid,
-                                                String strParentPkid,
-                                                Integer intGrade,
-                                                Integer intOrderid){
-        myCttItemMapper.setAfterThisOrderidSubOneByNode(strBelongToType,
-                strBelongToPkid,
-                strParentPkid,
-                intGrade,
-                intOrderid);
+    public void setAfterThisOrderidSubOneByNode(CttItemShow cttItemShowPara){
+        deleteRecord(cttItemShowPara.getPkid());
+        myCttItemMapper.setAfterThisOrderidSubOneByNode(
+                cttItemShowPara.getBelongToType(),
+                cttItemShowPara.getBelongToPkid(),
+                cttItemShowPara.getParentPkid(),
+                cttItemShowPara.getGrade(),
+                cttItemShowPara.getOrderid());
     }
 }

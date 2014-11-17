@@ -70,7 +70,8 @@ public class ProgStlItemTkEstAction {
     private ProgStlInfoShow progStlInfoShow;
 
     private String strSubmitType;
-    private String strPassFlag;
+    private String strPassVisible;
+    private String strPassFailVisible;
     private String strFlowType;
     private String strNotPassToStatus;
 
@@ -91,12 +92,21 @@ public class ProgStlItemTkEstAction {
             this.progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
             strTkcttPkid= this.progStlInfo.getStlPkid();
         }
-
-        strPassFlag="true";
-        if("Mng".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfo.getFlowStatus())) {
-            strPassFlag="false";
+        strPassVisible = "true";
+        strPassFailVisible = "true";
+        if ("Mng".equals(strFlowType)) {
+            if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfo.getFlowStatus())){
+                strPassVisible = "false";
+            }else {
+                strPassFailVisible = "false";
+            }
+        }else {
+            if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(progStlInfo.getFlowStatus()))
+                    ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfo.getFlowStatus()))
+                    ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(progStlInfo.getFlowStatus()))){
+                strPassVisible = "false";
+            }
         }
-
         resetAction();
         initData();
     }
@@ -601,13 +611,11 @@ public class ProgStlItemTkEstAction {
                     // 原因：录入完毕
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode());
                     progStlInfoService.updAutoLinkTask(progStlInfo);
-                    strPassFlag="false";
                     MessageUtil.addInfo("数据录入完成！");
                 }else if(strPowerType.equals("MngFail")){
                     progStlInfo.setFlowStatus(null);
                     progStlInfo.setFlowStatusReason(null);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
-                    strPassFlag="true";
                     MessageUtil.addInfo("数据录入未完！");
                 }
             }else if(strPowerType.contains("Check")&&!strPowerType.contains("DoubleCheck")){// 审核
@@ -680,6 +688,8 @@ public class ProgStlItemTkEstAction {
                     }
                 }
             }
+            strPassVisible="false";
+            strPassFailVisible="false";
         } catch (Exception e) {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -779,9 +789,6 @@ public class ProgStlItemTkEstAction {
     public String getStrSubmitType() {
         return strSubmitType;
     }
-    public String getStrMngNotFinishFlag() {
-        return strPassFlag;
-    }
 
     public BigDecimal getbDEng_BeginToCurrentPeriodEQtyInDB() {
         return bDEng_BeginToCurrentPeriodEQtyInDB;
@@ -831,14 +838,6 @@ public class ProgStlItemTkEstAction {
         this.progStlItemTkEstShowListForExcel = progStlItemTkEstShowListForExcel;
     }
 
-    public String getStrPassFlag() {
-        return strPassFlag;
-    }
-
-    public void setStrPassFlag(String strPassFlag) {
-        this.strPassFlag = strPassFlag;
-    }
-
     public String getStrFlowType() {
         return strFlowType;
     }
@@ -855,4 +854,12 @@ public class ProgStlItemTkEstAction {
         this.strNotPassToStatus = strNotPassToStatus;
     }
 /*智能字段End*/
+
+    public String getStrPassVisible() {
+        return strPassVisible;
+    }
+
+    public String getStrPassFailVisible() {
+        return strPassFailVisible;
+    }
 }

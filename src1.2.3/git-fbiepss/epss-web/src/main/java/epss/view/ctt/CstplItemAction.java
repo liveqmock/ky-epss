@@ -73,7 +73,8 @@ public class CstplItemAction {
 
     /*提交类型*/
     private String strSubmitType;
-    private String strPassFlag;
+    private String strPassVisible;
+    private String strPassFailVisible;
     private String strNotPassToStatus;
     private String strFlowType;
     /*控制控件在画面上的可用与现实Start*/
@@ -103,9 +104,20 @@ public class CstplItemAction {
             strFlowType = parammap.get("strFlowType").toString();
         }
 
-        strPassFlag = "true";
-        if ("Mng".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())) {
-            strPassFlag = "false";
+        strPassVisible = "true";
+        strPassFailVisible = "true";
+        if ("Mng".equals(strFlowType)) {
+            if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())){
+                strPassVisible = "false";
+            }else {
+                strPassFailVisible = "false";
+            }
+        }else {
+            if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(cttInfo.getFlowStatus()))
+                    ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(cttInfo.getFlowStatus()))
+                    ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(cttInfo.getFlowStatus()))){
+                strPassVisible = "false";
+            }
         }
 
         resetAction();
@@ -219,6 +231,8 @@ public class CstplItemAction {
                     }
                 }
             }
+            strPassVisible="false";
+            strPassFailVisible="false";
         } catch (Exception e) {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -1333,10 +1347,6 @@ public class CstplItemAction {
     public StyleModel getStyleModel() {
         return styleModel;
     }
-    public String getStrMngNotFinishFlag() {
-        return strPassFlag;
-    }
-
     public CttItemShow getCttItemShowAdd() {
         return cttItemShowAdd;
     }
@@ -1385,10 +1395,6 @@ public class CstplItemAction {
         this.strNotPassToStatus = strNotPassToStatus;
     }
 
-    public String getStrPassFlag() {
-        return strPassFlag;
-    }
-
     public String getStrFlowType() {
         return strFlowType;
     }
@@ -1429,4 +1435,12 @@ public class CstplItemAction {
         this.downloadFile = downloadFile;
     }
     /*智能字段End*/
+
+    public String getStrPassVisible() {
+        return strPassVisible;
+    }
+
+    public String getStrPassFailVisible() {
+        return strPassFailVisible;
+    }
 }

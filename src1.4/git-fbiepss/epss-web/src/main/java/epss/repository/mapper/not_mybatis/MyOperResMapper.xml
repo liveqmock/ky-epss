@@ -4,6 +4,7 @@
     <resultMap id="BaseResultMapOperRes" type="epss.repository.model.model_show.OperResShow">
         <result column="PKID" jdbcType="VARCHAR" property="pkid" />
         <result column="TID" jdbcType="VARCHAR" property="tid" />
+        <result column="OPER_ID" jdbcType="VARCHAR" property="operId" />
         <result column="OPER_PKID" jdbcType="VARCHAR" property="operPkid" />
         <result column="OPER_NAME" jdbcType="VARCHAR" property="operName" />
         <result column="FLOW_STATUS" jdbcType="CHAR" property="flowStatus" />
@@ -27,11 +28,13 @@
                 t.PKID,
                 t.TID,
                 t.OPER_PKID,
-                (select name from oper where PKID=t.OPER_PKID) as OPER_NAME,
+                o.ID as OPER_ID,
+                o.NAME as OPER_NAME,
                 t.FLOW_STATUS,
                 t.INFO_TYPE,
                 t.INFO_PKID,
-                (select name from CTT_INFO where PKID=t.INFO_PKID ) as INFO_PKID_NAME,
+                IFNULL((select name from CTT_INFO where PKID=t.INFO_PKID ),
+                    (select MENULABEL from PTMENU where PKID=t.INFO_PKID))as INFO_PKID_NAME,
                 t.ARCHIVED_FLAG,
                 t.CREATED_BY,
                 (select name from oper where PKID=t.CREATED_BY) as CREATED_BY_NAME,
@@ -43,6 +46,10 @@
                 t.REC_VERSION
             from
                 OPER_RES t
+            left join
+                OPER o
+            on
+                t.OPER_PKID=o.PKID
             where
                1=1
         ]]>

@@ -26,17 +26,18 @@
                     <h:panelGrid id="pgCondition" columns="5">
                         <p:commandButton id="endInputBtn" value="通过"
                                          action="#{progStlItemTkMeaAction.onClickForPowerAction('Pass')}"
-                                         update="msgs,pgCondition"
-                                         oncomplete="window.close()">
+                                         rendered="#{progStlItemTkMeaAction.strPassVisible}"
+                                         update="msgs,pgCondition">
                         </p:commandButton>
-                        <p:outputLabel value="未过至状态:"/>
-                        <p:selectOneMenu id="flowStatus" value="#{progStlItemTkMeaAction.strNotPassToStatus}">
+                        <p:outputLabel value="未过至状态:" rendered="#{progStlItemTkMeaAction.strPassFailVisible}"/>
+                        <p:selectOneMenu id="flowStatus" value="#{progStlItemTkMeaAction.strNotPassToStatus}"
+                                         rendered="#{progStlItemTkMeaAction.strPassFailVisible}">
                             <f:selectItems value="#{esFlowControl.getBackToStatusFlagList(progStlItemTkMeaAction.strFlowType)}"/>
                         </p:selectOneMenu>
                         <p:commandButton id="startInputBtn" value="未过"
                                          action="#{progStlItemTkMeaAction.onClickForPowerAction('Fail')}"
-                                         update="msgs,pgCondition"
-                                         oncomplete="window.setTimeout( 'window.close()', 2000)">
+                                         rendered="#{progStlItemTkMeaAction.strPassFailVisible}"
+                                         update="msgs,pgCondition">
                         </p:commandButton>
                         <p:commandButton value="导出到EXCEL"
                                          action="#{progStlItemTkMeaAction.onExportExcel}"
@@ -89,7 +90,7 @@
                         <p:column style="width:200px" headerText="名称">
                             <h:outputText value="#{record.tkctt_Name}" />
                         </p:column>
-                        <p:column style="width:30px" headerText="单位">
+                        <p:column style="width:60px" headerText="单位">
                             <h:outputText value="#{record.tkctt_Unit}" style="text-align:right"/>
                         </p:column>
                         <p:column style="width:80px" headerText="合同单价">

@@ -80,7 +80,8 @@ public class TkcttItemAction {
     private StyleModel styleModelNo;
     private StyleModel styleModel;
     //显示的控制
-    private String strPassFlag;
+    private String strPassVisible;
+    private String strPassFailVisible;
     private String strNotPassToStatus;
     private String strFlowType;
     private List<CttItemShow> cttItemShowListExcel;
@@ -98,9 +99,20 @@ public class TkcttItemAction {
             strFlowType = parammap.get("strFlowType").toString();
         }
 
-        strPassFlag = "true";
-        if ("Mng".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())) {
-            strPassFlag = "false";
+        strPassVisible = "true";
+        strPassFailVisible = "true";
+        if ("Mng".equals(strFlowType)) {
+            if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())){
+                strPassVisible = "false";
+            }else {
+                strPassFailVisible = "false";
+            }
+        }else {
+            if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(cttInfo.getFlowStatus()))
+                    ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(cttInfo.getFlowStatus()))
+                    ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(cttInfo.getFlowStatus()))){
+                strPassVisible = "false";
+            }
         }
         resetAction();
         initData();
@@ -623,6 +635,8 @@ public class TkcttItemAction {
                     }
                 }
             }
+            strPassVisible="false";
+            strPassFailVisible="false";
         } catch (Exception e) {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -780,9 +794,6 @@ public class TkcttItemAction {
     public StyleModel getStyleModel() {
         return styleModel;
     }
-    public String getStrPassFlag() {
-        return strPassFlag;
-    }
     public CttItemShow getCttItemShowAdd() {
         return cttItemShowAdd;
     }
@@ -865,5 +876,16 @@ public class TkcttItemAction {
     public void setDownloadFile(StreamedContent downloadFile) {
         this.downloadFile = downloadFile;
     }
+
+    public String getStrPassVisible() {
+        return strPassVisible;
+    }
+
+    public String getStrPassFailVisible() {
+        return strPassFailVisible;
+    }
+
+
+
     /*智能字段End*/
 }

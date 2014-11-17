@@ -27,14 +27,12 @@
                         <p:commandButton id="endInputBtn" value="录入完成"
                                          action="#{progStlItemTkMeaAction.onClickForPowerAction('Pass')}"
                                          update="pgCondition,pdt,msgs"
-                                         rendered="#{progStlItemTkMeaAction.strPassFlag}"
-                                         oncomplete="window.close()">
+                                         rendered="#{progStlItemTkMeaAction.strPassVisible}">
                         </p:commandButton>
                         <p:commandButton id="startInputBtn" value="录入未完"
                                          action="#{progStlItemTkMeaAction.onClickForPowerAction('Fail')}"
                                          update="pgCondition,pdt,msgs"
-                                         rendered="#{!progStlItemTkMeaAction.strPassFlag}"
-                                         oncomplete="window.close()">
+                                         rendered="#{progStlItemTkMeaAction.strPassFailVisible}">
                         </p:commandButton>
                         <p:commandButton value="导出到EXCEL"
                                          action="#{progStlItemTkMeaAction.onExportExcel}"
@@ -73,7 +71,7 @@
                              scrollable="true"
                              scrollHeight="460">
                     <p:column headerText="操作" style="width:91px;text-align: center;"
-                              rendered='#{progStlItemTkMeaAction.strPassFlag}'>
+                              rendered='#{progStlItemTkMeaAction.strPassVisible}'>
                         <p:commandButton  icon="ui-icon-pencil"
                                           style="height:18px;width:18px"
                                           rendered="#{record.tkctt_Unit eq null? 'false':'true'}"
