@@ -32,8 +32,8 @@ public interface MyDeptAndOperMapper {
             "        oper " +
             "     where " +
             "        dept_pkid=#{parentPkid}" +
-            "     and" +
-            "        type !='0'" +
+           /* "     and" +
+            "        type !='0'" +*/
             "    ) " +
             " union " +
             "    (select " +
