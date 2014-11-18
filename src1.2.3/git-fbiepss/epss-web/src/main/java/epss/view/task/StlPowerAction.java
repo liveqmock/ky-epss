@@ -31,7 +31,11 @@ public class StlPowerAction {
     @PostConstruct
     public void init() {
         //整个任务列表
-        stlPowerList=taskService.initRecentlyPowerTaskShowList();
+        try {
+            stlPowerList=taskService.initRecentlyPowerTaskShowList();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+        }
     }
 
     public List<TaskShow> getStlPowerList() {

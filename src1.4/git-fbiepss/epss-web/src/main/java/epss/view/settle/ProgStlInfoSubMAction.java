@@ -65,31 +65,36 @@ public class ProgStlInfoSubMAction {
 
     @PostConstruct
     public void init() {
-        this.progStlInfoShowList = new ArrayList<>();
-        String strCttInfoPkid="";
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (parammap.containsKey("strCttInfoPkid")){
-            strCttInfoPkid=parammap.get("strCttInfoPkid").toString();
-        }
-        strStlType = EnumResType.RES_TYPE4.getCode();
+        try {
 
-        resetAction();
-        //在某一成本计划下的分包合同
-        List<CttInfoShow> cttInfoShowList =
-                cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
-                        EnumResType.RES_TYPE2.getCode()
-                        , strCttInfoPkid
-                        , EnumFlowStatus.FLOW_STATUS3.getCode());
-        subcttList = new ArrayList<>();
-        if (cttInfoShowList.size() > 0) {
-            SelectItem selectItem = new SelectItem("", "全部");
-            subcttList.add(selectItem);
-            for (CttInfoShow itemUnit : cttInfoShowList) {
-                selectItem = new SelectItem();
-                selectItem.setValue(itemUnit.getPkid());
-                selectItem.setLabel(itemUnit.getName());
-                subcttList.add(selectItem);
+            this.progStlInfoShowList = new ArrayList<>();
+            String strCttInfoPkid="";
+            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            if (parammap.containsKey("strCttInfoPkid")){
+                strCttInfoPkid=parammap.get("strCttInfoPkid").toString();
             }
+            strStlType = EnumResType.RES_TYPE4.getCode();
+
+            resetAction();
+            //在某一成本计划下的分包合同
+            List<CttInfoShow> cttInfoShowList =
+                    cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
+                            EnumResType.RES_TYPE2.getCode()
+                            , strCttInfoPkid
+                            , EnumFlowStatus.FLOW_STATUS3.getCode());
+            subcttList = new ArrayList<>();
+            if (cttInfoShowList.size() > 0) {
+                SelectItem selectItem = new SelectItem("", "全部");
+                subcttList.add(selectItem);
+                for (CttInfoShow itemUnit : cttInfoShowList) {
+                    selectItem = new SelectItem();
+                    selectItem.setValue(itemUnit.getPkid());
+                    selectItem.setLabel(itemUnit.getName());
+                    subcttList.add(selectItem);
+                }
+            }
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
     }
 

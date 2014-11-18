@@ -97,34 +97,38 @@ public class SubcttItemAction {
 
     @PostConstruct
     public void init() {
-        this.attachmentList=new ArrayList<>();
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        beansMap = new HashMap();
-        strBelongToType= EnumResType.RES_TYPE2.getCode();
-        if (parammap.containsKey("strCttInfoPkid")) {
-            strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
-            cttInfo=cttInfoService.getCttInfoByPkId(strCttInfoPkid);
-        }
-        if (parammap.containsKey("strFlowType")) {
-            strFlowType = parammap.get("strFlowType").toString();
-        }
-        strPassVisible = "true";
-        strPassFailVisible = "true";
-        if ("Mng".equals(strFlowType)) {
-            if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())){
-                strPassVisible = "false";
+        try {
+            this.attachmentList=new ArrayList<>();
+            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            beansMap = new HashMap();
+            strBelongToType= EnumResType.RES_TYPE2.getCode();
+            if (parammap.containsKey("strCttInfoPkid")) {
+                strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
+                cttInfo=cttInfoService.getCttInfoByPkId(strCttInfoPkid);
+            }
+            if (parammap.containsKey("strFlowType")) {
+                strFlowType = parammap.get("strFlowType").toString();
+            }
+            strPassVisible = "true";
+            strPassFailVisible = "true";
+            if ("Mng".equals(strFlowType)) {
+                if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())){
+                    strPassVisible = "false";
+                }else {
+                    strPassFailVisible = "false";
+                }
             }else {
-                strPassFailVisible = "false";
+                if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(cttInfo.getFlowStatus()))
+                        ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(cttInfo.getFlowStatus()))
+                        ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(cttInfo.getFlowStatus()))){
+                    strPassVisible = "false";
+                }
             }
-        }else {
-            if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(cttInfo.getFlowStatus()))
-                    ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(cttInfo.getFlowStatus()))
-                    ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(cttInfo.getFlowStatus()))){
-                strPassVisible = "false";
-            }
+            resetAction();
+            initData() ;
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
-        resetAction();
-        initData() ;
     }
 
     /*初始化操作*/
@@ -632,6 +636,25 @@ public class SubcttItemAction {
         }
         return cttItemShowTemp;
     }
+    private boolean checkPreMng(CttInfo cttInfoPara) {
+        if (StringUtils.isEmpty(cttInfoPara.getId())) {
+            return false;
+        } else if (StringUtils.isEmpty(cttInfoPara.getName())) {
+            return false;
+        } else if (StringUtils.isEmpty(cttInfoPara.getSignDate())) {
+            return false;
+        }
+        if (StringUtils.isEmpty(cttInfoPara.getSignPartA())) {
+            return false;
+        } else if (StringUtils.isEmpty(cttInfoPara.getSignPartB())) {
+            return false;
+        } else if (StringUtils.isEmpty(cttInfoPara.getCttStartDate())) {
+            return false;
+        } else if (StringUtils.isEmpty(cttInfoPara.getCttEndDate())) {
+            return false;
+        }
+        return true;
+    }
     /**
      * 根据权限进行审核
      *
@@ -642,6 +665,10 @@ public class SubcttItemAction {
             strPowerTypePara=strFlowType+strPowerTypePara;
             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
+                    if(!checkPreMng(cttInfo)){
+                        MessageUtil.addError("合同信息未维护完整，无法录入完成！");
+                        return ;
+                    }
                     List<CttItem> cttItemList = cttItemService.getEsItemList(cttInfo.getCttType(), cttInfo.getPkid());
                     if (cttItemList.isEmpty()) {
                         MessageUtil.addInfo("无详细内容！");

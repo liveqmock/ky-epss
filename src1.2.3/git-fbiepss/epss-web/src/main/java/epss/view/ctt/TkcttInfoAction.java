@@ -56,23 +56,32 @@ public class TkcttInfoAction {
     //更新时检验用，符合立刻关闭，不符合进行提升
     @PostConstruct
     public void init() {
-        initData();
+        try {
+            initData();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+        }
     }
     public void initData() {
-        this.cttInfoShowList = new ArrayList<CttInfoShow>();
-        cttInfoShowQry = new CttInfoShow();
-        cttInfoShowQry.setCttType(EnumResType.RES_TYPE0.getCode());
-        cttInfoShowSel = new CttInfoShow();
-        cttInfoShowSel.setCttType(EnumResType.RES_TYPE0.getCode());
-        cttInfoShowAdd = new CttInfoShow();
-        cttInfoShowAdd.setCttType(EnumResType.RES_TYPE0.getCode());
-        cttInfoShowUpd = new CttInfoShow();
-        cttInfoShowUpd.setCttType(EnumResType.RES_TYPE0.getCode());
-        cttInfoShowDel = new CttInfoShow();
-        cttInfoShowDel.setCttType(EnumResType.RES_TYPE0.getCode());
-        styleModel = new StyleModel();
-        styleModel.setDisabled_Flag("false");
-        strSubmitType = "";
+        try {
+            this.cttInfoShowList = new ArrayList<CttInfoShow>();
+            cttInfoShowQry = new CttInfoShow();
+            cttInfoShowQry.setCttType(EnumResType.RES_TYPE0.getCode());
+            cttInfoShowSel = new CttInfoShow();
+            cttInfoShowSel.setCttType(EnumResType.RES_TYPE0.getCode());
+            cttInfoShowAdd = new CttInfoShow();
+            cttInfoShowAdd.setCttType(EnumResType.RES_TYPE0.getCode());
+            cttInfoShowUpd = new CttInfoShow();
+            cttInfoShowUpd.setCttType(EnumResType.RES_TYPE0.getCode());
+            cttInfoShowDel = new CttInfoShow();
+            cttInfoShowDel.setCttType(EnumResType.RES_TYPE0.getCode());
+            styleModel = new StyleModel();
+            styleModel.setDisabled_Flag("false");
+            strSubmitType = "";
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
+        }
     }
 
     public void setMaxNoPlusOne() {

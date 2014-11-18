@@ -51,9 +51,13 @@ public class EsFlowControl implements Serializable {
 
     @PostConstruct
     public void init() {
-        this.flowStatusFromDBList = toolsService.getEnuSelectItemList("FLOW_STATUS", false, false);
-        this.flowStatusReasonFromDBList= toolsService.getEnuSelectItemList("FLOW_STATUS_REASON", false, false);
-        this.achivedFlagList = toolsService.getEnuSelectItemList("ARCHIVED_FLAG", true, false);
+        try {
+            this.flowStatusFromDBList = toolsService.getEnuSelectItemList("FLOW_STATUS", false, false);
+            this.flowStatusReasonFromDBList= toolsService.getEnuSelectItemList("FLOW_STATUS_REASON", false, false);
+            this.achivedFlagList = toolsService.getEnuSelectItemList("ARCHIVED_FLAG", true, false);
+        }catch (Exception e){
+            logger.error("≥ı ºªØ ß∞‹", e);
+        }
     }
 
     public String getLabelByValueInStatusFlaglist(String strValue){

@@ -85,42 +85,46 @@ public class CstplSubcttStlQPeriodItemAction {
 
     @PostConstruct
     public void init() {
-        beansMap = new HashMap();
-        reportHeader =new ReportHeader();
-        commColSetList =new ArrayList<CommCol>();
-        for(int i=0;i<24;i++){
-            CommCol commCol =new CommCol();
-            commCol.setHeader("");
-            commCol.setRendered_flag("false");
-            commColSetList.add(commCol);
-        }
-
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        // 从成本计划传递过来的成本计划号
-        if (parammap.containsKey("strCttInfoPkid")){
-            strCstplPkid=parammap.get("strCttInfoPkid").toString();
-        }
-
-        List<CttInfoShow> cttInfoShowList =
-                cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
-                        EnumResType.RES_TYPE2.getCode()
-                        , strCstplPkid
-                        , EnumFlowStatus.FLOW_STATUS3.getCode());
-        subcttList=new ArrayList<SelectItem>();
-        if(cttInfoShowList.size()>0){
-            SelectItem selectItem=new SelectItem("","");
-            subcttList.add(selectItem);
-            for(CttInfoShow itemUnit: cttInfoShowList){
-                selectItem=new SelectItem();
-                selectItem.setValue(itemUnit.getPkid());
-                selectItem.setLabel(itemUnit.getName());
-                subcttList.add(selectItem);
+        try {
+            beansMap = new HashMap();
+            reportHeader =new ReportHeader();
+            commColSetList =new ArrayList<CommCol>();
+            for(int i=0;i<24;i++){
+                CommCol commCol =new CommCol();
+                commCol.setHeader("");
+                commCol.setRendered_flag("false");
+                commColSetList.add(commCol);
             }
+
+            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            // 从成本计划传递过来的成本计划号
+            if (parammap.containsKey("strCttInfoPkid")){
+                strCstplPkid=parammap.get("strCttInfoPkid").toString();
+            }
+
+            List<CttInfoShow> cttInfoShowList =
+                    cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
+                            EnumResType.RES_TYPE2.getCode()
+                            , strCstplPkid
+                            , EnumFlowStatus.FLOW_STATUS3.getCode());
+            subcttList=new ArrayList<SelectItem>();
+            if(cttInfoShowList.size()>0){
+                SelectItem selectItem=new SelectItem("","");
+                subcttList.add(selectItem);
+                for(CttInfoShow itemUnit: cttInfoShowList){
+                    selectItem=new SelectItem();
+                    selectItem.setValue(itemUnit.getPkid());
+                    selectItem.setLabel(itemUnit.getName());
+                    subcttList.add(selectItem);
+                }
+            }
+            strStartPeriodNo=ToolUtil.getStrThisMonth();
+            strStartPeriodNo=(new BigDecimal(strStartPeriodNo.substring(0,4)).subtract(new BigDecimal("2"))).toString()
+                    +strStartPeriodNo.substring(4);
+            strEndPeriodNo=ToolUtil.getStrThisMonth();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
-        strStartPeriodNo=ToolUtil.getStrThisMonth();
-        strStartPeriodNo=(new BigDecimal(strStartPeriodNo.substring(0,4)).subtract(new BigDecimal("2"))).toString()
-                +strStartPeriodNo.substring(4);
-        strEndPeriodNo=ToolUtil.getStrThisMonth();
     }
 
     public String onExportExcel()throws IOException,WriteException {

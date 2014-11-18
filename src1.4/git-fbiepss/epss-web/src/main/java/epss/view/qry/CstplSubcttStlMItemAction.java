@@ -60,24 +60,28 @@ public class CstplSubcttStlMItemAction {
 
     @PostConstruct
     public void init() {
-        beansMap = new HashMap();
-        reportHeader =new ReportHeader();
-        List<CttInfoShow> cttInfoShowList =
-                cttInfoService.getCttInfoListByCttType_Status(
-                        EnumResType.RES_TYPE1.getCode()
-                        , EnumFlowStatus.FLOW_STATUS3.getCode());
-        cstplList=new ArrayList<SelectItem>();
-        if(cttInfoShowList.size()>0){
-            SelectItem selectItem=new SelectItem("","");
-            cstplList.add(selectItem);
-            for(CttInfoShow itemUnit: cttInfoShowList){
-                selectItem=new SelectItem();
-                selectItem.setValue(itemUnit.getPkid());
-                selectItem.setLabel(itemUnit.getName());
+        try {
+            beansMap = new HashMap();
+            reportHeader =new ReportHeader();
+            List<CttInfoShow> cttInfoShowList =
+                    cttInfoService.getCttInfoListByCttType_Status(
+                            EnumResType.RES_TYPE1.getCode()
+                            , EnumFlowStatus.FLOW_STATUS3.getCode());
+            cstplList=new ArrayList<SelectItem>();
+            if(cttInfoShowList.size()>0){
+                SelectItem selectItem=new SelectItem("","");
                 cstplList.add(selectItem);
+                for(CttInfoShow itemUnit: cttInfoShowList){
+                    selectItem=new SelectItem();
+                    selectItem.setValue(itemUnit.getPkid());
+                    selectItem.setLabel(itemUnit.getName());
+                    cstplList.add(selectItem);
+                }
             }
+            strPeriodNo=ToolUtil.getStrThisMonth();
+        }catch (Exception e){
+            logger.error("≥ı ºªØ ß∞‹", e);
         }
-        strPeriodNo=ToolUtil.getStrThisMonth();
     }
 
     public String onExportExcel()throws IOException, RowsExceededException, WriteException {

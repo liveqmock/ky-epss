@@ -43,18 +43,27 @@ public class SubcttInfoTTAction {
 
     @PostConstruct
     public void init() {
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+        try {
+            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
 
-        if (parammap.containsKey("strCttInfoPkid")) {
-            strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
+            if (parammap.containsKey("strCttInfoPkid")) {
+                strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
+            }
+
+            cttInfoShowUpd = new CttInfoShow();
+            initData();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
-
-        cttInfoShowUpd = new CttInfoShow();
-        initData();
     }
     public void initData() {
-        CttInfo cttInfoTemp = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
-        cttInfoShowUpd=cttInfoService.fromModelToModelShow(cttInfoTemp);
+        try {
+            CttInfo cttInfoTemp = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
+            cttInfoShowUpd=cttInfoService.fromModelToModelShow(cttInfoTemp);
+        }catch (Exception e) {
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
+        }
     }
 
     public void setMaxNoPlusOne() {

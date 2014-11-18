@@ -82,34 +82,39 @@ public class ProgStlItemTkMeaAction {
 
     @PostConstruct
     public void init() {
-        beansMap = new HashMap();
-        reportHeader =new ReportHeader();
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if(parammap.containsKey("strFlowType")){
-            strFlowType=parammap.get("strFlowType").toString();
-        }
-        if(parammap.containsKey("strStlInfoPkid")){
-            strStlInfoPkid=parammap.get("strStlInfoPkid").toString();
-            this.progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
-            strTkcttPkid= this.progStlInfo.getStlPkid();
-        }
-        strPassVisible = "true";
-        strPassFailVisible = "true";
-        if ("Mng".equals(strFlowType)) {
-            if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfo.getFlowStatus())){
-                strPassVisible = "false";
+        try {
+
+            beansMap = new HashMap();
+            reportHeader =new ReportHeader();
+            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            if(parammap.containsKey("strFlowType")){
+                strFlowType=parammap.get("strFlowType").toString();
+            }
+            if(parammap.containsKey("strStlInfoPkid")){
+                strStlInfoPkid=parammap.get("strStlInfoPkid").toString();
+                this.progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
+                strTkcttPkid= this.progStlInfo.getStlPkid();
+            }
+            strPassVisible = "true";
+            strPassFailVisible = "true";
+            if ("Mng".equals(strFlowType)) {
+                if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfo.getFlowStatus())){
+                    strPassVisible = "false";
+                }else {
+                    strPassFailVisible = "false";
+                }
             }else {
-                strPassFailVisible = "false";
+                if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(progStlInfo.getFlowStatus()))
+                        ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfo.getFlowStatus()))
+                        ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(progStlInfo.getFlowStatus()))){
+                    strPassVisible = "false";
+                }
             }
-        }else {
-            if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(progStlInfo.getFlowStatus()))
-                    ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfo.getFlowStatus()))
-                    ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(progStlInfo.getFlowStatus()))){
-                strPassVisible = "false";
-            }
+            resetAction();
+            initData();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
-        resetAction();
-        initData();
     }
 
     /*初始化操作*/

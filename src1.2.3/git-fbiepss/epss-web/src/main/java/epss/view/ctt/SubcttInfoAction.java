@@ -66,31 +66,40 @@ public class SubcttInfoAction {
 
     @PostConstruct
     public void init() {
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        // 从成本计划传递过来的成本计划号
-        if (parammap.containsKey("strCttInfoPkid")) {
-            strBelongToPkid = parammap.get("strCttInfoPkid").toString();
-        } else {// 总包合同页面上
-            strBelongToPkid = null;
+        try {
+            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            // 从成本计划传递过来的成本计划号
+            if (parammap.containsKey("strCttInfoPkid")) {
+                strBelongToPkid = parammap.get("strCttInfoPkid").toString();
+            } else {// 总包合同页面上
+                strBelongToPkid = null;
+            }
+            initData();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
-        initData();
     }
 
     public void initData() {
-        this.cttInfoShowList = new ArrayList<>();
-        cttInfoShowQry = new CttInfoShow();
-        cttInfoShowQry.setCttType(EnumResType.RES_TYPE2.getCode());
-        cttInfoShowQry.setParentPkid(strBelongToPkid);
-        cttInfoShowAdd = new CttInfoShow();
-        cttInfoShowAdd.setCttType(EnumResType.RES_TYPE2.getCode());
-        cttInfoShowAdd.setParentPkid(strBelongToPkid);
-        cttInfoShowSel = new CttInfoShow();
-        cttInfoShowUpd = new CttInfoShow();
-        cttInfoShowDel = new CttInfoShow();
-        styleModel = new StyleModel();
-        styleModel.setDisabled_Flag("false");
-        strSubmitType = "Add";
-        rowSelectedFlag = "false";
+        try {
+            this.cttInfoShowList = new ArrayList<>();
+            cttInfoShowQry = new CttInfoShow();
+            cttInfoShowQry.setCttType(EnumResType.RES_TYPE2.getCode());
+            cttInfoShowQry.setParentPkid(strBelongToPkid);
+            cttInfoShowAdd = new CttInfoShow();
+            cttInfoShowAdd.setCttType(EnumResType.RES_TYPE2.getCode());
+            cttInfoShowAdd.setParentPkid(strBelongToPkid);
+            cttInfoShowSel = new CttInfoShow();
+            cttInfoShowUpd = new CttInfoShow();
+            cttInfoShowDel = new CttInfoShow();
+            styleModel = new StyleModel();
+            styleModel.setDisabled_Flag("false");
+            strSubmitType = "Add";
+            rowSelectedFlag = "false";
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
+        }
     }
 
     //分包合同录入时，验证分包合同编号是否合法重复

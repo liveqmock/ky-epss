@@ -61,34 +61,43 @@ public class CstplInfoAction {
 
     @PostConstruct
     public void init() {
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        // 从总包合同传递过来的总包合同号
-        if (parammap.containsKey("strCttInfoPkid")) {
-            strBelongToPkid = parammap.get("strCttInfoPkid").toString();
+        try {
+            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            // 从总包合同传递过来的总包合同号
+            if (parammap.containsKey("strCttInfoPkid")) {
+                strBelongToPkid = parammap.get("strCttInfoPkid").toString();
+            }
+            initData();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
-        initData();
     }
     public void initData() {
-        this.cttInfoShowList = new ArrayList<CttInfoShow>();
-        cttInfoShowQry = new CttInfoShow();
-        cttInfoShowQry.setCttType(EnumResType.RES_TYPE1.getCode());
-        cttInfoShowQry.setParentPkid(strBelongToPkid);
-        cttInfoShowSel = new CttInfoShow();
-        cttInfoShowSel.setCttType(EnumResType.RES_TYPE1.getCode());
-        cttInfoShowSel.setParentPkid(strBelongToPkid);
-        cttInfoShowAdd = new CttInfoShow();
-        cttInfoShowAdd.setCttType(EnumResType.RES_TYPE1.getCode());
-        cttInfoShowAdd.setParentPkid(strBelongToPkid);
-        cttInfoShowUpd = new CttInfoShow();
-        cttInfoShowUpd.setCttType(EnumResType.RES_TYPE1.getCode());
-        cttInfoShowUpd.setParentPkid(strBelongToPkid);
-        cttInfoShowDel = new CttInfoShow();
-        cttInfoShowDel.setCttType(EnumResType.RES_TYPE1.getCode());
-        cttInfoShowDel.setParentPkid(strBelongToPkid);
-        styleModel = new StyleModel();
-        styleModel.setDisabled_Flag("false");
-        strSubmitType = "Add";
-        rowSelectedFlag = "false";
+        try {
+            this.cttInfoShowList = new ArrayList<CttInfoShow>();
+            cttInfoShowQry = new CttInfoShow();
+            cttInfoShowQry.setCttType(EnumResType.RES_TYPE1.getCode());
+            cttInfoShowQry.setParentPkid(strBelongToPkid);
+            cttInfoShowSel = new CttInfoShow();
+            cttInfoShowSel.setCttType(EnumResType.RES_TYPE1.getCode());
+            cttInfoShowSel.setParentPkid(strBelongToPkid);
+            cttInfoShowAdd = new CttInfoShow();
+            cttInfoShowAdd.setCttType(EnumResType.RES_TYPE1.getCode());
+            cttInfoShowAdd.setParentPkid(strBelongToPkid);
+            cttInfoShowUpd = new CttInfoShow();
+            cttInfoShowUpd.setCttType(EnumResType.RES_TYPE1.getCode());
+            cttInfoShowUpd.setParentPkid(strBelongToPkid);
+            cttInfoShowDel = new CttInfoShow();
+            cttInfoShowDel.setCttType(EnumResType.RES_TYPE1.getCode());
+            cttInfoShowDel.setParentPkid(strBelongToPkid);
+            styleModel = new StyleModel();
+            styleModel.setDisabled_Flag("false");
+            strSubmitType = "Add";
+            rowSelectedFlag = "false";
+        }catch (Exception e) {
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
+        }
     }
 
     public void setMaxNoPlusOne() {

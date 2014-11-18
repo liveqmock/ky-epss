@@ -46,7 +46,11 @@ public class EsInitCustAction {
 
     @PostConstruct
     public void init() {
-        resetAction();
+        try {
+            resetAction();
+        }catch (Exception e){
+            logger.error("≥ı ºªØ ß∞‹", e);
+        }
     }
 
     public void resetAction(){

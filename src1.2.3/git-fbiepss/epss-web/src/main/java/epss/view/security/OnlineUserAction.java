@@ -27,19 +27,23 @@ public class OnlineUserAction implements Serializable {
 
     @PostConstruct
     public void init() {
-        operList=new ArrayList<Oper>();
-        ServletContext servletContext=
-                (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-        HashMap<String,OperatorManager> operMaps = OnLineOpersManager.getAllOperMaps(servletContext);
-        Iterator iter = operMaps.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry<String, OperatorManager> entry = (Map.Entry<String, OperatorManager>) iter.next();
-            OperatorManager om = entry.getValue();
-            Oper onLineOper = om.getOperator();
-            onLineOper.setSessionKey(entry.getKey());
-            operList.add(onLineOper);
+        try {
+            operList=new ArrayList<Oper>();
+            ServletContext servletContext=
+                    (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+            HashMap<String,OperatorManager> operMaps = OnLineOpersManager.getAllOperMaps(servletContext);
+            Iterator iter = operMaps.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry<String, OperatorManager> entry = (Map.Entry<String, OperatorManager>) iter.next();
+                OperatorManager om = entry.getValue();
+                Oper onLineOper = om.getOperator();
+                onLineOper.setSessionKey(entry.getKey());
+                operList.add(onLineOper);
+            }
+            onlineUserNum=operList.size()+"";
+        }catch (Exception e){
+            logger.error("≥ı ºªØ ß∞‹", e);
         }
-        onlineUserNum=operList.size()+"";
     }
 
     public void killLineUser(Oper operShowPara){

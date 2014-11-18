@@ -67,24 +67,28 @@ public class ProgStlInfoTkMeaAction {
 
     @PostConstruct
     public void init() {
-        this.progStlInfoShowList = new ArrayList<>();
-        strStlType= EnumResType.RES_TYPE7.getCode();
-        resetAction();
+        try {
+            this.progStlInfoShowList = new ArrayList<>();
+            strStlType= EnumResType.RES_TYPE7.getCode();
+            resetAction();
 
-        List<CttInfoShow> cttInfoShowList =
-                cttInfoService.getCttInfoListByCttType_Status(
-                        EnumResType.RES_TYPE0.getCode()
-                        , EnumFlowStatus.FLOW_STATUS3.getCode());
-        tkcttList=new ArrayList<SelectItem>();
-        if(cttInfoShowList.size()>0){
-            SelectItem selectItem=new SelectItem("","全部");
-            tkcttList.add(selectItem);
-            for(CttInfoShow itemUnit: cttInfoShowList){
-                selectItem=new SelectItem();
-                selectItem.setValue(itemUnit.getPkid());
-                selectItem.setLabel(itemUnit.getName());
+            List<CttInfoShow> cttInfoShowList =
+                    cttInfoService.getCttInfoListByCttType_Status(
+                            EnumResType.RES_TYPE0.getCode()
+                            , EnumFlowStatus.FLOW_STATUS3.getCode());
+            tkcttList=new ArrayList<SelectItem>();
+            if(cttInfoShowList.size()>0){
+                SelectItem selectItem=new SelectItem("","全部");
                 tkcttList.add(selectItem);
+                for(CttInfoShow itemUnit: cttInfoShowList){
+                    selectItem=new SelectItem();
+                    selectItem.setValue(itemUnit.getPkid());
+                    selectItem.setLabel(itemUnit.getName());
+                    tkcttList.add(selectItem);
+                }
             }
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
     }
 

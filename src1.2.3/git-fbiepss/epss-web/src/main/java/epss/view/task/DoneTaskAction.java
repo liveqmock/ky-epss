@@ -31,8 +31,12 @@ public class DoneTaskAction {
     @PostConstruct
     public void init() {
         //整个任务列表
-        taskShowList = new ArrayList<>();
-        taskShowList=taskService.initDoneTaskShowList();
+        try {
+            taskShowList = new ArrayList<>();
+            taskShowList=taskService.initDoneTaskShowList();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+        }
     }
 
     public List<TaskShow> getTaskShowList() {

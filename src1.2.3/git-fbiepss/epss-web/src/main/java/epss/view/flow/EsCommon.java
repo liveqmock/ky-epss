@@ -64,23 +64,27 @@ public class EsCommon implements Serializable {
 
     @PostConstruct
     public void init() {
-        this.originFlagList = toolsService.getEnuSelectItemList("ORIGIN_FLAG", false, false);
-        this.resTypeList = toolsService.getEnuSelectItemList("RES_TYPE", true, false);
-        this.cstplItemNamelist = toolsService.getEnuSelectItemList("CSTPLITEM_NAME", false, false);
-        this.subcttItemNamelist= toolsService.getEnuSelectItemList("SUBCTTITEM_NAME", false, false);
-        this.flowStatusReasonList= toolsService.getEnuSelectItemList("FLOW_STATUS_REASON", true, false);
-        this.flowStatusList = toolsService.getEnuSelectItemList("FLOW_STATUS", true, false);
-        this.achivedFlagList = toolsService.getEnuSelectItemList("ARCHIVED_FLAG", true, false);
+        try {
+            this.originFlagList = toolsService.getEnuSelectItemList("ORIGIN_FLAG", false, false);
+            this.resTypeList = toolsService.getEnuSelectItemList("RES_TYPE", true, false);
+            this.cstplItemNamelist = toolsService.getEnuSelectItemList("CSTPLITEM_NAME", false, false);
+            this.subcttItemNamelist= toolsService.getEnuSelectItemList("SUBCTTITEM_NAME", false, false);
+            this.flowStatusReasonList= toolsService.getEnuSelectItemList("FLOW_STATUS_REASON", true, false);
+            this.flowStatusList = toolsService.getEnuSelectItemList("FLOW_STATUS", true, false);
+            this.achivedFlagList = toolsService.getEnuSelectItemList("ARCHIVED_FLAG", true, false);
 
-        List<SignPart> signPartList = signPartService.selectListByModel();
-        customerlist=new ArrayList<SelectItem>();
-        SelectItem selectItem=new SelectItem("","全部");
-        customerlist.add(selectItem);
-        for(SignPart itemUnit: signPartList){
-            selectItem=new SelectItem();
-            selectItem.setValue(itemUnit.getPkid());
-            selectItem.setLabel(itemUnit.getName());
+            List<SignPart> signPartList = signPartService.selectListByModel();
+            customerlist=new ArrayList<SelectItem>();
+            SelectItem selectItem=new SelectItem("","全部");
             customerlist.add(selectItem);
+            for(SignPart itemUnit: signPartList){
+                selectItem=new SelectItem();
+                selectItem.setValue(itemUnit.getPkid());
+                selectItem.setLabel(itemUnit.getName());
+                customerlist.add(selectItem);
+            }
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
     }
 

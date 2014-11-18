@@ -69,25 +69,29 @@ public class TkMeaCSubStlQItemAction {
 
     @PostConstruct
     public void init() {
-        beansMap = new HashMap();
-        reportHeader =new ReportHeader();
-        // 获取已经批准了的总包合同列表
-        List<CttInfoShow> cttInfoShowList =
-                cttInfoService.getCttInfoListByCttType_Status(
-                        EnumResType.RES_TYPE0.getCode()
-                       , EnumFlowStatus.FLOW_STATUS3.getCode());
-        tkcttList=new ArrayList<SelectItem>();
-        if(cttInfoShowList.size()>0){
-            SelectItem selectItem=new SelectItem("","");
-            tkcttList.add(selectItem);
-            for(CttInfoShow itemUnit: cttInfoShowList){
-                selectItem=new SelectItem();
-                selectItem.setValue(itemUnit.getPkid());
-                selectItem.setLabel(itemUnit.getName());
+        try {
+            beansMap = new HashMap();
+            reportHeader =new ReportHeader();
+            // 获取已经批准了的总包合同列表
+            List<CttInfoShow> cttInfoShowList =
+                    cttInfoService.getCttInfoListByCttType_Status(
+                            EnumResType.RES_TYPE0.getCode()
+                            , EnumFlowStatus.FLOW_STATUS3.getCode());
+            tkcttList=new ArrayList<SelectItem>();
+            if(cttInfoShowList.size()>0){
+                SelectItem selectItem=new SelectItem("","");
                 tkcttList.add(selectItem);
+                for(CttInfoShow itemUnit: cttInfoShowList){
+                    selectItem=new SelectItem();
+                    selectItem.setValue(itemUnit.getPkid());
+                    selectItem.setLabel(itemUnit.getName());
+                    tkcttList.add(selectItem);
+                }
             }
+            strPeriodNo=ToolUtil.getStrThisMonth();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
-        strPeriodNo=ToolUtil.getStrThisMonth();
     }
 
     public String onExportExcel()throws IOException, WriteException {

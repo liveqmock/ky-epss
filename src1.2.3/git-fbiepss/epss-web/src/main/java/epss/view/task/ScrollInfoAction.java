@@ -28,11 +28,15 @@ public class ScrollInfoAction implements Serializable {
 
     @PostConstruct
     public void init() {
-        getViewMsg();
-        if ("".equals(ToolUtil.getStrIgnoreNull(strCurrentViewMng))){
-            strCurrentViewMng="»¶Ó­Äú£¡£¡";
+        try {
+            getViewMsg();
+            if ("".equals(ToolUtil.getStrIgnoreNull(strCurrentViewMng))){
+                strCurrentViewMng="»¶Ó­Äú£¡£¡";
+            }
+            strLastViewMng=strCurrentViewMng;
+        }catch (Exception e){
+            logger.error("³õÊ¼»¯Ê§°Ü", e);
         }
-        strLastViewMng=strCurrentViewMng;
     }
 
     public void getViewMsg() {

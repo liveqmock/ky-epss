@@ -45,14 +45,12 @@ public class OperPwdAction implements Serializable {
 
     @PostConstruct
     public void init() {
-        operUpd = new Oper();
-        OperatorManager operatorManagerTemp=ToolUtil.getOperatorManager();
         try {
+            operUpd = new Oper();
+            OperatorManager operatorManagerTemp=ToolUtil.getOperatorManager();
             BeanUtils.copyProperties(operUpd,operatorManagerTemp.getOperator());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+        }catch (Exception e){
+            logger.error("≥ı ºªØ ß∞‹", e);
         }
     }
 

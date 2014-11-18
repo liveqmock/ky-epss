@@ -54,15 +54,19 @@ public class ProgStlInfoTkEstSPAction {
 
     @PostConstruct
     public void init() {
-        progStlInfoShowList = new ArrayList<>();
-        progStlInfoShowQry = new ProgStlInfoShow();
-        progStlInfoShowAdd = new ProgStlInfoShow();
-        progStlInfoShowUpd = new ProgStlInfoShow();
-        progStlInfoShowDel = new ProgStlInfoShow();
+        try {
+            progStlInfoShowList = new ArrayList<>();
+            progStlInfoShowQry = new ProgStlInfoShow();
+            progStlInfoShowAdd = new ProgStlInfoShow();
+            progStlInfoShowUpd = new ProgStlInfoShow();
+            progStlInfoShowDel = new ProgStlInfoShow();
 
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        String strResPkidTemp = parammap.get("strResPkid").toString();
-        operRes=operResService.getOperResByPkid(strResPkidTemp);
+            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            String strResPkidTemp = parammap.get("strResPkid").toString();
+            operRes=operResService.getOperResByPkid(strResPkidTemp);
+        }catch (Exception e){
+            logger.error("≥ı ºªØ ß∞‹", e);
+        }
     }
     public void setMaxNoPlusOne(String strQryTypePara) {
         try {

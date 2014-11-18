@@ -92,17 +92,21 @@ public class ProgStlItemSubStlmentAction {
 
     @PostConstruct
     public void init() {
-        this.attachmentList=new ArrayList<>();
-        beansMap = new HashMap();
-        reportHeader = new ReportHeader();
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (parammap.containsKey("strStlInfoPkid")) {
-            strStlInfoPkid = parammap.get("strStlInfoPkid").toString();
+        try {
+            this.attachmentList=new ArrayList<>();
+            beansMap = new HashMap();
+            reportHeader = new ReportHeader();
+            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            if (parammap.containsKey("strStlInfoPkid")) {
+                strStlInfoPkid = parammap.get("strStlInfoPkid").toString();
+            }
+            if (parammap.containsKey("strFlowType")) {
+                strFlowType = parammap.get("strFlowType").toString();
+            }
+            initData();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
-        if (parammap.containsKey("strFlowType")) {
-            strFlowType = parammap.get("strFlowType").toString();
-        }
-        initData();
     }
 
     /*初始化操作*/

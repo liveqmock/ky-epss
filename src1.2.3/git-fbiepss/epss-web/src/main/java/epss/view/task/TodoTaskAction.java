@@ -30,9 +30,13 @@ public class TodoTaskAction {
 
     @PostConstruct
     public void init() {
-        //整个任务列表
-        taskShowList = new ArrayList<>();
-        taskShowList=taskService.initTodoTaskShowList();
+        try {
+            //整个任务列表
+            taskShowList = new ArrayList<>();
+            taskShowList = taskService.initTodoTaskShowList();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+        }
     }
 
     public List<TaskShow> getTaskShowList() {

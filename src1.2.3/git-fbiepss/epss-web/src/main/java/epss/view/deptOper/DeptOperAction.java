@@ -64,11 +64,15 @@ public class DeptOperAction implements Serializable {
 
     @PostConstruct
     public void init() {
-        deptOperShowFowExcelList=new ArrayList<>();
-        beansMap = new HashMap();
-        initVariables();
-        initData();
-        beansMap.put("deptOperShowFowExcelList", deptOperShowFowExcelList);
+        try {
+            deptOperShowFowExcelList=new ArrayList<>();
+            beansMap = new HashMap();
+            initVariables();
+            initData();
+            beansMap.put("deptOperShowFowExcelList", deptOperShowFowExcelList);
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+        }
     }
 
     private void initVariables() {
@@ -81,24 +85,29 @@ public class DeptOperAction implements Serializable {
     }
 
     private void initData() {
-        operSexSIList = new ArrayList<>();
-        operSexSIList.add(new SelectItem("1", "男"));
-        operSexSIList.add(new SelectItem("0", "女"));
-        operIsSuperSIList = new ArrayList<>();
-        operIsSuperSIList.add(new SelectItem("0", "否"));
-        operIsSuperSIList.add(new SelectItem("1", "是"));
-        enableSIList= new ArrayList<>();
-        enableSIList.add(new SelectItem("1", "可用"));
-        enableSIList.add(new SelectItem("0", "不可用"));
-        operTypeSIList= new ArrayList<>();
-        operTypeSIList.add(new SelectItem("2", "业务人员"));
-        operTypeSIList.add(new SelectItem("1", "系统管理员"));
-        deptSIList=new ArrayList<>();
-        List<Dept> deptListTemp=deptOperService.getDeptList();
-        for(Dept dept:deptListTemp){
-            deptSIList.add(new SelectItem(dept.getPkid(),dept.getName()));
+        try {
+            operSexSIList = new ArrayList<>();
+            operSexSIList.add(new SelectItem("1", "男"));
+            operSexSIList.add(new SelectItem("0", "女"));
+            operIsSuperSIList = new ArrayList<>();
+            operIsSuperSIList.add(new SelectItem("0", "否"));
+            operIsSuperSIList.add(new SelectItem("1", "是"));
+            enableSIList= new ArrayList<>();
+            enableSIList.add(new SelectItem("1", "可用"));
+            enableSIList.add(new SelectItem("0", "不可用"));
+            operTypeSIList= new ArrayList<>();
+            operTypeSIList.add(new SelectItem("2", "业务人员"));
+            operTypeSIList.add(new SelectItem("1", "系统管理员"));
+            deptSIList=new ArrayList<>();
+            List<Dept> deptListTemp=deptOperService.getDeptList();
+            for(Dept dept:deptListTemp){
+                deptSIList.add(new SelectItem(dept.getPkid(),dept.getName()));
+            }
+            initDeptOper();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
         }
-        initDeptOper();
     }
 
     private void initDeptOper() {
@@ -280,7 +289,7 @@ public class DeptOperAction implements Serializable {
                         return;
                     }
                     //String md5=MD5Helper.getMD5String(tidkeysService.getTidkeysList("126").getKey());
-                    int intUsersCounts=Integer.parseInt(tidkeysService.getTidkeysList("126").getKey());
+                    int intUsersCounts=Integer.parseInt(tidkeysService.getTidkeysList("126").getKey1());
                     Oper operTemp=new Oper();
                     int intExistRecordCountsInOperDb=deptOperService.existRecordCountsInOperDb(operTemp);
                     if (intExistRecordCountsInOperDb>=intUsersCounts) {

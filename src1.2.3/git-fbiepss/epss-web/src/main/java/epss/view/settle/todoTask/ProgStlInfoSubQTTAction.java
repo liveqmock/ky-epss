@@ -41,21 +41,30 @@ public class ProgStlInfoSubQTTAction {
 
     @PostConstruct
     public void init() {
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        if (parammap.containsKey("strStlInfoPkid")) {
-            strStlInfoPkid = parammap.get("strStlInfoPkid").toString();
-        }
-        strStlType = EnumResType.RES_TYPE3.getCode();
+        try {
+            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            if (parammap.containsKey("strStlInfoPkid")) {
+                strStlInfoPkid = parammap.get("strStlInfoPkid").toString();
+            }
+            strStlType = EnumResType.RES_TYPE3.getCode();
 
-        progStlInfoShowUpd = new ProgStlInfoShow();
-        initData();
+            progStlInfoShowUpd = new ProgStlInfoShow();
+            initData();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
+        }
     }
 
     public void initData() {
-        ProgStlInfo progStlInfoTemp = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
-        progStlInfoShowUpd =progStlInfoService.fromModelToModelShow(progStlInfoTemp);
-        CttInfo cttInfoTemp =cttInfoService.getCttInfoByPkId(progStlInfoShowUpd.getStlPkid());
-        progStlInfoShowUpd.setStlName(cttInfoTemp.getName());
+        try {
+            ProgStlInfo progStlInfoTemp = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
+            progStlInfoShowUpd =progStlInfoService.fromModelToModelShow(progStlInfoTemp);
+            CttInfo cttInfoTemp =cttInfoService.getCttInfoByPkId(progStlInfoShowUpd.getStlPkid());
+            progStlInfoShowUpd.setStlName(cttInfoTemp.getName());
+        }catch (Exception e) {
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
+        }
     }
 
     public void setMaxNoPlusOne() {

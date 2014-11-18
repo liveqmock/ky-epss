@@ -43,16 +43,25 @@ public class CstplInfoTTAction {
 
     @PostConstruct
     public void init() {
-        Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-        // 从总包合同传递过来的总包合同号
-        if (parammap.containsKey("strCttInfoPkid")) {
-            strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
+        try {
+            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+            // 从总包合同传递过来的总包合同号
+            if (parammap.containsKey("strCttInfoPkid")) {
+                strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
+            }
+            initData();
+        }catch (Exception e){
+            logger.error("初始化失败", e);
         }
-        initData();
     }
     public void initData() {
-        CttInfo cttInfoTemp = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
-        cttInfoShowUpd=cttInfoService.fromModelToModelShow(cttInfoTemp);
+        try {
+            CttInfo cttInfoTemp = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
+            cttInfoShowUpd=cttInfoService.fromModelToModelShow(cttInfoTemp);
+        }catch (Exception e) {
+            logger.error("初始化失败", e);
+            MessageUtil.addError("初始化失败");
+        }
     }
 
     public void setMaxNoPlusOne() {
