@@ -28,9 +28,9 @@
                     }else if (infoType == '5'){
                         var rtn = dialog("../subctt/todoTask/subctt_PMng.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '6'){
-                        var rtn = dialog("../tkctt/todoTask/tkctt_StaMng.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../item/itemMng_TkcttStaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7'){
-                        var rtn = dialog("../tkctt/todoTask/tkctt_MeaMng.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="0") { // 待审核

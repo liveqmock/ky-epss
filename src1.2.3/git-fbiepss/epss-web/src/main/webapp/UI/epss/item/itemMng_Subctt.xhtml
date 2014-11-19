@@ -205,7 +205,7 @@
                         </p:column>
                         <p:column style="width:80px" headerText="分包金额">
                             <h:outputText value="#{record.contractAmount}" style="float: right">
-                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00#{record.spareField eq null?'':'%'}"/>
                             </h:outputText>
                         </p:column>
                         <p:column style="width:100px" headerText="分包甲供材单价">
@@ -488,7 +488,7 @@
                                 <h:inputText id="contractAmountForUpd"
                                              style="text-align:right;"
                                              value="#{subcttItemAction.cttItemShowUpd.contractAmount}">
-                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00#{subcttItemAction.cttItemShowUpd.spareField eq null?'':'%'}"/>
                                 </h:inputText>
                                 <p:outputLabel for="signPartAPriceForUpd" value="甲供材价："/>
                                 <h:inputText id="signPartAPriceForUpd"
@@ -614,7 +614,7 @@
                                              value="#{subcttItemAction.cttItemShowDel.contractAmount}"
                                              readonly="true"
                                              style="background-color:gainsboro;text-align:right;">
-                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00#{subcttItemAction.cttItemShowDel.spareField eq null?'':'%'}"/>
                                 </h:inputText>
                                 <p:outputLabel for="signPartAPriceForDel" value="甲供材价："/>
                                 <h:inputText id="signPartAPriceForDel"

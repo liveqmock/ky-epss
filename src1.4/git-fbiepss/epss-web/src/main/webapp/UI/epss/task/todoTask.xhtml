@@ -20,7 +20,7 @@
                     }else if (infoType == '1'){
                         var rtn = dialog("../cstpl/todoTask/cstpl_Mng.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '2'){
-                        var rtn = dialog("../subctt/todoTask/subctt_Mng.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '3'){
                         var rtn = dialog("../subctt/todoTask/subctt_QMng.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '4'){
@@ -28,9 +28,9 @@
                     }else if (infoType == '5'){
                         var rtn = dialog("../subctt/todoTask/subctt_PMng.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '6'){
-                        var rtn = dialog("../tkctt/todoTask/tkctt_StaMng.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../item/itemMng_TkcttStaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7'){
-                        var rtn = dialog("../tkctt/todoTask/tkctt_MeaMng.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="0") { // 待审核
@@ -109,7 +109,7 @@
                              text-align: left;">
                         <h:outputLabel value="待处理:" style="font-weight:normal"/>
                         <h:outputLabel value="下级已通过" style="background-color: yellowgreen;"/>
-                        <h:outputLabel value="上级未通过" style="background-color: red"/>
+                        <h:outputLabel value="上级未通过" style="background-color: lightseagreen;"/>
                     </div>
                     <p:dataTable id="pdtTask"
                                  value="#{todoTaskAction.taskShowList}"
@@ -118,7 +118,7 @@
                                  rowKey="#{row + 1}"
                                  emptyMessage="数据记录为空..."
                                  rowStyleClass="#{record.pkid eq null?'rowGrayStyle':
-                                 record.strColorType eq '2'?'rowRedStyle':'rowGreenyellowStyle'}"
+                                 record.strColorType eq '2'?'rowLightSkyBlueStyle':'rowGreenyellowStyle'}"
                                  scrollable="true"
                                  scrollHeight="400">
                         <p:column headerText="操作" style="width:30px;text-align: center;">

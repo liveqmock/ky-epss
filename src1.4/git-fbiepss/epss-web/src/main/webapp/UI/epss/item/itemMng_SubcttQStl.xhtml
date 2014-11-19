@@ -119,7 +119,7 @@
                         </p:column>
                         <p:column style="width:80px" headerText="合同金额">
                             <h:outputText value="#{record.subctt_ContractAmount}" style="float: right">
-                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00#{record.subctt_SpareField eq null?'':'%'}"/>
                             </h:outputText>
                         </p:column>
                         <p:column style="width:100px" headerText="甲供材单价">
@@ -192,7 +192,7 @@
                                              value="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_ContractAmount}"
                                              style="background-color:gainsboro;"
                                              rendered="false">
-                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_SpareField eq null?'':'%'}"/>
                                 </h:inputText>
                                 <p:outputLabel for="originFlagItemInfoForUpd" value="数据来源:" />
                                 <h:inputText id="originFlagItemInfoForUpd"
@@ -288,7 +288,7 @@
                                              value="#{progStlItemSubQAction.progStlItemSubQShowDel.subctt_ContractAmount}"
                                              style="background-color:gainsboro;"
                                              rendered="false">
-                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00#{progStlItemSubQAction.progStlItemSubQShowDel.subctt_SpareField eq null?'':'%'}"/>
                                 </h:inputText>
                                 <p:outputLabel for="originFlagItemInfoForDel" value="数据来源:" />
                                 <h:inputText id="originFlagItemInfoForDel"

@@ -115,7 +115,7 @@
                     </p:column>
                     <p:column style="width:100px" headerText="合同金额">
                         <h:outputText value="#{record.subctt_ContractAmount}" style="float: right">
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.00#{record.subctt_SpareField eq null?'':'%'}"/>
                         </h:outputText>
                     </p:column>
                     <p:column style="width:100px" headerText="分包材料单价">

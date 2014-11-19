@@ -18,7 +18,13 @@
     background: green;
 }
 .rowBlueStyle {
-    background: blue;
+    background:blue;
+}
+.rowLightSeaGreenStyle {
+     background:lightseagreen;
+ }
+.rowLightSkyBlueStyle {
+    background:lightskyblue;
 }
 .rowGreenyellowStyle {
     background: greenyellow;

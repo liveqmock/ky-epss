@@ -186,6 +186,7 @@ public class ProgStlItemSubQAction {
             progStlItemSubQShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
             progStlItemSubQShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
             progStlItemSubQShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
+            progStlItemSubQShowTemp.setSubctt_SpareField(itemUnit.getSpareField());
 
             ProgStlItemSubQ progStlItemSubQ =new ProgStlItemSubQ();
             progStlItemSubQ.setSubcttPkid(strSubcttPkid);

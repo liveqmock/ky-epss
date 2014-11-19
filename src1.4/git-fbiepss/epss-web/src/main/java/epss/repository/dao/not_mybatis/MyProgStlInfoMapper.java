@@ -128,7 +128,9 @@ public interface MyProgStlInfoMapper {
             " where " +
             "      psi.STL_TYPE = #{strStlType}" +
             " and " +
-            "      psi.STL_PKID = #{strStlPkid}")
+            "      psi.STL_PKID = #{strStlPkid}" +
+            " order by " +
+            "      psi.PERIOD_NO desc")
     List<ProgStlInfoShow> getInitStlShowListByInfoTypePkid(@Param("strStlType") String strStlType,
                                                            @Param("strStlPkid") String strStlPkid);
 
