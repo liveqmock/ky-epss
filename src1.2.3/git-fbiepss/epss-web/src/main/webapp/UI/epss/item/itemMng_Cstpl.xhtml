@@ -69,7 +69,7 @@
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                                 </h:inputText>
                             </h:panelGrid>
-                            <h:panelGrid columns="5">
+                            <h:panelGrid columns="5" rendered='#{cstplItemAction.strPassVisible}'>
                                 <p:commandButton id="submitBtnForInfoUpd"
                                                  value="提交（更新）"
                                                  action="#{cstplInfoTTAction.onClickForMngAction()}"
