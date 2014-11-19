@@ -23,9 +23,102 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <h:panelGrid id="pgCondition" columns="4">
+                    <p:panel header="总包合同">
+                        <h:panelGrid id="pgViewForInfoUpd">
+                            <h:panelGrid columns="5">
+                                <p:outputLabel value="合同编号：" for="idForUpd"/>
+                                <p:inputText id="idForUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.id}"/>
+                                <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
+                                                 action="#{tkcttInfoTTAction.setMaxNoPlusOne()}"
+                                                 update="idForUpd"
+                                                 style="height:20px">
+                                </p:commandButton>
+                                <p:outputLabel value="合同名称：" for="cttNameForUpd"/>
+                                <p:inputText id="cttNameForUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.name}"
+                                             style="width:328px"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="8">
+                                <p:outputLabel value="签订日期：" for="signDateForInfoUpd"/>
+                                <p:inputText id="signDateForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.signDate}"
+                                             onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                <p:outputLabel value="开始时间：" for="cttStartDateForInfoUpd"/>
+                                <p:inputText id="cttStartDateForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.cttStartDate}"
+                                             onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                <p:outputLabel value="截止时间：" for="cttEndDateForInfoUpd"/>
+                                <p:inputText id="cttEndDateForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.cttEndDate}"
+                                             onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                <p:outputLabel value="备注内容：" for="remarkForInfoUpd"/>
+                                <p:inputText id="remarkForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.remark}"
+                                             style="width:328px"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="4">
+                                <p:outputLabel value="签订甲方：" for="signPartAForInfoUpd"/>
+                                <p:selectOneMenu id="signPartAForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.signPartA}">
+                                    <f:selectItems value="#{esCommon.customerlist}"/>
+                                </p:selectOneMenu>
+                                <p:outputLabel value="签订乙方：" for="signPartBForInfoUpd"/>
+                                <p:selectOneMenu id="signPartBForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.signPartB}"
+                                                 style="width:328px">
+                                    <f:selectItems value="#{esCommon.customerlist}"/>
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+                            <h:panelGrid columns="10">
+                                <p:outputLabel for="createdByNameInfoUpd" value="创建人名："/>
+                                <h:inputText id="createdByNameInfoUpd"
+                                             value="#{tkcttInfoTTAction.cttInfoShowUpd.createdByName}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel for="createdTimeInfoUpd" value="创建时间："/>
+                                <h:inputText id="createdTimeInfoUpd"
+                                             value="#{tkcttInfoTTAction.cttInfoShowUpd.createdTime}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel for="lastUpdByNameInfoUpd" value="修改人名："/>
+                                <h:inputText id="lastUpdByNameInfoUpd"
+                                             value="#{tkcttInfoTTAction.cttInfoShowUpd.lastUpdByName}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel for="lastUpdTimeInfoUpd" value="修改时间："/>
+                                <h:inputText id="lastUpdTimeInfoUpd"
+                                             value="#{tkcttInfoTTAction.cttInfoShowUpd.lastUpdTime}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel for="recVersionInfoUpd" value="修改次数："/>
+                                <h:inputText id="recVersionInfoUpd"
+                                             value="#{tkcttInfoTTAction.cttInfoShowUpd.recVersion}"
+                                             style="background-color:gainsboro;text-align:right;" readonly="true">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                                </h:inputText>
+                            </h:panelGrid>
+                            <h:panelGrid columns="5">
+                                <p:commandButton id="submitBtnForInfoUpd"
+                                                 value="提交（更新）"
+                                                 action="#{tkcttInfoTTAction.onClickForMngAction()}"
+                                                 update="msgs,pgViewForInfoUpd">
+                                </p:commandButton>
+                                <p:commandButton id="resetBtnForInfoUpd" value="重置"
+                                                 type="reset"
+                                                 update="pgViewForInfoUpd">
+                                </p:commandButton>
+                                <p:commandButton
+                                        value="附件"
+                                        update=":form:msgs"
+                                        onclick="PF('wvAttachmentList').show()">
+                                </p:commandButton>
+                                <p:commandButton value="导出到EXCEL"
+                                                 action="#{subcttItemAction.onExportExcel}"
+                                                 ajax="false">
+                                </p:commandButton>
+                                <p:ajaxStatus style="width:16px;height:16px;">
+                                    <f:facet name="start">
+                                        <h:graphicImage value="/images/ajaxloading.gif"/>
+                                    </f:facet>
+                                    <f:facet name="complete">
+                                        <h:outputText value=""/>
+                                    </f:facet>
+                                </p:ajaxStatus>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:panel>
+                    <h:panelGrid id="pgCondition" columns="3">
                         <p:commandButton id="addBtn"
-                                         value="增加" icon="ui-icon-plus"
+                                         value="增加项"
                                          rendered='#{tkcttItemAction.strPassVisible}'
                                          action="#{tkcttItemAction.resetAction()}"
                                          update="pgViewForAdd,pdt,msgs"
@@ -40,23 +133,6 @@
                                          action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
                                          rendered="#{tkcttItemAction.strPassFailVisible}"
                                          update="msgs,pgCondition,pdt">
-                        </p:commandButton>
-                        <p:commandButton value="导出到EXCEL"
-                                         action="#{tkcttItemAction.onExportExcel()}"
-                                         ajax="false">
-                        </p:commandButton>
-                    </h:panelGrid>
-                    <h:panelGrid columns="5">
-                        <p:outputLabel value="总包合同编号：" for="id"/>
-                        <p:inputText id="id" value="#{tkcttItemAction.cttInfo.id}"
-                                     readonly="true" style="background-color:gainsboro;"/>
-                        <p:outputLabel value="总包合同名称：" for="cttName"/>
-                        <p:inputText id="cttName" value="#{tkcttItemAction.cttInfo.name}"
-                                     readonly="true" style="width:400px;background-color:gainsboro;"/>
-                        <p:commandButton icon="ui-icon-document"
-                                         style="height:18px;width:18px"
-                                         update=":form:msgs"
-                                         onclick="PF('wvAttachmentList').show()">
                         </p:commandButton>
                     </h:panelGrid>
                     <p:dataTable id="pdt"
