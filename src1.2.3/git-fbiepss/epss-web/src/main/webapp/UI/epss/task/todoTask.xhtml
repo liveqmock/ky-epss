@@ -109,7 +109,7 @@
                              text-align: left;">
                         <h:outputLabel value="待处理:" style="font-weight:normal"/>
                         <h:outputLabel value="下级已通过" style="background-color: yellowgreen;"/>
-                        <h:outputLabel value="上级未通过" style="background-color: lightseagreen;"/>
+                        <h:outputLabel value="上级未通过" styleClass="rowPaleYellowStyle"/>
                     </div>
                     <p:dataTable id="pdtTask"
                                  value="#{todoTaskAction.taskShowList}"
@@ -118,7 +118,7 @@
                                  rowKey="#{row + 1}"
                                  emptyMessage="数据记录为空..."
                                  rowStyleClass="#{record.pkid eq null?'rowGrayStyle':
-                                 record.strColorType eq '2'?'rowLightSkyBlueStyle':'rowGreenyellowStyle'}"
+                                 record.strColorType eq '2'?'rowPaleYellowStyle':'rowGreenyellowStyle'}"
                                  scrollable="true"
                                  scrollHeight="400">
                         <p:column headerText="操作" style="width:30px;text-align: center;">
