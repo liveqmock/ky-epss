@@ -289,7 +289,7 @@ public class DeptOperAction implements Serializable {
                         return;
                     }
                     //String md5=MD5Helper.getMD5String(tidkeysService.getTidkeysList("126").getKey());
-                    int intUsersCounts=Integer.parseInt(tidkeysService.getTidkeysList("126").getKey1());
+                    int intUsersCounts=Integer.parseInt(tidkeysService.getTidkeysList("126").getKey());
                     Oper operTemp=new Oper();
                     int intExistRecordCountsInOperDb=deptOperService.existRecordCountsInOperDb(operTemp);
                     if (intExistRecordCountsInOperDb>=intUsersCounts) {
