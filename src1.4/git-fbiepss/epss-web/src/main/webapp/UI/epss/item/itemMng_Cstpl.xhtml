@@ -23,9 +23,85 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
+                    <p:panel header="成本计划">
+                        <h:panelGrid id="pgViewForInfoUpd">
+                            <h:panelGrid columns="5">
+                                <p:outputLabel value="合同编号：" for="idForUpd"/>
+                                <p:inputText id="idForUpd" value="#{cstplInfoTTAction.cttInfoShowUpd.id}"/>
+                                <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
+                                                 action="#{cstplInfoTTAction.setMaxNoPlusOne()}"
+                                                 update="idForUpd"
+                                                 style="height:20px">
+                                </p:commandButton>
+                                <p:outputLabel value="合同名称：" for="cttNameForUpd"/>
+                                <p:inputText id="cttNameForUpd" value="#{cstplInfoTTAction.cttInfoShowUpd.name}"
+                                             style="width:328px"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="4">
+                                <p:outputLabel value="签订日期：" for="signDateForInfoUpd"/>
+                                <p:inputText id="signDateForInfoUpd" value="#{cstplInfoTTAction.cttInfoShowUpd.signDate}"
+                                             onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                <p:outputLabel value="备注内容：" for="remarkForInfoUpd"/>
+                                <p:inputText id="remarkForInfoUpd" value="#{cstplInfoTTAction.cttInfoShowUpd.remark}"
+                                             style="width:328px"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="10">
+                                <p:outputLabel for="createdByNameInfoUpd" value="创建人名："/>
+                                <h:inputText id="createdByNameInfoUpd"
+                                             value="#{cstplInfoTTAction.cttInfoShowUpd.createdByName}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel for="createdTimeInfoUpd" value="创建时间："/>
+                                <h:inputText id="createdTimeInfoUpd"
+                                             value="#{cstplInfoTTAction.cttInfoShowUpd.createdTime}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel for="lastUpdByNameInfoUpd" value="修改人名："/>
+                                <h:inputText id="lastUpdByNameInfoUpd"
+                                             value="#{cstplInfoTTAction.cttInfoShowUpd.lastUpdByName}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel for="lastUpdTimeInfoUpd" value="修改时间："/>
+                                <h:inputText id="lastUpdTimeInfoUpd"
+                                             value="#{cstplInfoTTAction.cttInfoShowUpd.lastUpdTime}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel for="recVersionInfoUpd" value="修改次数："/>
+                                <h:inputText id="recVersionInfoUpd"
+                                             value="#{cstplInfoTTAction.cttInfoShowUpd.recVersion}"
+                                             style="background-color:gainsboro;text-align:right;" readonly="true">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                                </h:inputText>
+                            </h:panelGrid>
+                            <h:panelGrid columns="5" rendered='#{cstplItemAction.strPassVisible}'>
+                                <p:commandButton id="submitBtnForInfoUpd"
+                                                 value="提交（更新）"
+                                                 action="#{cstplInfoTTAction.onClickForMngAction()}"
+                                                 update="msgs,pgViewForInfoUpd">
+                                </p:commandButton>
+                                <p:commandButton id="resetBtnForInfoUpd" value="重置"
+                                                 type="reset"
+                                                 update="pgViewForInfoUpd">
+                                </p:commandButton>
+                                <p:commandButton
+                                        value="附件"
+                                        update=":form:msgs"
+                                        onclick="PF('wvAttachmentList').show()">
+                                </p:commandButton>
+                                <p:commandButton value="导出到EXCEL"
+                                                 action="#{subcttItemAction.onExportExcel}"
+                                                 ajax="false">
+                                </p:commandButton>
+                                <p:ajaxStatus style="width:16px;height:16px;">
+                                    <f:facet name="start">
+                                        <h:graphicImage value="/images/ajaxloading.gif"/>
+                                    </f:facet>
+                                    <f:facet name="complete">
+                                        <h:outputText value=""/>
+                                    </f:facet>
+                                </p:ajaxStatus>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:panel>
                     <h:panelGrid id="pgCondition" columns="4">
                         <p:commandButton id="addBtn"
-                                         value="增加" icon="ui-icon-plus"
+                                         value="增加项"
                                          rendered='#{cstplItemAction.strPassVisible}'
                                          action="#{cstplItemAction.resetAction()}"
                                          update="pgViewForAdd,pdt,msgs"
@@ -40,23 +116,6 @@
                                          action="#{cstplItemAction.onClickForPowerAction('Fail')}"
                                          rendered='#{cstplItemAction.strPassFailVisible}'
                                          update="msgs,pgCondition,pdt">
-                        </p:commandButton>
-                        <p:commandButton value="导出到EXCEL"
-                                         action="#{cstplItemAction.onExportExcel}"
-                                         ajax="false">
-                        </p:commandButton>
-                    </h:panelGrid>
-                    <h:panelGrid columns="5">
-                        <p:outputLabel value="成本计划编号：" for="id"/>
-                        <p:inputText id="id" value="#{cstplItemAction.cttInfo.id}"
-                                     readonly="true" style="background-color:gainsboro;"/>
-                        <p:outputLabel value="成本计划名称：" for="cttName"/>
-                        <p:inputText id="cttName" value="#{cstplItemAction.cttInfo.name}"
-                                     readonly="true" style="width:400px;background-color:gainsboro;"/>
-                        <p:commandButton icon="ui-icon-document"
-                                         style="height:18px;width:18px"
-                                         update=":form:msgs"
-                                         onclick="PF('wvAttachmentList').show()">
                         </p:commandButton>
                     </h:panelGrid>
                     <p:dataTable id="pdt" style="width:100%;"

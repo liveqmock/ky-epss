@@ -192,7 +192,7 @@
                              text-align: left;">
                         <h:outputLabel value="已处理:" style="font-weight:normal"/>
                         <h:outputLabel value="上级还未批" style="background-color: yellowgreen;"/>
-                        <h:outputLabel value="上级已经批" style="background-color: red;"/>
+                        <h:outputLabel value="上级已经批" styleClass="rowPaleYellowStyle"/>
                     </div>
                     <p:dataTable id="pdt"
                                  value="#{doneTaskAction.taskShowList}"
@@ -201,7 +201,7 @@
                                  rowKey="#{row + 1}"
                                  emptyMessage="数据记录为空..."
                                  rowStyleClass="#{record.isOwnTaskFlowFlag eq null?'rowGrayStyle':
-                                  record.isOwnTaskFlowFlag eq 'true'?'rowGreenyellowStyle':'rowRedStyle'}"
+                                  record.isOwnTaskFlowFlag eq 'true'?'rowGreenyellowStyle':'rowPaleYellowStyle'}"
                                  scrollable="true"
                                  scrollHeight="400">
                         <p:column headerText="操作" style="width:30px;text-align: center;">

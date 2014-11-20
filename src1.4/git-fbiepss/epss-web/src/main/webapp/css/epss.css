@@ -12,7 +12,7 @@
      background: khaki  ;
  }
  .rowGrayStyle {
-    background: gray;
+    background: lightgray;
 }
 .rowGreenStyle {
     background: green;
@@ -29,11 +29,14 @@
 .rowGreenyellowStyle {
     background: greenyellow;
 }
-.rowOrangeStyle {
-    background:orange;
+.rowPaleGoldStyle {
+    background:palegoldenrod;
 }
-.rowYellowStyle {
-    background: yellow;
+.rowPaleYellowStyle {
+    background: #fff3a1;
+}
+.rowGoldStyle {
+    background: gold;
 }
 .rowRedStyle {
     background: red;

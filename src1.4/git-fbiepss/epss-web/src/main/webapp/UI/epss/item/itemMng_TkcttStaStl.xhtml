@@ -21,75 +21,73 @@
     <ui:define name="content">
         <h:form id="form">
             <div style="margin:5px;">
+            <p:panel header="总包统计结算">
+                <h:panelGrid id="pgView">
+                    <h:panelGrid columns="7">
+                        <p:outputLabel value="结算编号：" for="id"/>
+                        <p:inputText id="id" value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.id}"/>
+                        <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
+                                         action="#{progStlInfoTkEstTTAction.setMaxNoPlusOne()}"
+                                         update="id"
+                                         style="height:20px">
+                        </p:commandButton>
+                        <p:outputLabel value="分包合同：" for="cttName"/>
+                        <p:inputText id="cttName" value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.stlName}"
+                                     style="background-color:gainsboro;width:328px;" readonly="true"/>
+                        <p:outputLabel value="期数编码：" for="periodNo"/>
+                        <p:inputText id="periodNo" value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.periodNo}"
+                                     style="background-color:gainsboro;" readonly="true"/>
+                    </h:panelGrid>
+                    <h:panelGrid columns="6">
+                        <p:outputLabel value="备注内容：" for="remark"/>
+                        <p:inputText id="remark" value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.remark}"/>
+                        <p:outputLabel for="createdByName" value="创建人：" />
+                        <h:inputText id="createdByName"
+                                     value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.createdByName}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="createdTime" value="创建时间：" />
+                        <h:inputText id="createdTime"
+                                     value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.createdTime}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="lastUpdByName" value="修改人：" />
+                        <h:inputText id="lastUpdByName"
+                                     value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.lastUpdByName}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="lastUpdTime" value="修改时间：" />
+                        <h:inputText id="lastUpdTime"
+                                     value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.lastUpdTime}"
+                                     style="background-color:gainsboro" readonly="true"/>
+                        <p:outputLabel for="recVersion" value="修改次数：" />
+                        <h:inputText id="recVersion"
+                                     value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.recVersion}"
+                                     style="background-color:gainsboro;text-align:right;" readonly="true">
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                        </h:inputText>
+                    </h:panelGrid>
+                    <h:panelGrid id="pgOperBtn" columns="4" rendered="#{progStlItemTkEstAction.strPassVisible}">
+                        <p:commandButton id="submitBtn"
+                                         value="提交（更新）"
+                                         action="#{progStlInfoTkEstTTAction.onClickForMngAction()}"
+                                         update="msgs,pgView"
+                                         oncomplete="wVDlgView.hide()">
+                        </p:commandButton>
+                        <p:commandButton id="resetBtn" value="重置"
+                                         type="reset"
+                                         update="pgView">
+                        </p:commandButton>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </h:panelGrid>
+                </h:panelGrid>
+            </p:panel>
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <p:panel header="总包统计结算">
-                        <h:panelGrid id="pgView">
-                            <h:panelGrid columns="5">
-                                <p:outputLabel value="结算编号：" for="idForSta"/>
-                                <p:inputText id="idForSta" value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.id}"/>
-                                <p:commandButton id="autoSetIdBtnForSta" icon="ui-icon-plus"
-                                                 action="#{progStlInfoTkEstTTAction.setMaxNoPlusOne()}"
-                                                 update="id"
-                                                 style="height:20px">
-                                </p:commandButton>
-                                <p:outputLabel value="分包合同：" for="cttNameForSta"/>
-                                <p:inputText id="cttNameForSta" value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.stlName}"
-                                             style="background-color:gainsboro;width:328px;" readonly="true"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="4">
-                                <p:outputLabel value="期数编码：" for="periodNoForSta"/>
-                                <p:inputText id="periodNoForSta" value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.periodNo}"
-                                             style="background-color:gainsboro;" readonly="true"/>
-                                <p:outputLabel value="备注内容：" for="remarkForSta"/>
-                                <p:inputText id="remarkForSta" value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.remark}"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="10">
-                                <p:outputLabel for="createdByNameForSta" value="创建人：" />
-                                <h:inputText id="createdByNameForSta"
-                                             value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.createdByName}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="createdTimeForSta" value="创建时间：" />
-                                <h:inputText id="createdTimeForSta"
-                                             value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.createdTime}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="lastUpdByNameForSta" value="修改人：" />
-                                <h:inputText id="lastUpdByNameForSta"
-                                             value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.lastUpdByName}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="lastUpdTimeForSta" value="修改时间：" />
-                                <h:inputText id="lastUpdTimeForSta"
-                                             value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.lastUpdTime}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="recVersionForSta" value="修改次数：" />
-                                <h:inputText id="recVersionForSta"
-                                             value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.recVersion}"
-                                             style="background-color:gainsboro;text-align:right;" readonly="true">
-                                    <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                </h:inputText>
-                            </h:panelGrid>
-                            <h:panelGrid id="pgOperBtnForSta" columns="4">
-                                <p:commandButton id="submitBtnForSta"
-                                                 value="提交（更新）"
-                                                 action="#{progStlInfoTkEstTTAction.onClickForMngAction()}"
-                                                 update="msgs,pgView"
-                                                 oncomplete="wVDlgView.hide()">
-                                </p:commandButton>
-                                <p:commandButton id="resetBtnForSta" value="重置"
-                                                 type="reset"
-                                                 update="pgView">
-                                </p:commandButton>
-                                <p:ajaxStatus style="width:16px;height:16px;">
-                                    <f:facet name="start">
-                                        <h:graphicImage value="/images/ajaxloading.gif"/>
-                                    </f:facet>
-                                    <f:facet name="complete">
-                                        <h:outputText value=""/>
-                                    </f:facet>
-                                </p:ajaxStatus>
-                            </h:panelGrid>
-                        </h:panelGrid>
-                    </p:panel>
                     <h:panelGrid id="pgCondition" columns="3">
                         <p:commandButton id="endInputBtn" value="录入完成"
                                          action="#{progStlItemTkEstAction.onClickForPowerAction('Pass')}"
@@ -105,20 +103,6 @@
                                          action="#{progStlItemTkEstAction.onExportExcel}"
                                          ajax="false">
                         </p:commandButton>
-                    </h:panelGrid>
-                    <h:panelGrid columns="8">
-                        <p:outputLabel value="总包合同编号：" for="stlId"/>
-                        <p:inputText id="stlId" value="#{progStlItemTkEstAction.progStlInfoShow.stlId}"
-                                     readonly="true" style="background-color:gainsboro;"/>
-                        <p:outputLabel value="总包合同名称：" for="cttName"/>
-                        <p:inputText id="cttName" value="#{progStlItemTkEstAction.progStlInfoShow.stlName}"
-                                     readonly="true" style="width:328px;background-color:gainsboro;"/>
-                        <p:outputLabel value="期号：" for="periodNo"/>
-                        <p:inputText id="periodNo" value="#{progStlItemTkEstAction.progStlInfoShow.periodNo}"
-                                     readonly="true" style="background-color:gainsboro;"/>
-                        <p:outputLabel value="总包统计结算编号：" for="id"/>
-                        <p:inputText id="id" value="#{progStlItemTkEstAction.progStlInfoShow.id}"
-                                     readonly="true" style="background-color:gainsboro;"/>
                     </h:panelGrid>
                     <p:dataTable id="pdt" style="width:100%;"
                                  value="#{progStlItemTkEstAction.progStlItemTkEstShowList}"
