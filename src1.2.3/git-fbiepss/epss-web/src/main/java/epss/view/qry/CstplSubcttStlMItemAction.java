@@ -126,9 +126,6 @@ public class CstplSubcttStlMItemAction {
 
                 Integer intGroup=0;
                 Boolean isInThisCirculateHasSame=false;
-                BigDecimal bdSubcttContractQuantityTotal=new BigDecimal(0);
-                BigDecimal bdSubcttContractUnitPriceTotal=new BigDecimal(0);
-                BigDecimal bdSubcttContractAmountTotal=new BigDecimal(0);
                 // 根据成本计划项插接分包合同项
                 for(int i=0;i< qryShowList.size();i++) {
                     // 成本计划项遇到目标分包合同项
@@ -138,16 +135,11 @@ public class CstplSubcttStlMItemAction {
                         // 克隆目标进行处理后插接
                         QryCSStlMShow qryCSStlMShowNewInsert =(QryCSStlMShow)BeanUtils.cloneBean(itemCstplInsertItem);
                         // 目标分包合同项的合同数量，合同单价，合同金额
-                        BigDecimal bdSubcttContractUnitPrice=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdUnitPrice());
                         BigDecimal bdSignPartAMPrice=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdSignPartAMPrice());
                         BigDecimal bdSubcttCurrentPeriodQuantity=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdQuantity());
                         BigDecimal bdSubcttBeginToCurrentPeriodQuantity=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdBeginToCurrentPeriodQuantity());
-                        BigDecimal bdSubcttCurrentPeriodAmount=bdSubcttCurrentPeriodQuantity.multiply(bdSubcttContractUnitPrice);
-                        BigDecimal bdSubcttBeginToCurrentPeriodAmount=bdSubcttBeginToCurrentPeriodQuantity.multiply(bdSubcttContractUnitPrice);
-                        // 累计目标分包合同项的合同数量，合同单价，合同金额
-                        bdSubcttContractQuantityTotal=bdSubcttContractQuantityTotal.add(bdSubcttCurrentPeriodQuantity);
-                        bdSubcttContractUnitPriceTotal=bdSubcttContractUnitPriceTotal.add(bdSubcttContractUnitPrice);
-                        bdSubcttContractAmountTotal=bdSubcttContractAmountTotal.add(bdSubcttCurrentPeriodAmount);
+                        BigDecimal bdSubcttCurrentPeriodAmount=bdSubcttCurrentPeriodQuantity.multiply(bdSignPartAMPrice);
+                        BigDecimal bdSubcttBeginToCurrentPeriodAmount=bdSubcttBeginToCurrentPeriodQuantity.multiply(bdSignPartAMPrice);
 
                         // 分包合同
                         qryCSStlMShowNewInsert.setBdSubctt_BeginToCurrentPeriodMQty(bdSubcttBeginToCurrentPeriodQuantity);
@@ -156,36 +148,20 @@ public class CstplSubcttStlMItemAction {
                         qryCSStlMShowNewInsert.setBdSubctt_BeginToCurrentPeriodMAmount(bdSubcttBeginToCurrentPeriodAmount);
                         qryCSStlMShowNewInsert.setBdSubctt_CurrentPeriodMAmount(bdSubcttCurrentPeriodAmount);
 
-                        qryCSStlMShowNewInsert.setStrSubctt_SignPartName(qryShowList.get(i).getStrName());
+                        qryCSStlMShowNewInsert.setStrSubctt_SignPartName(qryShowList.get(i).getStrSignPartName());
                         qryCSStlMShowNewInsert.setStrPkid(qryShowList.get(i).getStrCorrespondingPkid()
                                 + "/" + intGroup.toString());
                         qryCSStlMShowNewInsert.setStrParentPkid(itemUnit.getParentPkid());
                         qryCSStlMShowNewInsert.setStrSubctt_Unit(qryShowList.get(i).getStrUnit());
                         qryCSStlMShowNewInsert.setBdSubctt_ContractQuantity(qryShowList.get(i).getBdQuantity());
-                        qryCSStlMShowNewInsert.setBdSubctt_ContractUnitPrice(bdSubcttContractUnitPrice);
+                        qryCSStlMShowNewInsert.setBdSubctt_ContractUnitPrice(qryShowList.get(i).getBdUnitPrice());
                         qryCSStlMShowNewInsert.setBdSubctt_SignPartAMPrice(bdSignPartAMPrice);
 
                         if(intGroup>1){
                             qryCSStlMShowNewInsert.setStrNo("");
                             qryCSStlMShowNewInsert.setStrName("");
                         }
-
-                        // 最后一项之前的项
-                        if(i< qryShowList.size()-1){
-                            // 下一项仍是目标分包合同项
-                            if(itemUnit.getPkid().equals(qryShowList.get(i+1).getStrCorrespondingPkid())){
-                                // 成本计划再设定
-                                qryCSStlMShowList.add(qryCSStlMShowNewInsert);
-                            }// 下一项不是目标分包合同项
-                            else{
-                                // 成分值差
-                                qryCSStlMShowList.add(qryCSStlMShowNewInsert);
-                                break;
-                            }
-                        }else{
-                            // 成分值差
-                            qryCSStlMShowList.add(qryCSStlMShowNewInsert);
-                        }
+                        qryCSStlMShowList.add(qryCSStlMShowNewInsert);
                     }
                 }
                 if(isInThisCirculateHasSame.equals(false)){
