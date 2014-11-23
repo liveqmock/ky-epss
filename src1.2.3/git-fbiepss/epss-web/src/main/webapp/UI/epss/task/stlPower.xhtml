@@ -13,13 +13,13 @@
                 var sfeatureStl = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
                         "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 if (infoType == '3') {// 数量结算
-                    var rtn = dialog("../subctt/stlPower/subctt_QMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
+                    var rtn = dialog("../subPower/subctt/stlPower/subctt_QMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
                 }else if (infoType == '4') {// 材料结算
-                    var rtn = dialog("../subctt/stlPower/subctt_MMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
+                    var rtn = dialog("../subPower/subctt/stlPower/subctt_MMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
                 }else if (infoType == '6') {// 统计结算
-                    var rtn = dialog("../tkctt/stlPower/tkctt_StaMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
+                    var rtn = dialog("../subPower/tkctt/stlPower/tkctt_StaMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
                 }else if (infoType == '7') {// 计量结算
-                    var rtn = dialog("../tkctt/stlPower/tkctt_MeaMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
+                    var rtn = dialog("../subPower/tkctt/stlPower/tkctt_MeaMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
                 }
                 document.getElementById("form:qryBtn").click();
             }
