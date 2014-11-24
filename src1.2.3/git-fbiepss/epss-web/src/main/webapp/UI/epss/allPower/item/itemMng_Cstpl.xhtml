@@ -26,20 +26,22 @@
                     <h:panelGrid id="pgCondition" columns="4">
                         <p:commandButton id="addBtn"
                                          value="增加" icon="ui-icon-plus"
-                                         rendered='#{cstplItemAction.strPassVisible}'
-                                         action="#{cstplItemAction.resetAction()}"
+                                         rendered='#{cstplItemAction.strPassFlag}'
+                                         action="#{cstplItemAction.resetActionForAdd()}"
                                          update="pgViewForAdd,pdt,msgs"
                                          onclick="PF('wVDlgViewForAdd').show()">
                         </p:commandButton>
                         <p:commandButton id="endInputBtn" value="录入完成"
                                          action="#{cstplItemAction.onClickForPowerAction('Pass')}"
-                                         rendered='#{cstplItemAction.strPassVisible}'
-                                         update="msgs,pgCondition,pdt">
+                                         rendered='#{cstplItemAction.strPassFlag}'
+                                         update="msgs,pgCondition,pdt"
+                                         oncomplete="window.close()">
                         </p:commandButton>
                         <p:commandButton id="startInputBtn" value="录入未完"
                                          action="#{cstplItemAction.onClickForPowerAction('Fail')}"
-                                         rendered='#{cstplItemAction.strPassFailVisible}'
-                                         update="msgs,pgCondition,pdt">
+                                         rendered='#{!cstplItemAction.strPassFlag}'
+                                         update="msgs,pgCondition,pdt"
+                                         oncomplete="window.close()">
                         </p:commandButton>
                         <p:commandButton value="导出到EXCEL"
                                          action="#{cstplItemAction.onExportExcel}"
@@ -77,7 +79,7 @@
                                  scrollable="true"
                                  scrollHeight="450">
                         <p:column headerText="操作" style="width:65px;text-align: center;"
-                                  rendered='#{cstplItemAction.strPassVisible}'>
+                                  rendered='#{cstplItemAction.strMngNotFinishFlag}'>
                             <p:commandButton  icon="ui-icon-pencil"
                                         style="height:18px;width:18px"
                                         rendered="#{record.nameContrast eq null ?'false':
