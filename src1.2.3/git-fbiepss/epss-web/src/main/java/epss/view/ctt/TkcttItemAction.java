@@ -199,7 +199,8 @@ public class TkcttItemAction {
                     itemUnit.getRemark(),
                     itemUnit.getCorrespondingPkid(),
                     "",
-                    ""
+                    "",
+                    itemUnit.getSpareField()
             );
             cttItemShowList.add(cttItemShowTemp);
             recursiveDataTable(cttItemShowTemp.getPkid(), cttItemListPara);
