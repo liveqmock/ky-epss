@@ -8,28 +8,28 @@
         <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
         <script type="text/javascript" language="javascript">
             function actSelect(infoType,flowStatus,infoPkid) {
-                var sfeatureMng = "dialogwidth:500px;dialogheight:400px;center:yes;location:no;help:no;" +
-                        "resizable:no;scroll:yes;status:no;minimize:yes;maximize:no;";
-                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
+                var sfeatureMng = "dialogwidth:1400px;dialogheight:700px;center:yes;location:no;help:no;" +
+                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
+                var sfeature    = "dialogwidth:1400px;dialogheight:700px;center:yes;location:no;help:no;" +
                         "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
                 if(flowStatus=="") { // 待录入
                     if (infoType == '0'){
-                        var rtn = dialog("../subPower/item/itemMng_Tkctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_Tkctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '1'){
-                        var rtn = dialog("../subPower/item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '2'){
-                        var rtn = dialog("../subPower/item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '3'){
-                        var rtn = dialog("../subPower/item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '4'){
-                        var rtn = dialog("../subPower/item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '5'){
                     }else if (infoType == '6'){
-                        var rtn = dialog("../subPower/item/itemMng_TkcttStaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_TkcttStaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }else if (infoType == '7'){
-                        var rtn = dialog("../subPower/item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
                     }
                 }else
                 if(flowStatus=="0") { // 待审核
