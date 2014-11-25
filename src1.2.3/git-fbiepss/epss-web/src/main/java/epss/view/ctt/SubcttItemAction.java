@@ -229,7 +229,8 @@ public class SubcttItemAction {
                 itemUnit.getRemark(),
                 itemUnit.getCorrespondingPkid(),
                 "",
-                ""
+                "",
+                itemUnit.getSpareField()
             );
             cttItemShowListPara.add(cttItemShowTemp) ;
             recursiveDataTable(cttItemShowTemp.getPkid(), cttItemListPara, cttItemShowListPara);
@@ -248,8 +249,10 @@ public class SubcttItemAction {
         CttItemShow itemUnitNext=new CttItemShow();
         for(int i=0;i< cttItemShowListTemp.size();i++){
             itemUnit = cttItemShowListTemp.get(i);
-            bdTotal=bdTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getContractAmount()));
-            if(itemUnit.getUnit()!=null&&!itemUnit.getUnit().equals("")){
+            if (itemUnit.getSpareField()==null){
+                bdTotal=bdTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getContractAmount()));
+            }
+            if(itemUnit.getUnit()!=null&&!itemUnit.getUnit().equals("")&&itemUnit.getSpareField()==null){
                 bdAllTotal=bdAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getContractAmount()));
             }
             cttItemShowList.add(itemUnit);

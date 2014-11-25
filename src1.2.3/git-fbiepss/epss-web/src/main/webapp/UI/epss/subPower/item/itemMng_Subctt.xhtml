@@ -205,9 +205,12 @@
                                 </h:outputText>
                             </p:column>
                             <p:column style="width:80px" headerText="分包金额">
-                                <h:outputText value="#{record.contractAmount}" style="float: right">
-                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00#{record.spareField eq null?'':'%'}"/>
-                                </h:outputText>
+                            <h:outputText value="#{record.contractAmount}" style="float: right" rendered="#{record.spareField eq null?true:false}">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                            </h:outputText>
+                            <h:outputText value="#{record.contractAmount}" style="float: right" rendered="#{record.spareField ne null?true:false}">
+                                <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
+                            </h:outputText>
                             </p:column>
                             <p:column style="width:100px" headerText="分包甲供材单价">
                                 <h:outputText value="#{record.signPartAPrice}" style="float: right">
