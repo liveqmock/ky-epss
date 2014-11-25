@@ -1,0 +1,297 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+
+    <ui:define name="head">
+        <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
+        <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+            function actSelect(obj) {
+                var pkid = obj;
+                var sfeature = "dialogwidth:1200px;dialogheight:610px;center:yes;location:no;help:no;" +
+                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
+                var arg = new Object();
+                arg.doType = "select";
+                var rtn = dialog("../item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" + pkid + "", arg, sfeature);
+                document.getElementById("form:qryBtn").click();
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form" enctype="multipart/form-data">
+	    <div style="margin:5px;">
+                <p:growl id="msgs" showDetail="true"/>
+                <p:focus for="id"/>
+                <p:panel>
+                    <h:panelGrid id="pdQry" columns="3" style="width: 100%">
+                        <h:panelGrid columns="8">
+                            <p:outputLabel value="结算编号：" for="id"/>
+                            <p:inputText id="id" value="#{progStlInfoTkMeaAction.progStlInfoShowQry.id}"/>
+                            <p:outputLabel value="总包合同：" for="tkcttPkid"/>
+                            <p:selectOneMenu id="tkcttPkid" value="#{progStlInfoTkMeaAction.progStlInfoShowQry.stlPkid}">
+                                <f:selectItems value="#{progStlInfoTkMeaAction.tkcttList}"/>
+                            </p:selectOneMenu>
+                            <p:outputLabel value="期数编码：" for="periodNo"/>
+                            <p:inputText id="periodNo" value="#{progStlInfoTkMeaAction.progStlInfoShowQry.periodNo}"
+                                         onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
+                </h:panelGrid>
+                        <h:panelGrid columns="3">
+                            <p:commandButton id="qryBtn" value="查询"
+                                             action="#{progStlInfoTkMeaAction.onQueryAction('Mng','true')}"
+                                             update="pdt,msgs,pgCondition">
+                            </p:commandButton>
+                            <p:commandButton id="resetBtn" value="重置"
+                                             type="reset"
+                                             update="pdQry,msgs">
+                            </p:commandButton>
+                        <p:ajaxStatus style="width:16px;height:16px;">
+                            <f:facet name="start">
+                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                            </f:facet>
+                            <f:facet name="complete">
+                                <h:outputText value=""/>
+                            </f:facet>
+                        </p:ajaxStatus>
+                    </h:panelGrid>
+                        </h:panelGrid>
+
+                </p:panel>
+                <h:panelGrid id="pgCondition">
+                    <p:commandButton id="addBtn"
+                                     value="增加" icon="ui-icon-plus"
+                                     action="#{progStlInfoTkMeaAction.resetActionForAdd()}"
+                                     update="pgViewForAdd,pgCondition,pdQry"
+                                     onclick="PF('wVDlgViewForAdd').show()">
+                    </p:commandButton>
+                </h:panelGrid>
+                <p:dataTable id="pdt" style="width:100%;"
+                             value="#{progStlInfoTkMeaAction.progStlInfoShowList}"
+                             var="record"
+                             rowKey="#{record.pkid}"
+                             selectionMode="single"
+                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             rows="15"
+                             rowIndexVar="row"
+                             rowsPerPageTemplate="500,200,100,45,30,15"
+                             emptyMessage="数据记录为空..."
+                             widgetVar="DtInitTkcttList"
+                             rowStyleClass="#{record.flowStatus eq null? null:'rowGrayStyle'}"
+                             scrollable="true">
+                    <p:column headerText="操作" style="width:62px;text-align: center;">
+                        <p:commandButton icon="ui-icon-pencil"
+                                         style="height:18px;width:18px"
+                                         action="#{progStlInfoTkMeaAction.selectRecordAction('Upd',record)}"
+                                         update="pdt,:form:pgViewForUpd,:form:msgs"
+                                         onclick="PF('wVDlgViewForUpd').show()">
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-trash"
+                                         style="height:18px;width:18px"
+                                         action="#{progStlInfoTkMeaAction.selectRecordAction('Mng','Del',record)}"
+                                         update="pdt,:form:pgViewForDel,:form:msgs"
+                                         onclick="PF('wVDlgViewForDel').show()">
+                        </p:commandButton>
+                        <p:commandButton icon="ui-icon-triangle-1-e"
+                                         style="height:18px;width:18px"
+                                         onclick="actSelect('#{record.pkid}')">
+                        </p:commandButton>
+                    </p:column>
+                    <p:column headerText="序号" style="width:30px">
+                        <h:outputText value="#{row + 1}"/>
+                    </p:column>
+                    <p:column headerText="结算编号" style="width:120px;text-align:center">
+                        <h:outputText value="#{record.id}"/>
+                    </p:column>
+                    <p:column headerText="总包合同" style="width:400px;text-align:left">
+                        <h:outputText value="#{record.stlName}"/>
+                    </p:column>
+                    <p:column headerText="期数编码" style="width:60px;text-align:center">
+                        <h:outputText value="#{record.periodNo}"/>
+                    </p:column>
+                    <p:column headerText="状态" style="width:66px;text-align:center">
+                        <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
+                    </p:column>
+                    <p:column headerText="原因" style="width:66px;text-align:center">
+                        <h:outputText value="#{esFlowControl.getLabelByValueInPreStatusFlaglist(record.flowStatusReason)}"/>
+                    </p:column>
+                </p:dataTable>
+                <p:dialog id="dlgViewForAdd" header="总包数量计量增加信息" widgetVar="wVDlgViewForAdd"
+                          resizable="false" modal="true"
+                          showEffect="clip" hideEffect="fold">
+                    <h:panelGrid id="pgViewForAdd">
+                        <h:panelGrid columns="5">
+                            <p:outputLabel value="结算编号：" for="idForAdd"/>
+                            <p:inputText id="idForAdd" value="#{progStlInfoTkMeaAction.progStlInfoShowAdd.id}"/>
+                            <p:commandButton id="autoSetIdBtnForAdd" icon="ui-icon-plus"
+                                             action="#{progStlInfoTkMeaAction.setMaxNoPlusOne('Add')}"
+                                             update="idForAdd"
+                                             style="height:20px">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="总包合同：" for="tkcttPkidForAdd"/>
+                            <p:selectOneMenu id="tkcttPkidForAdd"
+                                             value="#{progStlInfoTkMeaAction.progStlInfoShowAdd.stlPkid}">
+                                <f:selectItems value="#{progStlInfoTkMeaAction.tkcttList}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="期数编码：" for="periodNoForAdd"/>
+                            <p:inputText id="periodNoForAdd" value="#{progStlInfoTkMeaAction.progStlInfoShowAdd.periodNo}"
+                                         onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
+                            <p:outputLabel value="备注内容：" for="remarkForAdd"/>
+                            <p:inputText id="remarkForAdd" value="#{progStlInfoTkMeaAction.progStlInfoShowAdd.remark}"
+                                         style="width:176px"/>
+                        </h:panelGrid>
+                        <h:panelGrid id="pgOperBtnForAdd" columns="2">
+                            <p:commandButton id="submitBtnForAdd"
+                                             value="提交（增加）"
+                                             action="#{progStlInfoTkMeaAction.onClickForMngAction}"
+                                             update="pdt,msgs,pgViewForAdd">
+                            </p:commandButton>
+                            <p:commandButton id="resetBtnForAdd" value="重置"
+                                             type="reset"
+                                             update="pgViewForAdd">
+                            </p:commandButton>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:dialog>
+                <p:dialog id="dlgViewForUpd" header="总包数量计量更新信息" widgetVar="wVDlgViewForUpd"
+                          resizable="false" modal="true"
+                          showEffect="clip" hideEffect="fold">
+                    <h:panelGrid id="pgViewForUpd">
+                        <h:panelGrid columns="5">
+                            <p:outputLabel value="结算编号：" for="idForUpd"/>
+                            <p:inputText id="idForUpd" value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.id}"/>
+                            <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
+                                             action="#{progStlInfoTkMeaAction.setMaxNoPlusOne('Upd')}"
+                                             update="idForUpd"
+                                             style="height:20px">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="总包合同：" for="tkcttPkidForUpd"/>
+                            <p:inputText id="tkcttPkidForUpd" value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.stlName}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;width: 328px;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="期数编码：" for="periodNoForUpd"/>
+                            <p:inputText id="periodNoForUpd" value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.periodNo}"
+                                         onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
+                            <p:outputLabel value="备注内容：" for="remarkForUpd"/>
+                            <p:inputText id="remarkForUpd" value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.remark}"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel for="createdByNameUpd" value="创建人：" />
+                            <h:inputText id="createdByNameUpd"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.createdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="createdTimeUpd" value="创建时间：" />
+                            <h:inputText id="createdTimeUpd"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.createdTime}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdByNameUpd" value="修改人：" />
+                            <h:inputText id="lastUpdByNameUpd"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.lastUpdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdTimeUpd" value="修改时间：" />
+                            <h:inputText id="lastUpdTimeUpd"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.lastUpdTime}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="recVersionUpd" value="修改次数：" />
+                            <h:inputText id="recVersionUpd"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowUpd.recVersion}"
+                                         style="background-color:gainsboro;text-align:right;" readonly="true">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                            </h:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid id="pgOperBtnForUpd" columns="2">
+                            <p:commandButton id="submitBtnForUpd"
+                                             value="提交（更新）"
+                                             action="#{progStlInfoTkMeaAction.onClickForMngAction}"
+                                             update="pdt,msgs,pgViewForUpd">
+                            </p:commandButton>
+                            <p:commandButton id="resetBtnForUpd" value="重置"
+                                             type="reset"
+                                             update="pgViewForUpd">
+                            </p:commandButton>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:dialog>
+                <p:dialog id="dlgViewForDel" header="总包数量计量删除信息" widgetVar="wVDlgViewForDel"
+                          resizable="false" modal="true"
+                          showEffect="clip" hideEffect="fold">
+                    <h:panelGrid id="pgViewForDel">
+                        <h:panelGrid columns="5">
+                            <p:outputLabel value="结算编号：" for="idForDel"/>
+                            <p:inputText id="idForDel" value="#{progStlInfoTkMeaAction.progStlInfoShowDel.id}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="2">
+                            <p:outputLabel value="总包合同：" for="tkcttPkidForDel"/>
+                            <p:inputText id="tkcttPkidForDel" value="#{progStlInfoTkMeaAction.progStlInfoShowDel.stlName}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;width: 328px;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel value="期数编码：" for="periodNoForDel"/>
+                            <p:inputText id="periodNoForDel" value="#{progStlInfoTkMeaAction.progStlInfoShowDel.periodNo}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                            <p:outputLabel value="备注内容：" for="remarkForDel"/>
+                            <p:inputText id="remarkForDel" value="#{progStlInfoTkMeaAction.progStlInfoShowDel.remark}"
+                                         readonly="true"
+                                         style="background-color:gainsboro;"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="4">
+                            <p:outputLabel for="createdByNameDel" value="创建人：" />
+                            <h:inputText id="createdByNameDel"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowDel.createdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="createdTimeDel" value="创建时间：" />
+                            <h:inputText id="createdTimeDel"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowDel.createdTime}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdByNameDel" value="修改人：" />
+                            <h:inputText id="lastUpdByNameDel"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowDel.lastUpdByName}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="lastUpdTimeDel" value="修改时间：" />
+                            <h:inputText id="lastUpdTimeDel"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowDel.lastUpdTime}"
+                                         style="background-color:gainsboro" readonly="true"/>
+                            <p:outputLabel for="recVersionDel" value="修改次数：" />
+                            <h:inputText id="recVersionDel"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowDel.recVersion}"
+                                         style="background-color:gainsboro;text-align:right;" readonly="true">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                            </h:inputText>
+                        </h:panelGrid>
+                        <h:panelGrid id="pgOperBtnForDel" columns="2">
+                            <p:commandButton id="submitBtnForDel"
+                                             value="提交（删除）"
+                                             action="#{progStlInfoTkMeaAction.onClickForMngAction}"
+                                             update="pdt,msgs,pgViewForDel">
+                            </p:commandButton>
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:dialog>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

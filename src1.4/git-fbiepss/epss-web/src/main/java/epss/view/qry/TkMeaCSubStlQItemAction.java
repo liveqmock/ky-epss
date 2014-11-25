@@ -500,7 +500,8 @@ public class TkMeaCSubStlQItemAction {
                 itemUnit.getRemark(),
                 itemUnit.getCorrespondingPkid(),
                 "",
-                ""
+                "",
+                itemUnit.getSpareField()
             );
             cttItemShowListPara.add(cttItemShowTemp) ;
             recursiveDataTable(cttItemShowTemp.getPkid(), cttItemListPara, cttItemShowListPara);

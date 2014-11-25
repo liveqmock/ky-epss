@@ -81,23 +81,24 @@ public class ProgStlItemSubQAction {
                 String strStlInfoPkidTemp=parammap.get("strStlInfoPkid").toString();
                 progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkidTemp);
                 strSubcttPkid= progStlInfo.getStlPkid();
-            }
-            strPassVisible = "true";
-            strPassFailVisible = "true";
-            if ("Mng".equals(strFlowType)) {
-                if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfo.getFlowStatus())){
-                    strPassVisible = "false";
+
+                strPassVisible = "true";
+                strPassFailVisible = "true";
+                if ("Mng".equals(strFlowType)) {
+                    if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfo.getFlowStatus())){
+                        strPassVisible = "false";
+                    }else {
+                        strPassFailVisible = "false";
+                    }
                 }else {
-                    strPassFailVisible = "false";
+                    if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(progStlInfo.getFlowStatus()))
+                            ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfo.getFlowStatus()))){
+                        strPassVisible = "false";
+                    }
                 }
-            }else {
-                if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(progStlInfo.getFlowStatus()))
-                        ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfo.getFlowStatus()))){
-                    strPassVisible = "false";
-                }
+                resetAction();
+                initData();
             }
-            resetAction();
-            initData();
         }catch (Exception e){
             logger.error("≥ı ºªØ ß∞‹", e);
         }
@@ -208,9 +209,11 @@ public class ProgStlItemSubQAction {
                 progStlItemSubQShowTemp.setEngQMng_LastUpdBy(progStlItemSubQ.getLastUpdBy());
                 progStlItemSubQShowTemp.setEngQMng_LastUpdTime(progStlItemSubQ.getLastUpdTime());
                 progStlItemSubQShowTemp.setEngQMng_RecVersion(progStlItemSubQ.getRecVersion());
-                if (progStlItemSubQShowTemp.getEngQMng_BeginToCurrentPeriodEQty()
-                        .equals(progStlItemSubQShowTemp.getSubctt_ContractQuantity())){
-                    progStlItemSubQShowTemp.setIsUptoCttContentFlag(true);
+                if(progStlItemSubQShowTemp.getEngQMng_BeginToCurrentPeriodEQty()!=null) {
+                    if (progStlItemSubQShowTemp.getEngQMng_BeginToCurrentPeriodEQty()
+                            .equals(progStlItemSubQShowTemp.getSubctt_ContractQuantity())) {
+                        progStlItemSubQShowTemp.setIsUptoCttContentFlag(true);
+                    }
                 }
             }
             sProgStlItemSubQShowListPara.add(progStlItemSubQShowTemp) ;
@@ -310,7 +313,8 @@ public class ProgStlItemSubQAction {
     }
 
     public boolean blurEngQMng_CurrentPeriodMQty(String strBlurOrSubmitFlag){
-        if(ToolUtil.getBdIgnoreNull(progStlItemSubQShowUpd.getSubctt_ContractQuantity()).equals( new BigDecimal(0))){
+        if(ToolUtil.getBdIgnoreNull(progStlItemSubQShowUpd.getSubctt_ContractQuantity()).
+                compareTo(ToolUtil.bigDecimal0)==0){
             return true;
         }
         else{

@@ -169,23 +169,7 @@ public class CstplSubcttStlMItemAction {
                             qryCSStlMShowNewInsert.setStrNo("");
                             qryCSStlMShowNewInsert.setStrName("");
                         }
-
-                        // 最后一项之前的项
-                        if(i< qryShowList.size()-1){
-                            // 下一项仍是目标分包合同项
-                            if(itemUnit.getPkid().equals(qryShowList.get(i+1).getStrCorrespondingPkid())){
-                                // 成本计划再设定
-                                qryCSStlMShowList.add(qryCSStlMShowNewInsert);
-                            }// 下一项不是目标分包合同项
-                            else{
-                                // 成分值差
-                                qryCSStlMShowList.add(qryCSStlMShowNewInsert);
-                                break;
-                            }
-                        }else{
-                            // 成分值差
-                            qryCSStlMShowList.add(qryCSStlMShowNewInsert);
-                        }
+                        qryCSStlMShowList.add(qryCSStlMShowNewInsert);
                     }
                 }
                 if(isInThisCirculateHasSame.equals(false)){
@@ -248,7 +232,8 @@ public class CstplSubcttStlMItemAction {
                 itemUnit.getRemark(),
                 itemUnit.getCorrespondingPkid(),
                 "",
-                ""
+                "",
+                itemUnit.getSpareField()
             );
             cttItemShowListPara.add(cttItemShowTemp) ;
             recursiveDataTable(cttItemShowTemp.getPkid(), cttItemListPara, cttItemShowListPara);

@@ -15,19 +15,20 @@
                 arg.doType = "select";
                 if(flowStatus=="0") { // 刚录入
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../item/itemMng_Tkctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_Tkctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
                     }else if (infoType == '1') {// 成本计划
-                        var rtn = dialog("../item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '2') {// 分包合同
-                        var rtn = dialog("../item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '3') {// 分包数量结算
-                        var rtn = dialog("../item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '4') {// 分包材料结算
-                        var rtn = dialog("../item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '5'){
                     }else if (infoType == '6') {// 总包统计结算
-                        var rtn = dialog("../item/itemMng_TkcttStaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_TkcttStaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7') {// 总包计量结算
-                        var rtn = dialog("../item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../subPower/item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="1") { // 刚审核
@@ -197,6 +198,7 @@
                     <p:dataTable id="pdt"
                                  value="#{doneTaskAction.taskShowList}"
                                  var="record"
+                                 resizableColumns="true"
                                  rowIndexVar="row"
                                  rowKey="#{row + 1}"
                                  emptyMessage="数据记录为空..."

@@ -1,0 +1,564 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
+        <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <div style="margin:5px;">
+                <p:panel>
+                    <p:growl id="msgs" showDetail="true"/>
+                    <p:panel header="成本计划信息">
+                        <h:panelGrid id="pgViewForInfoUpd">
+                            <h:panelGrid columns="5">
+                                <p:outputLabel value="合同编号：" for="idForUpd"/>
+                                <p:inputText id="idForUpd" value="#{cstplInfoTTAction.cttInfoShowUpd.id}"/>
+                                <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
+                                                 action="#{cstplInfoTTAction.setMaxNoPlusOne()}"
+                                                 update="idForUpd"
+                                                 style="height:20px">
+                                </p:commandButton>
+                                <p:outputLabel value="合同名称：" for="cttNameForUpd"/>
+                                <p:inputText id="cttNameForUpd" value="#{cstplInfoTTAction.cttInfoShowUpd.name}"
+                                             style="width:328px"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="8">
+                                <p:outputLabel for="createdByNameInfoUpd" value="创建人名："/>
+                                <h:inputText id="createdByNameInfoUpd"
+                                             value="#{cstplInfoTTAction.cttInfoShowUpd.createdByName}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel for="createdTimeInfoUpd" value="创建时间："/>
+                                <h:inputText id="createdTimeInfoUpd"
+                                             value="#{cstplInfoTTAction.cttInfoShowUpd.createdTime}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel value="签订日期：" for="signDateForInfoUpd"/>
+                                <p:inputText id="signDateForInfoUpd" value="#{cstplInfoTTAction.cttInfoShowUpd.signDate}"
+                                             onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                <p:outputLabel value="备注内容：" for="remarkForInfoUpd"/>
+                                <p:inputText id="remarkForInfoUpd" value="#{cstplInfoTTAction.cttInfoShowUpd.remark}"
+                                             style="width:328px"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="6">
+                                <p:outputLabel for="lastUpdByNameInfoUpd" value="修改人名："/>
+                                <h:inputText id="lastUpdByNameInfoUpd"
+                                             value="#{cstplInfoTTAction.cttInfoShowUpd.lastUpdByName}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel for="lastUpdTimeInfoUpd" value="修改时间："/>
+                                <h:inputText id="lastUpdTimeInfoUpd"
+                                             value="#{cstplInfoTTAction.cttInfoShowUpd.lastUpdTime}"
+                                             style="background-color:gainsboro" readonly="true"/>
+                                <p:outputLabel for="recVersionInfoUpd" value="修改次数："/>
+                                <h:inputText id="recVersionInfoUpd"
+                                             value="#{cstplInfoTTAction.cttInfoShowUpd.recVersion}"
+                                             style="background-color:gainsboro;text-align:right;" readonly="true">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                                </h:inputText>
+                            </h:panelGrid>
+                            <h:panelGrid columns="5" rendered='#{cstplItemAction.strPassVisible}'>
+                                <p:commandButton id="submitBtnForInfoUpd"
+                                                 value="提交（更新）"
+                                                 action="#{cstplInfoTTAction.onClickForMngAction()}"
+                                                 update="msgs,pgViewForInfoUpd">
+                                </p:commandButton>
+                                <p:commandButton id="resetBtnForInfoUpd" value="重置"
+                                                 type="reset"
+                                                 update="pgViewForInfoUpd">
+                                </p:commandButton>
+                                <p:commandButton
+                                        value="附件"
+                                        update=":form:msgs"
+                                        onclick="PF('wvAttachmentList').show()">
+                                </p:commandButton>
+                                <p:commandButton value="导出到EXCEL"
+                                                 action="#{subcttItemAction.onExportExcel}"
+                                                 ajax="false">
+                                </p:commandButton>
+                                <p:ajaxStatus style="width:16px;height:16px;">
+                                    <f:facet name="start">
+                                        <h:graphicImage value="/images/ajaxloading.gif"/>
+                                    </f:facet>
+                                    <f:facet name="complete">
+                                        <h:outputText value=""/>
+                                    </f:facet>
+                                </p:ajaxStatus>
+                            </h:panelGrid>
+                        </h:panelGrid>
+                    </p:panel>
+                    <p:panel header="成本计划内容">
+                        <h:panelGrid id="pgCondition" columns="4">
+                            <p:commandButton id="addBtn"
+                                             value="增加项"
+                                             rendered='#{cstplItemAction.strPassVisible}'
+                                             action="#{cstplItemAction.resetAction()}"
+                                             update="pgViewForAdd,pdt,msgs"
+                                             onclick="PF('wVDlgViewForAdd').show()">
+                            </p:commandButton>
+                            <p:commandButton id="endInputBtn" value="录入完成"
+                                             action="#{cstplItemAction.onClickForPowerAction('Pass')}"
+                                             rendered='#{cstplItemAction.strPassVisible}'
+                                             update="msgs,pgCondition,pdt">
+                            </p:commandButton>
+                            <p:commandButton id="startInputBtn" value="录入未完"
+                                             action="#{cstplItemAction.onClickForPowerAction('Fail')}"
+                                             rendered='#{cstplItemAction.strPassFailVisible}'
+                                             update="msgs,pgCondition,pdt">
+                            </p:commandButton>
+                        </h:panelGrid>
+                        <p:dataTable id="pdt" style="width:100%;"
+                                     value="#{cstplItemAction.cstplItemShowList}"
+                                     var="record"
+                                     rowKey="#{record.pkid}"
+                                     selectionMode="single"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     rows="15"
+                                     rowsPerPageTemplate="500,200,100,45,30,15"
+                                     rowIndexVar="row"
+                                     emptyMessage="数据记录为空..."
+                                     rowStyleClass="#{record.name eq '合计'? 'rowGrayStyle': record.nameContrast eq '合计'? 'rowGrayStyle':
+                                                         record.name eq '总合计'? 'rowGrayStyle':record.nameContrast eq '总合计'? 'rowGrayStyle':null}"
+                                     scrollable="true"
+                                     scrollHeight="450">
+                            <p:column headerText="操作" style="width:65px;text-align: center;"
+                                      rendered='#{cstplItemAction.strPassVisible}'>
+                                <p:commandButton  icon="ui-icon-pencil"
+                                            style="height:18px;width:18px"
+                                            rendered="#{record.nameContrast eq null ?'false':
+                                                         (record.name eq '合计'? 'false': record.nameContrast eq '合计'? 'false':
+                                                          record.name eq '总合计'? 'false':record.nameContrast eq '总合计'? 'false':'true')}"
+                                            actionListener="#{cstplItemAction.selectRecordAction('Upd',record)}"
+                                            update="pdt,:form:pgViewForUpd"
+                                            oncomplete="PF('wVDlgViewForUpd').show()">
+                                </p:commandButton>
+                                <p:commandButton  icon="ui-icon-trash"
+                                            style="height:18px;width:18px"
+                                            rendered="#{record.nameContrast eq null ?'false':
+                                                         (record.name eq '合计'? 'false': record.nameContrast eq '合计'? 'false':
+                                                          record.name eq '总合计'? 'false':record.nameContrast eq '总合计'? 'false':'true')}"
+                                            actionListener="#{cstplItemAction.selectRecordAction('Del',record)}"
+                                            update="pdt,:form:pgViewForDel"
+                                            oncomplete="PF('wVDlgViewForDel').show()">
+                                </p:commandButton>
+                                <p:commandButton  icon="ui-icon-copy"
+                                            style="height:18px;width:18px"
+                                            rendered="#{record.name eq '合计'? 'false': record.nameContrast eq '合计'? 'false':
+                                                          record.name eq '总合计'? 'false':record.nameContrast eq '总合计'? 'false':'true'}"
+                                            actionListener="#{cstplItemAction.selectRecordAction('From_tkctt_to_cstpl',record)}"
+                                            update="pdt,:form:msgs">
+                                </p:commandButton>
+                            </p:column>
+                            <p:column style="width:30px" headerText="序号">
+                                <h:outputText value="#{row + 1}"/>
+                            </p:column>
+                            <p:column style="width:100px" headerText="总包编号">
+                                <h:outputText value="#{record.strNo}" escape="false"/>
+                            </p:column>
+                            <p:column style="width:200px" headerText="总包名称">
+                                <h:outputText value="#{record.name}" />
+                            </p:column>
+                            <p:column style="width:60px" headerText="总包单位">
+                                <h:outputText value="#{record.unit}" style="text-align:right"/>
+                            </p:column>
+                            <p:column style="width:80px" headerText="总包单价">
+                                <h:outputText value="#{record.contractUnitPrice}" style="float: right" >
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:80px" headerText="总包数量">
+                                <h:outputText value="#{record.contractQuantity}" style="float: right">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:100px" headerText="总包金额">
+                                <h:outputText value="#{record.contractAmount}" style="float: right">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                </h:outputText>
+                            </p:column>
+                            <!--成本计划-->
+                            <p:column style="width:100px" headerText="成本编号">
+                                <h:outputText value="#{record.strNoContrast}" escape="false"/>
+                            </p:column>
+                            <p:column style="width:200px" headerText="成本名称">
+                                <h:outputText value="#{record.nameContrast}" />
+                            </p:column>
+                            <p:column style="width:60px" headerText="成本单位">
+                                <h:outputText value="#{record.unitContrast}" style="text-align:right"/>
+                            </p:column>
+                            <p:column style="width:80px" headerText="成本单价">
+                                <h:outputText value="#{record.contractUnitPriceContrast}" style="float: right" >
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:80px" headerText="成本数量">
+                                <h:outputText value="#{record.contractQuantityContrast}" style="float: right">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:100px" headerText="成本金额">
+                                <h:outputText value="#{record.contractAmountContrast}" style="float: right">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column style="width:100px" headerText="成本备注">
+                                <h:outputText value="#{record.remarkContrast}" />
+                            </p:column>
+                        </p:dataTable>
+                        <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
+                                  showEffect="clip" hideEffect="fold" header="附件列表">
+                            <p:growl id="messages" showDetail="true"/>
+                            <h:panelGrid id="pgAttachmentView">
+                                <p:fileUpload id="attachmentName" fileUploadListener="#{cstplItemAction.upload}"
+                                              mode="advanced"
+                                              sizeLimit="1000000"
+                                              multiple="true"
+                                              label="选择" showButtons="true"
+                                              cancelLabel="全部取消" uploadLabel="全部上传" process="@this"
+                                              allowTypes="/(\.|\/)(gif|jpe?g|png|xls|xlsx|doc|docx)$/"
+                                              update="pdtAttachmentList,attachmentName">
+                                </p:fileUpload>
+                                <p:dataTable id="pdtAttachmentList" style="width:100%;"
+                                             value="#{cstplItemAction.attachmentList}"
+                                             var="recordAttachment"
+                                             rowKey="#{recordAttachment.COLUMN_NAME}"
+                                             selectionMode="single"
+                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             paginator="true"
+                                             paginatorPosition="bottom"
+                                             rows="5"
+                                             rowsPerPageTemplate="100,50,30,15,5"
+                                             emptyMessage="数据记录为空...">
+                                    <p:column headerText="附件ID" style="text-align:left">
+                                        <h:outputText value="#{recordAttachment.COLUMN_ID}"/>
+                                    </p:column>
+                                    <p:column headerText="附件名" style="text-align:left">
+                                        <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
+                                    </p:column>
+                                    <p:column headerText="缩略图" style="text-align:center" rendered="false">
+                                        <h:graphicImage value="/upload/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
+                                    </p:column>
+                                    <p:column headerText="预览">
+                                        <p:commandButton icon="ui-icon-search"
+                                                         id="selectButton" update=":form:imageShow"
+                                                         style="height:18px;width:18px"
+                                                         action="#{cstplItemAction.onViewAttachment(recordAttachment)}"
+                                                         oncomplete="dlgWvView.show()"
+                                                         title="View">
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column headerText="操作" style="width:62px;text-align: center;">
+                                        <p:commandButton icon="ui-icon-arrowrefresh-1-w"
+                                                         style="height:18px;width:18px"
+                                                         ajax="false"
+                                                         actionListener="#{cstplItemAction.download(recordAttachment.COLUMN_PATH)}">
+                                            <p:fileDownload value="#{cstplItemAction.downloadFile}"/>
+                                        </p:commandButton>
+                                        <p:commandButton icon="ui-icon-trash"
+                                                         style="height:18px;width:18px"
+                                                         action="#{cstplItemAction.delAttachmentRecordAction(recordAttachment)}"
+                                                         update=":form:pgAttachmentView,:form:msgs">
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                                <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
+                                    <h:graphicImage binding="#{cstplItemAction.image}"/>
+                                </p:dialog>
+                            </h:panelGrid>
+                        </p:dialog>
+                        <p:dialog id="dlgViewForAdd" header="成本计划内容增加信息" widgetVar="wVDlgViewForAdd"
+                                  resizable="false" modal="true"
+                                  showEffect="clip" hideEffect="fold">
+                            <h:panelGrid id="pgViewForAdd">
+                                <h:panelGrid columns="4">
+                                    <p:outputLabel for="noItemHieRelapForAdd" value="编号:" />
+                                    <h:inputText id="noItemHieRelapForAdd"
+                                                 value="#{cstplItemAction.cttItemShowAdd.strNo}">
+                                        <p:ajax event="blur" update="msgs,pgOperBtnForAdd,strCorrespondingItemNoForAdd"
+                                                listener="#{cstplItemAction.blurStrNoToGradeAndOrderid('true')}"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="nameForAdd" value="名称:" />
+                                    <p:selectOneMenu id="nameForAdd"
+                                                     value="#{cstplItemAction.cttItemShowAdd.name}"
+                                                     editable="true">
+                                        <f:selectItem itemLabel="固定项输入时请选择下列名称" itemValue="" />
+                                        <f:selectItems value="#{esCommon.cstplItemNamelist}" />
+                                        <p:ajax update="msgs,pgViewForAdd"
+                                                listener="#{cstplItemAction.blurStrName}"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel for="unitItemInfoForAdd" value="单位:"/>
+                                    <h:inputText id="unitItemInfoForAdd"
+                                                 value="#{cstplItemAction.cttItemShowAdd.unit}"/>
+                                    <p:outputLabel for="remarkForAdd" value="备注内容:" />
+                                    <h:inputText id="remarkForAdd"
+                                                 value="#{cstplItemAction.cttItemShowAdd.remark}"/>
+                                    <p:outputLabel for="contractUnitPriceItemInfoForAdd" value="合同单价:"/>
+                                    <h:inputText id="contractUnitPriceItemInfoForAdd"
+                                                 value="#{cstplItemAction.cttItemShowAdd.contractUnitPrice}"
+                                                 style="text-align:right;">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                        <p:ajax event="blur" update="contractAmountItemInfoForAdd"
+                                                listener="#{cstplItemAction.blurCalculateAmountAction}"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="contractQuantityItemInfoForAdd" value="合同数量:"/>
+                                    <h:inputText id="contractQuantityItemInfoForAdd"
+                                                 value="#{cstplItemAction.cttItemShowAdd.contractQuantity}"
+                                                 style="text-align:right;">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                        <p:ajax event="blur" update="contractAmountItemInfoForAdd"
+                                                listener="#{cstplItemAction.blurCalculateAmountAction}"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="contractAmountItemInfoForAdd" value="合同金额:"/>
+                                    <h:inputText id="contractAmountItemInfoForAdd"
+                                                 value="#{cstplItemAction.cttItemShowAdd.contractAmount}"
+                                                 readonly="true"
+                                                 style="background-color:gainsboro;text-align:right;">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="strCorrespondingItemNoForAdd" value="对应编号:" />
+                                    <h:inputText id="strCorrespondingItemNoForAdd"
+                                                 value="#{cstplItemAction.cttItemShowAdd.strCorrespondingItemNo}">
+                                        <p:ajax event="blur" update="msgs,noItemHieRelapForAdd"
+                                                listener="#{cstplItemAction.blurCorrespondingPkid}"/>
+                                    </h:inputText>
+                                </h:panelGrid>
+                                <h:panelGrid id="pgOperBtnForAdd" columns="2">
+                                    <p:commandButton id="submitBtnForAdd"
+                                                     value="提交（增加）"
+                                                     action="#{cstplItemAction.submitThisRecordAction()}"
+                                                     update="pgViewForAdd,pdt,msgs">
+                                    </p:commandButton>
+                                    <p:commandButton id="resetBtnForAdd" value="重置"
+                                                     type="reset"
+                                                     update="pgViewForAdd">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:dialog>
+                        <p:dialog id="dlgViewForUpd" header="成本计划内容更新信息" widgetVar="wVDlgViewForUpd"
+                                  resizable="false" modal="true"
+                                  showEffect="clip" hideEffect="fold">
+                            <h:panelGrid id="pgViewForUpd">
+                                <h:panelGrid columns="4">
+                                    <p:outputLabel for="noItemHieRelapForUpd" value="编号:" />
+                                    <h:inputText id="noItemHieRelapForUpd"
+                                                 readonly="true"
+                                                 style="background-color:gainsboro"
+                                                 value="#{cstplItemAction.cttItemShowUpd.strNo}">
+                                        <p:ajax event="blur" update="msgs,pgOperBtnForUpd,strCorrespondingItemNoForUpd"
+                                                listener="#{cstplItemAction.blurStrNoToGradeAndOrderid('true')}"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="nameForUpd" value="名称:" />
+                                    <p:selectOneMenu id="nameForUpd"
+                                                     value="#{cstplItemAction.cttItemShowUpd.name}"
+                                                     editable="true">
+                                        <f:selectItem itemLabel="固定项输入时请选择下列名称" itemValue="" />
+                                        <f:selectItems value="#{esCommon.cstplItemNamelist}" />
+                                        <p:ajax update="msgs,pgViewForUpd"
+                                                listener="#{cstplItemAction.blurStrName}"/>
+                                    </p:selectOneMenu>
+                                    <p:outputLabel for="unitItemInfoForUpd" value="单位:"/>
+                                    <h:inputText id="unitItemInfoForUpd"
+                                                 value="#{cstplItemAction.cttItemShowUpd.unit}"/>
+                                    <p:outputLabel for="remarkForUpd" value="备注内容:" />
+                                    <h:inputText id="remarkForUpd"
+                                                 value="#{cstplItemAction.cttItemShowUpd.remark}"/>
+                                    <p:outputLabel for="contractUnitPriceItemInfoForUpd" value="合同单价:"/>
+                                    <h:inputText id="contractUnitPriceItemInfoForUpd"
+                                                 value="#{cstplItemAction.cttItemShowUpd.contractUnitPrice}"
+                                                 style="text-align:right;">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                        <p:ajax event="blur" update="contractAmountItemInfoForUpd"
+                                                listener="#{cstplItemAction.blurCalculateAmountAction}"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="contractQuantityItemInfoForUpd" value="合同数量:"/>
+                                    <h:inputText id="contractQuantityItemInfoForUpd"
+                                                 value="#{cstplItemAction.cttItemShowUpd.contractQuantity}"
+                                                 style="text-align:right;">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                        <p:ajax event="blur" update="contractAmountItemInfoForUpd"
+                                                listener="#{cstplItemAction.blurCalculateAmountAction}"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="contractAmountItemInfoForUpd" value="合同金额:"/>
+                                    <h:inputText id="contractAmountItemInfoForUpd"
+                                                 value="#{cstplItemAction.cttItemShowUpd.contractAmount}"
+                                                 readonly="true"
+                                                 style="background-color:gainsboro;text-align:right;">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="strCorrespondingItemNoForUpd" value="对应编号:" />
+                                    <h:inputText id="strCorrespondingItemNoForUpd"
+                                                 value="#{cstplItemAction.cttItemShowUpd.strCorrespondingItemNo}">
+                                        <p:ajax event="blur" update="msgs"
+                                                listener="#{cstplItemAction.blurCorrespondingPkid}"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="originFlagItemInfoForUpd" value="数据来源:" />
+                                    <h:inputText id="originFlagItemInfoForUpd"
+                                                 value="#{esCommon.originFlagListValueOfAlias(
+                                             cstplItemAction.cttItemShowUpd.originFlag)}"
+                                                 style="background-color:gainsboro" readonly="true"/>
+                                    <p:outputLabel for="createdByItemInfoForUpd" value="创建人:" />
+                                    <h:inputText id="createdByItemInfoForUpd"
+                                                 value="#{cstplItemAction.cttItemShowUpd.createdByName}"
+                                                 style="background-color:gainsboro" readonly="true"/>
+                                    <p:outputLabel for="createdTimeItemInfoForUpd" value="创建时间:" />
+                                    <h:inputText id="createdTimeItemInfoForUpd"
+                                                 value="#{cstplItemAction.cttItemShowUpd.createdTime}"
+                                                 style="background-color:gainsboro" readonly="true"/>
+                                    <p:outputLabel for="lastUpdByItemInfoForUpd" value="修改人:" />
+                                    <h:inputText id="lastUpdByItemInfoForUpd"
+                                                 value="#{cstplItemAction.cttItemShowUpd.lastUpdByName}"
+                                                 style="background-color:gainsboro" readonly="true"/>
+                                    <p:outputLabel for="lastUpdTimeItemInfoForUpd" value="修改时间:" />
+                                    <h:inputText id="lastUpdTimeItemInfoForUpd"
+                                                 value="#{cstplItemAction.cttItemShowUpd.lastUpdTime}"
+                                                 style="background-color:gainsboro" readonly="true"/>
+                                    <p:outputLabel for="recVersionItemInfoForUpd" value="修改次数:" />
+                                    <h:inputText id="recVersionItemInfoForUpd"
+                                                 value="#{cstplItemAction.cttItemShowUpd.recVersion}"
+                                                 style="background-color:gainsboro;text-align:right;" readonly="true">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                                    </h:inputText>
+                                </h:panelGrid>
+                                <h:panelGrid id="pgOperBtnForUpd" columns="2">
+                                    <p:commandButton id="submitBtnForUpd"
+                                                     value="提交（更新）"
+                                                     action="#{cstplItemAction.submitThisRecordAction()}"
+                                                     update="pgViewForUpd,pdt,msgs"
+                                                     onclick="wVDlgViewForUpd.hide()">
+                                    </p:commandButton>
+                                    <p:commandButton id="resetBtnForUpd" value="重置"
+                                                     type="reset"
+                                                     update="pgViewForUpd">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:dialog>
+                        <p:dialog id="dlgViewForDel" header="成本计划内容删除信息" widgetVar="wVDlgViewForDel"
+                                  resizable="false" modal="true"
+                                  showEffect="clip" hideEffect="fold">
+                            <h:panelGrid id="pgViewForDel">
+                                <h:panelGrid columns="4">
+                                    <p:outputLabel for="noItemHieRelapForDel" value="编号:" />
+                                    <h:inputText id="noItemHieRelapForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.strNo}"
+                                                 readonly="true"
+                                                 style="background-color:gainsboro">
+                                    </h:inputText>
+                                    <p:outputLabel for="nameForDel" value="名称:" />
+                                    <h:inputText id="nameForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.name}"
+                                                 readonly="true"
+                                                 style="background-color:gainsboro">
+                                    </h:inputText>
+                                    <p:outputLabel for="unitItemInfoForDel" value="单位:"/>
+                                    <h:inputText id="unitItemInfoForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.unit}"
+                                                 readonly="true"
+                                                 style="background-color:gainsboro"/>
+                                    <p:outputLabel for="remarkForDel" value="备注内容:" />
+                                    <h:inputText id="remarkForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.remark}"
+                                                 readonly="true"
+                                                 style="background-color:gainsboro"/>
+                                    <p:outputLabel for="contractUnitPriceItemInfoForDel" value="合同单价:"/>
+                                    <h:inputText id="contractUnitPriceItemInfoForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.contractUnitPrice}"
+                                                 readonly="true"
+                                                 style="background-color:gainsboro;text-align:right;">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                        <p:ajax event="blur" update="contractAmountItemInfoForDel"
+                                                listener="#{cstplItemAction.blurCalculateAmountAction}"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="contractQuantityItemInfoForDel" value="合同数量:"/>
+                                    <h:inputText id="contractQuantityItemInfoForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.contractQuantity}"
+                                                 readonly="true"
+                                                 style="background-color:gainsboro;text-align:right;">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                        <p:ajax event="blur" update="contractAmountItemInfoForDel"
+                                                listener="#{cstplItemAction.blurCalculateAmountAction}"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="contractAmountItemInfoForDel" value="合同金额:"/>
+                                    <h:inputText id="contractAmountItemInfoForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.contractAmount}"
+                                                 readonly="true"
+                                                 style="background-color:gainsboro;text-align:right;">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="strCorrespondingItemNoForDel" value="对应编号:" />
+                                    <h:inputText id="strCorrespondingItemNoForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.strCorrespondingItemNo}"
+                                                 readonly="true"
+                                                 style="background-color:gainsboro">
+                                        <p:ajax event="blur" update="msgs,strCorrespondingItemNoForDel"
+                                                listener="#{cstplItemAction.blurCorrespondingPkid}"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="originFlagItemInfoForDel" value="数据来源:" />
+                                    <h:inputText id="originFlagItemInfoForDel"
+                                                 value="#{esCommon.originFlagListValueOfAlias(
+                                             cstplItemAction.cttItemShowDel.originFlag)}"
+                                                 style="background-color:gainsboro" readonly="true"/>
+                                    <p:outputLabel for="createdByItemInfoForDel" value="创建人:" />
+                                    <h:inputText id="createdByItemInfoForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.createdByName}"
+                                                 style="background-color:gainsboro" readonly="true"/>
+                                    <p:outputLabel for="createdTimeItemInfoForDel" value="创建时间:" />
+                                    <h:inputText id="createdTimeItemInfoForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.createdTime}"
+                                                 style="background-color:gainsboro" readonly="true"/>
+                                    <p:outputLabel for="lastUpdByItemInfoForDel" value="修改人:" />
+                                    <h:inputText id="lastUpdByItemInfoForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.lastUpdByName}"
+                                                 style="background-color:gainsboro" readonly="true"/>
+                                    <p:outputLabel for="lastUpdTimeItemInfoForDel" value="修改时间:" />
+                                    <h:inputText id="lastUpdTimeItemInfoForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.lastUpdTime}"
+                                                 style="background-color:gainsboro" readonly="true"/>
+                                    <p:outputLabel for="recVersionItemInfoForDel" value="修改次数:" />
+                                    <h:inputText id="recVersionItemInfoForDel"
+                                                 value="#{cstplItemAction.cttItemShowDel.recVersion}"
+                                                 style="background-color:gainsboro;text-align:right;" readonly="true">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                                    </h:inputText>
+                                </h:panelGrid>
+                                <h:panelGrid id="pgOperBtnForDel">
+                                    <p:commandButton id="submitBtnForDel"
+                                                     value="提交（删除）"
+                                                     action="#{cstplItemAction.submitThisRecordAction()}"
+                                                     update="pgViewForDel,pdt,msgs"
+                                                     oncomplete="wVDlgViewForDel.hide()">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:dialog>
+                    </p:panel>
+                </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
+<!--（1）输出的时间与原来的时间差8个小时,原因是没加上时间的属性,改成:
+<h:outputText value="#{data.t_Date}">
+    <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" timeZone="GMT+8" locale="cn" />
+</h:outputText>
+加上 timeZone="GMT+8"之后，则显示正常的时间
+（2）有的需要显示是12小时格式，有的需要显示24小时格式
+主要在 pattern="yyyy-MM-dd HH:mm:ss"这句的hh上面，要是大写的HH则是24小时格式，小写hh则是12小时格式-->

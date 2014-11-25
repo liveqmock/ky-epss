@@ -94,24 +94,25 @@ public class ProgStlItemTkMeaAction {
                 strStlInfoPkid=parammap.get("strStlInfoPkid").toString();
                 this.progStlInfo = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
                 strTkcttPkid= this.progStlInfo.getStlPkid();
-            }
-            strPassVisible = "true";
-            strPassFailVisible = "true";
-            if ("Mng".equals(strFlowType)) {
-                if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfo.getFlowStatus())){
-                    strPassVisible = "false";
+
+                strPassVisible = "true";
+                strPassFailVisible = "true";
+                if ("Mng".equals(strFlowType)) {
+                    if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfo.getFlowStatus())){
+                        strPassVisible = "false";
+                    }else {
+                        strPassFailVisible = "false";
+                    }
                 }else {
-                    strPassFailVisible = "false";
+                    if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(progStlInfo.getFlowStatus()))
+                            ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfo.getFlowStatus()))
+                            ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(progStlInfo.getFlowStatus()))){
+                        strPassVisible = "false";
+                    }
                 }
-            }else {
-                if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(progStlInfo.getFlowStatus()))
-                        ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfo.getFlowStatus()))
-                        ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(progStlInfo.getFlowStatus()))){
-                    strPassVisible = "false";
-                }
+                resetAction();
+                initData();
             }
-            resetAction();
-            initData();
         }catch (Exception e){
             logger.error("≥ı ºªØ ß∞‹", e);
         }
