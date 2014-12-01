@@ -43,7 +43,7 @@
                             <p:inputText id="id" value="#{progStlItemSubQAction.progStlInfoShow.id}"
                                          readonly="true" style="background-color:gainsboro;"/>
                         </h:panelGrid>
-                        <h:panelGrid id="pgCondition" columns="5">
+                        <h:panelGrid id="pgOperBtn" columns="5">
                             <p:commandButton value="导出到EXCEL"
                                              action="#{progStlItemSubQAction.onExportExcel}"
                                              ajax="false">
@@ -51,7 +51,7 @@
                             <p:commandButton id="endInputBtn" value="通过"
                                              action="#{progStlItemSubQAction.onClickForPowerAction('Pass')}"
                                              rendered="#{progStlItemSubQAction.strPassVisible}"
-                                             update="msgs,pgCondition">
+                                             update="msgs,pgOperBtn">
                             </p:commandButton>
                             <p:outputLabel value="未过至状态:" rendered="#{progStlItemSubQAction.strPassFailVisible}"/>
                             <p:selectOneMenu id="flowStatus" value="#{progStlItemSubQAction.strNotPassToStatus}"
@@ -61,7 +61,7 @@
                             <p:commandButton id="startInputBtn" value="未过"
                                              action="#{progStlItemSubQAction.onClickForPowerAction('Fail')}"
                                              rendered="#{progStlItemSubQAction.strPassFailVisible}"
-                                             update="msgs,pgCondition">
+                                             update="msgs,pgOperBtn">
                             </p:commandButton>
                         </h:panelGrid>
                     </p:panel>

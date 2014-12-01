@@ -31,8 +31,8 @@
                                      value="#{progStlInfoTkMeaSPAction.progStlInfoShowQry.periodNo}"
                                      onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{progStlInfoTkMeaSPAction.onQueryAction('true')}"
-                                         update="pdt,msgs,pgCondition">
+                                         action="#{progStlInfoTkMeapgConditionSPAction.onQueryAction('true')}"
+                                         update="pdt,msgs,">
                         </p:commandButton>
                         <p:ajaxStatus style="width:16px;height:16px;">
                             <f:facet name="start">
@@ -44,11 +44,11 @@
                         </p:ajaxStatus>
                     </h:panelGrid>
                 </p:panel>
-                <h:panelGrid id="pgCondition">
+                <h:panelGrid id="pgOperBtn">
                     <p:commandButton id="addBtn"
                                      value="增加" icon="ui-icon-plus"
                                      action="#{progStlInfoTkMeaSPAction.selectRecordAction('Add','')}"
-                                     update="pgViewForAdd,pgCondition,pdQry"
+                                     update="pgViewForAdd,pgOperBtn,pdQry"
                                      onclick="PF('wVDlgViewForAdd').show()">
                     </p:commandButton>
                 </h:panelGrid>
