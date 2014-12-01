@@ -109,7 +109,11 @@ public class ProgStlInfoService {
         String periodNo=progStlInfoShowPara.getPeriodNo();
         String strReturnTemp="";
         if(EnumResType.RES_TYPE3.getCode().equals(stlType)||
-                EnumResType.RES_TYPE4.getCode().equals(stlType)){ //分包结算
+                EnumResType.RES_TYPE4.getCode().equals(stlType)){ //分包进度结算
+            // 取出分包合同的类型
+            CttInfo cttInfoTemp=cttInfoService.getCttInfoByPkId(cttPkid);
+            String strCttInfoTypeTemp=ToolUtil.getStrIgnoreNull(cttInfoTemp.getType());
+            // 取出最大期
             String quantityMaxPeriod = ToolUtil.getStrIgnoreNull(
                     getMaxPeriodNo(EnumResType.RES_TYPE3.getCode(),cttPkid));
             String materialMaxPeriod = ToolUtil.getStrIgnoreNull(
@@ -156,15 +160,18 @@ public class ProgStlInfoService {
                         return strReturnTemp;
                     }
                 }
-                //和材料比较
-                if (!("".equals(materialMaxPeriod))&&periodNo.compareTo(materialMaxPeriod)!=0){
-                    if (quantityMaxPeriod.compareTo(materialMaxPeriod)!=0){
-                        strReturnTemp="第["+materialMaxPeriod+"]期分包材料结算已经开始，请录入["+materialMaxPeriod+"]期的分包数量结算数据！";
-                        return strReturnTemp;
-                    }
-                    if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus)>0){
-                        strReturnTemp="材料结算第["+materialMaxPeriod+"]期数据还未复合通过，不能录入新数据!";
-                        return strReturnTemp;
+                // 分包合同类型为工程量和材料消耗量结算的情况，才审查对方
+                if(EnumSubcttType.TYPE3.getCode().equals(strCttInfoTypeTemp)) {
+                    //和材料比较
+                    if (!("".equals(materialMaxPeriod)) && periodNo.compareTo(materialMaxPeriod) != 0) {
+                        if (quantityMaxPeriod.compareTo(materialMaxPeriod) != 0) {
+                            strReturnTemp = "第[" + materialMaxPeriod + "]期分包材料结算已经开始，请录入[" + materialMaxPeriod + "]期的分包数量结算数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus) > 0) {
+                            strReturnTemp = "材料结算第[" + materialMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
                     }
                 }
                 //和结算单比较
@@ -187,15 +194,18 @@ public class ProgStlInfoService {
                         return strReturnTemp;
                     }
                 }
-                //和数量比较
-                if (!("".equals(quantityMaxPeriod))&&periodNo.compareTo(quantityMaxPeriod)!=0){
-                    if (quantityMaxPeriod.compareTo(materialMaxPeriod)!=0){
-                        strReturnTemp="第["+quantityMaxPeriod+"]期分包数量结算已经开始，请录入["+quantityMaxPeriod+"]期的分包材料结算数据！";
-                        return strReturnTemp;
-                    }
-                    if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus)>0){
-                        strReturnTemp="数量结算第["+quantityMaxPeriod+"]期数据还未复合通过，不能录入新数据!";
-                        return strReturnTemp;
+                // 分包合同类型为工程量和材料消耗量结算的情况，才审查对方
+                if(EnumSubcttType.TYPE3.getCode().equals(strCttInfoTypeTemp)) {
+                    //和数量比较
+                    if (!("".equals(quantityMaxPeriod)) && periodNo.compareTo(quantityMaxPeriod) != 0) {
+                        if (quantityMaxPeriod.compareTo(materialMaxPeriod) != 0) {
+                            strReturnTemp = "第[" + quantityMaxPeriod + "]期分包数量结算已经开始，请录入[" + quantityMaxPeriod + "]期的分包材料结算数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus) > 0) {
+                            strReturnTemp = "数量结算第[" + quantityMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
                     }
                 }
                 //和结算单比较
@@ -206,7 +216,7 @@ public class ProgStlInfoService {
                     }
                 }
             }
-        }else if(EnumResType.RES_TYPE6.getCode().equals(stlType)|| EnumResType.RES_TYPE7.getCode().equals(stlType)){// 总包结算
+        }else if(EnumResType.RES_TYPE6.getCode().equals(stlType)|| EnumResType.RES_TYPE7.getCode().equals(stlType)){// 总包进度结算
             if (EnumResType.RES_TYPE6.getCode().equals(stlType)){
                 String strStaQtyMaxPeriod = ToolUtil.getStrIgnoreNull(
                         getMaxPeriodNo(EnumResType.RES_TYPE6.getCode(),cttPkid));

@@ -92,31 +92,33 @@ public class TkcttItemAction {
             Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
             beansMap = new HashMap();
             strBelongToType = EnumResType.RES_TYPE0.getCode();
-            if (parammap.containsKey("strCttInfoPkid")) {
-                strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
-                cttInfo = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
-            }
+
             if (parammap.containsKey("strFlowType")) {
                 strFlowType = parammap.get("strFlowType").toString();
             }
 
-            strPassVisible = "true";
-            strPassFailVisible = "true";
-            if ("Mng".equals(strFlowType)) {
-                if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())){
-                    strPassVisible = "false";
+            if (parammap.containsKey("strCttInfoPkid")) {
+                strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
+                cttInfo = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
+
+                strPassVisible = "true";
+                strPassFailVisible = "true";
+                if ("Mng".equals(strFlowType)) {
+                    if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())){
+                        strPassVisible = "false";
+                    }else {
+                        strPassFailVisible = "false";
+                    }
                 }else {
-                    strPassFailVisible = "false";
+                    if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(cttInfo.getFlowStatus()))
+                            ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(cttInfo.getFlowStatus()))
+                            ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(cttInfo.getFlowStatus()))){
+                        strPassVisible = "false";
+                    }
                 }
-            }else {
-                if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(cttInfo.getFlowStatus()))
-                        ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(cttInfo.getFlowStatus()))
-                        ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(cttInfo.getFlowStatus()))){
-                    strPassVisible = "false";
-                }
+                resetAction();
+                initData();
             }
-            resetAction();
-            initData();
         }catch (Exception e){
             logger.error("³õÊ¼»¯Ê§°Ü", e);
         }
@@ -911,8 +913,6 @@ public class TkcttItemAction {
     public String getStrPassFailVisible() {
         return strPassFailVisible;
     }
-
-
 
     /*ÖÇÄÜ×Ö¶ÎEnd*/
 }

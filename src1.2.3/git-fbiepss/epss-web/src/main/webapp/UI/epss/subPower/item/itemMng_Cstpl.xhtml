@@ -8,6 +8,7 @@
         <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
         <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
         <script type="text/javascript" language="javascript">
+            $(function(){ $("html").css("overflowX","hidden");});
             document.onkeydown = function TabReplace() {
                 if (event.keyCode == 13) {
                     if (event.srcElement.tagName != 'BUTTON')
@@ -85,7 +86,7 @@
                                         onclick="PF('wvAttachmentList').show()">
                                 </p:commandButton>
                                 <p:commandButton value="导出到EXCEL"
-                                                 action="#{subcttItemAction.onExportExcel}"
+                                                 action="#{cstplItemAction.onExportExcel}"
                                                  ajax="false">
                                 </p:commandButton>
                                 <p:ajaxStatus style="width:16px;height:16px;">
