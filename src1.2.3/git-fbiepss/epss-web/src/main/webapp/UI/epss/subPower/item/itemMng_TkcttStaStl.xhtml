@@ -21,6 +21,7 @@
     <ui:define name="content">
         <h:form id="form">
             <div style="margin:5px;">
+                <p:growl id="msgs" showDetail="true"/>
                 <p:panel header="总包进度统计结算信息">
                     <h:panelGrid id="pgView">
                         <h:panelGrid columns="7">
@@ -64,16 +65,32 @@
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                             </h:inputText>
                         </h:panelGrid>
-                        <h:panelGrid id="pgOperBtn" columns="4" rendered="#{progStlItemTkEstAction.strPassVisible}">
-                            <p:commandButton id="submitBtn"
-                                             value="提交（更新）"
-                                             action="#{progStlInfoTkEstTTAction.onClickForMngAction()}"
-                                             update="msgs,pgView"
-                                             oncomplete="wVDlgView.hide()">
+                        <h:panelGrid id="pgOperBtn" columns="5">
+                            <h:panelGrid columns="2" rendered="#{progStlItemTkEstAction.strPassVisible}">
+                                <p:commandButton id="submitBtn"
+                                                 value="提交（更新）"
+                                                 action="#{progStlInfoTkEstTTAction.onClickForMngAction()}"
+                                                 update="msgs,pgView"
+                                                 oncomplete="wVDlgView.hide()">
+                                </p:commandButton>
+                                <p:commandButton id="resetBtn" value="重置"
+                                                 type="reset"
+                                                 update="pgView">
+                                </p:commandButton>
+                            </h:panelGrid>
+                            <p:commandButton id="endInputBtn" value="录入完成"
+                                             action="#{progStlItemTkEstAction.onClickForPowerAction('Pass')}"
+                                             update="msgs,pgOperBtn"
+                                             rendered="#{progStlItemTkEstAction.strPassVisible}">
                             </p:commandButton>
-                            <p:commandButton id="resetBtn" value="重置"
-                                             type="reset"
-                                             update="pgView">
+                            <p:commandButton id="startInputBtn" value="录入未完"
+                                             action="#{progStlItemTkEstAction.onClickForPowerAction('Fail')}"
+                                             update="msgs,pgOperBtn"
+                                             rendered="#{progStlItemTkEstAction.strPassFailVisible}">
+                            </p:commandButton>
+                            <p:commandButton value="导出到EXCEL"
+                                             action="#{progStlItemTkEstAction.onExportExcel}"
+                                             ajax="false">
                             </p:commandButton>
                             <p:ajaxStatus style="width:16px;height:16px;">
                                 <f:facet name="start">
@@ -87,23 +104,6 @@
                     </h:panelGrid>
                 </p:panel>
                 <p:panel header="总包进度统计结算内容">
-                    <p:growl id="msgs" showDetail="true"/>
-                    <h:panelGrid id="pgCondition" columns="3">
-                        <p:commandButton id="endInputBtn" value="录入完成"
-                                         action="#{progStlItemTkEstAction.onClickForPowerAction('Pass')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{progStlItemTkEstAction.strPassVisible}">
-                        </p:commandButton>
-                        <p:commandButton id="startInputBtn" value="录入未完"
-                                         action="#{progStlItemTkEstAction.onClickForPowerAction('Fail')}"
-                                         update="pgCondition,pdt,msgs"
-                                         rendered="#{progStlItemTkEstAction.strPassFailVisible}">
-                        </p:commandButton>
-                        <p:commandButton value="导出到EXCEL"
-                                         action="#{progStlItemTkEstAction.onExportExcel}"
-                                         ajax="false">
-                        </p:commandButton>
-                    </h:panelGrid>
                     <p:dataTable id="pdt" style="width:100%;"
                                  value="#{progStlItemTkEstAction.progStlItemTkEstShowList}"
                                  var="record"

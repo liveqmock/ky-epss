@@ -87,16 +87,18 @@
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                                 </h:inputText>
                             </h:panelGrid>
-                            <h:panelGrid columns="5" rendered="#{subcttItemAction.strPassVisible}">
-                                <p:commandButton id="submitBtnForInfoUpd"
-                                                 value="提交（更新）"
-                                                 action="#{subcttInfoTTAction.onClickForMngAction()}"
-                                                 update="msgs,pgViewForInfoUpd">
-                                </p:commandButton>
-                                <p:commandButton id="resetBtnForInfoUpd" value="重置"
-                                                 type="reset"
-                                                 update="pgViewForInfoUpd">
-                                </p:commandButton>
+                            <h:panelGrid id="pgOperBtn" columns="5" >
+                                <h:panelGrid columns="2" rendered="#{subcttItemAction.strPassVisible}">
+                                    <p:commandButton id="submitBtnForInfoUpd"
+                                                     value="提交（更新）"
+                                                     action="#{subcttInfoTTAction.onClickForMngAction()}"
+                                                     update="msgs,pgViewForInfoUpd">
+                                    </p:commandButton>
+                                    <p:commandButton id="resetBtnForInfoUpd" value="重置"
+                                                     type="reset"
+                                                     update="pgViewForInfoUpd">
+                                    </p:commandButton>
+                                </h:panelGrid>
                                 <p:commandButton
                                                  value="附件"
                                                  update=":form:msgs"
@@ -105,6 +107,16 @@
                                 <p:commandButton value="导出到EXCEL"
                                                  action="#{subcttItemAction.onExportExcel}"
                                                  ajax="false">
+                                </p:commandButton>
+                                <p:commandButton id="endInputBtn" value="录入完成"
+                                                 action="#{subcttItemAction.onClickForPowerAction('Pass')}"
+                                                 update="msgs,btnAddItem,pgOperBtn"
+                                                 rendered="#{subcttItemAction.strPassVisible}">
+                                </p:commandButton>
+                                <p:commandButton id="startInputBtn" value="录入未完"
+                                                 action="#{subcttItemAction.onClickForPowerAction('Fail')}"
+                                                 update="msgs,btnAddItem,pgOperBtn"
+                                                 rendered="#{subcttItemAction.strPassFailVisible}">
                                 </p:commandButton>
                                 <p:ajaxStatus style="width:16px;height:16px;">
                                     <f:facet name="start">
@@ -118,23 +130,13 @@
                         </h:panelGrid>
                     </p:panel>
                     <p:panel header="分包合同内容">
-                        <h:panelGrid id="pgCondition" columns="3">
+                        <h:panelGrid id="btnAddItem">
                             <p:commandButton id="addBtn"
                                              value="增加项"
                                              rendered='#{subcttItemAction.strPassVisible}'
                                              action="#{subcttItemAction.resetAction()}"
                                              update="pgViewForAdd,pdt,msgs"
                                              onclick="PF('wVDlgViewForAdd').show()">
-                            </p:commandButton>
-                            <p:commandButton id="endInputBtn" value="录入完成"
-                                             action="#{subcttItemAction.onClickForPowerAction('Pass')}"
-                                             update="pgCondition,pdt,msgs"
-                                             rendered="#{subcttItemAction.strPassVisible}">
-                            </p:commandButton>
-                            <p:commandButton id="startInputBtn" value="录入未完"
-                                             action="#{subcttItemAction.onClickForPowerAction('Fail')}"
-                                             update="pgCondition,pdt,msgs"
-                                             rendered="#{subcttItemAction.strPassFailVisible}">
                             </p:commandButton>
                         </h:panelGrid>
                         <p:dataTable id="pdt" style="width:100%;"

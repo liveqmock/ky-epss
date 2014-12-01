@@ -53,8 +53,7 @@
                         <p:outputLabel value="成本计划名称：" for="cttName"/>
                         <p:inputText id="cttName" value="#{cstplItemAction.cttInfo.name}"
                                      readonly="true" style="width:400px;background-color:gainsboro;"/>
-                        <p:commandButton icon="ui-icon-document"
-                                         style="height:18px;width:18px"
+                        <p:commandButton value="附件"
                                          update=":form:msgs"
                                          onclick="PF('wvAttachmentList').show()">
                         </p:commandButton>
