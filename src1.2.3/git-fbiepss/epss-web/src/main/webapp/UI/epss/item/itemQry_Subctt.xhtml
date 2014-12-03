@@ -67,7 +67,7 @@
                                      emptyMessage="数据记录为空..."
                                      rowStyleClass="#{record.name eq '合计'? 'rowGrayStyle': record.name eq '总合计'? 'rowGrayStyle':null}"
                                      scrollable="true"
-                                     scrollHeight="450">
+                                     scrollHeight="425">
                             <p:column headerText="操作" style="width:28px;text-align: center" >
                                 <p:commandButton  icon="ui-icon-pencil"
                                             style="height:18px;width:18px"
@@ -117,6 +117,25 @@
                             </p:column>
                             <p:column style="width:300px" headerText="分包备注">
                                 <h:outputText value="#{record.remark}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="数据来源">
+                                <h:outputText value="#{record.originFlag}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="创建人">
+                                <h:outputText value="#{record.createdByName}" />
+                            </p:column>
+                            <p:column style="width:120px" headerText="创建时间">
+                                <h:outputText value="#{record.createdTime}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="修改人">
+                                <h:outputText value="#{record.lastUpdByName}" />
+                            </p:column>
+                            <p:column style="width:120px" headerText="修改时间">
+                                <h:outputText value="#{record.lastUpdTime}" />
+                            </p:column>
+                            <p:column style="width:80px" headerText="修改次数">
+                                <h:outputText value="#{record.recVersion}" style="float: right">
+                                </h:outputText>
                             </p:column>
                         </p:dataTable>
                         <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
@@ -236,34 +255,6 @@
                                     <h:inputText id="remark" value="#{subcttItemAction.cttItemShowSel.remark}"
                                                  style="background-color:gainsboro;"
                                                  readonly="true"/>
-                                    <p:outputLabel for="originFlagItemInfo" value="数据来源：" />
-                                    <h:inputText id="originFlagItemInfo"
-                                                 value="#{esCommon.originFlagListValueOfAlias(
-                                                             subcttItemAction.cttItemShowSel.originFlag)}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="createdByItemInfo" value="创建人：" />
-                                    <h:inputText id="createdByItemInfo" value="#{subcttItemAction.cttItemShowSel.createdByName}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="createdTimeItemInfo" value="创建时间：" />
-                                    <h:inputText id="createdTimeItemInfo" value="#{subcttItemAction.cttItemShowSel.createdTime}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="lastUpdByItemInfo" value="修改人：" />
-                                    <h:inputText id="lastUpdByItemInfo" value="#{subcttItemAction.cttItemShowSel.lastUpdByName}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="lastUpdTimeItemInfo" value="修改时间：" />
-                                    <h:inputText id="lastUpdTimeItemInfo" value="#{subcttItemAction.cttItemShowSel.lastUpdTime}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="recVersionItemInfo" value="修改次数：" />
-                                    <h:inputText id="recVersionItemInfo" value="#{subcttItemAction.cttItemShowSel.recVersion}"
-                                                 style="background-color:gainsboro;text-align:right;"
-                                                 readonly="true">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                    </h:inputText>
                                     <p:outputLabel for="strCorrespondingItemNo" value="对应编号：" />
                                     <h:inputText id="strCorrespondingItemNo"
                                                  value="#{subcttItemAction.cttItemShowSel.strCorrespondingItemNo}"

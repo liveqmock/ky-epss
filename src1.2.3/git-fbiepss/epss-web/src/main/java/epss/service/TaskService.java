@@ -107,8 +107,7 @@ public class TaskService {
                         // 资源录入启动且权限分配为录入状态
                         if (detailTaskShowUnit.getFlowStatus() == null) {
                             intHasRecordCount++;
-                            detailTaskShowUnit.setId(
-                                    "(" + EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" +
+                            detailTaskShowUnit.setId(EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle() + "_" +
                                             ToolUtil.getStrIgnoreNull(detailTaskShowUnit.getId()));
                             if (detailTaskShowUnit.getFlowStatusReason() == null) {
                                 detailTaskShowUnit.setFlowStatusReasonName(null);
@@ -187,8 +186,7 @@ public class TaskService {
             for (TaskShow detailTaskShowUnit : detailTaskShowListTemp) {
                 if (taskShowGroupUnit.getFlowStatus().equals(detailTaskShowUnit.getFlowStatus())) {
                     intHasRecordCount++;
-                    detailTaskShowUnit.setId(
-                            "(" + EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")"
+                    detailTaskShowUnit.setId(EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle() + "_"
                                     + detailTaskShowUnit.getId());
                     detailTaskShowUnit.setFlowStatusName(
                             EnumFlowStatus.getValueByKey(detailTaskShowUnit.getFlowStatus()).getTitle());

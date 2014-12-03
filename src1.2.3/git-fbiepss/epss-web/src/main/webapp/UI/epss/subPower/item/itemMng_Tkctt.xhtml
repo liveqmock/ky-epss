@@ -184,17 +184,17 @@
                             <p:column style="width:60px" headerText="单位">
                                 <h:outputText value="#{record.unit}" style="text-align:right"/>
                             </p:column>
-                            <p:column style="width:80px" headerText="合同单价">
+                            <p:column style="width:80px" headerText="单价">
                                 <h:outputText value="#{record.contractUnitPrice}" style="float: right" >
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column style="width:80px" headerText="合同数量">
+                            <p:column style="width:80px" headerText="数量">
                                 <h:outputText value="#{record.contractQuantity}" style="float: right">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column style="width:100px" headerText="合同金额">
+                            <p:column style="width:100px" headerText="金额">
                                 <h:outputText value="#{record.contractAmount}" style="float: right">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
@@ -306,7 +306,7 @@
                                     <h:inputText id="nameForAdd" value="#{tkcttItemAction.cttItemShowAdd.name}"/>
                                     <p:outputLabel for="unitItemInfoForAdd" value="单位:"/>
                                     <h:inputText id="unitItemInfoForAdd" value="#{tkcttItemAction.cttItemShowAdd.unit}"/>
-                                    <p:outputLabel for="contractUnitPriceItemInfoForAdd" value="合同单价:"/>
+                                    <p:outputLabel for="contractUnitPriceItemInfoForAdd" value="单价:"/>
                                     <h:inputText id="contractUnitPriceItemInfoForAdd"
                                                  value="#{tkcttItemAction.cttItemShowAdd.contractUnitPrice}"
                                                  style="text-align:right;float:left">
@@ -314,7 +314,7 @@
                                         <p:ajax event="blur" update="contractAmountItemInfoForAdd"
                                                 listener="#{tkcttItemAction.blurCalculateAmountAction}"/>
                                     </h:inputText>
-                                    <p:outputLabel for="contractQuantityItemInfoForAdd" value="合同数量:"/>
+                                    <p:outputLabel for="contractQuantityItemInfoForAdd" value="数量:"/>
                                     <h:inputText id="contractQuantityItemInfoForAdd"
                                                  value="#{tkcttItemAction.cttItemShowAdd.contractQuantity}"
                                                  style="text-align:right;float:left">
@@ -322,14 +322,14 @@
                                         <p:ajax event="blur" update="contractAmountItemInfoForAdd"
                                                 listener="#{tkcttItemAction.blurCalculateAmountAction}"/>
                                     </h:inputText>
-                                    <p:outputLabel for="contractAmountItemInfoForAdd" value="合同金额:"/>
+                                    <p:outputLabel for="contractAmountItemInfoForAdd" value="金额:"/>
                                     <h:inputText id="contractAmountItemInfoForAdd"
                                                  value="#{tkcttItemAction.cttItemShowAdd.contractAmount}"
                                                  style="text-align:right;background-color:gainsboro"
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
-                                    <p:outputLabel for="remarkForAdd" value="备注内容:" />
+                                    <p:outputLabel for="remarkForAdd" value="备注:" />
                                     <h:inputText id="remarkForAdd" value="#{tkcttItemAction.cttItemShowAdd.remark}"/>
                                 </h:panelGrid>
                                 <h:panelGrid id="pgOperBtnForAdd" columns="2">
@@ -364,7 +364,7 @@
                                     <h:inputText id="nameForUpd" value="#{tkcttItemAction.cttItemShowUpd.name}"/>
                                     <p:outputLabel for="unitItemInfoForUpd" value="单位:"/>
                                     <h:inputText id="unitItemInfoForUpd" value="#{tkcttItemAction.cttItemShowUpd.unit}"/>
-                                    <p:outputLabel for="contractUnitPriceItemInfoForUpd" value="合同单价:"/>
+                                    <p:outputLabel for="contractUnitPriceItemInfoForUpd" value="单价:"/>
                                     <h:inputText id="contractUnitPriceItemInfoForUpd"
                                                  value="#{tkcttItemAction.cttItemShowUpd.contractUnitPrice}"
                                                  style="text-align:right;float:left">
@@ -372,7 +372,7 @@
                                         <p:ajax event="blur" update="contractAmountItemInfoForUpd"
                                                 listener="#{tkcttItemAction.blurCalculateAmountAction}"/>
                                     </h:inputText>
-                                    <p:outputLabel for="contractQuantityItemInfoForUpd" value="合同数量:"/>
+                                    <p:outputLabel for="contractQuantityItemInfoForUpd" value="数量:"/>
                                     <h:inputText id="contractQuantityItemInfoForUpd"
                                                  value="#{tkcttItemAction.cttItemShowUpd.contractQuantity}"
                                                  style="text-align:right;float:left">
@@ -380,14 +380,14 @@
                                         <p:ajax event="blur" update="contractAmountItemInfoForUpd"
                                                 listener="#{tkcttItemAction.blurCalculateAmountAction}"/>
                                     </h:inputText>
-                                    <p:outputLabel for="contractAmountItemInfoForUpd" value="合同金额:"/>
+                                    <p:outputLabel for="contractAmountItemInfoForUpd" value="金额:"/>
                                     <h:inputText id="contractAmountItemInfoForUpd"
                                                  value="#{tkcttItemAction.cttItemShowUpd.contractAmount}"
                                                  style="text-align:right;background-color:gainsboro"
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
-                                    <p:outputLabel for="remarkForUpd" value="备注内容:" />
+                                    <p:outputLabel for="remarkForUpd" value="备注:" />
                                     <h:inputText id="remarkForUpd" value="#{tkcttItemAction.cttItemShowUpd.remark}"/>
                                 </h:panelGrid>
                                 <h:panelGrid id="pgOperBtnForUpd" columns="2">
@@ -425,28 +425,28 @@
                                     <h:inputText id="unitItemInfoForDel" value="#{tkcttItemAction.cttItemShowDel.unit}"
                                                  readonly="true"
                                                  style="background-color:gainsboro"/>
-                                    <p:outputLabel for="contractUnitPriceItemInfoForDel" value="合同单价:"/>
+                                    <p:outputLabel for="contractUnitPriceItemInfoForDel" value="单价:"/>
                                     <h:inputText id="contractUnitPriceItemInfoForDel"
                                                  value="#{tkcttItemAction.cttItemShowDel.contractUnitPrice}"
                                                  readonly="true"
                                                  style="background-color:gainsboro;text-align:right;float:left">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                     </h:inputText>
-                                    <p:outputLabel for="contractQuantityItemInfoForDel" value="合同数量:"/>
+                                    <p:outputLabel for="contractQuantityItemInfoForDel" value="数量:"/>
                                     <h:inputText id="contractQuantityItemInfoForDel"
                                                  value="#{tkcttItemAction.cttItemShowDel.contractQuantity}"
                                                  readonly="true"
                                                  style="background-color:gainsboro;text-align:right;float:left">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                     </h:inputText>
-                                    <p:outputLabel for="contractAmountItemInfoForDel" value="合同金额:"/>
+                                    <p:outputLabel for="contractAmountItemInfoForDel" value="金额:"/>
                                     <h:inputText id="contractAmountItemInfoForDel"
                                                  value="#{tkcttItemAction.cttItemShowDel.contractAmount}"
                                                  style="text-align:right;background-color:gainsboro"
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
-                                    <p:outputLabel for="remarkForDel" value="备注内容:" />
+                                    <p:outputLabel for="remarkForDel" value="备注:" />
                                     <h:inputText id="remarkForDel" value="#{tkcttItemAction.cttItemShowDel.remark}"
                                                  readonly="true"
                                                  style="background-color:gainsboro"/>

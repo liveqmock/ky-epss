@@ -205,35 +205,35 @@
                                     <h:inputText id="name" value="#{tkcttItemAction.cttItemShowSel.name}"
                                                  style="background-color:gainsboro;"
                                                  readonly="true"/>
-                                    <p:outputLabel for="remark" value="备注内容:" />
-                                    <h:inputText id="remark" value="#{tkcttItemAction.cttItemShowSel.remark}"
-                                                 style="background-color:gainsboro;"
-                                                 readonly="true"/>
                                     <p:outputLabel for="unitItemInfo" value="单位:"/>
                                     <h:inputText id="unitItemInfo" value="#{tkcttItemAction.cttItemShowSel.unit}"
                                                  style="background-color:gainsboro;"
                                                  readonly="true"/>
-                                    <p:outputLabel for="contractUnitPriceItemInfo" value="合同单价:"/>
+                                    <p:outputLabel for="contractUnitPriceItemInfo" value="单价:"/>
                                     <h:inputText id="contractUnitPriceItemInfo"
                                                  value="#{tkcttItemAction.cttItemShowSel.contractUnitPrice}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true" >
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                     </h:inputText>
-                                    <p:outputLabel for="contractQuantityItemInfo" value="合同数量:"/>
+                                    <p:outputLabel for="contractQuantityItemInfo" value="数量:"/>
                                     <h:inputText id="contractQuantityItemInfo"
                                                  value="#{tkcttItemAction.cttItemShowSel.contractQuantity}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                     </h:inputText>
-                                    <p:outputLabel for="contractAmountItemInfo" value="合同金额:"/>
+                                    <p:outputLabel for="contractAmountItemInfo" value="金额:"/>
                                     <h:inputText id="contractAmountItemInfo"
                                                  value="#{tkcttItemAction.cttItemShowSel.contractAmount}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
+                                    <p:outputLabel for="remark" value="备注:" />
+                                    <h:inputText id="remark" value="#{tkcttItemAction.cttItemShowSel.remark}"
+                                                 style="background-color:gainsboro;"
+                                                 readonly="true"/>
                                 </h:panelGrid>
                             </h:panelGrid>
                         </p:dialog>

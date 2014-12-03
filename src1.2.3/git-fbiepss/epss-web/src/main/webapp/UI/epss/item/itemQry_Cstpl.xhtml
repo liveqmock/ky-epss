@@ -71,7 +71,7 @@
                                                          record.name eq '总合计'? 'rowGrayStyle':
                                                          record.nameContrast eq '总合计'? 'rowGrayStyle':null}"
                                      scrollable="true"
-                                     scrollHeight="480">
+                                     scrollHeight="425">
                             <p:column headerText="操作" style="width:28px;text-align: center">
                                 <p:commandButton  icon="ui-icon-search"
                                                   style="height:18px;width:18px"
@@ -138,6 +138,25 @@
                             </p:column>
                             <p:column style="width:100px" headerText="成本备注">
                                 <h:outputText value="#{record.remarkContrast}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="数据来源">
+                                <h:outputText value="#{record.originFlagContrast}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="创建人">
+                                <h:outputText value="#{record.createdByNameContrast}" />
+                            </p:column>
+                            <p:column style="width:120px" headerText="创建时间">
+                                <h:outputText value="#{record.createdTimeContrast}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="修改人">
+                                <h:outputText value="#{record.lastUpdByNameContrast}" />
+                            </p:column>
+                            <p:column style="width:120px" headerText="修改时间">
+                                <h:outputText value="#{record.lastUpdTimeContrast}" />
+                            </p:column>
+                            <p:column style="width:80px" headerText="修改次数">
+                                <h:outputText value="#{record.recVersion}" style="float: right">
+                                </h:outputText>
                             </p:column>
                         </p:dataTable>
                         <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
@@ -225,60 +244,32 @@
                                                  value="#{cstplItemAction.cttItemShowSel.unit}"
                                                  style="background-color:gainsboro;"
                                                  readonly="true"/>
-                                    <p:outputLabel for="contractUnitPriceItemInfo" value="合同单价："/>
+                                    <p:outputLabel for="contractUnitPriceItemInfo" value="单价："/>
                                     <h:inputText id="contractUnitPriceItemInfo"
                                                  value="#{cstplItemAction.cttItemShowSel.contractUnitPrice}"
                                                  style="background-color:gainsboro;text-align:right;float:left"
                                                  readonly="true" >
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                     </h:inputText>
-                                    <p:outputLabel for="contractQuantityItemInfo" value="合同数量："/>
+                                    <p:outputLabel for="contractQuantityItemInfo" value="数量："/>
                                     <h:inputText id="contractQuantityItemInfo"
                                                  value="#{cstplItemAction.cttItemShowSel.contractQuantity}"
                                                  style="background-color:gainsboro;text-align:right;float:left"
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                     </h:inputText>
-                                    <p:outputLabel for="contractAmountItemInfo" value="合同金额："/>
+                                    <p:outputLabel for="contractAmountItemInfo" value="金额："/>
                                     <h:inputText id="contractAmountItemInfo"
                                                  value="#{cstplItemAction.cttItemShowSel.contractAmount}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
-                                    <p:outputLabel for="remark" value="备注内容：" />
+                                    <p:outputLabel for="remark" value="备注：" />
                                     <h:inputText id="remark"
                                                  value="#{cstplItemAction.cttItemShowSel.remark}"
                                                  style="background-color:gainsboro;"
                                                  readonly="true"/>
-                                    <p:outputLabel for="originFlagItemInfo" value="数据来源：" />
-                                    <h:inputText id="originFlagItemInfo"
-                                                 value="#{esCommon.originFlagListValueOfAlias(
-                                                             cstplItemAction.cttItemShowSel.originFlag)}"
-                                                 style="background-color:gainsboro" readonly="true"/>
-                                    <p:outputLabel for="createdByItemInfo" value="创建人：" />
-                                    <h:inputText id="createdByItemInfo"
-                                                 value="#{cstplItemAction.cttItemShowSel.createdByName}"
-                                                 style="background-color:gainsboro" readonly="true"/>
-                                    <p:outputLabel for="createdTimeItemInfo" value="创建时间：" />
-                                    <h:inputText id="createdTimeItemInfo"
-                                                 value="#{cstplItemAction.cttItemShowSel.createdTime}"
-                                                 style="background-color:gainsboro" readonly="true"/>
-                                    <p:outputLabel for="lastUpdByItemInfo" value="修改人：" />
-                                    <h:inputText id="lastUpdByItemInfo"
-                                                 value="#{cstplItemAction.cttItemShowSel.lastUpdByName}"
-                                                 style="background-color:gainsboro" readonly="true"/>
-                                    <p:outputLabel for="lastUpdTimeItemInfo" value="修改时间：" />
-                                    <h:inputText id="lastUpdTimeItemInfo"
-                                                 value="#{cstplItemAction.cttItemShowSel.lastUpdTime}"
-                                                 style="background-color:gainsboro" readonly="true"/>
-                                    <p:outputLabel for="recVersionItemInfo" value="修改次数：" />
-                                    <h:inputText id="recVersionItemInfo"
-                                                 value="#{cstplItemAction.cttItemShowSel.recVersion}"
-                                                 style="background-color:gainsboro;text-align:right;"
-                                                 readonly="true">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                    </h:inputText>
                                     <p:outputLabel for="correspondingPkidItemInfo" value="对应编号：" />
                                     <h:inputText id="correspondingPkidItemInfo"
                                                  value="#{cstplItemAction.cttItemShowSel.strCorrespondingItemNo}"
