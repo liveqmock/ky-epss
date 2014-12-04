@@ -24,7 +24,7 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <p:panel header="总包合同信息">
+                    <p:panel id="ppInfo" header="总包合同信息">
                         <h:panelGrid columns="4">
                             <p:outputLabel value="总包合同编号：" for="id"/>
                             <p:inputText id="id" value="#{tkcttItemAction.cttInfo.id}"
@@ -33,19 +33,15 @@
                             <p:inputText id="cttName" value="#{tkcttItemAction.cttInfo.name}"
                                          readonly="true" style="width:400px;background-color:gainsboro;"/>
                         </h:panelGrid>
-                        <h:panelGrid id="pgOperBtn" columns="7">
-                            <p:commandButton value="附件"
-                                             update=":form:msgs"
-                                             onclick="PF('wvAttachmentList').show()">
-                            </p:commandButton>
-                            <p:commandButton value="导出到EXCEL"
-                                             action="#{tkcttItemAction.onExportExcel}"
-                                             ajax="false">
-                            </p:commandButton>
+                        <p:separator></p:separator>
+                        <h:panelGrid columns="9">
+                            <p:outputLabel value="审批意见：" for="flowRemark"/>
+                            <p:inputText id="flowRemark"
+                                         value="#{tkcttItemAction.strFlowStatusRemark}"/>
                             <p:commandButton id="endInputBtn" value="通过"
                                              action="#{tkcttItemAction.onClickForPowerAction('Pass')}"
                                              rendered='#{tkcttItemAction.strPassVisible}'
-                                             update="msgs,pgOperBtn">
+                                             update="msgs,ppInfo">
                             </p:commandButton>
                             <p:outputLabel value="未过至状态：" rendered="#{tkcttItemAction.strPassFailVisible}"/>
                             <p:selectOneMenu id="flowStatus"
@@ -56,7 +52,15 @@
                             <p:commandButton id="startInputBtn" value="未过"
                                              action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
                                              rendered="#{tkcttItemAction.strPassFailVisible}"
-                                             update="msgs,pgOperBtn">
+                                             update="msgs,ppInfo">
+                            </p:commandButton>
+                            <p:commandButton value="附件"
+                                             update=":form:msgs"
+                                             onclick="PF('wvAttachmentList').show()">
+                            </p:commandButton>
+                            <p:commandButton value="导出到EXCEL"
+                                             action="#{tkcttItemAction.onExportExcel}"
+                                             ajax="false">
                             </p:commandButton>
                             <p:ajaxStatus style="width:16px;height:16px;">
                                 <f:facet name="start">

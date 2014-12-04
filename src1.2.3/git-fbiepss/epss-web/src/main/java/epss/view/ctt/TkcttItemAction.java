@@ -86,6 +86,9 @@ public class TkcttItemAction {
     private String strFlowType;
     private List<CttItemShow> cttItemShowListExcel;
     private Map beansMap;
+    // 录入备注
+    private String strFlowStatusRemark;
+
     @PostConstruct
     public void init() {
         try {
@@ -570,11 +573,13 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
                     // 原因：录入完毕
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
                     cttInfo.setFlowStatus(null);
                     cttInfo.setFlowStatusReason(null);
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
@@ -585,6 +590,7 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
                     // 原因：审核通过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON1.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
@@ -592,6 +598,7 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(null);
                     // 原因：审核未过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON2.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据审核未过！");
                 }
@@ -602,6 +609,7 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                     // 原因：复核通过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
@@ -613,6 +621,7 @@ public class TkcttItemAction {
                     }
                     // 原因：复核未过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据复核未过！");
                 }
@@ -623,6 +632,7 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
                     // 原因：批准通过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerTypePara.equals("ApproveFail")) {
@@ -644,7 +654,7 @@ public class TkcttItemAction {
                     }
                     // 原因：批准未过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
-
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
 
                     List<ProgStlInfo> progStlInfoListTemp =
@@ -914,5 +924,12 @@ public class TkcttItemAction {
         return strPassFailVisible;
     }
 
-    /*智能字段End*/
+    public String getStrFlowStatusRemark() {
+        return strFlowStatusRemark;
+    }
+
+    public void setStrFlowStatusRemark(String strFlowStatusRemark) {
+        this.strFlowStatusRemark = strFlowStatusRemark;
+    }
+/*智能字段End*/
 }
