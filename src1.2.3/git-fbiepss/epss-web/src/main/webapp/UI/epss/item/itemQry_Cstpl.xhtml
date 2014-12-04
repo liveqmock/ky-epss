@@ -33,9 +33,9 @@
                             <p:inputText id="cttName" value="#{cstplItemAction.cttInfo.name}"
                                          readonly="true" style="width:400px;background-color:gainsboro;"/>
                         </h:panelGrid>
+                        <p:separator></p:separator>
                         <h:panelGrid columns="3">
                             <p:commandButton value="附件"
-                                             style="height:18px;width:18px"
                                              update=":form:msgs"
                                              onclick="PF('wvAttachmentList').show()">
                             </p:commandButton>
@@ -64,7 +64,7 @@
                                      paginator="true"
                                      paginatorPosition="bottom"
                                      rows="15"
-                                     rowsPerPageTemplate="500,200,100,45,30,15"
+                                     rowsPerPageTemplate="480,240,120,60,30,15"
                                      rowIndexVar="row"
                                      emptyMessage="数据记录为空..."
                                      rowStyleClass="#{record.name eq '合计'? 'rowGrayStyle':

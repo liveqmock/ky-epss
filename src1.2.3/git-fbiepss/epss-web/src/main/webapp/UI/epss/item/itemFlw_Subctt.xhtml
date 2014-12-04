@@ -21,52 +21,72 @@
     </ui:define>
     <ui:define name="content">
         <h:form id="form">
-        <div style="margin:5px;">
-            <p:panel>
-                <p:growl id="msgs" showDetail="true"/>
-                <p:panel header="分包合同信息">
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="分包合同编号：" for="id"/>
-                        <p:inputText id="id" value="#{subcttItemAction.cttInfo.id}"
-                                     readonly="true" style="background-color:gainsboro;"/>
-                        <p:outputLabel value="分包合同名称：" for="cttName"/>
-                        <p:inputText id="cttName" value="#{subcttItemAction.cttInfo.name}"
-                                     readonly="true" style="width:400px;background-color:gainsboro;"/>
+            <div style="margin:5px;">
+                <p:panel>
+                    <p:growl id="msgs" showDetail="true"/>
+                    <h:panelGrid columns="3">
+                        <p:panel id="ppInfo" header="分包合同信息">
+                            <h:panelGrid columns="2">
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="分包合同编号：" for="id"/>
+                                    <p:inputText id="id" value="#{subcttItemAction.cttInfo.id}"
+                                                 readonly="true" style="background-color:gainsboro;"/>
+                                    <p:outputLabel value="分包合同名称：" for="cttName"/>
+                                    <p:inputText id="cttName" value="#{subcttItemAction.cttInfo.name}"
+                                                 readonly="true" style="width:400px;background-color:gainsboro;"/>
+                                </h:panelGrid>
+                                    <p:ajaxStatus style="width:16px;height:16px;">
+                                        <f:facet name="start">
+                                            <h:graphicImage value="/images/ajaxloading.gif"/>
+                                        </f:facet>
+                                        <f:facet name="complete">
+                                            <h:outputText value=""/>
+                                        </f:facet>
+                                    </p:ajaxStatus>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="备注">
+                            <h:panelGrid>
+				                <p:commandButton value="附件"
+                                                update=":form:msgs"
+                                                onclick="PF('wvAttachmentList').show()">
+                                </p:commandButton>
+                                <p:commandButton value="导出到EXCEL"
+                                                action="#{subcttItemAction.onExportExcel}"
+                                                ajax="false">
+                                </p:commandButton>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="审批" id="ppFlow">
+                            <h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="审批意见：" for="flowRemark"/>
+                                    <p:inputTextarea id="flowRemark"
+                                                     rows="1"
+                                                     autoResize="false"
+                                                     value="#{tkcttItemAction.strFlowStatusRemark}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="4">
+                            <p:commandButton id="endInputBtn" value="通过"
+                                             action="#{subcttItemAction.onClickForPowerAction('Pass')}"
+                                             rendered='#{subcttItemAction.strPassVisible}'
+                                                     update="msgs,ppInfo,ppFlow">
+                            </p:commandButton>
+                            <p:outputLabel value="未过至状态：" rendered="#{subcttItemAction.strPassFailVisible}"/>
+                            <p:selectOneMenu id="flowStatus"
+                                             value="#{subcttItemAction.strNotPassToStatus}"
+                                             rendered="#{subcttItemAction.strPassFailVisible}">
+                                <f:selectItems value="#{esFlowControl.getBackToStatusFlagList(subcttItemAction.strFlowType)}"/>
+                            </p:selectOneMenu>
+                            <p:commandButton id="startInputBtn" value="未过"
+                                             action="#{subcttItemAction.onClickForPowerAction('Fail')}"
+                                             rendered="#{subcttItemAction.strPassFailVisible}"
+                                                     update="msgs,ppInfo,ppFlow">
+                            </p:commandButton>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
                     </h:panelGrid>
-                    <h:panelGrid id="pgOperBtn" columns="7">
-                        <p:commandButton value="附件"
-                                         update=":form:msgs"
-                                         onclick="PF('wvAttachmentList').show()">
-                        </p:commandButton>
-                        <p:commandButton value="导出到EXCEL"
-                                         action="#{subcttItemAction.onExportExcel}"
-                                         ajax="false">
-                        </p:commandButton>
-                        <p:commandButton id="endInputBtn" value="通过"
-                                         action="#{subcttItemAction.onClickForPowerAction('Pass')}"
-                                         rendered='#{subcttItemAction.strPassVisible}'
-                                         update="msgs,pgOperBtn">
-                        </p:commandButton>
-                        <p:outputLabel value="未过至状态:" rendered='#{subcttItemAction.strPassFailVisible}'/>
-                        <p:selectOneMenu id="flowStatus" value="#{subcttItemAction.strNotPassToStatus}"
-                                         rendered='#{subcttItemAction.strPassFailVisible}'>
-                            <f:selectItems value="#{esFlowControl.getBackToStatusFlagList(subcttItemAction.strFlowType)}"/>
-                        </p:selectOneMenu>
-                        <p:commandButton id="startInputBtn" value="未过"
-                                         action="#{subcttItemAction.onClickForPowerAction('Fail')}"
-                                         rendered="#{subcttItemAction.strPassFailVisible}"
-                                         update="msgs,pgOperBtn">
-                        </p:commandButton>
-                        <p:ajaxStatus style="width:16px;height:16px;">
-                            <f:facet name="start">
-                                <h:graphicImage value="/images/ajaxloading.gif"/>
-                            </f:facet>
-                            <f:facet name="complete">
-                                <h:outputText value=""/>
-                            </f:facet>
-                        </p:ajaxStatus>
-                    </h:panelGrid>
-                </p:panel>
                 <p:panel header="分包合同内容">
                     <p:dataTable id="pdt" style="width:100%;"
                                  value="#{subcttItemAction.cttItemShowList}"
@@ -78,12 +98,12 @@
                                  paginator="true"
                                  paginatorPosition="bottom"
                                  rows="15"
-                                 rowsPerPageTemplate="500,200,100,45,30,15"
+                                 rowsPerPageTemplate="480,240,120,60,30,15"
                                  rowIndexVar="row"
                                  emptyMessage="数据记录为空..."
                                  rowStyleClass="#{record.name eq '合计'? 'rowGrayStyle': record.name eq '总合计'? 'rowGrayStyle':null}"
-                                 scrollable="true"
-                                 scrollHeight="450">
+                                     scrollable="true"
+                                     scrollHeight="425">
                         <p:column headerText="操作" style="width:28px;text-align: center" >
                             <p:commandButton  icon="ui-icon-search"
                                         style="height:18px;width:18px"
@@ -94,7 +114,7 @@
                                         oncomplete="PF('wVDlgView').show()">
                             </p:commandButton>
                         </p:column>
-                        <p:column style="width:40px" headerText="序号">
+                        <p:column style="width:30px" headerText="序号">
                             <h:outputText value="#{row + 1}"/>
                         </p:column>
                         <p:column style="width:100px" headerText="成本项号">
