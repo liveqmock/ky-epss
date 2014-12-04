@@ -319,6 +319,7 @@ public class ProgStlInfoService {
         flowCtrlHis.setPeriodNo(progStlInfoPara.getPeriodNo());
         flowCtrlHis.setFlowStatus(progStlInfoPara.getFlowStatus());
         flowCtrlHis.setFlowStatusReason(progStlInfoPara.getFlowStatusReason());
+        flowCtrlHis.setFlowStatusRemark(progStlInfoPara.getFlowStatusRemark());
         flowCtrlHis.setCreatedTime(progStlInfoPara.getCreatedTime());
         flowCtrlHis.setCreatedBy(progStlInfoPara.getCreatedBy());
         flowCtrlHis.setOperType(EnumOperType.OPER_TYPE0.getCode());
@@ -333,6 +334,7 @@ public class ProgStlInfoService {
         flowCtrlHis.setPeriodNo(progStlInfoShowPara.getPeriodNo());
         flowCtrlHis.setFlowStatus(progStlInfoShowPara.getFlowStatus());
         flowCtrlHis.setFlowStatusReason(progStlInfoShowPara.getFlowStatusReason());
+        flowCtrlHis.setFlowStatusRemark(progStlInfoShowPara.getFlowStatusRemark());
         flowCtrlHis.setCreatedTime(progStlInfoShowPara.getCreatedTime());
         flowCtrlHis.setCreatedBy(progStlInfoShowPara.getCreatedBy());
         flowCtrlHis.setOperType(EnumOperType.OPER_TYPE0.getCode());
@@ -356,6 +358,7 @@ public class ProgStlInfoService {
         progStlInfoTemp.setAutoLinkAdd(progStlInfoShowPara.getAutoLinkAdd());
         progStlInfoTemp.setFlowStatus(progStlInfoShowPara.getFlowStatus());
         progStlInfoTemp.setFlowStatusReason(progStlInfoShowPara.getFlowStatusReason());
+        progStlInfoTemp.setFlowStatusRemark(progStlInfoShowPara.getFlowStatusRemark());
         return progStlInfoTemp;
     }
     public ProgStlInfoShow fromModelToModelShow(ProgStlInfo progStlInfoPara){
@@ -376,6 +379,7 @@ public class ProgStlInfoService {
         progStlInfoShowTemp.setAutoLinkAdd(progStlInfoPara.getAutoLinkAdd());
         progStlInfoShowTemp.setFlowStatus(progStlInfoPara.getFlowStatus());
         progStlInfoShowTemp.setFlowStatusReason(progStlInfoPara.getFlowStatusReason());
+        progStlInfoShowTemp.setFlowStatusRemark(progStlInfoPara.getFlowStatusRemark());
         return progStlInfoShowTemp;
     }
 
@@ -474,7 +478,6 @@ public class ProgStlInfoService {
     }
     @Transactional
     public void updAutoLinkTask(ProgStlInfo progStlInfoPara) {
-
         //  ˝¡øΩ·À„
         if (EnumResType.RES_TYPE3.getCode().equals(progStlInfoPara.getStlType())) {
             if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfoPara.getFlowStatus())&&

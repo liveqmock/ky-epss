@@ -79,6 +79,8 @@ public class ProgStlItemTkMeaAction {
     // 画面上控件的显示控制
     private String strExportToExcelRendered;
     private List<ProgStlItemTkMeaShow> progStlItemTkMeaShowListForExcel;
+    // 流程备注内容
+    private String strFlowStatusRemark;
 
     @PostConstruct
     public void init() {
@@ -615,11 +617,13 @@ public class ProgStlItemTkMeaAction {
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
                     // 原因：录入完毕
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode());
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerType.equals("MngFail")) {
                     progStlInfo.setFlowStatus(null);
                     progStlInfo.setFlowStatusReason(null);
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
@@ -629,6 +633,7 @@ public class ProgStlItemTkMeaAction {
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
                     // 原因：审核通过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON1.getCode());
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerType.equals("CheckFail")) {
@@ -636,6 +641,7 @@ public class ProgStlItemTkMeaAction {
                     progStlInfo.setFlowStatus(null);
                     // 原因：审核未过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON2.getCode());
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据审核未过！");
                 }
@@ -645,6 +651,7 @@ public class ProgStlItemTkMeaAction {
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                     // 原因：复核通过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerType.equals("DoubleCheckFail")) {
@@ -657,6 +664,7 @@ public class ProgStlItemTkMeaAction {
 
                     // 原因：复核未过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode());
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据复核未过！");
                 }
@@ -666,6 +674,7 @@ public class ProgStlItemTkMeaAction {
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
                     // 原因：批准通过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerType.equals("ApproveFail")) {
@@ -688,6 +697,7 @@ public class ProgStlItemTkMeaAction {
 
                         // 原因：批准未过
                         progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
+                        progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                         progStlInfoService.updAutoLinkTask(progStlInfo);
                         MessageUtil.addInfo("数据批准未过！");
                     }
@@ -857,5 +867,13 @@ public class ProgStlItemTkMeaAction {
     public String getStrPassVisible() {
         return strPassVisible;
     }
-	/*智能字段End*/
+
+    public String getStrFlowStatusRemark() {
+        return strFlowStatusRemark;
+    }
+
+    public void setStrFlowStatusRemark(String strFlowStatusRemark) {
+        this.strFlowStatusRemark = strFlowStatusRemark;
+    }
+    /*智能字段End*/
 }

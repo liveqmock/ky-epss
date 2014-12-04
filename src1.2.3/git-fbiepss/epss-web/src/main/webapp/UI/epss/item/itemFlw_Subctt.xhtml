@@ -8,6 +8,7 @@
         <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
         <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
         <script type="text/javascript" language="javascript">
+            $(function(){ $("html").css("overflowX","hidden");});
             document.onkeydown = function TabReplace() {
                 if (event.keyCode == 13) {
                     if (event.srcElement.tagName != 'BUTTON')

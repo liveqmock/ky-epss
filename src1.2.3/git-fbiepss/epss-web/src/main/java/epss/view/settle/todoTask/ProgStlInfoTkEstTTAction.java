@@ -38,6 +38,8 @@ public class ProgStlInfoTkEstTTAction {
 
     private String strStlType;
     private String strStlInfoPkid;
+    // 流程备注内容
+    private String strFlowStatusRemark;
 
     @PostConstruct
     public void init() {
@@ -149,6 +151,14 @@ public class ProgStlInfoTkEstTTAction {
 
     public void setProgStlInfoShowUpd(ProgStlInfoShow progStlInfoShowUpd) {
         this.progStlInfoShowUpd = progStlInfoShowUpd;
+    }
+
+    public String getStrFlowStatusRemark() {
+        return strFlowStatusRemark;
+    }
+
+    public void setStrFlowStatusRemark(String strFlowStatusRemark) {
+        this.strFlowStatusRemark = strFlowStatusRemark;
     }
     /*智能字段End*/
 }

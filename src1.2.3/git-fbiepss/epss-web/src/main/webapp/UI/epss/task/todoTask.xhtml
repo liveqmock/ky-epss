@@ -131,7 +131,7 @@
                         <p:column headerText="序号" style="width:30px">
                             <h:outputText value="#{row + 1}"/>
                         </p:column>
-                        <p:column headerText="任务类别" style="width:60px;text-align:left;">
+                        <p:column headerText="任务类别" style="width:50px;text-align:center;">
                             <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
                         </p:column>
                         <p:column headerText="任务编号" style="width:280px;text-align:left;">
@@ -143,11 +143,14 @@
                         <p:column headerText="任务备注" style="width:300px;text-align:left;">
                             <h:outputText value="#{record.signPartBName}"/>
                         </p:column>
-                        <p:column headerText="期数" style="width:80px;text-align:center;">
+                        <p:column headerText="期数" style="width:40px;text-align:center;">
                             <h:outputText value="#{record.periodNo}"/>
                         </p:column>
-                        <p:column headerText="状态原因" style="width:80px;text-align:center;">
+                        <p:column headerText="状态原因" style="width:50px;text-align:center;">
                             <h:outputText value="#{record.flowStatusReasonName}"/>
+                        </p:column>
+                        <p:column headerText="状态备注" style="width:300px;text-align:left;">
+                            <h:outputText value="#{record.flowStatusRemark}"/>
                         </p:column>
                     </p:dataTable>
                 </p:panel>

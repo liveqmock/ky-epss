@@ -31,6 +31,10 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
+        <table schema="epss" tableName="FLOW_CTRL_HIS">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
+        </table>
         <!--业务类例子 -->
         <!--<table schema="epss" tableName="OPER_RES">
             <property name="ignoreQualifiersAtRuntime" value="true" />
@@ -75,11 +79,11 @@
         <table schema="epss" tableName="PROG_STL_ITEM_TK_MEA">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>-->
+        </table>
         <table schema="epss" tableName="OPER">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
+        </table>-->
         <!--平台类 有几个表并不是Mybatis自动生成的，更新慎用-->
         <!--
         <table schema="epss" tableName="DEPT">

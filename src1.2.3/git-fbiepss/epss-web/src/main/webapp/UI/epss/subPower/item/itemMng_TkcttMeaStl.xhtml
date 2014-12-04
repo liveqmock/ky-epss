@@ -8,6 +8,7 @@
         <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
         <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
         <script type="text/javascript" language="javascript">
+            $(function(){ $("html").css("overflowX","hidden");});
             document.onkeydown = function TabReplace() {
                 if (event.keyCode == 13) {
                     if (event.srcElement.tagName != 'BUTTON')
@@ -69,17 +70,18 @@
                                     <p:inputText id="remark" value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.remark}"/>
                                 </h:panelGrid>
                             </h:panelGrid>
-                            <h:panelGrid rendered="#{progStlItemTkMeaAction.strPassVisible}">
-                                <p:commandButton id="submitBtn"
-                                                 value="提交"
-                                                 action="#{progStlInfoTkMeaTTAction.onClickForMngAction()}"
-                                                 update="msgs,pgInfo">
-                                </p:commandButton>
-                            </h:panelGrid>
-                        </h:panelGrid>
+                            <p:commandButton id="submitBtn"
+                                             rendered="#{progStlItemTkMeaAction.strPassVisible}"
+                                             value="提交"
+                                             action="#{progStlInfoTkMeaTTAction.onClickForMngAction()}"
+                                             update="msgs,pgInfo">
+                            </p:commandButton>
+                         </h:panelGrid>
                         <p:separator></p:separator>
                         <h:panelGrid columns="5">
-
+                            <p:outputLabel value="录入备注：" for="flowRemark"/>
+                            <p:inputText id="flowRemark"
+                                             value="#{progStlItemTkMeaAction.strFlowStatusRemark}"/>
                             <p:commandButton id="endInputBtn" value="录入完成"
                                              action="#{progStlItemTkMeaAction.onClickForPowerAction('Pass')}"
                                              update="msgs,ppInfo"

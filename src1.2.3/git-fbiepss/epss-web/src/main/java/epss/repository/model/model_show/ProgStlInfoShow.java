@@ -22,6 +22,7 @@ public class ProgStlInfoShow {
     private String strStatusFlagEnd;
     private String flowStatus;
     private String flowStatusReason;
+    private String flowStatusRemark;
     private String archivedFlag;
     private String createdBy;
     private String createdByName;
@@ -111,6 +112,14 @@ public class ProgStlInfoShow {
 
     public void setFlowStatus(String flowStatus) {
         this.flowStatus = flowStatus;
+    }
+
+    public String getFlowStatusRemark() {
+        return flowStatusRemark;
+    }
+
+    public void setFlowStatusRemark(String flowStatusRemark) {
+        this.flowStatusRemark = flowStatusRemark;
     }
 
     public String getStrStatusFlagBegin() {
