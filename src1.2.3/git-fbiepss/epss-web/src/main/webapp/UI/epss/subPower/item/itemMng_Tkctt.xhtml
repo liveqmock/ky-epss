@@ -8,7 +8,7 @@
         <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
         <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
         <script type="text/javascript" language="javascript">
-            $(function(){ $("html").css("overflowX","hidden");});
+            /*$(function(){ $("html").css("overflowX","hidden");});*/
             document.onkeydown = function TabReplace() {
                 if (event.keyCode == 13) {
                     if (event.srcElement.tagName != 'BUTTON')
@@ -24,90 +24,105 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <p:panel id="ppInfo" header="总包合同信息">
-                        <h:panelGrid columns="2" style="width: 100%">
-                            <h:panelGrid id="pgInfo">
-                                <h:panelGrid columns="7">
-                                    <p:outputLabel value="合同编号：" for="idForUpd"/>
-                                    <p:inputText id="idForUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.id}"
-                                                 style="width:113px"/>
-                                    <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
-                                                     action="#{tkcttInfoTTAction.setMaxNoPlusOne()}"
-                                                     update="idForUpd"
-                                                     style="width:20px;height:20px">
-                                    </p:commandButton>
-                                    <p:outputLabel value="合同名称：" for="cttNameForUpd"/>
-                                    <p:inputText id="cttNameForUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.name}"
-                                                 style="width:328px"/>
-                                    <p:outputLabel value="签订日期：" for="signDateForInfoUpd"/>
-                                    <p:inputText id="signDateForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.signDate}"
-                                                 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                    <h:panelGrid columns="3" style="width: 100%">
+                        <p:panel header="总包合同信息" id="ppInfo">
+                            <h:panelGrid columns="2" style="width: 100%">
+                                <h:panelGrid>
+                                    <h:panelGrid columns="7">
+                                        <p:outputLabel value="合同编号：" for="idForUpd"/>
+                                        <p:inputText id="idForUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.id}"
+                                                     style="width:113px"/>
+                                        <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
+                                                         action="#{tkcttInfoTTAction.setMaxNoPlusOne()}"
+                                                         update="idForUpd"
+                                                         style="width:20px;height:20px">
+                                        </p:commandButton>
+                                        <p:outputLabel value="合同名称：" for="cttNameForUpd"/>
+                                        <p:inputText id="cttNameForUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.name}"
+                                                     style="width:335px"/>
+                                        <p:outputLabel value="签订日期：" for="signDateForInfoUpd"/>
+                                        <p:inputText id="signDateForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.signDate}"
+                                                     onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="6">
+                                        <p:outputLabel value="备注内容：" for="remarkForInfoUpd"/>
+                                        <p:inputText id="remarkForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.remark}"/>
+                                        <p:outputLabel value="签订甲方：" for="signPartAForInfoUpd"/>
+                                        <p:selectOneMenu id="signPartAForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.signPartA}">
+                                            <f:selectItems value="#{esCommon.customerlist}"/>
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="开始时间：" for="cttStartDateForInfoUpd"/>
+                                        <p:inputText id="cttStartDateForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.cttStartDate}"
+                                                     onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                        <p:outputLabel for="recVersionInfoUpd" value="修改次数："/>
+                                        <h:inputText id="recVersionInfoUpd"
+                                                     value="#{tkcttInfoTTAction.cttInfoShowUpd.recVersion}"
+                                                     style="background-color:gainsboro;text-align:right;" readonly="true">
+                                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                                        </h:inputText>
+                                        <p:outputLabel value="签订乙方：" for="signPartBForInfoUpd"/>
+                                        <p:selectOneMenu id="signPartBForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.signPartB}"
+                                                         style="width:328px">
+                                            <f:selectItems value="#{esCommon.customerlist}"/>
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="截止时间：" for="cttEndDateForInfoUpd"/>
+                                        <p:inputText id="cttEndDateForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.cttEndDate}"
+                                                     onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                    </h:panelGrid>
                                 </h:panelGrid>
-                                <h:panelGrid columns="6">
-                                    <p:outputLabel value="备注内容：" for="remarkForInfoUpd"/>
-                                    <p:inputText id="remarkForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.remark}"/>
-                                    <p:outputLabel value="签订甲方：" for="signPartAForInfoUpd"/>
-                                    <p:selectOneMenu id="signPartAForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.signPartA}">
-                                        <f:selectItems value="#{esCommon.customerlist}"/>
-                                    </p:selectOneMenu>
-                                    <p:outputLabel value="开始时间：" for="cttStartDateForInfoUpd"/>
-                                    <p:inputText id="cttStartDateForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.cttStartDate}"
-                                                 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                                    <p:outputLabel for="recVersionInfoUpd" value="修改次数："/>
-                                    <h:inputText id="recVersionInfoUpd"
-                                                 value="#{tkcttInfoTTAction.cttInfoShowUpd.recVersion}"
-                                                 style="background-color:gainsboro;text-align:right;" readonly="true">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                    </h:inputText>
-                                    <p:outputLabel value="签订乙方：" for="signPartBForInfoUpd"/>
-                                    <p:selectOneMenu id="signPartBForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.signPartB}"
-                                                     style="width:328px">
-                                        <f:selectItems value="#{esCommon.customerlist}"/>
-                                    </p:selectOneMenu>
-                                    <p:outputLabel value="截止时间：" for="cttEndDateForInfoUpd"/>
-                                    <p:inputText id="cttEndDateForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.cttEndDate}"
-                                                 onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="提交"
+                                                     rendered='#{tkcttItemAction.strPassVisible}'
+                                                     action="#{tkcttInfoTTAction.onClickForMngAction()}"
+                                                     update="msgs,ppInfo">
+                                    </p:commandButton>
+                                    <p:ajaxStatus style="width:16px;height:16px;">
+                                        <f:facet name="start">
+                                            <h:graphicImage value="/images/ajaxloading.gif"/>
+                                        </f:facet>
+                                        <f:facet name="complete">
+                                            <h:outputText value=""/>
+                                        </f:facet>
+                                    </p:ajaxStatus>
                                 </h:panelGrid>
                             </h:panelGrid>
-                            <p:commandButton value="提交"
-                                             rendered='#{tkcttItemAction.strPassVisible}'
-                                             action="#{tkcttInfoTTAction.onClickForMngAction()}"
-                                             update="msgs,pgInfo">
-                            </p:commandButton>
-                        </h:panelGrid>
-                        <p:separator></p:separator>
-                        <h:panelGrid columns="7">
-                            <p:outputLabel value="录入备注：" for="flowRemark"/>
-                            <p:inputText id="flowRemark"
-                                         value="#{tkcttItemAction.strFlowStatusRemark}"/>
-                            <p:commandButton id="endInputBtn" value="录入完成"
-                                             action="#{tkcttItemAction.onClickForPowerAction('Pass')}"
-                                             rendered='#{tkcttItemAction.strPassVisible}'
-                                             update="msgs,ppInfo,ppDetail">
-                            </p:commandButton>
-                            <p:commandButton id="startInputBtn" value="录入未完"
-                                             action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
-                                             rendered="#{tkcttItemAction.strPassFailVisible}"
-                                             update="msgs,ppInfo,ppDetail">
-                            </p:commandButton>
-                            <p:commandButton value="附件"
-                                             update=":form:msgs"
-                                             onclick="PF('wvAttachmentList').show()">
-                            </p:commandButton>
-                            <p:commandButton value="导出到EXCEL"
-                                             action="#{tkcttItemAction.onExportExcel}"
-                                             ajax="false">
-                            </p:commandButton>
-                            <p:ajaxStatus style="width:16px;height:16px;">
-                                <f:facet name="start">
-                                    <h:graphicImage value="/images/ajaxloading.gif"/>
-                                </f:facet>
-                                <f:facet name="complete">
-                                    <h:outputText value=""/>
-                                </f:facet>
-                            </p:ajaxStatus>
-                        </h:panelGrid>
-                    </p:panel>
+                        </p:panel>
+                        <p:panel header="备注" style="height:112px">
+                            <h:panelGrid>
+                                <p:commandButton value="附件"
+                                                 update=":form:msgs"
+                                                 onclick="PF('wvAttachmentList').show()">
+                                </p:commandButton>
+                                <p:commandButton value="导出到EXCEL"
+                                                 action="#{tkcttItemAction.onExportExcel}"
+                                                 ajax="false">
+                                </p:commandButton>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="录入完了确认" id="ppFlow" style="height:112px">
+                            <h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="录入备注：" for="flowRemark"/>
+                                    <p:inputTextarea id="flowRemark"
+                                                 rows="1"
+                                                 autoResize="false"
+                                                 value="#{tkcttItemAction.strFlowStatusRemark}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="录入完成"
+                                                     action="#{tkcttItemAction.onClickForPowerAction('Pass')}"
+                                                     rendered='#{tkcttItemAction.strPassVisible}'
+                                                     update="msgs,ppInfo,ppFlow,ppDetail">
+                                    </p:commandButton>
+                                    <p:commandButton value="录入未完"
+                                                     action="#{tkcttItemAction.onClickForPowerAction('Fail')}"
+                                                     rendered="#{tkcttItemAction.strPassFailVisible}"
+                                                     update="msgs,ppInfo,ppFlow,ppDetail">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:panelGrid>
                     <p:panel id="ppDetail" header="总包合同内容">
                         <p:commandButton value="增加项"
                                          rendered='#{tkcttItemAction.strPassVisible}'
