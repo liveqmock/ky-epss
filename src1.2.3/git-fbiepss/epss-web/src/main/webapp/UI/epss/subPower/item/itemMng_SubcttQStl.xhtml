@@ -24,90 +24,85 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <p:panel header="分包进度工程量结算信息">
-                        <h:panelGrid id="pgView">
-                            <h:panelGrid columns="7">
-                                <p:outputLabel value="结算编号：" for="id"/>
-                                <p:inputText id="id" value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.id}"/>
-                                <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
-                                                 action="#{progStlInfoSubQTTAction.setMaxNoPlusOne()}"
-                                                 update="id"
-                                                 style="height:20px">
-                                </p:commandButton>
-                                <p:outputLabel value="分包合同：" for="cttName"/>
-                                <p:inputText id="cttName"
-                                             value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.stlName}"
-                                             style="background-color:gainsboro;width:328px;" readonly="true"/>
-                                <p:outputLabel value="期数编码：  " for="periodNo"/>
-                                <p:inputText id="periodNo"
-                                             value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.periodNo}"
-                                             style="background-color:gainsboro;" readonly="true"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="6">
-                                <p:outputLabel value="备注内容：" for="remark"/>
-                                <p:inputText id="remark" value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.remark}"/>
-                                <p:outputLabel for="createdByName" value="创建人：" />
-                                <h:inputText id="createdByName"
-                                             value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.createdByName}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="createdTime" value="创建时间：" />
-                                <h:inputText id="createdTime"
-                                             value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.createdTime}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="lastUpdByName" value="修改人：" />
-                                <h:inputText id="lastUpdByName"
-                                             value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.lastUpdByName}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="lastUpdTime" value="修改时间：" />
-                                <h:inputText id="lastUpdTime"
-                                             value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.lastUpdTime}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="recVersion" value="修改次数：" />
-                                <h:inputText id="recVersion"
-                                             value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.recVersion}"
-                                             style="background-color:gainsboro;text-align:right;" readonly="true">
-                                    <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                </h:inputText>
-                            </h:panelGrid>
-                            <h:panelGrid id="pgOperBtn" columns="5">
-                                <h:panelGrid columns="2" rendered="#{progStlItemSubQAction.strPassVisible}">
-                                    <p:commandButton id="submitBtn"
-                                                     value="提交（更新）"
-                                                     action="#{progStlInfoSubQTTAction.onClickForMngAction()}"
-                                                     update="msgs,pgView"
-                                                     oncomplete="wVDlgView.hide()">
-                                    </p:commandButton>
-                                    <p:commandButton id="resetBtn" value="重置"
-                                                     type="reset"
-                                                     update="pgView">
-                                    </p:commandButton>
+                    <h:panelGrid columns="3">
+                        <p:panel header="分包进度工程量结算信息" id="ppInfo">
+                            <h:panelGrid columns="2">
+                                <h:panelGrid>
+                                    <h:panelGrid columns="7">
+                                        <p:outputLabel value="分包合同：" for="cttName"/>
+                                        <p:inputText id="cttName"
+                                                     value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.stlName}"
+                                                     style="background-color:gainsboro;" readonly="true"/>
+                                        <p:outputLabel value="期数编码：" for="periodNo"/>
+                                        <p:inputText id="periodNo"
+                                                     value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.periodNo}"
+                                                     style="background-color:gainsboro;" readonly="true"/>
+                                        <p:outputLabel value="结算编号：" for="id"/>
+                                        <p:inputText id="id" value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.id}"/>
+                                        <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
+                                                         action="#{progStlInfoSubQTTAction.setMaxNoPlusOne()}"
+                                                         update="id"
+                                                         style="height:20px">
+                                        </p:commandButton>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="6">
+                                        <p:outputLabel value="备注内容：" for="remark"/>
+                                        <p:inputText id="remark" value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.remark}"/>
+                                        <p:outputLabel for="recVersion" value="修改次数：" />
+                                        <h:inputText id="recVersion"
+                                                     value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.recVersion}"
+                                                     style="background-color:gainsboro;text-align:right;" readonly="true">
+                                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                                        </h:inputText>
+                                    </h:panelGrid>
                                 </h:panelGrid>
-                                <p:commandButton value="导出到EXCEL"
-                                                 action="#{progStlItemSubQAction.onExportExcel}"
-                                                 ajax="false">
-                                </p:commandButton>
+                                <h:panelGrid columns="2" >
+                                    <p:commandButton id="submitBtn"
+                                                     value="提交"
+                                                     rendered="#{progStlItemSubQAction.strPassVisible}"
+                                                     action="#{progStlInfoSubQTTAction.onClickForMngAction()}"
+                                                     update="msgs,ppInfo">
+                                    </p:commandButton>
+                                    <p:ajaxStatus style="width:16px;height:16px;">
+                                        <f:facet name="start">
+                                            <h:graphicImage value="/images/ajaxloading.gif"/>
+                                        </f:facet>
+                                        <f:facet name="complete">
+                                            <h:outputText value=""/>
+                                        </f:facet>
+                                    </p:ajaxStatus>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="备注" style="height:90px">
+                            <p:commandButton value="导出到EXCEL"
+                                             action="#{progStlItemSubQAction.onExportExcel}"
+                                             ajax="false">
+                            </p:commandButton>
+                        </p:panel>
+                        <p:panel header="录入完了确认" id="ppFlow" style="height:90px">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="录入备注：" for="flowRemark"/>
+                                <p:inputTextarea id="flowRemark"
+                                                 rows="1"
+                                                 autoResize="false"
+                                                 value="#{progStlItemSubQAction.strFlowStatusRemark}"/>
+                            </h:panelGrid>
+                            <h:panelGrid>
                                 <p:commandButton id="endInputBtn" value="录入完成"
                                                  action="#{progStlItemSubQAction.onClickForPowerAction('Pass')}"
-                                                 update="msgs,pgOperBtn"
+                                                 update="msgs,ppInfo,ppFlow,ppDetail"
                                                  rendered="#{progStlItemSubQAction.strPassVisible}">
                                 </p:commandButton>
                                 <p:commandButton id="startInputBtn" value="录入未完"
                                                  action="#{progStlItemSubQAction.onClickForPowerAction('Fail')}"
-                                                 update="msgs,pgOperBtn"
+                                                 update="msgs,ppInfo,ppFlow,ppDetail"
                                                  rendered="#{progStlItemSubQAction.strPassFailVisible}">
                                 </p:commandButton>
-                                <p:ajaxStatus style="width:16px;height:16px;">
-                                    <f:facet name="start">
-                                        <h:graphicImage value="/images/ajaxloading.gif"/>
-                                    </f:facet>
-                                    <f:facet name="complete">
-                                        <h:outputText value=""/>
-                                    </f:facet>
-                                </p:ajaxStatus>
                             </h:panelGrid>
-                        </h:panelGrid>
-                    </p:panel>
-                    <p:panel header="分包进度工程量结算内容">
+                        </p:panel>
+                    </h:panelGrid>
+                    <p:panel id="ppDetail" header="分包进度工程量结算内容">
                         <p:dataTable id="pdt" style="width:100%;"
                                      value="#{progStlItemSubQAction.progStlItemSubQShowList}"
                                      var="record"

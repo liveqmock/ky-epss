@@ -44,22 +44,6 @@
                             <h:panelGrid columns="6">
                                 <p:outputLabel value="备注内容：" for="remark"/>
                                 <p:inputText id="remark" value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.remark}"/>
-                                <p:outputLabel for="createdByName" value="创建人：" />
-                                <h:inputText id="createdByName"
-                                             value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.createdByName}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="createdTime" value="创建时间：" />
-                                <h:inputText id="createdTime"
-                                             value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.createdTime}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="lastUpdByName" value="修改人：" />
-                                <h:inputText id="lastUpdByName"
-                                             value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.lastUpdByName}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="lastUpdTime" value="修改时间：" />
-                                <h:inputText id="lastUpdTime"
-                                             value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.lastUpdTime}"
-                                             style="background-color:gainsboro" readonly="true"/>
                                 <p:outputLabel for="recVersion" value="修改次数：" />
                                 <h:inputText id="recVersion"
                                              value="#{progStlInfoTkEstTTAction.progStlInfoShowUpd.recVersion}"
@@ -72,7 +56,7 @@
                                          rendered="#{progStlItemTkEstAction.strPassVisible}"
                                          value="提交"
                                          action="#{progStlInfoTkEstTTAction.onClickForMngAction()}"
-                                         update="msgs,pgInfo">
+                                         update="msgs,ppInfo">
                         </p:commandButton>
                     </h:panelGrid>
                     <p:separator></p:separator>

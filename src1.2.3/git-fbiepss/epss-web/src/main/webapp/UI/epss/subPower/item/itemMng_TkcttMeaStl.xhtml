@@ -44,28 +44,12 @@
                                     </p:commandButton>
                                 </h:panelGrid>
                                 <h:panelGrid columns="6">
-                                    <p:outputLabel for="createdByName" value="创建人名：" />
-                                    <h:inputText id="createdByName"
-                                                 value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.createdByName}"
-                                                 style="background-color:gainsboro" readonly="true"/>
-                                    <p:outputLabel for="createdTime" value="创建时间：" />
-                                    <h:inputText id="createdTime"
-                                                 value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.createdTime}"
-                                                 style="background-color:gainsboro" readonly="true"/>
                                     <p:outputLabel for="recVersion" value="修改次数：" />
                                     <h:inputText id="recVersion"
                                                  value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.recVersion}"
                                                  style="background-color:gainsboro;text-align:right;" readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                                     </h:inputText>
-                                    <p:outputLabel for="lastUpdByName" value="修改人名：" />
-                                    <h:inputText id="lastUpdByName"
-                                                 value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.lastUpdByName}"
-                                                 style="background-color:gainsboro" readonly="true"/>
-                                    <p:outputLabel for="lastUpdTime" value="修改时间：" />
-                                    <h:inputText id="lastUpdTime"
-                                                 value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.lastUpdTime}"
-                                                 style="background-color:gainsboro" readonly="true"/>
                                     <p:outputLabel value="备注内容：" for="remark"/>
                                     <p:inputText id="remark" value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.remark}"/>
                                 </h:panelGrid>
