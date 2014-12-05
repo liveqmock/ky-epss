@@ -24,26 +24,26 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
+                    <h:panelGrid columns="2">
                     <p:panel header="总包进度工程量统计信息">
+                            <h:panelGrid columns="2">
+                                <h:panelGrid>
                         <h:panelGrid columns="8">
-                            <p:outputLabel value="总包合同编号：" for="stlId"/>
+                            <p:outputLabel value="合同编号：" for="stlId"/>
                             <p:inputText id="stlId" value="#{progStlItemTkEstAction.progStlInfoShow.stlId}"
                                          readonly="true" style="background-color:gainsboro;"/>
-                            <p:outputLabel value="总包合同名称：" for="cttName"/>
+                            <p:outputLabel value="合同名称：" for="cttName"/>
                             <p:inputText id="cttName" value="#{progStlItemTkEstAction.progStlInfoShow.stlName}"
-                                         readonly="true" style="width:328px;background-color:gainsboro;"/>
+                                         readonly="true" style="width:300px;background-color:gainsboro;"/>
                             <p:outputLabel value="期号：" for="periodNo"/>
                             <p:inputText id="periodNo" value="#{progStlItemTkEstAction.progStlInfoShow.periodNo}"
                                          readonly="true" style="background-color:gainsboro;"/>
-                            <p:outputLabel value="总包统计结算编号：" for="id"/>
+                            <p:outputLabel value="统计结算编号：" for="id"/>
                             <p:inputText id="id" value="#{progStlItemTkEstAction.progStlInfoShow.id}"
                                          readonly="true" style="background-color:gainsboro;"/>
                         </h:panelGrid>
-                        <h:panelGrid  columns="2">
-                            <p:commandButton value="导出到EXCEL"
-                                             action="#{progStlItemTkEstAction.onExportExcel}"
-                                             ajax="false">
-                            </p:commandButton>
+                    </h:panelGrid>
+                            
                             <p:ajaxStatus style="width:16px;height:16px;">
                                 <f:facet name="start">
                                     <h:graphicImage value="/images/ajaxloading.gif"/>
@@ -54,6 +54,13 @@
                             </p:ajaxStatus>
                         </h:panelGrid>
                     </p:panel>
+                    <p:panel header="备注" style="height: 66px;">
+			<p:commandButton value="导出到EXCEL"
+                                             action="#{progStlItemTkEstAction.onExportExcel}"
+                                             ajax="false">
+                       	</p:commandButton>
+                    </p:panel>
+                    </h:panelGrid>
                     <p:panel header="总包进度工程量统计内容">
                         <p:dataTable id="pdt" style="width:100%;"
                                      value="#{progStlItemTkEstAction.progStlItemTkEstShowList}"

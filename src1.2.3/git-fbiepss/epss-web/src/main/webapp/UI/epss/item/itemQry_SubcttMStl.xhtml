@@ -24,8 +24,11 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
+                    <h:panelGrid columns="2">
                     <p:panel header="分包进度材料消耗料结算信息">
-                        <h:panelGrid columns="6">
+                            <h:panelGrid columns="2">
+                                <h:panelGrid>
+                                    <h:panelGrid columns="8">
                             <p:outputLabel value="分包合同编号：" for="stlId"/>
                             <p:inputText id="stlId" value="#{progStlItemSubMAction.progStlInfoShow.stlId}"
                                          readonly="true" style="background-color:gainsboro;"/>
@@ -44,11 +47,8 @@
                             <p:inputText id="id" value="#{progStlItemSubMAction.progStlInfoShow.id}"
                                          readonly="true" style="background-color:gainsboro;"/>
                         </h:panelGrid>
-                        <h:panelGrid columns="2">
-                            <p:commandButton value="导出到EXCEL"
-                                             action="#{progStlItemSubMAction.onExportExcel}"
-                                             ajax="false">
-                            </p:commandButton>
+                    </h:panelGrid>
+                            
                             <p:ajaxStatus style="width:16px;height:16px;">
                                 <f:facet name="start">
                                     <h:graphicImage value="/images/ajaxloading.gif"/>
@@ -59,6 +59,13 @@
                             </p:ajaxStatus>
                         </h:panelGrid >
                     </p:panel>
+                        <p:panel header="备注" style="height: 90px;">
+				<p:commandButton value="导出到EXCEL"
+                                             action="#{progStlItemSubMAction.onExportExcel}"
+                                             ajax="false">
+                            	</p:commandButton>
+                        </p:panel>
+                    </h:panelGrid>
                     <p:panel header="分包进度材料消耗料结算内容">
                         <p:dataTable id="pdt" style="width:100%;"
                                      value="#{progStlItemSubMAction.progStlItemSubMShowList}"
@@ -70,7 +77,7 @@
                                      paginator="true"
                                      paginatorPosition="bottom"
                                      rows="15"
-                                     rowsPerPageTemplate="500,200,100,45,30,15"
+                                     rowsPerPageTemplate="480,240,120,60,30,15"
                                      rowIndexVar="row"
                                      emptyMessage="数据记录为空..."
                                      widgetVar="dtItemDetail"
@@ -88,7 +95,7 @@
                                                   onclick="PF('wVDlgView').show()">
                                 </p:commandButton>
                             </p:column>
-                            <p:column headerText="序号" style="width:30px">
+                            <p:column headerText="序号" style="width:40px">
                                 <h:outputText value="#{row + 1}"/>
                             </p:column>
                             <p:column style="width:100px" headerText="编号">
@@ -97,7 +104,7 @@
                             <p:column style="width:200px" headerText="名称">
                                 <h:outputText value="#{record.subctt_Name}"/>
                             </p:column>
-                            <p:column style="width:60px" headerText="单位">
+                            <p:column style="width:40px" headerText="单位">
                                 <h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
                             </p:column>
                             <p:column style="width:100px" headerText="合同单价">

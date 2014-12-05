@@ -24,16 +24,11 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <p:panel header="分包进度材料消耗量结算信息">
-                        <h:panelGrid id="pgView">
+                    <h:panelGrid columns="3">
+                    <p:panel header="分包进度材料消耗量结算信息" id="ppInfo">
+                            <h:panelGrid columns="2">
+                                <h:panelGrid>
                             <h:panelGrid columns="7">
-                                <p:outputLabel value="结算编号：" for="id"/>
-                                <p:inputText id="id" value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.id}"/>
-                                <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
-                                                 action="#{progStlInfoSubMTTAction.setMaxNoPlusOne()}"
-                                                 update="id"
-                                                 style="height:20px">
-                                </p:commandButton>
                                 <p:outputLabel value="分包合同：" for="cttName"/>
                                 <p:inputText id="cttName"
                                              value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.stlName}"
@@ -42,6 +37,13 @@
                                 <p:inputText id="periodNo"
                                              value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.periodNo}"
                                              style="background-color:gainsboro;" readonly="true"/>
+				<p:outputLabel value="结算编号：" for="id"/>
+                                <p:inputText id="id" value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.id}"/>
+                                <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
+                                                 action="#{progStlInfoSubMTTAction.setMaxNoPlusOne()}"
+                                                 update="id"
+                                                 style="height:20px">
+                                </p:commandButton>
                             </h:panelGrid>
                             <h:panelGrid columns="6">
                                 <p:outputLabel value="备注内容：" for="remarkForUpd"/>
@@ -53,33 +55,14 @@
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                                 </h:inputText>
                             </h:panelGrid>
-                            <h:panelGrid id="pgOperBtn" columns="5">
-                                <h:panelGrid columns="2" rendered="#{progStlItemSubMAction.strPassVisible}">
-                                    <p:commandButton id="submitBtnUpd"
-                                                     value="提交（更新）"
-                                                     action="#{progStlInfoSubMTTAction.onClickForMngAction()}"
-                                                     update="msgs,pgView"
-                                                     oncomplete="wVDlgView.hide()">
-                                    </p:commandButton>
-                                    <p:commandButton id="resetBtn" value="重置"
-                                                     type="reset"
-                                                     update="pgView">
-                                    </p:commandButton>
                                 </h:panelGrid>
-                                <p:commandButton value="导出到EXCEL"
-                                                 action="#{progStlItemSubMAction.onExportExcel}"
-                                                 ajax="false">
-                                </p:commandButton>
-                                <p:commandButton id="endInputBtn" value="录入完成"
-                                                 action="#{progStlItemSubMAction.onClickForPowerAction('Pass')}"
-                                                 update="msgs,pgOperBtn"
-                                                 rendered="#{progStlItemSubMAction.strPassVisible}">
-                                </p:commandButton>
-                                <p:commandButton id="startInputBtn" value="录入未完"
-                                                 action="#{progStlItemSubMAction.onClickForPowerAction('Fail')}"
-                                                 update="msgs,pgOperBtn"
-                                                 rendered="#{progStlItemSubMAction.strPassFailVisible}">
-                                </p:commandButton>
+                                <h:panelGrid columns="2" >
+                                    <p:commandButton id="submitBtnUpd"
+                                                     value="提交"
+						     rendered="#{progStlItemSubMAction.strPassVisible}"
+                                                     action="#{progStlInfoSubMTTAction.onClickForMngAction()}"
+                                                     update="msgs,ppInfo">
+                                    </p:commandButton>
                                 <p:ajaxStatus style="width:16px;height:16px;">
                                     <f:facet name="start">
                                         <h:graphicImage value="/images/ajaxloading.gif"/>
@@ -91,7 +74,35 @@
                             </h:panelGrid>
                         </h:panelGrid>
                     </p:panel>
-                    <p:panel header="分包进度材料消耗量结算内容">
+                    <p:panel header="备注" style="height:90px">
+			                <p:commandButton value="导出到EXCEL"
+                                                 action="#{progStlItemSubMAction.onExportExcel}"
+                                                 ajax="false">
+                            </p:commandButton>
+                        </p:panel>
+                        <p:panel header="录入完了确认" id="ppFlow" style="height:90px">
+                            <h:panelGrid columns="2">
+                                <p:outputLabel value="录入备注：" for="flowRemark"/>
+                                <p:inputTextarea id="flowRemark"
+                                                 rows="1"
+                                                 autoResize="false"
+                                                 value="#{progStlItemSubMAction.strFlowStatusRemark}"/>
+                            </h:panelGrid>
+                            <h:panelGrid>
+                                <p:commandButton id="endInputBtn" value="录入完成"
+                                                 action="#{progStlItemSubMAction.onClickForPowerAction('Pass')}"
+                                                 update="msgs,ppInfo,ppFlow,ppDetail"
+                                                 rendered="#{progStlItemSubMAction.strPassVisible}">
+                                </p:commandButton>
+                                <p:commandButton id="startInputBtn" value="录入未完"
+                                                 action="#{progStlItemSubMAction.onClickForPowerAction('Fail')}"
+                                                 update="msgs,ppInfo,ppFlow,ppDetail"
+                                                 rendered="#{progStlItemSubMAction.strPassFailVisible}">
+                                </p:commandButton>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:panelGrid>
+                    <p:panel id="ppDetail" header="分包进度材料消耗量结算内容">
                          <p:dataTable id="pdt" style="width:100%;"
                                      value="#{progStlItemSubMAction.progStlItemSubMShowList}"
                                      var="record"

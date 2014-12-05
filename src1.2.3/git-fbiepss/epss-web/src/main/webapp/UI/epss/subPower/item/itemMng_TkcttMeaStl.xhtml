@@ -24,73 +24,84 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <p:panel id="ppInfo" header="总包进度计量结算信息">
-                        <h:panelGrid columns="2" style="width: 100%">
-                            <h:panelGrid id="pgInfo">
-                                <h:panelGrid columns="7">
-                                    <p:outputLabel value="总包合同：" for="cttName"/>
-                                    <h:inputText id="cttName"
-                                                 value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.stlName}"
-                                                 style="background-color:gainsboro;" readonly="true"/>
-                                    <p:outputLabel value="期数编码：  " for="periodNo"/>
-                                    <h:inputText id="periodNo" value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.periodNo}"
-                                                 style="background-color:gainsboro;" readonly="true"/>
-                                    <p:outputLabel value="结算编号：" for="id"/>
-                                    <h:inputText id="id" value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.id}"/>
-                                    <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
-                                                     action="#{progStlInfoTkMeaTTAction.setMaxNoPlusOne()}"
-                                                     update="id"
-                                                     style="height:20px">
-                                    </p:commandButton>
+                    <h:panelGrid columns="3">
+                        <p:panel  header="总包进度计量结算信息" id="ppInfo">
+                            <h:panelGrid columns="2">
+                                <h:panelGrid>
+                                    <h:panelGrid columns="7">
+                                        <p:outputLabel value="总包合同：" for="cttName"/>
+                                        <h:inputText id="cttName"
+                                                     value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.stlName}"
+                                                     style="background-color:gainsboro;" readonly="true"/>
+                                        <p:outputLabel value="期数编码：  " for="periodNo"/>
+                                        <h:inputText id="periodNo" value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.periodNo}"
+                                                     style="background-color:gainsboro;" readonly="true"/>
+                                        <p:outputLabel value="结算编号：" for="id"/>
+                                        <h:inputText id="id" value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.id}"/>
+                                        <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
+                                                         action="#{progStlInfoTkMeaTTAction.setMaxNoPlusOne()}"
+                                                         update="id"
+                                                         style="height:20px">
+                                        </p:commandButton>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="6">
+                                        <p:outputLabel value="备注内容：" for="remark"/>
+                                            <p:inputText id="remark" value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.remark}"/>
+                                            <p:outputLabel for="recVersion" value="修改次数：" />
+                                            <h:inputText id="recVersion"
+                                                         value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.recVersion}"
+                                                         style="background-color:gainsboro;text-align:right;" readonly="true">
+                                                <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                                            </h:inputText>
+                                    </h:panelGrid>
                                 </h:panelGrid>
-                                <h:panelGrid columns="6">
-                                    <p:outputLabel for="recVersion" value="修改次数：" />
-                                    <h:inputText id="recVersion"
-                                                 value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.recVersion}"
-                                                 style="background-color:gainsboro;text-align:right;" readonly="true">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                    </h:inputText>
-                                    <p:outputLabel value="备注内容：" for="remark"/>
-                                    <p:inputText id="remark" value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.remark}"/>
+                                <h:panelGrid columns="2" >
+                                    <p:commandButton id="submitBtn"
+                                                rendered="#{progStlItemTkMeaAction.strPassVisible}"
+                                                value="提交"
+                                                action="#{progStlInfoTkMeaTTAction.onClickForMngAction()}"
+                                                update="msgs,ppInfo">
+                                    </p:commandButton>
+                                    <p:ajaxStatus style="width:16px;height:16px;">
+                                        <f:facet name="start">
+                                            <h:graphicImage value="/images/ajaxloading.gif"/>
+                                        </f:facet>
+                                        <f:facet name="complete">
+                                            <h:outputText value=""/>
+                                        </f:facet>
+                                    </p:ajaxStatus>
                                 </h:panelGrid>
                             </h:panelGrid>
-                            <p:commandButton id="submitBtn"
-                                             rendered="#{progStlItemTkMeaAction.strPassVisible}"
-                                             value="提交"
-                                             action="#{progStlInfoTkMeaTTAction.onClickForMngAction()}"
-                                             update="msgs,pgInfo">
+                        </p:panel>
+                        <p:panel header="备注" style="height:90px">
+				            <p:commandButton value="导出到EXCEL"
+                                             action="#{progStlItemTkMeaAction.onExportExcel}"
+                                             ajax="false">
                             </p:commandButton>
-                         </h:panelGrid>
-                        <p:separator></p:separator>
-                        <h:panelGrid columns="5">
-                            <p:outputLabel value="录入备注：" for="flowRemark"/>
-                            <p:inputText id="flowRemark"
+                        </p:panel>
+                        <p:panel header="录入完了确认" id="ppFlow" style="height:90px">
+                            <h:panelGrid columns="2">
+				                <p:outputLabel  value="录入备注：" for="flowRemark"/>
+                            <p:inputTextarea id="flowRemark"
+                                                 rows="1"
+                                                 autoResize="false"
                                              value="#{progStlItemTkMeaAction.strFlowStatusRemark}"/>
+                            </h:panelGrid>
+                            <h:panelGrid>
                             <p:commandButton id="endInputBtn" value="录入完成"
                                              action="#{progStlItemTkMeaAction.onClickForPowerAction('Pass')}"
-                                             update="msgs,ppInfo"
+                                                 update="msgs,ppInfo,ppFlow,ppDetail"
                                              rendered="#{progStlItemTkMeaAction.strPassVisible}">
                             </p:commandButton>
                             <p:commandButton id="startInputBtn" value="录入未完"
                                              action="#{progStlItemTkMeaAction.onClickForPowerAction('Fail')}"
-                                             update="msgs,ppInfo"
+                                                 update="msgs,ppInfo,ppFlow,ppDetail"
                                              rendered="#{progStlItemTkMeaAction.strPassFailVisible}">
                             </p:commandButton>
-                            <p:commandButton value="导出到EXCEL"
-                                             action="#{progStlItemTkMeaAction.onExportExcel}"
-                                             ajax="false">
-                            </p:commandButton>
-                            <p:ajaxStatus style="width:16px;height:16px;">
-                                <f:facet name="start">
-                                    <h:graphicImage value="/images/ajaxloading.gif"/>
-                                </f:facet>
-                                <f:facet name="complete">
-                                    <h:outputText value=""/>
-                                </f:facet>
-                            </p:ajaxStatus>
-                        </h:panelGrid>
-                    </p:panel>
-                    <p:panel header="总包进度计量结算内容">
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:panelGrid>
+                    <p:panel id="ppDetail" header="总包进度计量结算内容">
                         <p:dataTable id="pdt" style="width:100%;"
                                  value="#{progStlItemTkMeaAction.progStlItemTkMeaShowList}"
                                  var="record"
@@ -367,7 +378,8 @@
                                     <p:commandButton id="submitBtnForDel"
                                                      value="提交（删除）"
                                                      action="#{progStlItemTkMeaAction.submitThisRecordAction}"
-                                                     update="pgViewForDel,pdt,msgs">
+                                                     update="pgViewForDel,pdt,msgs"
+                                                     oncomplete="wVDlgViewForDel.hide()">
                                     </p:commandButton>
                                 </h:panelGrid>
                             </h:panelGrid>

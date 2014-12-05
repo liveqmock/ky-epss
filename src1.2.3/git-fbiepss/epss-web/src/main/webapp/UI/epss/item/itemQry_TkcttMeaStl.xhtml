@@ -24,27 +24,25 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <p:panel id="ppInfo" header="总包进度工程量计量信息">
-                        <h:panelGrid columns="8">
-                            <p:outputLabel value="合同编号：" for="stlId"/>
-                            <p:inputText id="stlId" value="#{progStlItemTkMeaAction.progStlInfoShow.stlId}"
-                                         readonly="true" style="background-color:gainsboro;"/>
-                            <p:outputLabel value="合同名称：" for="cttName"/>
-                            <p:inputText id="cttName" value="#{progStlItemTkMeaAction.progStlInfoShow.stlName}"
-                                         readonly="true" style="background-color:gainsboro;"/>
-                            <p:outputLabel value="结算期号：" for="periodNo"/>
-                            <p:inputText id="periodNo" value="#{progStlItemTkMeaAction.progStlInfoShow.periodNo}"
-                                         readonly="true" style="background-color:gainsboro;"/>
-                            <p:outputLabel value="结算编号：" for="id"/>
-                            <p:inputText id="id" value="#{progStlItemTkMeaAction.progStlInfoShow.id}"
-                                         readonly="true" style="background-color:gainsboro;"/>
-                        </h:panelGrid>
-                        <p:separator></p:separator>
-                        <h:panelGrid columns="2">
-                            <p:commandButton value="导出到EXCEL"
-                                             action="#{progStlItemTkMeaAction.onExportExcel}"
-                                             ajax="false">
-                            </p:commandButton>
+                    <h:panelGrid columns="2">
+                    <p:panel header="总包进度工程量计量信息">
+                    	<h:panelGrid columns="2">
+                        	<h:panelGrid>
+                                <h:panelGrid columns="8">
+                                    <p:outputLabel value="合同编号：" for="stlId"/>
+                                    <p:inputText id="stlId" value="#{progStlItemTkMeaAction.progStlInfoShow.stlId}"
+                                                 readonly="true" style="background-color:gainsboro;"/>
+                                    <p:outputLabel value="合同名称：" for="cttName"/>
+                                    <p:inputText id="cttName" value="#{progStlItemTkMeaAction.progStlInfoShow.stlName}"
+                                                 readonly="true" style="background-color:gainsboro;"/>
+                                    <p:outputLabel value="结算期号：" for="periodNo"/>
+                                    <p:inputText id="periodNo" value="#{progStlItemTkMeaAction.progStlInfoShow.periodNo}"
+                                                 readonly="true" style="background-color:gainsboro;"/>
+                                    <p:outputLabel value="结算编号：" for="id"/>
+                                    <p:inputText id="id" value="#{progStlItemTkMeaAction.progStlInfoShow.id}"
+                                                 readonly="true" style="background-color:gainsboro;"/>
+                                </h:panelGrid>
+                            </h:panelGrid>
                             <p:ajaxStatus style="width:16px;height:16px;">
                                 <f:facet name="start">
                                     <h:graphicImage value="/images/ajaxloading.gif"/>
@@ -55,6 +53,13 @@
                             </p:ajaxStatus>
                         </h:panelGrid>
                     </p:panel>
+                    <p:panel header="备注" style="height: 66px;">
+				            <p:commandButton value="导出到EXCEL"
+                                             action="#{progStlItemTkMeaAction.onExportExcel}"
+                                             ajax="false">
+                            </p:commandButton>
+                    </p:panel>
+                    </h:panelGrid>
                     <p:panel header="总包进度工程量计量内容">
                         <p:dataTable id="pdt" style="width:100%;"
                                  value="#{progStlItemTkMeaAction.progStlItemTkMeaShowList}"

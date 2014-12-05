@@ -24,6 +24,7 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
+                    <h:panelGrid columns="2">
                     <p:panel header="分包合同信息">
                         <h:panelGrid columns="4">
                             <p:outputLabel value="分包合同编号：" for="id"/>
@@ -33,7 +34,8 @@
                             <p:inputText id="cttName" value="#{subcttItemAction.cttInfo.name}"
                                          readonly="true" style="width:400px;background-color:gainsboro;"/>
                         </h:panelGrid>
-                        <p:separator></p:separator>
+                        </p:panel>
+                        <p:panel header="备注">
                         <h:panelGrid columns="3">
                             <p:commandButton value="附件"
                                              update=":form:msgs"
@@ -53,6 +55,7 @@
                             </p:ajaxStatus>
                         </h:panelGrid>
                     </p:panel>
+                    </h:panelGrid>
                     <p:panel header="分包合同内容">
                         <p:dataTable id="pdt" style="width:100%;"
                                      value="#{subcttItemAction.cttItemShowList}"

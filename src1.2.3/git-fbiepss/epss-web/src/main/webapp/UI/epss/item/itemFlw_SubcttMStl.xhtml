@@ -22,37 +22,62 @@
     <ui:define name="content">
         <h:form id="form">
             <div style="margin:5px;">
-            <p:panel>
-                <p:growl id="msgs" showDetail="true"/>
-                <p:panel header="分包进度材料消耗量结算信息">
-                    <h:panelGrid columns="6">
-                        <p:outputLabel value="分包合同编号：" for="stlId"/>
-                        <p:inputText id="stlId" value="#{progStlItemSubMAction.progStlInfoShow.stlId}"
-                                     readonly="true" style="background-color:gainsboro;"/>
-                        <p:outputLabel value="分包合同名称：" for="cttName"/>
-                        <p:inputText id="cttName" value="#{progStlItemSubMAction.progStlInfoShow.stlName}"
-                                     readonly="true" style="width:400px;background-color:gainsboro;"/>
-                        <p:outputLabel value="分包合同类型：" for="type"/>
-                        <p:inputText id="type" value="#{progStlItemSubMAction.progStlInfoShow.type}"
-                                     readonly="true" style="background-color:gainsboro;"/>
-                    </h:panelGrid>
-                    <h:panelGrid columns="4">
-                        <p:outputLabel value="本期结算期号：" for="periodNo"/>
-                        <p:inputText id="periodNo" value="#{progStlItemSubMAction.progStlInfoShow.periodNo}"
-                                     readonly="true" style="background-color:gainsboro;"/>
-                        <p:outputLabel value="材料结算编号：" for="id"/>
-                        <p:inputText id="id" value="#{progStlItemSubMAction.progStlInfoShow.id}"
-                                     readonly="true" style="background-color:gainsboro;"/>
-                    </h:panelGrid>
-                    <h:panelGrid id="pgOperBtn" columns="6">
-                        <p:commandButton value="导出到EXCEL"
-                                         action="#{progStlItemSubMAction.onExportExcel}"
-                                         ajax="false">
+                <p:panel>
+                    <p:growl id="msgs" showDetail="true"/>
+                    <h:panelGrid columns="3">
+                	    <p:panel header="分包进度材料消耗量结算信息" id="ppInfo">
+                            <h:panelGrid columns="2">
+                                <h:panelGrid>
+                                    <h:panelGrid columns="6">
+                                        <p:outputLabel value="分包合同编号：" for="stlId"/>
+                                        <p:inputText id="stlId" value="#{progStlItemSubMAction.progStlInfoShow.stlId}"
+                                                     readonly="true" style="background-color:gainsboro;"/>
+                                        <p:outputLabel value="分包合同名称：" for="cttName"/>
+                                        <p:inputText id="cttName" value="#{progStlItemSubMAction.progStlInfoShow.stlName}"
+                                                     readonly="true" style="width:280px;background-color:gainsboro;"/>
+                                        <p:outputLabel value="分包合同类型：" for="type"/>
+                                        <p:inputText id="type" value="#{progStlItemSubMAction.progStlInfoShow.type}"
+                                                     readonly="true" style="background-color:gainsboro;"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="4">
+                                        <p:outputLabel value="本期结算期号：" for="periodNo"/>
+                                        <p:inputText id="periodNo" value="#{progStlItemSubMAction.progStlInfoShow.periodNo}"
+                                                     readonly="true" style="background-color:gainsboro;"/>
+                                        <p:outputLabel value="材料结算编号：" for="id"/>
+                                        <p:inputText id="id" value="#{progStlItemSubMAction.progStlInfoShow.id}"
+                                                     readonly="true" style="background-color:gainsboro;"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <p:ajaxStatus style="width:16px;height:16px;">
+                                    <f:facet name="start">
+                                        <h:graphicImage value="/images/ajaxloading.gif"/>
+                                    </f:facet>
+                                    <f:facet name="complete">
+                                        <h:outputText value=""/>
+                                    </f:facet>
+                                </p:ajaxStatus>
+                            </h:panelGrid>
+                        </p:panel>
+                    <p:panel header="备注" style="height:90px">
+				        <p:commandButton value="导出到EXCEL"
+                                        action="#{progStlItemSubMAction.onExportExcel}"
+                                        ajax="false">
                         </p:commandButton>
-                        <p:commandButton id="endInputBtn" value="通过"
+                    </p:panel>
+                        <p:panel header="审批" id="ppFlow" style="height:90px">
+                            <h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="录入备注：" for="flowRemark"/>
+                                    <p:inputTextarea id="flowRemark"
+                                                     rows="1"
+                                                     autoResize="false"
+                                                     value="#{progStlItemSubQAction.strFlowStatusRemark}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="5">
+					<p:commandButton id="endInputBtn" value="通过"
                                          action="#{progStlItemSubMAction.onClickForPowerAction('Pass')}"
                                          rendered='#{progStlItemSubMAction.strPassVisible}'
-                                         update="msgs,pgOperBtn">
+                                                     update="msgs,ppInfo,ppFlow">
                         </p:commandButton>
                         <p:outputLabel value="未过至状态:" rendered='#{progStlItemSubMAction.strPassFailVisible}'/>
                         <p:selectOneMenu id="flowStatus" value="#{progStlItemSubMAction.strNotPassToStatus}"
@@ -62,18 +87,12 @@
                         <p:commandButton id="startInputBtn" value="未过"
                                          action="#{progStlItemSubMAction.onClickForPowerAction('Fail')}"
                                          rendered='#{progStlItemSubMAction.strPassFailVisible}'
-                                         update="msgs,pgOperBtn">
+                                                     update="msgs,ppInfo,ppFlow">
                         </p:commandButton>
-                        <p:ajaxStatus style="width:16px;height:16px;">
-                            <f:facet name="start">
-                                <h:graphicImage value="/images/ajaxloading.gif"/>
-                            </f:facet>
-                            <f:facet name="complete">
-                                <h:outputText value=""/>
-                            </f:facet>
-                        </p:ajaxStatus>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
                     </h:panelGrid>
-                </p:panel>
                 <p:panel header="分包进度材料消耗量结算内容">
                     <p:dataTable id="pdt" style="width:100%;"
                                  value="#{progStlItemSubMAction.progStlItemSubMShowList}"
@@ -103,7 +122,7 @@
                                               onclick="PF('wVDlgView').show()">
                             </p:commandButton>
                         </p:column>
-                        <p:column headerText="序号" style="width:30px">
+                        <p:column headerText="序号" style="width:40px">
                             <h:outputText value="#{row + 1}"/>
                         </p:column>
                         <p:column style="width:100px" headerText="编号">
@@ -112,8 +131,8 @@
                         <p:column style="width:300px" headerText="名称">
                             <h:outputText value="#{record.subctt_Name}"/>
                         </p:column>
-                        <p:column style="width:60px" headerText="单位">
-                            <h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
+                        <p:column style="width:40px" headerText="单位">
+                        	<h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
                         </p:column>
                         <p:column style="width:100px" headerText="合同单价">
                             <h:outputText value="#{record.subctt_ContractUnitPrice}" style="float: right">
