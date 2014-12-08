@@ -59,10 +59,16 @@
                             </h:panelGrid>
                         </p:panel>
                         <p:panel header="备注" style="height:90px">
-                            <p:commandButton value="导出到EXCEL"
-                                             action="#{progStlItemSubQAction.onExportExcel}"
-                                             ajax="false">
-                            </p:commandButton>
+                            <h:panelGrid>
+                                <p:commandButton value="附件"
+                                                 update=":form:msgs"
+                                                 onclick="PF('wvAttachmentList').show()">
+                                </p:commandButton>
+                                <p:commandButton value="导出到EXCEL"
+                                                action="#{progStlItemSubQAction.onExportExcel}"
+                                                ajax="false">
+                                </p:commandButton>
+                            </h:panelGrid>
                         </p:panel>
                         <p:panel header="审批" id="ppFlow" style="height:90px">
                             <h:panelGrid>
@@ -275,6 +281,68 @@
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                                     </h:inputText>
                                 </h:panelGrid>
+                            </h:panelGrid>
+                        </p:dialog>
+                        <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
+                                  showEffect="clip" hideEffect="fold" header="附件列表">
+                            <p:growl id="messages" showDetail="true"/>
+                            <h:panelGrid id="pgAttachmentView">
+                                <p:fileUpload id="attachmentName" fileUploadListener="#{progStlItemSubQAction.upload}"
+                                              mode="advanced"
+                                              sizeLimit="1000000"
+                                              multiple="true"
+                                              label="选择" showButtons="true"
+                                              cancelLabel="全部取消" uploadLabel="全部上传" process="@this"
+                                              allowTypes="/(\.|\/)(gif|jpe?g|png|xls|xlsx|doc|docx)$/"
+                                              update="pdtAttachmentList,attachmentName">
+                                </p:fileUpload>
+                                <p:dataTable id="pdtAttachmentList" style="width:100%;"
+                                             value="#{progStlItemSubQAction.attachmentList}"
+                                             var="recordAttachment"
+                                             rowKey="#{recordAttachment.COLUMN_NAME}"
+                                             selectionMode="single"
+                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             paginator="true"
+                                             paginatorPosition="bottom"
+                                             rows="5"
+                                             rowsPerPageTemplate="100,50,30,15,5"
+                                             emptyMessage="数据记录为空...">
+                                    <p:column headerText="附件ID" style="text-align:left">
+                                        <h:outputText value="#{recordAttachment.COLUMN_ID}"/>
+                                    </p:column>
+                                    <p:column headerText="附件名" style="text-align:left">
+                                        <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
+                                    </p:column>
+                                    <p:column headerText="缩略图" style="text-align:center" rendered="false">
+                                        <h:graphicImage value="/upload/stl/SubQ/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
+                                    </p:column>
+                                    <p:column headerText="预览">
+                                        <p:commandButton icon="ui-icon-search"
+                                                         id="selectButton" update=":form:imageShow"
+                                                         style="height:18px;width:18px"
+                                                         action="#{progStlItemSubQAction.onViewAttachment(recordAttachment)}"
+                                                         oncomplete="dlgWvView.show()"
+                                                         title="View">
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column headerText="操作" style="width:62px;text-align: center;">
+                                        <p:commandButton icon="ui-icon-arrowrefresh-1-w"
+                                                         style="height:18px;width:18px"
+                                                         ajax="false"
+                                                         actionListener="#{progStlItemSubQAction.download(recordAttachment.COLUMN_PATH)}">
+                                            <p:fileDownload value="#{progStlItemSubQAction.downloadFile}"/>
+                                        </p:commandButton>
+                                        <p:commandButton icon="ui-icon-trash"
+                                                         style="height:18px;width:18px"
+                                                         action="#{progStlItemSubQAction.delAttachmentRecordAction(recordAttachment)}"
+                                                         update=":form:pgAttachmentView,:form:msgs">
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                                <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
+                                    <h:graphicImage binding="#{progStlItemSubQAction.image}"/>
+                                </p:dialog>
                             </h:panelGrid>
                         </p:dialog>
                     </p:panel>
