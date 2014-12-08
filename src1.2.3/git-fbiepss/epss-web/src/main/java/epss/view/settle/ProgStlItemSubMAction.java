@@ -132,8 +132,10 @@ public class ProgStlItemSubMAction {
                 return;
             }
             progStlItemSubMShowList =new ArrayList<ProgStlItemSubMShow>();
+            progStlItemSubMShowListExcel =new ArrayList<>();
             recursiveDataTable("root", cttItemList, progStlItemSubMShowList);
             progStlItemSubMShowList =getStlSubCttEngMMngConstructList_DoFromatNo(progStlItemSubMShowList);
+            setItemOfEsItemHieRelapList_AddTotal();
             // Excel报表形成
             progStlItemSubMShowListExcel =new ArrayList<ProgStlItemSubMShow>();
             for(ProgStlItemSubMShow itemUnit: progStlItemSubMShowList){
@@ -219,6 +221,106 @@ public class ProgStlItemSubMAction {
             }
             sProgStlItemSubMShowListPara.add(progStlItemSubMShowTemp) ;
             recursiveDataTable(progStlItemSubMShowTemp.getSubctt_Pkid(), cttItemListPara, sProgStlItemSubMShowListPara);
+        }
+    }
+    private void setItemOfEsItemHieRelapList_AddTotal(){
+        List<ProgStlItemSubMShow> progStlItemSubMShowListTemp =new ArrayList<ProgStlItemSubMShow>();
+        progStlItemSubMShowListTemp.addAll(progStlItemSubMShowList);
+        progStlItemSubMShowList.clear();
+        // 合同数量小计
+        BigDecimal bdQuantityTotal=new BigDecimal(0);
+        // 合同数量大计
+        BigDecimal bdQuantityAllTotal=new BigDecimal(0);
+        // 合同金额小计
+        BigDecimal bdAmountTotal=new BigDecimal(0);
+        // 合同金额大计
+        BigDecimal bdAmountAllTotal=new BigDecimal(0);
+        // 开累材料量小计
+        BigDecimal bdBeginToCurrentPeriodMQtyTotal=new BigDecimal(0);
+        // 开累材料量大计
+        BigDecimal bdBeginToCurrentPeriodMQtyAllTotal=new BigDecimal(0);
+        // 当期材料量小计
+        BigDecimal bdCurrentPeriodMQtyTotal=new BigDecimal(0);
+        // 当期材料量大计
+        BigDecimal bdCurrentPeriodMQtyAllTotal=new BigDecimal(0);
+        ProgStlItemSubMShow itemUnit=new ProgStlItemSubMShow();
+        ProgStlItemSubMShow itemUnitNext=new ProgStlItemSubMShow();
+        for(int i=0;i< progStlItemSubMShowListTemp.size();i++){
+            itemUnit = progStlItemSubMShowListTemp.get(i);
+            bdQuantityTotal=bdQuantityTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
+            bdQuantityAllTotal=bdQuantityAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
+            bdBeginToCurrentPeriodMQtyTotal=
+                    bdBeginToCurrentPeriodMQtyTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngMMng_BeginToCurrentPeriodMQty()));
+            bdCurrentPeriodMQtyTotal=
+                    bdCurrentPeriodMQtyTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngMMng_CurrentPeriodMQty()));
+            //费税率金额不计入小计（费税率为子项时），当前和开累不计入大计
+            if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade()>1){
+                bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount())).subtract(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+            }else{
+                bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+            }
+            if(itemUnit.getSubctt_SpareField()==null){
+                bdAmountAllTotal=bdAmountAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+            }
+            bdBeginToCurrentPeriodMQtyAllTotal=
+                    bdBeginToCurrentPeriodMQtyAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngMMng_BeginToCurrentPeriodMQty()));
+            bdCurrentPeriodMQtyAllTotal=
+                    bdCurrentPeriodMQtyAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngMMng_CurrentPeriodMQty()));
+            progStlItemSubMShowList.add(itemUnit);
+            if(i+1< progStlItemSubMShowListTemp.size()){
+                itemUnitNext = progStlItemSubMShowListTemp.get(i+1);
+                if(itemUnitNext.getSubctt_ParentPkid().equals("root")){
+                    ProgStlItemSubMShow itemOfEsItemHieRelapTemp=new ProgStlItemSubMShow();
+                    itemOfEsItemHieRelapTemp.setSubctt_Name("合计");
+                    itemOfEsItemHieRelapTemp.setSubctt_Pkid("total"+i);
+                    itemOfEsItemHieRelapTemp.setSubctt_ContractQuantity(
+                            ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
+                    itemOfEsItemHieRelapTemp.setSubctt_ContractAmount(
+                            ToolUtil.getBdFrom0ToNull(bdAmountTotal));
+                    itemOfEsItemHieRelapTemp.setEngMMng_BeginToCurrentPeriodMQty(
+                            ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodMQtyTotal));
+                    itemOfEsItemHieRelapTemp.setEngMMng_CurrentPeriodMQty(
+                            ToolUtil.getBdFrom0ToNull(bdCurrentPeriodMQtyTotal));
+                    progStlItemSubMShowList.add(itemOfEsItemHieRelapTemp);
+                    bdQuantityTotal=new BigDecimal(0);
+                    bdAmountTotal=new BigDecimal(0);
+                    bdBeginToCurrentPeriodMQtyTotal=new BigDecimal(0);
+                    bdCurrentPeriodMQtyTotal=new BigDecimal(0);
+                }
+            } else if(i+1== progStlItemSubMShowListTemp.size()){
+                itemUnitNext = progStlItemSubMShowListTemp.get(i);
+                ProgStlItemSubMShow progStlItemSubMShowTemp = new ProgStlItemSubMShow();
+                progStlItemSubMShowTemp.setSubctt_Name("合计");
+                progStlItemSubMShowTemp.setSubctt_Pkid("total" + i);
+                progStlItemSubMShowTemp.setSubctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
+                progStlItemSubMShowTemp.setSubctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(bdAmountTotal));
+                progStlItemSubMShowTemp.setEngMMng_BeginToCurrentPeriodMQty(
+                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodMQtyTotal));
+                progStlItemSubMShowTemp.setEngMMng_CurrentPeriodMQty(
+                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodMQtyTotal));
+                progStlItemSubMShowList.add(progStlItemSubMShowTemp);
+                progStlItemSubMShowListExcel.add(progStlItemSubMShowTemp);
+                bdQuantityTotal = new BigDecimal(0);
+                bdAmountTotal = new BigDecimal(0);
+                bdBeginToCurrentPeriodMQtyTotal = new BigDecimal(0);
+                bdCurrentPeriodMQtyTotal = new BigDecimal(0);
+                // 总合计
+                progStlItemSubMShowTemp = new ProgStlItemSubMShow();
+                progStlItemSubMShowTemp.setSubctt_Name("总合计");
+                progStlItemSubMShowTemp.setSubctt_Pkid("total_all" + i);
+                progStlItemSubMShowTemp.setSubctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(bdQuantityAllTotal));
+                progStlItemSubMShowTemp.setSubctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(bdAmountAllTotal));
+                progStlItemSubMShowTemp.setEngMMng_BeginToCurrentPeriodMQty(
+                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodMQtyAllTotal));
+                progStlItemSubMShowTemp.setEngMMng_CurrentPeriodMQty(
+                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodMQtyAllTotal));
+                progStlItemSubMShowList.add(progStlItemSubMShowTemp);
+                progStlItemSubMShowListExcel.add(progStlItemSubMShowTemp);
+            }
         }
     }
     /*根据group和orderid临时编制编码strNo*/
