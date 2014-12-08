@@ -4,11 +4,13 @@ import epss.common.enums.*;
 import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.ProgStlInfoShow;
 import epss.repository.model.model_show.ProgStlItemSubQShow;
+import jxl.write.WriteException;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
+import skyline.util.JxlsManager;
 import skyline.util.ToolUtil;
 import epss.repository.model.*;
 import epss.service.*;
@@ -27,6 +29,7 @@ import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
 import java.io.*;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.*;
 /**
  * Created with IntelliJ IDEA.
@@ -166,7 +169,6 @@ public class ProgStlItemSubQAction {
                 progStlItemSubQShowListExcel.add(itemUnitTemp);
             }
             beansMap.put("progStlItemSubQShowListExcel", progStlItemSubQShowListExcel);
-            beansMap.put("progStlItemSubQShowList", progStlItemSubQShowList);
         }catch (Exception e){
             logger.error("初始化失败", e);
             MessageUtil.addError("初始化失败");
@@ -174,8 +176,8 @@ public class ProgStlItemSubQAction {
     }
     /*根据数据库中层级关系数据列表得到总包合同*/
     private void recursiveDataTable(String strLevelParentId,
-                                    List<CttItem> cttItemListPara,
-                                    List<ProgStlItemSubQShow> sProgStlItemSubQShowListPara){
+                                      List<CttItem> cttItemListPara,
+                                      List<ProgStlItemSubQShow> progStlItemSubQShowListPara){
         // 根据父层级号获得该父层级下的子节点
         List<CttItem> subCttItemList =new ArrayList<CttItem>();
         // 通过父层id查找它的孩子
@@ -220,15 +222,9 @@ public class ProgStlItemSubQAction {
                 progStlItemSubQShowTemp.setEngQMng_LastUpdBy(progStlItemSubQ.getLastUpdBy());
                 progStlItemSubQShowTemp.setEngQMng_LastUpdTime(progStlItemSubQ.getLastUpdTime());
                 progStlItemSubQShowTemp.setEngQMng_RecVersion(progStlItemSubQ.getRecVersion());
-                if(progStlItemSubQShowTemp.getEngQMng_BeginToCurrentPeriodEQty()!=null) {
-                    if (progStlItemSubQShowTemp.getEngQMng_BeginToCurrentPeriodEQty()
-                            .equals(progStlItemSubQShowTemp.getSubctt_ContractQuantity())) {
-                        progStlItemSubQShowTemp.setIsUptoCttContentFlag(true);
-                    }
-                }
             }
-            sProgStlItemSubQShowListPara.add(progStlItemSubQShowTemp) ;
-            recursiveDataTable(progStlItemSubQShowTemp.getSubctt_Pkid(), cttItemListPara, sProgStlItemSubQShowListPara);
+            progStlItemSubQShowListPara.add(progStlItemSubQShowTemp) ;
+            recursiveDataTable(progStlItemSubQShowTemp.getSubctt_Pkid(), cttItemListPara, progStlItemSubQShowListPara);
         }
     }
 
@@ -256,6 +252,19 @@ public class ProgStlItemSubQAction {
         ProgStlItemSubQShow itemUnitNext=new ProgStlItemSubQShow();
         for(int i=0;i< progStlItemSubQShowListTemp.size();i++){
             itemUnit = progStlItemSubQShowListTemp.get(i);
+            // 控制画面上的按钮显示
+            // 累积数已达到合同数量
+            if(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()!=null) {
+                if (itemUnit.getEngQMng_BeginToCurrentPeriodEQty()
+                        .compareTo(itemUnit.getSubctt_ContractQuantity())>=0) {
+                    itemUnit.setIsUptoCttQtyFlag(true);
+                }
+            }
+            // 框架项
+            if(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()).compareTo(ToolUtil.bigDecimal0)==0){
+                itemUnit.setIsRenderedFlag(false);
+            }
+
             bdQuantityTotal=bdQuantityTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
             bdQuantityAllTotal=bdQuantityAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
             bdBeginToCurrentPeriodEQtyTotal=
@@ -264,7 +273,9 @@ public class ProgStlItemSubQAction {
                     bdCurrentPeriodEQtyTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngQMng_CurrentPeriodEQty()));
             //费税率金额不计入小计（费税率为子项时），当前和开累不计入大计
             if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade()>1){
-                bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount())).subtract(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+                bdAmountTotal=bdAmountTotal.add(
+                        ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount())).subtract(
+                        ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
             }else{
                 bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
             }
@@ -290,6 +301,7 @@ public class ProgStlItemSubQAction {
                             ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyTotal));
                     itemOfEsItemHieRelapTemp.setEngQMng_CurrentPeriodEQty(
                             ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal));
+                    itemOfEsItemHieRelapTemp.setIsRenderedFlag(false);
                     progStlItemSubQShowList.add(itemOfEsItemHieRelapTemp);
                     bdQuantityTotal=new BigDecimal(0);
                     bdAmountTotal=new BigDecimal(0);
@@ -309,6 +321,7 @@ public class ProgStlItemSubQAction {
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyTotal));
                 progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal));
+                progStlItemSubQShowTemp.setIsRenderedFlag(false);
                 progStlItemSubQShowList.add(progStlItemSubQShowTemp);
                 progStlItemSubQShowListExcel.add(progStlItemSubQShowTemp);
                 bdQuantityTotal = new BigDecimal(0);
@@ -327,6 +340,7 @@ public class ProgStlItemSubQAction {
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyAllTotal));
                 progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyAllTotal));
+                progStlItemSubQShowTemp.setIsRenderedFlag(false);
                 progStlItemSubQShowList.add(progStlItemSubQShowTemp);
                 progStlItemSubQShowListExcel.add(progStlItemSubQShowTemp);
             }
@@ -447,6 +461,12 @@ public class ProgStlItemSubQAction {
                     ToolUtil.getBdIgnoreNull(progStlItemSubQShowUpd.getSubctt_ContractQuantity());
 
             if(strBlurOrSubmitFlag.equals("blur")) {
+                if(bDSubctt_ContractQuantity.compareTo(ToolUtil.bigDecimal0)<0){
+                    bDSubctt_ContractQuantity=ToolUtil.bigDecimal0.divide(bDSubctt_ContractQuantity);
+                }
+                if(bigDecimalTemp.compareTo(ToolUtil.bigDecimal0)<0){
+                    bigDecimalTemp=ToolUtil.bigDecimal0.divide(bigDecimalTemp);
+                }
                 if(bigDecimalTemp.compareTo(bDSubctt_ContractQuantity)>0){
                     MessageUtil.addError("上期开累工程数量+本期工程数量>合同数量，请确认您输入的本期工程数量（"
                             + bDEngQMng_CurrentPeriodEQtyTemp.toString() + "）！");
@@ -726,6 +746,18 @@ public class ProgStlItemSubQAction {
                 }
             }
         }
+    }
+	public String onExportExcel()throws IOException, WriteException {
+        if (this.progStlItemSubQShowList.size() == 0) {
+            MessageUtil.addWarn("记录为空...");
+            return null;
+        } else {
+            String excelFilename = "分包数量结算-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
+            JxlsManager jxls = new JxlsManager();
+            jxls.exportList(excelFilename, beansMap,"progStlItemSubQ.xls");
+            // 其他状态的票据需要添加时再修改导出文件名
+        }
+        return null;
     }
     /* 智能字段Start*/
     public CttInfoService getCttInfoService() {

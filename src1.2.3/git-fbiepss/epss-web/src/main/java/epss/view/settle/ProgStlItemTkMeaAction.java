@@ -253,7 +253,7 @@ public class ProgStlItemTkMeaAction {
                 progStlItemTkMeaShowTemp.setEng_RecVersion(progStlItemTkMea.getRecVersion());
                 if (ToolUtil.getBdIgnoreNull(progStlItemTkMeaShowTemp.getEng_BeginToCurrentPeriodEQty())
                         .compareTo(progStlItemTkMeaShowTemp.getTkctt_ContractQuantity())==0){
-                    progStlItemTkMeaShowTemp.setIsUptoCttContentFlag(true);
+                    progStlItemTkMeaShowTemp.setIsUptoCttQtyFlag(true);
                 }
             }
             sProgStlItemTkMeaShowListPara.add(progStlItemTkMeaShowTemp) ;

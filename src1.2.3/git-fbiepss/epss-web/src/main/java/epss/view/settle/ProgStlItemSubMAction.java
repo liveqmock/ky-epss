@@ -215,7 +215,7 @@ public class ProgStlItemSubMAction {
                 if(progStlItemSubMShowTemp.getEngMMng_BeginToCurrentPeriodMQty()!=null) {
                     if (progStlItemSubMShowTemp.getEngMMng_BeginToCurrentPeriodMQty()
                             .equals(progStlItemSubMShowTemp.getSubctt_ContractQuantity())) {
-                        progStlItemSubMShowTemp.setIsUptoCttContentFlag(true);
+                        progStlItemSubMShowTemp.setIsUptoCttQtyFlag(true);
                     }
                 }
             }

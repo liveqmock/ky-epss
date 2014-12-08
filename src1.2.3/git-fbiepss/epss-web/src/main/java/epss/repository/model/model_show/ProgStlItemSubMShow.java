@@ -47,7 +47,8 @@ public class ProgStlItemSubMShow implements Serializable {
     private String engMMng_LastUpdByName;
     private String engMMng_LastUpdTime;
     private Integer engMMng_RecVersion;
-    private Boolean isUptoCttContentFlag;
+    private Boolean isUptoCttQtyFlag;
+    private Boolean isRenderedFlag;
 
     public ProgStlItemSubMShow() {
 
@@ -108,7 +109,6 @@ public class ProgStlItemSubMShow implements Serializable {
     public void setSubctt_CorrespondingPkid(String subctt_CorrespondingPkid) {
         this.subctt_CorrespondingPkid = subctt_CorrespondingPkid;
     }
-
 
     public String getSubctt_ParentPkid() {
         return subctt_ParentPkid;
@@ -318,11 +318,19 @@ public class ProgStlItemSubMShow implements Serializable {
         this.engMMng_CreatedByName = engMMng_CreatedByName;
     }
 
-    public Boolean getIsUptoCttContentFlag() {
-        return isUptoCttContentFlag;
+    public Boolean getIsUptoCttQtyFlag() {
+        return isUptoCttQtyFlag;
     }
 
-    public void setIsUptoCttContentFlag(Boolean isUptoCttContentFlag) {
-        this.isUptoCttContentFlag = isUptoCttContentFlag;
+    public void setIsUptoCttQtyFlag(Boolean isUptoCttQtyFlag) {
+        this.isUptoCttQtyFlag = isUptoCttQtyFlag;
+    }
+
+    public Boolean getIsRenderedFlag() {
+        return isRenderedFlag;
+    }
+
+    public void setIsRenderedFlag(Boolean isRenderedFlag) {
+        this.isRenderedFlag = isRenderedFlag;
     }
 }
