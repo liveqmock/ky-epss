@@ -140,10 +140,12 @@
                                 </h:outputText>
                             </p:column>
                             <p:column style="width:100px" headerText="合同金额">
-                                <h:outputText value="#{record.subctt_ContractAmount}" style="float: right" rendered="#{record.subctt_SpareField eq null?true:false}">
+                                <h:outputText value="#{record.subctt_ContractAmount}" style="float: right"
+                                              rendered="#{record.subctt_SpareField eq null?true:false}">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
-                                <h:outputText value="#{record.subctt_ContractAmount}" style="float: right" rendered="#{record.subctt_SpareField ne null?true:false}">
+                                <h:outputText value="#{record.subctt_ContractAmount}" style="float: right"
+                                              rendered="#{record.subctt_SpareField ne null?true:false}">
                                     <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
                                 </h:outputText>
                             </p:column>
@@ -153,18 +155,22 @@
                                 </h:outputText>
                             </p:column>
                             <p:column style="width:110px" headerText="开累工程数量">
-                                <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQty}" style="float: right" rendered="#{record.subctt_SpareField eq null?true:false}">
+                                <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQty}" style="float: right"
+                                              rendered="#{record.subctt_SpareField eq null?true:false}">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
-                                <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQty}" style="float: right" rendered="#{record.subctt_SpareField ne null?true:false}">
+                                <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQty}" style="float: right"
+                                              rendered="#{record.subctt_SpareField ne null?true:false}">
                                     <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
                                 </h:outputText>
                             </p:column>
                             <p:column style="width:110px" headerText="当期工程数量">
-                                <h:outputText value="#{record.engQMng_CurrentPeriodEQty}" style="float: right"  rendered="#{record.subctt_SpareField eq null?true:false}">
+                                <h:outputText value="#{record.engQMng_CurrentPeriodEQty}" style="float: right"
+                                              rendered="#{record.subctt_SpareField eq null?true:false}">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
-                                <h:outputText value="#{record.engQMng_CurrentPeriodEQty}" style="float: right"  rendered="#{record.subctt_SpareField ne null?true:false}">
+                                <h:outputText value="#{record.engQMng_CurrentPeriodEQty}" style="float: right"
+                                              rendered="#{record.subctt_SpareField ne null?true:false}">
                                     <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
                                 </h:outputText>
                             </p:column>
@@ -203,28 +209,32 @@
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
-                                    <p:outputLabel for="engQMng_BeginToCurrentPeriodEQty" value="开累数量:" rendered="#{progStlItemSubQAction.progStlItemSubQShowSel.subctt_SpareField eq null?true:false}"/>
+                                    <p:outputLabel for="engQMng_BeginToCurrentPeriodEQty" value="开累数量:"
+                                                   rendered="#{progStlItemSubQAction.progStlItemSubQShowSel.subctt_SpareField eq null?true:false}"/>
                                     <h:inputText id="engQMng_BeginToCurrentPeriodEQty"
                                                  value="#{progStlItemSubQAction.progStlItemSubQShowSel.engQMng_BeginToCurrentPeriodEQty}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true" rendered="#{progStlItemSubQAction.progStlItemSubQShowSel.subctt_SpareField eq null?true:false}">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
-                                    <p:outputLabel for="engQMng_BeginToCurrentPeriodEQty2" value="开累数量:" rendered="#{progStlItemSubQAction.progStlItemSubQShowSel.subctt_SpareField ne null?true:false}"/>
+                                    <p:outputLabel for="engQMng_BeginToCurrentPeriodEQty2" value="开累数量:"
+                                                   rendered="#{progStlItemSubQAction.progStlItemSubQShowSel.subctt_SpareField ne null?true:false}"/>
                                     <h:inputText id="engQMng_BeginToCurrentPeriodEQty2"
                                                  value="#{progStlItemSubQAction.progStlItemSubQShowSel.engQMng_BeginToCurrentPeriodEQty}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true" rendered="#{progStlItemSubQAction.progStlItemSubQShowSel.subctt_SpareField ne null?true:false}">
                                         <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
                                     </h:inputText>
-                                    <p:outputLabel for="engQMng_CurrentPeriodEQty" value="本期数量:" rendered="#{progStlItemSubQAction.progStlItemSubQShowSel.subctt_SpareField eq null?true:false}"/>
+                                    <p:outputLabel for="engQMng_CurrentPeriodEQty" value="本期数量:"
+                                                   rendered="#{progStlItemSubQAction.progStlItemSubQShowSel.subctt_SpareField eq null?true:false}"/>
                                     <h:inputText id="engQMng_CurrentPeriodEQty"
                                                  value="#{progStlItemSubQAction.progStlItemSubQShowSel.engQMng_CurrentPeriodEQty}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true" rendered="#{progStlItemSubQAction.progStlItemSubQShowSel.subctt_SpareField eq null?true:false}">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
-                                    <p:outputLabel for="engQMng_CurrentPeriodEQty2" value="本期数量:" rendered="#{progStlItemSubQAction.progStlItemSubQShowSel.subctt_SpareField ne null?true:false}"/>
+                                    <p:outputLabel for="engQMng_CurrentPeriodEQty2" value="本期数量:"
+                                                   rendered="#{progStlItemSubQAction.progStlItemSubQShowSel.subctt_SpareField ne null?true:false}"/>
                                     <h:inputText id="engQMng_CurrentPeriodEQty2"
                                                  value="#{progStlItemSubQAction.progStlItemSubQShowSel.engQMng_CurrentPeriodEQty}"
                                                  style="background-color:gainsboro;text-align:right;"
