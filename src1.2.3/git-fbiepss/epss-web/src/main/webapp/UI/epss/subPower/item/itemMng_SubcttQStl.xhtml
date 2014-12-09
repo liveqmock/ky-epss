@@ -433,7 +433,7 @@
                                         <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
                                     </p:column>
                                     <p:column headerText="缩略图" style="text-align:center" rendered="false">
-                                        <h:graphicImage value="/upload/stl/SubQ/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
+                                        <h:graphicImage value="#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
                                     </p:column>
                                     <p:column headerText="预览">
                                         <p:commandButton icon="ui-icon-search"
@@ -448,7 +448,7 @@
                                         <p:commandButton icon="ui-icon-arrowrefresh-1-w"
                                                          style="height:18px;width:18px"
                                                          ajax="false"
-                                                         actionListener="#{progStlItemSubQAction.download(recordAttachment.COLUMN_PATH)}">
+                                                         actionListener="#{progStlItemSubQAction.download(recordAttachment)}">
                                             <p:fileDownload value="#{progStlItemSubQAction.downloadFile}"/>
                                         </p:commandButton>
                                         <p:commandButton icon="ui-icon-trash"

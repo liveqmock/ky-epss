@@ -668,7 +668,8 @@ public class ProgStlItemSubQAction {
             MessageUtil.addError(e.getMessage());
         }
     }
-    public void download(String strAttachment){
+    public void download(AttachmentModel attachmentModelPara){
+        String strAttachment=attachmentModelPara.getCOLUMN_NAME();
         try{
             if(StringUtils.isEmpty(strAttachment) ){
                 MessageUtil.addError("路径为空，无法下载！");

@@ -3,9 +3,15 @@ package epss.view.settle;
 import epss.common.enums.EnumResType;
 import epss.common.enums.EnumFlowStatus;
 import epss.common.enums.EnumFlowStatusReason;
+import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.ProgStlInfoShow;
 import epss.repository.model.model_show.ProgStlItemTkMeaShow;
 import epss.repository.model.model_show.ReportHeader;
+import org.apache.commons.lang.StringUtils;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.repository.model.*;
@@ -15,16 +21,20 @@ import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
+import java.io.*;
 import java.math.BigDecimal;
 import java.util.*;
 import skyline.util.JxlsManager;
 import java.text.SimpleDateFormat;
-import java.io.IOException;
+
 import jxl.write.WriteException;
 /**
  * Created with IntelliJ IDEA.
@@ -81,7 +91,9 @@ public class ProgStlItemTkMeaAction {
     private List<ProgStlItemTkMeaShow> progStlItemTkMeaShowListForExcel;
     // 流程备注内容
     private String strFlowStatusRemark;
-
+    private HtmlGraphicImage image;
+    private StreamedContent downloadFile;
+    private List<AttachmentModel> attachmentList;
     @PostConstruct
     public void init() {
         try {
@@ -156,6 +168,8 @@ public class ProgStlItemTkMeaAction {
                 return;
             }
             progStlItemTkMeaShowList =new ArrayList<ProgStlItemTkMeaShow>();
+            attachmentList=new ArrayList<>();
+            attachmentList=ToolUtil.getListAttachmentByStrAttachment(progStlInfoShow.getAttachment());
             recursiveDataTable("root", cttItemList, progStlItemTkMeaShowList);
             progStlItemTkMeaShowList =getItemStlTkcttEngSMList_DoFromatNo(progStlItemTkMeaShowList);
             setItemOfEsItemHieRelapList_AddTotal();
@@ -709,7 +723,107 @@ public class ProgStlItemTkMeaAction {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
         }
+    }// 附件
+    public void onViewAttachment(AttachmentModel attachmentModelPara) {
+        image.setValue("/upload/stl/TkMea/" + attachmentModelPara.getCOLUMN_NAME());
     }
+    public void delAttachmentRecordAction(AttachmentModel attachmentModelPara){
+        try {
+            File deletingFile = new File(attachmentModelPara.getCOLUMN_PATH());
+            deletingFile.delete();
+            attachmentList.remove(attachmentModelPara) ;
+            StringBuffer sbTemp = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sbTemp.append(item.getCOLUMN_PATH() + ";");
+            }
+            progStlInfoShow.setAttachment(sbTemp.toString());
+            progStlInfoService.updateRecord(progStlInfoShow);
+        } catch (Exception e) {
+            logger.error("删除数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+    public void download(AttachmentModel attachmentModelPara){
+        String strAttachment=attachmentModelPara.getCOLUMN_NAME();
+        try{
+            if(StringUtils.isEmpty(strAttachment) ){
+                MessageUtil.addError("路径为空，无法下载！");
+                logger.error("路径为空，无法下载！");
+            }
+            else {
+                String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/stl/TkMea")+"/"+strAttachment;
+                File file = new File(fileName);
+                InputStream stream = new FileInputStream(fileName);
+                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), new String(strAttachment.getBytes("gbk"),"iso8859-1"));
+            }
+        } catch (Exception e) {
+            logger.error("下载文件失败", e);
+            MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
+        }
+    }
+    public void upload(FileUploadEvent event) {
+        BufferedInputStream inStream = null;
+        FileOutputStream fileOutputStream = null;
+        UploadedFile uploadedFile = event.getFile();
+        AttachmentModel attachmentModel = new AttachmentModel();
+        if (uploadedFile != null) {
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/stl/TkMea");
+            File superFile = new File(path);
+            if (!superFile.exists()) {
+                superFile.mkdirs();
+            }
+            File descFile = new File(superFile, uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_ID(ToolUtil.getIntIgnoreNull(attachmentList.size()) + "");
+            attachmentModel.setCOLUMN_NAME(uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_PATH(descFile.getAbsolutePath());
+            for (AttachmentModel item : attachmentList){
+                if (item.getCOLUMN_NAME().equals(attachmentModel.getCOLUMN_NAME())) {
+                    MessageUtil.addError("附件已存在！");
+                    return;
+                }
+            }
+
+            attachmentList.add(attachmentModel);
+
+            StringBuffer sb = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sb.append(item.getCOLUMN_NAME() + ";");
+            }
+            if(sb.length()>4000){
+                MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
+                return;
+            }
+            progStlInfoShow.setAttachment(sb.toString());
+            progStlInfoService.updateRecord(progStlInfoShow);
+            try {
+                inStream = new BufferedInputStream(uploadedFile.getInputstream());
+                fileOutputStream = new FileOutputStream(descFile);
+                byte[] buf = new byte[1024];
+                int num;
+                while ((num = inStream.read(buf)) != -1) {
+                    fileOutputStream.write(buf, 0, num);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (inStream != null) {
+                    try {
+                        inStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
     /* 智能字段Start*/
 
     public ProgStlInfoShow getProgStlInfoShow() {
@@ -875,5 +989,30 @@ public class ProgStlItemTkMeaAction {
     public void setStrFlowStatusRemark(String strFlowStatusRemark) {
         this.strFlowStatusRemark = strFlowStatusRemark;
     }
+
+    public HtmlGraphicImage getImage() {
+        return image;
+    }
+
+    public void setImage(HtmlGraphicImage image) {
+        this.image = image;
+    }
+
+    public StreamedContent getDownloadFile() {
+        return downloadFile;
+    }
+
+    public void setDownloadFile(StreamedContent downloadFile) {
+        this.downloadFile = downloadFile;
+    }
+
+    public List<AttachmentModel> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public void setAttachmentList(List<AttachmentModel> attachmentList) {
+        this.attachmentList = attachmentList;
+    }
+
     /*智能字段End*/
 }
