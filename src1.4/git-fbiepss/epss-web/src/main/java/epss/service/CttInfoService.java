@@ -122,6 +122,7 @@ public class CttInfoService {
         flowCtrlHisTemp.setInfoName(cttInfoPara.getName());
         flowCtrlHisTemp.setFlowStatus(cttInfoPara.getFlowStatus());
         flowCtrlHisTemp.setFlowStatusReason(cttInfoPara.getFlowStatusReason());
+        flowCtrlHisTemp.setFlowStatusRemark(cttInfoPara.getFlowStatusRemark());
         flowCtrlHisTemp.setCreatedBy(cttInfoPara.getCreatedBy());
         flowCtrlHisTemp.setCreatedByName(ToolUtil.getUserName(cttInfoPara.getCreatedBy()));
         flowCtrlHisTemp.setCreatedTime(cttInfoPara.getCreatedTime());
@@ -208,7 +209,8 @@ public class CttInfoService {
         cttInfoTemp.setSignPartA(cttInfoShowPara.getSignPartA());
         cttInfoTemp.setSignPartB(cttInfoShowPara.getSignPartB());
         cttInfoTemp.setFlowStatus(cttInfoShowPara.getFlowStatus());
-        cttInfoTemp.setFlowStatusReason(cttInfoShowPara.getFlowStatusReason());
+        cttInfoTemp.setFlowStatusReason(cttInfoTemp.getFlowStatusReason());
+        cttInfoTemp.setFlowStatusRemark(cttInfoTemp.getFlowStatusRemark());
         cttInfoTemp.setRemark(cttInfoShowPara.getRemark());
         cttInfoTemp.setAttachment(cttInfoShowPara.getAttachment());
         cttInfoTemp.setArchivedFlag(cttInfoShowPara.getArchivedFlag());
@@ -235,6 +237,7 @@ public class CttInfoService {
         cttInfoShowTemp.setRemark(cttInfoPara.getRemark());
         cttInfoShowTemp.setFlowStatus(cttInfoPara.getFlowStatus());
         cttInfoShowTemp.setFlowStatusReason(cttInfoPara.getFlowStatusReason());
+        cttInfoShowTemp.setFlowStatusRemark(cttInfoPara.getFlowStatusRemark());
         cttInfoShowTemp.setAttachment(cttInfoPara.getAttachment());
         cttInfoShowTemp.setArchivedFlag(cttInfoPara.getArchivedFlag());
         cttInfoShowTemp.setCreatedBy(cttInfoPara.getCreatedBy());

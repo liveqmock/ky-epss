@@ -8,6 +8,7 @@
         <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
         <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
         <script type="text/javascript" language="javascript">
+            /*$(function(){ $("html").css("overflowX","hidden");});*/
             document.onkeydown = function TabReplace() {
                 if (event.keyCode == 13) {
                     if (event.srcElement.tagName != 'BUTTON')
@@ -23,81 +24,72 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <p:panel header="分包合同信息">
-                        <h:panelGrid id="pgViewForInfoUpd">
-                            <h:panelGrid columns="5">
-                                <p:outputLabel value="合同编号：" for="idForUpd"/>
-                                <p:inputText id="idForUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.id}"/>
-                                <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
-                                                 action="#{subcttInfoTTAction.setMaxNoPlusOne()}"
-                                                 update="idForUpd"
-                                                 style="height:20px">
-                                </p:commandButton>
-                                <p:outputLabel value="合同名称：" for="cttNameForUpd"/>
-                                <p:inputText id="cttNameForUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.name}"
-                                             style="width:328px"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="8">
-                                <p:outputLabel value="签订日期：" for="signDateForInfoUpd"/>
-                                <p:inputText id="signDateForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.signDate}"
-                                             onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                                <p:outputLabel value="开始时间：" for="cttStartDateForInfoUpd"/>
-                                <p:inputText id="cttStartDateForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.cttStartDate}"
-                                             onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                                <p:outputLabel value="截止时间：" for="cttEndDateForInfoUpd"/>
-                                <p:inputText id="cttEndDateForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.cttEndDate}"
-                                             onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                                <p:outputLabel value="备注内容：" for="remarkForInfoUpd"/>
-                                <p:inputText id="remarkForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.remark}"
-                                             style="width:328px"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="6">
-                                <p:outputLabel for="createdByNameInfoUpd" value="创建人名："/>
-                                <h:inputText id="createdByNameInfoUpd"
-                                             value="#{subcttInfoTTAction.cttInfoShowUpd.createdByName}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="createdTimeInfoUpd" value="创建时间："/>
-                                <h:inputText id="createdTimeInfoUpd"
-                                             value="#{subcttInfoTTAction.cttInfoShowUpd.createdTime}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel value="签订甲方：" for="signPartAForInfoUpd"/>
-                                <p:selectOneMenu id="signPartAForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.signPartA}">
-                                    <f:selectItems value="#{esCommon.customerlist}"/>
-                                </p:selectOneMenu>
-                            </h:panelGrid>
-                            <h:panelGrid columns="10">
-                                <p:outputLabel for="lastUpdByNameInfoUpd" value="修改人名："/>
-                                <h:inputText id="lastUpdByNameInfoUpd"
-                                             value="#{subcttInfoTTAction.cttInfoShowUpd.lastUpdByName}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel for="lastUpdTimeInfoUpd" value="修改时间："/>
-                                <h:inputText id="lastUpdTimeInfoUpd"
-                                             value="#{subcttInfoTTAction.cttInfoShowUpd.lastUpdTime}"
-                                             style="background-color:gainsboro" readonly="true"/>
-                                <p:outputLabel value="签订乙方：" for="signPartBForInfoUpd"/>
-                                <p:selectOneMenu id="signPartBForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.signPartB}"
-                                                 style="width:328px">
-                                    <f:selectItems value="#{esCommon.customerlist}"/>
-                                </p:selectOneMenu>
-                                <p:outputLabel for="recVersionInfoUpd" value="修改次数："/>
-                                <h:inputText id="recVersionInfoUpd"
-                                             value="#{subcttInfoTTAction.cttInfoShowUpd.recVersion}"
-                                             style="background-color:gainsboro;text-align:right;" readonly="true">
-                                    <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                </h:inputText>
-                            </h:panelGrid>
-                            <h:panelGrid columns="5" rendered="#{subcttItemAction.strPassVisible}">
-                                <p:commandButton id="submitBtnForInfoUpd"
-                                                 value="提交（更新）"
+                    <h:panelGrid columns="3" style="width: 100%">
+                        <p:panel id="ppInfo" header="分包合同信息">
+                            <h:panelGrid columns="2" style="width: 100%">
+                                <h:panelGrid>
+                                    <h:panelGrid columns="7">
+                                        <p:outputLabel value="合同编号：" for="idForUpd"/>
+                                            <p:inputText id="idForUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.id}"
+                                                         style="width:113px"/>
+                                        <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
+                                                         action="#{subcttInfoTTAction.setMaxNoPlusOne()}"
+                                                         update="idForUpd"
+                                                             style="width:20px;height:20px">
+                                        </p:commandButton>
+                                        <p:outputLabel value="合同名称：" for="cttNameForUpd"/>
+                                        <p:inputText id="cttNameForUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.name}"
+                                                         style="width:328px"/>
+                                        <p:outputLabel value="签订日期：" for="signDateForInfoUpd"/>
+                                        <p:inputText id="signDateForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.signDate}"
+                                                         onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                    </h:panelGrid>
+                                <h:panelGrid columns="6">
+                                        <p:outputLabel value="备注内容：" for="remarkForInfoUpd"/>
+                                        <p:inputText id="remarkForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.remark}"/>
+                                        <p:outputLabel value="签订甲方：" for="signPartAForInfoUpd"/>
+                                        <p:selectOneMenu id="signPartAForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.signPartA}">
+                                            <f:selectItems value="#{esCommon.customerlist}"/>
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="开始时间：" for="cttStartDateForInfoUpd"/>
+                                        <p:inputText id="cttStartDateForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.cttStartDate}"
+                                                     onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                        <p:outputLabel for="recVersionInfoUpd" value="修改次数："/>
+                                        <h:inputText id="recVersionInfoUpd"
+                                                     value="#{subcttInfoTTAction.cttInfoShowUpd.recVersion}"
+                                                     style="background-color:gainsboro;text-align:right;" readonly="true">
+                                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                                        </h:inputText>
+                                        <p:outputLabel value="签订乙方：" for="signPartBForInfoUpd"/>
+                                        <p:selectOneMenu id="signPartBForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.signPartB}"
+                                                         style="width:328px">
+                                            <f:selectItems value="#{esCommon.customerlist}"/>
+                                        </p:selectOneMenu>
+                                        <p:outputLabel value="截止时间：" for="cttEndDateForInfoUpd"/>
+                                        <p:inputText id="cttEndDateForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.cttEndDate}"
+                                                     onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                <p:commandButton value="提交"
+                                                 rendered='#{subcttItemAction.strPassVisible}'
                                                  action="#{subcttInfoTTAction.onClickForMngAction()}"
-                                                 update="msgs,pgViewForInfoUpd">
-                                </p:commandButton>
-                                <p:commandButton id="resetBtnForInfoUpd" value="重置"
-                                                 type="reset"
-                                                 update="pgViewForInfoUpd">
-                                </p:commandButton>
-                                <p:commandButton
-                                                 value="附件"
+                                                         update="msgs,ppInfo">
+                                        </p:commandButton>
+                                        <p:ajaxStatus style="width:16px;height:16px;">
+                                            <f:facet name="start">
+                                                <h:graphicImage value="/images/ajaxloading.gif"/>
+                                            </f:facet>
+                                            <f:facet name="complete">
+                                                <h:outputText value=""/>
+                                            </f:facet>
+                                        </p:ajaxStatus>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="备注" style="height:112px">
+                            <h:panelGrid>
+                                <p:commandButton value="附件"
                                                  update=":form:msgs"
                                                  onclick="PF('wvAttachmentList').show()">
                                 </p:commandButton>
@@ -105,121 +97,142 @@
                                                  action="#{subcttItemAction.onExportExcel}"
                                                  ajax="false">
                                 </p:commandButton>
-                                <p:ajaxStatus style="width:16px;height:16px;">
-                                    <f:facet name="start">
-                                        <h:graphicImage value="/images/ajaxloading.gif"/>
-                                    </f:facet>
-                                    <f:facet name="complete">
-                                        <h:outputText value=""/>
-                                    </f:facet>
-                                </p:ajaxStatus>
                             </h:panelGrid>
-                        </h:panelGrid>
-                    </p:panel>
-                    <p:panel header="分包合同内容">
-                        <h:panelGrid id="pgCondition" columns="3">
-                            <p:commandButton id="addBtn"
-                                             value="增加项"
-                                             rendered='#{subcttItemAction.strPassVisible}'
-                                             action="#{subcttItemAction.resetAction()}"
-                                             update="pgViewForAdd,pdt,msgs"
-                                             onclick="PF('wVDlgViewForAdd').show()">
-                            </p:commandButton>
-                            <p:commandButton id="endInputBtn" value="录入完成"
-                                             action="#{subcttItemAction.onClickForPowerAction('Pass')}"
-                                             update="pgCondition,pdt,msgs"
-                                             rendered="#{subcttItemAction.strPassVisible}">
-                            </p:commandButton>
-                            <p:commandButton id="startInputBtn" value="录入未完"
-                                             action="#{subcttItemAction.onClickForPowerAction('Fail')}"
-                                             update="pgCondition,pdt,msgs"
-                                             rendered="#{subcttItemAction.strPassFailVisible}">
-                            </p:commandButton>
-                        </h:panelGrid>
-                        <p:dataTable id="pdt" style="width:100%;"
-                                 value="#{subcttItemAction.cttItemShowList}"
-                                 var="record"
-                                 rowKey="#{record.pkid}"
-                                 selectionMode="single"
-                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                 paginator="true"
-                                 paginatorPosition="bottom"
-                                 rows="15"
-                                 rowsPerPageTemplate="500,200,100,45,30,15"
-                                 rowIndexVar="row"
-                                 emptyMessage="数据记录为空..."
-                                 rowStyleClass="#{record.name eq '合计'? 'rowGrayStyle': record.name eq '总合计'? 'rowGrayStyle':null}"
-                                 scrollable="true"
-                                 scrollHeight="400">
-                            <p:column headerText="操作" style="width:65px;text-align: center;"
-                                      rendered='#{subcttItemAction.strPassVisible}'>
-                                <p:commandButton  icon="ui-icon-pencil"
-                                                  style="height:18px;width:18px"
-                                                  rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
-                                                  action="#{subcttItemAction.selectRecordAction('Upd',record)}"
-                                                  update=":form:pdt,:form:pgViewForUpd,:form:msgs"
-                                                  onclick="PF('wVDlgViewForUpd').show()">
-                                </p:commandButton>
-                                <p:commandButton  icon="ui-icon-trash"
-                                                  style="height:18px;width:18px"
-                                                  rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
-                                                  action="#{subcttItemAction.selectRecordAction('Del',record)}"
-                                                  update=":form:pdt,:form:pgViewForDel,:form:msgs"
-                                                  onclick="PF('wVDlgViewForDel').show()">
-                                </p:commandButton>
-                                <p:commandButton  icon="ui-icon-search"
-                                                  style="height:18px;width:18px"
-                                                  rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
-                                                  action="#{subcttItemAction.selectRecordAction('FromCstplToSubctt',record)}"
-                                                  pdate=":form:pdt,:form:msgs"
-                                                  onclick ="wvCstplDetail.show()" >
-                                </p:commandButton>
-                            </p:column>
-                            <p:column style="width:30px" headerText="序号">
-                                <h:outputText value="#{row + 1}"/>
-                            </p:column>
-                            <p:column style="width:100px" headerText="成本项号">
-                                <h:outputText value="#{record.strCorrespondingItemNo}" escape="false"/>
-                            </p:column>
-                            <p:column style="width:300px" headerText="成本项名">
-                                <h:outputText value="#{record.strCorrespondingItemName}"/>
-                            </p:column>
-                            <p:column style="width:100px" headerText="分包编号">
-                                <h:outputText value="#{record.strNo}" escape="false"/>
-                            </p:column>
-                            <p:column style="width:300px" headerText="分包名称">
-                                <h:outputText value="#{record.name}" />
-                            </p:column>
-                            <p:column style="width:60px" headerText="分包单位">
-                                <h:outputText value="#{record.unit}" style="text-align:right"/>
-                            </p:column>
-                            <p:column style="width:80px" headerText="分包单价">
-                                <h:outputText value="#{record.contractUnitPrice}" style="float: right" >
+                        </p:panel>
+                        <p:panel header="录入完了确认" id="ppFlow" style="height:112px">
+                            <h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:outputLabel value="录入备注：" for="flowRemark"/>
+                                    <p:inputTextarea id="flowRemark"
+                                                     rows="1"
+                                                     autoResize="false"
+                                                     value="#{subcttItemAction.strFlowStatusRemark}"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton id="endInputBtn" value="录入完成"
+                                                     action="#{subcttItemAction.onClickForPowerAction('Pass')}"
+                                                     rendered='#{subcttItemAction.strPassVisible}'
+                                                     update="msgs,ppInfo,ppDetail">
+                                    </p:commandButton>
+                                    <p:commandButton id="startInputBtn" value="录入未完"
+                                                     action="#{subcttItemAction.onClickForPowerAction('Fail')}"
+                                                     rendered="#{subcttItemAction.strPassFailVisible}"
+                                                     update="msgs,ppInfo,ppDetail">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:panelGrid>
+                    <p:panel id="ppDetail" header="分包合同内容">
+                        <p:commandButton value="增加项"
+                            rendered='#{subcttItemAction.strPassVisible}'
+                            action="#{subcttItemAction.resetAction()}"
+                            update="pgViewForAdd,pdt,msgs"
+                            onclick="PF('wVDlgViewForAdd').show()">
+                        </p:commandButton>
+                        <p:dataTable id="pdt"
+                                     value="#{subcttItemAction.cttItemShowList}"
+                                     var="record"
+                                     rowKey="#{record.pkid}"
+                                     selectionMode="single"
+                                     paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     paginator="true"
+                                     paginatorPosition="bottom"
+                                     rows="15"
+                                     rowsPerPageTemplate="480,240,120,60,30,15"
+                                     rowIndexVar="row"
+                                     emptyMessage="数据记录为空..."
+                                     rowStyleClass="#{record.name eq '合计'? 'rowGrayStyle': record.name eq '总合计'? 'rowGrayStyle':null}"
+                                     scrollable="true"
+                                     scrollHeight="425">
+                                <p:column headerText="操作" style="width:65px;text-align: center;"
+                                          rendered='#{subcttItemAction.strPassVisible}'>
+                                    <p:commandButton  icon="ui-icon-pencil"
+                                                      style="height:18px;width:18px"
+                                                      rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
+                                                      action="#{subcttItemAction.selectRecordAction('Upd',record)}"
+                                                      update=":form:pdt,:form:pgViewForUpd,:form:msgs"
+                                                      onclick="PF('wVDlgViewForUpd').show()">
+                                    </p:commandButton>
+                                    <p:commandButton  icon="ui-icon-trash"
+                                                      style="height:18px;width:18px"
+                                                      rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
+                                                      action="#{subcttItemAction.selectRecordAction('Del',record)}"
+                                                      update=":form:pdt,:form:pgViewForDel,:form:msgs"
+                                                      onclick="PF('wVDlgViewForDel').show()">
+                                    </p:commandButton>
+                                    <p:commandButton  icon="ui-icon-search"
+                                                      style="height:18px;width:18px"
+                                                      rendered="#{record.name eq '合计'? 'false': record.name eq '总合计'? 'false':'true'}"
+                                                      action="#{subcttItemAction.selectRecordAction('FromCstplToSubctt',record)}"
+                                                      pdate=":form:pdt,:form:msgs"
+                                                      onclick ="wvCstplDetail.show()" >
+                                    </p:commandButton>
+                                </p:column>
+                                <p:column style="width:42px" headerText="序号">
+                                    <h:outputText value="#{row + 1}"/>
+                                </p:column>
+                                <p:column style="width:100px" headerText="成本项号">
+                                    <h:outputText value="#{record.strCorrespondingItemNo}" escape="false"/>
+                                </p:column>
+                                <p:column style="width:300px" headerText="成本项名">
+                                    <h:outputText value="#{record.strCorrespondingItemName}"/>
+                                </p:column>
+                                <p:column style="width:100px" headerText="分包编号">
+                                    <h:outputText value="#{record.strNo}" escape="false"/>
+                                </p:column>
+                                <p:column style="width:300px" headerText="分包名称">
+                                    <h:outputText value="#{record.name}" />
+                                </p:column>
+                                <p:column style="width:60px" headerText="分包单位">
+                                    <h:outputText value="#{record.unit}" style="text-align:right"/>
+                                </p:column>
+                                <p:column style="width:80px" headerText="分包单价">
+                                    <h:outputText value="#{record.contractUnitPrice}" style="float: right" >
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="width:80px" headerText="分包数量">
+                                    <h:outputText value="#{record.contractQuantity}" style="float: right">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="width:80px" headerText="分包金额">
+                                <h:outputText value="#{record.contractAmount}" style="float: right" rendered="#{record.spareField eq null?true:false}">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                 </h:outputText>
-                            </p:column>
-                            <p:column style="width:80px" headerText="分包数量">
-                                <h:outputText value="#{record.contractQuantity}" style="float: right">
-                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                <h:outputText value="#{record.contractAmount}" style="float: right" rendered="#{record.spareField ne null?true:false}">
+                                    <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
                                 </h:outputText>
-                            </p:column>
-                            <p:column style="width:80px" headerText="分包金额">
-                            <h:outputText value="#{record.contractAmount}" style="float: right" rendered="#{record.spareField eq null?true:false}">
-                                <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
-                            </h:outputText>
-                            <h:outputText value="#{record.contractAmount}" style="float: right" rendered="#{record.spareField ne null?true:false}">
-                                <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
-                            </h:outputText>
-                            </p:column>
-                            <p:column style="width:100px" headerText="分包甲供材单价">
-                                <h:outputText value="#{record.signPartAPrice}" style="float: right">
-                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
-                                </h:outputText>
-                            </p:column>
-                            <p:column style="width:300px" headerText="分包备注">
-                                <h:outputText value="#{record.remark}"/>
-                            </p:column>
+                                </p:column>
+                                <p:column style="width:100px" headerText="分包甲供材单价">
+                                    <h:outputText value="#{record.signPartAPrice}" style="float: right">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                    </h:outputText>
+                                </p:column>
+                                <p:column style="width:300px" headerText="分包备注">
+                                    <h:outputText value="#{record.remark}"/>
+                                </p:column>
+                                <p:column style="width:100px" headerText="数据来源">
+                                    <h:outputText value="#{record.originFlag}" />
+                                </p:column>
+                                <p:column style="width:100px" headerText="创建人">
+                                    <h:outputText value="#{record.createdByName}" />
+                                </p:column>
+                                <p:column style="width:120px" headerText="创建时间">
+                                    <h:outputText value="#{record.createdTime}" />
+                                </p:column>
+                                <p:column style="width:100px" headerText="修改人">
+                                    <h:outputText value="#{record.lastUpdByName}" />
+                                </p:column>
+                                <p:column style="width:120px" headerText="修改时间">
+                                    <h:outputText value="#{record.lastUpdTime}" />
+                                </p:column>
+                                <p:column style="width:80px" headerText="修改次数">
+                                    <h:outputText value="#{record.recVersion}" style="float: right">
+                                    </h:outputText>
+                                </p:column>
                         </p:dataTable>
                         <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
                                   showEffect="clip" hideEffect="fold" header="附件列表">
@@ -490,9 +503,10 @@
                                     </h:inputText>
                                     <p:outputLabel for="contractAmountForUpd" value="合同金额："/>
                                     <h:inputText id="contractAmountForUpd"
-                                                 style="text-align:right;"
-                                                 value="#{subcttItemAction.cttItemShowUpd.contractAmount}">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00#{subcttItemAction.cttItemShowUpd.spareField eq null?'':'%'}"/>
+                                                     style="text-align:right;"
+                                                     value="#{subcttItemAction.cttItemShowUpd.contractAmount}">
+                                        <f:convertNumber type="number"
+                                                     pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
                                     <p:outputLabel for="signPartAPriceForUpd" value="甲供材价："/>
                                     <h:inputText id="signPartAPriceForUpd"
@@ -502,40 +516,8 @@
                                     </h:inputText>
                                     <p:outputLabel for="remarkForUpd" value="备注内容：" />
                                     <h:inputText id="remarkForUpd"
-                                                 value="#{subcttItemAction.cttItemShowUpd.remark}"
-                                                 style="text-align:left;"/>
-                                    <p:outputLabel for="originFlagForUpd" value="数据来源：" />
-                                    <h:inputText id="originFlagForUpd"
-                                                 value="#{esCommon.originFlagListValueOfAlias(
-                                             subcttItemAction.cttItemShowUpd.originFlag)}"
-                                                 style="background-color:gainsboro" readonly="true"/>
-                                    <p:outputLabel for="recVersionForUpd" value="修改次数：" />
-                                    <h:inputText id="recVersionForUpd"
-                                                 value="#{subcttItemAction.cttItemShowUpd.recVersion}"
-                                                 readonly="true"
-                                                 style="background-color:gainsboro;text-align:right;">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                    </h:inputText>
-                                    <p:outputLabel for="createdByForUpd" value="创建人：" />
-                                    <h:inputText id="createdByForUpd"
-                                                 value="#{subcttItemAction.cttItemShowUpd.createdByName}"
-                                                 readonly="true"
-                                                 style="background-color:gainsboro;"/>
-                                    <p:outputLabel for="createdTimeForUpd" value="创建时间：" />
-                                    <h:inputText id="createdTimeForUpd"
-                                                 value="#{subcttItemAction.cttItemShowUpd.createdTime}"
-                                                 readonly="true"
-                                                 style="background-color:gainsboro"/>
-                                    <p:outputLabel for="lastUpdByForUpd" value="修改人：" />
-                                    <h:inputText id="lastUpdByForUpd"
-                                                 value="#{subcttItemAction.cttItemShowUpd.lastUpdByName}"
-                                                 readonly="true"
-                                                 style="background-color:gainsboro"/>
-                                    <p:outputLabel for="lastUpdTimeForUpd" value="修改时间：" />
-                                    <h:inputText id="lastUpdTimeForUpd"
-                                                 value="#{subcttItemAction.cttItemShowUpd.lastUpdTime}"
-                                                 readonly="true"
-                                                 style="background-color:gainsboro"/>
+                                                  value="#{subcttItemAction.cttItemShowUpd.remark}"
+                                                  style="text-align:left;"/>
                                 </h:panelGrid>
                                 <h:panelGrid id="pgOperBtnForUpd" columns="4">
                                     <p:commandButton id="submitBtnForUpd"
@@ -629,42 +611,10 @@
                                     </h:inputText>
                                     <p:outputLabel for="remarkForDel" value="备注内容：" />
                                     <h:inputText id="remarkForDel"
-                                                 value="#{subcttItemAction.cttItemShowDel.remark}"
-                                                 readonly="true"
-                                                 style="background-color:gainsboro;text-align:left;"/>
-                                    <p:outputLabel for="originFlagForDel" value="数据来源：" />
-                                    <h:inputText id="originFlagForDel"
-                                                 value="#{esCommon.originFlagListValueOfAlias(
-                                             subcttItemAction.cttItemShowDel.originFlag)}"
-                                                 style="background-color:gainsboro" readonly="true"/>
-                                    <p:outputLabel for="recVersionForDel" value="修改次数：" />
-                                    <h:inputText id="recVersionForDel"
-                                                 value="#{subcttItemAction.cttItemShowDel.recVersion}"
-                                                 readonly="true"
-                                                 style="background-color:gainsboro;text-align:right;">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                    </h:inputText>
-                                    <p:outputLabel for="createdByForDel" value="创建人：" />
-                                    <h:inputText id="createdByForDel"
-                                                 value="#{subcttItemAction.cttItemShowDel.createdByName}"
-                                                 readonly="true"
-                                                 style="background-color:gainsboro;"/>
-                                    <p:outputLabel for="createdTimeForDel" value="创建时间：" />
-                                    <h:inputText id="createdTimeForDel"
-                                                 value="#{subcttItemAction.cttItemShowDel.createdTime}"
-                                                 readonly="true"
-                                                 style="background-color:gainsboro"/>
-                                    <p:outputLabel for="lastUpdByForDel" value="修改人：" />
-                                    <h:inputText id="lastUpdByForDel"
-                                                 value="#{subcttItemAction.cttItemShowDel.lastUpdByName}"
-                                                 readonly="true"
-                                                 style="background-color:gainsboro"/>
-                                    <p:outputLabel for="lastUpdTimeForDel" value="修改时间：" />
-                                    <h:inputText id="lastUpdTimeForDel"
-                                                 value="#{subcttItemAction.cttItemShowDel.lastUpdTime}"
-                                                 readonly="true"
-                                                 style="background-color:gainsboro"/>
-                                </h:panelGrid>
+                                                  value="#{subcttItemAction.cttItemShowDel.remark}"
+                                                  readonly="true"
+                                                  style="background-color:gainsboro;text-align:left;"/>
+                                    </h:panelGrid>
                                 <h:panelGrid id="pgOperBtnForDel" columns="4">
                                     <p:commandButton id="submitBtnForDel"
                                                      value="提交（删除）"
@@ -672,14 +622,6 @@
                                                      update="pgOperBtnForDel,pdt,msgs,pgViewForDel"
                                                      oncomplete="wVDlgViewForDel.hide()">
                                     </p:commandButton>
-                                    <p:ajaxStatus style="width:16px;height:16px;">
-                                        <f:facet name="start">
-                                            <h:graphicImage value="/images/ajaxloading.gif"/>
-                                        </f:facet>
-                                        <f:facet name="complete">
-                                            <h:outputText value=""/>
-                                        </f:facet>
-                                    </p:ajaxStatus>
                                 </h:panelGrid>
                             </h:panelGrid>
                         </p:dialog>

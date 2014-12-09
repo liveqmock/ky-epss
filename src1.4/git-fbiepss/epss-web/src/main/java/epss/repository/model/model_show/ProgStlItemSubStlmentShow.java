@@ -53,6 +53,8 @@ public class ProgStlItemSubStlmentShow implements Serializable {
     private Integer engPMng_RecVersion;
     private Integer engPMng_RowNo;
 
+    private Boolean isRenderedFlag;
+
     public ProgStlItemSubStlmentShow() {
 
     }
@@ -367,5 +369,13 @@ public class ProgStlItemSubStlmentShow implements Serializable {
 
     public void setEngPMng_RowNo(Integer engPMng_RowNo) {
         this.engPMng_RowNo = engPMng_RowNo;
+    }
+
+    public Boolean getIsRenderedFlag() {
+        return isRenderedFlag;
+    }
+
+    public void setIsRenderedFlag(Boolean isRenderedFlag) {
+        this.isRenderedFlag = isRenderedFlag;
     }
 }

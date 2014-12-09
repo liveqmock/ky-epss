@@ -80,7 +80,8 @@ public interface MyTaskMapper {
             "            ci.NAME as name," +
             "            '' as periodNo," +
             "            ci.FLOW_STATUS as flowStatus," +
-            "            ci.FLOW_STATUS_REASON as flowStatusReason" +
+            "            ci.FLOW_STATUS_REASON as flowStatusReason," +
+            "            ci.FLOW_STATUS_REMARK as flowStatusRemark" +
             "        from" +
             "            OPER_RES opr" +
             "        inner join  " +
@@ -105,7 +106,8 @@ public interface MyTaskMapper {
             "             ci.name as name," +
             "             stl.PERIOD_NO as periodNo," +
             "             stl.FLOW_STATUS as flowStatus," +
-            "             stl.FLOW_STATUS_REASON as flowStatusReason" +
+            "             stl.FLOW_STATUS_REASON as flowStatusReason," +
+            "             stl.FLOW_STATUS_REMARK as flowStatusRemark" +
             "         from" +
             "             OPER_RES opr" +
             "         inner join  " +
@@ -136,7 +138,8 @@ public interface MyTaskMapper {
             "                 max(resultAll.operResFlowStatus) as operResFlowStatus,     " +
             "                 resultAll.periodNo,     " +
             "                 resultAll.flowStatus,     " +
-            "                 resultAll.flowStatusReason     " +
+            "                 resultAll.flowStatusReason,     " +
+			"                 resultAll.flowStatusRemark     " +
             "              from    " +
             "                (    " +
             "                    (    " +
@@ -150,7 +153,8 @@ public interface MyTaskMapper {
             "                            opr.FLOW_STATUS as operResFlowStatus,    " +
             "                            '' as periodNo,    " +
             "               ci.FLOW_STATUS as flowStatus," +
-            "               ci.FLOW_STATUS_REASON as flowStatusReason" +
+            "               ci.FLOW_STATUS_REASON as flowStatusReason," +
+			"               ci.FLOW_STATUS_REMARK as flowStatusRemark" +
             "                        from    " +
             "                            OPER_RES opr    " +
             "           inner join  " +
@@ -182,7 +186,8 @@ public interface MyTaskMapper {
             "                             opr.FLOW_STATUS as operResFlowStatus,    " +
             "                             stl.PERIOD_NO as periodNo,    " +
             "                             stl.FLOW_STATUS as flowStatus,    " +
-            "                             stl.FLOW_STATUS_REASON as flowStatusReason    " +
+            "                             stl.FLOW_STATUS_REASON as flowStatusReason,    " +
+			"                			  stl.FLOW_STATUS_REMARK as flowStatusRemark" +
             "                         from    " +
             "                             OPER_RES opr    " +
             "                         inner join      " +
@@ -213,7 +218,8 @@ public interface MyTaskMapper {
             "                 resultAll.name,    " +
             "                 resultAll.periodNo,    " +
             "                 resultAll.flowStatus,    " +
-            "                 resultAll.flowStatusReason    " +
+            "                 resultAll.flowStatusReason,    " +
+			"                 resultAll.flowStatusRemark    " +
             "              order by    " +
             "                 resultAll.flowStatus,resultAll.type,resultAll.periodNo desc ")
     List<TaskShow> getDetailDoneTaskShowList(@Param("strOperPkid") String strOperPkid);

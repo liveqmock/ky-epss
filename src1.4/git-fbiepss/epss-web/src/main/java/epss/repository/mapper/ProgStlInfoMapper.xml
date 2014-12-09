@@ -23,6 +23,7 @@
     <result column="AUTO_LINK_ADD" property="autoLinkAdd" jdbcType="CHAR" />
     <result column="FLOW_STATUS" property="flowStatus" jdbcType="CHAR" />
     <result column="FLOW_STATUS_REASON" property="flowStatusReason" jdbcType="CHAR" />
+    <result column="FLOW_STATUS_REMARK"  property="flowStatusRemark" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -100,7 +101,7 @@
     -->
     PKID, ID, STL_TYPE, STL_PKID, PERIOD_NO, REMARK, ATTACHMENT, ARCHIVED_FLAG, CREATED_BY, 
     CREATED_TIME, LAST_UPD_BY, LAST_UPD_TIME, REC_VERSION, AUTO_LINK_ADD, FLOW_STATUS, 
-    FLOW_STATUS_REASON
+    FLOW_STATUS_REASON, FLOW_STATUS_REMARK
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="epss.repository.model.ProgStlInfoExample" >
     <!--
@@ -166,13 +167,13 @@
       ATTACHMENT, ARCHIVED_FLAG, CREATED_BY, 
       CREATED_TIME, LAST_UPD_BY, LAST_UPD_TIME, 
       REC_VERSION, AUTO_LINK_ADD, FLOW_STATUS, 
-      FLOW_STATUS_REASON)
+      FLOW_STATUS_REASON, FLOW_STATUS_REMARK)
     values (#{pkid,jdbcType=VARCHAR}, #{id,jdbcType=VARCHAR}, #{stlType,jdbcType=VARCHAR}, 
       #{stlPkid,jdbcType=VARCHAR}, #{periodNo,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{attachment,jdbcType=VARCHAR}, #{archivedFlag,jdbcType=CHAR}, #{createdBy,jdbcType=VARCHAR}, 
       #{createdTime,jdbcType=VARCHAR}, #{lastUpdBy,jdbcType=VARCHAR}, #{lastUpdTime,jdbcType=VARCHAR}, 
       #{recVersion,jdbcType=DECIMAL}, #{autoLinkAdd,jdbcType=CHAR}, #{flowStatus,jdbcType=CHAR}, 
-      #{flowStatusReason,jdbcType=CHAR})
+      #{flowStatusReason,jdbcType=CHAR}, #{flowStatusRemark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="epss.repository.model.ProgStlInfo" >
     <!--
@@ -231,6 +232,9 @@
       <if test="flowStatusReason != null" >
         FLOW_STATUS_REASON,
       </if>
+      <if test="flowStatusRemark != null">
+        FLOW_STATUS_REMARK,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       #{pkid,jdbcType=VARCHAR},
@@ -278,6 +282,9 @@
       </if>
       <if test="flowStatusReason != null" >
         #{flowStatusReason,jdbcType=CHAR},
+      </if>
+      <if test="flowStatusRemark != null">
+        #{flowStatusRemark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -348,6 +355,9 @@
       <if test="record.flowStatusReason != null" >
         FLOW_STATUS_REASON = #{record.flowStatusReason,jdbcType=CHAR},
       </if>
+      <if test="record.flowStatusRemark != null">
+        FLOW_STATUS_REMARK = #{record.flowStatusRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -375,8 +385,9 @@
       REC_VERSION = #{record.recVersion,jdbcType=DECIMAL},
       AUTO_LINK_ADD = #{record.autoLinkAdd,jdbcType=CHAR},
       FLOW_STATUS = #{record.flowStatus,jdbcType=CHAR},
-      FLOW_STATUS_REASON = #{record.flowStatusReason,jdbcType=CHAR}
-    <if test="_parameter != null" >
+      FLOW_STATUS_REASON = #{record.flowStatusReason,jdbcType=CHAR},
+      FLOW_STATUS_REMARK = #{record.flowStatusRemark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -433,6 +444,9 @@
       <if test="flowStatusReason != null" >
         FLOW_STATUS_REASON = #{flowStatusReason,jdbcType=CHAR},
       </if>
+      <if test="flowStatusRemark != null">
+        FLOW_STATUS_REMARK = #{flowStatusRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
@@ -457,7 +471,8 @@
       REC_VERSION = #{recVersion,jdbcType=DECIMAL},
       AUTO_LINK_ADD = #{autoLinkAdd,jdbcType=CHAR},
       FLOW_STATUS = #{flowStatus,jdbcType=CHAR},
-      FLOW_STATUS_REASON = #{flowStatusReason,jdbcType=CHAR}
+      FLOW_STATUS_REASON = #{flowStatusReason,jdbcType=CHAR},
+      FLOW_STATUS_REMARK = #{flowStatusRemark,jdbcType=VARCHAR}
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
 </mapper>

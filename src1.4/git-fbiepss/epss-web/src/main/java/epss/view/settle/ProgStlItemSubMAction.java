@@ -1,8 +1,13 @@
 package epss.view.settle;
 
 import epss.common.enums.*;
+import epss.repository.model.model_show.AttachmentModel;
 import epss.repository.model.model_show.ProgStlInfoShow;
 import epss.repository.model.model_show.ProgStlItemSubMShow;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import skyline.util.JxlsManager;
 import skyline.util.ToolUtil;
 import epss.repository.model.*;
@@ -15,12 +20,15 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.util.MessageUtil;
+
+import javax.activation.MimetypesFileTypeMap;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
-import java.io.IOException;
+import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -71,6 +79,10 @@ public class ProgStlItemSubMAction {
     private List<ProgStlItemSubMShow> progStlItemSubMShowListExcel;
     private Map beansMap;
     private ProgStlInfoShow progStlInfoShow;
+    private String strFlowStatusRemark;
+    private HtmlGraphicImage image;
+    private StreamedContent downloadFile;
+    private List<AttachmentModel> attachmentList;
     @PostConstruct
     public void init() {
         try {
@@ -131,8 +143,12 @@ public class ProgStlItemSubMAction {
                 return;
             }
             progStlItemSubMShowList =new ArrayList<ProgStlItemSubMShow>();
+            progStlItemSubMShowListExcel =new ArrayList<>();
+            attachmentList=new ArrayList<>();
+            attachmentList=ToolUtil.getListAttachmentByStrAttachment(progStlInfoShow.getAttachment());
             recursiveDataTable("root", cttItemList, progStlItemSubMShowList);
             progStlItemSubMShowList =getStlSubCttEngMMngConstructList_DoFromatNo(progStlItemSubMShowList);
+            setItemOfEsItemHieRelapList_AddTotal();
             // Excel报表形成
             progStlItemSubMShowListExcel =new ArrayList<ProgStlItemSubMShow>();
             for(ProgStlItemSubMShow itemUnit: progStlItemSubMShowList){
@@ -212,12 +228,112 @@ public class ProgStlItemSubMAction {
                 if(progStlItemSubMShowTemp.getEngMMng_BeginToCurrentPeriodMQty()!=null) {
                     if (progStlItemSubMShowTemp.getEngMMng_BeginToCurrentPeriodMQty()
                             .equals(progStlItemSubMShowTemp.getSubctt_ContractQuantity())) {
-                        progStlItemSubMShowTemp.setIsUptoCttContentFlag(true);
+                        progStlItemSubMShowTemp.setIsUptoCttQtyFlag(true);
                     }
                 }
             }
             sProgStlItemSubMShowListPara.add(progStlItemSubMShowTemp) ;
             recursiveDataTable(progStlItemSubMShowTemp.getSubctt_Pkid(), cttItemListPara, sProgStlItemSubMShowListPara);
+        }
+    }
+    private void setItemOfEsItemHieRelapList_AddTotal(){
+        List<ProgStlItemSubMShow> progStlItemSubMShowListTemp =new ArrayList<ProgStlItemSubMShow>();
+        progStlItemSubMShowListTemp.addAll(progStlItemSubMShowList);
+        progStlItemSubMShowList.clear();
+        // 合同数量小计
+        BigDecimal bdQuantityTotal=new BigDecimal(0);
+        // 合同数量大计
+        BigDecimal bdQuantityAllTotal=new BigDecimal(0);
+        // 合同金额小计
+        BigDecimal bdAmountTotal=new BigDecimal(0);
+        // 合同金额大计
+        BigDecimal bdAmountAllTotal=new BigDecimal(0);
+        // 开累材料量小计
+        BigDecimal bdBeginToCurrentPeriodMQtyTotal=new BigDecimal(0);
+        // 开累材料量大计
+        BigDecimal bdBeginToCurrentPeriodMQtyAllTotal=new BigDecimal(0);
+        // 当期材料量小计
+        BigDecimal bdCurrentPeriodMQtyTotal=new BigDecimal(0);
+        // 当期材料量大计
+        BigDecimal bdCurrentPeriodMQtyAllTotal=new BigDecimal(0);
+        ProgStlItemSubMShow itemUnit=new ProgStlItemSubMShow();
+        ProgStlItemSubMShow itemUnitNext=new ProgStlItemSubMShow();
+        for(int i=0;i< progStlItemSubMShowListTemp.size();i++){
+            itemUnit = progStlItemSubMShowListTemp.get(i);
+            bdQuantityTotal=bdQuantityTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
+            bdQuantityAllTotal=bdQuantityAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
+            bdBeginToCurrentPeriodMQtyTotal=
+                    bdBeginToCurrentPeriodMQtyTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngMMng_BeginToCurrentPeriodMQty()));
+            bdCurrentPeriodMQtyTotal=
+                    bdCurrentPeriodMQtyTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngMMng_CurrentPeriodMQty()));
+            //费税率金额不计入小计（费税率为子项时），当前和开累不计入大计
+            if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade()>1){
+                bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount())).subtract(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+            }else{
+                bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+            }
+            if(itemUnit.getSubctt_SpareField()==null){
+                bdAmountAllTotal=bdAmountAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+            }
+            bdBeginToCurrentPeriodMQtyAllTotal=
+                    bdBeginToCurrentPeriodMQtyAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngMMng_BeginToCurrentPeriodMQty()));
+            bdCurrentPeriodMQtyAllTotal=
+                    bdCurrentPeriodMQtyAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngMMng_CurrentPeriodMQty()));
+            progStlItemSubMShowList.add(itemUnit);
+            if(i+1< progStlItemSubMShowListTemp.size()){
+                itemUnitNext = progStlItemSubMShowListTemp.get(i+1);
+                if(itemUnitNext.getSubctt_ParentPkid().equals("root")){
+                    ProgStlItemSubMShow itemOfEsItemHieRelapTemp=new ProgStlItemSubMShow();
+                    itemOfEsItemHieRelapTemp.setSubctt_Name("合计");
+                    itemOfEsItemHieRelapTemp.setSubctt_Pkid("total"+i);
+                    itemOfEsItemHieRelapTemp.setSubctt_ContractQuantity(
+                            ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
+                    itemOfEsItemHieRelapTemp.setSubctt_ContractAmount(
+                            ToolUtil.getBdFrom0ToNull(bdAmountTotal));
+                    itemOfEsItemHieRelapTemp.setEngMMng_BeginToCurrentPeriodMQty(
+                            ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodMQtyTotal));
+                    itemOfEsItemHieRelapTemp.setEngMMng_CurrentPeriodMQty(
+                            ToolUtil.getBdFrom0ToNull(bdCurrentPeriodMQtyTotal));
+                    progStlItemSubMShowList.add(itemOfEsItemHieRelapTemp);
+                    bdQuantityTotal=new BigDecimal(0);
+                    bdAmountTotal=new BigDecimal(0);
+                    bdBeginToCurrentPeriodMQtyTotal=new BigDecimal(0);
+                    bdCurrentPeriodMQtyTotal=new BigDecimal(0);
+                }
+            } else if(i+1== progStlItemSubMShowListTemp.size()){
+                itemUnitNext = progStlItemSubMShowListTemp.get(i);
+                ProgStlItemSubMShow progStlItemSubMShowTemp = new ProgStlItemSubMShow();
+                progStlItemSubMShowTemp.setSubctt_Name("合计");
+                progStlItemSubMShowTemp.setSubctt_Pkid("total" + i);
+                progStlItemSubMShowTemp.setSubctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
+                progStlItemSubMShowTemp.setSubctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(bdAmountTotal));
+                progStlItemSubMShowTemp.setEngMMng_BeginToCurrentPeriodMQty(
+                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodMQtyTotal));
+                progStlItemSubMShowTemp.setEngMMng_CurrentPeriodMQty(
+                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodMQtyTotal));
+                progStlItemSubMShowList.add(progStlItemSubMShowTemp);
+                progStlItemSubMShowListExcel.add(progStlItemSubMShowTemp);
+                bdQuantityTotal = new BigDecimal(0);
+                bdAmountTotal = new BigDecimal(0);
+                bdBeginToCurrentPeriodMQtyTotal = new BigDecimal(0);
+                bdCurrentPeriodMQtyTotal = new BigDecimal(0);
+                // 总合计
+                progStlItemSubMShowTemp = new ProgStlItemSubMShow();
+                progStlItemSubMShowTemp.setSubctt_Name("总合计");
+                progStlItemSubMShowTemp.setSubctt_Pkid("total_all" + i);
+                progStlItemSubMShowTemp.setSubctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(bdQuantityAllTotal));
+                progStlItemSubMShowTemp.setSubctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(bdAmountAllTotal));
+                progStlItemSubMShowTemp.setEngMMng_BeginToCurrentPeriodMQty(
+                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodMQtyAllTotal));
+                progStlItemSubMShowTemp.setEngMMng_CurrentPeriodMQty(
+                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodMQtyAllTotal));
+                progStlItemSubMShowList.add(progStlItemSubMShowTemp);
+                progStlItemSubMShowListExcel.add(progStlItemSubMShowTemp);
+            }
         }
     }
     /*根据group和orderid临时编制编码strNo*/
@@ -401,12 +517,14 @@ public class ProgStlItemSubMAction {
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
                     // 原因：录入完毕
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode());
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 }else if(strPowerType.equals("MngFail")){
                     progStlInfo.setAutoLinkAdd("");
                     progStlInfo.setFlowStatus(null);
                     progStlInfo.setFlowStatusReason(null);
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
@@ -416,6 +534,7 @@ public class ProgStlItemSubMAction {
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
                     // 原因：审核通过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON1.getCode());
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据审核通过！");
                 }else if(strPowerType.equals("CheckFail")){
@@ -423,6 +542,7 @@ public class ProgStlItemSubMAction {
                     progStlInfo.setFlowStatus(null);
                     // 原因：审核未过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON2.getCode());
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据审核未过！");
                 }
@@ -433,6 +553,7 @@ public class ProgStlItemSubMAction {
                         progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                         // 原因：复核通过
                         progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                        progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                         progStlInfoService.updAutoLinkTask(progStlInfo);
                         MessageUtil.addInfo("数据复核通过！");
                     }catch (Exception e) {
@@ -464,6 +585,7 @@ public class ProgStlItemSubMAction {
 
                         // 原因：复核未过
                         progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode());
+                        progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                         progStlInfoService.updAutoLinkTask(progStlInfo);
                         MessageUtil.addInfo("数据复核未过！");
                     }catch (Exception e) {
@@ -478,6 +600,7 @@ public class ProgStlItemSubMAction {
                     progStlInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
                     // 原因：批准通过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
                     MessageUtil.addInfo("数据批准通过！");
                 }else if(strPowerType.equals("ApproveFail")){
@@ -491,6 +614,7 @@ public class ProgStlItemSubMAction {
                     }
                     // 原因：批准未过
                     progStlInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
+                    progStlInfo.setFlowStatusRemark(strFlowStatusRemark);
                     progStlInfoService.updAutoLinkTask(progStlInfo);
 
                     MessageUtil.addInfo("数据批准未过！");
@@ -501,6 +625,106 @@ public class ProgStlItemSubMAction {
         } catch (Exception e) {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
+        }
+    }
+    // 附件
+    public void onViewAttachment(AttachmentModel attachmentModelPara) {
+        image.setValue("/upload/stl/SubM/" + attachmentModelPara.getCOLUMN_NAME());
+    }
+    public void delAttachmentRecordAction(AttachmentModel attachmentModelPara){
+        try {
+            File deletingFile = new File(attachmentModelPara.getCOLUMN_PATH());
+            deletingFile.delete();
+            attachmentList.remove(attachmentModelPara) ;
+            StringBuffer sbTemp = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sbTemp.append(item.getCOLUMN_PATH() + ";");
+            }
+            progStlInfoShow.setAttachment(sbTemp.toString());
+            progStlInfoService.updateRecord(progStlInfoShow);
+        } catch (Exception e) {
+            logger.error("删除数据失败，", e);
+            MessageUtil.addError(e.getMessage());
+        }
+    }
+    public void download(AttachmentModel attachmentModelPara){
+        String strAttachment=attachmentModelPara.getCOLUMN_NAME();
+        try{
+            if(StringUtils.isEmpty(strAttachment) ){
+                MessageUtil.addError("路径为空，无法下载！");
+                logger.error("路径为空，无法下载！");
+            }
+            else {
+                String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/stl/SubM")+"/"+strAttachment;
+                File file = new File(fileName);
+                InputStream stream = new FileInputStream(fileName);
+                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), new String(strAttachment.getBytes("gbk"),"iso8859-1"));
+            }
+        } catch (Exception e) {
+            logger.error("下载文件失败", e);
+            MessageUtil.addError("下载文件失败,"+e.getMessage()+strAttachment);
+        }
+    }
+    public void upload(FileUploadEvent event) {
+        BufferedInputStream inStream = null;
+        FileOutputStream fileOutputStream = null;
+        UploadedFile uploadedFile = event.getFile();
+        AttachmentModel attachmentModel = new AttachmentModel();
+        if (uploadedFile != null) {
+            String path = FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/stl/SubM");
+            File superFile = new File(path);
+            if (!superFile.exists()) {
+                superFile.mkdirs();
+            }
+            File descFile = new File(superFile, uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_ID(ToolUtil.getIntIgnoreNull(attachmentList.size()) + "");
+            attachmentModel.setCOLUMN_NAME(uploadedFile.getFileName());
+            attachmentModel.setCOLUMN_PATH(descFile.getAbsolutePath());
+            for (AttachmentModel item : attachmentList){
+                if (item.getCOLUMN_NAME().equals(attachmentModel.getCOLUMN_NAME())) {
+                    MessageUtil.addError("附件已存在！");
+                    return;
+                }
+            }
+
+            attachmentList.add(attachmentModel);
+
+            StringBuffer sb = new StringBuffer();
+            for (AttachmentModel item : attachmentList) {
+                sb.append(item.getCOLUMN_NAME() + ";");
+            }
+            if(sb.length()>4000){
+                MessageUtil.addError("附件路径("+sb.toString()+")长度已超过最大允许值4000，不能入库，请联系系统管理员！");
+                return;
+            }
+            progStlInfoShow.setAttachment(sb.toString());
+            progStlInfoService.updateRecord(progStlInfoShow);
+            try {
+                inStream = new BufferedInputStream(uploadedFile.getInputstream());
+                fileOutputStream = new FileOutputStream(descFile);
+                byte[] buf = new byte[1024];
+                int num;
+                while ((num = inStream.read(buf)) != -1) {
+                    fileOutputStream.write(buf, 0, num);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                if (inStream != null) {
+                    try {
+                        inStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+                if (fileOutputStream != null) {
+                    try {
+                        fileOutputStream.close();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                }
+            }
         }
     }
     public String onExportExcel()throws IOException, WriteException {
@@ -682,5 +906,37 @@ public class ProgStlItemSubMAction {
 
     public String getStrPassFailVisible() {
         return strPassFailVisible;
+    }
+
+    public String getStrFlowStatusRemark() {
+        return strFlowStatusRemark;
+    }
+
+    public void setStrFlowStatusRemark(String strFlowStatusRemark) {
+        this.strFlowStatusRemark = strFlowStatusRemark;
+    }
+
+    public HtmlGraphicImage getImage() {
+        return image;
+    }
+
+    public void setImage(HtmlGraphicImage image) {
+        this.image = image;
+    }
+
+    public StreamedContent getDownloadFile() {
+        return downloadFile;
+    }
+
+    public void setDownloadFile(StreamedContent downloadFile) {
+        this.downloadFile = downloadFile;
+    }
+
+    public List<AttachmentModel> getAttachmentList() {
+        return attachmentList;
+    }
+
+    public void setAttachmentList(List<AttachmentModel> attachmentList) {
+        this.attachmentList = attachmentList;
     }
 }

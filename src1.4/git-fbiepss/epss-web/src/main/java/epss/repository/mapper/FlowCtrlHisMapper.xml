@@ -22,6 +22,7 @@
     <result column="OPER_TYPE" property="operType" jdbcType="VARCHAR" />
     <result column="ARCHIVED_FLAG" property="archivedFlag" jdbcType="CHAR" />
     <result column="TID" property="tid" jdbcType="VARCHAR" />
+    <result column="FLOW_STATUS_REMARK" jdbcType="VARCHAR" property="flowStatusRemark" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -98,7 +99,8 @@
       This element was generated on Wed Oct 08 14:42:56 CST 2014.
     -->
     PKID, INFO_TYPE, INFO_PKID, INFO_ID, INFO_NAME, PERIOD_NO, FLOW_STATUS, FLOW_STATUS_REASON, 
-    CREATED_BY, CREATED_BY_NAME, CREATED_TIME, REMARK, OPER_TYPE, ARCHIVED_FLAG, TID
+    CREATED_BY, CREATED_BY_NAME, CREATED_TIME, REMARK, OPER_TYPE, ARCHIVED_FLAG, TID, 
+    FLOW_STATUS_REMARK
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="epss.repository.model.FlowCtrlHisExample" >
     <!--
@@ -163,14 +165,14 @@
       INFO_ID, INFO_NAME, PERIOD_NO, 
       FLOW_STATUS, FLOW_STATUS_REASON, CREATED_BY, 
       CREATED_BY_NAME, CREATED_TIME, REMARK, 
-      OPER_TYPE, ARCHIVED_FLAG, TID
-      )
+      OPER_TYPE, ARCHIVED_FLAG, TID, 
+      FLOW_STATUS_REMARK)
     values (#{pkid,jdbcType=VARCHAR}, #{infoType,jdbcType=VARCHAR}, #{infoPkid,jdbcType=VARCHAR}, 
       #{infoId,jdbcType=VARCHAR}, #{infoName,jdbcType=VARCHAR}, #{periodNo,jdbcType=VARCHAR}, 
       #{flowStatus,jdbcType=CHAR}, #{flowStatusReason,jdbcType=CHAR}, #{createdBy,jdbcType=VARCHAR}, 
       #{createdByName,jdbcType=VARCHAR}, #{createdTime,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{operType,jdbcType=VARCHAR}, #{archivedFlag,jdbcType=CHAR}, #{tid,jdbcType=VARCHAR}
-      )
+      #{operType,jdbcType=VARCHAR}, #{archivedFlag,jdbcType=CHAR}, #{tid,jdbcType=VARCHAR}, 
+      #{flowStatusRemark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="epss.repository.model.FlowCtrlHis" >
     <!--
@@ -226,6 +228,9 @@
       <if test="tid != null" >
         TID,
       </if>
+      <if test="flowStatusRemark != null">
+        FLOW_STATUS_REMARK,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       #{pkid,jdbcType=VARCHAR},
@@ -270,6 +275,9 @@
       </if>
       <if test="tid != null" >
         #{tid,jdbcType=VARCHAR},
+      </if>
+      <if test="flowStatusRemark != null">
+        #{flowStatusRemark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -337,6 +345,9 @@
       <if test="record.tid != null" >
         TID = #{record.tid,jdbcType=VARCHAR},
       </if>
+      <if test="record.flowStatusRemark != null">
+        FLOW_STATUS_REMARK = #{record.flowStatusRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -363,7 +374,8 @@
       REMARK = #{record.remark,jdbcType=VARCHAR},
       OPER_TYPE = #{record.operType,jdbcType=VARCHAR},
       ARCHIVED_FLAG = #{record.archivedFlag,jdbcType=CHAR},
-      TID = #{record.tid,jdbcType=VARCHAR}
+      TID = #{record.tid,jdbcType=VARCHAR},
+      FLOW_STATUS_REMARK = #{record.flowStatusRemark,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -418,6 +430,9 @@
       <if test="tid != null" >
         TID = #{tid,jdbcType=VARCHAR},
       </if>
+      <if test="flowStatusRemark != null">
+        FLOW_STATUS_REMARK = #{flowStatusRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
@@ -441,7 +456,8 @@
       REMARK = #{remark,jdbcType=VARCHAR},
       OPER_TYPE = #{operType,jdbcType=VARCHAR},
       ARCHIVED_FLAG = #{archivedFlag,jdbcType=CHAR},
-      TID = #{tid,jdbcType=VARCHAR}
+      TID = #{tid,jdbcType=VARCHAR},
+      FLOW_STATUS_REMARK = #{flowStatusRemark,jdbcType=VARCHAR}
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
 </mapper>

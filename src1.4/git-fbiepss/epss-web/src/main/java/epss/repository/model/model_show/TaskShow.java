@@ -12,6 +12,7 @@ public class TaskShow {
     private String flowStatusName;
     private String flowStatusReason;
     private String flowStatusReasonName;
+    private String flowStatusRemark;
     private String strColorType;
     private String operResFlowStatus;
     private String operResFlowStatusName;
@@ -89,6 +90,14 @@ public class TaskShow {
 
     public void setFlowStatusReasonName(String flowStatusReasonName) {
         this.flowStatusReasonName = flowStatusReasonName;
+    }
+
+    public String getFlowStatusRemark() {
+        return flowStatusRemark;
+    }
+
+    public void setFlowStatusRemark(String flowStatusRemark) {
+        this.flowStatusRemark = flowStatusRemark;
     }
 
     public String getFlowStatusReason() {

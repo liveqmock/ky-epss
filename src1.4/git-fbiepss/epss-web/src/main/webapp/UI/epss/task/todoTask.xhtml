@@ -8,28 +8,26 @@
         <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
         <script type="text/javascript" language="javascript">
             function actSelect(infoType,flowStatus,infoPkid) {
-                var sfeatureMng = "dialogwidth:1400px;dialogheight:700px;center:yes;location:no;help:no;" +
-                        "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
-                var sfeature    = "dialogwidth:1400px;dialogheight:700px;center:yes;location:no;help:no;" +
+                var sfeature = "dialogwidth:1400px;dialogheight:700px;center:yes;location:no;help:no;" +
                         "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
                 if(flowStatus=="") { // 待录入
                     if (infoType == '0'){
-                        var rtn = dialog("../subPower/item/itemMng_Tkctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../subPower/item/itemMng_Tkctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '1'){
-                        var rtn = dialog("../subPower/item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../subPower/item/itemMng_Cstpl.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '2'){
-                        var rtn = dialog("../subPower/item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../subPower/item/itemMng_Subctt.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '3'){
-                        var rtn = dialog("../subPower/item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../subPower/item/itemMng_SubcttQStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '4'){
-                        var rtn = dialog("../subPower/item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../subPower/item/itemMng_SubcttMStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '5'){
                     }else if (infoType == '6'){
-                        var rtn = dialog("../subPower/item/itemMng_TkcttStaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../subPower/item/itemMng_TkcttStaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7'){
-                        var rtn = dialog("../subPower/item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeatureMng);
+                        var rtn = dialog("../subPower/item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="0") { // 待审核
@@ -131,10 +129,10 @@
                         <p:column headerText="序号" style="width:30px">
                             <h:outputText value="#{row + 1}"/>
                         </p:column>
-                        <p:column headerText="任务类别" style="width:60px;text-align:left;">
+                        <p:column headerText="任务类别" style="width:50px;text-align:center;">
                             <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
                         </p:column>
-                        <p:column headerText="任务编号" style="width:200px;text-align:left;">
+                        <p:column headerText="任务编号" style="width:280px;text-align:left;">
                             <h:outputText value="#{record.id}"/>
                         </p:column>
                         <p:column headerText="任务名称" style="width:300px;text-align:left;">
@@ -143,11 +141,14 @@
                         <p:column headerText="任务备注" style="width:300px;text-align:left;">
                             <h:outputText value="#{record.signPartBName}"/>
                         </p:column>
-                        <p:column headerText="期数" style="width:80px;text-align:center;">
+                        <p:column headerText="期数" style="width:40px;text-align:center;">
                             <h:outputText value="#{record.periodNo}"/>
                         </p:column>
-                        <p:column headerText="状态原因" style="width:80px;text-align:center;">
+                        <p:column headerText="状态原因" style="width:50px;text-align:center;">
                             <h:outputText value="#{record.flowStatusReasonName}"/>
+                        </p:column>
+                        <p:column headerText="状态备注" style="width:300px;text-align:left;">
+                            <h:outputText value="#{record.flowStatusRemark}"/>
                         </p:column>
                     </p:dataTable>
                 </p:panel>

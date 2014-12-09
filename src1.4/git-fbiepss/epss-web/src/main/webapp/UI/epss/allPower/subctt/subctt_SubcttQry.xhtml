@@ -32,27 +32,25 @@
                     <p:growl id="msgs" showDetail="true"/>
                     <p:focus for="id"/>
                     <h:panelGrid id="pdQry" columns="3" style="width: 100%">
-                        <h:panelGrid columns="4">
+                        <h:panelGrid columns="6">
                             <p:outputLabel value="合同编号：" for="id"/>
                             <p:inputText id="id"
                                          value="#{subcttInfoAction.cttInfoShowQry.id}"/>
                             <p:outputLabel value="合同名称：" for="cttName"/>
                             <p:inputText id="cttName"
-                                         value="#{subcttInfoAction.cttInfoShowQry.name}"
-                                         style="width: 328px"/>
-                            <p:outputLabel value="签订日期：" for="signDate"/>
-                            <p:inputText id="signDate"
-                                         value="#{subcttInfoAction.cttInfoShowQry.signDate}"
-                                         onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                            <p:outputLabel value="备注内容：" for="remark"/>
-                            <p:inputText id="remark"
-                                         value="#{subcttInfoAction.cttInfoShowQry.remark}"/>
+                                         value="#{subcttInfoAction.cttInfoShowQry.name}"/>
                             <p:outputLabel value="签订甲方：" for="signPartA"/>
                             <p:selectOneMenu id="signPartA"
                                              value="#{subcttInfoAction.cttInfoShowQry.signPartA}"
                                              disabled="#{subcttInfoAction.styleModel.disabled_Flag}">
                                 <f:selectItems value="#{esCommon.customerlist}"/>
                             </p:selectOneMenu>
+                            <p:outputLabel value="签订日期：" for="signDate"/>
+                            <p:inputText id="signDate"
+                                         value="#{subcttInfoAction.cttInfoShowQry.signDate}"
+                                         onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                            <p:outputLabel value="备注内容：" for="remark"/>
+                            <p:inputText id="remark" value="#{subcttInfoAction.cttInfoShowQry.remark}"/>
                             <p:outputLabel value="签订乙方：" for="signPartB"/>
                             <p:selectOneMenu id="signPartB"
                                              value="#{subcttInfoAction.cttInfoShowQry.signPartB}"

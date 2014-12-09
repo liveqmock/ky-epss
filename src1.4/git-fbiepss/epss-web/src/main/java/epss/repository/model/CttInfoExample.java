@@ -1653,6 +1653,76 @@ public class CttInfoExample {
             addCriterion("FLOW_STATUS_REASON not between", value1, value2, "flowStatusReason");
             return (Criteria) this;
         }
+
+        public Criteria andFlowStatusRemarkIsNull() {
+            addCriterion("FLOW_STATUS_REMARK is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkIsNotNull() {
+            addCriterion("FLOW_STATUS_REMARK is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkEqualTo(String value) {
+            addCriterion("FLOW_STATUS_REMARK =", value, "flowStatusRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkNotEqualTo(String value) {
+            addCriterion("FLOW_STATUS_REMARK <>", value, "flowStatusRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkGreaterThan(String value) {
+            addCriterion("FLOW_STATUS_REMARK >", value, "flowStatusRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkGreaterThanOrEqualTo(String value) {
+            addCriterion("FLOW_STATUS_REMARK >=", value, "flowStatusRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkLessThan(String value) {
+            addCriterion("FLOW_STATUS_REMARK <", value, "flowStatusRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkLessThanOrEqualTo(String value) {
+            addCriterion("FLOW_STATUS_REMARK <=", value, "flowStatusRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkLike(String value) {
+            addCriterion("FLOW_STATUS_REMARK like", value, "flowStatusRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkNotLike(String value) {
+            addCriterion("FLOW_STATUS_REMARK not like", value, "flowStatusRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkIn(List<String> values) {
+            addCriterion("FLOW_STATUS_REMARK in", values, "flowStatusRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkNotIn(List<String> values) {
+            addCriterion("FLOW_STATUS_REMARK not in", values, "flowStatusRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkBetween(String value1, String value2) {
+            addCriterion("FLOW_STATUS_REMARK between", value1, value2, "flowStatusRemark");
+            return (Criteria) this;
+        }
+
+        public Criteria andFlowStatusRemarkNotBetween(String value1, String value2) {
+            addCriterion("FLOW_STATUS_REMARK not between", value1, value2, "flowStatusRemark");
+            return (Criteria) this;
+        }
     }
 
     /**

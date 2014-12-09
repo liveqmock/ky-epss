@@ -8,6 +8,7 @@
         <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
         <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
         <script type="text/javascript" language="javascript">
+            $(function(){ $("html").css("overflowX","hidden");});
             document.onkeydown = function TabReplace() {
                 if (event.keyCode == 13) {
                     if (event.srcElement.tagName != 'BUTTON')
@@ -23,7 +24,7 @@
             <div style="margin:5px;">
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
-                    <h:panelGrid id="pgCondition">
+                    <p:panel header="分包结算单信息">
                         <h:panelGrid columns="4">
                             <p:outputLabel value="工程名称：" for="id"/>
                             <p:inputText id="id" value="#{progStlItemSubStlmentAction.reportHeader.strTkcttName}"
@@ -51,19 +52,18 @@
                                          style="background-color:gainsboro;width:200px;"/>
                         </h:panelGrid>
                         <h:panelGrid id="AccountPass" columns="4">
-                            <p:commandButton icon="ui-icon-document"
-                                             value="分包合同附件"
+                            <p:commandButton value="分包合同附件"
                                              update="msgs"
                                              onclick="PF('wvAttachmentList').show()">
+                            </p:commandButton>
+                            <p:commandButton value="导出到EXCEL"
+                                             action="#{progStlItemSubStlmentAction.onExportExcel}"
+                                             ajax="false">
                             </p:commandButton>
                             <p:commandButton id="ApprovePassBtn" value="记账"
                                              action="#{progStlItemSubStlmentAction.onClickForPowerAction('AccountPass')}"
                                              update="AccountPass,msgs"
                                              rendered="#{progStlItemSubStlmentAction.strAccountBtnRendered}">
-                            </p:commandButton>
-                            <p:commandButton value="导出到EXCEL"
-                                             action="#{progStlItemSubStlmentAction.onExportExcel}"
-                                             ajax="false">
                             </p:commandButton>
                             <p:ajaxStatus style="width:16px;height:16px;">
                                 <f:facet name="start">
@@ -74,125 +74,127 @@
                                 </f:facet>
                             </p:ajaxStatus>
                         </h:panelGrid>
-                    </h:panelGrid>
-                    <p:dataTable id="pdt" style="heiht:100%;width:100%;"
-                             value="#{progStlItemSubStlmentAction.progStlItemSubStlmentShowList}"
-                             var="record"
-                             rowKey="#{record.subctt_ItemPkid}"
-                             selectionMode="single"
-                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                             paginator="true"
-                             paginatorPosition="bottom"
-                             rows="15"
-                             rowsPerPageTemplate="500,200,100,45,30,15"
-                             rowIndexVar="row"
-                             emptyMessage="数据记录为空..."
-                             widgetVar="dtItemDetail"
-                             rowStyleClass="#{record.subctt_ItemName eq '小计'? 'rowGrayStyle':
-                                                 record.subctt_ItemName eq '本期净结算额'? 'rowTotalStyle':
-                                                 record.subctt_ItemName eq '合计(扣除其它栏款项后本期结算价值)'?'rowTotalStyle':
-                                                 record.subctt_ItemName eq '其中:安全施工措施费'?'rowGrayStyle':
-                                                 record.subctt_ItemName eq '质保金'? 'rowTotalStyle':null}"
-                             scrollable="true">
-                        <p:column headerText="序号" style="width:30px">
-                            <h:outputText value="#{row + 1}"/>
-                        </p:column>
-                        <p:column headerText="编号" style="width:100px">
-                            <h:outputText value="#{record.subctt_StrNo}" escape="false"/>
-                        </p:column>
-                        <p:column headerText="分项项目名称" style="width:200px">
-                            <h:outputText value="#{record.subctt_ItemName}" />
-                        </p:column>
-                        <p:column headerText="单位" style="width:60px">
-                            <h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
-                        </p:column>
-                        <p:column headerText="合同单价" style="width:100px">
-                            <h:outputText value="#{record.subctt_ContractUnitPrice}" style="float: right" >
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="合同数量" style="width:100px">
-                            <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right" >
-                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="合同金额" style="width:100px">
-                            <h:outputText value="#{record.subctt_ContractAmount}" style="float: right" >
-                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="本期_数量" style="width:100px">
-                            <h:outputText value="#{record.engPMng_CurrentPeriodEQty}" style="float: right">
-                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="本期_金额" style="width:100px">
-                            <h:outputText value="#{record.engPMng_CurrentPeriodAmt}" style="float: right">
-                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="开累_数量" style="width:100px">
-                            <h:outputText value="#{record.engPMng_BeginToCurrentPeriodEQty}" style="float: right">
-                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="开累_金额" style="width:100px">
-                            <h:outputText value="#{record.engPMng_BeginToCurrentPeriodAmt}" style="float: right">
-                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                            </h:outputText>
-                        </p:column>
-                        <p:column headerText="备注内容" style="width:200px">
-                            <h:outputText value="#{record.subctt_Remark}" />
-                        </p:column>
-                    </p:dataTable>
-                    <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
-                              showEffect="clip" hideEffect="fold" header="附件列表">
-                        <p:growl id="messages" showDetail="true"/>
-                        <h:panelGrid id="pgAttachmentView">
-                            <p:dataTable id="pdtAttachmentList" style="width:100%;"
-                                         value="#{progStlItemSubStlmentAction.attachmentList}"
-                                         var="recordAttachment"
-                                         rowKey="#{recordAttachment.COLUMN_NAME}"
-                                         selectionMode="single"
-                                         paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                                             {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                         paginator="true"
-                                         paginatorPosition="bottom"
-                                         rows="5"
-                                         rowsPerPageTemplate="100,50,30,15,5"
-                                         emptyMessage="数据记录为空...">
-                                <p:column headerText="附件ID" style="text-align:left">
-                                    <h:outputText value="#{recordAttachment.COLUMN_ID}"/>
-                                </p:column>
-                                <p:column headerText="附件名" style="text-align:left">
-                                    <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
-                                </p:column>
-                                <p:column headerText="缩略图" style="text-align:center" rendered="false">
-                                    <h:graphicImage value="/upload/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
-                                </p:column>
-                                <p:column headerText="预览">
-                                    <p:commandButton icon="ui-icon-search"
-                                                     id="selectButton" update=":form:imageShow"
-                                                     style="height:18px;width:18px"
-                                                     action="#{progStlItemSubStlmentAction.onViewAttachment(recordAttachment)}"
-                                                     oncomplete="dlgWvView.show()"
-                                                     title="View">
-                                    </p:commandButton>
-                                </p:column>
-                                <p:column headerText="操作" style="width:62px;text-align: center;">
-                                    <p:commandButton icon="ui-icon-arrowrefresh-1-w"
-                                                     style="height:18px;width:18px"
-                                                     ajax="false"
-                                                     actionListener="#{progStlItemSubStlmentAction.download(recordAttachment.COLUMN_PATH)}">
-                                        <p:fileDownload value="#{progStlItemSubStlmentAction.downloadFile}"/>
-                                    </p:commandButton>
-                                </p:column>
-                            </p:dataTable>
-                            <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
-                                <h:graphicImage binding="#{progStlItemSubStlmentAction.image}"/>
-                            </p:dialog>
-                        </h:panelGrid>
-                    </p:dialog>
+                    </p:panel>
+                    <p:panel header="分包结算单内容">
+                        <p:dataTable id="pdt" style="heiht:100%;width:100%;"
+                                 value="#{progStlItemSubStlmentAction.progStlItemSubStlmentShowList}"
+                                 var="record"
+                                 rowKey="#{record.subctt_ItemPkid}"
+                                 selectionMode="single"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                 {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 paginator="true"
+                                 paginatorPosition="bottom"
+                                 rows="15"
+                                 rowsPerPageTemplate="500,200,100,45,30,15"
+                                 rowIndexVar="row"
+                                 emptyMessage="数据记录为空..."
+                                 widgetVar="dtItemDetail"
+                                 rowStyleClass="#{record.subctt_ItemName eq '小计'? 'rowGrayStyle':
+                                                     record.subctt_ItemName eq '本期净结算额'? 'rowTotalStyle':
+                                                     record.subctt_ItemName eq '合计(扣除其它栏款项后本期结算价值)'?'rowTotalStyle':
+                                                     record.subctt_ItemName eq '其中:安全施工措施费'?'rowGrayStyle':
+                                                     record.subctt_ItemName eq '质保金'? 'rowTotalStyle':null}"
+                                 scrollable="true">
+                            <p:column headerText="序号" style="width:30px">
+                                <h:outputText value="#{row + 1}"/>
+                            </p:column>
+                            <p:column headerText="编号" style="width:100px">
+                                <h:outputText value="#{record.subctt_StrNo}" escape="false"/>
+                            </p:column>
+                            <p:column headerText="分项项目名称" style="width:200px">
+                                <h:outputText value="#{record.subctt_ItemName}" />
+                            </p:column>
+                            <p:column headerText="单位" style="width:60px">
+                                <h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
+                            </p:column>
+                            <p:column headerText="合同单价" style="width:100px">
+                                <h:outputText value="#{record.subctt_ContractUnitPrice}" style="float: right" >
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="合同数量" style="width:100px">
+                                <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right" >
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="合同金额" style="width:100px">
+                                <h:outputText value="#{record.subctt_ContractAmount}" style="float: right" >
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="本期_数量" style="width:100px">
+                                <h:outputText value="#{record.engPMng_CurrentPeriodEQty}" style="float: right">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="本期_金额" style="width:100px">
+                                <h:outputText value="#{record.engPMng_CurrentPeriodAmt}" style="float: right">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="开累_数量" style="width:100px">
+                                <h:outputText value="#{record.engPMng_BeginToCurrentPeriodEQty}" style="float: right">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="开累_金额" style="width:100px">
+                                <h:outputText value="#{record.engPMng_BeginToCurrentPeriodAmt}" style="float: right">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                </h:outputText>
+                            </p:column>
+                            <p:column headerText="备注内容" style="width:200px">
+                                <h:outputText value="#{record.subctt_Remark}" />
+                            </p:column>
+                        </p:dataTable>
+                        <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
+                                  showEffect="clip" hideEffect="fold" header="附件列表">
+                            <p:growl id="messages" showDetail="true"/>
+                            <h:panelGrid id="pgAttachmentView">
+                                <p:dataTable id="pdtAttachmentList" style="width:100%;"
+                                             value="#{progStlItemSubStlmentAction.attachmentList}"
+                                             var="recordAttachment"
+                                             rowKey="#{recordAttachment.COLUMN_NAME}"
+                                             selectionMode="single"
+                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                                 {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             paginator="true"
+                                             paginatorPosition="bottom"
+                                             rows="5"
+                                             rowsPerPageTemplate="100,50,30,15,5"
+                                             emptyMessage="数据记录为空...">
+                                    <p:column headerText="附件ID" style="text-align:left">
+                                        <h:outputText value="#{recordAttachment.COLUMN_ID}"/>
+                                    </p:column>
+                                    <p:column headerText="附件名" style="text-align:left">
+                                        <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
+                                    </p:column>
+                                    <p:column headerText="缩略图" style="text-align:center" rendered="false">
+                                        <h:graphicImage value="/upload/#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
+                                    </p:column>
+                                    <p:column headerText="预览">
+                                        <p:commandButton icon="ui-icon-search"
+                                                         id="selectButton" update=":form:imageShow"
+                                                         style="height:18px;width:18px"
+                                                         action="#{progStlItemSubStlmentAction.onViewAttachment(recordAttachment)}"
+                                                         oncomplete="dlgWvView.show()"
+                                                         title="View">
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column headerText="操作" style="width:62px;text-align: center;">
+                                        <p:commandButton icon="ui-icon-arrowrefresh-1-w"
+                                                         style="height:18px;width:18px"
+                                                         ajax="false"
+                                                         actionListener="#{progStlItemSubStlmentAction.download(recordAttachment.COLUMN_PATH)}">
+                                            <p:fileDownload value="#{progStlItemSubStlmentAction.downloadFile}"/>
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                                <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
+                                    <h:graphicImage binding="#{progStlItemSubStlmentAction.image}"/>
+                                </p:dialog>
+                            </h:panelGrid>
+                        </p:dialog>
+                    </p:panel>
                 </p:panel>
             </div>
         </h:form>

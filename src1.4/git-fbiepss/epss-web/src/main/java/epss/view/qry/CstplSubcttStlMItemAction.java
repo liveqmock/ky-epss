@@ -156,7 +156,7 @@ public class CstplSubcttStlMItemAction {
                         qryCSStlMShowNewInsert.setBdSubctt_BeginToCurrentPeriodMAmount(bdSubcttBeginToCurrentPeriodAmount);
                         qryCSStlMShowNewInsert.setBdSubctt_CurrentPeriodMAmount(bdSubcttCurrentPeriodAmount);
 
-                        qryCSStlMShowNewInsert.setStrSubctt_SignPartName(qryShowList.get(i).getStrName());
+                        qryCSStlMShowNewInsert.setStrSubctt_SignPartName(qryShowList.get(i).getStrSignPartName());
                         qryCSStlMShowNewInsert.setStrPkid(qryShowList.get(i).getStrCorrespondingPkid()
                                 + "/" + intGroup.toString());
                         qryCSStlMShowNewInsert.setStrParentPkid(itemUnit.getParentPkid());

@@ -29,6 +29,7 @@ public class CttInfoShow implements Serializable {
     private String strStatusFlagBegin;
     private String strStatusFlagEnd;
     private String flowStatusReason;
+    private String flowStatusRemark;
     private String archivedFlag;
     private String createdBy;
     private String createdByName;
@@ -191,6 +192,14 @@ public class CttInfoShow implements Serializable {
 
     public void setFlowStatus(String flowStatus) {
         this.flowStatus = flowStatus;
+    }
+
+    public String getFlowStatusRemark() {
+        return flowStatusRemark;
+    }
+
+    public void setFlowStatusRemark(String flowStatusRemark) {
+        this.flowStatusRemark = flowStatusRemark;
     }
 
     public String getFlowStatusReason() {

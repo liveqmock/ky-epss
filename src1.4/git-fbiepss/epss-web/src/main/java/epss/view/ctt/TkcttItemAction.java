@@ -86,37 +86,42 @@ public class TkcttItemAction {
     private String strFlowType;
     private List<CttItemShow> cttItemShowListExcel;
     private Map beansMap;
+    // 录入备注
+    private String strFlowStatusRemark;
+
     @PostConstruct
     public void init() {
         try {
             Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
             beansMap = new HashMap();
             strBelongToType = EnumResType.RES_TYPE0.getCode();
-            if (parammap.containsKey("strCttInfoPkid")) {
-                strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
-                cttInfo = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
-            }
+
             if (parammap.containsKey("strFlowType")) {
                 strFlowType = parammap.get("strFlowType").toString();
             }
 
-            strPassVisible = "true";
-            strPassFailVisible = "true";
-            if ("Mng".equals(strFlowType)) {
-                if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())){
-                    strPassVisible = "false";
+            if (parammap.containsKey("strCttInfoPkid")) {
+                strCttInfoPkid = parammap.get("strCttInfoPkid").toString();
+                cttInfo = cttInfoService.getCttInfoByPkId(strCttInfoPkid);
+
+                strPassVisible = "true";
+                strPassFailVisible = "true";
+                if ("Mng".equals(strFlowType)) {
+                    if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(cttInfo.getFlowStatus())){
+                        strPassVisible = "false";
+                    }else {
+                        strPassFailVisible = "false";
+                    }
                 }else {
-                    strPassFailVisible = "false";
+                    if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(cttInfo.getFlowStatus()))
+                            ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(cttInfo.getFlowStatus()))
+                            ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(cttInfo.getFlowStatus()))){
+                        strPassVisible = "false";
+                    }
                 }
-            }else {
-                if (("Check".equals(strFlowType)&&EnumFlowStatus.FLOW_STATUS1.getCode().equals(cttInfo.getFlowStatus()))
-                        ||("DoubleCheck".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS2.getCode().equals(cttInfo.getFlowStatus()))
-                        ||("Approve".equals(strFlowType) && EnumFlowStatus.FLOW_STATUS3.getCode().equals(cttInfo.getFlowStatus()))){
-                    strPassVisible = "false";
-                }
+                resetAction();
+                initData();
             }
-            resetAction();
-            initData();
         }catch (Exception e){
             logger.error("初始化失败", e);
         }
@@ -568,11 +573,13 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());
                     // 原因：录入完毕
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据录入完成！");
                 } else if (strPowerTypePara.equals("MngFail")) {
                     cttInfo.setFlowStatus(null);
                     cttInfo.setFlowStatusReason(null);
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据录入未完！");
                 }
@@ -583,6 +590,7 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS1.getCode());
                     // 原因：审核通过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON1.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据审核通过！");
                 } else if (strPowerTypePara.equals("CheckFail")) {
@@ -590,6 +598,7 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(null);
                     // 原因：审核未过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON2.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据审核未过！");
                 }
@@ -600,6 +609,7 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                     // 原因：复核通过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据复核通过！");
                 } else if (strPowerTypePara.equals("DoubleCheckFail")) {
@@ -611,6 +621,7 @@ public class TkcttItemAction {
                     }
                     // 原因：复核未过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据复核未过！");
                 }
@@ -621,6 +632,7 @@ public class TkcttItemAction {
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
                     // 原因：批准通过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON5.getCode());
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
                     MessageUtil.addInfo("数据批准通过！");
                 } else if (strPowerTypePara.equals("ApproveFail")) {
@@ -642,7 +654,7 @@ public class TkcttItemAction {
                     }
                     // 原因：批准未过
                     cttInfo.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON6.getCode());
-
+                    cttInfo.setFlowStatusRemark(strFlowStatusRemark);
                     cttInfoService.updateRecord(cttInfo);
 
                     List<ProgStlInfo> progStlInfoListTemp =
@@ -912,7 +924,12 @@ public class TkcttItemAction {
         return strPassFailVisible;
     }
 
+    public String getStrFlowStatusRemark() {
+        return strFlowStatusRemark;
+    }
 
-
-    /*智能字段End*/
+    public void setStrFlowStatusRemark(String strFlowStatusRemark) {
+        this.strFlowStatusRemark = strFlowStatusRemark;
+    }
+/*智能字段End*/
 }

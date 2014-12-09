@@ -57,8 +57,10 @@ public class CstplItemShow implements Serializable {
     private String archivedFlagContrast;
     private String originFlagContrast;
     private String createdByContrast;
+    private String createdByNameContrast;
     private String createdTimeContrast;
     private String lastUpdByContrast;
+    private String lastUpdByNameContrast;
     private String lastUpdTimeContrast;
     private Integer recVersionContrast;
 
@@ -459,5 +461,21 @@ public class CstplItemShow implements Serializable {
 
     public void setSpareField(String spareField) {
         this.spareField = spareField;
+    }
+
+    public String getCreatedByNameContrast() {
+        return createdByNameContrast;
+    }
+
+    public void setCreatedByNameContrast(String createdByNameContrast) {
+        this.createdByNameContrast = createdByNameContrast;
+    }
+
+    public String getLastUpdByNameContrast() {
+        return lastUpdByNameContrast;
+    }
+
+    public void setLastUpdByNameContrast(String lastUpdByNameContrast) {
+        this.lastUpdByNameContrast = lastUpdByNameContrast;
     }
 }

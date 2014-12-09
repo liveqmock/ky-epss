@@ -46,7 +46,8 @@ public class ProgStlItemTkEstShow implements Serializable {
     private String eng_LastUpdByName;
     private String eng_LastUpdTime;
     private Integer eng_RecVersion;
-    private Boolean isUptoCttContentFlag;
+    private Boolean isUptoCttQtyFlag;
+    private Boolean isRenderedFlag;
 
     public ProgStlItemTkEstShow() {
 
@@ -308,11 +309,19 @@ public class ProgStlItemTkEstShow implements Serializable {
         this.eng_LastUpdByName = eng_LastUpdByName;
     }
 
-    public Boolean getIsUptoCttContentFlag() {
-        return isUptoCttContentFlag;
+    public Boolean getIsUptoCttQtyFlag() {
+        return isUptoCttQtyFlag;
     }
 
-    public void setIsUptoCttContentFlag(Boolean isUptoCttContentFlag) {
-        this.isUptoCttContentFlag = isUptoCttContentFlag;
+    public void setIsUptoCttQtyFlag(Boolean isUptoCttQtyFlag) {
+        this.isUptoCttQtyFlag = isUptoCttQtyFlag;
+    }
+
+    public Boolean getIsRenderedFlag() {
+        return isRenderedFlag;
+    }
+
+    public void setIsRenderedFlag(Boolean isRenderedFlag) {
+        this.isRenderedFlag = isRenderedFlag;
     }
 }

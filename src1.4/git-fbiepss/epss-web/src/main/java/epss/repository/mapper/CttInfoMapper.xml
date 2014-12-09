@@ -28,6 +28,7 @@
     <result column="TYPE" property="type" jdbcType="CHAR" />
     <result column="FLOW_STATUS" property="flowStatus" jdbcType="CHAR" />
     <result column="FLOW_STATUS_REASON" property="flowStatusReason" jdbcType="CHAR" />
+    <result column="FLOW_STATUS_REMARK"  property="flowStatusRemark" jdbcType="VARCHAR"/>
   </resultMap>
   <sql id="Example_Where_Clause" >
     <!--
@@ -105,7 +106,7 @@
     -->
     PKID, CTT_TYPE, PARENT_PKID, ID, NAME, SIGN_DATE, SIGN_PART_A, SIGN_PART_B, CTT_START_DATE, 
     CTT_END_DATE, ATTACHMENT, REMARK, ARCHIVED_FLAG, CREATED_BY, CREATED_TIME, LAST_UPD_BY, 
-    LAST_UPD_TIME, REC_VERSION, TYPE, FLOW_STATUS, FLOW_STATUS_REASON
+    LAST_UPD_TIME, REC_VERSION, TYPE, FLOW_STATUS, FLOW_STATUS_REASON, FLOW_STATUS_REMARK
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="epss.repository.model.CttInfoExample" >
     <!--
@@ -172,8 +173,8 @@
       CTT_END_DATE, ATTACHMENT, REMARK, 
       ARCHIVED_FLAG, CREATED_BY, CREATED_TIME, 
       LAST_UPD_BY, LAST_UPD_TIME, REC_VERSION, 
-      TYPE, FLOW_STATUS, FLOW_STATUS_REASON
-      )
+      TYPE, FLOW_STATUS, FLOW_STATUS_REASON, 
+      FLOW_STATUS_REMARK)
     values (#{pkid,jdbcType=VARCHAR}, #{cttType,jdbcType=VARCHAR}, #{parentPkid,jdbcType=VARCHAR}, 
       #{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{signDate,jdbcType=VARCHAR}, 
       #{signPartA,jdbcType=VARCHAR}, #{signPartB,jdbcType=VARCHAR}, #{cttStartDate,jdbcType=VARCHAR}, 
@@ -255,6 +256,9 @@
       <if test="flowStatusReason != null" >
         FLOW_STATUS_REASON,
       </if>
+      <if test="flowStatusRemark != null">
+        FLOW_STATUS_REMARK,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       #{pkid,jdbcType=VARCHAR},
@@ -317,6 +321,9 @@
       </if>
       <if test="flowStatusReason != null" >
         #{flowStatusReason,jdbcType=CHAR},
+      </if>
+      <if test="flowStatusRemark != null">
+        #{flowStatusRemark,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -402,6 +409,9 @@
       <if test="record.flowStatusReason != null" >
         FLOW_STATUS_REASON = #{record.flowStatusReason,jdbcType=CHAR},
       </if>
+      <if test="record.flowStatusRemark != null">
+        FLOW_STATUS_REMARK = #{record.flowStatusRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -434,8 +444,9 @@
       REC_VERSION = #{record.recVersion,jdbcType=DECIMAL},
       TYPE = #{record.type,jdbcType=CHAR},
       FLOW_STATUS = #{record.flowStatus,jdbcType=CHAR},
-      FLOW_STATUS_REASON = #{record.flowStatusReason,jdbcType=CHAR}
-    <if test="_parameter != null" >
+      FLOW_STATUS_REASON = #{record.flowStatusReason,jdbcType=CHAR},
+      FLOW_STATUS_REMARK = #{record.flowStatusRemark,jdbcType=VARCHAR}
+    <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
@@ -507,6 +518,9 @@
       <if test="flowStatusReason != null" >
         FLOW_STATUS_REASON = #{flowStatusReason,jdbcType=CHAR},
       </if>
+      <if test="flowStatusRemark != null">
+        FLOW_STATUS_REMARK = #{flowStatusRemark,jdbcType=VARCHAR},
+      </if>
     </set>
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
@@ -536,7 +550,8 @@
       REC_VERSION = #{recVersion,jdbcType=DECIMAL},
       TYPE = #{type,jdbcType=CHAR},
       FLOW_STATUS = #{flowStatus,jdbcType=CHAR},
-      FLOW_STATUS_REASON = #{flowStatusReason,jdbcType=CHAR}
+      FLOW_STATUS_REASON = #{flowStatusReason,jdbcType=CHAR},
+      FLOW_STATUS_REMARK = #{flowStatusRemark,jdbcType=VARCHAR}
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
 </mapper>
