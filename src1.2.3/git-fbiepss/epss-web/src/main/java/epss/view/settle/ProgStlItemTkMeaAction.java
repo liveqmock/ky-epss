@@ -260,11 +260,16 @@ public class ProgStlItemTkMeaAction {
                 progStlItemTkMeaShowTemp.setEng_ArchivedFlag(progStlItemTkMea.getArchivedFlag());
                 progStlItemTkMeaShowTemp.setEng_CreatedBy(progStlItemTkMea.getCreatedBy());
                 progStlItemTkMeaShowTemp.setEng_CreatedByName(strCreatedByName);
+                String strCreatedByNameTemp=ToolUtil.getUserName(progStlItemTkMea.getCreatedBy());
+                progStlItemTkMeaShowTemp.setEng_CreatedByName(strCreatedByNameTemp);
                 progStlItemTkMeaShowTemp.setEng_CreatedTime(progStlItemTkMea.getCreatedTime());
                 progStlItemTkMeaShowTemp.setEng_LastUpdBy(progStlItemTkMea.getLastUpdBy());
                 progStlItemTkMeaShowTemp.setEng_LastUpdByName(strLastUpdByName);
+                String strLastUpdByNameTemp=ToolUtil.getUserName(progStlItemTkMea.getLastUpdBy());
+                progStlItemTkMeaShowTemp.setEng_LastUpdByName(strLastUpdByNameTemp);
                 progStlItemTkMeaShowTemp.setEng_LastUpdTime(progStlItemTkMea.getLastUpdTime());
                 progStlItemTkMeaShowTemp.setEng_RecVersion(progStlItemTkMea.getRecVersion());
+                progStlItemTkMeaShowTemp.setEng_Remark(progStlItemTkMea.getRemark());
                 if (ToolUtil.getBdIgnoreNull(progStlItemTkMeaShowTemp.getEng_BeginToCurrentPeriodEQty())
                         .compareTo(progStlItemTkMeaShowTemp.getTkctt_ContractQuantity())==0){
                     progStlItemTkMeaShowTemp.setIsUptoCttQtyFlag(true);

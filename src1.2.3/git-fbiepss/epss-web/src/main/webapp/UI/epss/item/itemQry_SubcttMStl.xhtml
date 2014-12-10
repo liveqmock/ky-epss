@@ -25,7 +25,7 @@
                 <p:panel>
                     <p:growl id="msgs" showDetail="true"/>
                     <h:panelGrid columns="2">
-                    <p:panel header="分包进度材料消耗料结算信息">
+                    <p:panel header="分包进度材料消耗量结算信息">
                             <h:panelGrid columns="2">
                                 <h:panelGrid>
                                     <h:panelGrid columns="8">
@@ -71,7 +71,7 @@
                             </h:panelGrid>
                         </p:panel>
                     </h:panelGrid>
-                    <p:panel header="分包进度材料消耗料结算内容">
+                    <p:panel header="分包进度材料消耗量结算内容">
                         <p:dataTable id="pdt" style="width:100%;"
                                      value="#{progStlItemSubMAction.progStlItemSubMShowList}"
                                      var="record"
@@ -103,22 +103,22 @@
                             <p:column headerText="序号" style="width:40px">
                                 <h:outputText value="#{row + 1}"/>
                             </p:column>
-                            <p:column style="width:100px" headerText="编号">
+                            <p:column style="width:100px" headerText="项目编号">
                                 <h:outputText value="#{record.subctt_StrNo}" escape="false"/>
                             </p:column>
-                            <p:column style="width:200px" headerText="名称">
+                            <p:column style="width:200px" headerText="项目名称">
                                 <h:outputText value="#{record.subctt_Name}"/>
                             </p:column>
-                            <p:column style="width:40px" headerText="单位">
+                            <p:column style="width:40px" headerText="项目单位">
                                 <h:outputText value="#{record.subctt_Unit}" style="text-align:right"/>
                             </p:column>
                             <p:column style="width:100px" headerText="合同单价">
                                 <h:outputText value="#{record.subctt_ContractUnitPrice}" style="float: right">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
-                            </p:column>
-                            <p:column style="width:100px" headerText="合同数量">
-                                <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right">
+                            </p:column>			    
+                            <p:column style="width:100px" headerText="分包材料单价">
+                                <h:outputText value="#{record.subctt_SignPartAPrice}" style="float: right">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
                             </p:column>
@@ -126,9 +126,9 @@
                                 <h:outputText value="#{record.subctt_ContractAmount}" style="float: right">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
-                            </p:column>
-                            <p:column style="width:100px" headerText="分包材料单价">
-                                <h:outputText value="#{record.subctt_SignPartAPrice}" style="float: right">
+                            </p:column>			    
+                            <p:column style="width:100px" headerText="合同工程量">
+                                <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
                             </p:column>
@@ -142,8 +142,30 @@
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column style="width:100px" headerText="备注内容">
+                            <p:column style="width:100px" headerText="合同备注">
                                 <h:outputText value="#{record.subctt_Remark}"/>
+                            </p:column>
+                            <p:column style="width:200px" headerText="结算备注">
+                                <h:outputText value="#{record.engMMng_Remark}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="数据来源">
+                                <h:outputText value="#{record.engMMng_OriginFlag}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="创建人">
+                                <h:outputText value="#{record.engMMng_CreatedByName}" />
+                            </p:column>
+                            <p:column style="width:120px" headerText="创建时间">
+                                <h:outputText value="#{record.engMMng_CreatedTime}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="修改人">
+                                <h:outputText value="#{record.engMMng_LastUpdByName}" />
+                            </p:column>
+                            <p:column style="width:120px" headerText="修改时间">
+                                <h:outputText value="#{record.engMMng_LastUpdTime}" />
+                            </p:column>
+                            <p:column style="width:80px" headerText="修改次数">
+                                <h:outputText value="#{record.engMMng_RecVersion}" style="float: right">
+                                </h:outputText>
                             </p:column>
                         </p:dataTable>
                         <p:dialog id="dlgView" header="分包材料结算查询" widgetVar="wVDlgView"
@@ -161,68 +183,40 @@
                                     <h:inputText id="name" value="#{progStlItemSubMAction.progStlItemSubMShowSel.subctt_Name}"
                                                  style="background-color:gainsboro"
                                                  readonly="true"/>
-                                    <p:outputLabel for="remark" value="备注内容:"/>
-                                    <h:inputText id="remark" value="#{progStlItemSubMAction.progStlItemSubMShowSel.subctt_Remark}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="unitItemInfo" value="单位:"/>
+                                    <p:outputLabel for="unitItemInfo" value="项目单位:"/>
                                     <h:inputText id="unitItemInfo"
                                                  value="#{progStlItemSubMAction.progStlItemSubMShowSel.subctt_Unit}"
                                                  style="background-color:gainsboro"
                                                  readonly="true"/>
-                                    <p:outputLabel for="contractQuantityItemInfo" value="合同数量:"/>
+                                    <p:outputLabel for="contractQuantityItemInfo" value="合同工程量:"/>
                                     <h:inputText id="contractQuantityItemInfo"
                                                  value="#{progStlItemSubMAction.progStlItemSubMShowSel.subctt_ContractQuantity}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
-                                    <p:outputLabel for="engMMng_BeginToCurrentPeriodMQty" value="开累数量:"/>
+				                    <p:outputLabel for="remark" value="合同备注:"/>
+                                    <h:inputText id="remark" value="#{progStlItemSubMAction.progStlItemSubMShowSel.subctt_Remark}"
+                                                 style="background-color:gainsboro"
+                                                 readonly="true"/>
+                                    <p:outputLabel for="engMMng_BeginToCurrentPeriodMQty" value="开累材料量:"/>
                                     <h:inputText id="engMMng_BeginToCurrentPeriodMQty"
                                                  value="#{progStlItemSubMAction.progStlItemSubMShowSel.engMMng_BeginToCurrentPeriodMQty}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
+				                    <p:outputLabel for="engMMng_RemarkForDel" value="结算备注:" />
+                                    <h:inputText id="engMMng_RemarkForDel"
+                                                 value="#{progStlItemSubMAction.progStlItemSubMShowSel.engMMng_Remark}"
+                                                 style="background-color:gainsboro"
+                                                 readonly="true"/>
                                     <p:outputLabel for="engMMng_CurrentPeriodMQty" value="本期数量:"/>
                                     <h:inputText id="engMMng_CurrentPeriodMQty"
                                                  value="#{progStlItemSubMAction.progStlItemSubMShowSel.engMMng_CurrentPeriodMQty}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                                    </h:inputText>
-                                    <p:outputLabel for="originFlagItemInfo" value="数据来源:"/>
-                                    <h:inputText id="originFlagItemInfo"
-                                                 value="#{esCommon.originFlagListValueOfAlias(
-                                                             progStlItemSubMAction.progStlItemSubMShowSel.engMMng_OriginFlag)}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="createdByItemInfo" value="创建人:"/>
-                                    <h:inputText id="createdByItemInfo"
-                                                 value="#{progStlItemSubMAction.progStlItemSubMShowSel.engMMng_CreatedByName}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="createdTimeItemInfo" value="创建时间:"/>
-                                    <h:inputText id="createdTimeItemInfo"
-                                                 value="#{progStlItemSubMAction.progStlItemSubMShowSel.engMMng_CreatedTime}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="lastUpdByItemInfo" value="修改人:"/>
-                                    <h:inputText id="lastUpdByItemInfo"
-                                                 value="#{progStlItemSubMAction.progStlItemSubMShowSel.engMMng_LastUpdByName}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="lastUpdTimeItemInfo" value="修改时间:"/>
-                                    <h:inputText id="lastUpdTimeItemInfo"
-                                                 value="#{progStlItemSubMAction.progStlItemSubMShowSel.engMMng_LastUpdTime}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="recVersionItemInfo" value="修改次数:"/>
-                                    <h:inputText id="recVersionItemInfo"
-                                                 value="#{progStlItemSubMAction.progStlItemSubMShowSel.engMMng_RecVersion}"
-                                                 style="background-color:gainsboro;text-align:right;"
-                                                 readonly="true">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                                     </h:inputText>
                                 </h:panelGrid>
                             </h:panelGrid>

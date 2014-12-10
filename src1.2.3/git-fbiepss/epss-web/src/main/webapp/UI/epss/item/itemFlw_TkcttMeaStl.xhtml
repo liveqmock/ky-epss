@@ -121,13 +121,13 @@
                             <p:column headerText="序号" style="width:30px">
                                 <h:outputText value="#{row + 1}"/>
                             </p:column>
-                            <p:column style="width:100px" headerText="编号">
+                            <p:column style="width:100px" headerText="项目编号">
                                 <h:outputText value="#{record.tkctt_StrNo}" escape="false"/>
                             </p:column>
-                            <p:column style="width:200px" headerText="名称">
+                            <p:column style="width:200px" headerText="项目名称">
                                 <h:outputText value="#{record.tkctt_Name}" />
                             </p:column>
-                            <p:column style="width:60px" headerText="单位">
+                            <p:column style="width:60px" headerText="项目单位">
                                 <h:outputText value="#{record.tkctt_Unit}" style="text-align:right"/>
                             </p:column>
                             <p:column style="width:80px" headerText="合同单价">
@@ -135,13 +135,13 @@
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column style="width:80px" headerText="合同数量">
-                                <h:outputText value="#{record.tkctt_ContractQuantity}" style="text-align: right">
+			                <p:column style="width:100px" headerText="合同金额">
+                                <h:outputText value="#{record.tkctt_ContractAmount}" style="text-align: right">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
                             </p:column>
-                            <p:column style="width:100px" headerText="合同金额">
-                                <h:outputText value="#{record.tkctt_ContractAmount}" style="text-align: right">
+                            <p:column style="width:80px" headerText="合同数量">
+                                <h:outputText value="#{record.tkctt_ContractQuantity}" style="text-align: right">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
                             </p:column>
@@ -165,6 +165,31 @@
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                 </h:outputText>
                             </p:column>
+                            <p:column style="width:200px" headerText="合同备注">
+                                <h:outputText value="#{record.tkctt_Remark}" />
+                            </p:column>
+                            <p:column style="width:200px" headerText="结算备注">
+                                <h:outputText value="#{record.eng_Remark}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="数据来源">
+                                <h:outputText value="#{record.eng_OriginFlag}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="创建人">
+                                <h:outputText value="#{record.eng_CreatedByName}" />
+                            </p:column>
+                            <p:column style="width:120px" headerText="创建时间">
+                                <h:outputText value="#{record.eng_CreatedTime}" />
+                            </p:column>
+                            <p:column style="width:100px" headerText="修改人">
+                                <h:outputText value="#{record.eng_LastUpdByName}" />
+                            </p:column>
+                            <p:column style="width:120px" headerText="修改时间">
+                                <h:outputText value="#{record.eng_LastUpdTime}" />
+                            </p:column>
+                            <p:column style="width:80px" headerText="修改次数">
+                                <h:outputText value="#{record.eng_RecVersion}" style="float: right">
+                                </h:outputText>
+                            </p:column>
                         </p:dataTable>
                         <p:dialog id="dlgView" header="总包数量计量查询" widgetVar="wVDlgView"
                                   resizable="false" modal="true"
@@ -177,15 +202,12 @@
                                                  style="background-color:gainsboro"
                                                  readonly="true">
                                     </h:inputText>
-                                    <p:outputLabel for="name" value="名称:"/>
+                                    <p:outputLabel for="name" value="项目名称:"/>
                                     <h:inputText id="name" value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.tkctt_Name}"
                                                  style="background-color:gainsboro"
                                                  readonly="true"/>
-                                    <p:outputLabel for="remark" value="备注内容:"/>
-                                    <h:inputText id="remark" value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.tkctt_Remark}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="unitItemInfo" value="单位:"/>
+                                   
+                                    <p:outputLabel for="unitItemInfo" value="项目单位:"/>
                                     <h:inputText id="unitItemInfo"
                                                  value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.tkctt_Unit}"
                                                  style="background-color:gainsboro"
@@ -197,13 +219,17 @@
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
-                                    <p:outputLabel for="contractQuantityItemInfo" value="合同数量:"/>
+                                    <p:outputLabel for="contractQuantityItemInfo" value="合同工程量:"/>
                                     <h:inputText id="contractQuantityItemInfo"
                                                  value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.tkctt_ContractQuantity}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
+				                    <p:outputLabel for="remark" value="合同备注:"/>
+                                    <h:inputText id="remark" value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.tkctt_Remark}"
+                                                 style="background-color:gainsboro"
+                                                 readonly="true"/>
                                     <p:outputLabel for="eng_BeginToCurrentPeriodEQty" value="开累工程量:"/>
                                     <h:inputText id="eng_BeginToCurrentPeriodEQty"
                                                  value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.eng_BeginToCurrentPeriodEQty}"
@@ -218,37 +244,9 @@
                                                  readonly="true">
                                         <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
-                                    <p:outputLabel for="createdByItemInfo" value="创建人:"/>
-                                    <h:inputText id="createdByItemInfo"
-                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.eng_CreatedByName}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="createdTimeItemInfo" value="创建时间:"/>
-                                    <h:inputText id="createdTimeItemInfo"
-                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.eng_CreatedTime}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="lastUpdByItemInfo" value="修改人:"/>
-                                    <h:inputText id="lastUpdByItemInfo"
-                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.eng_LastUpdByName}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="lastUpdTimeItemInfo" value="修改时间:"/>
-                                    <h:inputText id="lastUpdTimeItemInfo"
-                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.eng_LastUpdTime}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="recVersionItemInfo" value="修改次数:"/>
-                                    <h:inputText id="recVersionItemInfo"
-                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.eng_RecVersion}"
-                                                 style="background-color:gainsboro;text-align:right;"
-                                                 readonly="true">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                    </h:inputText>
-                                    <p:outputLabel for="originFlagItemInfo" value="数据来源:"/>
-                                    <h:inputText id="originFlagItemInfo"
-                                                 value="#{esCommon.originFlagListValueOfAlias(
-                                                             progStlItemTkMeaAction.progStlItemTkMeaShowSel.eng_OriginFlag)}"
+                                    <p:outputLabel for="eng_Remark" value="结算备注:" />
+                                    <h:inputText id="eng_Remark"
+                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowSel.eng_Remark}"
                                                  style="background-color:gainsboro"
                                                  readonly="true"/>
                                 </h:panelGrid>
