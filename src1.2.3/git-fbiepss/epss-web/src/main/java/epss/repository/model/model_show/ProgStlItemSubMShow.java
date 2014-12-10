@@ -47,6 +47,7 @@ public class ProgStlItemSubMShow implements Serializable {
     private String engMMng_LastUpdByName;
     private String engMMng_LastUpdTime;
     private Integer engMMng_RecVersion;
+    private String engMMng_Remark;
     private Boolean isUptoCttQtyFlag;
     private Boolean isRenderedFlag;
 
@@ -332,5 +333,13 @@ public class ProgStlItemSubMShow implements Serializable {
 
     public void setIsRenderedFlag(Boolean isRenderedFlag) {
         this.isRenderedFlag = isRenderedFlag;
+    }
+
+    public String getEngMMng_Remark() {
+        return engMMng_Remark;
+    }
+
+    public void setEngMMng_Remark(String engMMng_Remark) {
+        this.engMMng_Remark = engMMng_Remark;
     }
 }

@@ -79,6 +79,7 @@ public class ProgStlItemSubQService {
         progStlItemSubQTemp.setLastUpdBy(progStlItemSubQShowPara.getEngQMng_LastUpdBy());
         progStlItemSubQTemp.setLastUpdTime(progStlItemSubQShowPara.getEngQMng_LastUpdTime());
         progStlItemSubQTemp.setRecVersion(progStlItemSubQShowPara.getEngQMng_RecVersion());
+        progStlItemSubQTemp.setRemark(progStlItemSubQShowPara.getEngQMng_Remark());
         return progStlItemSubQTemp;
     }
 

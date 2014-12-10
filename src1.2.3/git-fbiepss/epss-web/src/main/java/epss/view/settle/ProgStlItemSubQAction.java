@@ -218,10 +218,15 @@ public class ProgStlItemSubQAction {
                 progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(progStlItemSubQ.getCurrentPeriodEQty());
                 progStlItemSubQShowTemp.setEngQMng_ArchivedFlag(progStlItemSubQ.getArchivedFlag());
                 progStlItemSubQShowTemp.setEngQMng_CreatedBy(progStlItemSubQ.getCreatedBy());
+                String strCreatedByNameTemp=ToolUtil.getUserName(progStlItemSubQ.getCreatedBy());
+                progStlItemSubQShowTemp.setEngQMng_CreatedByName(strCreatedByNameTemp);
                 progStlItemSubQShowTemp.setEngQMng_CreatedTime(progStlItemSubQ.getCreatedTime());
                 progStlItemSubQShowTemp.setEngQMng_LastUpdBy(progStlItemSubQ.getLastUpdBy());
+                String strLastUpdByNameTemp=ToolUtil.getUserName(progStlItemSubQ.getLastUpdBy());
+                progStlItemSubQShowTemp.setEngQMng_LastUpdByName(strLastUpdByNameTemp);
                 progStlItemSubQShowTemp.setEngQMng_LastUpdTime(progStlItemSubQ.getLastUpdTime());
                 progStlItemSubQShowTemp.setEngQMng_RecVersion(progStlItemSubQ.getRecVersion());
+                progStlItemSubQShowTemp.setEngQMng_Remark(progStlItemSubQ.getRemark());
             }
             progStlItemSubQShowListPara.add(progStlItemSubQShowTemp) ;
             recursiveDataTable(progStlItemSubQShowTemp.getSubctt_Pkid(), cttItemListPara, progStlItemSubQShowListPara);
