@@ -49,6 +49,14 @@ public class ProgStlItemSubQShow implements Serializable {
     private String engQMng_Remark;
     private Boolean isUptoCttQtyFlag;
     private Boolean isRenderedFlag;
+    //税费率以百分比表示
+    private String subctt_ContractAmountInPercent;
+    private String engQMng_BeginToCurrentPeriodEQtyInPercent;
+    private String engQMng_CurrentPeriodEQtyInPercent;
+    //excel中显示的数据
+    private String subctt_ContractAmountForExcel;
+    private String engQMng_BeginToCurrentPeriodEQtyForExcel;
+    private String engQMng_CurrentPeriodEQtyForExcel;
 
     public ProgStlItemSubQShow() {
 
@@ -332,5 +340,53 @@ public class ProgStlItemSubQShow implements Serializable {
 
     public void setEngQMng_Remark(String engQMng_Remark) {
         this.engQMng_Remark = engQMng_Remark;
+    }
+
+    public String getSubctt_ContractAmountInPercent() {
+        return subctt_ContractAmountInPercent;
+    }
+
+    public void setSubctt_ContractAmountInPercent(String subctt_ContractAmountInPercent) {
+        this.subctt_ContractAmountInPercent = subctt_ContractAmountInPercent;
+    }
+
+    public String getEngQMng_BeginToCurrentPeriodEQtyInPercent() {
+        return engQMng_BeginToCurrentPeriodEQtyInPercent;
+    }
+
+    public void setEngQMng_BeginToCurrentPeriodEQtyInPercent(String engQMng_BeginToCurrentPeriodEQtyInPercent) {
+        this.engQMng_BeginToCurrentPeriodEQtyInPercent = engQMng_BeginToCurrentPeriodEQtyInPercent;
+    }
+
+    public String getEngQMng_CurrentPeriodEQtyInPercent() {
+        return engQMng_CurrentPeriodEQtyInPercent;
+    }
+
+    public void setEngQMng_CurrentPeriodEQtyInPercent(String engQMng_CurrentPeriodEQtyInPercent) {
+        this.engQMng_CurrentPeriodEQtyInPercent = engQMng_CurrentPeriodEQtyInPercent;
+    }
+
+    public String getSubctt_ContractAmountForExcel() {
+        return subctt_ContractAmountForExcel;
+    }
+
+    public void setSubctt_ContractAmountForExcel(String subctt_ContractAmountForExcel) {
+        this.subctt_ContractAmountForExcel = subctt_ContractAmountForExcel;
+    }
+
+    public String getEngQMng_BeginToCurrentPeriodEQtyForExcel() {
+        return engQMng_BeginToCurrentPeriodEQtyForExcel;
+    }
+
+    public void setEngQMng_BeginToCurrentPeriodEQtyForExcel(String engQMng_BeginToCurrentPeriodEQtyForExcel) {
+        this.engQMng_BeginToCurrentPeriodEQtyForExcel = engQMng_BeginToCurrentPeriodEQtyForExcel;
+    }
+
+    public String getEngQMng_CurrentPeriodEQtyForExcel() {
+        return engQMng_CurrentPeriodEQtyForExcel;
+    }
+
+    public void setEngQMng_CurrentPeriodEQtyForExcel(String engQMng_CurrentPeriodEQtyForExcel) {
+        this.engQMng_CurrentPeriodEQtyForExcel = engQMng_CurrentPeriodEQtyForExcel;
     }
 }

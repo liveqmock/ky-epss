@@ -508,6 +508,17 @@ public class ToolUtil {
         }
         return returnStr;
     }
+    public static String  getCttAmtInPercent(BigDecimal v) {
+        if (v==null){
+            return null;
+        }else{
+            java.text.DecimalFormat  df = new java.text.DecimalFormat("#.00%");
+            return df.format(v);
+        }
+    }
+    public static String getStrFromBdIgnoreZeroNull(BigDecimal bigDecimalPara){
+        return bigDecimalPara==null?"":(bigDecimal0.compareTo(bigDecimalPara)==0?"":bigDecimalPara.toString());
+    }
     public static void main(String[] argv) {
         System.out.println(getDateString("2004-10-20"));
     }

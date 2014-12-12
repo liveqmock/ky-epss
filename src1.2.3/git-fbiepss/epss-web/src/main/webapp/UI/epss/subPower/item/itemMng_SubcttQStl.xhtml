@@ -171,10 +171,9 @@
                                               rendered="#{record.subctt_SpareField eq null?true:false}">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                 </h:outputText>
-                                <h:outputText value="#{record.subctt_ContractAmount}" style="float: right"
+                                <h:outputText value="#{record.subctt_ContractAmountInPercent}" style="float: right"
                                               rendered="#{record.subctt_SpareField ne null?true:false}">
-                                    <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
-                                    </h:outputText>
+                                </h:outputText>
                             </p:column>
                             <p:column style="width:110px" headerText="合同工程量">
                                 <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right">
@@ -182,23 +181,21 @@
                                 </h:outputText>
                             </p:column>
                             <p:column style="width:110px" headerText="开累工程量">
-                            <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQty}" style="float: right"
-                                          rendered="#{record.subctt_SpareField eq null?true:false}">
-                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                            </h:outputText>
-                            <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQty}" style="float: right"
-                                          rendered="#{record.subctt_SpareField ne null?true:false}">
-                                <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
-                            </h:outputText>
+                                <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQty}" style="float: right"
+                                              rendered="#{record.subctt_SpareField eq null?true:false}">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                </h:outputText>
+                                <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQtyInPercent}" style="float: right"
+                                              rendered="#{record.subctt_SpareField ne null?true:false}">
+                                </h:outputText>
                             </p:column>
                             <p:column style="width:110px" headerText="当期工程量">
                             <h:outputText value="#{record.engQMng_CurrentPeriodEQty}" style="float: right"
                                           rendered="#{record.subctt_SpareField eq null?true:false}">
                                 <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                             </h:outputText>
-                            <h:outputText value="#{record.engQMng_CurrentPeriodEQty}" style="float: right"
+                            <h:outputText value="#{record.engQMng_CurrentPeriodEQtyInPercent}" style="float: right"
                                           rendered="#{record.subctt_SpareField ne null?true:false}">
-                                <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
                             </h:outputText>
                             </p:column>
                             <p:column style="width:200px" headerText="合同备注">
@@ -276,7 +273,6 @@
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true"
                                                  rendered="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_SpareField ne null?true:false}">
-                                        <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
                                     </h:inputText>
                                     <p:outputLabel for="engQMng_RemarkForUpd" value="结算备注:" />
                                     <h:inputText id="engQMng_RemarkForUpd"
