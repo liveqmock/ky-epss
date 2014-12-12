@@ -167,13 +167,10 @@ public class ProgStlItemSubQAction {
                 ProgStlItemSubQShow itemUnitTemp= (ProgStlItemSubQShow) BeanUtils.cloneBean(itemUnit);
                 itemUnitTemp.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getSubctt_StrNo()));
                 if(itemUnitTemp.getSubctt_SpareField()==null){
-                    itemUnitTemp.setSubctt_ContractAmountForExcel(
-                            ToolUtil.getStrFromBdIgnoreZeroNull(itemUnitTemp.getSubctt_ContractAmount()));
+                    itemUnitTemp.setSubctt_ContractAmountForExcel(ToolUtil.getCttAmtStrFromBdIgnoreZeroNull(itemUnitTemp.getSubctt_ContractAmount()));
                     // 分包工程量结算
-                    itemUnitTemp.setEngQMng_CurrentPeriodEQtyForExcel(
-                            ToolUtil.getStrFromBdIgnoreZeroNull(itemUnitTemp.getEngQMng_CurrentPeriodEQty()));
-                    itemUnitTemp.setEngQMng_BeginToCurrentPeriodEQtyForExcel(
-                            ToolUtil.getStrFromBdIgnoreZeroNull(itemUnitTemp.getEngQMng_BeginToCurrentPeriodEQty()));
+                    itemUnitTemp.setEngQMng_CurrentPeriodEQtyForExcel(ToolUtil.getCttStlQtyStrFromBdIgnoreZeroNull(itemUnitTemp.getEngQMng_CurrentPeriodEQty()));
+                    itemUnitTemp.setEngQMng_BeginToCurrentPeriodEQtyForExcel(ToolUtil.getCttStlQtyStrFromBdIgnoreZeroNull(itemUnitTemp.getEngQMng_BeginToCurrentPeriodEQty()));
                 }else{
                     String strSubctt_ContractAmountInPercent=ToolUtil.getStrIgnoreNull(ToolUtil.getCttAmtInPercent(itemUnitTemp.getSubctt_ContractAmount()));
                     itemUnitTemp.setSubctt_ContractAmountForExcel(strSubctt_ContractAmountInPercent);
@@ -213,10 +210,18 @@ public class ProgStlItemSubQAction {
 
             progStlItemSubQShowTemp.setSubctt_Unit(itemUnit.getUnit());
             progStlItemSubQShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
-            progStlItemSubQShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
             progStlItemSubQShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
-            String strSubctt_ContractAmountInPercent=ToolUtil.getCttAmtInPercent(itemUnit.getContractAmount());
-            progStlItemSubQShowTemp.setSubctt_ContractAmountInPercent(strSubctt_ContractAmountInPercent);
+            progStlItemSubQShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
+            try {
+                if(itemUnit.getSpareField()==null){
+                    progStlItemSubQShowTemp.setSubctt_ContractAmountForExcel(ToolUtil.getCttAmtStrFromBdIgnoreZeroNull(itemUnit.getContractAmount()));
+                }else{
+                    String strSubctt_ContractAmountInPercent=ToolUtil.getCttAmtInPercent(itemUnit.getContractAmount());
+                    progStlItemSubQShowTemp.setSubctt_ContractAmountForExcel(strSubctt_ContractAmountInPercent);
+                }
+            }catch (Exception e){
+
+            }
             progStlItemSubQShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
             progStlItemSubQShowTemp.setSubctt_SpareField(itemUnit.getSpareField());
 
@@ -234,10 +239,15 @@ public class ProgStlItemSubQAction {
                 progStlItemSubQShowTemp.setEngQMng_SubcttItemPkid(progStlItemSubQ.getSubcttItemPkid());
                 progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(progStlItemSubQ.getBeginToCurrentPeriodEQty());
                 progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(progStlItemSubQ.getCurrentPeriodEQty());
-                String strEngQMng_BeginToCurrentPeriodEQtyInPercent=ToolUtil.getCttAmtInPercent(progStlItemSubQ.getBeginToCurrentPeriodEQty());
-                progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQtyInPercent(strEngQMng_BeginToCurrentPeriodEQtyInPercent);
-                String strEengQMng_CurrentPeriodEQtyInPercentInPercent=ToolUtil.getCttAmtInPercent(progStlItemSubQ.getCurrentPeriodEQty());
-                progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQtyInPercent(strEengQMng_CurrentPeriodEQtyInPercentInPercent);
+                if(progStlItemSubQShowTemp.getSubctt_SpareField()==null){
+                    progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQtyForExcel(ToolUtil.getCttStlQtyStrFromBdIgnoreZeroNull(progStlItemSubQ.getBeginToCurrentPeriodEQty()));
+                    progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQtyForExcel(ToolUtil.getCttStlQtyStrFromBdIgnoreZeroNull(progStlItemSubQ.getCurrentPeriodEQty()));
+                }else{
+                    String strEngQMng_BeginToCurrentPeriodEQtyInPercent=ToolUtil.getCttAmtInPercent(progStlItemSubQ.getBeginToCurrentPeriodEQty());
+                    progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQtyForExcel(strEngQMng_BeginToCurrentPeriodEQtyInPercent);
+                    String strEengQMng_CurrentPeriodEQtyInPercentInPercent=ToolUtil.getCttAmtInPercent(progStlItemSubQ.getCurrentPeriodEQty());
+                    progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQtyForExcel(strEengQMng_CurrentPeriodEQtyInPercentInPercent);
+                }
                 progStlItemSubQShowTemp.setEngQMng_ArchivedFlag(progStlItemSubQ.getArchivedFlag());
                 progStlItemSubQShowTemp.setEngQMng_CreatedBy(progStlItemSubQ.getCreatedBy());
                 String strCreatedByNameTemp=ToolUtil.getUserName(progStlItemSubQ.getCreatedBy());
@@ -328,12 +338,12 @@ public class ProgStlItemSubQAction {
                             ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyTotal));
                     itemOfEsItemHieRelapTemp.setEngQMng_CurrentPeriodEQty(
                             ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal));
-                    String strSubctt_ContractAmountInPercent = ToolUtil.getStrIgnoreNull(ToolUtil.getCttAmtInPercent(itemOfEsItemHieRelapTemp.getSubctt_ContractAmount()));
-                    itemOfEsItemHieRelapTemp.setSubctt_ContractAmountForExcel(strSubctt_ContractAmountInPercent);
-                    String strEngQMng_BeginToCurrentPeriodEQtyInPercent = ToolUtil.getStrIgnoreNull(ToolUtil.getCttAmtInPercent(itemOfEsItemHieRelapTemp.getEngQMng_BeginToCurrentPeriodEQty()));
-                    itemOfEsItemHieRelapTemp.setEngQMng_BeginToCurrentPeriodEQtyForExcel(strEngQMng_BeginToCurrentPeriodEQtyInPercent);
-                    String strEengQMng_CurrentPeriodEQtyInPercentInPercent = ToolUtil.getStrIgnoreNull(ToolUtil.getCttAmtInPercent(ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal)));
-                    itemOfEsItemHieRelapTemp.setEngQMng_CurrentPeriodEQtyForExcel(strEengQMng_CurrentPeriodEQtyInPercentInPercent);
+                    itemOfEsItemHieRelapTemp.setSubctt_ContractAmountForExcel(
+                            ToolUtil.getCttAmtStrFromBdIgnoreZeroNull(bdAmountTotal));
+                    itemOfEsItemHieRelapTemp.setEngQMng_BeginToCurrentPeriodEQtyForExcel(
+                            ToolUtil.getCttStlQtyStrFromBdIgnoreZeroNull(bdBeginToCurrentPeriodEQtyTotal));
+                    itemOfEsItemHieRelapTemp.setEngQMng_CurrentPeriodEQtyForExcel(
+                            ToolUtil.getCttStlQtyStrFromBdIgnoreZeroNull(bdCurrentPeriodEQtyTotal));
                     itemOfEsItemHieRelapTemp.setIsRenderedFlag(false);
                     progStlItemSubQShowList.add(itemOfEsItemHieRelapTemp);
                     bdQuantityTotal=new BigDecimal(0);
@@ -354,14 +364,15 @@ public class ProgStlItemSubQAction {
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyTotal));
                 progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal));
-                String strSubctt_ContractAmountInPercent = ToolUtil.getStrIgnoreNull(ToolUtil.getCttAmtInPercent(progStlItemSubQShowTemp.getSubctt_ContractAmount()));
-                String strEngQMng_BeginToCurrentPeriodEQtyInPercent = ToolUtil.getStrIgnoreNull(ToolUtil.getCttAmtInPercent(progStlItemSubQShowTemp.getEngQMng_BeginToCurrentPeriodEQty()));
-                String strEengQMng_CurrentPeriodEQtyInPercentInPercent = ToolUtil.getStrIgnoreNull(ToolUtil.getCttAmtInPercent(ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal)));
+                progStlItemSubQShowTemp.setSubctt_ContractAmountForExcel(
+                        ToolUtil.getCttAmtStrFromBdIgnoreZeroNull(bdAmountTotal));
+                progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQtyForExcel(
+                        ToolUtil.getCttStlQtyStrFromBdIgnoreZeroNull(bdBeginToCurrentPeriodEQtyTotal));
+                progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQtyForExcel(
+                        ToolUtil.getCttStlQtyStrFromBdIgnoreZeroNull(bdCurrentPeriodEQtyTotal));
+
                 progStlItemSubQShowTemp.setIsRenderedFlag(false);
                 progStlItemSubQShowList.add(progStlItemSubQShowTemp);
-                progStlItemSubQShowTemp.setSubctt_ContractAmountForExcel(strSubctt_ContractAmountInPercent);
-                progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQtyForExcel(strEngQMng_BeginToCurrentPeriodEQtyInPercent);
-                progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQtyForExcel(strEengQMng_CurrentPeriodEQtyInPercentInPercent);
                 progStlItemSubQShowListExcel.add(progStlItemSubQShowTemp);
                 bdQuantityTotal = new BigDecimal(0);
                 bdAmountTotal = new BigDecimal(0);
@@ -379,11 +390,11 @@ public class ProgStlItemSubQAction {
                         ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyAllTotal));
                 progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(
                         ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyAllTotal));
+                progStlItemSubQShowTemp.setSubctt_ContractAmountForExcel(ToolUtil.getCttAmtStrFromBdIgnoreZeroNull(bdAmountAllTotal));
+                progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQtyForExcel(ToolUtil.getCttStlQtyStrFromBdIgnoreZeroNull(bdBeginToCurrentPeriodEQtyAllTotal));
+                progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQtyForExcel(ToolUtil.getCttStlQtyStrFromBdIgnoreZeroNull(bdCurrentPeriodEQtyAllTotal));
                 progStlItemSubQShowTemp.setIsRenderedFlag(false);
                 progStlItemSubQShowList.add(progStlItemSubQShowTemp);
-                progStlItemSubQShowTemp.setSubctt_ContractAmountForExcel(ToolUtil.getStrFromBdIgnoreZeroNull(progStlItemSubQShowTemp.getSubctt_ContractAmount()));
-                progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQtyForExcel(ToolUtil.getStrFromBdIgnoreZeroNull(progStlItemSubQShowTemp.getEngQMng_BeginToCurrentPeriodEQty()));
-                progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQtyForExcel(ToolUtil.getStrFromBdIgnoreZeroNull(progStlItemSubQShowTemp.getEngQMng_CurrentPeriodEQty()));
                 progStlItemSubQShowListExcel.add(progStlItemSubQShowTemp);
             }
         }

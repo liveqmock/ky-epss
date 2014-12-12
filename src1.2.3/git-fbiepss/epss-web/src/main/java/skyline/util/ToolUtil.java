@@ -510,14 +510,19 @@ public class ToolUtil {
     }
     public static String  getCttAmtInPercent(BigDecimal v) {
         if (v==null){
-            return null;
+            return "";
         }else{
-            java.text.DecimalFormat  df = new java.text.DecimalFormat("#.00%");
+            java.text.DecimalFormat  df = new java.text.DecimalFormat("#,##0.00%");
             return df.format(v);
         }
     }
-    public static String getStrFromBdIgnoreZeroNull(BigDecimal bigDecimalPara){
-        return bigDecimalPara==null?"":(bigDecimal0.compareTo(bigDecimalPara)==0?"":bigDecimalPara.toString());
+    public static String getCttAmtStrFromBdIgnoreZeroNull(BigDecimal bigDecimalPara){
+        java.text.DecimalFormat  df = new java.text.DecimalFormat("#,###,###,###,##0.000");
+        return bigDecimalPara==null?"":(bigDecimal0.compareTo(bigDecimalPara)==0?"":df.format(bigDecimalPara));
+    }
+    public static String getCttStlQtyStrFromBdIgnoreZeroNull(BigDecimal bigDecimalPara){
+        java.text.DecimalFormat  df = new java.text.DecimalFormat("#,###,###,###,##0.00");
+        return bigDecimalPara==null?"":(bigDecimal0.compareTo(bigDecimalPara)==0?"":df.format(bigDecimalPara));
     }
     public static void main(String[] argv) {
         System.out.println(getDateString("2004-10-20"));
