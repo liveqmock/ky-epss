@@ -508,21 +508,33 @@ public class ToolUtil {
         }
         return returnStr;
     }
-    public static String  getCttAmtInPercent(BigDecimal v) {
-        if (v==null){
-            return "";
-        }else{
-            java.text.DecimalFormat  df = new java.text.DecimalFormat("#,##0.00%");
-            return df.format(v);
+
+    public static BigDecimal getBdIgnoreZeroNull(BigDecimal bigDecimalPara){
+        return bigDecimalPara==null?bigDecimal0:(bigDecimal0.compareTo(bigDecimalPara)==0?bigDecimal0:bigDecimalPara);
+    }
+    //算小计大计bd,str并存
+    public static BigDecimal getBdFromStrOrBdIgnoreNull(Object objPara){
+        if(objPara==null){
+            return  bigDecimal0;
+        }else if(objPara.getClass().equals((new BigDecimal(0)).getClass())){
+            return (BigDecimal)objPara;
+        }else {
+            return objPara.equals("")?bigDecimal0:new BigDecimal(objPara.toString().replace(",","").replace("%",""));
         }
     }
-    public static String getCttAmtStrFromBdIgnoreZeroNull(BigDecimal bigDecimalPara){
-        java.text.DecimalFormat  df = new java.text.DecimalFormat("#,###,###,###,##0.000");
-        return bigDecimalPara==null?"":(bigDecimal0.compareTo(bigDecimalPara)==0?"":df.format(bigDecimalPara));
+    //将%以bd形式存入数据库
+    public static BigDecimal getBdFromStrInPercent(String strPara){
+        return   getStrIgnoreNull(strPara).equals("")?bigDecimal0:(new BigDecimal(strPara.replace("%","")).divide(new BigDecimal(100)));
     }
-    public static String getCttStlQtyStrFromBdIgnoreZeroNull(BigDecimal bigDecimalPara){
-        java.text.DecimalFormat  df = new java.text.DecimalFormat("#,###,###,###,##0.00");
-        return bigDecimalPara==null?"":(bigDecimal0.compareTo(bigDecimalPara)==0?"":df.format(bigDecimalPara));
+    //将数据库bd取出并转化为str
+    public static String getStrFromBdIgnoreZeroNull(String strFormatPara, BigDecimal bigDecimalPara){
+        if (bigDecimal0.compareTo(getBdIgnoreNull(bigDecimalPara))==0){
+            return "";
+        }else{
+            DecimalFormat  df =new DecimalFormat(strFormatPara);
+            return df.format(getBdIgnoreZeroNull(bigDecimalPara));
+        }
+
     }
     public static void main(String[] argv) {
         System.out.println(getDateString("2004-10-20"));

@@ -9,6 +9,7 @@ import skyline.util.ToolUtil;
 import epss.repository.model.model_show.ProgStlItemSubQShow;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -71,8 +72,14 @@ public class ProgStlItemSubQService {
         progStlItemSubQTemp.setPeriodNo(progStlItemSubQShowPara.getEngQMng_PeriodNo());
         progStlItemSubQTemp.setSubcttPkid(progStlItemSubQShowPara.getEngQMng_SubcttPkid());
         progStlItemSubQTemp.setSubcttItemPkid(progStlItemSubQShowPara.getEngQMng_SubcttItemPkid());
-        progStlItemSubQTemp.setBeginToCurrentPeriodEQty(progStlItemSubQShowPara.getEngQMng_BeginToCurrentPeriodEQty());
-        progStlItemSubQTemp.setCurrentPeriodEQty(progStlItemSubQShowPara.getEngQMng_CurrentPeriodEQty());
+        //税费率的输入可以以bd和%两种方式实现
+        if(progStlItemSubQShowPara.getSubctt_SpareField()!=null&&ToolUtil.getStrIgnoreNull(progStlItemSubQShowPara.getEngQMng_CurrentPeriodEQty()).contains("%")){
+            progStlItemSubQTemp.setBeginToCurrentPeriodEQty(ToolUtil.getBdFromStrInPercent(progStlItemSubQShowPara.getEngQMng_BeginToCurrentPeriodEQty()));
+            progStlItemSubQTemp.setCurrentPeriodEQty(ToolUtil.getBdFromStrInPercent(progStlItemSubQShowPara.getEngQMng_CurrentPeriodEQty()));
+        }else{
+            progStlItemSubQTemp.setBeginToCurrentPeriodEQty(ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowPara.getEngQMng_BeginToCurrentPeriodEQty()));
+            progStlItemSubQTemp.setCurrentPeriodEQty(ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowPara.getEngQMng_CurrentPeriodEQty()));
+        }
         progStlItemSubQTemp.setArchivedFlag(progStlItemSubQShowPara.getEngQMng_ArchivedFlag());
         progStlItemSubQTemp.setCreatedBy(progStlItemSubQShowPara.getEngQMng_CreatedBy());
         progStlItemSubQTemp.setCreatedTime(progStlItemSubQShowPara.getEngQMng_CreatedTime());

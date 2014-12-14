@@ -120,7 +120,7 @@
                                      paginatorPosition="bottom"
                                      rows="15"
                                      rowsPerPageTemplate="500,200,100,45,30,15"
-                                     rowStyleClass="#{record.subctt_ContractAmount le 0? 'rowGrayStyle':
+                                     rowStyleClass="#{record.subctt_ContractAmount le '0'? 'rowGrayStyle':
                                                          record.subctt_ContractAmount eq null? 'rowGrayStyle':
                                                          record.isUptoCttQtyFlag? 'rowGreenyellowStyle':null}"
                                      rowIndexVar="row"
@@ -167,7 +167,7 @@
                                 </h:outputText>
                             </p:column>
                             <p:column style="width:110px" headerText="合同金额">
-                                <h:outputText value="#{record.subctt_ContractAmountForExcel}" style="float: right"/>
+                                <h:outputText value="#{record.subctt_ContractAmount}" style="float: right"/>
                             </p:column>
                             <p:column style="width:110px" headerText="合同工程量">
                                 <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right">
@@ -175,10 +175,10 @@
                                 </h:outputText>
                             </p:column>
                             <p:column style="width:110px" headerText="开累工程量">
-                                <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQtyForExcel}" style="float: right"/>
+                                <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQty}" style="float: right"/>
                             </p:column>
                             <p:column style="width:110px" headerText="当期工程量">
-                                <h:outputText value="#{record.engQMng_CurrentPeriodEQtyForExcel}" style="float: right"/>
+                                <h:outputText value="#{record.engQMng_CurrentPeriodEQty}" style="float: right"/>
                             </p:column>
                             <p:column style="width:200px" headerText="合同备注">
                                 <h:outputText value="#{record.subctt_Remark}" />
@@ -232,7 +232,6 @@
                                                  value="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_ContractQuantity}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
                                     <p:outputLabel for="remarkForUpd" value="合同备注:" />
                                     <h:inputText id="remarkForUpd"
@@ -244,8 +243,6 @@
                                                  value="#{progStlItemSubQAction.progStlItemSubQShowUpd.engQMng_BeginToCurrentPeriodEQty}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
-                                        <!--考虑比如3.48%，开累为0.008（8%）时-->
                                     </h:inputText>
                                     <p:outputLabel for="engQMng_RemarkForUpd" value="结算备注:" />
                                     <h:inputText id="engQMng_RemarkForUpd"
@@ -254,8 +251,6 @@
                                     <h:inputText id="engQMng_CurrentPeriodEQtyForUpd"
                                                  value="#{progStlItemSubQAction.progStlItemSubQShowUpd.engQMng_CurrentPeriodEQty}"
                                                  style="text-align:right;float:left">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
-                                        <!--考虑比如3.48%，输入0.008（8%）时-->
                                         <p:ajax event="blur" update="msgs,engQMng_BeginToCurrentPeriodEQtyForUpd"
                                                 listener="#{progStlItemSubQAction.blurEngQMng_CurrentPeriodMQty('blur')}"/>
                                     </h:inputText>

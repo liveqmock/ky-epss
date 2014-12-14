@@ -26,7 +26,7 @@ public class ProgStlItemSubQShow implements Serializable {
     private String subctt_Unit;
     private BigDecimal subctt_ContractUnitPrice;
     private BigDecimal subctt_ContractQuantity;
-    private BigDecimal subctt_ContractAmount;
+    private String subctt_ContractAmount;
     private BigDecimal subctt_SignPartAPrice;
     private String subctt_SpareField ;
 
@@ -34,8 +34,8 @@ public class ProgStlItemSubQShow implements Serializable {
     private String engQMng_PeriodNo;
     private String engQMng_SubcttPkid;
     private String engQMng_SubcttItemPkid;
-    private BigDecimal engQMng_BeginToCurrentPeriodEQty;
-    private BigDecimal engQMng_CurrentPeriodEQty;
+    private String engQMng_BeginToCurrentPeriodEQty;
+    private String engQMng_CurrentPeriodEQty;
     private String engQMng_State;
     private String engQMng_ArchivedFlag;
     private String engQMng_OriginFlag;
@@ -49,10 +49,6 @@ public class ProgStlItemSubQShow implements Serializable {
     private String engQMng_Remark;
     private Boolean isUptoCttQtyFlag;
     private Boolean isRenderedFlag;
-    //税费率以百分比表示,同步页面和excel
-    private String subctt_ContractAmountForExcel;
-    private String engQMng_BeginToCurrentPeriodEQtyForExcel;
-    private String engQMng_CurrentPeriodEQtyForExcel;
 
     public ProgStlItemSubQShow() {
 
@@ -162,13 +158,15 @@ public class ProgStlItemSubQShow implements Serializable {
         this.subctt_ContractQuantity = subctt_ContractQuantity;
     }
 
-    public BigDecimal getSubctt_ContractAmount() {
+    public String getSubctt_ContractAmount() {
         return subctt_ContractAmount;
     }
+	
 
-    public void setSubctt_ContractAmount(BigDecimal subctt_ContractAmount) {
+    public void setSubctt_ContractAmount(String subctt_ContractAmount) {
         this.subctt_ContractAmount = subctt_ContractAmount;
     }
+
 
     public BigDecimal getSubctt_SignPartAPrice() {
         return subctt_SignPartAPrice;
@@ -212,26 +210,6 @@ public class ProgStlItemSubQShow implements Serializable {
 
     public String getEngQMng_SubcttItemPkid() {
         return engQMng_SubcttItemPkid;
-    }
-
-    public void setEngQMng_SubcttItemPkid(String engQMng_SubcttItemPkid) {
-        this.engQMng_SubcttItemPkid = engQMng_SubcttItemPkid;
-    }
-
-    public BigDecimal getEngQMng_BeginToCurrentPeriodEQty() {
-        return engQMng_BeginToCurrentPeriodEQty;
-    }
-
-    public void setEngQMng_BeginToCurrentPeriodEQty(BigDecimal engQMng_BeginToCurrentPeriodEQty) {
-        this.engQMng_BeginToCurrentPeriodEQty = engQMng_BeginToCurrentPeriodEQty;
-    }
-
-    public BigDecimal getEngQMng_CurrentPeriodEQty() {
-        return engQMng_CurrentPeriodEQty;
-    }
-
-    public void setEngQMng_CurrentPeriodEQty(BigDecimal engQMng_CurrentPeriodEQty) {
-        this.engQMng_CurrentPeriodEQty = engQMng_CurrentPeriodEQty;
     }
 
     public String getEngQMng_State() {
@@ -338,27 +316,23 @@ public class ProgStlItemSubQShow implements Serializable {
         this.engQMng_Remark = engQMng_Remark;
     }
 
-    public String getSubctt_ContractAmountForExcel() {
-        return subctt_ContractAmountForExcel;
+    public String getEngQMng_CurrentPeriodEQty() {
+        return engQMng_CurrentPeriodEQty;
     }
 
-    public void setSubctt_ContractAmountForExcel(String subctt_ContractAmountForExcel) {
-        this.subctt_ContractAmountForExcel = subctt_ContractAmountForExcel;
+    public void setEngQMng_CurrentPeriodEQty(String engQMng_CurrentPeriodEQty) {
+        this.engQMng_CurrentPeriodEQty = engQMng_CurrentPeriodEQty;
     }
 
-    public String getEngQMng_BeginToCurrentPeriodEQtyForExcel() {
-        return engQMng_BeginToCurrentPeriodEQtyForExcel;
+    public String getEngQMng_BeginToCurrentPeriodEQty() {
+        return engQMng_BeginToCurrentPeriodEQty;
     }
 
-    public void setEngQMng_BeginToCurrentPeriodEQtyForExcel(String engQMng_BeginToCurrentPeriodEQtyForExcel) {
-        this.engQMng_BeginToCurrentPeriodEQtyForExcel = engQMng_BeginToCurrentPeriodEQtyForExcel;
+    public void setEngQMng_BeginToCurrentPeriodEQty(String engQMng_BeginToCurrentPeriodEQty) {
+        this.engQMng_BeginToCurrentPeriodEQty = engQMng_BeginToCurrentPeriodEQty;
     }
 
-    public String getEngQMng_CurrentPeriodEQtyForExcel() {
-        return engQMng_CurrentPeriodEQtyForExcel;
-    }
-
-    public void setEngQMng_CurrentPeriodEQtyForExcel(String engQMng_CurrentPeriodEQtyForExcel) {
-        this.engQMng_CurrentPeriodEQtyForExcel = engQMng_CurrentPeriodEQtyForExcel;
+    public void setEngQMng_SubcttItemPkid(String engQMng_SubcttItemPkid) {
+        this.engQMng_SubcttItemPkid = engQMng_SubcttItemPkid;
     }
 }
