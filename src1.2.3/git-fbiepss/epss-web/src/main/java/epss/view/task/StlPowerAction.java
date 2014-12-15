@@ -2,6 +2,8 @@ package epss.view.task;
 
 import epss.repository.model.model_show.TaskShow;
 import epss.service.TaskService;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,24 +28,29 @@ public class StlPowerAction {
     @ManagedProperty(value = "#{taskService}")
     private TaskService taskService;
 
-    private List<TaskShow> stlPowerList;
+    private TreeNode stlPowerRoot;
 
     @PostConstruct
     public void init() {
         //整个任务列表
         try {
-            stlPowerList=taskService.initRecentlyPowerTaskShowList();
+            stlPowerRoot = new DefaultTreeNode("ROOT", null);
+            List<TaskShow> stlPowerList=taskService.initRecentlyPowerTaskShowList();
+            for (int i=0;i<stlPowerList.size();i++){
+
+            }
+
         }catch (Exception e){
             logger.error("初始化失败", e);
         }
     }
 
-    public List<TaskShow> getStlPowerList() {
-        return stlPowerList;
+    public TreeNode getStlPowerRoot() {
+        return stlPowerRoot;
     }
 
-    public void setStlPowerList(List<TaskShow> stlPowerList) {
-        this.stlPowerList = stlPowerList;
+    public void setStlPowerRoot(TreeNode stlPowerRoot) {
+        this.stlPowerRoot = stlPowerRoot;
     }
 
     public TaskService getTaskService() {

@@ -15,9 +15,11 @@ public enum EnumResType {
     RES_TYPE2("2","分包合同"),
     RES_TYPE3("3","分包进度工程量结算"),
     RES_TYPE4("4","分包进度材料消耗量结算"),
+    RES_TYPE8("8","分包进度费用结算"),
     RES_TYPE5("5","分包进度结算单"),
     RES_TYPE6("6","总包进度工程量统计结算"),
     RES_TYPE7("7","总包进度工程量计量结算");
+
 
     private String code = null;
     private String title = null;

@@ -29,13 +29,13 @@
                             <h:panelGrid columns="2">
                                 <h:panelGrid>
                                     <h:panelGrid columns="7">
-                                        <p:outputLabel value="分包合同：" for="cttName"/>
+                                        <p:outputLabel value="合同编号：" for="stlId"/>
+                                        <h:inputText id="stlId"
+                                                     value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.stlId}"
+                                                     style="background-color:gainsboro;" readonly="true"/>
+                                        <p:outputLabel value="合同名称：" for="cttName"/>
                                         <h:inputText id="cttName"
                                                      value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.stlName}"
-                                                     style="background-color:gainsboro;" readonly="true"/>
-                                        <p:outputLabel value="期数编码：" for="periodNo"/>
-                                        <h:inputText id="periodNo"
-                                                     value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.periodNo}"
                                                      style="background-color:gainsboro;" readonly="true"/>
                                         <p:outputLabel value="结算编号：" for="id"/>
                                         <h:inputText id="id" value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.id}"/>
@@ -46,14 +46,19 @@
                                         </p:commandButton>
                                     </h:panelGrid>
                                     <h:panelGrid columns="6">
-                                        <p:outputLabel value="备注内容：" for="remark"/>
-                                        <h:inputText id="remark" value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.remark}"/>
+                                        <p:outputLabel value="期数编码：" for="periodNo"/>
+                                        <h:inputText id="periodNo"
+                                                     value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.periodNo}"
+                                                     style="background-color:gainsboro;" readonly="true"/>
                                         <p:outputLabel for="recVersion" value="修改次数：" />
                                         <h:inputText id="recVersion"
                                                      value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.recVersion}"
                                                      style="background-color:gainsboro;text-align:right;" readonly="true">
                                             <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
                                         </h:inputText>
+                                        <p:outputLabel value="备注内容：" for="remark"/>
+                                        <h:inputText id="remark"
+                                                     value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.remark}"/>
                                     </h:panelGrid>
                                 </h:panelGrid>
                                 <h:panelGrid columns="2" >
@@ -120,13 +125,15 @@
                                      paginatorPosition="bottom"
                                      rows="15"
                                      rowsPerPageTemplate="500,200,100,45,30,15"
-                                     rowStyleClass="#{record.subctt_ContractAmount le '0'? 'rowGrayStyle':
+                                     rowStyleClass="#{
+                                                         record.subctt_SpareField ne null? 'rowGrayStyle':
                                                          record.subctt_ContractAmount eq null? 'rowGrayStyle':
                                                          record.isUptoCttQtyFlag? 'rowGreenyellowStyle':null}"
                                      rowIndexVar="row"
                                      emptyMessage="数据记录为空..."
                                      scrollable="true"
                                      scrollHeight="440">
+                            <!--record.subctt_ContractAmount le 0? 'rowGrayStyle':-->
                             <p:column headerText="操作" style="width:40px;text-align: center"
                                       rendered='#{progStlItemSubQAction.strPassVisible}'>
                                 <p:commandButton  icon="ui-icon-pencil"
@@ -167,7 +174,14 @@
                                 </h:outputText>
                             </p:column>
                             <p:column style="width:110px" headerText="合同金额">
-                                <h:outputText value="#{record.subctt_ContractAmount}" style="float: right"/>
+                                <h:outputText value="#{record.subctt_ContractAmount}" style="float: right"
+                                              rendered="#{record.subctt_SpareField eq null?true:false}">
+                                    <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                                </h:outputText>
+                                <h:outputText value="#{record.subctt_ContractAmount}" style="float: right"
+                                              rendered="#{record.subctt_SpareField ne null?true:false}">
+                                    <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
+                                    </h:outputText>
                             </p:column>
                             <p:column style="width:110px" headerText="合同工程量">
                                 <h:outputText value="#{record.subctt_ContractQuantity}" style="float: right">
@@ -175,10 +189,24 @@
                                 </h:outputText>
                             </p:column>
                             <p:column style="width:110px" headerText="开累工程量">
-                                <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQty}" style="float: right"/>
+                            <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQty}" style="float: right"
+                                          rendered="#{record.subctt_SpareField eq null?true:false}">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            </h:outputText>
+                            <h:outputText value="#{record.engQMng_BeginToCurrentPeriodEQty}" style="float: right"
+                                          rendered="#{record.subctt_SpareField ne null?true:false}">
+                                <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
+                            </h:outputText>
                             </p:column>
                             <p:column style="width:110px" headerText="当期工程量">
-                                <h:outputText value="#{record.engQMng_CurrentPeriodEQty}" style="float: right"/>
+                            <h:outputText value="#{record.engQMng_CurrentPeriodEQty}" style="float: right"
+                                          rendered="#{record.subctt_SpareField eq null?true:false}">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            </h:outputText>
+                            <h:outputText value="#{record.engQMng_CurrentPeriodEQty}" style="float: right"
+                                          rendered="#{record.subctt_SpareField ne null?true:false}">
+                                <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
+                            </h:outputText>
                             </p:column>
                             <p:column style="width:200px" headerText="合同备注">
                                 <h:outputText value="#{record.subctt_Remark}" />
@@ -232,17 +260,30 @@
                                                  value="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_ContractQuantity}"
                                                  style="background-color:gainsboro;text-align:right;"
                                                  readonly="true">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                     </h:inputText>
                                     <p:outputLabel for="remarkForUpd" value="合同备注:" />
                                     <h:inputText id="remarkForUpd"
                                                  value="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_Remark}"
                                                  style="background-color:gainsboro"
                                                  readonly="true"/>
-                                    <p:outputLabel for="engQMng_BeginToCurrentPeriodEQtyForUpd" value="开累工程量:"/>
+                                    <p:outputLabel for="engQMng_BeginToCurrentPeriodEQtyForUpd" value="开累工程量:"
+                                                   rendered="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_SpareField eq null?true:false}"/>
                                     <h:inputText id="engQMng_BeginToCurrentPeriodEQtyForUpd"
                                                  value="#{progStlItemSubQAction.progStlItemSubQShowUpd.engQMng_BeginToCurrentPeriodEQty}"
                                                  style="background-color:gainsboro;text-align:right;"
-                                                 readonly="true">
+                                                 readonly="true"
+                                                 rendered="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_SpareField eq null?true:false}">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="engQMng_BeginToCurrentPeriodEQtyForUpd2" value="开累工程量:"
+                                                   rendered="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_SpareField ne null?true:false}"/>
+                                    <h:inputText id="engQMng_BeginToCurrentPeriodEQtyForUpd2"
+                                                 value="#{progStlItemSubQAction.progStlItemSubQShowUpd.engQMng_BeginToCurrentPeriodEQty}"
+                                                 style="background-color:gainsboro;text-align:right;"
+                                                 readonly="true"
+                                                 rendered="#{progStlItemSubQAction.progStlItemSubQShowUpd.subctt_SpareField ne null?true:false}">
+                                        <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
                                     </h:inputText>
                                     <p:outputLabel for="engQMng_RemarkForUpd" value="结算备注:" />
                                     <h:inputText id="engQMng_RemarkForUpd"
@@ -251,6 +292,7 @@
                                     <h:inputText id="engQMng_CurrentPeriodEQtyForUpd"
                                                  value="#{progStlItemSubQAction.progStlItemSubQShowUpd.engQMng_CurrentPeriodEQty}"
                                                  style="text-align:right;float:left">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
                                         <p:ajax event="blur" update="msgs,engQMng_BeginToCurrentPeriodEQtyForUpd"
                                                 listener="#{progStlItemSubQAction.blurEngQMng_CurrentPeriodMQty('blur')}"/>
                                     </h:inputText>

@@ -190,10 +190,8 @@ public class ProgStlItemSubQAction {
             progStlItemSubQShowTemp.setSubctt_Grade(itemUnit.getGrade());
             progStlItemSubQShowTemp.setSubctt_Orderid(itemUnit.getOrderid());
             progStlItemSubQShowTemp.setSubctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
-
             progStlItemSubQShowTemp.setSubctt_Name(itemUnit.getName());
             progStlItemSubQShowTemp.setSubctt_Remark(itemUnit.getRemark());
-
             progStlItemSubQShowTemp.setSubctt_Unit(itemUnit.getUnit());
             progStlItemSubQShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             progStlItemSubQShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());

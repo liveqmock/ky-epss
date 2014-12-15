@@ -66,7 +66,7 @@ public interface MyTaskMapper {
             "           opr.TYPE='business'" +
             " )" +
             " order by  " +
-            "    taskDoneFlag,flowStatus,type")
+            "    type,taskDoneFlag")
     List<TaskShow> getRencentlyPowerDetailTaskShowList(@Param("strOperPkid") String strOperPkid);
 
     @Select(

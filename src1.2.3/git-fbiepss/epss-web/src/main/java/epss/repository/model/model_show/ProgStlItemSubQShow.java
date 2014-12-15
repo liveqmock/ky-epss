@@ -161,12 +161,10 @@ public class ProgStlItemSubQShow implements Serializable {
     public String getSubctt_ContractAmount() {
         return subctt_ContractAmount;
     }
-	
 
     public void setSubctt_ContractAmount(String subctt_ContractAmount) {
         this.subctt_ContractAmount = subctt_ContractAmount;
     }
-
 
     public BigDecimal getSubctt_SignPartAPrice() {
         return subctt_SignPartAPrice;

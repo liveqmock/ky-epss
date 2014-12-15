@@ -31,22 +31,11 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table schema="epss" tableName="PROG_STL_ITEM_SUB_M">
+        <table schema="epss" tableName="PROG_STL_ITEM_SUB_F">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
         </table>
-        <table schema="epss" tableName="PROG_STL_ITEM_SUB_Q">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        <table schema="epss" tableName="PROG_STL_ITEM_TK_EST">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
-        <table schema="epss" tableName="PROG_STL_ITEM_TK_MEA">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select sys_guid() from dual" identity="false"/>
-        </table>
+
         <!--业务类例子 -->
         <!--<table schema="epss" tableName="OPER_RES">
             <property name="ignoreQualifiersAtRuntime" value="true" />
