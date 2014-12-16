@@ -29,13 +29,14 @@ public class StlPowerAction {
     private TaskService taskService;
 
     private TreeNode stlPowerRoot;
+    private List<TaskShow> stlPowerList;
 
     @PostConstruct
     public void init() {
         //整个任务列表
         try {
             stlPowerRoot = new DefaultTreeNode("ROOT", null);
-            List<TaskShow> stlPowerList=taskService.initRecentlyPowerTaskShowList();
+            stlPowerList=taskService.initRecentlyPowerTaskShowList();
             for (int i=0;i<stlPowerList.size();i++){
 
             }
@@ -59,5 +60,13 @@ public class StlPowerAction {
 
     public void setTaskService(TaskService taskService) {
         this.taskService = taskService;
+    }
+
+    public List<TaskShow> getStlPowerList() {
+        return stlPowerList;
+    }
+
+    public void setStlPowerList(List<TaskShow> stlPowerList) {
+        this.stlPowerList = stlPowerList;
     }
 }
