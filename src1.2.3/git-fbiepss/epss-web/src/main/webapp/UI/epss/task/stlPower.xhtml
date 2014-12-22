@@ -21,7 +21,6 @@
                 }else if (infoType == '7') {// 计量结算
                     var rtn = dialog("../subPower/tkctt/stlPower/tkctt_MeaMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
                 }
-                document.getElementById("form:qryBtn").click();
             }
         </script>
     </ui:define>
@@ -29,12 +28,6 @@
         <h:form id="form" enctype="multipart/form-data">
 	        <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
-                <div style="display: none">
-                    <p:commandButton id="qryBtn" value="查询"
-                                     action="#{stlPowerAction.init()}"
-                                     update="pdtRecentlyPower,msgs">
-                    </p:commandButton>
-                </div>
                 <!--列表维护-->
                 <p:panel header="分配录入权限的结算资源">
                     <p:treeTable id="pdtRecentlyPower"

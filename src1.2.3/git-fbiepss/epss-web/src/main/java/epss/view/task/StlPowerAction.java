@@ -47,46 +47,62 @@ public class StlPowerAction {
             TaskShow taskShowFront2 = new TaskShow();
             taskShowFront2.setId("工程量结算");
             TreeNode subStlQ = new DefaultTreeNode(taskShowFront2, subStl);
-            getChildNode(EnumResType.RES_TYPE3.getCode(), subStlQ);
             TaskShow taskShowFront3 = new TaskShow();
             taskShowFront3.setId("材料消耗量结算");
             TreeNode subStlM = new DefaultTreeNode(taskShowFront3, subStl);
-            getChildNode(EnumResType.RES_TYPE4.getCode(), subStlM);
             TaskShow taskShowFront4 = new TaskShow();
             taskShowFront4.setId("费用结算");
             TreeNode subStlF = new DefaultTreeNode(taskShowFront4, subStl);
-            getChildNode(EnumResType.RES_TYPE8.getCode(), subStlF);
             TaskShow taskShowFront5 = new TaskShow();
             taskShowFront5.setId("总包进度结算");
             TreeNode tkStl = new DefaultTreeNode(taskShowFront5, stlPower);
             TaskShow taskShowFront6 = new TaskShow();
             taskShowFront6.setId("工程量统计结算");
             TreeNode tkStlEst = new DefaultTreeNode(taskShowFront6, tkStl);
-            getChildNode(EnumResType.RES_TYPE6.getCode(), tkStlEst);
             TaskShow taskShowFront7 = new TaskShow();
             taskShowFront7.setId("工程量计量结算");
             TreeNode tkStlMea = new DefaultTreeNode(taskShowFront7, tkStl);
-            getChildNode(EnumResType.RES_TYPE7.getCode(), tkStlMea);
+            getChildNode(subStlQ,subStlM,subStlF,tkStlEst,tkStlMea);
         }catch (Exception e){
             logger.error("初始化失败", e);
         }
     }
 
-    private TreeNode getChildNode(String typePara,TreeNode parentNode)throws Exception {
+    //获取结算单最末端节点   传入参数父节点
+    private TreeNode getChildNode(TreeNode subStlQ,TreeNode subStlM,TreeNode subStlF,TreeNode tkStlEst,TreeNode tkStlMea)
+            throws Exception {
+        TreeNode parentNode;
         stlPowerList=taskService.initRecentlyPowerTaskShowList();
         for (int i=0;i<stlPowerList.size();i++){
-           TaskShow taskShow=new TaskShow();
-           TaskShow taskShowTemp=stlPowerList.get(i);
-           if(typePara.equals(taskShowTemp.getType())){
-               taskShow.setPkid(taskShowTemp.getPkid());
-               taskShow.setId(taskShowTemp.getId());
-               taskShow.setType(taskShowTemp.getType());
-               taskShow.setName(taskShowTemp.getName());
-               taskShow.setSignPartBName(taskShowTemp.getSignPartBName());
-               return  new DefaultTreeNode(taskShow, parentNode);
-           }
+            TaskShow taskShow=new TaskShow();
+            TaskShow taskShowTemp=stlPowerList.get(i);
+            if(taskShowTemp.getType()!=null){
+                if(taskShowTemp.getType().equals(EnumResType.RES_TYPE3.getCode())){
+                    parentNode=subStlQ;
+                }else
+                if(taskShowTemp.getType().equals(EnumResType.RES_TYPE4.getCode())){
+                    parentNode=subStlM;
+                }else
+                if(taskShowTemp.getType().equals(EnumResType.RES_TYPE8.getCode())){
+                    parentNode=subStlF;
+                }else
+                if(taskShowTemp.getType().equals(EnumResType.RES_TYPE6.getCode())){
+                    parentNode=tkStlEst;
+                }else
+                if(taskShowTemp.getType().equals(EnumResType.RES_TYPE7.getCode())){
+                    parentNode=tkStlMea;
+                }else
+                {parentNode= null;}
+            if(parentNode!=null) {
+                taskShow.setPkid(taskShowTemp.getPkid());
+                taskShow.setId(taskShowTemp.getId());
+                taskShow.setType(taskShowTemp.getType());
+                taskShow.setName(taskShowTemp.getName());
+                taskShow.setSignPartBName(taskShowTemp.getSignPartBName());
+                new DefaultTreeNode(taskShow, parentNode);
+            }}
         }
-        return null;
+        return  null;
     }
 
     public TreeNode getStlPowerRoot() {
