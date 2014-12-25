@@ -30,7 +30,7 @@
                                 <h:panelGrid>
                                     <h:panelGrid columns="7">
                                         <p:outputLabel value="合同编号：" for="idForUpd"/>
-                                            <p:inputText id="idForUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.id}"
+                                            <p:inputText id="idForUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.id}"
                                                          style="width:113px"/>
                                         <p:commandButton id="autoSetIdBtnForUpd" icon="ui-icon-plus"
                                                          action="#{subcttInfoTTAction.setMaxNoPlusOne()}"
@@ -41,7 +41,7 @@
                                         <p:inputText id="cttNameForUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.name}"
                                                          style="width:328px"/>
                                         <p:outputLabel value="签订日期：" for="signDateForInfoUpd"/>
-                                        <p:inputText id="signDateForInfoUpd" value="#{tkcttInfoTTAction.cttInfoShowUpd.signDate}"
+                                        <p:inputText id="signDateForInfoUpd" value="#{subcttInfoTTAction.cttInfoShowUpd.signDate}"
                                                          onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
                                     </h:panelGrid>
                                 <h:panelGrid columns="6">
