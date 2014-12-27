@@ -43,166 +43,89 @@ public interface MyQueryMapper {
     List<QryShow> getCSList(@Param("strCttType") String strCttType,
                             @Param("strParentPkid") String strParentPkid);
 
-    /*@Select("select" +
-            "     ecitem.CORRESPONDING_PKID as strCorrespondingPkid," +
-            "     eissem.subctt_item_pkid as strItemPkid," +
-            "     nei.name as strSignPartName," +
-            "     max(ecitem.unit) as strUnit," +
-            "     sum(ecitem.contract_quantity) as bdQuantity," +
-            "     sum(eissem.current_period_m_qty) as bdCurrentPeriodQuantity," +
-            "     sum(eissem.begin_to_current_period_m_qty) as bdBeginToCurrentPeriodQuantity," +
-            "     sum(ecitem.contract_unit_price) as bdUnitPrice," +
-            "     sum(ecitem.SIGN_PART_A_PRICE) as bdSignPartAMPrice" +
+    @Select("select" +
+            "     c_info_item.strCorrespondingPkid," +
+            "     c_info_item.strItemPkid," +
+            "     c_info_item.strSignPartName," +
+            "     max(c_info_item.NAME) as strName," +
+            "     max(c_info_item.UNIT) as strUnit," +
+            "     sum(c_info_item.CONTRACT_UNIT_PRICE) as bdUnitPrice," +
+            "     sum(c_info_item.SIGN_PART_A_PRICE) as bdSignPartAMPrice," +
+            "     sum(c_info_item.CONTRACT_QUANTITY) as bdQuantity," +
+            "     sum(ps_info_item.current_period_m_qty) as bdCurrentPeriodQuantity," +
+            "     sum(ps_info_item.begin_to_current_period_m_qty) as bdBeginToCurrentPeriodQuantity" +
             " from " +
             "     (" +
             "       select " +
-            "              eis.stl_type," +
-            "              eis.stl_pkid," +
-            "              eis.period_no," +
-            "              eicust.name" +
+            "              citem.CORRESPONDING_PKID as strCorrespondingPkid," +
+            "              citem.PKID as strItemPkid," +
+            "              sp.NAME as strSignPartName," +
+            "              citem.NAME," +
+            "              citem.UNIT," +
+            "              citem.CONTRACT_UNIT_PRICE," +
+            "              citem.SIGN_PART_A_PRICE," +
+            "              citem.CONTRACT_QUANTITY," +
+            "              citem.BELONG_TO_PKID" +
             "       from" +
-            "              PROG_STL_INFO eis" +
-            "       inner join" +
-            "              CTT_INFO ecinfo" +
-            "       on" +
-            "              eis.stl_pkid=ecinfo.pkid" +
-            "       and" +
-            "              ecinfo.PARENT_PKID = #{strCstplInfoPkid}" +
+             "             CTT_INFO cinfo" +
             "       inner join " +
-            "              SIGN_PART eicust" +
+            "              SIGN_PART sp" +
             "       on " +
-            "              ecinfo.SIGN_PART_B=eicust.PKID" +
+            "              cinfo.SIGN_PART_B=sp.PKID" +
+            "       inner join" +
+            "              CTT_ITEM citem" +
+            "       on" +
+            "              cinfo.CTT_TYPE=citem.belong_to_type" +
+            "       and" +
+            "              cinfo.PKID=citem.belong_to_pkid" +
             "       where" +
-            "              eis.stl_type='4'" +
-            "       and " +
-            "              eis.FLOW_STATUS='2'" +
-            "     )nei" +
+            "              cinfo.PARENT_PKID = #{strCstplInfoPkid}" +
+            "       and " +  //已经批准了的分包合同
+            "              cinfo.FLOW_STATUS='3'" +
+               "     )c_info_item" +
             " inner join" +//联分包工程数量详细项
             "    (" +
             "       select" +
-            "            subctt_pkid,period_no,subctt_item_pkid,current_period_m_qty," +
-            "            (" +
-            "               select " +
-            "                    max(begin_to_current_period_m_qty)" +
-            "               from " +
-            "                    PROG_STL_ITEM_SUB_M eissemnei" +
-            "               where " +
-            "                    eissemnei.subctt_pkid=eissemwai.subctt_pkid" +
-            "               and" +
-            "                    eissemnei.subctt_item_pkid=eissemwai.subctt_item_pkid" +
-            "               and" +
-            "                    eissemnei.period_no<=#{strPeriodNo}" +
-            "            ) as begin_to_current_period_m_qty" +
-            "       from" +
-            "          PROG_STL_ITEM_SUB_M eissemwai" +
-            "    )eissem" +
+            "            subctt_pkid,period_no,subctt_item_pkid," +
+            "            current_period_m_qty,begin_to_current_period_m_qty" +
+            "       from (" +
+            "             select" +
+            "                  psism.subctt_pkid,psism.period_no,psism.subctt_item_pkid," +
+            "                  psism.current_period_m_qty,psism.begin_to_current_period_m_qty," +
+            "                  row_number() over " +
+            "                       (partition by psism.subctt_pkid,psism.subctt_item_pkid" +
+            "                        order by psism.period_no desc)rn" +
+            "            from " +
+            "                  PROG_STL_ITEM_SUB_M psism" +
+            "            inner join" +
+            "                  PROG_STL_INFO eis" +
+            "            on" +
+            "                  psism.SUBCTT_PKID=eis.stl_pkid" +
+            "            and" +
+            "                  psism.PERIOD_NO=eis.PERIOD_NO" +
+            "            and" +
+            "                  eis.STL_TYPE='4'" +
+            "            and" +
+            "                  eis.FLOW_STATUS='2'" +
+            "            and" +
+            "                  eis.period_no<=#{strPeriodNo}" +
+            "           ) ta " +
+            "       where rn=1" +
+            "    )ps_info_item" +
             " on" +
-            "    eissem.subctt_pkid=nei.stl_pkid" +
+            "    c_info_item.BELONG_TO_PKID=ps_info_item.subctt_pkid" +
             " and" +
-            "    eissem.period_no=nei.period_no" +
-            " inner join " +
-            "    CTT_ITEM ecitem" +
-            " on" +
-            "    ecitem.PKID=eissem.subctt_item_pkid" +
-            " and " +
-            "    ecitem.belong_to_pkid=eissem.subctt_pkid" +
-            " and " +
-            "    ecitem.belong_to_type='2'" +
+            "    c_info_item.strItemPkid=ps_info_item.subctt_item_pkid" +
             " group by" +
-            "    eissem.subctt_pkid,nei.name,eissem.period_no,ecitem.CORRESPONDING_PKID,eissem.subctt_item_pkid" +
-            " order by" +
-            "    eissem.subctt_pkid,nei.name,eissem.period_no,ecitem.CORRESPONDING_PKID,eissem.subctt_item_pkid")
-    List<QryShow> getCSStlMList(@Param("strCstplInfoPkid") String strCstplInfoPkid,
-                                @Param("strPeriodNo") String strPeriodNo);*/
-    @Select(" select    " +
-            "     ecitem.CORRESPONDING_PKID as strCorrespondingPkid," +
-            "     nei.name as strSignPartName,    " +
-            "     ecitem.unit as strUnit, " +
-            "     ecitem.contract_quantity as bdQuantity, " +
-            "     ecitem.contract_unit_price as bdUnitPrice, " +
-            "     ecitem.SIGN_PART_A_PRICE as bdSignPartAMPrice, " +
-            "     eissem.SUBCTT_ITEM_PKID as strItemPkid, " +
-            "     eissem.current_period_m_qty as bdCurrentPeriodQuantity, " +
-            "     eissem.begin_to_current_period_m_qty as bdBeginToCurrentPeriodQuantity " +
-            " from     " +
-            // 选定成本计划下的分包合同,并连接复核了的材料消耗量结算信息
-            "     ( " +
-            "       select " +
-            "              eis.stl_type, " +
-            "              eis.stl_pkid, " +
-            "              eis.period_no, " +
-            "              eicust.name " +
-            "       from    " +
-            "              PROG_STL_INFO eis" +
-            "       inner join    " +
-            "              CTT_INFO ecinfo" +
-            "       on    " +
-            "              eis.stl_pkid=ecinfo.pkid" +
-            "       and    " +
-            "              ecinfo.PARENT_PKID = #{strCstplInfoPkid}" +
-            "       inner join     " +
-            "              SIGN_PART eicust" +
-            "       on     " +
-            "              ecinfo.SIGN_PART_B=eicust.PKID" +
-            "       where    " +
-            "              eis.stl_type='4'" +
-            "       and     " +
-            "              eis.FLOW_STATUS='2'" +
-            "     )nei" +
-            " inner join" +
-            "    (    " +
-            "       select" +
-            "            subctt_pkid," +
-            "            subctt_item_pkid, " +
-            "            (" +
-            "               select     " +
-            "                    current_period_m_qty    " +
-            "               from     " +
-            "                    PROG_STL_ITEM_SUB_M  " +
-            "               where     " +
-            "                    subctt_pkid=eissemwai.subctt_pkid    " +
-            "               and    " +
-            "                   subctt_item_pkid=eissemwai.subctt_item_pkid    " +
-            "               and    " +
-            "                    period_no=#{strPeriodNo}    " +
-            "            ) as current_period_m_qty, " +
-            "            (    " +
-            "               select     " +
-            "                    max(begin_to_current_period_m_qty)    " +
-            "               from     " +
-            "                    PROG_STL_ITEM_SUB_M eissemnei    " +
-            "               where     " +
-            "                    eissemnei.subctt_pkid=eissemwai.subctt_pkid    " +
-            "               and    " +
-            "                    eissemnei.subctt_item_pkid=eissemwai.subctt_item_pkid    " +
-            "               and    " +
-            "                    eissemnei.period_no<=#{strPeriodNo}    " +
-            "            ) as begin_to_current_period_m_qty    " +
-            "       from    " +
-            "            PROG_STL_ITEM_SUB_M eissemwai " +
-            "       group by subctt_pkid,subctt_item_pkid  " +
-            "    )eissem " +
-            " on    " +
-            "    eissem.subctt_pkid=nei.stl_pkid " +
-            " inner join " +
-            "    CTT_ITEM ecitem    " +
-            " on " +
-            "    ecitem.PKID=eissem.subctt_item_pkid " +
-            " and " +
-            "    ecitem.belong_to_pkid=eissem.subctt_pkid " +
-            " and " +
-            "    ecitem.belong_to_type='2' " +
-            " group by " +
-            "    ecitem.CORRESPONDING_PKID,eissem.subctt_pkid,nei.name " +
-            " order by    " +
-            "    ecitem.CORRESPONDING_PKID,eissem.subctt_pkid,nei.name")
+            "    BELONG_TO_PKID,strSignPartName,strCorrespondingPkid,strItemPkid")
     List<QryShow> getCSStlMList(@Param("strCstplInfoPkid") String strCstplInfoPkid,
                                 @Param("strPeriodNo") String strPeriodNo);
 
-    @Select("select" +
+    /*@Select("select" +
             " ecitem.CORRESPONDING_PKID as strCorrespondingPkid," +
             " eisseq.subctt_item_pkid as strItemPkid," +
             " nei.name as strSignPartName," +
+            " max(ecitem.NAME) as strName," +
             " max(ecitem.unit) as strUnit," +
             " sum(ecitem.contract_quantity) as bdQuantity," +
             " sum(ecitem.contract_unit_price) as bdUnitPrice," +
@@ -263,8 +186,83 @@ public interface MyQueryMapper {
             " group by" +
             "    eisseq.subctt_pkid,nei.name,eisseq.period_no,ecitem.CORRESPONDING_PKID,eisseq.subctt_item_pkid" +
             " order by" +
-            "    eisseq.subctt_pkid,nei.name,eisseq.period_no,ecitem.CORRESPONDING_PKID,eisseq.subctt_item_pkid")
-    List<QryShow> getCSStlQList(@Param("strParentPkid") String strParentPkid,
+            "    eisseq.subctt_pkid,nei.name,eisseq.period_no,ecitem.CORRESPONDING_PKID,eisseq.subctt_item_pkid")*/
+    @Select("select" +
+            "     c_info_item.strCorrespondingPkid," +
+            "     c_info_item.strItemPkid," +
+            "     c_info_item.strSignPartName," +
+            "     max(c_info_item.NAME) as strName," +
+            "     max(c_info_item.UNIT) as strUnit," +
+            "     sum(c_info_item.CONTRACT_UNIT_PRICE) as bdUnitPrice," +
+            "     sum(c_info_item.SIGN_PART_A_PRICE) as bdSignPartAMPrice," +
+            "     sum(c_info_item.CONTRACT_QUANTITY) as bdQuantity," +
+            "     sum(ps_info_item.current_period_e_qty) as bdCurrentPeriodQuantity," +
+            "     sum(ps_info_item.begin_to_current_period_e_qty) as bdBeginToCurrentPeriodQuantity" +
+            " from " +
+            "     (" +
+            "       select " +
+            "              citem.CORRESPONDING_PKID as strCorrespondingPkid," +
+            "              citem.PKID as strItemPkid," +
+            "              sp.NAME as strSignPartName," +
+            "              citem.NAME," +
+            "              citem.UNIT," +
+            "              citem.CONTRACT_UNIT_PRICE," +
+            "              citem.SIGN_PART_A_PRICE," +
+            "              citem.CONTRACT_QUANTITY," +
+            "              citem.BELONG_TO_PKID" +
+            "       from" +
+            "             CTT_INFO cinfo" +
+            "       inner join " +
+            "              SIGN_PART sp" +
+            "       on " +
+            "              cinfo.SIGN_PART_B=sp.PKID" +
+            "       inner join" +
+            "              CTT_ITEM citem" +
+            "       on" +
+            "              cinfo.CTT_TYPE=citem.belong_to_type" +
+            "       and" +
+            "              cinfo.PKID=citem.belong_to_pkid" +
+            "       where" +
+            "              cinfo.PARENT_PKID = #{strCstplInfoPkid}" +
+            "       and " +  //已经批准了的分包合同
+            "              cinfo.FLOW_STATUS='3'" +
+            "     )c_info_item" +
+            " inner join" +//联分包工程数量详细项
+            "    (" +
+            "       select" +
+            "            subctt_pkid,period_no,subctt_item_pkid," +
+            "            current_period_e_qty,begin_to_current_period_e_qty" +
+            "       from (" +
+            "             select" +
+            "                  psisq.subctt_pkid,psisq.period_no,psisq.subctt_item_pkid," +
+            "                  psisq.current_period_e_qty,psisq.begin_to_current_period_e_qty," +
+            "                  row_number() over " +
+            "                       (partition by psisq.subctt_pkid,psisq.subctt_item_pkid" +
+            "                        order by psisq.period_no desc)rn" +
+            "            from " +
+            "                  PROG_STL_ITEM_SUB_Q psisq" +
+            "            inner join" +
+            "                  PROG_STL_INFO eis" +
+            "            on" +
+            "                  psisq.SUBCTT_PKID=eis.stl_pkid" +
+            "            and" +
+            "                  psisq.PERIOD_NO=eis.PERIOD_NO" +
+            "            and" +
+            "                  eis.STL_TYPE='3'" +
+            "            and" +
+            "                  eis.FLOW_STATUS='2'" +
+            "            and" +
+            "                  eis.period_no<=#{strPeriodNo}" +
+            "           ) ta " +
+            "       where rn=1" +
+            "    )ps_info_item" +
+            " on" +
+            "    c_info_item.BELONG_TO_PKID=ps_info_item.subctt_pkid" +
+            " and" +
+            "    c_info_item.strItemPkid=ps_info_item.subctt_item_pkid" +
+            " group by" +
+            "    BELONG_TO_PKID,strSignPartName,strCorrespondingPkid,strItemPkid")
+    List<QryShow> getCSStlQList(@Param("strCstplInfoPkid") String strCstplInfoPkid,
                                 @Param("strPeriodNo") String strPeriodNo);
 
     @Select(" select " +

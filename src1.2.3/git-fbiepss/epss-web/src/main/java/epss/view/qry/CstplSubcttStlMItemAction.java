@@ -136,7 +136,7 @@ public class CstplSubcttStlMItemAction {
                         QryCSStlMShow qryCSStlMShowNewInsert =(QryCSStlMShow)BeanUtils.cloneBean(itemCstplInsertItem);
                         // 目标分包合同项的合同数量，合同单价，合同金额
                         BigDecimal bdSignPartAMPrice=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdSignPartAMPrice());
-                        BigDecimal bdSubcttCurrentPeriodQuantity=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdQuantity());
+                        BigDecimal bdSubcttCurrentPeriodQuantity=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdCurrentPeriodQuantity());
                         BigDecimal bdSubcttBeginToCurrentPeriodQuantity=ToolUtil.getBdIgnoreNull(qryShowList.get(i).getBdBeginToCurrentPeriodQuantity());
                         BigDecimal bdSubcttCurrentPeriodAmount=bdSubcttCurrentPeriodQuantity.multiply(bdSignPartAMPrice);
                         BigDecimal bdSubcttBeginToCurrentPeriodAmount=bdSubcttBeginToCurrentPeriodQuantity.multiply(bdSignPartAMPrice);
@@ -152,6 +152,7 @@ public class CstplSubcttStlMItemAction {
                         qryCSStlMShowNewInsert.setStrPkid(qryShowList.get(i).getStrCorrespondingPkid()
                                 + "/" + intGroup.toString());
                         qryCSStlMShowNewInsert.setStrParentPkid(itemUnit.getParentPkid());
+                        qryCSStlMShowNewInsert.setStrSubctt_Name(qryShowList.get(i).getStrName());
                         qryCSStlMShowNewInsert.setStrSubctt_Unit(qryShowList.get(i).getStrUnit());
                         qryCSStlMShowNewInsert.setBdSubctt_ContractQuantity(qryShowList.get(i).getBdQuantity());
                         qryCSStlMShowNewInsert.setBdSubctt_ContractUnitPrice(qryShowList.get(i).getBdUnitPrice());
@@ -174,13 +175,12 @@ public class CstplSubcttStlMItemAction {
                 itemUnitTemp.setStrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getStrNo()));
                 qryCSStlMShowListForExcel.add(itemUnitTemp);
             }
-        if(qryCSStlMShowList.size()>0){
-            strExportToExcelRendered="true";
-        }else{
-            strExportToExcelRendered="false";
-        }
-        beansMap.put("qryCSStlMShowListForExcel", qryCSStlMShowListForExcel);
-
+            if(qryCSStlMShowList.size()>0){
+                strExportToExcelRendered="true";
+            }else{
+                strExportToExcelRendered="false";
+            }
+            beansMap.put("qryCSStlMShowListForExcel", qryCSStlMShowListForExcel);
         } catch (Exception e) {
             logger.error("信息查询失败", e);
             MessageUtil.addError("信息查询失败");

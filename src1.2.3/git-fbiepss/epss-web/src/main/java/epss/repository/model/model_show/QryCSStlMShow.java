@@ -17,6 +17,7 @@ public class QryCSStlMShow implements Serializable {
     private String strNo;
     private String strName;
 
+    private String strSubctt_Name;
     private String strSubctt_SignPartName;
     private String strSubctt_Unit;
     private BigDecimal bdSubctt_ContractQuantity;
@@ -58,6 +59,14 @@ public class QryCSStlMShow implements Serializable {
 
     public void setStrName(String strName) {
         this.strName = strName;
+    }
+
+    public String getStrSubctt_Name() {
+        return strSubctt_Name;
+    }
+
+    public void setStrSubctt_Name(String strSubctt_Name) {
+        this.strSubctt_Name = strSubctt_Name;
     }
 
     public String getStrSubctt_SignPartName() {
