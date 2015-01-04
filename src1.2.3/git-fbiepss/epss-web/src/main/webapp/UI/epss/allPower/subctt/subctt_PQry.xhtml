@@ -56,6 +56,7 @@
                 <p:dataTable id="pdt" style="width:100%;"
                              value="#{progStlInfoSubStlmentAction.progStlInfoShowList}"
                              var="record"
+                             resizableColumns="true"
                              rowKey="#{record.pkid}"
                              selectionMode="single"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
@@ -66,13 +67,13 @@
                              rowIndexVar="row"
                              rowsPerPageTemplate="500,200,100,45,30,15"
                              emptyMessage="数据记录为空..."
-                                rowStyleClass="#{record.id eq '分包结算单'?'rowGrayStyle':
-                                record.flowStatus eq '3'?'rowGrayStyle':null}"
+                                rowStyleClass="#{record.id eq '分包结算单'?'rowGrayStyle':null}"
                              scrollable="true"
                              scrollHeight="480">
                     <p:column headerText="操作" style="width:31px;text-align: center;">
                         <p:commandButton icon="ui-icon-triangle-1-e"
                                          style="height:18px;width:18px"
+                                         rendered="#{record.id eq '分包结算单'?'false':'true'}"
                                          onclick="actSelect('#{record.pkid}')">
                         </p:commandButton>
                     </p:column>
