@@ -86,17 +86,7 @@ public class ConnectionManager {
    * @roseuid 3E5EB1AE011A
    */
   public DatabaseConnection get() {
-    return getConnection(null, null);
-  }
-
-  /**
-   * 得到指定数据源URL的数据库连接,以线程ID保存
-   * 
-   * @param url
-   * @return
-   */
-  public DatabaseConnection get(String url) {
-    return getConnection(url, null);
+    return getConnection(null);
   }
 
   /**
@@ -106,8 +96,8 @@ public class ConnectionManager {
    * @param id
    * @return
    */
-  public DatabaseConnection get(String url, String id) {
-    return getConnection(url, id);
+  public DatabaseConnection get(String id) {
+    return getConnection(id);
   }
 
   /**
@@ -129,25 +119,6 @@ public class ConnectionManager {
   }
 
   /**
-   * 判断该线程的数据库连接是否已经存在
-   * 
-   * @return
-   */
-  public boolean exist() {
-    return isExist(null);
-  }
-
-  /**
-   * 判断指定id的数据库连接是否已经存在
-   * 
-   * @param id
-   * @return
-   */
-  public boolean exist(String id) {
-    return isExist(id);
-  }
-
-  /**
    * Description of the Method
    * 
    * @param con
@@ -159,13 +130,6 @@ public class ConnectionManager {
     } catch (Exception e) {
 
     }
-  }
-
-  private boolean isExist(String id) {
-    if (id == null) {
-      id = "" + Thread.currentThread().hashCode();
-    }
-    return conns.containsKey(id);
   }
 
   private void releaseConnection1(String id) {
@@ -183,10 +147,7 @@ public class ConnectionManager {
     }
   }
 
-  private DatabaseConnection getConnection(String url, String id) {
-    if (url == null) {
-      url = DatabaseConnection.DEFAULT_DATASOURCE_URL;
-    }
+  private DatabaseConnection getConnection(String id) {
     if (id == null) {
       id = "" + Thread.currentThread().hashCode();
     }

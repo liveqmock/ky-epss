@@ -283,26 +283,6 @@ public class DatabaseConnection {
   }
 
   /**
-   * 判断记录是否存在
-   * 
-   * @param sql
-   * @return
-   */
-  public boolean isExist(String sql) {
-    try {
-      Statement st = connect.createStatement();
-      ResultSet rs = st.executeQuery(sql);
-      boolean exist = rs.next();
-      st.close();
-      return exist;
-    } catch (SQLException sqle) {
-      errorException = sqle;
-      logger.error("查询错误：", sqle);
-      return false;
-    }
-  }
-
-  /**
    * 判断事务是否自动提交
    * 
    * @return boolean
