@@ -458,17 +458,13 @@ public class ProgStlItemSubQAction {
                 }
                 if (progStlItemSubQListTemp.size() == 1) {
                     progStlItemSubQShowUpd.setEngQMng_Pkid (progStlItemSubQListTemp.get(0).getPkid());
+                    BigDecimal bigDecimalTemp=bDEngQMng_BeginToCurrentPeriodEQtyInDB
+                                    .add(ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_CurrentPeriodEQty()))
+                                    .subtract(bDEngQMng_CurrentPeriodEQtyInDB);
+                    progStlItemSubQShowUpd.setEngQMng_BeginToCurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",bigDecimalTemp));
                     progStlItemSubQService.updateRecord(progStlItemSubQShowUpd);
                 }
-                if (progStlItemSubQListTemp.size()==0){
-                    progStlItemSubQShowUpd.setEngQMng_SubcttPkid(strSubcttPkid);
-                    progStlItemSubQShowUpd.setEngQMng_SubcttItemPkid(progStlItemSubQShowUpd.getSubctt_Pkid());
-                    progStlItemSubQService.insertRecord(progStlItemSubQShowUpd);
-                }
                 MessageUtil.addInfo("更新数据完成。");
-            }
-            else if(strSubmitType.equals("Del")){
-                delRecordAction(progStlItemSubQShowDel);
             }
             initData();
         }
@@ -556,10 +552,6 @@ public class ProgStlItemSubQAction {
                 bDEngQMng_CurrentPeriodEQtyInDB=ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_CurrentPeriodEQty());
                 bDEngQMng_BeginToCurrentPeriodEQtyInDB=
                         ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_BeginToCurrentPeriodEQty());
-            }
-            else if(strSubmitTypePara.equals("Del")){
-                progStlItemSubQShowDel =(ProgStlItemSubQShow) BeanUtils.cloneBean(progStlItemSubQShowPara) ;
-                progStlItemSubQShowDel.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progStlItemSubQShowDel.getSubctt_StrNo()));
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());

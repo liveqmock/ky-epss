@@ -143,13 +143,6 @@
                                                   update="pdt,:form:pgViewForUpd"
                                                   onclick="PF('wVDlgViewForUpd').show()">
                                 </p:commandButton>
-                                <p:commandButton  icon="ui-icon-trash"
-                                                  style="height:18px;width:18px"
-                                                  rendered="#{record.isRenderedFlag eq false? 'false':'true'}"
-                                                  actionListener="#{progStlItemSubQAction.selectRecordAction('Del',record)}"
-                                                  update="pdt,:form:pgViewForDel"
-                                                  onclick="PF('wVDlgViewForDel').show()">
-                                </p:commandButton>
                             </p:column>
                             <p:column style="width:40px" headerText="序号" >
                                 <h:outputText value="#{row + 1}"/>
@@ -303,75 +296,6 @@
                                                      action="#{progStlItemSubQAction.submitThisRecordAction}"
                                                      update="pdt,msgs"
                                                      oncomplete="wVDlgViewForUpd.hide()">
-                                    </p:commandButton>
-                                </h:panelGrid>
-                            </h:panelGrid>
-                        </p:dialog>
-                        <p:dialog id="dlgViewForDel" header="分包数量结算删除信息" widgetVar="wVDlgViewForDel"
-                                  resizable="false" modal="true"
-                                  showEffect="clip" hideEffect="fold">
-                            <h:panelGrid id="pgViewForDel">
-                                <h:panelGrid columns="4">
-                                    <p:outputLabel for="noItemHieRelapForDel" value="项目编号:" />
-                                    <h:inputText id="noItemHieRelapForDel"
-                                                 value="#{progStlItemSubQAction.progStlItemSubQShowDel.subctt_StrNo}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true">
-                                    </h:inputText>
-                                    <p:outputLabel for="nameForDel" value="项目名称:" />
-                                    <h:inputText id="nameForDel"
-                                                 value="#{progStlItemSubQAction.progStlItemSubQShowDel.subctt_Name}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="unitItemInfoForDel" value="项目单位:"/>
-                                    <h:inputText id="unitItemInfoForDel"
-                                                 value="#{progStlItemSubQAction.progStlItemSubQShowDel.subctt_Unit}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="contractQuantityItemInfoForDel" value="合同工程量:"/>
-                                    <h:inputText id="contractQuantityItemInfoForDel"
-                                                 value="#{progStlItemSubQAction.progStlItemSubQShowDel.subctt_ContractQuantity}"
-                                                 style="background-color:gainsboro;text-align:right;"
-                                                 readonly="true">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                                    </h:inputText>
-                                    <p:outputLabel for="remarkForDel" value="合同备注:" />
-                                    <h:inputText id="remarkForDel"
-                                                 value="#{progStlItemSubQAction.progStlItemSubQShowDel.subctt_Remark}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="engQMng_BeginToCurrentPeriodEQtyForDel" value="开累工程量:"/>
-                                    <h:inputText id="engQMng_BeginToCurrentPeriodEQtyForDel"
-                                                 value="#{progStlItemSubQAction.progStlItemSubQShowDel.engQMng_BeginToCurrentPeriodEQty}"
-                                                 style="background-color:gainsboro;text-align:right;"
-                                                 readonly="true">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                                    </h:inputText>
-                                    <p:outputLabel for="contractAmountItemInfoForDel" value="合同金额:" rendered="false"/>
-                                    <h:inputText id="contractAmountItemInfoForDel"
-                                                 value="#{progStlItemSubQAction.progStlItemSubQShowDel.subctt_ContractAmount}"
-                                                 style="background-color:gainsboro;"
-                                                 rendered="false">
-                                    </h:inputText>
-                                    <p:outputLabel for="engQMng_RemarkForDel" value="结算备注:" />
-                                    <h:inputText id="engQMng_RemarkForDel"
-                                                 value="#{progStlItemSubQAction.progStlItemSubQShowDel.engQMng_Remark}"
-                                                 style="background-color:gainsboro"
-                                                 readonly="true"/>
-                                    <p:outputLabel for="engQMng_CurrentPeriodEQtyForDel" value="本期工程量:"/>
-                                    <h:inputText id="engQMng_CurrentPeriodEQtyForDel"
-                                                 value="#{progStlItemSubQAction.progStlItemSubQShowDel.engQMng_CurrentPeriodEQty}"
-                                                 style="background-color:gainsboro;text-align:right;float:left"
-                                                 readonly="true">
-                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                                    </h:inputText>
-                                </h:panelGrid>
-                                <h:panelGrid columns="1">
-                                    <p:commandButton id="submitBtnForDel"
-                                                     value="提交（删除）"
-                                                     action="#{progStlItemSubQAction.submitThisRecordAction}"
-                                                     update="pdt,msgs"
-                                                     oncomplete="wVDlgViewForDel.hide()">
                                     </p:commandButton>
                                 </h:panelGrid>
                             </h:panelGrid>

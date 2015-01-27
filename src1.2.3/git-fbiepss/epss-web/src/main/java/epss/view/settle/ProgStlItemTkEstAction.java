@@ -303,17 +303,13 @@ public class ProgStlItemTkEstAction {
                 }
                 if (progStlItemTkEstListTemp.size() == 1) {
                     progStlItemTkEstShowUpd.setEng_Pkid(progStlItemTkEstListTemp.get(0).getPkid());
+                    BigDecimal bigDecimalTemp=bDEng_BeginToCurrentPeriodEQtyInDB
+                            .add(progStlItemTkEstShowUpd.getEng_CurrentPeriodEQty())
+                            .subtract(bDEng_CurrentPeriodEQtyInDB);
+                    progStlItemTkEstShowUpd.setEng_BeginToCurrentPeriodEQty(bigDecimalTemp);
                     progStlItemTkEstService.updateRecord(progStlItemTkEstShowUpd);
                 }
-                if (progStlItemTkEstListTemp.size()==0){
-				    progStlItemTkEstShowUpd.setEng_TkcttPkid(strTkcttPkid);
-                    progStlItemTkEstShowUpd.setEng_TkcttItemPkid(progStlItemTkEstShowUpd.getTkctt_Pkid());
-                    progStlItemTkEstService.insertRecord(progStlItemTkEstShowUpd);
-                }
                 MessageUtil.addInfo("更新数据完成。");
-            }
-            else if(strSubmitType.equals("Del")){
-                delRecordAction(progStlItemTkEstShowDel);
             }
             initData();
         }
@@ -402,9 +398,6 @@ public class ProgStlItemTkEstAction {
                 if(strSubmitTypePara.equals("Upd")){
                     MessageUtil.addInfo("该数据不是项数据，无法更新");
                 }
-                else if(strSubmitTypePara.equals("Del")){
-                    MessageUtil.addInfo("该数据不是项数据，无法删除");
-                }
                 resetAction();
                 return;
             }
@@ -414,10 +407,6 @@ public class ProgStlItemTkEstAction {
                 bDEng_CurrentPeriodEQtyInDB=ToolUtil.getBdIgnoreNull(progStlItemTkEstShowUpd.getEng_CurrentPeriodEQty());
                 bDEng_BeginToCurrentPeriodEQtyInDB=
                         ToolUtil.getBdIgnoreNull(progStlItemTkEstShowUpd.getEng_BeginToCurrentPeriodEQty());
-            }
-            else if(strSubmitTypePara.equals("Del")){
-                progStlItemTkEstShowDel =(ProgStlItemTkEstShow) BeanUtils.cloneBean(progStlItemTkEstShowPara) ;
-                progStlItemTkEstShowDel.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progStlItemTkEstShowDel.getTkctt_StrNo()));
             }
         } catch (Exception e) {
             logger.error("", e);

@@ -414,16 +414,12 @@ public class ProgStlItemSubMAction {
                 }
                 if (progStlItemSubMListTemp.size() == 1) {
                     progStlItemSubMShowUpd.setEngMMng_Pkid (progStlItemSubMListTemp.get(0).getPkid());
+                    BigDecimal bigDecimalTemp =bDEngMMng_BeginToCurrentPeriodMQtyInDB
+                            .add(ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getEngMMng_CurrentPeriodMQty()))
+                            .subtract(bDEngMMng_CurrentPeriodMQtyInDB);
+                    progStlItemSubMShowUpd.setEngMMng_BeginToCurrentPeriodMQty(bigDecimalTemp);
                     updRecordAction(progStlItemSubMShowUpd);
-                } else if (progStlItemSubMListTemp.size()==0){
-                    progStlItemSubMShowUpd.setEngMMng_SubcttPkid(progStlInfo.getStlPkid());
-                    progStlItemSubMShowUpd.setEngMMng_PeriodNo(progStlInfo.getPeriodNo());
-                    progStlItemSubMShowUpd.setEngMMng_SubcttItemPkid(progStlItemSubMShowUpd.getSubctt_Pkid());
-                    addRecordAction(progStlItemSubMShowUpd);
                 }
-            }
-            else if(strSubmitType.equals("Del")){
-                delRecordAction(progStlItemSubMShowDel);
             }
             initData();
         }
@@ -500,10 +496,6 @@ public class ProgStlItemSubMAction {
                 bDEngMMng_CurrentPeriodMQtyInDB=ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getEngMMng_CurrentPeriodMQty());
                 bDEngMMng_BeginToCurrentPeriodMQtyInDB=
                         ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getEngMMng_BeginToCurrentPeriodMQty());
-            }else
-            if(strSubmitTypePara.equals("Del")){
-                progStlItemSubMShowDel =(ProgStlItemSubMShow) BeanUtils.cloneBean(progStlItemSubMShowPara) ;
-                progStlItemSubMShowDel.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progStlItemSubMShowDel.getSubctt_StrNo()));
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
