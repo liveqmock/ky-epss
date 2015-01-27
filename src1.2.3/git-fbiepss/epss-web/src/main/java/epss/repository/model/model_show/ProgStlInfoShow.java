@@ -32,6 +32,7 @@ public class ProgStlInfoShow {
     private String lastUpdTime;
     private Integer recVersion;
     private String type;
+    private String typeName;
     private String autoLinkAdd;
 
     public String getPkid() {
@@ -216,6 +217,14 @@ public class ProgStlInfoShow {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 
     public String getAutoLinkAdd() {

@@ -28,7 +28,7 @@
                         <p:panel header="分包进度工程量结算信息" id="ppInfo">
                             <h:panelGrid columns="2">
                                 <h:panelGrid>
-                                    <h:panelGrid columns="7">
+                                    <h:panelGrid columns="6">
                                         <p:outputLabel value="合同编号：" for="cttId"/>
                                         <h:inputText id="cttId"
                                                      value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.stlId}"
@@ -37,25 +37,24 @@
                                         <h:inputText id="cttName"
                                                      value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.stlName}"
                                                      style="background-color:gainsboro;" readonly="true"/>
+                                        <p:outputLabel value="合同类型：" for="type"/>
+                                        <p:inputText id="type" value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.typeName}"
+                                                     readonly="true" style="background-color:gainsboro;"/>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="7">
                                         <p:outputLabel value="结算编号：" for="id"/>
-                                        <h:inputText id="id" value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.id}"/>
+                                        <h:inputText id="id"
+                                                     style="width:106px"
+                                                     value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.id}"/>
                                         <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
                                                          action="#{progStlInfoSubQTTAction.setMaxNoPlusOne()}"
                                                          update="id"
                                                          style="height:20px">
                                         </p:commandButton>
-                                    </h:panelGrid>
-                                    <h:panelGrid columns="6">
                                         <p:outputLabel value="期数编码：" for="periodNo"/>
                                         <h:inputText id="periodNo"
                                                      value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.periodNo}"
                                                      style="background-color:gainsboro;" readonly="true"/>
-                                        <p:outputLabel for="recVersion" value="修改次数：" />
-                                        <h:inputText id="recVersion"
-                                                     value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.recVersion}"
-                                                     style="background-color:gainsboro;text-align:right;" readonly="true">
-                                            <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                        </h:inputText>
                                         <p:outputLabel value="备注内容：" for="remark"/>
                                         <h:inputText id="remark"
                                                      value="#{progStlInfoSubQTTAction.progStlInfoShowUpd.remark}"/>

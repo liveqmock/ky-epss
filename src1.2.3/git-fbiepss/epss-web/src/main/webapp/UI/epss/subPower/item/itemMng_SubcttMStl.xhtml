@@ -28,7 +28,7 @@
                     <p:panel header="分包进度材料消耗量结算信息" id="ppInfo">
                             <h:panelGrid columns="2">
                                 <h:panelGrid>
-                            <h:panelGrid columns="7">
+                            <h:panelGrid columns="6">
                                 <p:outputLabel value="合同编号：" for="cttId"/>
                                 <h:inputText id="cttId"
                                              value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.stlId}"
@@ -36,26 +36,25 @@
                                 <p:outputLabel value="合同名称：" for="cttName"/>
                                 <h:inputText id="cttName"
                                              value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.stlName}"
-                                             style="background-color:gainsboro;width:328px;" readonly="true"/>
-				                <p:outputLabel value="结算编号：" for="id"/>
-                                <h:inputText id="id" value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.id}"/>
+                                             style="background-color:gainsboro;" readonly="true"/>
+                                <p:outputLabel value="合同类型：" for="type"/>
+                                <p:inputText id="type" value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.typeName}"
+                                             readonly="true" style="background-color:gainsboro;"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="7">
+                                <p:outputLabel value="结算编号：" for="id"/>
+                                <h:inputText id="id"
+                                             style="width:106px"
+                                             value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.id}"/>
                                 <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
                                                  action="#{progStlInfoSubMTTAction.setMaxNoPlusOne()}"
                                                  update="id"
                                                  style="height:20px">
                                 </p:commandButton>
-                            </h:panelGrid>
-                            <h:panelGrid columns="6">
                                 <p:outputLabel value="期数编码：  " for="periodNo"/>
                                 <h:inputText id="periodNo"
                                              value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.periodNo}"
                                              style="background-color:gainsboro;" readonly="true"/>
-                                <p:outputLabel for="recVersion" value="修改次数：" />
-                                <h:inputText id="recVersion"
-                                             value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.recVersion}"
-                                             style="background-color:gainsboro;text-align:right;" readonly="true">
-                                    <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
-                                </h:inputText>
                                 <p:outputLabel value="备注内容：" for="remarkForUpd"/>
                                 <h:inputText id="remarkUpd" value="#{progStlInfoSubMTTAction.progStlInfoShowUpd.remark}"/>
                             </h:panelGrid>

@@ -1,6 +1,7 @@
 package epss.view.settle.todoTask;
 
 import epss.common.enums.EnumResType;
+import epss.common.enums.EnumSubcttType;
 import epss.repository.model.CttInfo;
 import epss.repository.model.ProgStlInfo;
 import epss.repository.model.model_show.ProgStlInfoShow;
@@ -60,7 +61,9 @@ public class ProgStlInfoSubMTTAction {
             ProgStlInfo progStlInfoTemp = progStlInfoService.getProgStlInfoByPkid(strStlInfoPkid);
             progStlInfoShowUpd =progStlInfoService.fromModelToModelShow(progStlInfoTemp);
             CttInfo cttInfoTemp =cttInfoService.getCttInfoByPkId(progStlInfoShowUpd.getStlPkid());
+            progStlInfoShowUpd.setStlId(cttInfoTemp.getId());
             progStlInfoShowUpd.setStlName(cttInfoTemp.getName());
+            progStlInfoShowUpd.setTypeName(EnumSubcttType.getValueByKey(cttInfoTemp.getType()).getTitle());
         }catch (Exception e) {
             logger.error("初始化失败", e);
             MessageUtil.addError("初始化失败");
