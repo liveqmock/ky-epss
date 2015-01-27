@@ -493,7 +493,7 @@ public class ProgStlInfoService {
                         progStlInfoPara.setAutoLinkAdd("0");
                         progStlInfoShowQryM.setAutoLinkAdd("1");
                         progStlInfoShowQryM.setId(getMaxId( progStlInfoShowQryM.getStlType()));
-                        insertRecord(progStlInfoShowQryM);
+                        addSubStlMInfoAndItemInitDataAction(progStlInfoShowQryM);
                     }else{
                         for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
                             if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
@@ -570,7 +570,7 @@ public class ProgStlInfoService {
                         progStlInfoPara.setAutoLinkAdd("0");
                         progStlInfoShowQryQ.setAutoLinkAdd("1");
                         progStlInfoShowQryQ.setId(getMaxId(progStlInfoShowQryQ.getStlType()));
-                        insertRecord(progStlInfoShowQryQ);
+                        addSubStlQInfoAndItemInitDataAction(progStlInfoShowQryQ);
                     }else{
                         for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
                             if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){

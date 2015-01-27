@@ -92,7 +92,7 @@ public class ConnectionManager {
   /**
    * 得到指定数据源URL的数据库连接,并以指定的id保存
    * 
-   * @param url
+   * @param
    * @param id
    * @return
    */
