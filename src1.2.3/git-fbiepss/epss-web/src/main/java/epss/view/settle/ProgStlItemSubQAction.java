@@ -456,11 +456,18 @@ public class ProgStlItemSubQAction {
                     MessageUtil.addInfo("数据有误，数据库中存在多条记录。");
                     return;
                 }
+                BigDecimal bigDecimalTemp=bDEngQMng_BeginToCurrentPeriodEQtyInDB
+                        .add(ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_CurrentPeriodEQty()))
+                        .subtract(bDEngQMng_CurrentPeriodEQtyInDB);
+                if (progStlItemSubQListTemp.size() == 0) {
+                    progStlItemSubQShowUpd.setEngQMng_SubcttPkid(progStlInfo.getStlPkid());
+                    progStlItemSubQShowUpd.setEngQMng_PeriodNo(progStlInfo.getPeriodNo());
+                    progStlItemSubQShowUpd.setEngQMng_SubcttItemPkid(progStlItemSubQShowUpd.getSubctt_Pkid());
+                    progStlItemSubQShowUpd.setEngQMng_BeginToCurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",bigDecimalTemp));
+                    progStlItemSubQService.insertRecord(progStlItemSubQShowUpd);
+                }else
                 if (progStlItemSubQListTemp.size() == 1) {
                     progStlItemSubQShowUpd.setEngQMng_Pkid (progStlItemSubQListTemp.get(0).getPkid());
-                    BigDecimal bigDecimalTemp=bDEngQMng_BeginToCurrentPeriodEQtyInDB
-                                    .add(ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_CurrentPeriodEQty()))
-                                    .subtract(bDEngQMng_CurrentPeriodEQtyInDB);
                     progStlItemSubQShowUpd.setEngQMng_BeginToCurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",bigDecimalTemp));
                     progStlItemSubQService.updateRecord(progStlItemSubQShowUpd);
                 }
