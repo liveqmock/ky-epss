@@ -228,28 +228,6 @@ public class ToolUtil {
         return formatter.format(date);
     }
 
-    //取出某表某字段的最大值
-    public static String  getFieldMax(DatabaseConnection dc,String Keyfield,String tableName,String whereStr){
-        String maxcount ="1";
-        try{
-            String SQLStr = "select max(to_number(" + Keyfield + "))as maxcount from  " + tableName + " " +whereStr ;
-            System.out.println("SQLStr="+SQLStr);
-            RecordSet rs = dc.executeQuery(SQLStr);
-            if(rs.next())
-                maxcount = rs.getString(0);
-            if(maxcount == null )
-                maxcount = "1";
-            else
-                maxcount = "" + (Integer.parseInt(maxcount) +1);
-        }catch(Exception e){
-        }
-        return maxcount;
-    }
-    //取出某表某字段的最大值
-    public static String  getFieldMax(DatabaseConnection dc,String Keyfield,String tableName){
-        return getFieldMax(dc,Keyfield,tableName,"");
-    }
-
     public static String getUserName(String operPkidPara){
         ConnectionManager cm  = ConnectionManager.getInstance();
         DatabaseConnection dc = cm.get();
@@ -278,127 +256,6 @@ public class ToolUtil {
         }catch(Exception e){
         }
         return username;
-    }
-    // 生成添加语句
-    public String createInsertSQL(String fieldStr,Element insertElement,String tablename){
-        String sqlstr = "insert into  "+tablename +"(";
-        String fieldname ="";
-        String fieldvalue ="";
-
-        List listchild = insertElement.getChildren();
-        for (int j=0; j< listchild.size();j++){
-            Element childnode = (Element)listchild.get(j);
-            if (!fieldname.equals(""))
-                fieldname +="," ;
-            if (!fieldvalue.equals(""))
-                fieldvalue +="," ;
-            if (childnode.getAttributeValue("type").equals("text")){
-                fieldname += childnode.getAttributeValue("name");
-                fieldvalue+="'" + childnode.getAttributeValue("value")+"'";
-            }
-
-            if (childnode.getAttributeValue("type").equals("date")){
-                fieldname += childnode.getAttributeValue("name");
-                fieldvalue+= DBUtil.formatDateTime(childnode.getAttributeValue("value"));
-            }
-
-            if (childnode.getAttributeValue("type").equals("datetime")){
-                fieldname += childnode.getAttributeValue("name");
-                Calendar rightNow = Calendar.getInstance();
-                String timeStr = rightNow.get(rightNow.HOUR_OF_DAY)+":"+rightNow.get(rightNow.MINUTE)+":"+rightNow.get(rightNow.SECOND);
-
-                fieldvalue += DBUtil.formatDateTime(childnode.getAttributeValue("value")+" "+timeStr);
-            }
-            if ((childnode.getAttributeValue("type").equals("int"))||(childnode.getAttributeValue("type").equals("checkbox"))){
-                fieldname  += childnode.getAttributeValue("name");
-                fieldvalue += childnode.getAttributeValue("value");
-            }
-        }
-
-        String[] recoderS = fieldStr.split(";");
-        for (int i=0; i< recoderS.length;i++){
-            if (!fieldname.equals(""))
-                fieldname +="," ;
-            if (!fieldvalue.equals(""))
-                fieldvalue +="," ;
-            String[] fields = recoderS[i].split("&");
-            if (fields[2].equals("text")){
-                fieldname += fields[0];
-                fieldvalue+="'" + fields[1]+"'";
-            }
-            if ((fields[2].equals("date"))||(fields[2].equals("datetime"))){
-                fieldname += fields[0];
-                fieldvalue+=DBUtil.formatDateTime(fields[1]);
-            }
-            if (fields[2].equals("int")){
-                fieldname += fields[0];
-                fieldvalue+= fields[1];
-            }
-        }
-        sqlstr += fieldname +" ) " + "values( "+ fieldvalue+" )";
-        System.out.print(sqlstr);
-        return sqlstr;
-    }
-    ///生成更新语句
-    public String createupdateSQL(String fieldStr,Element updateElement,String tablename,String whereStr){
-        String sqlstr = "update  "+tablename +"  set  ";
-        String updatevalue ="";
-        List listchild = updateElement.getChildren();
-        for (int j=0; j< listchild.size()-1;j++){
-            Element childnode = (Element)listchild.get(j);
-            if (!updatevalue.equals(""))
-                updatevalue +="," ;
-            if (childnode.getAttributeValue("type").equals("text")){
-                updatevalue += childnode.getAttributeValue("name")+" = '" + childnode.getAttributeValue("value")+"'";
-            }
-            if (childnode.getAttributeValue("type").equals("date")){
-                updatevalue += childnode.getAttributeValue("name")+ "=" + DBUtil.formatDateTime(childnode.getAttributeValue("value"));
-            }
-            if (childnode.getAttributeValue("type").equals("datetime")){
-                Calendar rightNow = Calendar.getInstance();
-                String timeStr = rightNow.get(rightNow.HOUR_OF_DAY)+":"+rightNow.get(rightNow.MINUTE)+":"+rightNow.get(rightNow.SECOND);
-                updatevalue +=childnode.getAttributeValue("name")+"="+DBUtil.formatDateTime(childnode.getAttributeValue("value")+" "+timeStr);
-            }
-            if ((childnode.getAttributeValue("type").equals("int"))||(childnode.getAttributeValue("type").equals("checkbox"))){
-                updatevalue += childnode.getAttributeValue("name")+" = " + childnode.getAttributeValue("value")+"";
-            }
-        }
-        if (!fieldStr.equals("")){
-            String[] recoderS = fieldStr.split(";");
-            for (int i=0; i< recoderS.length;i++){
-                if (!updatevalue.equals(""))
-                    updatevalue +="," ;
-                String[] fields = recoderS[i].split("&");
-                if (fields[2].equals("text")){
-                    updatevalue += fields[0] + "='" + fields[1]+"'";
-                }
-                if ((fields[2].equals("date"))||(fields[2].equals("datetime"))){
-                    updatevalue += fields[0] + "=" + DBUtil.formatDateTime(fields[1]);
-                }
-                if (fields[2].equals("int")){
-                    updatevalue += fields[0] + "=" + fields[1]+"";
-                }
-            }
-        }
-        Element childRoot = (Element) listchild.get(listchild.size()-1);
-        //添加更新条件
-        sqlstr += updatevalue +" where (1=1)";
-        if (!childRoot.getText().equals("no")) {
-            sqlstr += childRoot.getText();
-        }
-        sqlstr += whereStr;
-        return sqlstr;
-    }
-    ///生成删除语句
-    public String createdeleteSQL(Element deleteElement,String tablename,String whereStr){
-        String sqlstr = "delete  from   " + tablename +" where (1=1) ";
-        List listchild = deleteElement.getChildren();
-        Element childnode = (Element)listchild.get(0);
-        if (childnode.getText().length() > 0)
-            sqlstr +=  childnode.getText();
-        sqlstr +=  whereStr;
-        System.out.print(sqlstr);
-        return sqlstr;
     }
 
     public static Calendar getDate(String sDate) {
@@ -507,6 +364,34 @@ public class ToolUtil {
                 returnStr +="0";
         }
         return returnStr;
+    }
+
+    public static BigDecimal getBdIgnoreZeroNull(BigDecimal bigDecimalPara){
+        return bigDecimalPara==null?bigDecimal0:(bigDecimal0.compareTo(bigDecimalPara)==0?bigDecimal0:bigDecimalPara);
+    }
+    //算小计大计bd,str并存
+    public static BigDecimal getBdFromStrOrBdIgnoreNull(Object objPara){
+        if(objPara==null){
+            return  bigDecimal0;
+        }else if(objPara.getClass().equals((new BigDecimal(0)).getClass())){
+            return (BigDecimal)objPara;
+        }else {
+            return objPara.equals("")?bigDecimal0:new BigDecimal(objPara.toString().replace(",","").replace("%",""));
+        }
+    }
+    //将%以bd形式存入数据库
+    public static BigDecimal getBdFromStrInPercent(String strPara){
+        return   getStrIgnoreNull(strPara).equals("")?bigDecimal0:(new BigDecimal(strPara.replace("%","")).divide(new BigDecimal(100)));
+    }
+    //将数据库bd取出并转化为str
+    public static String getStrFromBdIgnoreZeroNull(String strFormatPara, BigDecimal bigDecimalPara){
+        if (bigDecimal0.compareTo(getBdIgnoreNull(bigDecimalPara))==0){
+            return "";
+        }else{
+            DecimalFormat  df =new DecimalFormat(strFormatPara);
+            return df.format(getBdIgnoreZeroNull(bigDecimalPara));
+        }
+
     }
     public static void main(String[] argv) {
         System.out.println(getDateString("2004-10-20"));

@@ -31,9 +31,14 @@
 	        <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
                 <p:panel>
-                    <h:panelGrid id="pgCondition" columns="5">
-                        <p:outputLabel value="分包合同：" for="id" />
-                        <p:selectOneMenu id="id"
+                    <h:panelGrid columns="7">
+                        <p:outputLabel value="结算单类型：" for="strSubcttPStlFormFlag"/>
+                        <p:selectOneMenu id="strSubcttPStlFormFlag"
+                                         value="#{progStlInfoSubStlmentAction.strSubcttPStlFormFlag}">
+                            <f:selectItems value="#{progStlInfoSubStlmentAction.subcttPStlFormFlagList}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value="分包合同：" for="stlPkid" />
+                        <p:selectOneMenu id="stlPkid"
                                          value="#{progStlInfoSubStlmentAction.progStlInfoShowQry.stlPkid}">
                             <f:selectItems value="#{progStlInfoSubStlmentAction.subcttList}"/>
                         </p:selectOneMenu>
@@ -42,8 +47,8 @@
                                      value="#{progStlInfoSubStlmentAction.progStlInfoShowQry.periodNo}"
                                      onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         <p:commandButton id="qryBtn" value="查询"
-                                         action="#{progStlInfoSubStlmentAction.queryAction('Qry')}"
-                                         update="pdt,msgs">
+                                     action="#{progStlInfoSubStlmentAction.queryAction()}"
+                                     update="pdt,msgs">
                         </p:commandButton>
                     </h:panelGrid>
                 </p:panel>
@@ -51,6 +56,7 @@
                 <p:dataTable id="pdt" style="width:100%;"
                              value="#{progStlInfoSubStlmentAction.progStlInfoShowList}"
                              var="record"
+                             resizableColumns="true"
                              rowKey="#{record.pkid}"
                              selectionMode="single"
                              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
@@ -61,12 +67,13 @@
                              rowIndexVar="row"
                              rowsPerPageTemplate="500,200,100,45,30,15"
                              emptyMessage="数据记录为空..."
-                             widgetVar="DtInitSubcttList"
+                                rowStyleClass="#{record.id eq '分包结算单'?'rowGrayStyle':null}"
                              scrollable="true"
                              scrollHeight="480">
                     <p:column headerText="操作" style="width:31px;text-align: center;">
                         <p:commandButton icon="ui-icon-triangle-1-e"
                                          style="height:18px;width:18px"
+                                         rendered="#{record.id eq '分包结算单'?'false':'true'}"
                                          onclick="actSelect('#{record.pkid}')">
                         </p:commandButton>
                     </p:column>

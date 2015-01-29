@@ -46,6 +46,7 @@ public class ProgStlItemTkEstShow implements Serializable {
     private String eng_LastUpdByName;
     private String eng_LastUpdTime;
     private Integer eng_RecVersion;
+    private String eng_Remark;
     private Boolean isUptoCttQtyFlag;
     private Boolean isRenderedFlag;
 
@@ -323,5 +324,13 @@ public class ProgStlItemTkEstShow implements Serializable {
 
     public void setIsRenderedFlag(Boolean isRenderedFlag) {
         this.isRenderedFlag = isRenderedFlag;
+    }
+
+    public String getEng_Remark() {
+        return eng_Remark;
+    }
+
+    public void setEng_Remark(String eng_Remark) {
+        this.eng_Remark = eng_Remark;
     }
 }

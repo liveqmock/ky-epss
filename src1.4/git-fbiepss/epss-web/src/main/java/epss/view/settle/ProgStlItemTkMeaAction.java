@@ -260,11 +260,16 @@ public class ProgStlItemTkMeaAction {
                 progStlItemTkMeaShowTemp.setEng_ArchivedFlag(progStlItemTkMea.getArchivedFlag());
                 progStlItemTkMeaShowTemp.setEng_CreatedBy(progStlItemTkMea.getCreatedBy());
                 progStlItemTkMeaShowTemp.setEng_CreatedByName(strCreatedByName);
+                String strCreatedByNameTemp=ToolUtil.getUserName(progStlItemTkMea.getCreatedBy());
+                progStlItemTkMeaShowTemp.setEng_CreatedByName(strCreatedByNameTemp);
                 progStlItemTkMeaShowTemp.setEng_CreatedTime(progStlItemTkMea.getCreatedTime());
                 progStlItemTkMeaShowTemp.setEng_LastUpdBy(progStlItemTkMea.getLastUpdBy());
                 progStlItemTkMeaShowTemp.setEng_LastUpdByName(strLastUpdByName);
+                String strLastUpdByNameTemp=ToolUtil.getUserName(progStlItemTkMea.getLastUpdBy());
+                progStlItemTkMeaShowTemp.setEng_LastUpdByName(strLastUpdByNameTemp);
                 progStlItemTkMeaShowTemp.setEng_LastUpdTime(progStlItemTkMea.getLastUpdTime());
                 progStlItemTkMeaShowTemp.setEng_RecVersion(progStlItemTkMea.getRecVersion());
+                progStlItemTkMeaShowTemp.setEng_Remark(progStlItemTkMea.getRemark());
                 if (ToolUtil.getBdIgnoreNull(progStlItemTkMeaShowTemp.getEng_BeginToCurrentPeriodEQty())
                         .compareTo(progStlItemTkMeaShowTemp.getTkctt_ContractQuantity())==0){
                     progStlItemTkMeaShowTemp.setIsUptoCttQtyFlag(true);
@@ -296,19 +301,22 @@ public class ProgStlItemTkMeaAction {
                     MessageUtil.addInfo("数据有误，数据库中存在多条记录。");
                     return;
                 }
+                BigDecimal bigDecimalTemp=bDEng_BeginToCurrentPeriodEQtyInDB
+                        .add(progStlItemTkMeaShowUpd.getEng_CurrentPeriodEQty())
+                        .subtract(bDEng_CurrentPeriodEQtyInDB);
+                if (progStlItemTkMeaListTemp.size() == 0) {
+                    progStlItemTkMeaShowUpd.setEng_TkcttPkid(progStlInfo.getStlPkid());
+                    progStlItemTkMeaShowUpd.setEng_PeriodNo(progStlInfo.getPeriodNo());
+                    progStlItemTkMeaShowUpd.setEng_TkcttItemPkid(progStlItemTkMeaShowUpd.getTkctt_Pkid());
+                    progStlItemTkMeaShowUpd.setEng_BeginToCurrentPeriodEQty(bigDecimalTemp);
+                    progStlItemTkMeaService.insertRecord(progStlItemTkMeaShowUpd);
+                }else
                 if (progStlItemTkMeaListTemp.size() == 1) {
                     progStlItemTkMeaShowUpd.setEng_Pkid(progStlItemTkMeaListTemp.get(0).getPkid());
+                    progStlItemTkMeaShowUpd.setEng_BeginToCurrentPeriodEQty(bigDecimalTemp);
                     progStlItemTkMeaService.updateRecord(progStlItemTkMeaShowUpd);
                 }
-                if (progStlItemTkMeaListTemp.size()==0){
-                    progStlItemTkMeaShowUpd.setEng_TkcttPkid(strTkcttPkid);
-                    progStlItemTkMeaShowUpd.setEng_TkcttItemPkid(progStlItemTkMeaShowUpd.getTkctt_Pkid());
-                    progStlItemTkMeaService.insertRecord(progStlItemTkMeaShowUpd);
-                }
                 MessageUtil.addInfo("更新数据完成。");
-            }
-            else if(strSubmitType.equals("Del")){
-                delRecordAction(progStlItemTkMeaShowDel);
             }
             initData();
         }
@@ -397,9 +405,6 @@ public class ProgStlItemTkMeaAction {
                 if(strSubmitTypePara.equals("Upd")){
                     MessageUtil.addInfo("该数据不是项数据，无法更新");
                 }
-                else if(strSubmitTypePara.equals("Del")){
-                    MessageUtil.addInfo("该数据不是项数据，无法删除");
-                }
                 resetAction();
                 return;
             }
@@ -409,10 +414,6 @@ public class ProgStlItemTkMeaAction {
                 bDEng_CurrentPeriodEQtyInDB=ToolUtil.getBdIgnoreNull(progStlItemTkMeaShowUpd.getEng_CurrentPeriodEQty());
                 bDEng_BeginToCurrentPeriodEQtyInDB=
                         ToolUtil.getBdIgnoreNull(progStlItemTkMeaShowUpd.getEng_BeginToCurrentPeriodEQty());
-               }
-            else if(strSubmitTypePara.equals("Del")){
-                progStlItemTkMeaShowDel =(ProgStlItemTkMeaShow) BeanUtils.cloneBean(progStlItemTkMeaShowPara) ;
-                progStlItemTkMeaShowDel.setTkctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progStlItemTkMeaShowDel.getTkctt_StrNo()));
             }
         } catch (Exception e) {
             logger.error("", e);

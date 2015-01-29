@@ -49,7 +49,7 @@
                                      value="#{progStlInfoSubStlmentAction.progStlInfoShowQry.periodNo}"
                                      onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         <p:commandButton id="qryBtn" value="查询"
-                                     action="#{progStlInfoSubStlmentAction.queryAction('Approve')}"
+                                     action="#{progStlInfoSubStlmentAction.queryAction()}"
                                      update="pdt,msgs">
                         </p:commandButton>
                     </h:panelGrid>

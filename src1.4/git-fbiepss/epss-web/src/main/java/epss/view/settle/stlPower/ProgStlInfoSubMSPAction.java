@@ -183,7 +183,8 @@ public class ProgStlInfoSubMSPAction {
             MessageUtil.addInfo("更新数据完成。");
         } else if (strSubmitType.equals("Del")) {
             //判断是否已关联产生了分包数量结算
-            ProgStlInfo progStlInfoQryM =new ProgStlInfo();
+            /*此处联动删除功能删掉，太危险了，容易造成删除对方已真做的数据By Jack*/
+            /*ProgStlInfo progStlInfoQryM =new ProgStlInfo();
             progStlInfoQryM.setStlType(EnumResType.RES_TYPE3.getCode());
             progStlInfoQryM.setStlPkid(progStlInfoShowDel.getStlPkid());
             progStlInfoQryM.setPeriodNo(progStlInfoShowDel.getPeriodNo());
@@ -192,9 +193,9 @@ public class ProgStlInfoSubMSPAction {
                     progStlInfoService.getInitStlShowListByModel(progStlInfoQryM);
             if (progStlInfoShowConstructsTemp.size()>0){
                 progStlInfoService.delSubQMStlInfoAndItem(progStlInfoShowDel);
-            }else{
+            }else{*/
                 progStlInfoService.delSubMStlInfoAndItem(progStlInfoShowDel);
-            }
+            /*}*/
             MessageUtil.addInfo("删除数据完成。");
         }
         onQueryAction("false");

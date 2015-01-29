@@ -31,7 +31,6 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 /**
  * Created with IntelliJ IDEA.
  * User: Think
@@ -156,15 +155,14 @@ public class ProgStlItemSubQAction {
                 itemUnit.setSubctt_ContractQuantity(
                         ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_ContractQuantity()));
                 itemUnit.setSubctt_ContractAmount(
-                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_ContractAmount()));
+                        ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_ContractAmount()));
                 itemUnit.setSubctt_SignPartAPrice(
                         ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_SignPartAPrice()));
                 // 分包工程量结算
                 itemUnit.setEngQMng_CurrentPeriodEQty(
-                        ToolUtil.getBdFrom0ToNull(itemUnit.getEngQMng_CurrentPeriodEQty()));
+                        ToolUtil.getStrIgnoreNull(itemUnit.getEngQMng_CurrentPeriodEQty()));
                 itemUnit.setEngQMng_BeginToCurrentPeriodEQty(
-                        ToolUtil.getBdFrom0ToNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()));
-
+                        ToolUtil.getStrIgnoreNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()));
                 ProgStlItemSubQShow itemUnitTemp= (ProgStlItemSubQShow) BeanUtils.cloneBean(itemUnit);
                 itemUnitTemp.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getSubctt_StrNo()));
                 progStlItemSubQShowListExcel.add(itemUnitTemp);
@@ -192,14 +190,17 @@ public class ProgStlItemSubQAction {
             progStlItemSubQShowTemp.setSubctt_Grade(itemUnit.getGrade());
             progStlItemSubQShowTemp.setSubctt_Orderid(itemUnit.getOrderid());
             progStlItemSubQShowTemp.setSubctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
-
             progStlItemSubQShowTemp.setSubctt_Name(itemUnit.getName());
             progStlItemSubQShowTemp.setSubctt_Remark(itemUnit.getRemark());
-
             progStlItemSubQShowTemp.setSubctt_Unit(itemUnit.getUnit());
             progStlItemSubQShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             progStlItemSubQShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
-            progStlItemSubQShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
+            if(itemUnit.getSpareField()!=null){
+                progStlItemSubQShowTemp.setSubctt_ContractAmount(ToolUtil.getStrFromBdIgnoreZeroNull("#,##0.00%",itemUnit.getContractAmount()));
+            }else{
+                String strSubctt_ContractAmountInPercent=ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",itemUnit.getContractAmount());
+                progStlItemSubQShowTemp.setSubctt_ContractAmount(strSubctt_ContractAmountInPercent);
+            }
             progStlItemSubQShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
             progStlItemSubQShowTemp.setSubctt_SpareField(itemUnit.getSpareField());
 
@@ -215,14 +216,26 @@ public class ProgStlItemSubQAction {
                 progStlItemSubQShowTemp.setEngQMng_PeriodNo(progStlItemSubQ.getPeriodNo());
                 progStlItemSubQShowTemp.setEngQMng_SubcttPkid(progStlItemSubQ.getSubcttPkid());
                 progStlItemSubQShowTemp.setEngQMng_SubcttItemPkid(progStlItemSubQ.getSubcttItemPkid());
-                progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(progStlItemSubQ.getBeginToCurrentPeriodEQty());
-                progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(progStlItemSubQ.getCurrentPeriodEQty());
+                if(progStlItemSubQShowTemp.getSubctt_SpareField()!=null){
+                    String strEngQMng_BeginToCurrentPeriodEQtyInPercent=ToolUtil.getStrFromBdIgnoreZeroNull("#,##0.00%", progStlItemSubQ.getBeginToCurrentPeriodEQty());
+                    progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(strEngQMng_BeginToCurrentPeriodEQtyInPercent);
+                    String strEengQMng_CurrentPeriodEQtyInPercentInPercent=ToolUtil.getStrFromBdIgnoreZeroNull("#,##0.00%", progStlItemSubQ.getCurrentPeriodEQty());
+                    progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(strEengQMng_CurrentPeriodEQtyInPercentInPercent);
+                }else{
+                    progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.00", progStlItemSubQ.getBeginToCurrentPeriodEQty()));
+                    progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.00", progStlItemSubQ.getCurrentPeriodEQty()));
+                }
                 progStlItemSubQShowTemp.setEngQMng_ArchivedFlag(progStlItemSubQ.getArchivedFlag());
                 progStlItemSubQShowTemp.setEngQMng_CreatedBy(progStlItemSubQ.getCreatedBy());
+                String strCreatedByNameTemp=ToolUtil.getUserName(progStlItemSubQ.getCreatedBy());
+                progStlItemSubQShowTemp.setEngQMng_CreatedByName(strCreatedByNameTemp);
                 progStlItemSubQShowTemp.setEngQMng_CreatedTime(progStlItemSubQ.getCreatedTime());
                 progStlItemSubQShowTemp.setEngQMng_LastUpdBy(progStlItemSubQ.getLastUpdBy());
+                String strLastUpdByNameTemp=ToolUtil.getUserName(progStlItemSubQ.getLastUpdBy());
+                progStlItemSubQShowTemp.setEngQMng_LastUpdByName(strLastUpdByNameTemp);
                 progStlItemSubQShowTemp.setEngQMng_LastUpdTime(progStlItemSubQ.getLastUpdTime());
                 progStlItemSubQShowTemp.setEngQMng_RecVersion(progStlItemSubQ.getRecVersion());
+                progStlItemSubQShowTemp.setEngQMng_Remark(progStlItemSubQ.getRemark());
             }
             progStlItemSubQShowListPara.add(progStlItemSubQShowTemp) ;
             recursiveDataTable(progStlItemSubQShowTemp.getSubctt_Pkid(), cttItemListPara, progStlItemSubQShowListPara);
@@ -254,38 +267,37 @@ public class ProgStlItemSubQAction {
         for(int i=0;i< progStlItemSubQShowListTemp.size();i++){
             itemUnit = progStlItemSubQShowListTemp.get(i);
             // 控制画面上的按钮显示
-            // 累积数已达到合同数量
-            if(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()!=null) {
+            // 累积数已达到合同数量,字段为str,判断条件做修改
+            if(!("").equals(ToolUtil.getStrIgnoreNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()))) {
                 if (itemUnit.getEngQMng_BeginToCurrentPeriodEQty()
-                        .compareTo(itemUnit.getSubctt_ContractQuantity())>=0) {
+                        .compareTo(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.00", itemUnit.getSubctt_ContractQuantity()))>=0) {
                     itemUnit.setIsUptoCttQtyFlag(true);
                 }
             }
             // 框架项
-            if(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()).compareTo(ToolUtil.bigDecimal0)==0){
+            if(ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_ContractAmount()).compareTo("0")==0){
                 itemUnit.setIsRenderedFlag(false);
             }
-
             bdQuantityTotal=bdQuantityTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
             bdQuantityAllTotal=bdQuantityAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
-            bdBeginToCurrentPeriodEQtyTotal=
-                    bdBeginToCurrentPeriodEQtyTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()));
-            bdCurrentPeriodEQtyTotal=
-                    bdCurrentPeriodEQtyTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngQMng_CurrentPeriodEQty()));
-            //费税率金额不计入小计（费税率为子项时），当前和开累不计入大计
-            if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade()>1){
-                bdAmountTotal=bdAmountTotal.add(
-                        ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount())).subtract(
-                        ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
-            }else{
-                bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
-            }
+                bdBeginToCurrentPeriodEQtyTotal=
+                        bdBeginToCurrentPeriodEQtyTotal.add(ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()));
+                bdCurrentPeriodEQtyTotal=
+                        bdCurrentPeriodEQtyTotal.add(ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getEngQMng_CurrentPeriodEQty()));
+                //费税率金额不计入小计（费税率为子项时），当前和开累不计入大计
+                if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade()>1){
+                    bdAmountTotal=bdAmountTotal.add(
+                            ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getSubctt_ContractAmount()).subtract(
+                                    ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getSubctt_ContractAmount())));
+                }else{
+                    bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+                }
             if(itemUnit.getSubctt_SpareField()==null){
-                bdAmountAllTotal=bdAmountAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+                bdAmountAllTotal=bdAmountAllTotal.add(ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
                 bdBeginToCurrentPeriodEQtyAllTotal=
-                        bdBeginToCurrentPeriodEQtyAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()));
+                        bdBeginToCurrentPeriodEQtyAllTotal.add(ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()));
                 bdCurrentPeriodEQtyAllTotal=
-                        bdCurrentPeriodEQtyAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngQMng_CurrentPeriodEQty()));
+                        bdCurrentPeriodEQtyAllTotal.add(ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getEngQMng_CurrentPeriodEQty()));
             }
             progStlItemSubQShowList.add(itemUnit);
             if(i+1< progStlItemSubQShowListTemp.size()){
@@ -293,15 +305,29 @@ public class ProgStlItemSubQAction {
                 if(itemUnitNext.getSubctt_ParentPkid().equals("root")){
                     ProgStlItemSubQShow itemOfEsItemHieRelapTemp=new ProgStlItemSubQShow();
                     itemOfEsItemHieRelapTemp.setSubctt_Name("合计");
-                    itemOfEsItemHieRelapTemp.setSubctt_Pkid("total"+i);
-                    itemOfEsItemHieRelapTemp.setSubctt_ContractQuantity(
-                            ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
-                    itemOfEsItemHieRelapTemp.setSubctt_ContractAmount(
-                            ToolUtil.getBdFrom0ToNull(bdAmountTotal));
-                    itemOfEsItemHieRelapTemp.setEngQMng_BeginToCurrentPeriodEQty(
-                            ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyTotal));
-                    itemOfEsItemHieRelapTemp.setEngQMng_CurrentPeriodEQty(
-                            ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal));
+                    itemOfEsItemHieRelapTemp.setSubctt_Pkid("total" + i);
+                    //税费率为单独项时，添加小计大计，并排除0%的情况
+                    if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade().compareTo(1)==0){
+                        if(bdAmountTotal.compareTo(ToolUtil.bigDecimal0)>0){
+                            itemOfEsItemHieRelapTemp.setSubctt_ContractAmount(
+                                    ToolUtil.getStrIgnoreNull(bdAmountTotal+"%"));
+                        }
+                        if(bdBeginToCurrentPeriodEQtyTotal.compareTo(ToolUtil.bigDecimal0)>0){
+                            itemOfEsItemHieRelapTemp.setEngQMng_BeginToCurrentPeriodEQty(
+                                    ToolUtil.getStrIgnoreNull(bdBeginToCurrentPeriodEQtyTotal+"%"));
+                        }
+                        if(bdCurrentPeriodEQtyTotal.compareTo(ToolUtil.bigDecimal0)>0){
+                            itemOfEsItemHieRelapTemp.setEngQMng_CurrentPeriodEQty(
+                                    ToolUtil.getStrIgnoreNull(bdCurrentPeriodEQtyTotal+"%"));
+                        }
+                    }else{
+                        itemOfEsItemHieRelapTemp.setSubctt_ContractAmount(
+                                ToolUtil.getStrIgnoreNull(bdAmountTotal+""));
+                        itemOfEsItemHieRelapTemp.setEngQMng_BeginToCurrentPeriodEQty(
+                                ToolUtil.getStrIgnoreNull(bdBeginToCurrentPeriodEQtyTotal+""));
+                        itemOfEsItemHieRelapTemp.setEngQMng_CurrentPeriodEQty(
+                                ToolUtil.getStrIgnoreNull(bdCurrentPeriodEQtyTotal+""));
+                    }
                     itemOfEsItemHieRelapTemp.setIsRenderedFlag(false);
                     progStlItemSubQShowList.add(itemOfEsItemHieRelapTemp);
                     bdQuantityTotal=new BigDecimal(0);
@@ -316,12 +342,27 @@ public class ProgStlItemSubQAction {
                 progStlItemSubQShowTemp.setSubctt_Pkid("total" + i);
                 progStlItemSubQShowTemp.setSubctt_ContractQuantity(
                         ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
-                progStlItemSubQShowTemp.setSubctt_ContractAmount(
-                        ToolUtil.getBdFrom0ToNull(bdAmountTotal));
-                progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(
-                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyTotal));
-                progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(
-                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyTotal));
+                if(itemUnitNext.getSubctt_SpareField()==null){
+                    progStlItemSubQShowTemp.setSubctt_ContractAmount(
+                            ToolUtil.getStrIgnoreNull(bdAmountTotal+""));
+                    progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(
+                            ToolUtil.getStrIgnoreNull(bdBeginToCurrentPeriodEQtyTotal+""));
+                    progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(
+                            ToolUtil.getStrIgnoreNull(bdCurrentPeriodEQtyTotal+""));
+                }else{
+                    if(bdAmountTotal.compareTo(ToolUtil.bigDecimal0)>0){
+                        progStlItemSubQShowTemp.setSubctt_ContractAmount(
+                                ToolUtil.getStrIgnoreNull(bdAmountTotal+"%"));
+                    }
+                    if(bdBeginToCurrentPeriodEQtyTotal.compareTo(ToolUtil.bigDecimal0)>0){
+                        progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(
+                                ToolUtil.getStrIgnoreNull(bdBeginToCurrentPeriodEQtyTotal+"%"));
+                    }
+                    if(bdCurrentPeriodEQtyTotal.compareTo(ToolUtil.bigDecimal0)>0){
+                        progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(
+                                ToolUtil.getStrIgnoreNull(bdCurrentPeriodEQtyTotal+"%"));
+                    }
+                }
                 progStlItemSubQShowTemp.setIsRenderedFlag(false);
                 progStlItemSubQShowList.add(progStlItemSubQShowTemp);
                 progStlItemSubQShowListExcel.add(progStlItemSubQShowTemp);
@@ -335,12 +376,9 @@ public class ProgStlItemSubQAction {
                 progStlItemSubQShowTemp.setSubctt_Pkid("total_all" + i);
                 progStlItemSubQShowTemp.setSubctt_ContractQuantity(
                         ToolUtil.getBdFrom0ToNull(bdQuantityAllTotal));
-                progStlItemSubQShowTemp.setSubctt_ContractAmount(
-                        ToolUtil.getBdFrom0ToNull(bdAmountAllTotal));
-                progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(
-                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodEQtyAllTotal));
-                progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(
-                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodEQtyAllTotal));
+                progStlItemSubQShowTemp.setSubctt_ContractAmount(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",bdAmountAllTotal));
+                progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.00",bdBeginToCurrentPeriodEQtyAllTotal));
+                progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.00",bdCurrentPeriodEQtyAllTotal));
                 progStlItemSubQShowTemp.setIsRenderedFlag(false);
                 progStlItemSubQShowList.add(progStlItemSubQShowTemp);
                 progStlItemSubQShowListExcel.add(progStlItemSubQShowTemp);
@@ -418,19 +456,22 @@ public class ProgStlItemSubQAction {
                     MessageUtil.addInfo("数据有误，数据库中存在多条记录。");
                     return;
                 }
+                BigDecimal bigDecimalTemp=bDEngQMng_BeginToCurrentPeriodEQtyInDB
+                        .add(ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_CurrentPeriodEQty()))
+                        .subtract(bDEngQMng_CurrentPeriodEQtyInDB);
+                if (progStlItemSubQListTemp.size() == 0) {
+                    progStlItemSubQShowUpd.setEngQMng_SubcttPkid(progStlInfo.getStlPkid());
+                    progStlItemSubQShowUpd.setEngQMng_PeriodNo(progStlInfo.getPeriodNo());
+                    progStlItemSubQShowUpd.setEngQMng_SubcttItemPkid(progStlItemSubQShowUpd.getSubctt_Pkid());
+                    progStlItemSubQShowUpd.setEngQMng_BeginToCurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",bigDecimalTemp));
+                    progStlItemSubQService.insertRecord(progStlItemSubQShowUpd);
+                }else
                 if (progStlItemSubQListTemp.size() == 1) {
                     progStlItemSubQShowUpd.setEngQMng_Pkid (progStlItemSubQListTemp.get(0).getPkid());
+                    progStlItemSubQShowUpd.setEngQMng_BeginToCurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",bigDecimalTemp));
                     progStlItemSubQService.updateRecord(progStlItemSubQShowUpd);
                 }
-                if (progStlItemSubQListTemp.size()==0){
-                    progStlItemSubQShowUpd.setEngQMng_SubcttPkid(strSubcttPkid);
-                    progStlItemSubQShowUpd.setEngQMng_SubcttItemPkid(progStlItemSubQShowUpd.getSubctt_Pkid());
-                    progStlItemSubQService.insertRecord(progStlItemSubQShowUpd);
-                }
                 MessageUtil.addInfo("更新数据完成。");
-            }
-            else if(strSubmitType.equals("Del")){
-                delRecordAction(progStlItemSubQShowDel);
             }
             initData();
         }
@@ -445,18 +486,18 @@ public class ProgStlItemSubQAction {
             return true;
         }
         else{
-            String strTemp= progStlItemSubQShowUpd.getEngQMng_CurrentPeriodEQty().toString();
+            String strTemp= progStlItemSubQShowUpd.getEngQMng_CurrentPeriodEQty();
             String strRegex = "[-]?[0-9]+\\.?[0-9]*";
-            if (!strTemp.matches(strRegex) ){
+            if (!strTemp.replace(",","").matches(strRegex)){
                 MessageUtil.addError("请确认输入的数据，" + strTemp + "不是正确的数据格式！");
                 return false;
             }
 
             BigDecimal bDEngQMng_CurrentPeriodEQtyTemp=
-                    ToolUtil.getBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_CurrentPeriodEQty());
+                    ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_CurrentPeriodEQty());
 
             BigDecimal bigDecimalTemp=
-                    bDEngQMng_BeginToCurrentPeriodEQtyInDB.add(bDEngQMng_CurrentPeriodEQtyTemp).subtract(bDEngQMng_CurrentPeriodEQtyInDB);
+                    ToolUtil.getBdIgnoreNull(bDEngQMng_BeginToCurrentPeriodEQtyInDB).add(ToolUtil.getBdFromStrOrBdIgnoreNull(bDEngQMng_CurrentPeriodEQtyTemp)).subtract(ToolUtil.getBdFromStrOrBdIgnoreNull(bDEngQMng_CurrentPeriodEQtyInDB));
 
             BigDecimal bDSubctt_ContractQuantity=
                     ToolUtil.getBdIgnoreNull(progStlItemSubQShowUpd.getSubctt_ContractQuantity());
@@ -473,10 +514,10 @@ public class ProgStlItemSubQAction {
                             + bDEngQMng_CurrentPeriodEQtyTemp.toString() + "）！");
                     return false;
                 }
-                progStlItemSubQShowUpd.setEngQMng_BeginToCurrentPeriodEQty(bigDecimalTemp);
+                progStlItemSubQShowUpd.setEngQMng_BeginToCurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",bigDecimalTemp));
             }else if (strBlurOrSubmitFlag.equals("submit")) {
                 BigDecimal bDEngQMng_BeginToCurrentPeriodEQtyTemp=
-                        ToolUtil.getBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_BeginToCurrentPeriodEQty());
+                        ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_BeginToCurrentPeriodEQty());
 
                 if(bDEngQMng_BeginToCurrentPeriodEQtyTemp.compareTo(bDEngQMng_BeginToCurrentPeriodEQtyInDB)==0){
                     if(bigDecimalTemp.compareTo(bDSubctt_ContractQuantity)>0){
@@ -515,13 +556,9 @@ public class ProgStlItemSubQAction {
             else if(strSubmitTypePara.equals("Upd")){
                 progStlItemSubQShowUpd =(ProgStlItemSubQShow) BeanUtils.cloneBean(progStlItemSubQShowPara) ;
                 progStlItemSubQShowUpd.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progStlItemSubQShowUpd.getSubctt_StrNo()));
-                bDEngQMng_CurrentPeriodEQtyInDB=ToolUtil.getBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_CurrentPeriodEQty());
+                bDEngQMng_CurrentPeriodEQtyInDB=ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_CurrentPeriodEQty());
                 bDEngQMng_BeginToCurrentPeriodEQtyInDB=
-                        ToolUtil.getBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_BeginToCurrentPeriodEQty());
-            }
-            else if(strSubmitTypePara.equals("Del")){
-                progStlItemSubQShowDel =(ProgStlItemSubQShow) BeanUtils.cloneBean(progStlItemSubQShowPara) ;
-                progStlItemSubQShowDel.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progStlItemSubQShowDel.getSubctt_StrNo()));
+                        ToolUtil.getBdFromStrOrBdIgnoreNull(progStlItemSubQShowUpd.getEngQMng_BeginToCurrentPeriodEQty());
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
@@ -749,7 +786,7 @@ public class ProgStlItemSubQAction {
             }
         }
     }
-    public String onExportExcel()throws IOException, WriteException {
+	public String onExportExcel()throws IOException, WriteException {
         if (this.progStlItemSubQShowList.size() == 0) {
             MessageUtil.addWarn("记录为空...");
             return null;

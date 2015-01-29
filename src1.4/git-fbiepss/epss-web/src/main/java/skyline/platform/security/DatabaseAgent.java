@@ -231,7 +231,7 @@ public class DatabaseAgent {
         List<MenuItemBean> listTemp = new ArrayList();
         try {
             cm = ConnectionManager.getInstance();
-            dc = cm.get();
+            dc = cm.getConnection();
             rs = dc.executeQuery(SQL_GetMenuItemsForAnOperator);
             if (rs == null)
                 rs = new RecordSet();
@@ -317,7 +317,12 @@ public class DatabaseAgent {
             }
         } catch (Exception ex) {
             System.err.println("[" + ex + "] ");
+        }finally {
+            if (dc != null) {
+                cm.releaseConnection(dc);
+            }
         }
+
         return listTemp;
     }
 }

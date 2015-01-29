@@ -197,7 +197,7 @@ public class CstplSubcttStlQPeriodItemAction {
             qryCSStlQPeriodShow.setStrNo(itemUnit.getSubctt_StrNo());
             qryCSStlQPeriodShow.setStrName(itemUnit.getSubctt_Name());
             qryCSStlQPeriodShow.setStrUnit(itemUnit.getSubctt_Unit());
-            qryCSStlQPeriodShow.setBdBeginToCurrentPeriodEQty(itemUnit.getEngQMng_BeginToCurrentPeriodEQty());
+            qryCSStlQPeriodShow.setBdBeginToCurrentPeriodEQty(ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()));
             qryCSStlQPeriodShow.setBdContractQuantity(itemUnit.getSubctt_ContractQuantity());
             qryCSStlQPeriodShow.setBdSignPartAPrice(itemUnit.getSubctt_SignPartAPrice());
 
@@ -267,7 +267,7 @@ public class CstplSubcttStlQPeriodItemAction {
             progStlItemSubQShowTemp.setSubctt_Unit(itemUnit.getUnit());
             progStlItemSubQShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             progStlItemSubQShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
-            progStlItemSubQShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
+            progStlItemSubQShowTemp.setSubctt_ContractAmount(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",itemUnit.getContractAmount()));
             progStlItemSubQShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
             if(ToolUtil.getStrIgnoreNull(strLatestApprovedPeriodNo).length()!=0){
                 ProgStlItemSubQ progStlItemSubQ =new ProgStlItemSubQ();
@@ -281,8 +281,8 @@ public class CstplSubcttStlQPeriodItemAction {
                     progStlItemSubQShowTemp.setEngQMng_Pkid(progStlItemSubQ.getPkid());
                     progStlItemSubQShowTemp.setEngQMng_PeriodNo(progStlItemSubQ.getPeriodNo());
                     progStlItemSubQShowTemp.setEngQMng_SubcttPkid(progStlItemSubQ.getSubcttPkid());
-                    progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(progStlItemSubQ.getBeginToCurrentPeriodEQty());
-                    progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(progStlItemSubQ.getCurrentPeriodEQty());
+                    progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",progStlItemSubQ.getBeginToCurrentPeriodEQty()));
+                    progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",progStlItemSubQ.getCurrentPeriodEQty()));
                     progStlItemSubQShowTemp.setEngQMng_ArchivedFlag(progStlItemSubQ.getArchivedFlag());
                     progStlItemSubQShowTemp.setEngQMng_CreatedBy(progStlItemSubQ.getCreatedBy());
                     progStlItemSubQShowTemp.setEngQMng_CreatedTime(progStlItemSubQ.getCreatedTime());

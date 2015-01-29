@@ -75,8 +75,7 @@ public class TaskService {
             if(EnumResType.RES_TYPE5.getCode().equals(detailTaskShowUnit.getType())){
                 continue;
             }
-            detailTaskShowUnit.setId(
-                    "(" + EnumResType.getValueByKey(detailTaskShowUnit.getType()).getTitle() + ")" + detailTaskShowUnit.getId());
+            detailTaskShowUnit.setId(detailTaskShowUnit.getId());
             detailTaskShowUnit.setFlowStatusName("ÒÑÊÚÈ¨");
             detailTaskShowUnit.setTaskDoneFlagName(
                     EnumTaskDoneFlag.getValueByKey(detailTaskShowUnit.getTaskDoneFlag()).getTitle());

@@ -183,6 +183,7 @@ public class CttItemService {
         cttItemTemp.setOriginFlag("0");
         cttItemTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         cttItemTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
+        cttItemTemp.setContractAmount(cttItemShowPara.getContractUnitPrice().multiply(cttItemShowPara.getContractQuantity()));
         cttItemMapper.updateByPrimaryKey(cttItemTemp) ;
     }
 
@@ -203,6 +204,7 @@ public class CttItemService {
                 cttItemShowPara.getParentPkid(),
                 cttItemShowPara.getGrade(),
                 cttItemShowPara.getOrderid());
+        cttItemShowPara.setContractAmount(cttItemShowPara.getContractUnitPrice().multiply(cttItemShowPara.getContractQuantity()));
         insertRecord(cttItemShowPara);
     }
 

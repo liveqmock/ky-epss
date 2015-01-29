@@ -107,82 +107,8 @@ public class CttItemShow implements Serializable {
             String strRemark,
             String strCorrespondingPkid,
             String strNo,
-            String strCorrespondingItemNo) {
-        /*EPSS.ES_ITEM_INFO.PKID*/
-        this.pkid=strPkId;
-        /*EPSS.CTT_ITEM.BelongToType*/
-        this.belongToType =strBelongToType ;
-        /*EPSS.CTT_ITEM.ITEMBELONGTOPKID*/
-        this.belongToPkid =strBelongToPkid ;
-        this.strNo =strNo ;
-        this.orderid =intOrderid;
-        /*EPSS.ES_ITEM_INFO.ID*/
-        this.grade=intGrade;
-        /*EPSS.ES_ITEM_INFO.NAME*/
-        this.name=strName;
-        this.parentPkid =strParentPkid;
-        /*EPSS.ES_ITEM_INFO.REMARK*/
-        this.remark=strRemark;
-        /*EPSS.CTT_ITEM.CORRESPONDING_PKID*/
-        this.correspondingPkid =strCorrespondingPkid;
-
-        /*EPSS.ES_ITEM_INFO.UNIT*/
-        this.unit=strUnit;
-        /*EPSS.ES_ITEM_INFO.CONTRACT_UNIT_PRICE*/
-        this.contractUnitPrice=bdContractUnitPrice;
-        /*EPSS.ES_ITEM_INFO.CONTRACT_QUANTITY*/
-        this.contractQuantity=bdContractQuantity;
-        /*EPSS.ES_ITEM_INFO.CONTRACT_AMOUNT*/
-        this.contractAmount=bdContractAmount;
-        /*EPSS.ES_ITEM_INFO.SIGN_PART_A_PRICE*/
-        this.signPartAPrice=bdSignPartAPrice;
-        /*EPSS.ES_ITEM_INFO.ARCHIVED_FLAG*/
-        this.archivedFlag=strArchivedFlag;
-        /*EPSS.ES_ITEM_INFO.ORIGIN_FLAG*/
-        this.originFlag=strOriginFlag;
-        /*EPSS.ES_ITEM_INFO.CREATED_BY*/
-        this.createdBy=strCreatedBy;
-        this.createdByName=strCreatedByName;
-        /*EPSS.ES_ITEM_INFO.CREATED_TIME*/
-        this.createdTime=dtCreatedTime;
-        /*EPSS.ES_ITEM_INFO.LAST_UPD_BY*/
-        this.lastUpdBy=strLastUpdBy;
-        this.lastUpdByName=strLastUpdByName;
-        /*EPSS.ES_ITEM_INFO.LAST_UPD_TIME*/
-        this.lastUpdTime=dtLastUpdTime;
-        /*EPSS.ES_ITEM_INFO.REC_VERSION*/
-        this.recVersion=intRecVersion;
-
-        this.strNo =strNo ;
-        this.strCorrespondingItemNo =strCorrespondingItemNo;
-    }
-    public CttItemShow(
-            String strPkId,
-            String strBelongToType,
-            String strBelongToPkid,
-            String strParentPkid,
-            Integer intGrade,
-            Integer intOrderid,
-            String strName,
-            String strUnit,
-            BigDecimal bdContractUnitPrice,
-            BigDecimal bdContractQuantity,
-            BigDecimal bdContractAmount,
-            BigDecimal bdSignPartAPrice,
-            String strArchivedFlag,
-            String strOriginFlag,
-            String strCreatedBy,
-            String strCreatedByName,
-            String dtCreatedTime,
-            String strLastUpdBy,
-            String strLastUpdByName,
-            String dtLastUpdTime,
-            Integer intRecVersion,
-            String strRemark,
-            String strCorrespondingPkid,
-            String strNo,
             String strCorrespondingItemNo,
-            String spareField) {
+			String spareField) {
         /*EPSS.ES_ITEM_INFO.PKID*/
         this.pkid=strPkId;
         /*EPSS.CTT_ITEM.BelongToType*/
@@ -230,7 +156,7 @@ public class CttItemShow implements Serializable {
 
         this.strNo =strNo ;
         this.strCorrespondingItemNo =strCorrespondingItemNo;
-        this.spareField=spareField;
+		this.spareField=spareField;
     }
 
     public boolean equals(Object obj)

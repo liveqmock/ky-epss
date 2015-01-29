@@ -21,7 +21,6 @@
                 }else if (infoType == '7') {// 计量结算
                     var rtn = dialog("../subPower/tkctt/stlPower/tkctt_MeaMng.xhtml?strResPkid=" + strResPkid, arg, sfeatureStl);
                 }
-                document.getElementById("form:qryBtn").click();
             }
         </script>
     </ui:define>
@@ -29,53 +28,38 @@
         <h:form id="form" enctype="multipart/form-data">
 	        <div style="margin:5px;">
                 <p:growl id="msgs" showDetail="true"/>
-                <div style="display: none">
-                    <p:commandButton id="qryBtn" value="查询"
-                                     action="#{stlPowerAction.init()}"
-                                     update="pdtRecentlyPower,msgs">
-                    </p:commandButton>
-                </div>
                 <!--列表维护-->
                 <p:panel header="分配录入权限的结算资源">
-                    <p:dataTable id="pdtRecentlyPower"
-                                 value="#{stlPowerAction.stlPowerList}"
-                                 var="record"
-                                 resizableColumns="true"
-                                 rowIndexVar="row"
-                                 rowKey="#{row + 1}"
+                    <p:treeTable id="pdtRecentlyPower"
+                                 value="#{stlPowerAction.stlPowerRoot}"
+                                 var="document"
+                                 dynamic="true"
+                                 cache="false"
                                  emptyMessage="数据记录为空..."
-                                 rowStyleClass="#{record.id eq null?'rowGrayStyle':'rowGreenyellowStyle'}"
+                                 rowStyleClass="#{document.type eq '3' ? 'rowGreenyellowStyle'
+                                                      :document.type eq '4' ? 'rowGreenyellowStyle':document.type eq '8' ? 'rowGreenyellowStyle'
+                                                      :document.type eq '6' ? 'rowLavenderStyle':document.type eq '7' ? 'rowLavenderStyle':null}"
                                  scrollable="true"
-                                 scrollHeight="442">
-                        <p:column headerText="操作" style="width:30px;text-align: center;">
-                            <p:commandButton icon="ui-icon-triangle-1-e"
-                                             style="height:16px;width:30px;"
-                                             rendered="#{record.id eq null?'false':'true'}"
-                                         onclick="actSelectStlPower('#{record.type}','#{record.pkid}')">
-                            </p:commandButton>
-                        </p:column>
-                        <p:column headerText="序号" style="width:30px">
-                            <h:outputText value="#{row + 1}"/>
-                        </p:column>
-                        <p:column headerText="任务类别" style="width:60px;text-align:left;">
-                            <h:outputText value="#{record.operResFlowStatusName}" escape="false"/>
-                        </p:column>
+                                 scrollHeight="500">
                         <p:column headerText="任务编号" style="width:200px;text-align:left;">
-                            <h:outputText value="#{record.id}"/>
+                            <h:outputText value="#{document.id}"/>
                         </p:column>
                         <p:column headerText="任务名称" style="width:300px;text-align:left;">
-                            <h:outputText value="#{record.name}"/>
+                            <h:outputText value="#{document.name}"/>
                         </p:column>
-                        <p:column headerText="任务备注" style="width:300px;text-align:left;">
-                            <h:outputText value="#{record.signPartBName}"/>
+                        <p:column headerText="操作" style="width:30px;text-align: center;">
+                            <p:commandButton
+                                    icon="ui-icon-triangle-1-e"
+                                    style="height:16px;width:30px;"
+                                    rendered="#{document.type eq '3' ? 'true':
+                                                  document.type eq '4' ? 'true':
+                                                  document.type eq '8' ? 'true':
+                                                  document.type eq '6' ? 'true':
+                                                  document.type eq '7' ? 'true':'false'}"
+                                    onclick="actSelectStlPower('#{document.type}','#{document.pkid}')">
+                            </p:commandButton>
                         </p:column>
-                        <p:column headerText="授权状态" style="width:100px;text-align:center;">
-                            <h:outputText value="#{record.flowStatusName}"/>
-                        </p:column>
-                        <p:column headerText="执行状态" style="width:100px;text-align:center;">
-                            <h:outputText value="#{record.taskDoneFlagName}"/>
-                        </p:column>
-                    </p:dataTable>
+                    </p:treeTable>
                 </p:panel>
             </div>
         </h:form>

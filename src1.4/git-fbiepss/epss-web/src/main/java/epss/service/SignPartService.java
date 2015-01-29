@@ -51,7 +51,7 @@ public class SignPartService {
     public List<SignPart> selectListByModel() {
         SignPartExample example= new SignPartExample();
         SignPartExample.Criteria criteria = example.createCriteria();
-        example.setOrderByClause("ID ASC") ;
+        example.setOrderByClause("NAME ASC") ;
         return signPartMapper.selectByExample(example);
     }
 

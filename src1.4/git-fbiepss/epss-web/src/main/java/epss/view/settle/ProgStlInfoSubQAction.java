@@ -189,8 +189,8 @@ public class ProgStlInfoSubQAction {
     }
 
     public void selectRecordAction(
-                                   String strSubmitTypePara,
-                                   ProgStlInfoShow progStlInfoShowPara) {
+                                     String strSubmitTypePara,
+                                     ProgStlInfoShow progStlInfoShowPara) {
         try {
             strSubmitType = strSubmitTypePara;
             progStlInfoShowPara.setCreatedByName(ToolUtil.getUserName(progStlInfoShowPara.getCreatedBy()));
@@ -199,7 +199,7 @@ public class ProgStlInfoSubQAction {
             if (strSubmitTypePara.equals("Sel")) {
                 progStlInfoShowSel = (ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
             } else if (strSubmitTypePara.equals("Add")) {
-                progStlInfoShowAdd =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
+                progStlInfoShowAdd = (ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
             } else if (strSubmitTypePara.equals("Upd")) {
                 progStlInfoShowUpd = (ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
             } else if (strSubmitTypePara.equals("Del")) {

@@ -221,10 +221,15 @@ public class ProgStlItemSubMAction {
                 progStlItemSubMShowTemp.setEngMMng_MPurchaseUnitPrice(progStlItemSubM.getmPurchaseUnitPrice());
                 progStlItemSubMShowTemp.setEngMMng_ArchivedFlag(progStlItemSubM.getArchivedFlag());
                 progStlItemSubMShowTemp.setEngMMng_CreatedBy(progStlItemSubM.getCreatedBy());
+                String strCreatedByNameTemp=ToolUtil.getUserName(progStlItemSubM.getCreatedBy());
+                progStlItemSubMShowTemp.setEngMMng_CreatedByName(strCreatedByNameTemp);
                 progStlItemSubMShowTemp.setEngMMng_CreatedTime(progStlItemSubM.getCreatedTime());
                 progStlItemSubMShowTemp.setEngMMng_LastUpdBy(progStlItemSubM.getLastUpdBy());
+                String strLastUpdByNameTemp=ToolUtil.getUserName(progStlItemSubM.getLastUpdBy());
+                progStlItemSubMShowTemp.setEngMMng_LastUpdByName(strLastUpdByNameTemp);
                 progStlItemSubMShowTemp.setEngMMng_LastUpdTime(progStlItemSubM.getLastUpdTime());
                 progStlItemSubMShowTemp.setEngMMng_RecVersion(progStlItemSubM.getRecVersion());
+                progStlItemSubMShowTemp.setEngMMng_Remark(progStlItemSubM.getRemark());
                 if(progStlItemSubMShowTemp.getEngMMng_BeginToCurrentPeriodMQty()!=null) {
                     if (progStlItemSubMShowTemp.getEngMMng_BeginToCurrentPeriodMQty()
                             .equals(progStlItemSubMShowTemp.getSubctt_ContractQuantity())) {
@@ -407,18 +412,21 @@ public class ProgStlItemSubMAction {
                     MessageUtil.addInfo("数据有误，数据库中存在多条记录。");
                     return;
                 }
-                if (progStlItemSubMListTemp.size() == 1) {
-                    progStlItemSubMShowUpd.setEngMMng_Pkid (progStlItemSubMListTemp.get(0).getPkid());
-                    updRecordAction(progStlItemSubMShowUpd);
-                } else if (progStlItemSubMListTemp.size()==0){
+                BigDecimal bigDecimalTemp =bDEngMMng_BeginToCurrentPeriodMQtyInDB
+                        .add(ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getEngMMng_CurrentPeriodMQty()))
+                        .subtract(bDEngMMng_CurrentPeriodMQtyInDB);
+                if (progStlItemSubMListTemp.size() == 0) {
                     progStlItemSubMShowUpd.setEngMMng_SubcttPkid(progStlInfo.getStlPkid());
                     progStlItemSubMShowUpd.setEngMMng_PeriodNo(progStlInfo.getPeriodNo());
                     progStlItemSubMShowUpd.setEngMMng_SubcttItemPkid(progStlItemSubMShowUpd.getSubctt_Pkid());
-                    addRecordAction(progStlItemSubMShowUpd);
+                    progStlItemSubMShowUpd.setEngMMng_BeginToCurrentPeriodMQty(bigDecimalTemp);
+                    progStlItemSubMService.insertRecord(progStlItemSubMShowUpd);
+                }else
+                if (progStlItemSubMListTemp.size() == 1) {
+                    progStlItemSubMShowUpd.setEngMMng_Pkid (progStlItemSubMListTemp.get(0).getPkid());
+                    progStlItemSubMShowUpd.setEngMMng_BeginToCurrentPeriodMQty(bigDecimalTemp);
+                    updRecordAction(progStlItemSubMShowUpd);
                 }
-            }
-            else if(strSubmitType.equals("Del")){
-                delRecordAction(progStlItemSubMShowDel);
             }
             initData();
         }
@@ -495,10 +503,6 @@ public class ProgStlItemSubMAction {
                 bDEngMMng_CurrentPeriodMQtyInDB=ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getEngMMng_CurrentPeriodMQty());
                 bDEngMMng_BeginToCurrentPeriodMQtyInDB=
                         ToolUtil.getBdIgnoreNull(progStlItemSubMShowUpd.getEngMMng_BeginToCurrentPeriodMQty());
-            }else
-            if(strSubmitTypePara.equals("Del")){
-                progStlItemSubMShowDel =(ProgStlItemSubMShow) BeanUtils.cloneBean(progStlItemSubMShowPara) ;
-                progStlItemSubMShowDel.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progStlItemSubMShowDel.getSubctt_StrNo()));
             }
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());
@@ -658,7 +662,10 @@ public class ProgStlItemSubMAction {
                 String fileName=FacesContext.getCurrentInstance().getExternalContext().getRealPath("/upload/stl/SubM")+"/"+strAttachment;
                 File file = new File(fileName);
                 InputStream stream = new FileInputStream(fileName);
-                downloadFile = new DefaultStreamedContent(stream, new MimetypesFileTypeMap().getContentType(file), new String(strAttachment.getBytes("gbk"),"iso8859-1"));
+                downloadFile = new DefaultStreamedContent(
+                        stream,
+                        new MimetypesFileTypeMap().getContentType(file),
+                        new String(strAttachment.getBytes("gbk"),"iso8859-1"));
             }
         } catch (Exception e) {
             logger.error("下载文件失败", e);

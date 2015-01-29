@@ -26,7 +26,7 @@ public class ProgStlItemSubQShow implements Serializable {
     private String subctt_Unit;
     private BigDecimal subctt_ContractUnitPrice;
     private BigDecimal subctt_ContractQuantity;
-    private BigDecimal subctt_ContractAmount;
+    private String subctt_ContractAmount;
     private BigDecimal subctt_SignPartAPrice;
     private String subctt_SpareField ;
 
@@ -34,8 +34,8 @@ public class ProgStlItemSubQShow implements Serializable {
     private String engQMng_PeriodNo;
     private String engQMng_SubcttPkid;
     private String engQMng_SubcttItemPkid;
-    private BigDecimal engQMng_BeginToCurrentPeriodEQty;
-    private BigDecimal engQMng_CurrentPeriodEQty;
+    private String engQMng_BeginToCurrentPeriodEQty;
+    private String engQMng_CurrentPeriodEQty;
     private String engQMng_State;
     private String engQMng_ArchivedFlag;
     private String engQMng_OriginFlag;
@@ -46,6 +46,7 @@ public class ProgStlItemSubQShow implements Serializable {
     private String engQMng_LastUpdByName;
     private String engQMng_LastUpdTime;
     private Integer engQMng_RecVersion;
+    private String engQMng_Remark;
     private Boolean isUptoCttQtyFlag;
     private Boolean isRenderedFlag;
 
@@ -157,11 +158,11 @@ public class ProgStlItemSubQShow implements Serializable {
         this.subctt_ContractQuantity = subctt_ContractQuantity;
     }
 
-    public BigDecimal getSubctt_ContractAmount() {
+    public String getSubctt_ContractAmount() {
         return subctt_ContractAmount;
     }
 
-    public void setSubctt_ContractAmount(BigDecimal subctt_ContractAmount) {
+    public void setSubctt_ContractAmount(String subctt_ContractAmount) {
         this.subctt_ContractAmount = subctt_ContractAmount;
     }
 
@@ -207,26 +208,6 @@ public class ProgStlItemSubQShow implements Serializable {
 
     public String getEngQMng_SubcttItemPkid() {
         return engQMng_SubcttItemPkid;
-    }
-
-    public void setEngQMng_SubcttItemPkid(String engQMng_SubcttItemPkid) {
-        this.engQMng_SubcttItemPkid = engQMng_SubcttItemPkid;
-    }
-
-    public BigDecimal getEngQMng_BeginToCurrentPeriodEQty() {
-        return engQMng_BeginToCurrentPeriodEQty;
-    }
-
-    public void setEngQMng_BeginToCurrentPeriodEQty(BigDecimal engQMng_BeginToCurrentPeriodEQty) {
-        this.engQMng_BeginToCurrentPeriodEQty = engQMng_BeginToCurrentPeriodEQty;
-    }
-
-    public BigDecimal getEngQMng_CurrentPeriodEQty() {
-        return engQMng_CurrentPeriodEQty;
-    }
-
-    public void setEngQMng_CurrentPeriodEQty(BigDecimal engQMng_CurrentPeriodEQty) {
-        this.engQMng_CurrentPeriodEQty = engQMng_CurrentPeriodEQty;
     }
 
     public String getEngQMng_State() {
@@ -323,5 +304,33 @@ public class ProgStlItemSubQShow implements Serializable {
 
     public void setIsRenderedFlag(Boolean isRenderedFlag) {
         this.isRenderedFlag = isRenderedFlag;
+    }
+
+    public String getEngQMng_Remark() {
+        return engQMng_Remark;
+    }
+
+    public void setEngQMng_Remark(String engQMng_Remark) {
+        this.engQMng_Remark = engQMng_Remark;
+    }
+
+    public String getEngQMng_CurrentPeriodEQty() {
+        return engQMng_CurrentPeriodEQty;
+    }
+
+    public void setEngQMng_CurrentPeriodEQty(String engQMng_CurrentPeriodEQty) {
+        this.engQMng_CurrentPeriodEQty = engQMng_CurrentPeriodEQty;
+    }
+
+    public String getEngQMng_BeginToCurrentPeriodEQty() {
+        return engQMng_BeginToCurrentPeriodEQty;
+    }
+
+    public void setEngQMng_BeginToCurrentPeriodEQty(String engQMng_BeginToCurrentPeriodEQty) {
+        this.engQMng_BeginToCurrentPeriodEQty = engQMng_BeginToCurrentPeriodEQty;
+    }
+
+    public void setEngQMng_SubcttItemPkid(String engQMng_SubcttItemPkid) {
+        this.engQMng_SubcttItemPkid = engQMng_SubcttItemPkid;
     }
 }

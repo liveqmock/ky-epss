@@ -4,14 +4,14 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="D:\WorkSpace\IntellijIDEA\Github\ky-epss\develop\lib\1.2.1\lib\mysql-jdbc.jar"/>
+    <classPathEntry location="D:\WorkSpace\IntellijIDEA\Github\ky-epss\other\lib\1.2.1\lib\mysql-jdbc.jar"/>
 
     <!--信息-->
     <context id="AllInfo" targetRuntime="MyBatis3">
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/epssdb?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
-                        userId="epss"
-                        password="epss">
+                        connectionURL="jdbc:mysql://localhost:3306/epssceshiyindb?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
+                        userId="ceshiyin"
+                        password="ceshiyin">
         </jdbcConnection>
 
         <javaTypeResolver>
@@ -30,6 +30,19 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="epss.repository.dao" targetProject="main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
+
+        <table   tableName="DEPT">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
+        </table>
+        <table   tableName="OPER">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
+        </table>
+        <table   tableName="TIDKEYS">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
+        </table>
 
         <!--业务类例子 -->
         <!--<table   tableName="OPER_RES">
@@ -56,6 +69,10 @@
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
+        <table   tableName="PROG_STL_ITEM_SUB_F">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
+        </table>
         <table   tableName="PROG_STL_ITEM_SUB_M">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
@@ -77,7 +94,7 @@
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>-->
         <!--平台类 有几个表并不是Mybatis自动生成的，更新慎用-->
-       <!-- <table   tableName="DEPT">
+        <!--<table   tableName="DEPT">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>

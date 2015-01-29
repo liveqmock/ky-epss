@@ -88,43 +88,58 @@ public class ProgStlInfoSubStlmentAction {
         }
     }
 
-    public void queryAction(String strQryFlag) {
+    public void queryAction() {
         try {
             if(strSubcttPStlFormFlag.equals("0")) {
                 progStlInfoShowList.clear();
-                if (strQryFlag.equals("Approve")) {
-                    List<ProgStlInfoShow> progStlInfoShowListTemp = new ArrayList<>();
-                    List<ProgStlInfoShow> itemEsInitNotFormStlListTemp =
-                            progStlInfoService.getNotFormSubcttStlP(
-                                    strCttInfoPkid,
-                                    ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
-                                    ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo()));
-                    List<ProgStlInfoShow> getFormPreSubcttStlP =
-                            progStlInfoService.getFormPreSubcttStlP(
-                                    strCttInfoPkid,
-                                    ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
-                                    ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo()));
-                    for (ProgStlInfoShow itemUnitAll : itemEsInitNotFormStlListTemp) {
-                        Boolean isHasSame = false;
-                        for (ProgStlInfoShow itemUnitForming : getFormPreSubcttStlP) {
-                            if (itemUnitAll.getPkid().equals(itemUnitForming.getPkid())) {
-                                isHasSame = true;
-                                break;
-                            }
-                        }
-                        if (isHasSame.equals(false)) {
-                            progStlInfoShowListTemp.add(itemUnitAll);
+                List<ProgStlInfoShow> progStlInfoShowListTemp = new ArrayList<>();
+                List<ProgStlInfoShow> itemEsInitNotFormStlListTemp =
+                        progStlInfoService.getNotFormSubcttStlP(
+                                strCttInfoPkid,
+                                ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
+                                ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo()));
+                List<ProgStlInfoShow> getFormPreSubcttStlP =
+                        progStlInfoService.getFormPreSubcttStlP(
+                                strCttInfoPkid,
+                                ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
+                                ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo()));
+                for (ProgStlInfoShow itemUnitAll : itemEsInitNotFormStlListTemp) {
+                    Boolean isHasSame = false;
+                    for (ProgStlInfoShow itemUnitForming : getFormPreSubcttStlP) {
+                        if (itemUnitAll.getPkid().equals(itemUnitForming.getPkid())) {
+                            isHasSame = true;
+                            break;
                         }
                     }
+                    if (isHasSame.equals(false)) {
+                        progStlInfoShowListTemp.add(itemUnitAll);
+                    }
+                }
 
-                    ProgStlInfoShow progStlInfoShow1Temp;
-                    for (int i = 0; i < progStlInfoShowListTemp.size(); i++) {
-                        if (progStlInfoShowListTemp.get(i).getStlType().equals("3")) {
-                            progStlInfoShowListTemp.get(i).setId("分包数量结算(" + progStlInfoShowListTemp.get(i).getId() + ")");
-                        } else if (progStlInfoShowListTemp.get(i).getStlType().equals("4")) {
-                            progStlInfoShowListTemp.get(i).setId("分包材料结算(" + progStlInfoShowListTemp.get(i).getId() + ")");
-                        }
-                        if (i == 0) {
+                ProgStlInfoShow progStlInfoShow1Temp;
+                for (int i = 0; i < progStlInfoShowListTemp.size(); i++) {
+                    if (progStlInfoShowListTemp.get(i).getStlType().equals("3")) {
+                        progStlInfoShowListTemp.get(i).setId("分包数量结算(" + progStlInfoShowListTemp.get(i).getId() + ")");
+                    } else if (progStlInfoShowListTemp.get(i).getStlType().equals("4")) {
+                        progStlInfoShowListTemp.get(i).setId("分包材料结算(" + progStlInfoShowListTemp.get(i).getId() + ")");
+                    }
+                    if (i == 0) {
+                        progStlInfoShow1Temp = new ProgStlInfoShow();
+                        progStlInfoShow1Temp.setPkid(i + "");
+                        progStlInfoShow1Temp.setId("分包结算单");
+                        progStlInfoShow1Temp.setStlName(progStlInfoShowListTemp.get(i).getStlName());
+                        progStlInfoShow1Temp.setSignPartBName(progStlInfoShowListTemp.get(i).getSignPartBName());
+                        progStlInfoShow1Temp.setPeriodNo(progStlInfoShowListTemp.get(i).getPeriodNo());
+                        progStlInfoShowList.add(progStlInfoShow1Temp);
+                        progStlInfoShowList.add(progStlInfoShowListTemp.get(0));
+                    } else {
+                        if (progStlInfoShowListTemp.get(i - 1).getStlPkid().equals(
+                                progStlInfoShowListTemp.get(i).getStlPkid()) &&
+                                progStlInfoShowListTemp.get(i - 1).getPeriodNo().equals(
+                                        progStlInfoShowListTemp.get(i).getPeriodNo())
+                                ) {
+                            progStlInfoShowList.add(progStlInfoShowListTemp.get(i));
+                        } else {
                             progStlInfoShow1Temp = new ProgStlInfoShow();
                             progStlInfoShow1Temp.setPkid(i + "");
                             progStlInfoShow1Temp.setId("分包结算单");
@@ -132,61 +147,18 @@ public class ProgStlInfoSubStlmentAction {
                             progStlInfoShow1Temp.setSignPartBName(progStlInfoShowListTemp.get(i).getSignPartBName());
                             progStlInfoShow1Temp.setPeriodNo(progStlInfoShowListTemp.get(i).getPeriodNo());
                             progStlInfoShowList.add(progStlInfoShow1Temp);
-                            progStlInfoShowList.add(progStlInfoShowListTemp.get(0));
-                        } else {
-                            if (progStlInfoShowListTemp.get(i - 1).getStlPkid().equals(
-                                    progStlInfoShowListTemp.get(i).getStlPkid()) &&
-                                    progStlInfoShowListTemp.get(i - 1).getPeriodNo().equals(
-                                            progStlInfoShowListTemp.get(i).getPeriodNo())
-                                    ) {
-                                progStlInfoShowList.add(progStlInfoShowListTemp.get(i));
-                            } else {
-                                progStlInfoShow1Temp = new ProgStlInfoShow();
-                                progStlInfoShow1Temp.setPkid(i + "");
-                                progStlInfoShow1Temp.setId("分包结算单");
-                                progStlInfoShow1Temp.setStlName(progStlInfoShowListTemp.get(i).getStlName());
-                                progStlInfoShow1Temp.setSignPartBName(progStlInfoShowListTemp.get(i).getSignPartBName());
-                                progStlInfoShow1Temp.setPeriodNo(progStlInfoShowListTemp.get(i).getPeriodNo());
-                                progStlInfoShowList.add(progStlInfoShow1Temp);
-                                progStlInfoShowList.add(progStlInfoShowListTemp.get(i));
-                            }
+                            progStlInfoShowList.add(progStlInfoShowListTemp.get(i));
                         }
                     }
-                } else if (strQryFlag.equals("Qry") || strQryFlag.equals("Print")) {
-
                 }
             }else if(strSubcttPStlFormFlag.equals("1")){
                 progStlInfoShowList.clear();
-                if(strQryFlag.equals("Approve")){
-                    List<ProgStlInfoShow> progStlInfoShowApprovedListTemp =
-                            progStlInfoService.selectFormedEsInitSubcttStlP(
-                                    strCttInfoPkid,
-                                    ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
-                                    ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo()));
-                    for(int i=0;i< progStlInfoShowApprovedListTemp.size();i++){
-                        if(progStlInfoShowApprovedListTemp.get(i).getFlowStatus().equals(EnumFlowStatus.FLOW_STATUS2.getCode())||
-                                progStlInfoShowApprovedListTemp.get(i).getFlowStatus().equals(EnumFlowStatus.FLOW_STATUS3.getCode())){
-                            progStlInfoShowList.add(progStlInfoShowApprovedListTemp.get(i));
-                        }
-                    }
-                }
-                else if(strQryFlag.equals("Qry")){
-                    progStlInfoShowList =
-                            progStlInfoService.getFormedAfterEsInitSubcttStlPList(
-                                    strCttInfoPkid,
-                                    ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
-                                    ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo())
-                            );
-
-                }
-                else if(strQryFlag.equals("Account")){
-                    progStlInfoShowList =
-                            progStlInfoService.getFormedAfterEsInitSubcttStlPList(
-                                    strCttInfoPkid,
-                                    ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
-                                    ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo())
-                            );
-                }
+                progStlInfoShowList =
+                progStlInfoService.getFormedAfterEsInitSubcttStlPList(
+                        strCttInfoPkid,
+                        ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
+                        ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo())
+                );
             }
             if (progStlInfoShowList.isEmpty()) {
                 MessageUtil.addWarn("没有查询到数据。");

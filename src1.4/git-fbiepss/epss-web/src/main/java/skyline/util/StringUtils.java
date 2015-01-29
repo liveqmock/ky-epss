@@ -649,58 +649,6 @@ public class StringUtils {
     return collectionToDelimitedString(coll, ",");
   }
 
-  /**
-   * 在字符串的前面补上制定的字符到指定的长度
-   * 
-   * @param oristr
-   * @param prestr
-   * @param len
-   * @return
-   */
-  public static String addPrefix(String oristr, String prestr, int len) {
-    if (oristr.length() > len)
-      throw new IllegalArgumentException("original string is too long!!!");
-
-    StringBuffer sb = new StringBuffer(oristr);
-    for (int i = 0; i < len - oristr.length(); i++) {
-      sb.insert(0, prestr);
-    }
-
-    return sb.toString();
-
-  }
-
-  public static void getLoadForm(Object bean, JspWriter out) throws Exception {
-    if (bean == null)
-      return;
-
-    out.println("<script language=\"javascript\">");
-    out.println("  function load_form() {");
-
-    Map mm = PropertyUtils.describe(bean);
-    Iterator it = mm.keySet().iterator();
-
-    while (it.hasNext()) {
-      String key = (String) it.next();
-      // String 类型
-      if (PropertyUtils.getPropertyType(bean, key) == String.class) {
-        String value = (String) mm.get(key);
-        out.println("    initFormElement('" + key + "','" + Basic.encode(value) + "');");
-      }// int 类型
-      else if (PropertyUtils.getPropertyType(bean, key) == int.class) {
-        String value = String.valueOf(mm.get(key));
-        out.println("    initFormElement('" + key + "','" + Basic.encode(value) + "');");
-      }
-      // double 类型
-      else if (PropertyUtils.getPropertyType(bean, key) == double.class) {
-        String value = DBUtil.doubleToStr(Double.parseDouble(String.valueOf(mm.get(key))));
-        out.println("    initFormElement('" + key + "','" + Basic.encode(value) + "');");
-      }
-    }
-    out.println("  }");
-    out.println("</script>");
-  }
-
   public static String getNullString(String ori) {
     if (ori == null)
       return "";
