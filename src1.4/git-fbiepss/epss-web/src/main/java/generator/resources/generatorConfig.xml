@@ -9,9 +9,9 @@
     <!--信息-->
     <context id="AllInfo" targetRuntime="MyBatis3">
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/epssceshiyindb?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
-                        userId="ceshiyin"
-                        password="ceshiyin">
+                        connectionURL="jdbc:mysql://localhost:3306/ztjepssdb?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
+                        userId="ztjepss"
+                        password="ztjepss">
         </jdbcConnection>
 
         <javaTypeResolver>
