@@ -183,8 +183,8 @@ public class CstplInfoAction {
                   CttInfoShow cttInfoShowSelected) {
         try {
             strSubmitType = strSubmitTypePara;
-            cttInfoShowSelected.setCreatedByName(ToolUtil.getUserName(cttInfoShowSelected.getCreatedBy()));
-            cttInfoShowSelected.setLastUpdByName(ToolUtil.getUserName(cttInfoShowSelected.getLastUpdBy()));
+            cttInfoShowSelected.setCreatedByName(cttInfoService.getUserName(cttInfoShowSelected.getCreatedBy()));
+            cttInfoShowSelected.setLastUpdByName(cttInfoService.getUserName(cttInfoShowSelected.getLastUpdBy()));
             if (strSubmitTypePara.equals("Sel")) {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowSelected);
                 rowSelectedFlag = "true";

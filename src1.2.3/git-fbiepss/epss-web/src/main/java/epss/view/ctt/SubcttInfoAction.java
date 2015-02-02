@@ -204,8 +204,8 @@ public class SubcttInfoAction {
                                      CttInfoShow cttInfoShowPara) {
         try {
             strSubmitType = strSubmitTypePara;
-            cttInfoShowPara.setCreatedByName(ToolUtil.getUserName(cttInfoShowPara.getCreatedBy()));
-            cttInfoShowPara.setLastUpdByName(ToolUtil.getUserName(cttInfoShowPara.getLastUpdBy()));
+            cttInfoShowPara.setCreatedByName(cttInfoService.getUserName(cttInfoShowPara.getCreatedBy()));
+            cttInfoShowPara.setLastUpdByName(cttInfoService.getUserName(cttInfoShowPara.getLastUpdBy()));
             // ≤È—Ø
             if (strSubmitTypePara.equals("Sel")) {
                 cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);

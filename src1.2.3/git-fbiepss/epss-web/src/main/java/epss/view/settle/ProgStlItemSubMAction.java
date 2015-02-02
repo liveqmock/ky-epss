@@ -221,11 +221,11 @@ public class ProgStlItemSubMAction {
                 progStlItemSubMShowTemp.setEngMMng_MPurchaseUnitPrice(progStlItemSubM.getmPurchaseUnitPrice());
                 progStlItemSubMShowTemp.setEngMMng_ArchivedFlag(progStlItemSubM.getArchivedFlag());
                 progStlItemSubMShowTemp.setEngMMng_CreatedBy(progStlItemSubM.getCreatedBy());
-                String strCreatedByNameTemp=ToolUtil.getUserName(progStlItemSubM.getCreatedBy());
+                String strCreatedByNameTemp=cttInfoService.getUserName(progStlItemSubM.getCreatedBy());
                 progStlItemSubMShowTemp.setEngMMng_CreatedByName(strCreatedByNameTemp);
                 progStlItemSubMShowTemp.setEngMMng_CreatedTime(progStlItemSubM.getCreatedTime());
                 progStlItemSubMShowTemp.setEngMMng_LastUpdBy(progStlItemSubM.getLastUpdBy());
-                String strLastUpdByNameTemp=ToolUtil.getUserName(progStlItemSubM.getLastUpdBy());
+                String strLastUpdByNameTemp=cttInfoService.getUserName(progStlItemSubM.getLastUpdBy());
                 progStlItemSubMShowTemp.setEngMMng_LastUpdByName(strLastUpdByNameTemp);
                 progStlItemSubMShowTemp.setEngMMng_LastUpdTime(progStlItemSubM.getLastUpdTime());
                 progStlItemSubMShowTemp.setEngMMng_RecVersion(progStlItemSubM.getRecVersion());

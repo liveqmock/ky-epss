@@ -241,8 +241,8 @@ public class ProgStlItemTkMeaAction {
                     progStlItemTkMeaService.selectRecordsByKeyExample(progStlItemTkMea);
             if(progStlItemTkMeaList.size()>0){
                 progStlItemTkMea = progStlItemTkMeaList.get(0);
-                String strCreatedByName= ToolUtil.getUserName(progStlItemTkMea.getCreatedBy());
-                String strLastUpdByName= ToolUtil.getUserName(progStlItemTkMea.getLastUpdBy());
+                String strCreatedByName= cttInfoService.getUserName(progStlItemTkMea.getCreatedBy());
+                String strLastUpdByName= cttInfoService.getUserName(progStlItemTkMea.getLastUpdBy());
                 progStlItemTkMeaShowTemp.setEng_Pkid(progStlItemTkMea.getPkid());
                 progStlItemTkMeaShowTemp.setEng_PeriodNo(progStlItemTkMea.getPeriodNo());
                 progStlItemTkMeaShowTemp.setEng_TkcttPkid(progStlItemTkMea.getTkcttPkid());
@@ -260,12 +260,12 @@ public class ProgStlItemTkMeaAction {
                 progStlItemTkMeaShowTemp.setEng_ArchivedFlag(progStlItemTkMea.getArchivedFlag());
                 progStlItemTkMeaShowTemp.setEng_CreatedBy(progStlItemTkMea.getCreatedBy());
                 progStlItemTkMeaShowTemp.setEng_CreatedByName(strCreatedByName);
-                String strCreatedByNameTemp=ToolUtil.getUserName(progStlItemTkMea.getCreatedBy());
+                String strCreatedByNameTemp=cttInfoService.getUserName(progStlItemTkMea.getCreatedBy());
                 progStlItemTkMeaShowTemp.setEng_CreatedByName(strCreatedByNameTemp);
                 progStlItemTkMeaShowTemp.setEng_CreatedTime(progStlItemTkMea.getCreatedTime());
                 progStlItemTkMeaShowTemp.setEng_LastUpdBy(progStlItemTkMea.getLastUpdBy());
                 progStlItemTkMeaShowTemp.setEng_LastUpdByName(strLastUpdByName);
-                String strLastUpdByNameTemp=ToolUtil.getUserName(progStlItemTkMea.getLastUpdBy());
+                String strLastUpdByNameTemp=cttInfoService.getUserName(progStlItemTkMea.getLastUpdBy());
                 progStlItemTkMeaShowTemp.setEng_LastUpdByName(strLastUpdByNameTemp);
                 progStlItemTkMeaShowTemp.setEng_LastUpdTime(progStlItemTkMea.getLastUpdTime());
                 progStlItemTkMeaShowTemp.setEng_RecVersion(progStlItemTkMea.getRecVersion());

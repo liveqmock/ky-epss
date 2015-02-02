@@ -92,8 +92,8 @@ public class CstplInfoTTAction {
     public void selectRecordAction(CttInfoShow cttInfoShowPara) {
         try {
             // ≤È—Ø
-            cttInfoShowPara.setCreatedByName(ToolUtil.getUserName(cttInfoShowPara.getCreatedBy()));
-            cttInfoShowPara.setLastUpdByName(ToolUtil.getUserName(cttInfoShowPara.getLastUpdBy()));
+            cttInfoShowPara.setCreatedByName(cttInfoService.getUserName(cttInfoShowPara.getCreatedBy()));
+            cttInfoShowPara.setLastUpdByName(cttInfoService.getUserName(cttInfoShowPara.getLastUpdBy()));
             cttInfoShowUpd = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
         } catch (Exception e) {
             MessageUtil.addError(e.getMessage());

@@ -3,6 +3,7 @@ package epss.service;
 import epss.common.enums.EnumOperType;
 import epss.repository.dao.CttInfoMapper;
 import epss.repository.dao.not_mybatis.MyCttInfoMapper;
+import epss.repository.dao.not_mybatis.MyDeptAndOperMapper;
 import epss.repository.model.*;
 import epss.repository.model.model_show.CttInfoShow;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,12 @@ public class CttInfoService {
     private MyCttInfoMapper myCttInfoMapper;
     @Resource
     private FlowCtrlHisService flowCtrlHisService;
+    @Autowired
+    private MyDeptAndOperMapper myDeptAndOperMapper;
+
+    public String getUserName(String operPkidPara){
+        return myDeptAndOperMapper.getUserName(ToolUtil.getStrIgnoreNull(operPkidPara));
+    }
 
     public List<CttInfo> getListByModelShow(CttInfoShow cttInfoShowPara) {
         CttInfoExample example= new CttInfoExample();
@@ -124,7 +131,7 @@ public class CttInfoService {
         flowCtrlHisTemp.setFlowStatusReason(cttInfoPara.getFlowStatusReason());
         flowCtrlHisTemp.setFlowStatusRemark(cttInfoPara.getFlowStatusRemark());
         flowCtrlHisTemp.setCreatedBy(cttInfoPara.getCreatedBy());
-        flowCtrlHisTemp.setCreatedByName(ToolUtil.getUserName(cttInfoPara.getCreatedBy()));
+        flowCtrlHisTemp.setCreatedByName(getUserName(cttInfoPara.getCreatedBy()));
         flowCtrlHisTemp.setCreatedTime(cttInfoPara.getCreatedTime());
         flowCtrlHisTemp.setRemark(cttInfoPara.getRemark());
         flowCtrlHisTemp.setOperType(strOperTypePara);

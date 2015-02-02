@@ -49,4 +49,12 @@ public interface MyDeptAndOperMapper {
             "     ) " +
             " order by name asc")
     List<DeptOperShow> selectDeptAndOperRecords(@Param("parentPkid") String parentPkidPara);
+    @Select("   select " +
+            "       NAME as username" +
+            "   from" +
+            "       oper" +
+            "   where " +
+            "       PKID=#{operPkidPara} ")
+    String getUserName(@Param("operPkidPara") String operPkidPara);
+
 }
