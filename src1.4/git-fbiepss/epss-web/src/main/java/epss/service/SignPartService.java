@@ -9,6 +9,7 @@ import epss.repository.model.model_show.SignPartShow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class SignPartService {
     private MySignPartMapper mySignPartMapper;
     @Autowired
     private SignPartMapper signPartMapper;
+    @Resource
+    private CttInfoService cttInfoService;
 
     public List<SignPartShow> selectListByModel(SignPartShow signPartShowPara) {
         SignPartExample example= new SignPartExample();
@@ -41,8 +44,8 @@ public class SignPartService {
         for(SignPart itemUnit: signPartListTemp){
             SignPartShow signPartShowTemp=new SignPartShow();
             signPartShowTemp=fromModelToShow(itemUnit);
-            signPartShowTemp.setCreatedByName(ToolUtil.getUserName(itemUnit.getCreatedBy()));
-            signPartShowTemp.setLastUpdByName(ToolUtil.getUserName(itemUnit.getLastUpdBy()));
+            signPartShowTemp.setCreatedByName(cttInfoService.getUserName(itemUnit.getCreatedBy()));
+            signPartShowTemp.setLastUpdByName(cttInfoService.getUserName(itemUnit.getLastUpdBy()));
             signPartShowListTemp.add(signPartShowTemp) ;
         }
         return signPartShowListTemp;

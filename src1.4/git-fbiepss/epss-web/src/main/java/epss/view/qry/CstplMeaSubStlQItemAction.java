@@ -299,8 +299,8 @@ public class CstplMeaSubStlQItemAction {
         subCttItemList =getEsCttItemListByParentPkid(strLevelParentId, cttItemListPara);
         for(CttItem itemUnit: subCttItemList){
             CttItemShow cttItemShowTemp = null;
-            String strCreatedByName= ToolUtil.getUserName(itemUnit.getCreatedBy());
-            String strLastUpdByName= ToolUtil.getUserName(itemUnit.getLastUpdBy());
+            String strCreatedByName= cttInfoService.getUserName(itemUnit.getCreatedBy());
+            String strLastUpdByName= cttInfoService.getUserName(itemUnit.getLastUpdBy());
             cttItemShowTemp = new CttItemShow(
                     itemUnit.getPkid(),
                     itemUnit.getBelongToType(),

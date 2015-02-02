@@ -228,36 +228,6 @@ public class ToolUtil {
         return formatter.format(date);
     }
 
-    public static String getUserName(String operPkidPara){
-        ConnectionManager cm  = ConnectionManager.getInstance();
-        DatabaseConnection dc = cm.get();
-        String username ="";
-        try{
-            String SQLStr = "select NAME as username from OPER  where PKID='"+operPkidPara+"'";
-            RecordSet rs = dc.executeQuery(SQLStr);
-            if(rs.next())
-                username = rs.getString(0);
-            if(username == null)
-                username = "";
-        }catch(Exception e){
-        }
-        return username;
-    }
-
-    public static String getUserName(DatabaseConnection dc,String operID){
-        String username ="";
-        try{
-            String SQLStr = "select NAME as username from OPER  where ID='"+operID+"'";
-            RecordSet rs = dc.executeQuery(SQLStr);
-            if(rs.next())
-                username = rs.getString(0);
-            if(username == null)
-                username = "";
-        }catch(Exception e){
-        }
-        return username;
-    }
-
     public static Calendar getDate(String sDate) {
         if ( sDate == null )
             return null;

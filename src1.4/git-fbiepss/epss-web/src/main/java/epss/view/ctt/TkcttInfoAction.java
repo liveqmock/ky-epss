@@ -160,8 +160,8 @@ public class TkcttInfoAction {
         try {
             strSubmitType = strSubmitTypePara;
             // ≤È—Ø
-            cttInfoShowPara.setCreatedByName(ToolUtil.getUserName(cttInfoShowPara.getCreatedBy()));
-            cttInfoShowPara.setLastUpdByName(ToolUtil.getUserName(cttInfoShowPara.getLastUpdBy()));
+            cttInfoShowPara.setCreatedByName(cttInfoService.getUserName(cttInfoShowPara.getCreatedBy()));
+            cttInfoShowPara.setLastUpdByName(cttInfoService.getUserName(cttInfoShowPara.getLastUpdBy()));
             if (strSubmitTypePara.equals("Sel")) {
                  cttInfoShowSel = (CttInfoShow) BeanUtils.cloneBean(cttInfoShowPara);
             }else if (strSubmitTypePara.equals("Add")) {

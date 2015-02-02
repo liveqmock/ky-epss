@@ -188,8 +188,8 @@ public class ProgStlInfoTkMeaAction {
                                      ProgStlInfoShow progStlInfoShowPara){
         try {
             strSubmitType=strSubmitTypePara;
-            progStlInfoShowPara.setCreatedByName(ToolUtil.getUserName(progStlInfoShowPara.getCreatedBy()));
-            progStlInfoShowPara.setLastUpdByName(ToolUtil.getUserName(progStlInfoShowPara.getLastUpdBy()));
+            progStlInfoShowPara.setCreatedByName(cttInfoService.getUserName(progStlInfoShowPara.getCreatedBy()));
+            progStlInfoShowPara.setLastUpdByName(cttInfoService.getUserName(progStlInfoShowPara.getLastUpdBy()));
             // ≤È—Ø
             if(strSubmitTypePara.equals("Sel")){
                 progStlInfoShowSel =(ProgStlInfoShow) BeanUtils.cloneBean(progStlInfoShowPara);
