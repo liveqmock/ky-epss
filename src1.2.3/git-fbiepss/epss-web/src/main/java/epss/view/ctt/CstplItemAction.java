@@ -450,7 +450,7 @@ public class CstplItemAction {
     }
 
     public Boolean blurCorrespondingPkid(){
-        CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCttInfoPkid);
+        CttItemShow cttItemShowTemp =new CttItemShow();
         if (strSubmitType.equals("Add")){
             cttItemShowTemp = cttItemShowAdd;
         }
@@ -460,28 +460,25 @@ public class CstplItemAction {
         CstplItemShow cstplItemShowTemp =
                 getItemOfTkcttAndCstplByStrNo(cttItemShowTemp.getStrCorrespondingItemNo(), cstplItemShowList, "Tkctt");
         if(cstplItemShowTemp !=null && cstplItemShowTemp.getStrNo() !=null){
-
-            String strNo= cttItemShowTemp.getStrNo();
-            if(strNo!=null&&!strNo.equals("")){
-                CstplItemShow cstplTempForCstplItemShow =getItemOfTkcttAndCstplByStrNo(
-                        strNo, cstplItemShowList, "Cstpl");
-                if(cstplTempForCstplItemShow !=null) {
-                    String correspondingItemNoContrast=ToolUtil.getIgnoreSpaceOfStr(cstplTempForCstplItemShow.getCorrespondingItemNoContrast());
-                    if(cttItemShowTemp.getStrCorrespondingItemNo()!=null&&
-                            !correspondingItemNoContrast.equals(cttItemShowTemp.getStrCorrespondingItemNo())){
-                        MessageUtil.addError("该编码(" + strNo + ")，对应编码(" + correspondingItemNoContrast
-                                + ")已经存在,您输入的对应编码（" + cttItemShowTemp.getStrCorrespondingItemNo() +
-                                ")执行插入操作时会出现逻辑错误，将无法插入！");
-                        return strNoBlurFalse();
+            if (strSubmitType.equals("Add")) {
+                String strNo = cttItemShowTemp.getStrNo();
+                if (strNo != null && !strNo.equals("")) {
+                    CstplItemShow cstplTempForCstplItemShow = getItemOfTkcttAndCstplByStrNo(strNo, cstplItemShowList, "Cstpl");
+                    if (cstplTempForCstplItemShow != null) {
+                        String correspondingItemNoContrast = ToolUtil.getIgnoreSpaceOfStr(cstplTempForCstplItemShow.getCorrespondingItemNoContrast());
+                        if (cttItemShowTemp.getStrCorrespondingItemNo() != null &&
+                                !correspondingItemNoContrast.equals(cttItemShowTemp.getStrCorrespondingItemNo())) {
+                            MessageUtil.addError("该编码(" + strNo + ")，对应编码(" + correspondingItemNoContrast
+                                    + ")已经存在,您输入的对应编码（" + cttItemShowTemp.getStrCorrespondingItemNo() +
+                                    ")执行插入操作时会出现逻辑错误，将无法插入！");
+                            return strNoBlurFalse();
+                        }
                     }
                 }
             }
             cttItemShowTemp.setCorrespondingPkid(cstplItemShowTemp.getPkid());
         }
-        else{
-            //MessageUtil.addError("请确认输入的对应编码，该编码不是正确的总包合同项编码！");
-            //return strNoBlurFalse();
-        }
+
         return true ;
     }
 
@@ -523,7 +520,7 @@ public class CstplItemAction {
                     return;
                 }
                 if (strSubmitType.equals("Upd")) {
-                    if(ToolUtil.getStrIgnoreNull(cttItemShowUpd.getStrCorrespondingItemNo()).equals("")){
+                    if("".equals(cttItemShowUpd.getStrCorrespondingItemNo())){
                         cttItemShowUpd.setCorrespondingPkid("");
                     }
                     cttItemService.updateRecord(cttItemShowUpd);
