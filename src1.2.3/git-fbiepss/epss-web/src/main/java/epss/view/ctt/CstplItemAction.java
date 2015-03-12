@@ -523,6 +523,9 @@ public class CstplItemAction {
                     return;
                 }
                 if (strSubmitType.equals("Upd")) {
+                    if(ToolUtil.getStrIgnoreNull(cttItemShowUpd.getStrCorrespondingItemNo()).equals("")){
+                        cttItemShowUpd.setCorrespondingPkid("");
+                    }
                     cttItemService.updateRecord(cttItemShowUpd);
                 } else if (strSubmitType.equals("Add")) {
                     CttItem cttItemTemp = cttItemService.fromModelShowToModel(cttItemShowAdd);
