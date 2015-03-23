@@ -278,6 +278,9 @@ public class ProgStlItemSubQAction {
             if(ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_ContractAmount()).compareTo("0")==0){
                 itemUnit.setIsRenderedFlag(false);
             }
+            if(ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_SpareField()).length()>0){
+                itemUnit.setIsRenderedFlag(false);
+            }
             bdQuantityTotal=bdQuantityTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
             bdQuantityAllTotal=bdQuantityAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
                 bdBeginToCurrentPeriodEQtyTotal=
