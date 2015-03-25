@@ -7,9 +7,11 @@ import epss.repository.model.FlowCtrlHis;
 import epss.repository.model.FlowCtrlHisExample;
 import epss.repository.model.Oper;
 import epss.repository.model.OperExample;
+import epss.repository.model.model_show.FlowCtrlShow;
 import org.springframework.stereotype.Service;
 import skyline.util.ToolUtil;
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,6 +54,52 @@ public class FlowCtrlHisService {
         example.setOrderByClause("INFO_TYPE ASC,INFO_PKID ASC,PERIOD_NO ASC,FLOW_STATUS ASC,CREATED_TIME ASC") ;
         return flowCtrlHisMapper.selectByExample(example);
     }
+
+    /**
+     * 2015-03-24追加
+     * auto:hu
+     * @param flowCtrlShowParam
+     * @return
+     */
+    public List<FlowCtrlShow> selectListByFlowCtrlHis(FlowCtrlShow flowCtrlShowParam) {
+        int i=0;
+        List<FlowCtrlShow> flowCtrlshows = myFlowCtrlHisMapper.selectListByFlowCtrlHis(flowCtrlShowParam);
+        List<FlowCtrlShow> flowCtrlShowList = new ArrayList<>();
+        List<FlowCtrlShow> returnFlowCtrlShowList = new ArrayList<>();
+
+        for (FlowCtrlShow flowCtrlshow: flowCtrlshows) {
+            if(i==0){
+                flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
+                flowCtrlShowList.add(flowCtrlshow);
+            }else{
+                if(flowCtrlShowList.get(i-1).getInfoPkid().equals(flowCtrlshow.getInfoPkid())&&flowCtrlShowList.get(i-1).getInfoType().equals(flowCtrlshow.getInfoType())){
+                    //取出上一次的endTime 就是这次的开始时间
+                    String benginTime = flowCtrlShowList.get(i-1).getEndTime();
+                    //取出当前这次createTime就是这次的结束时间
+                    String endTime = flowCtrlshow.getCreatedTime();
+                    flowCtrlshow.setCreatedTime(benginTime);
+                    flowCtrlshow.setEndTime(endTime);
+                    flowCtrlShowList.add(flowCtrlshow);
+                }else{
+                    flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
+
+                    flowCtrlShowList.add(flowCtrlshow);
+                }
+            }
+           i++;
+        }
+        //去掉FlowStatus为0 也就是初始
+        for(FlowCtrlShow flowCtrlShow: flowCtrlShowList){
+            if(!"0".equals(flowCtrlShow.getFlowStatus())){
+                returnFlowCtrlShowList.add(flowCtrlShow);
+            }
+
+        }
+
+        return returnFlowCtrlShowList;
+
+    }//追加结束
+
 
     public List<FlowCtrlHis> getSubStlListByFlowCtrlHis(String powerPkid,String periodNo){
         return myFlowCtrlHisMapper.getSubStlListByFlowCtrlHis(powerPkid,periodNo);

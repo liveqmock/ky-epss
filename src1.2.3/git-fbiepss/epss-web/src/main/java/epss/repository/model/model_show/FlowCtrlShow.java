@@ -19,6 +19,10 @@ public class FlowCtrlShow {
     private String lastUpdTime;
     private String spareField;
 
+    private String infoPkid;
+    private String infoType;
+    private String endTime;
+
     public String getPowerType() {
         return powerType;
     }
@@ -161,5 +165,29 @@ public class FlowCtrlShow {
 
     public void setSpareField(String spareField) {
         this.spareField = spareField;
+    }
+
+    public String getInfoPkid() {
+        return infoPkid;
+    }
+
+    public void setInfoPkid(String infoPkid) {
+        this.infoPkid = infoPkid;
+    }
+
+    public String getInfoType() {
+        return infoType;
+    }
+
+    public void setInfoType(String infoType) {
+        this.infoType = infoType;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }
