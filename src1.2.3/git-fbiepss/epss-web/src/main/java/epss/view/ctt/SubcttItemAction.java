@@ -498,8 +498,10 @@ public class SubcttItemAction {
 
                 if(strSubmitType.equals("Add")){
                     if(!ToolUtil.getStrIgnoreNull(cttItemShowAdd.getName()).equals("")){
-                        Integer intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowAdd.getName());
-                        if(intIndex>=0){
+//                        Integer intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowAdd.getName());
+                        String intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowAdd.getName());
+
+                        if(!intIndex.equals("-1")){
                             cttItemShowAdd.setSpareField(intIndex.toString());
                         }
                     }
@@ -507,8 +509,8 @@ public class SubcttItemAction {
                     resetAction();
                 }else if(strSubmitType.equals("Upd")){
                     if(!ToolUtil.getStrIgnoreNull(cttItemShowUpd.getName()).equals("")){
-                        Integer intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowUpd.getName());
-                        if(intIndex>=0){
+                        String intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowUpd.getName());
+                        if(!intIndex.equals("-1")){
                             cttItemShowUpd.setSpareField(intIndex.toString());
                         }
                     }
@@ -681,22 +683,41 @@ public class SubcttItemAction {
                     }
                     int checkQZero=0;
                     int checkMZero=0;
+                    int checkSpare=0;//明细表判断是否是安全措施费字段
                     for (CttItem cttItemTemp : cttItemList) {
                         if (ToolUtil.bigDecimal0.compareTo(ToolUtil.getBdIgnoreNull(cttItemTemp.getSignPartAPrice()))!=0){
-                                checkMZero=1;
+                            checkMZero=1;
                         }
                         if (ToolUtil.bigDecimal0.compareTo(ToolUtil.getBdIgnoreNull(cttItemTemp.getContractQuantity()))!=0){
-                                checkQZero=1;
+                            checkQZero=1;
+                        }
+                        if (!ToolUtil.getStrIgnoreNull(cttItemTemp.getSpareField()).equals("F1") ){
+                            checkSpare=1;
                         }
                     }
-                    if(checkQZero==1&&checkMZero==0){
-                        cttInfo.setType(EnumSubcttType.TYPE0.getCode());
-                    }
-                    if(checkQZero==0&&checkMZero==1){
-                        cttInfo.setType(EnumSubcttType.TYPE1.getCode());
-                    }
-                    if(checkQZero==1&&checkMZero==1){
-                        cttInfo.setType(EnumSubcttType.TYPE3.getCode());
+                    if(checkSpare==0) {
+                        if(checkQZero==1&&checkMZero==0){
+                            cttInfo.setType(EnumSubcttType.TYPE0.getCode());
+                        }
+                        if(checkQZero==0&&checkMZero==1){
+                            cttInfo.setType(EnumSubcttType.TYPE1.getCode());
+                        }
+                        if(checkQZero==1&&checkMZero==1){
+                            cttInfo.setType(EnumSubcttType.TYPE3.getCode());
+                        }
+                    }else {
+                        if (checkQZero == 0 && checkMZero == 0 ) {//安全措施
+                            cttInfo.setType(EnumSubcttType.TYPE2.getCode());
+                        }
+                        if (checkQZero == 0 && checkMZero == 1 ) {
+                            cttInfo.setType(EnumSubcttType.TYPE5.getCode());
+                        }
+                        if (checkQZero == 1 && checkMZero == 0) {
+                            cttInfo.setType(EnumSubcttType.TYPE4.getCode());
+                        }
+                        if (checkQZero == 1 && checkMZero == 1 ) {
+                            cttInfo.setType(EnumSubcttType.TYPE6.getCode());
+                        }
                     }
                     // 状态标志：初始
                     cttInfo.setFlowStatus(EnumFlowStatus.FLOW_STATUS0.getCode());

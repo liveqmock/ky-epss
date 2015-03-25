@@ -42,6 +42,8 @@ public class ProgStlInfoService {
     private ProgStlItemTkEstService progStlItemTkEstService;
     @Resource
     private ProgStlItemTkMeaService progStlItemTkMeaService;
+    @Resource
+    private ProgStlItemSubFService progStlItemSubFService;
 
     // 判断记录是否存在
     public List<ProgStlInfo> getInitStlListByModelShow(ProgStlInfoShow progStlInfoShowPara) {
@@ -423,6 +425,11 @@ public class ProgStlInfoService {
         progStlItemSubMService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
     }
     @Transactional
+    public void addSubStlFInfoAndItemInitDataAction(ProgStlInfoShow progStlInfoShowPara) {
+        insertRecord(progStlInfoShowPara);
+        progStlItemSubFService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
+    }
+    @Transactional
     public void addTkStlEstInfoAndItemInitDataAction(ProgStlInfoShow progStlInfoShowPara) {
         insertRecord(progStlInfoShowPara);
         progStlItemTkEstService.setFromLastStageAddUpToDataToThisStageBeginData(progStlInfoShowPara);
@@ -654,6 +661,28 @@ public class ProgStlInfoService {
         int intDelSubQInfoNum=progStlInfoMapper.deleteByExample(exampleSubQStlInfo);
 
         if (intDelSubQItemNum <= 0 && intDelSubQInfoNum <= 0) {
+            return 0;
+        }
+        return 1;
+    }
+
+//  分包费用
+    @Transactional
+    public int delSubFStlInfoAndItem(ProgStlInfoShow progStlInfoShowPara) {
+        // 删除分包数量结算详细数据
+        int intDelSubFItemNum =
+                progStlItemSubFService.delByCttPkidAndPeriodNo(
+                        progStlInfoShowPara.getStlPkid(),
+                        progStlInfoShowPara.getPeriodNo());
+        // 删除分包数量结算信息数据
+        ProgStlInfoExample exampleSubFStlInfo = new ProgStlInfoExample();
+        exampleSubFStlInfo.createCriteria()
+                .andStlTypeEqualTo(EnumResType.RES_TYPE8.getCode())
+                .andStlPkidEqualTo(progStlInfoShowPara.getStlPkid())
+                .andPeriodNoEqualTo(progStlInfoShowPara.getPeriodNo());
+        int intDelSubFInfoNum=progStlInfoMapper.deleteByExample(exampleSubFStlInfo);
+
+        if (intDelSubFItemNum <= 0 && intDelSubFInfoNum <= 0) {
             return 0;
         }
         return 1;
