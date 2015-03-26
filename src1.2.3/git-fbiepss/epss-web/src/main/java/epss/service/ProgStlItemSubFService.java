@@ -94,8 +94,6 @@ public class ProgStlItemSubFService {
         return progStlItemSubFMapper.deleteByExample(example);
     }
 
-
-
     public void setFromLastStageAddUpToDataToThisStageBeginData(ProgStlInfoShow progStlInfoShowPara){
         // 插入新数据之后,就得把上期批准了的数据作为今期数据的起始数据
         String strLatestApprovedPeriodNo= ToolUtil.getStrIgnoreNull(

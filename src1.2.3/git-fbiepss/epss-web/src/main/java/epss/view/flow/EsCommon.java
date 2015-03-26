@@ -116,28 +116,6 @@ public class EsCommon implements Serializable {
             return "";
         }
     }
-
-//    public Integer getIndexOfCstplItemNamelist(String strLabel){
-//        if(!StringUtils.isEmpty(strLabel)){
-//            for(SelectItem itemUnit:cstplItemNamelist){
-//                if(itemUnit.getLabel().equals(strLabel)){
-//                    return cstplItemNamelist.indexOf(itemUnit);
-//                }
-//            }
-//        }
-//        return -1;
-//    }
-//    public Integer getIndexOfSubcttItemNamelist(String strLabel){
-//        if(!StringUtils.isEmpty(strLabel)){
-//            for(SelectItem itemUnit:subcttItemNamelist){
-//                if(itemUnit.getLabel().equals(strLabel)){
-//                    return subcttItemNamelist.indexOf(itemUnit);
-//                }
-//            }
-//        }
-//        return -1;
-//    }
-// 替代上面方法
     public String getIndexOfSubcttItemNamelist(String strLabel){
         if(!StringUtils.isEmpty(strLabel)){
             for(SelectItem itemUnit:subcttItemNamelist){
