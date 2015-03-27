@@ -8,7 +8,10 @@ import epss.repository.model.FlowCtrlHisExample;
 import epss.repository.model.Oper;
 import epss.repository.model.OperExample;
 import epss.repository.model.model_show.FlowCtrlShow;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
+
 import skyline.util.ToolUtil;
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -113,10 +116,20 @@ public class FlowCtrlHisService {
             }
            i++;
         }
+
         //去掉FlowStatus为0 也就是初始
         for(FlowCtrlShow flowCtrlShow: flowCtrlShowList){
             if(!"0".equals(flowCtrlShow.getFlowStatus())){
-                returnFlowCtrlShowList.add(flowCtrlShow);
+                //从所有的数据中筛选符合页面上搜索的创建记录名
+                //因为这样就不会和时间有冲突了
+                if(StringUtils.isNotBlank(flowCtrlShowParam.getCreatedByName())){
+                    if(StringUtils.isNotBlank(flowCtrlShow.getCreatedByName())&&flowCtrlShow.getCreatedByName().contains(flowCtrlShowParam.getCreatedByName().trim())){
+                        returnFlowCtrlShowList.add(flowCtrlShow);
+                    }
+                }else{
+                    returnFlowCtrlShowList.add(flowCtrlShow);
+                }
+
             }
         }
         return returnFlowCtrlShowList;

@@ -65,9 +65,9 @@
         <if test="endTime != null and endTime != ''">
             and created_time &lt;=trim(#{endTime})
         </if>
-        <if test="createdByName != null and createdByName != ''">
-            and createdByName like CONCAT('%',CONCAT(trim(#{createdByName}),'%'))
-        </if>
+        <!--<if test="createdByName != null and createdByName != ''">-->
+            <!--and createdByName like CONCAT('%',CONCAT(trim(#{createdByName}),'%'))-->
+        <!--</if>-->
 
 
 
