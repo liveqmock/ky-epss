@@ -100,7 +100,7 @@ public class FlowCtrlHisService {
                         //設置開始時間就是上次的結束時間
                         fcsParam.setCreatedTime(fcs.getEndTime());
                         //状态就是上一次状态加1，作为下一次的状态
-                        fcsParam.setFlowStatus(fcs.getFlowStatus().equals("") ? "" : String.valueOf(Integer.parseInt(fcs.getFlowStatus()) + 1));
+                        fcsParam.setFlowStatus("".equals(fcs.getFlowStatus())||fcs.getFlowStatus()==null?"" : String.valueOf(Integer.parseInt(fcs.getFlowStatus()) + 1));
                         flowCtrlShowList.add(fcsParam);
                         //如果FlowStatus是0时，可以把它本身的开始时间设置为本身的结束时间，为下一状态使用
                         if("0".equals(flowCtrlshow.getFlowStatus())){
