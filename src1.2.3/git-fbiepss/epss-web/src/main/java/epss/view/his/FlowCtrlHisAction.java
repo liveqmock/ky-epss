@@ -46,7 +46,7 @@ public class FlowCtrlHisAction {
     private List<SelectItem> esInitCtt2List;
     private List<FlowCtrlShow> flowCtrlShowList;
     private String strTkcttCstplSelected;
-   private String endTime;
+
 
     @PostConstruct
     public void init() {
@@ -81,8 +81,8 @@ public class FlowCtrlHisAction {
      */
     public String onQueryFlowCtrlHisAction(String strQryMsgOutPara) {
         try {
-            flowCtrlShow.setEndTime(endTime);
-            flowCtrlShow.setCreatedTime(flowCtrlHis.getCreatedTime());
+//            flowCtrlShow.setEndTime(endTime);
+//            flowCtrlShow.setCreatedTime(flowCtrlHis.getCreatedTime());
             flowCtrlShow.setInfoType(flowCtrlHis.getInfoType());
             flowCtrlShow.setInfoPkid(flowCtrlHis.getInfoPkid());
             flowCtrlShow.setPeriodNo(flowCtrlHis.getPeriodNo());
@@ -313,11 +313,5 @@ public class FlowCtrlHisAction {
         this.flowCtrlShow = flowCtrlShow;
     }
 
-    public String getEndTime() {
-        return endTime;
-    }
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
 }

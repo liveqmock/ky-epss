@@ -72,17 +72,42 @@ public class FlowCtrlHisService {
                 flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
                 flowCtrlShowList.add(flowCtrlshow);
             }else{
-                if(flowCtrlShowList.get(i-1).getInfoPkid().equals(flowCtrlshow.getInfoPkid())&&flowCtrlShowList.get(i-1).getInfoType().equals(flowCtrlshow.getInfoType())){
+                if(flowCtrlshows.get(i-1).getInfoPkid().equals(flowCtrlshow.getInfoPkid())&&flowCtrlshows.get(i-1).getInfoType().equals(flowCtrlshow.getInfoType())){
                     //取出上一次的endTime 就是这次的开始时间
-                    String benginTime = flowCtrlShowList.get(i-1).getEndTime();
+                    String benginTime = flowCtrlshows.get(i-1).getEndTime();
                     //取出当前这次createTime就是这次的结束时间
                     String endTime = flowCtrlshow.getCreatedTime();
                     flowCtrlshow.setCreatedTime(benginTime);
                     flowCtrlshow.setEndTime(endTime);
                     flowCtrlShowList.add(flowCtrlshow);
                 }else{
-                    flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
-
+                    //判断上一次的FlowStatus是否为5
+                    //如果不等于数据库中FlowStatus的最大数，
+                    // 则说明这个操作没有执行完，
+                    //要为下一状态添加开始时间
+                    if(!"5".equals(flowCtrlshows.get(i-1).getFlowStatus())){
+                        //取出上一個FlowCtrlShow
+                        FlowCtrlShow fcs = flowCtrlshows.get(i-1);
+                        FlowCtrlShow fcsParam = new FlowCtrlShow();
+                        //赋值时一定不要写成 fcsParam = fcs 如果写成这样最后往List.add时会把上一条数据改变
+                        fcsParam.setInfoPkid(fcs.getInfoPkid());
+                        fcsParam.setInfoType(fcs.getInfoType());
+                        //期数编码
+                        fcsParam.setPeriodNo(fcs.getPeriodNo());
+                        //設置開始時間就是上次的結束時間
+                        fcsParam.setCreatedTime(fcs.getEndTime());
+                        //状态就是上一次状态加1，作为下一次的状态
+                        fcsParam.setFlowStatus(fcs.getFlowStatus().equals("") ? "" : String.valueOf(Integer.parseInt(fcs.getFlowStatus()) + 1));
+                        flowCtrlShowList.add(fcsParam);
+                        //如果FlowStatus是0时，可以把它本身的开始时间设置为本身的结束时间，为下一状态使用
+                        if("0".equals(flowCtrlshow.getFlowStatus())){
+                            flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
+                        }else{
+                            //如果不是0的时候要把数据库的这条数据的creattime变成它的结束时间，并且开始时间为空
+                            flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
+                            flowCtrlshow.setCreatedTime("");
+                        }
+                    }
                     flowCtrlShowList.add(flowCtrlshow);
                 }
             }
@@ -93,9 +118,7 @@ public class FlowCtrlHisService {
             if(!"0".equals(flowCtrlShow.getFlowStatus())){
                 returnFlowCtrlShowList.add(flowCtrlShow);
             }
-
         }
-
         return returnFlowCtrlShowList;
 
     }//追加结束
