@@ -277,8 +277,8 @@ public class CstplItemAction {
 
     public Boolean blurStrName(){
         if(!ToolUtil.getStrIgnoreNull(cttItemShowSel.getName()).equals("")){
-            Integer intIndex= esCommon.getIndexOfCstplItemNamelist(cttItemShowSel.getName());
-            if(intIndex>=0){
+            String intIndex= esCommon.getIndexOfCstplItemNamelist(cttItemShowUpd.getName());
+            if(!intIndex.equals("-1")){
                 cttItemShowSel.setUnit(null);
                 cttItemShowSel.setContractUnitPrice(null);
                 cttItemShowSel.setContractQuantity(null);
