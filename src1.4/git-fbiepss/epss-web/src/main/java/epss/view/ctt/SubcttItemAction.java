@@ -670,6 +670,9 @@ public class SubcttItemAction {
             strPowerTypePara=strFlowType+strPowerTypePara;
             if (strPowerTypePara.contains("Mng")) {
                 if (strPowerTypePara.equals("MngPass")) {
+                    if (!strCttInfoPkid.equals("")) {
+                        cttInfo=cttInfoService.getCttInfoByPkId(strCttInfoPkid);
+                    }
                     if(!checkPreMng(cttInfo)){
                         MessageUtil.addError("合同信息未维护完整，无法录入完成！");
                         return ;
