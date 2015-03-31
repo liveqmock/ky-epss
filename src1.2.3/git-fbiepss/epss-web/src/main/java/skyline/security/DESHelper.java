@@ -161,16 +161,19 @@ public class DESHelper {
         // 生成密钥 
         Key key = new javax.crypto.spec.SecretKeySpec(arrB, "DES"); return key; 
     } 
-    public static void main(String[] args) throws Exception { 
-    	//使用默认的密钥 aec504733cfb4112
+    public static void main(String[] args) throws Exception {
+        //使用默认的密钥 aec504733cfb4112
+        System.out.println("使用默认的密钥 aec504733cfb4112");
     	DESHelper dESHelper = new DESHelper();
     	String e = dESHelper.encrypt("laozhou");
     	System.out.println("laozhou加密--------"+e); 
     	String d = dESHelper.decrypt(e);
-    	System.out.println("laozhou解密--------"+d); 
-    	//使用新密钥 
-    	DESHelper dESHelper2 = new DESHelper("wangchongan");
-    	String e2 = dESHelper2.encrypt("13588888888");
+    	System.out.println("laozhou解密--------"+d);
+
+    	//使用自定义密钥
+        System.out.println("使用自定义密钥");
+    	DESHelper dESHelper2 = new DESHelper("qingdao_rongshangxinxijishu_youxiangongsi");
+    	String e2 = dESHelper2.encrypt("50");
     	System.out.println("13588888888加密--------"+e2);
     	String d2 = dESHelper2.decrypt(e2);
     	System.out.println("13588888888解密--------"+d2);
