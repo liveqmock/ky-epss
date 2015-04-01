@@ -27,7 +27,7 @@
              from
                  (select f.info_pkid
                          ,f.info_type
-                         ,f.flow_status
+                         ,nvl(f.flow_status,'-100') flow_status
                          ,f.ARCHIVED_FLAG
                          ,name as createdByName
                          ,nvl(f.created_time,'1990-0-0') created_time
@@ -46,7 +46,7 @@
              from flow_ctrl_his f
              left join oper o
              on o.pkid = f.created_by)
-             where cn = 1 and ARCHIVED_FLAG='0'
+             where cn = 1 and ARCHIVED_FLAG='0' and flow_status!='-100'
         ]]>
         <if test="infoType != null and infoType != ''">
             and info_type=trim(#{infoType})

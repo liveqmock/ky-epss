@@ -9,11 +9,13 @@ import epss.repository.model.Oper;
 import epss.repository.model.OperExample;
 import epss.repository.model.model_show.FlowCtrlShow;
 
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Service;
 
 import skyline.util.ToolUtil;
 import javax.annotation.Resource;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,6 +73,7 @@ public class FlowCtrlHisService {
         List<FlowCtrlShow> returnFlowCtrlShowList = new ArrayList<>();
 
         for (FlowCtrlShow flowCtrlshow: flowCtrlshows) {
+
             if(i==0){
                 flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
                 flowCtrlShowList.add(flowCtrlshow);
@@ -83,8 +86,22 @@ public class FlowCtrlHisService {
                     flowCtrlshow.setCreatedTime(benginTime);
                     flowCtrlshow.setEndTime(endTime);
                     flowCtrlShowList.add(flowCtrlshow);
+                    if(i==flowCtrlshows.size()-1&&!"5".equals(flowCtrlshow.getFlowStatus())){
+                        FlowCtrlShow fcsParam = new FlowCtrlShow();
+                        try {
+                            fcsParam = (FlowCtrlShow) BeanUtils.cloneBean(flowCtrlshow);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        //状态就是上一次状态加1，作为下一次的状态
+                        fcsParam.setFlowStatus("".equals(flowCtrlshow.getFlowStatus())||flowCtrlshow.getFlowStatus()==null?"" : String.valueOf(Integer.parseInt(flowCtrlshow.getFlowStatus()) + 1));
+                        fcsParam.setCreatedByName("");
+                        fcsParam.setCreatedTime(fcsParam.getEndTime());
+                        fcsParam.setEndTime("");
+                        flowCtrlShowList.add(fcsParam);
+                    }
                 }else{
-                    //判断上一次的FlowStatus是否为5
+                     //判断上一次的FlowStatus是否为5
                     //如果不等于数据库中FlowStatus的最大数，
                     // 则说明这个操作没有执行完，
                     //要为下一状态添加开始时间
