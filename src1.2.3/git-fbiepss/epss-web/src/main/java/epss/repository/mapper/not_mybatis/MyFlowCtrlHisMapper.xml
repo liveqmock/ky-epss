@@ -36,6 +36,7 @@
                                             f.info_pkid
                                             ,f.info_type
                                             ,f.flow_status
+                                            ,f.PERIOD_NO
                                         order by
                                              f.info_pkid
                                              ,f.info_type
