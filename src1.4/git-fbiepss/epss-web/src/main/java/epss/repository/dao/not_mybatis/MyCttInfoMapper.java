@@ -62,20 +62,23 @@ public interface MyCttInfoMapper {
                                                @Param("strParentPkid") String strParentPkid);
 
     @Select(" select" +
-            "    t.pkid as pkid," +
-            "    t.ctt_type as cttType," +
-            "    t.parent_pkid as parentPkid," +
-            "    t.id as id," +
-            "    t.name as name," +
-            "    t.remark as remark," +
-            "    t.created_by as createdBy," +
+            "    t.PKID as pkid," +
+            "    t.CTT_TYPE as cttType," +
+            "    t.PARENT_PKID as parentPkid," +
+            "    t.ID as id," +
+            "    t.NAME as name," +
+            "    t.REMARK as remark," +
+            "    t.CREATED_BY as createdBy," +
             "    (select NAME from oper where PKID=t.created_by) as createdByName," +
             "    t.CREATED_TIME as createdTime " +
             " from" +
             "    CTT_INFO t" +
             " where" +
             "    t.parent_pkid=#{parentPkid}" +
+            " and" +
+            "    t.NAME like '%'||(case when #{tkcttInfoName} is null then t.NAME else #{tkcttInfoName} end)||'%'" +
             " order by" +
             "    t.name")
-    List<CttInfoShow> selectRecordsFromCtt(@Param("parentPkid") String parentPkidPara);
+    List<CttInfoShow> selectRecordsFromCtt(@Param("parentPkid") String parentPkidPara,
+                                           @Param("tkcttInfoName") String tkcttInfoNamePara);
 }

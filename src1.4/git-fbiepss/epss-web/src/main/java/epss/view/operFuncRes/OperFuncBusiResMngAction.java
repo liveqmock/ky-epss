@@ -69,6 +69,8 @@ public class OperFuncBusiResMngAction implements Serializable{
     private TreeNode currentSelectedNode;
     private TreeNode currentSelectedResNode;
     private TreeNode lastSelectedResNode;
+    // 作为查询条件总包合同名
+    private String strTkcttInfoName;
 
     private String strBtnRender;
     @PostConstruct
@@ -111,9 +113,14 @@ public class OperFuncBusiResMngAction implements Serializable{
         recursiveOperTreeNode("ROOT", node0);
         node0.setExpanded(true);
     }
-    private void recursiveResTreeNode(String parentPkidPara,TreeNode parentNode)
+    private void recursiveResTreeNode(String strParentPkidPara,TreeNode parentNode)
             throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        List<CttInfoShow> cttInfoShowList=cttInfoService.selectRecordsFromCtt(parentPkidPara);
+        List<CttInfoShow> cttInfoShowList;
+        if("ROOT".equals(strParentPkidPara)){
+            cttInfoShowList=cttInfoService.selectRecordsFromCtt(strParentPkidPara,strTkcttInfoName);
+        }else{
+            cttInfoShowList=cttInfoService.selectRecordsFromCtt(strParentPkidPara,"");
+        }
         for (int i=0;i<cttInfoShowList.size();i++){
             CttInfoShow cttInfoShowTemp =cttInfoShowList.get(i);
             // 总成分
@@ -910,6 +917,14 @@ public class OperFuncBusiResMngAction implements Serializable{
         strBtnRender="true";
     }
     /*智能字段 Start*/
+
+    public String getStrTkcttInfoName() {
+        return strTkcttInfoName;
+    }
+
+    public void setStrTkcttInfoName(String strTkcttInfoName) {
+        this.strTkcttInfoName = strTkcttInfoName;
+    }
 
     public OperResService getOperResService() {
         return operResService;

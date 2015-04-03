@@ -4,14 +4,13 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-    <classPathEntry location="D:\WorkSpace\IntellijIDEA\Github\ky-epss\other\lib\1.2.1\lib\mysql-jdbc.jar"/>
+    <classPathEntry location="D:\WorkSpace\svn-fbiepss\src\branch1.4\git-fbiepss\epss-web\lib\mysql-jdbc.jar"/>
 
-    <!--信息-->
     <context id="AllInfo" targetRuntime="MyBatis3">
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/ztjepssdb?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
-                        userId="ztjepss"
-                        password="ztjepss">
+                        connectionURL="jdbc:mysql://localhost:3306/hbtepssdb?useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
+                        userId="hbtepss"
+                        password="hbtepss">
         </jdbcConnection>
 
         <javaTypeResolver>
@@ -31,18 +30,11 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table   tableName="DEPT">
+        <table   tableName="TID_KEYS">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="OPER">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
-        </table>
-        <table   tableName="TIDKEYS">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
-        </table>
+
 
         <!--业务类例子 -->
         <!--<table   tableName="OPER_RES">
@@ -99,10 +91,6 @@
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
         <table   tableName="OPER">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
-        </table>
-        <table   tableName="TIDKEYS">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>

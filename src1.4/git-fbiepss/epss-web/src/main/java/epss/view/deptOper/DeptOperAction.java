@@ -2,22 +2,22 @@ package epss.view.deptOper;
 
 import epss.repository.model.Dept;
 import epss.repository.model.Oper;
+import epss.repository.model.TidKeys;
 import epss.repository.model.model_show.DeptOperShow;
 import epss.service.DeptOperService;
-import epss.service.TidkeysService;
+import epss.service.TidKeysService;
 import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.event.NodeCollapseEvent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
-import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import skyline.security.DESHelper;
 import skyline.security.MD5Helper;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
-import skyline.util.ToolUtil;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -40,8 +40,8 @@ public class DeptOperAction implements Serializable {
     private static final Logger logger = LoggerFactory.getLogger(DeptOperAction.class);
     @ManagedProperty(value = "#{deptOperService}")
     private DeptOperService deptOperService;
-    @ManagedProperty(value = "#{tidkeysService}")
-    private TidkeysService tidkeysService;
+    @ManagedProperty(value = "#{tidKeysService}")
+    private TidKeysService tidKeysService;
 
     private TreeNode deptOperRoot;
     private TreeNode currentSelectedNode;
@@ -288,15 +288,23 @@ public class DeptOperAction implements Serializable {
                     if (!submitOperPreCheck(operAdd)) {
                         return;
                     }
-                    //String md5=MD5Helper.getMD5String(tidkeysService.getTidkeysList("126").getKey());
-                    int intUsersCounts=Integer.parseInt(tidkeysService.getTidkeysList("126").getKey1());
-                    Oper operTemp=new Oper();
-                    int intExistRecordCountsInOperDb=deptOperService.existRecordCountsInOperDb(operTemp);
-                    if (intExistRecordCountsInOperDb>=intUsersCounts) {
-                        MessageUtil.addError("系统限制用户数["+intUsersCounts+"]，实际用户数["
-                                +intExistRecordCountsInOperDb+"],您将无法继续添加用户！");
-                        return;
+                    TidKeys tidKeysPara =new TidKeys();
+                    tidKeysPara.setTid("126");
+                    List<TidKeys> tidKeysList = tidKeysService.getTidKeysList(tidKeysPara);
+                    if(tidKeysList.size()>0){
+                        TidKeys tidKeysTemp = tidKeysList.get(0);
+                        DESHelper dESHelper = new DESHelper(tidKeysTemp.getEsKey());
+                        String strOperCounts=dESHelper.decrypt(tidKeysTemp.getOperCounts());
+                        int intUsersCounts=Integer.parseInt(strOperCounts);
+                        Oper operTemp=new Oper();
+                        int intExistRecordCountsInOperDb=deptOperService.existRecordCountsInOperDb(operTemp);
+                        if (intExistRecordCountsInOperDb>=intUsersCounts) {
+                            MessageUtil.addError("系统限制用户数["+intUsersCounts+"]，实际用户数["
+                                    +intExistRecordCountsInOperDb+"],您将无法继续添加用户！");
+                            return;
+                        }
                     }
+
                     if (deptOperService.existRecordCountsInOperDb(operAdd)>0) {
                         MessageUtil.addError("该编号用户已存在，请重新录入！");
                         return;
@@ -374,12 +382,12 @@ public class DeptOperAction implements Serializable {
     }
     /*智能字段 Start*/
 
-    public TidkeysService getTidkeysService() {
-        return tidkeysService;
+    public TidKeysService getTidKeysService() {
+        return tidKeysService;
     }
 
-    public void setTidkeysService(TidkeysService tidkeysService) {
-        this.tidkeysService = tidkeysService;
+    public void setTidKeysService(TidKeysService tidKeysService) {
+        this.tidKeysService = tidKeysService;
     }
 
     public TreeNode getDeptOperRoot() {
