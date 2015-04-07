@@ -1,9 +1,9 @@
 package epss.repository.dao;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import epss.repository.model.SysLock;
 import epss.repository.model.SysLockExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface SysLockMapper {
     /**

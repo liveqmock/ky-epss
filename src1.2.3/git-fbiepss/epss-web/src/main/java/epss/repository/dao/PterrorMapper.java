@@ -1,9 +1,9 @@
 package epss.repository.dao;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import epss.repository.model.Pterror;
 import epss.repository.model.PterrorExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface PterrorMapper {
     /**

@@ -1,9 +1,9 @@
 package epss.repository.dao;
 
-import java.util.List;
-import org.apache.ibatis.annotations.Param;
 import epss.repository.model.Ptlogicact;
 import epss.repository.model.PtlogicactExample;
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface PtlogicactMapper {
     /**
