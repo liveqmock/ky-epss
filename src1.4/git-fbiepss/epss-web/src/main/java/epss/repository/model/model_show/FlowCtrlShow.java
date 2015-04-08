@@ -2,10 +2,11 @@ package epss.repository.model.model_show;
 
 public class FlowCtrlShow {
 
-    private String powerType;
-    private String powerPkid;
-    private String powerPkidName;
+    private String infoType;
+    private String infoPkid;
+    private String infoName;
     private String periodNo;
+	private String endTime;
 
     private String flowStatus;
     private String flowStatusName;
@@ -19,28 +20,12 @@ public class FlowCtrlShow {
     private String lastUpdTime;
     private String spareField;
 
-    public String getPowerType() {
-        return powerType;
+    public String getInfoName() {
+        return infoName;
     }
 
-    public void setPowerType(String powerType) {
-        this.powerType = powerType;
-    }
-
-    public String getPowerPkid() {
-        return powerPkid;
-    }
-
-    public void setPowerPkid(String powerPkid) {
-        this.powerPkid = powerPkid;
-    }
-
-    public String getPowerPkidName() {
-        return powerPkidName;
-    }
-
-    public void setPowerPkidName(String powerPkidName) {
-        this.powerPkidName = powerPkidName;
+    public void setInfoName(String infoName) {
+        this.infoName = infoName;
     }
 
     public String getPeriodNo() {
@@ -161,5 +146,29 @@ public class FlowCtrlShow {
 
     public void setSpareField(String spareField) {
         this.spareField = spareField;
+    }
+
+    public String getInfoPkid() {
+        return infoPkid;
+    }
+
+    public void setInfoPkid(String infoPkid) {
+        this.infoPkid = infoPkid;
+    }
+
+    public String getInfoType() {
+        return infoType;
+    }
+
+    public void setInfoType(String infoType) {
+        this.infoType = infoType;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 }

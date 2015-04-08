@@ -29,7 +29,6 @@
     <result column="REMARK" jdbcType="VARCHAR" property="remark" />
     <result column="CORRESPONDING_PKID" jdbcType="VARCHAR" property="correspondingPkid" />
     <result column="SPARE_FIELD" jdbcType="VARCHAR" property="spareField" />
-    <result column="ITEM_PKID" jdbcType="VARCHAR" property="itemPkid" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <!--
@@ -108,7 +107,7 @@
     PKID, BELONG_TO_TYPE, BELONG_TO_PKID, PARENT_PKID, GRADE, ORDERID, NAME, UNIT, CONTRACT_UNIT_PRICE, 
     CONTRACT_QUANTITY, CONTRACT_AMOUNT, SIGN_PART_A_PRICE, ARCHIVED_FLAG, ORIGIN_FLAG, 
     CREATED_BY, CREATED_TIME, LAST_UPD_BY, LAST_UPD_TIME, REC_VERSION, REMARK, CORRESPONDING_PKID, 
-    SPARE_FIELD, ITEM_PKID
+    SPARE_FIELD
   </sql>
   <select id="selectByExample" parameterType="epss.repository.model.CttItemExample" resultMap="BaseResultMap">
     <!--
@@ -261,9 +260,6 @@
       <if test="spareField != null">
         SPARE_FIELD,
       </if>
-      <if test="itemPkid != null">
-        ITEM_PKID,
-      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       #{pkid,jdbcType=VARCHAR},
@@ -329,9 +325,6 @@
       </if>
       <if test="spareField != null">
         #{spareField,jdbcType=VARCHAR},
-      </if>
-      <if test="itemPkid != null">
-        #{itemPkid,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -420,9 +413,6 @@
       <if test="record.spareField != null">
         SPARE_FIELD = #{record.spareField,jdbcType=VARCHAR},
       </if>
-      <if test="record.itemPkid != null">
-        ITEM_PKID = #{record.itemPkid,jdbcType=VARCHAR},
-      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -456,8 +446,7 @@
       REC_VERSION = #{record.recVersion,jdbcType=DECIMAL},
       REMARK = #{record.remark,jdbcType=VARCHAR},
       CORRESPONDING_PKID = #{record.correspondingPkid,jdbcType=VARCHAR},
-      SPARE_FIELD = #{record.spareField,jdbcType=VARCHAR},
-      ITEM_PKID = #{record.itemPkid,jdbcType=VARCHAR}
+      SPARE_FIELD = #{record.spareField,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -533,9 +522,6 @@
       <if test="spareField != null">
         SPARE_FIELD = #{spareField,jdbcType=VARCHAR},
       </if>
-      <if test="itemPkid != null">
-        ITEM_PKID = #{itemPkid,jdbcType=VARCHAR},
-      </if>
     </set>
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
@@ -566,8 +552,7 @@
       REC_VERSION = #{recVersion,jdbcType=DECIMAL},
       REMARK = #{remark,jdbcType=VARCHAR},
       CORRESPONDING_PKID = #{correspondingPkid,jdbcType=VARCHAR},
-      SPARE_FIELD = #{spareField,jdbcType=VARCHAR},
-      ITEM_PKID = #{itemPkid,jdbcType=VARCHAR}
+      SPARE_FIELD = #{spareField,jdbcType=VARCHAR}
     where PKID = #{pkid,jdbcType=VARCHAR}
   </update>
 </mapper>

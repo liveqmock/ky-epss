@@ -117,25 +117,26 @@ public class EsCommon implements Serializable {
         }
     }
 
-    public Integer getIndexOfCstplItemNamelist(String strLabel){
+
+    public String getIndexOfCstplItemNamelist(String strLabel){
         if(!StringUtils.isEmpty(strLabel)){
             for(SelectItem itemUnit:cstplItemNamelist){
                 if(itemUnit.getLabel().equals(strLabel)){
-                    return cstplItemNamelist.indexOf(itemUnit);
+                    return cstplItemNamelist.get(cstplItemNamelist.indexOf(itemUnit)).getValue().toString();
                 }
             }
         }
-        return -1;
+        return "-1";
     }
-    public Integer getIndexOfSubcttItemNamelist(String strLabel){
+    public String getIndexOfSubcttItemNamelist(String strLabel){
         if(!StringUtils.isEmpty(strLabel)){
             for(SelectItem itemUnit:subcttItemNamelist){
                 if(itemUnit.getLabel().equals(strLabel)){
-                    return subcttItemNamelist.indexOf(itemUnit);
+                    return subcttItemNamelist.get(subcttItemNamelist.indexOf(itemUnit)).getValue().toString();
                 }
             }
         }
-        return -1;
+        return "-1";
     }
 
     public String getLabelByValueInresTypeList(String strValue){

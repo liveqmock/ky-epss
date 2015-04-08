@@ -1,5 +1,6 @@
 package epss.view.deptOper;
 
+import skyline.security.DESHelper;
 import epss.repository.model.Dept;
 import epss.repository.model.Oper;
 import epss.repository.model.TidKeys;
@@ -14,10 +15,10 @@ import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import skyline.security.DESHelper;
 import skyline.security.MD5Helper;
 import skyline.util.JxlsManager;
 import skyline.util.MessageUtil;
+
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -327,7 +328,14 @@ public class DeptOperAction implements Serializable {
             }
             initVariables();
             initData();
-            MessageUtil.addInfo("数据处理成功！");
+            switch (strSubmitType){
+                case "DeptAdd":MessageUtil.addInfo("机构增加成功！");break;
+                case "OperAdd":MessageUtil.addInfo("用户增加成功！");break;
+                case "DeptUpd":MessageUtil.addInfo("机构更新成功！");break;
+                case "OperUpd":MessageUtil.addInfo("用户更新成功！");break;
+                case "DeptDel":MessageUtil.addInfo("机构删除成功！");break;
+                case "OperDel":MessageUtil.addInfo("用户删除成功！");break;
+            }
         }catch (Exception e){
             logger.error("数据处理失败。", e);
             MessageUtil.addError("数据处理失败。");

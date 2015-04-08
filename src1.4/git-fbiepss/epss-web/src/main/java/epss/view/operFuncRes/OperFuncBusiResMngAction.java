@@ -84,17 +84,15 @@ public class OperFuncBusiResMngAction implements Serializable{
         deptOperShowSeledList = new ArrayList<>();
         operFuncResShowFowExcelList= new ArrayList<>();
         strBtnRender="false";
-        // 资源-用户-功能
-        initRes();
-        initFuncListByResType(resRoot);
+        resRoot = new DefaultTreeNode("ROOT", null);
         initDeptOper();
         beansMap.put("operFuncResShowFowExcelList", operFuncResShowFowExcelList);
     }
     private void initRes(){
+        resRoot = new DefaultTreeNode("ROOT", null);
         OperFuncResShow operFuncResShowTemp=new OperFuncResShow();
         operFuncResShowTemp.setResPkid("ROOT");
         operFuncResShowTemp.setResName("资源信息");
-        resRoot = new DefaultTreeNode("ROOT", null);
         TreeNode node0 = new DefaultTreeNode(operFuncResShowTemp,resRoot);
         try {
             recursiveResTreeNode("ROOT", node0);
@@ -121,6 +119,7 @@ public class OperFuncBusiResMngAction implements Serializable{
         }else{
             cttInfoShowList=cttInfoService.selectRecordsFromCtt(strParentPkidPara,"");
         }
+
         for (int i=0;i<cttInfoShowList.size();i++){
             CttInfoShow cttInfoShowTemp =cttInfoShowList.get(i);
             // 总成分
@@ -634,11 +633,11 @@ public class OperFuncBusiResMngAction implements Serializable{
         }
     }
 
-    public void recursiveResTreeNode(TreeNode treeNodePara){
+    public void recursiveResTreeNodeForExpanded(TreeNode treeNodePara){
         treeNodePara.setExpanded(false);
         if (treeNodePara.getChildCount()!=0){
             for (int i=0;i<treeNodePara.getChildCount();i++){
-                recursiveResTreeNode(treeNodePara.getChildren().get(i));
+                recursiveResTreeNodeForExpanded(treeNodePara.getChildren().get(i));
             }
         }
     }
@@ -672,7 +671,7 @@ public class OperFuncBusiResMngAction implements Serializable{
     }
 
     public void onNodeCollapse(NodeCollapseEvent event) {
-        recursiveResTreeNode(event.getTreeNode());
+        recursiveResTreeNodeForExpanded(event.getTreeNode());
     }
 
     public void findSelectedNode(
@@ -693,6 +692,12 @@ public class OperFuncBusiResMngAction implements Serializable{
                 findSelectedNode(operFuncResShowPara, treeNodeTemp,strSubmitTypePara);
             }
         }
+    }
+
+    public void onQueryAction(String strPara){
+        // 资源-用户-功能
+        initRes();
+        initFuncListByResType(resRoot);
     }
 
     public void selectRecordAction(String strSubmitTypePara,OperFuncResShow operFuncResShowPara) {
@@ -916,6 +921,7 @@ public class OperFuncBusiResMngAction implements Serializable{
         ((OperFuncResShow)currentSelectedResNode.getData()).setIsActived("true");
         strBtnRender="true";
     }
+
     /*智能字段 Start*/
 
     public String getStrTkcttInfoName() {

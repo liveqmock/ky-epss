@@ -73,7 +73,7 @@
                         <p:column headerText="名称" style="width:400px;">
                             <h:outputText value="#{document.resName}"/>
                         </p:column>
-                        <p:column headerText="操作" style="width:75px;text-align: left;">
+                        <!--<p:column headerText="操作" style="width:75px;text-align: left;">
                             <p:commandButton
                                     icon="ui-icon-plus"
                                     style="height:18px;width:18px"
@@ -106,19 +106,8 @@
                                     update=":form:pgViewForDel,:form:msgs"
                                     onclick="PF('wVDlgViewForDel').show()">
                             </p:commandButton>
-                        </p:column>
+                        </p:column>-->
                         <p:column headerText="录入" style="width:100px;">
-                            <p:commandButton icon="ui-icon-search"
-                                             style="height:18px;width:18px"
-                                             action="#{operFuncBusiResMngAction.selectRecordAction('Sel',document,'0')}"
-                                             rendered="#{operFuncBusiResMngAction.strBtnRender eq 'true'?
-                                                                document.isActived eq 'true'?
-                                                                document.isMng eq '0'?
-                                                                document.resPkid eq 'ROOT'?'false':'true':'false':'false':'false'}"
-                                             update=":form:pgViewForPower,:form:msgs"
-                                             onclick="wVDlgViewForPower.show()"
-                                             title="View">
-                            </p:commandButton>
                             <h:outputText value="#{document.inputOperName}"/>
                         </p:column>
                         <p:column headerText="审核" style="width:100px;">
@@ -190,6 +179,11 @@
                                              title="View">
                             </p:commandButton>
                             <h:outputText value="#{document.placeOnFileOperName}"/>
+                        </p:column>
+                        <p:column headerText="选择" style="width:30px;text-align:center">
+                            <p:selectBooleanCheckbox value="#{document.isSeled}">
+                                <p:ajax listener="#{operFuncBusiResMngAction.selOperRecordAction(document)}"/>
+                            </p:selectBooleanCheckbox>
                         </p:column>
                     </p:treeTable>
                 </h:panelGrid>

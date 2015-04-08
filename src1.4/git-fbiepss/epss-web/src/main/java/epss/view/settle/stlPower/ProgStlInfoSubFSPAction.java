@@ -75,7 +75,7 @@ public class ProgStlInfoSubFSPAction {
             Integer intTemp;
             String strMaxId = progStlInfoService.getStrMaxStlId(operRes.getInfoType());
             if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
-                strMaxId = "STLS" + ToolUtil.getStrToday() + "001";
+                strMaxId = "STLF" + ToolUtil.getStrToday() + "001";
             } else {
                 if (strMaxId.length() > 3) {
                     String strTemp = strMaxId.substring(strMaxId.length() - 3).replaceFirst("^0+", "");
@@ -185,7 +185,7 @@ public class ProgStlInfoSubFSPAction {
                 MessageUtil.addError(strTemp);
                 return;
             }else{
-                progStlInfoService.addSubStlMInfoAndItemInitDataAction(progStlInfoShowAdd);
+                progStlInfoService.addSubStlFInfoAndItemInitDataAction(progStlInfoShowAdd);
                 if(!EnumTaskDoneFlag.TASK_DONE_FLAG1.getCode().equals(operRes.getTaskdoneFlag())){
                     operRes.setTaskdoneFlag(EnumTaskDoneFlag.TASK_DONE_FLAG1.getCode());
                     operResService.updateRecord(operRes);
@@ -196,19 +196,20 @@ public class ProgStlInfoSubFSPAction {
             progStlInfoService.updateRecord(progStlInfoShowUpd);
             MessageUtil.addInfo("更新数据完成。");
         } else if (strSubmitType.equals("Del")) {
-            //判断是否已关联产生了分包数量结算
-            ProgStlInfo progStlInfoQryM =new ProgStlInfo();
-            progStlInfoQryM.setStlType(EnumResType.RES_TYPE3.getCode());
-            progStlInfoQryM.setStlPkid(progStlInfoShowDel.getStlPkid());
-            progStlInfoQryM.setPeriodNo(progStlInfoShowDel.getPeriodNo());
-            progStlInfoQryM.setAutoLinkAdd(EnumAutoLinkFlag.AUTO_LINK_FLAG0.getCode());
-            List<ProgStlInfoShow> progStlInfoShowConstructsTemp =
-                    progStlInfoService.getInitStlShowListByModel(progStlInfoQryM);
-            if (progStlInfoShowConstructsTemp.size()>0){
-                progStlInfoService.delSubQMStlInfoAndItem(progStlInfoShowDel);
-            }else{
-                progStlInfoService.delSubQStlInfoAndItem(progStlInfoShowDel);
-            }
+            //判断是否已关联产生了分包材料结算
+//            ProgStlInfo progStlInfoQryM =new ProgStlInfo();
+//            progStlInfoQryM.setStlType(EnumResType.RES_TYPE4.getCode());
+//            progStlInfoQryM.setStlPkid(progStlInfoShowDel.getStlPkid());
+//            progStlInfoQryM.setPeriodNo(progStlInfoShowDel.getPeriodNo());
+//            progStlInfoQryM.setAutoLinkAdd(EnumAutoLinkFlag.AUTO_LINK_FLAG0.getCode());
+//            List<ProgStlInfoShow> progStlInfoShowConstructsTemp =
+//                    progStlInfoService.getInitStlShowListByModel(progStlInfoQryM);
+//            if (progStlInfoShowConstructsTemp.size()>0){
+//                progStlInfoService.delSubQMStlInfoAndItem(progStlInfoShowDel);
+//            }else{
+//                progStlInfoService.delSubQStlInfoAndItem(progStlInfoShowDel);
+//            }
+            progStlInfoService.delSubFStlInfoAndItem(progStlInfoShowDel);
             MessageUtil.addInfo("删除数据完成。");
         }
         onQueryAction("false");

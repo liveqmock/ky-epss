@@ -28,6 +28,8 @@
                         var rtn = dialog("../subPower/item/itemMng_TkcttStaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7'){
                         var rtn = dialog("../subPower/item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '8'){//安全措施待处理任务
+                        var rtn = dialog("../subPower/item/itemMng_SubcttFStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="0") { // 待审核

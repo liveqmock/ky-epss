@@ -89,8 +89,8 @@ public class CttInfoService {
                 strStatusPara);
     }
 
-    public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara,String tkcttInfoNamePara){
-        return  myCttInfoMapper.selectRecordsFromCtt(parentPkidPara,tkcttInfoNamePara);
+    public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara,String strTkcttInfoNamePara){
+        return  myCttInfoMapper.selectRecordsFromCtt(parentPkidPara,strTkcttInfoNamePara);
     }
 
     public List<CttInfo> getEsInitCttByCttTypeAndBelongToPkId(String strCttType,String strBelongToPkid) {

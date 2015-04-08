@@ -3,6 +3,7 @@ package epss.service;
 import epss.repository.dao.ProgStlItemSubFMapper;
 import epss.repository.model.ProgStlItemSubF;
 import epss.repository.model.ProgStlItemSubFExample;
+import epss.repository.model.model_show.ProgStlInfoShow;
 import epss.repository.model.model_show.ProgStlItemSubFShow;
 import org.springframework.stereotype.Service;
 import skyline.util.ToolUtil;
@@ -19,7 +20,9 @@ import java.util.List;
 @Service
 public class ProgStlItemSubFService {
     @Resource
-    private ProgStlItemSubFMapper ProgStlItemSubFMapper;
+    private ProgStlItemSubFMapper progStlItemSubFMapper;
+    @Resource
+    private ProgStlInfoService progStlInfoService;
 
     /**
      * 判断记录是否已存在
@@ -33,7 +36,7 @@ public class ProgStlItemSubFService {
                 .andSubcttPkidEqualTo(progStlItemSubFShowPara.getEngSMng_SubcttPkid())
                 .andPeriodNoEqualTo(progStlItemSubFShowPara.getEngSMng_PeriodNo())
                 .andSubcttItemPkidEqualTo(progStlItemSubFShowPara.getEngSMng_SubcttItemPkid());
-        return ProgStlItemSubFMapper.selectByExample(example);
+        return progStlItemSubFMapper.selectByExample(example);
     }
 
     public List<ProgStlItemSubF> selectRecordsByExample(ProgStlItemSubF esStlSubcttEngMPara){
@@ -42,7 +45,7 @@ public class ProgStlItemSubFService {
                                .andSubcttPkidEqualTo(esStlSubcttEngMPara.getSubcttPkid())
                                .andSubcttItemPkidEqualTo(esStlSubcttEngMPara.getSubcttItemPkid())
                                .andPeriodNoEqualTo(esStlSubcttEngMPara.getPeriodNo());
-        return ProgStlItemSubFMapper.selectByExample(example);
+        return progStlItemSubFMapper.selectByExample(example);
     }
 
     private ProgStlItemSubF fromModelShowToModel
@@ -64,13 +67,13 @@ public class ProgStlItemSubFService {
     }
 
     public void updateRecord(ProgStlItemSubFShow progStlItemSubFShowPara){
-        ProgStlItemSubF ProgStlItemSubFTemp =fromModelShowToModel(progStlItemSubFShowPara);
-        ProgStlItemSubFTemp.setRecVersion(
-                ToolUtil.getIntIgnoreNull(ProgStlItemSubFTemp.getRecVersion())+1);
-        ProgStlItemSubFTemp.setArchivedFlag("0");
-        ProgStlItemSubFTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
-        ProgStlItemSubFTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-        ProgStlItemSubFMapper.updateByPrimaryKey(ProgStlItemSubFTemp) ;
+        ProgStlItemSubF progStlItemSubFTemp =fromModelShowToModel(progStlItemSubFShowPara);
+        progStlItemSubFTemp.setRecVersion(
+                ToolUtil.getIntIgnoreNull(progStlItemSubFTemp.getRecVersion())+1);
+        progStlItemSubFTemp.setArchivedFlag("0");
+        progStlItemSubFTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
+        progStlItemSubFTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
+        progStlItemSubFMapper.updateByPrimaryKey(progStlItemSubFTemp) ;
     }
 
     public void insertRecord(ProgStlItemSubFShow progStlItemSubFShowPara){
@@ -80,7 +83,7 @@ public class ProgStlItemSubFService {
         ProgStlItemSubFTemp.setArchivedFlag("0");
         ProgStlItemSubFTemp.setLastUpdBy(ToolUtil.getOperatorManager().getOperator().getPkid());
         ProgStlItemSubFTemp.setLastUpdTime(ToolUtil.getStrLastUpdTime());
-        ProgStlItemSubFMapper.insert(ProgStlItemSubFTemp) ;
+        progStlItemSubFMapper.insert(ProgStlItemSubFTemp) ;
     }
 
     public int delByCttPkidAndPeriodNo(String strSubcttPkid,String strPeriodNo){
@@ -88,6 +91,27 @@ public class ProgStlItemSubFService {
         example.createCriteria().
                 andSubcttPkidEqualTo(strSubcttPkid).
                 andPeriodNoEqualTo(strPeriodNo);
-        return ProgStlItemSubFMapper.deleteByExample(example);
+        return progStlItemSubFMapper.deleteByExample(example);
+    }
+
+    public void setFromLastStageAddUpToDataToThisStageBeginData(ProgStlInfoShow progStlInfoShowPara){
+        // 插入新数据之后,就得把上期批准了的数据作为今期数据的起始数据
+        String strLatestApprovedPeriodNo= ToolUtil.getStrIgnoreNull(
+                progStlInfoService.getLatestDoubleCkeckedPeriodNo(
+                        progStlInfoShowPara.getStlType(),
+                        progStlInfoShowPara.getStlPkid()));
+        if(strLatestApprovedPeriodNo!=null){
+            ProgStlItemSubFExample example = new ProgStlItemSubFExample();
+            example.createCriteria()
+                    .andSubcttPkidEqualTo(progStlInfoShowPara.getStlPkid())
+                    .andPeriodNoEqualTo(strLatestApprovedPeriodNo);
+            List<ProgStlItemSubF> progStlItemSubFList =
+                    progStlItemSubFMapper.selectByExample(example);
+            for(ProgStlItemSubF itemUnit: progStlItemSubFList){
+                itemUnit.setThisStageAmt(null);
+                itemUnit.setPeriodNo(progStlInfoShowPara.getPeriodNo());
+                progStlItemSubFMapper.insert(itemUnit);
+            }
+        }
     }
 }

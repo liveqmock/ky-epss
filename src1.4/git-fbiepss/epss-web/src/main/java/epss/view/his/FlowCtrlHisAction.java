@@ -3,6 +3,7 @@ package epss.view.his;
 import epss.common.enums.EnumResType;
 import epss.repository.model.CttInfo;
 import epss.repository.model.FlowCtrlHis;
+import epss.repository.model.model_show.FlowCtrlShow;
 import epss.service.CttInfoService;
 import epss.service.FlowCtrlHisService;
 import org.slf4j.Logger;
@@ -34,6 +35,7 @@ public class FlowCtrlHisAction {
     private CttInfoService cttInfoService;
 
     private FlowCtrlHis flowCtrlHis;
+    private FlowCtrlShow flowCtrlShow;
     private List<FlowCtrlHis> flowCtrlHisList;
 
     private String strRendered1;
@@ -42,12 +44,14 @@ public class FlowCtrlHisAction {
     private String strLabel2;
     private List<SelectItem> esInitCtt1List;
     private List<SelectItem> esInitCtt2List;
-
+    private List<FlowCtrlShow> flowCtrlShowList;
     private String strTkcttCstplSelected;
+
 
     @PostConstruct
     public void init() {
         this.flowCtrlHisList = new ArrayList<FlowCtrlHis>();
+        flowCtrlShow = new FlowCtrlShow();
         esInitCtt1List=new ArrayList<SelectItem> ();
         esInitCtt2List=new ArrayList<SelectItem> ();
         strRendered1="false";
@@ -69,6 +73,33 @@ public class FlowCtrlHisAction {
         }
         return null;
     }
+
+    /**
+     * 2015-03-24追加
+     * auto:hu
+     * @return
+     */
+    public String onQueryFlowCtrlHisAction(String strQryMsgOutPara) {
+        try {
+//            flowCtrlShow.setEndTime(endTime);
+//            flowCtrlShow.setCreatedTime(flowCtrlHis.getCreatedTime());
+            flowCtrlShow.setInfoType(flowCtrlHis.getInfoType());
+            flowCtrlShow.setInfoPkid(flowCtrlHis.getInfoPkid());
+            flowCtrlShow.setPeriodNo(flowCtrlHis.getPeriodNo());
+
+            flowCtrlShowList = flowCtrlHisService.selectListByFlowCtrlHis(flowCtrlShow);
+            if(strQryMsgOutPara.equals("true")){
+                if (flowCtrlShowList.isEmpty()) {
+                    MessageUtil.addWarn("没有查询到数据。");
+                }
+            }
+        } catch (Exception e) {
+            logger.error("信息查询失败", e);
+            MessageUtil.addError("信息查询失败");
+        }
+        return null;
+    }
+
 
     public void setEsInitPowerHisActionOfPowerPkidAction(){
         String strCttType= flowCtrlHis.getInfoType();
@@ -265,4 +296,22 @@ public class FlowCtrlHisAction {
     public void setEsInitCtt2List(List<SelectItem> esInitCtt2List) {
         this.esInitCtt2List = esInitCtt2List;
     }
+
+    public List<FlowCtrlShow> getFlowCtrlShowList() {
+        return flowCtrlShowList;
+    }
+
+    public void setFlowCtrlShowList(List<FlowCtrlShow> flowCtrlShowList) {
+        this.flowCtrlShowList = flowCtrlShowList;
+    }
+
+    public FlowCtrlShow getFlowCtrlShow() {
+        return flowCtrlShow;
+    }
+
+    public void setFlowCtrlShow(FlowCtrlShow flowCtrlShow) {
+        this.flowCtrlShow = flowCtrlShow;
+    }
+
+
 }
