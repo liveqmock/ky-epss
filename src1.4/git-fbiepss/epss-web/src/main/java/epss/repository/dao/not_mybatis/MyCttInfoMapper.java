@@ -74,9 +74,9 @@ public interface MyCttInfoMapper {
             " from" +
             "    CTT_INFO t" +
             " where" +
-            "    t.parent_pkid=#{parentPkid}" +
+            "    t.parent_pkid = #{parentPkid}" +
             " and" +
-            "    t.NAME like '%'||(case when #{tkcttInfoName} is null then t.NAME else #{tkcttInfoName} end)||'%'" +
+            "    t.NAME like concat(concat('%',(case when #{tkcttInfoName} = '' then t.NAME else #{tkcttInfoName} end)),'%')" +
             " order by" +
             "    t.name")
     List<CttInfoShow> selectRecordsFromCtt(@Param("parentPkid") String parentPkidPara,

@@ -49,8 +49,7 @@
     </bean>
     <!-- scan for mappers and let them be autowired -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage"
-                  value="epss.repository.dao"/>
+        <property name="basePackage" value="epss.repository.dao"/>
     </bean>
 
 </beans>

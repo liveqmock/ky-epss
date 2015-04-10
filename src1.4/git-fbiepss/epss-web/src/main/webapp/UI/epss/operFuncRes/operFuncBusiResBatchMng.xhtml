@@ -30,12 +30,8 @@
                                              style="width:133px">
                             </p:inputText>
                             <p:commandButton id="qryBtn" value="查询"
-                                             action="#{operFuncBusiResMngAction.onQueryAction('true')}"
+                                             action="#{operFuncBusiResMngAction.onQueryAction()}"
                                              update="resTreeTable,msgs,pgCondition">
-                            </p:commandButton>
-                            <p:commandButton id="resetBtn" value="重置"
-                                             type="reset"
-                                             update="pgCondition,msgs">
                             </p:commandButton>
                             <p:commandButton value="导出到EXCEL"
                                              action="#{operFuncBusiResMngAction.onExportExcel}"
@@ -96,6 +92,7 @@
                                  var="document"
                                  dynamic="true"
                                  cache="false"
+                                 resizableColumns="true"
                                  rowStyleClass="#{document.resType eq '1' ? 'rowGreenyellowStyle'
                                                       :document.resType eq '2' ? 'rowLavenderStyle':document.resType eq '3' ? 'rowLavenderStyle'
                                                       :document.resType eq '4' ? 'rowLavenderStyle':document.resType eq '5' ? 'rowLavenderStyle':null}"

@@ -700,7 +700,7 @@ public class OperFuncBusiResMngAction implements Serializable{
         }
     }
 
-    public void onQueryAction(String strPara){
+    public void onQueryAction(){
         // 资源-用户-功能
         initRes();
         initFuncListByResType(resRoot);
