@@ -63,6 +63,7 @@ public class ProgStlItemSubFService {
         ProgStlItemSubFTemp.setLastUpdBy(progStlItemSubFShowPara.getEngSMng_LastUpdBy());
         ProgStlItemSubFTemp.setLastUpdTime(progStlItemSubFShowPara.getEngSMng_LastUpdTime());
         ProgStlItemSubFTemp.setRecVersion(progStlItemSubFShowPara.getEngSMng_RecVersion());
+        ProgStlItemSubFTemp.setRemark(progStlItemSubFShowPara.getEngSMng_Remark());
         return ProgStlItemSubFTemp;
     }
 

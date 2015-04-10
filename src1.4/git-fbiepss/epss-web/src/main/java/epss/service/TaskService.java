@@ -257,7 +257,8 @@ public class TaskService {
             }// 分包合同及衍生的结算，取对应的分包合同的乙方信息
             else if (strTypeTemp.equals(EnumResType.RES_TYPE3.getCode())||
                       strTypeTemp.equals(EnumResType.RES_TYPE4.getCode())||
-                      strTypeTemp.equals(EnumResType.RES_TYPE5.getCode()))  {
+                      strTypeTemp.equals(EnumResType.RES_TYPE5.getCode())||
+                      strTypeTemp.equals(EnumResType.RES_TYPE8.getCode()))  {
                 ProgStlInfo progStlInfoTemp=progStlInfoMapper.selectByPrimaryKey(taskShowUnit.getPkid());
                 if(progStlInfoTemp!=null) {
                     CttInfo cttInfoTemp = cttInfoMapper.selectByPrimaryKey(progStlInfoTemp.getStlPkid());

@@ -9,6 +9,7 @@ import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -207,7 +208,12 @@ public class CttItemService {
                 cttItemShowPara.getGrade(),
                 cttItemShowPara.getOrderid());
         if(ToolUtil.getStrIgnoreNull(cttItemShowPara.getSpareField()).length()==0) {
-            cttItemShowPara.setContractAmount(cttItemShowPara.getContractUnitPrice().multiply(cttItemShowPara.getContractQuantity()));
+            if(cttItemShowPara.getContractUnitPrice() != null &&
+                    cttItemShowPara.getContractUnitPrice().compareTo(BigDecimal.ZERO) != 0 &&
+                    cttItemShowPara.getContractQuantity() != null &&
+                    cttItemShowPara.getContractQuantity().compareTo(BigDecimal.ZERO)!=0){
+                cttItemShowPara.setContractAmount(cttItemShowPara.getContractUnitPrice().multiply(cttItemShowPara.getContractQuantity()));
+            }
         }
         insertRecord(cttItemShowPara);
     }

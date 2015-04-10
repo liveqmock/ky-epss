@@ -81,6 +81,11 @@
                                              update="ApproveBtn,msgs"
                                              rendered="#{progStlItemSubStlmentAction.strApprovedNotBtnRenderedForStlM}">
                             </p:commandButton>
+                            <p:commandButton id="ApproveFailToFBtn" value="批准未过至安全措施费"
+                                             action="#{progStlItemSubStlmentAction.onClickForPowerAction('ApproveFailToF')}"
+                                             update="ApproveBtn,msgs"
+                                             rendered="#{progStlItemSubStlmentAction.strApprovedNotBtnRenderedForStlF}">
+                            </p:commandButton>
                             <p:commandButton id="AccountPassBtn" value="记账"
                                              action="#{progStlItemSubStlmentAction.onClickForPowerAction('AccountPass')}"
                                              update="ApproveBtn,msgs"

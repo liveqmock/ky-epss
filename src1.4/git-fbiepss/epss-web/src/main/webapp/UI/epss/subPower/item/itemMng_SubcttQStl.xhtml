@@ -167,11 +167,13 @@
                             </p:column>
                             <p:column style="width:110px" headerText="合同金额">
                                 <h:outputText value="#{record.subctt_ContractAmount}" style="float: right"
-                                              rendered="#{record.subctt_SpareField eq null?true:false}">
+                                              rendered="#{record.subctt_SpareField ne null?
+                                                          ( record.subctt_SpareField  ne 'F1' ? false :true): true}">
                                     <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                                 </h:outputText>
                                 <h:outputText value="#{record.subctt_ContractAmount}" style="float: right"
-                                              rendered="#{record.subctt_SpareField ne null?true:false}">
+                                              rendered="#{record.subctt_SpareField ne null?
+                                                           (record.subctt_SpareField  ne 'F1' ? true :false): false}">
                                     <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
                                     </h:outputText>
                             </p:column>

@@ -64,6 +64,8 @@ public class ProgStlItemSubStlmentAction {
     private FlowCtrlHisService flowCtrlHisService;
     @ManagedProperty(value = "#{deptOperService}")
     private DeptOperService deptOperService;
+    @ManagedProperty(value = "#{progStlItemSubFService}")
+    private ProgStlItemSubFService progStlItemSubFService;
 
     private List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowList;
     private List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForApprove;
@@ -82,6 +84,8 @@ public class ProgStlItemSubStlmentAction {
     private String strApproveBtnRendered;
     private String strApprovedNotBtnRenderedForStlQ;
     private String strApprovedNotBtnRenderedForStlM;
+    private String strApprovedNotBtnRenderedForStlF;
+
     private String strFlowType;
 
     //附件
@@ -126,23 +130,37 @@ public class ProgStlItemSubStlmentAction {
                 if ("".equals(ToolUtil.getStrIgnoreNull(cttInfo.getType()))) {
                     strApprovedNotBtnRenderedForStlQ = "true";
                     strApprovedNotBtnRenderedForStlM = "true";
+                    strApprovedNotBtnRenderedForStlF = "true";
                 } else if (EnumSubcttType.TYPE0.getCode().equals(cttInfo.getType())) {
                     strApprovedNotBtnRenderedForStlQ = "true";
                     strApprovedNotBtnRenderedForStlM = "false";
+                    strApprovedNotBtnRenderedForStlF = "false";
                 } else if (EnumSubcttType.TYPE1.getCode().equals(cttInfo.getType())) {
                     strApprovedNotBtnRenderedForStlQ = "false";
                     strApprovedNotBtnRenderedForStlM = "true";
+                    strApprovedNotBtnRenderedForStlF = "false";
                 } else if (EnumSubcttType.TYPE2.getCode().equals(cttInfo.getType())) {
-
+                    strApprovedNotBtnRenderedForStlQ = "false";
+                    strApprovedNotBtnRenderedForStlM = "false";
+                    strApprovedNotBtnRenderedForStlF = "true";
                 } else if (EnumSubcttType.TYPE3.getCode().equals(cttInfo.getType())) {
                     strApprovedNotBtnRenderedForStlQ = "true";
                     strApprovedNotBtnRenderedForStlM = "true";
+                    strApprovedNotBtnRenderedForStlF = "false";
                 } else if (EnumSubcttType.TYPE4.getCode().equals(cttInfo.getType())) {
+                    strApprovedNotBtnRenderedForStlQ = "true";
+                    strApprovedNotBtnRenderedForStlM = "false";
+                    strApprovedNotBtnRenderedForStlF = "true";
 
                 } else if (EnumSubcttType.TYPE5.getCode().equals(cttInfo.getType())) {
+                    strApprovedNotBtnRenderedForStlQ = "false";
+                    strApprovedNotBtnRenderedForStlM = "true";
+                    strApprovedNotBtnRenderedForStlF = "true";
 
                 } else if (EnumSubcttType.TYPE6.getCode().equals(cttInfo.getType())) {
-
+                    strApprovedNotBtnRenderedForStlQ = "true";
+                    strApprovedNotBtnRenderedForStlM = "true";
+                    strApprovedNotBtnRenderedForStlF = "true";
                 }
                 if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(
                         ToolUtil.getStrIgnoreNull(progStlInfo.getFlowStatus())) == 0) {
@@ -155,6 +173,7 @@ public class ProgStlItemSubStlmentAction {
                 strApproveBtnRendered = "false";
                 strApprovedNotBtnRenderedForStlQ = "false";
                 strApprovedNotBtnRenderedForStlM = "false";
+                strApprovedNotBtnRenderedForStlF = "false";
                 if (EnumFlowStatus.FLOW_STATUS3.getCode().compareTo(
                         ToolUtil.getStrIgnoreNull(progStlInfo.getFlowStatus())) == 0) {
                     strAccountBtnRendered = "true";
@@ -173,6 +192,7 @@ public class ProgStlItemSubStlmentAction {
             /*records0,records1导出excel报表使用*/
                 List<ProgStlItemSubStlmentShow> records0 = new ArrayList<ProgStlItemSubStlmentShow>();
                 List<ProgStlItemSubStlmentShow> records1 = new ArrayList<ProgStlItemSubStlmentShow>();
+                List<ProgStlItemSubStlmentShow> records2 = new ArrayList<ProgStlItemSubStlmentShow>();
             /*表内容设定，批准，查P表*/
                 for (ProgStlItemSubStlment progStlItemSubStlment : progStlItemSubStlmentList) {
                     ProgStlItemSubStlmentShow progStlItemSubStlmentShowTemp =
@@ -183,6 +203,9 @@ public class ProgStlItemSubStlmentAction {
                     } else {
                         if (EnumResType.RES_TYPE3.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
                             records0.add(progStlItemSubStlmentShowTemp);
+                        }
+                        if (EnumResType.RES_TYPE4.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
+                            records1.add(progStlItemSubStlmentShowTemp);
                         }
                         if (EnumResType.RES_TYPE4.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
                             records1.add(progStlItemSubStlmentShowTemp);
@@ -280,13 +303,17 @@ public class ProgStlItemSubStlmentAction {
 
             List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForSubcttEngQ = new ArrayList<ProgStlItemSubStlmentShow>();
             List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForSubcttEngM = new ArrayList<ProgStlItemSubStlmentShow>();
+            List<ProgStlItemSubStlmentShow> progStlItemSubStlmentShowListForSubcttEngF = new ArrayList<ProgStlItemSubStlmentShow>();
             for (ProgStlItemSubStlmentShow itemUnit : progStlItemSubStlmentShowList) {
                 ProgStlItemSubStlmentShow progStlItemSubStlmentShowForSubcttEngQ =
                         (ProgStlItemSubStlmentShow) BeanUtils.cloneBean(itemUnit);
                 ProgStlItemSubStlmentShow progStlItemSubStlmentShowForSubcttEngM =
                         (ProgStlItemSubStlmentShow) BeanUtils.cloneBean(itemUnit);
+                ProgStlItemSubStlmentShow progStlItemSubStlmentShowForSubcttEngF =
+                        (ProgStlItemSubStlmentShow) BeanUtils.cloneBean(itemUnit);
                 progStlItemSubStlmentShowListForSubcttEngQ.add(progStlItemSubStlmentShowForSubcttEngQ);
                 progStlItemSubStlmentShowListForSubcttEngM.add(progStlItemSubStlmentShowForSubcttEngM);
+                progStlItemSubStlmentShowListForSubcttEngF.add(progStlItemSubStlmentShowForSubcttEngF);
             }
             progStlItemSubStlmentShowList.clear();
             ProgStlItemSubStlmentShow stl1 = new ProgStlItemSubStlmentShow();
@@ -451,15 +478,77 @@ public class ProgStlItemSubStlmentAction {
             progStlItemSubStlmentShowList.add(stl5);
             progStlItemSubStlmentShowListForApprove.add(stl5);
 
+
+//  安全措施
+            ProgStlItemSubStlmentShow stl10 = new ProgStlItemSubStlmentShow();
+            stl10.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
+            stl10.setSubctt_ItemPkid("stl10");
+            stl10.setSubctt_ItemName("费用计算");
+            stl10.setEngPMng_SubStlType(EnumResType.RES_TYPE8.getCode());
+            stl10.setEngPMng_PeriodNo(progStlInfo.getPeriodNo());
+            progStlItemSubStlmentShowList.add(stl10);
+            progStlItemSubStlmentShowListForApprove.add(stl10);
+            BigDecimal bdTotalAmtFtemp = new BigDecimal(0);
+            BigDecimal bdTotalAllAmtFtemp = new BigDecimal(0);
+
+
+            for (ProgStlItemSubStlmentShow itemUnit : progStlItemSubStlmentShowListForSubcttEngF) {
+                // 从抽取结算数据
+                ProgStlItemSubF progStlItemSubFTemp = new ProgStlItemSubF();
+                progStlItemSubFTemp.setSubcttPkid(reportHeader.getStrSubcttPkid());
+                progStlItemSubFTemp.setSubcttItemPkid(itemUnit.getSubctt_ItemPkid());
+                progStlItemSubFTemp.setPeriodNo(progStlInfo.getPeriodNo());
+                List<ProgStlItemSubF> progStlItemSubFList =
+                        progStlItemSubFService.selectRecordsByExample(progStlItemSubFTemp);
+                itemUnit.setEngPMng_PeriodNo(progStlInfo.getPeriodNo());
+                itemUnit.setEngPMng_SubStlType(EnumResType.RES_TYPE8.getCode());
+                if (progStlItemSubFList.size() <= 0) {
+                    if ("Approve".equals(strFlowType)) {
+                        progStlItemSubStlmentShowListForApprove.add(itemUnit);
+                    }
+                } else {
+                    progStlItemSubFTemp = progStlItemSubFList.get(0);
+
+                    itemUnit.setEngPMng_CurrentPeriodAmt(progStlItemSubFTemp.getThisStageAmt());
+                    itemUnit.setEngPMng_BeginToCurrentPeriodAmt(progStlItemSubFTemp.getAddUpToAmt());
+
+                    bdTotalAmtFtemp =bdTotalAmtFtemp.add(
+                            ToolUtil.getBdIgnoreNull(itemUnit.getEngPMng_CurrentPeriodAmt()));
+                    bdTotalAllAmtFtemp =bdTotalAllAmtFtemp.add(
+                            ToolUtil.getBdIgnoreNull(itemUnit.getEngPMng_BeginToCurrentPeriodAmt())) ;
+                    progStlItemSubStlmentShowList.add(itemUnit);
+                    progStlItemSubStlmentShowListForApprove.add(itemUnit);
+                }
+            }
+
+            List<ProgStlItemSubStlmentShow> records10 = new ArrayList<ProgStlItemSubStlmentShow>();
+            records10.addAll(progStlItemSubStlmentShowList);
+            beansMap.put("records10", records10);
+
+            //1小计
+            ProgStlItemSubStlmentShow stl11 = new ProgStlItemSubStlmentShow();
+            stl11.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
+            stl11.setSubctt_ItemPkid("stl11");
+            stl11.setSubctt_ItemName("小计");
+            stl11.setEngPMng_SubStlType(EnumResType.RES_TYPE8.getCode());
+            stl11.setEngPMng_PeriodNo(progStlInfo.getPeriodNo());
+            stl11.setEngPMng_CurrentPeriodAmt(bdTotalAmtFtemp);
+            stl11.setEngPMng_BeginToCurrentPeriodAmt(bdTotalAllAmtFtemp);
+            progStlItemSubStlmentShowList.add(stl11);
+            progStlItemSubStlmentShowListForApprove.add(stl11);
+            // 安全措施费结束
+
             ProgStlItemSubStlmentShow stl6 = new ProgStlItemSubStlmentShow();
             stl6.setSubctt_Pkid(reportHeader.getStrSubcttPkid());
             stl6.setSubctt_ItemPkid("stl6");
             stl6.setSubctt_ItemName("本期净结算额");
             stl6.setEngPMng_PeriodNo(progStlInfo.getPeriodNo());
             stl6.setEngPMng_CurrentPeriodAmt(
-                    stl2.getEngPMng_CurrentPeriodAmt().subtract(stl5.getEngPMng_CurrentPeriodAmt()));
+                    stl2.getEngPMng_CurrentPeriodAmt().subtract(stl5.getEngPMng_CurrentPeriodAmt()).
+                    add(stl11.getEngPMng_CurrentPeriodAmt() ));   // 加费用
             stl6.setEngPMng_BeginToCurrentPeriodAmt(
-                    stl2.getEngPMng_BeginToCurrentPeriodAmt().subtract(stl5.getEngPMng_BeginToCurrentPeriodAmt()));
+                    stl2.getEngPMng_BeginToCurrentPeriodAmt().subtract(stl5.getEngPMng_BeginToCurrentPeriodAmt()).
+                            add(stl11.getEngPMng_BeginToCurrentPeriodAmt()));  // 加费用
             progStlItemSubStlmentShowList.add(stl6);
             progStlItemSubStlmentShowListForApprove.add(stl6);
 
@@ -504,6 +593,8 @@ public class ProgStlItemSubStlmentAction {
             beansMap.put("stl7", stl7);
             beansMap.put("stl8", stl8);
             beansMap.put("stl9", stl9);
+            beansMap.put("stl10", stl10);
+            beansMap.put("stl11", stl11);
         } catch (Exception e) {
             MessageUtil.addInfo("结算数据引取失败！" + e.getMessage());
         }
@@ -729,6 +820,19 @@ public class ProgStlItemSubStlmentAction {
                         progStlInfoTemp.setStlType(EnumResType.RES_TYPE5.getCode());
                         progStlInfoService.delSubPApproveFailTo(progStlInfoTemp, EnumResType.RES_TYPE4.getCode());
                     }
+                } else if (strPowerType.equals("ApproveFailToF")) {
+                    ProgStlInfo progStlInfoTemp = (ProgStlInfo) BeanUtils.cloneBean(progStlInfo);
+                    String strTemp = progStlInfoService.progStlInfoAppFailPreCheck(
+                            EnumResType.RES_TYPE8.getCode(),
+                            progStlInfoTemp.getStlPkid(),
+                            progStlInfoTemp.getPeriodNo());
+                    if (!"".equals(strTemp)) {
+                        MessageUtil.addError(strTemp);
+                        return;
+                    }else {
+                        progStlInfoTemp.setStlType(EnumResType.RES_TYPE5.getCode());
+                        progStlInfoService.delSubPApproveFailTo(progStlInfoTemp, EnumResType.RES_TYPE8.getCode());
+                    }
                 }
                 MessageUtil.addInfo("批准数据完成。");
             }else if (strPowerType.contains("AccountPass")) {
@@ -742,6 +846,7 @@ public class ProgStlItemSubStlmentAction {
             strApproveBtnRendered = "false";
             strApprovedNotBtnRenderedForStlQ = "false";
             strApprovedNotBtnRenderedForStlM = "false";
+            strApprovedNotBtnRenderedForStlF = "false";
             strAccountBtnRendered = "false";
         } catch (Exception e) {
             logger.error("批准数据失败，", e);
@@ -911,6 +1016,14 @@ public class ProgStlItemSubStlmentAction {
         this.strApprovedNotBtnRenderedForStlM = strApprovedNotBtnRenderedForStlM;
     }
 
+    public String getStrApprovedNotBtnRenderedForStlF() {
+        return strApprovedNotBtnRenderedForStlF;
+    }
+
+    public void setStrApprovedNotBtnRenderedForStlF(String strApprovedNotBtnRenderedForStlF) {
+        this.strApprovedNotBtnRenderedForStlF = strApprovedNotBtnRenderedForStlF;
+    }
+
     public DeptOperService getDeptOperService() {
         return deptOperService;
     }
@@ -933,5 +1046,13 @@ public class ProgStlItemSubStlmentAction {
     public void setImage(HtmlGraphicImage image) {
         this.image = image;
     }
-/*智能字段End*/
+
+    public ProgStlItemSubFService getProgStlItemSubFService() {
+        return progStlItemSubFService;
+    }
+
+    public void setProgStlItemSubFService(ProgStlItemSubFService progStlItemSubFService) {
+        this.progStlItemSubFService = progStlItemSubFService;
+    }
+    /*智能字段End*/
 }

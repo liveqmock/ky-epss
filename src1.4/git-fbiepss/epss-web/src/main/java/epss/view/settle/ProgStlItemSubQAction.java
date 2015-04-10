@@ -195,7 +195,7 @@ public class ProgStlItemSubQAction {
             progStlItemSubQShowTemp.setSubctt_Unit(itemUnit.getUnit());
             progStlItemSubQShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             progStlItemSubQShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
-            if(itemUnit.getSpareField()!=null){
+            if(itemUnit.getSpareField()!=null && (!itemUnit.getSpareField().equals("F1"))){
                 progStlItemSubQShowTemp.setSubctt_ContractAmount(ToolUtil.getStrFromBdIgnoreZeroNull("#,##0.00%",itemUnit.getContractAmount()));
             }else{
                 String strSubctt_ContractAmountInPercent=ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",itemUnit.getContractAmount());
@@ -310,7 +310,8 @@ public class ProgStlItemSubQAction {
                     itemOfEsItemHieRelapTemp.setSubctt_Name("合计");
                     itemOfEsItemHieRelapTemp.setSubctt_Pkid("total" + i);
                     //税费率为单独项时，添加小计大计，并排除0%的情况
-                    if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade().compareTo(1)==0){
+                    if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade().compareTo(1)==0
+                            && (! itemUnit.getSubctt_SpareField().equals("F1"))){
                         if(bdAmountTotal.compareTo(ToolUtil.bigDecimal0)>0){
                             itemOfEsItemHieRelapTemp.setSubctt_ContractAmount(
                                     ToolUtil.getStrIgnoreNull(bdAmountTotal+"%"));

@@ -29,6 +29,8 @@
                         var rtn = dialog("../subPower/item/itemMng_TkcttStaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7') {// 总包计量结算
                         var rtn = dialog("../subPower/item/itemMng_TkcttMeaStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '8') {// 分包安全措施結算
+                        var rtn = dialog("../subPower/item/itemMng_SubcttFStl.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="1") { // 刚审核
@@ -46,6 +48,8 @@
                         var rtn = dialog("../item/itemFlw_TkcttStaStl.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7') {// 总包计量结算
                         var rtn = dialog("../item/itemFlw_TkcttMeaStl.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '8') {// 分包安全措施结算
+                        var rtn = dialog("../item/itemFlw_SubcttFStl.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="2") { // 刚复核
@@ -63,6 +67,8 @@
                         var rtn = dialog("../item/itemFlw_TkcttStaStl.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7') {// 总包计量结算
                         var rtn = dialog("../item/itemFlw_TkcttMeaStl.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                    }else if (infoType == '8') {// 分包安全措施结算
+                        var rtn = dialog("../item/itemFlw_SubcttFStl.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="3") { // 刚批准

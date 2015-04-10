@@ -251,10 +251,13 @@ public class SubcttItemAction {
         CttItemShow itemUnitNext=new CttItemShow();
         for(int i=0;i< cttItemShowListTemp.size();i++){
             itemUnit = cttItemShowListTemp.get(i);
-            if (itemUnit.getSpareField()==null){
+            if (itemUnit.getSpareField()==null||itemUnit.getSpareField().equals("F1")){
                 bdTotal=bdTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getContractAmount()));
             }
             if(itemUnit.getUnit()!=null&&!itemUnit.getUnit().equals("")&&itemUnit.getSpareField()==null){
+                bdAllTotal=bdAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getContractAmount()));
+            }
+            if(itemUnit.getSpareField()!=null && itemUnit.getSpareField().equals("F1")){
                 bdAllTotal=bdAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getContractAmount()));
             }
             cttItemShowList.add(itemUnit);

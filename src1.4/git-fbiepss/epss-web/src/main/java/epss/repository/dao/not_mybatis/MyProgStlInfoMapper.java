@@ -52,7 +52,7 @@ public interface MyProgStlInfoMapper {
             " where" +
             "     STL_PKID = #{strStlPkid}" +
             " and" +
-            "     (STL_TYPE='3' or STL_TYPE='4')")
+            "     (STL_TYPE='3' or STL_TYPE='4' or STL_TYPE='8')")
     List<ProgStlInfo> selectIsUsedInQMPBySubcttPkid(@Param("strStlPkid") String strStlPkid);
 
     @Select("select " +

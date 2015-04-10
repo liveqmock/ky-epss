@@ -30,6 +30,7 @@ import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
 import java.io.*;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -65,8 +66,10 @@ public class ProgStlItemSubFAction {
     private ProgStlItemSubFShow progStlItemSubFShowSel;
     private ProgStlItemSubFShow progStlItemSubFShowUpd;
     private ProgStlItemSubFShow progStlItemSubFShowDel;
-    private BigDecimal bDEngSMng_BeginToCurrentPeriodSEXPInDB;
-    private BigDecimal bDEngSMng_CurrentPeriodSEXPInDB;
+//    private BigDecimal bDEngSMng_BeginToCurrentPeriodSEXPInDB;
+//    private BigDecimal bDEngSMng_CurrentPeriodSEXPInDB;
+    private BigDecimal bDEngSMng_AddUpToAmt;
+    private BigDecimal bDEngSMng_ThisStageAmt;
 
 
     private String strSubcttPkid;
@@ -122,6 +125,7 @@ public class ProgStlItemSubFAction {
         }
     }
 
+
     /*初始化操作*/
     private void initData() {
         try {
@@ -130,87 +134,269 @@ public class ProgStlItemSubFAction {
             progStlInfoShow =progStlInfoService.fromModelToModelShow(progStlInfo);
             progStlInfoShow.setStlId(cttInfoTemp.getId());
             progStlInfoShow.setStlName(cttInfoTemp.getName());
-            progStlInfoShow.setSignPartBName(signPartService.getEsInitCustByPkid(cttInfoTemp.getSignPartB()).getName());
-            progStlInfoShow.setType(EnumSubcttType.getValueByKey(cttInfoTemp.getType()).getTitle());
+            SignPart signPartTemp=signPartService.getEsInitCustByPkid(cttInfoTemp.getSignPartB());
+            if (signPartTemp!=null){
+                progStlInfoShow.setSignPartBName(signPartTemp.getName());
+            }
+            EnumSubcttType subcttTypeTemp=EnumSubcttType.getValueByKey(cttInfoTemp.getType());
+            if (subcttTypeTemp!=null){
+                progStlInfoShow.setType(subcttTypeTemp.getTitle());
+            }
             beansMap.put("progStlInfoShow", progStlInfoShow);
 
             /*分包合同*/
-            List<CttItem> cttItemList =new ArrayList<CttItem>();
+            List<CttItem> cttItemList =new ArrayList<>();
             cttItemList = cttItemService.getEsItemList(
-                    EnumResType.RES_TYPE2.getCode(), progStlInfo.getStlPkid());
+                    EnumResType.RES_TYPE2.getCode(), strSubcttPkid);
             if(cttItemList.size()<=0){
                 return;
             }
-            progStlItemSubFShowList =new ArrayList<ProgStlItemSubFShow>();
+            progStlItemSubFShowList =new ArrayList<>();
+            progStlItemSubFShowListExcel =new ArrayList<>();
+            attachmentList=new ArrayList<>();
+            attachmentList=ToolUtil.getListAttachmentByStrAttachment(progStlInfoShow.getAttachment());
             recursiveDataTable("root", cttItemList, progStlItemSubFShowList);
-            progStlItemSubFShowList =getStlSubCttEngSMngConstructList_DoFromatNo(progStlItemSubFShowList);
-            progStlItemSubFShowListExcel =new ArrayList<ProgStlItemSubFShow>();
+            progStlItemSubFShowList =getStlSubCttEngQMngConstructList_DoFromatNo(progStlItemSubFShowList);
+            setItemOfEsItemHieRelapList_AddTotal();
+            // Excel报表形成
+            progStlItemSubFShowListExcel =new ArrayList<>();
             for(ProgStlItemSubFShow itemUnit: progStlItemSubFShowList){
+                // 分包合同
+                itemUnit.setSubctt_ContractUnitPrice(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_ContractUnitPrice()));
+                itemUnit.setSubctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_ContractQuantity()));
+                itemUnit.setSubctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_ContractAmount()));
+                itemUnit.setSubctt_SignPartAPrice(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getSubctt_SignPartAPrice()));
+                // 分包工程量结算
+                itemUnit.setEngSMng_ThisStageAmt(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getEngSMng_ThisStageAmt()));
+                itemUnit.setEngSMng_AddUpToAmt(
+                        ToolUtil.getBdFrom0ToNull(itemUnit.getEngSMng_AddUpToAmt()));
                 ProgStlItemSubFShow itemUnitTemp= (ProgStlItemSubFShow) BeanUtils.cloneBean(itemUnit);
                 itemUnitTemp.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(itemUnitTemp.getSubctt_StrNo()));
                 progStlItemSubFShowListExcel.add(itemUnitTemp);
             }
             beansMap.put("progStlItemSubFShowListExcel", progStlItemSubFShowListExcel);
-            beansMap.put("progStlItemSubFShowList", progStlItemSubFShowList);
         }catch (Exception e){
             logger.error("初始化失败", e);
             MessageUtil.addError("初始化失败");
         }
     }
+
+
+    private List<ProgStlItemSubFShow> getStlSubCttEngQMngConstructList_DoFromatNo(
+            List<ProgStlItemSubFShow> progStlItemSubQShowListPara){
+        String strTemp="";
+        Integer intBeforeGrade=-1;
+        for(ProgStlItemSubFShow itemUnit: progStlItemSubQShowListPara){
+            if(itemUnit.getSubctt_Grade().equals(intBeforeGrade)){
+                if(strTemp.lastIndexOf(".")<0) {
+                    strTemp=itemUnit.getSubctt_Orderid().toString();
+                }
+                else{
+                    strTemp=strTemp.substring(0,strTemp.lastIndexOf(".")) +"."+itemUnit.getSubctt_Orderid().toString();
+                }
+            }
+            else{
+                if(itemUnit.getSubctt_Grade()==1){
+                    strTemp=itemUnit.getSubctt_Orderid().toString() ;
+                }
+                else {
+                    if (!itemUnit.getSubctt_Grade().equals(intBeforeGrade)) {
+                        if (itemUnit.getSubctt_Grade().compareTo(intBeforeGrade)>0) {
+                            strTemp = strTemp + "." + itemUnit.getSubctt_Orderid().toString();
+                        } else {
+                            Integer intTemp=strTemp.indexOf(".",itemUnit.getSubctt_Grade()-1);
+                            strTemp = strTemp .substring(0, intTemp);
+                            strTemp = strTemp+"."+itemUnit.getSubctt_Orderid().toString();
+                        }
+                    }
+                }
+            }
+            intBeforeGrade=itemUnit.getSubctt_Grade() ;
+            itemUnit.setSubctt_StrNo(ToolUtil.padLeft_DoLevel(itemUnit.getSubctt_Grade(), strTemp)) ;
+        }
+        return progStlItemSubQShowListPara;
+    }
+
+    private void setItemOfEsItemHieRelapList_AddTotal(){
+        List<ProgStlItemSubFShow> progStlItemSubMShowListTemp =new ArrayList<ProgStlItemSubFShow>();
+        progStlItemSubMShowListTemp.addAll(progStlItemSubFShowList);
+        progStlItemSubFShowList.clear();
+        // 合同数量小计
+        BigDecimal bdQuantityTotal=new BigDecimal(0);
+        // 合同数量大计
+        BigDecimal bdQuantityAllTotal=new BigDecimal(0);
+        // 合同金额小计
+        BigDecimal bdAmountTotal=new BigDecimal(0);
+        // 合同金额大计
+        BigDecimal bdAmountAllTotal=new BigDecimal(0);
+        // 开累材料量小计
+        BigDecimal bdBeginToCurrentPeriodFQtyTotal=new BigDecimal(0);
+        // 开累材料量大计
+        BigDecimal bdBeginToCurrentPeriodFQtyAllTotal=new BigDecimal(0);
+        // 当期材料量小计
+        BigDecimal bdCurrentPeriodFQtyTotal=new BigDecimal(0);
+        // 当期材料量大计
+        BigDecimal bdCurrentPeriodMQtyAllTotal=new BigDecimal(0);
+        ProgStlItemSubFShow itemUnit=new ProgStlItemSubFShow();
+        ProgStlItemSubFShow itemUnitNext=new ProgStlItemSubFShow();
+        for(int i=0;i< progStlItemSubMShowListTemp.size();i++){
+            itemUnit = progStlItemSubMShowListTemp.get(i);
+            bdQuantityTotal=bdQuantityTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
+            bdQuantityAllTotal=bdQuantityAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
+            bdBeginToCurrentPeriodFQtyTotal=
+                    bdBeginToCurrentPeriodFQtyTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngSMng_AddUpToAmt()));
+            bdCurrentPeriodFQtyTotal=
+                    bdCurrentPeriodFQtyTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngSMng_ThisStageAmt()));
+            //费税率金额不计入小计（费税率为子项时），当前和开累不计入大计
+            if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade()>1&&(!ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_SpareField()).equals("F1"))){
+                bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount())).subtract(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+            }else{
+                bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+            }
+            if(itemUnit.getSubctt_SpareField()==null||ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_SpareField()).equals("F1")){
+                bdAmountAllTotal=bdAmountAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
+            }
+            bdBeginToCurrentPeriodFQtyAllTotal=
+                    bdBeginToCurrentPeriodFQtyAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngSMng_AddUpToAmt()));
+            bdCurrentPeriodMQtyAllTotal=
+                    bdCurrentPeriodMQtyAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngSMng_ThisStageAmt()));
+            progStlItemSubFShowList.add(itemUnit);
+            if(i+1< progStlItemSubMShowListTemp.size()){
+                itemUnitNext = progStlItemSubMShowListTemp.get(i+1);
+                if(itemUnitNext.getSubctt_ParentPkid().equals("root")){
+                    ProgStlItemSubFShow itemOfEsItemHieRelapTemp=new ProgStlItemSubFShow();
+                    itemOfEsItemHieRelapTemp.setSubctt_Name("合计");
+                    itemOfEsItemHieRelapTemp.setSubctt_Pkid("total"+i);
+                    itemOfEsItemHieRelapTemp.setSubctt_ContractQuantity(
+                            ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
+                    itemOfEsItemHieRelapTemp.setSubctt_ContractAmount(
+                            ToolUtil.getBdFrom0ToNull(bdAmountTotal));
+                    itemOfEsItemHieRelapTemp.setEngSMng_AddUpToAmt(
+                            ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodFQtyTotal));
+                    itemOfEsItemHieRelapTemp.setEngSMng_ThisStageAmt(
+                            ToolUtil.getBdFrom0ToNull(bdCurrentPeriodFQtyTotal));
+                    progStlItemSubFShowList.add(itemOfEsItemHieRelapTemp);
+                    bdQuantityTotal=new BigDecimal(0);
+                    bdAmountTotal=new BigDecimal(0);
+                    bdBeginToCurrentPeriodFQtyTotal=new BigDecimal(0);
+                    bdCurrentPeriodFQtyTotal=new BigDecimal(0);
+                }
+            } else if(i+1== progStlItemSubMShowListTemp.size()){
+                itemUnitNext = progStlItemSubMShowListTemp.get(i);
+                ProgStlItemSubFShow progStlItemSubFShowTemp = new ProgStlItemSubFShow();
+                progStlItemSubFShowTemp.setSubctt_Name("合计");
+                progStlItemSubFShowTemp.setSubctt_Pkid("total" + i);
+                progStlItemSubFShowTemp.setSubctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
+                progStlItemSubFShowTemp.setSubctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(bdAmountTotal));
+                progStlItemSubFShowTemp.setEngSMng_AddUpToAmt(
+                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodFQtyTotal));
+                progStlItemSubFShowTemp.setEngSMng_ThisStageAmt(
+                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodFQtyTotal));
+                progStlItemSubFShowList.add(progStlItemSubFShowTemp);
+                progStlItemSubFShowListExcel.add(progStlItemSubFShowTemp);
+                bdQuantityTotal = new BigDecimal(0);
+                bdAmountTotal = new BigDecimal(0);
+                bdBeginToCurrentPeriodFQtyTotal = new BigDecimal(0);
+                bdCurrentPeriodFQtyTotal = new BigDecimal(0);
+                // 总合计
+                progStlItemSubFShowTemp = new ProgStlItemSubFShow();
+                progStlItemSubFShowTemp.setSubctt_Name("总合计");
+                progStlItemSubFShowTemp.setSubctt_Pkid("total_all" + i);
+                progStlItemSubFShowTemp.setSubctt_ContractQuantity(
+                        ToolUtil.getBdFrom0ToNull(bdQuantityAllTotal));
+                progStlItemSubFShowTemp.setSubctt_ContractAmount(
+                        ToolUtil.getBdFrom0ToNull(bdAmountAllTotal));
+                progStlItemSubFShowTemp.setEngSMng_AddUpToAmt(
+                        ToolUtil.getBdFrom0ToNull(bdBeginToCurrentPeriodFQtyAllTotal));
+                progStlItemSubFShowTemp.setEngSMng_ThisStageAmt(
+                        ToolUtil.getBdFrom0ToNull(bdCurrentPeriodMQtyAllTotal));
+                progStlItemSubFShowList.add(progStlItemSubFShowTemp);
+                progStlItemSubFShowListExcel.add(progStlItemSubFShowTemp);
+            }
+        }
+    }
+    
     /*根据数据库中层级关系数据列表得到总包合同*/
     private void recursiveDataTable(String strLevelParentId,
                                     List<CttItem> cttItemListPara,
-                                    List<ProgStlItemSubFShow> sProgStlItemSubFShowListPara){
+                                    List<ProgStlItemSubFShow> ProgStlItemSubFShowListPara){
         // 根据父层级号获得该父层级下的子节点
-        List<CttItem> subCttItemList =new ArrayList<>();
+        List<CttItem> subCttItemList =new ArrayList<CttItem>();
         // 通过父层id查找它的孩子
         subCttItemList =getEsCttItemListByParentPkid(strLevelParentId, cttItemListPara);
-            for(CttItem itemUnit: subCttItemList){
-            ProgStlItemSubFShow progStlItemSubFShowTemp = new ProgStlItemSubFShow();
-            progStlItemSubFShowTemp.setSubctt_Pkid(itemUnit.getPkid());
-            progStlItemSubFShowTemp.setSubctt_BelongToType(itemUnit.getBelongToType());
-            progStlItemSubFShowTemp.setSubctt_BelongToPkid(itemUnit.getBelongToPkid());
-            progStlItemSubFShowTemp.setSubctt_ParentPkid(itemUnit.getParentPkid());
-            progStlItemSubFShowTemp.setSubctt_Grade(itemUnit.getGrade());
-            progStlItemSubFShowTemp.setSubctt_Orderid(itemUnit.getOrderid());
-            progStlItemSubFShowTemp.setSubctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
-            progStlItemSubFShowTemp.setSubctt_Name(itemUnit.getName());
-            progStlItemSubFShowTemp.setSubctt_Remark(itemUnit.getRemark());
-            progStlItemSubFShowTemp.setSubctt_Unit(itemUnit.getUnit());
-            progStlItemSubFShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
-            progStlItemSubFShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
-            progStlItemSubFShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
-            progStlItemSubFShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
+        for(CttItem itemUnit: subCttItemList){
+            ProgStlItemSubFShow ProgStlItemSubFShowTemp = new ProgStlItemSubFShow();
+            ProgStlItemSubFShowTemp.setSubctt_Pkid(itemUnit.getPkid());
+            ProgStlItemSubFShowTemp.setSubctt_BelongToType(itemUnit.getBelongToType());
+            ProgStlItemSubFShowTemp.setSubctt_BelongToPkid(itemUnit.getBelongToPkid());
+            ProgStlItemSubFShowTemp.setSubctt_ParentPkid(itemUnit.getParentPkid());
+            ProgStlItemSubFShowTemp.setSubctt_Grade(itemUnit.getGrade());
+            ProgStlItemSubFShowTemp.setSubctt_Orderid(itemUnit.getOrderid());
+            ProgStlItemSubFShowTemp.setSubctt_CorrespondingPkid(itemUnit.getCorrespondingPkid());
+            ProgStlItemSubFShowTemp.setSubctt_Name(itemUnit.getName());
+            ProgStlItemSubFShowTemp.setSubctt_Remark(itemUnit.getRemark());
+            ProgStlItemSubFShowTemp.setSubctt_Unit(itemUnit.getUnit());
+            ProgStlItemSubFShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
+            ProgStlItemSubFShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
+            ProgStlItemSubFShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
+//            ProgStlItemSubFShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
+//            if(itemUnit.getSpareField()!=null&&(!ToolUtil.getStrIgnoreNull(itemUnit.getSpareField()).equals("F1"))){
+//                ProgStlItemSubFShowTemp.setSubctt_ContractAmount(ToolUtil.getStrFromBdIgnoreZeroNull("#,##0.00%",itemUnit.getContractAmount()));
+//            }else{
+//                String strSubctt_ContractAmountInPercent=ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",itemUnit.getContractAmount());
+//                ProgStlItemSubFShowTemp.setSubctt_ContractAmount(strSubctt_ContractAmountInPercent);
+//            }
+            ProgStlItemSubFShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
+            ProgStlItemSubFShowTemp.setSubctt_SpareField(itemUnit.getSpareField());
 
             ProgStlItemSubF progStlItemSubF =new ProgStlItemSubF();
-            progStlItemSubF.setSubcttPkid(progStlInfo.getStlPkid());
+            progStlItemSubF.setSubcttPkid(strSubcttPkid);
             progStlItemSubF.setSubcttItemPkid(itemUnit.getPkid());
             progStlItemSubF.setPeriodNo(progStlInfo.getPeriodNo());
             List<ProgStlItemSubF> progStlItemSubFList =
                     progStlItemSubFService.selectRecordsByExample(progStlItemSubF);
-            if(progStlItemSubFList.size()>0) {
+            if(progStlItemSubFList.size()>0){
                 progStlItemSubF = progStlItemSubFList.get(0);
-                progStlItemSubFShowTemp.setEngSMng_Pkid(progStlItemSubF.getPkid());
-                progStlItemSubFShowTemp.setEngSMng_PeriodNo(progStlItemSubF.getPeriodNo());
-                progStlItemSubFShowTemp.setEngSMng_SubcttPkid(progStlItemSubF.getSubcttPkid());
-                progStlItemSubFShowTemp.setEngSMng_SubcttItemPkid(progStlItemSubF.getSubcttItemPkid());
-                progStlItemSubFShowTemp.setEngSMng_AddUpToAmt(progStlItemSubF.getAddUpToAmt());
-                progStlItemSubFShowTemp.setEngSMng_ThisStageAmt(progStlItemSubF.getThisStageAmt());
-                progStlItemSubFShowTemp.setEngSMng_ArchivedFlag(progStlItemSubF.getArchivedFlag());
-                progStlItemSubFShowTemp.setEngSMng_CreatedBy(progStlItemSubF.getCreatedBy());
-                progStlItemSubFShowTemp.setEngSMng_CreatedTime(progStlItemSubF.getCreatedTime());
-                progStlItemSubFShowTemp.setEngSMng_LastUpdBy(progStlItemSubF.getLastUpdBy());
-                progStlItemSubFShowTemp.setEngSMng_LastUpdTime(progStlItemSubF.getLastUpdTime());
-                progStlItemSubFShowTemp.setEngSMng_RecVersion(progStlItemSubF.getRecVersion());
-                if (progStlItemSubFShowTemp.getEngSMng_AddUpToAmt() != null) {
-                    if (progStlItemSubFShowTemp.getEngSMng_AddUpToAmt()
-                            .equals(progStlItemSubFShowTemp.getSubctt_ContractAmount())) {
-                        progStlItemSubFShowTemp.setIsUptoCttAmtFlag(true);
+                ProgStlItemSubFShowTemp.setEngSMng_Pkid(progStlItemSubF.getPkid());
+                ProgStlItemSubFShowTemp.setEngSMng_PeriodNo(progStlItemSubF.getPeriodNo());
+                ProgStlItemSubFShowTemp.setEngSMng_SubcttPkid(progStlItemSubF.getSubcttPkid());
+                ProgStlItemSubFShowTemp.setEngSMng_SubcttItemPkid(progStlItemSubF.getSubcttItemPkid());
+//                if(ProgStlItemSubFShowTemp.getSubctt_SpareField()!=null &&(!ToolUtil.getStrIgnoreNull(itemUnit.getSpareField()).equals("F1"))){
+//                    String strEngQMng_BeginToCurrentPeriodEQtyInPercent=ToolUtil.getStrFromBdIgnoreZeroNull("#,##0.00%", progStlItemSubF.getAddUpToAmt());
+//                    ProgStlItemSubFShowTemp.setEngSMng_ThisStageAmt(ToolUtil.getBdFromStrOrBdIgnoreNull(strEngQMng_BeginToCurrentPeriodEQtyInPercent));
+//                    String strEengQMng_CurrentPeriodEQtyInPercentInPercent=ToolUtil.getStrFromBdIgnoreZeroNull("#,##0.00%", progStlItemSubF.getThisStageAmt());
+//                    ProgStlItemSubFShowTemp.setEngSMng_ThisStageAmt(ToolUtil.getBdFromStrOrBdIgnoreNull(strEengQMng_CurrentPeriodEQtyInPercentInPercent));
+//                }else{
+                    ProgStlItemSubFShowTemp.setEngSMng_AddUpToAmt( progStlItemSubF.getAddUpToAmt());
+                    ProgStlItemSubFShowTemp.setEngSMng_ThisStageAmt( progStlItemSubF.getThisStageAmt());
+//                }
+                ProgStlItemSubFShowTemp.setEngSMng_ArchivedFlag(progStlItemSubF.getArchivedFlag());
+                ProgStlItemSubFShowTemp.setEngSMng_CreatedBy(progStlItemSubF.getCreatedBy());
+                String strCreatedByNameTemp=cttInfoService.getUserName(progStlItemSubF.getCreatedBy());
+                ProgStlItemSubFShowTemp.setEngSMng_CreatedByName(strCreatedByNameTemp);
+                ProgStlItemSubFShowTemp.setEngSMng_CreatedTime(progStlItemSubF.getCreatedTime());
+                ProgStlItemSubFShowTemp.setEngSMng_LastUpdBy(progStlItemSubF.getLastUpdBy());
+                String strLastUpdByNameTemp=cttInfoService.getUserName(progStlItemSubF.getLastUpdBy());
+                ProgStlItemSubFShowTemp.setEngSMng_LastUpdByName(strLastUpdByNameTemp);
+                ProgStlItemSubFShowTemp.setEngSMng_LastUpdTime(progStlItemSubF.getLastUpdTime());
+                ProgStlItemSubFShowTemp.setEngSMng_RecVersion(progStlItemSubF.getRecVersion());
+                ProgStlItemSubFShowTemp.setEngSMng_Remark(progStlItemSubF.getRemark());
+                if(ProgStlItemSubFShowTemp.getEngSMng_AddUpToAmt()!=null) {
+                    if (ProgStlItemSubFShowTemp.getEngSMng_AddUpToAmt()
+                            .equals(ProgStlItemSubFShowTemp.getSubctt_ContractAmount())) {
+                        ProgStlItemSubFShowTemp.setIsUptoCttQtyFlag(true);
                     }
                 }
             }
-            sProgStlItemSubFShowListPara.add(progStlItemSubFShowTemp) ;
-            recursiveDataTable(progStlItemSubFShowTemp.getSubctt_Pkid(), cttItemListPara, sProgStlItemSubFShowListPara);
+            ProgStlItemSubFShowListPara.add(ProgStlItemSubFShowTemp) ;
+            recursiveDataTable(ProgStlItemSubFShowTemp.getSubctt_Pkid(), cttItemListPara, ProgStlItemSubFShowListPara);
         }
     }
     /*根据group和orderid临时编制编码strNo*/
@@ -274,6 +460,9 @@ public class ProgStlItemSubFAction {
     public void submitThisRecordAction(){
         try{
             if(strSubmitType.equals("Upd")){
+                if(!blurengFMng_CurrentPeriodFAmt("submit")){
+                    return;
+                }
                 ProgStlItemSubFShow progStlItemSubFShowTemp =new ProgStlItemSubFShow();
                 progStlItemSubFShowTemp.setEngSMng_SubcttPkid(progStlInfo.getStlPkid());
                 progStlItemSubFShowTemp.setEngSMng_PeriodNo(progStlInfo.getPeriodNo());
@@ -305,34 +494,30 @@ public class ProgStlItemSubFAction {
         }
     }
 
-    public boolean blurEngSMng_CurrentPeriodSEXP() {
-
-        if(ToolUtil.getBdIgnoreNull(progStlItemSubFShowUpd.getSubctt_ContractAmount()).equals( new BigDecimal(0))){
-            return true;
-        }
-        else{
+    public boolean blurengFMng_CurrentPeriodFAmt(String strBlurOrSubmitFlag){
             String strTemp= progStlItemSubFShowUpd.getEngSMng_ThisStageAmt().toString();
             String strRegex = "[-]?[0-9]+\\.?[0-9]*";
             if (!strTemp.matches(strRegex) ){
                 MessageUtil.addError("请确认输入的数据，" + strTemp + "不是正确的数据格式！");
                 return false;
             }
-
-            BigDecimal bDEngSMng_CurrentPeriodSSEXPTemp=
-                    ToolUtil.getBdIgnoreNull(progStlItemSubFShowUpd.getEngSMng_ThisStageAmt()  );
+            BigDecimal bDEngSMng_ThisStageAmtTemp=
+                    ToolUtil.getBdIgnoreNull(progStlItemSubFShowUpd.getEngSMng_ThisStageAmt());
             //开累量叠加,
             BigDecimal bigDecimalTemp=
-                    bDEngSMng_BeginToCurrentPeriodSEXPInDB.add(bDEngSMng_CurrentPeriodSSEXPTemp).subtract(bDEngSMng_CurrentPeriodSEXPInDB );
+                    bDEngSMng_AddUpToAmt.add(bDEngSMng_ThisStageAmtTemp).subtract(bDEngSMng_ThisStageAmt);
 
             BigDecimal bDSubctt_ContracttAmount=
                     ToolUtil.getBdIgnoreNull(progStlItemSubFShowUpd.getSubctt_ContractAmount());
-                if(bigDecimalTemp.compareTo(bDSubctt_ContracttAmount)>0){
-                    MessageUtil.addError("上期开累安全措施费+本期安全措施费>合同数量，请确认您输入的 （"
-                            + bDEngSMng_CurrentPeriodSSEXPTemp.toString() + "）！");
-                    return false;
-                }
-            progStlItemSubFShowUpd.setEngSMng_AddUpToAmt (bigDecimalTemp);
-        }
+
+//            if(strBlurOrSubmitFlag.equals("blur")) {
+            if(bigDecimalTemp.compareTo(bDSubctt_ContracttAmount)>0){
+                MessageUtil.addError("上期开累安全措施费+本期安全措施费>合同数量，请确认您输入的 （"
+                        + bDEngSMng_ThisStageAmtTemp.toString() + "）！");
+                return false;
+            }
+            progStlItemSubFShowUpd.setEngSMng_AddUpToAmt(bigDecimalTemp);
+
         return true;
     }
 
@@ -378,8 +563,8 @@ public class ProgStlItemSubFAction {
                 progStlItemSubFShowUpd =(ProgStlItemSubFShow) BeanUtils.cloneBean(progStlItemSubFShowPara) ;
                 progStlItemSubFShowUpd.setSubctt_StrNo(ToolUtil.getIgnoreSpaceOfStr(progStlItemSubFShowUpd.getSubctt_StrNo()));
 
-                bDEngSMng_CurrentPeriodSEXPInDB=ToolUtil.getBdIgnoreNull(progStlItemSubFShowUpd.getEngSMng_ThisStageAmt());
-                bDEngSMng_BeginToCurrentPeriodSEXPInDB=
+                bDEngSMng_ThisStageAmt=ToolUtil.getBdIgnoreNull(progStlItemSubFShowUpd.getEngSMng_ThisStageAmt());
+                bDEngSMng_AddUpToAmt=
                         ToolUtil.getBdIgnoreNull(progStlItemSubFShowUpd.getEngSMng_AddUpToAmt());
             }else
             if(strSubmitTypePara.equals("Del")){
@@ -500,6 +685,8 @@ public class ProgStlItemSubFAction {
                     MessageUtil.addInfo("数据批准未过！");
                 }
             }
+            strPassVisible="false";
+            strPassFailVisible="false";
         } catch (Exception e) {
             logger.error("数据流程化失败，", e);
             MessageUtil.addError(e.getMessage());
@@ -832,6 +1019,22 @@ public class ProgStlItemSubFAction {
 
     public void setAttachmentList(List<AttachmentModel> attachmentList) {
         this.attachmentList = attachmentList;
+    }
+
+    public BigDecimal getbDEngSMng_ThisStageAmt() {
+        return bDEngSMng_ThisStageAmt;
+    }
+
+    public void setbDEngSMng_ThisStageAmt(BigDecimal bDEngSMng_ThisStageAmt) {
+        this.bDEngSMng_ThisStageAmt = bDEngSMng_ThisStageAmt;
+    }
+
+    public BigDecimal getbDEngSMng_AddUpToAmt() {
+        return bDEngSMng_AddUpToAmt;
+    }
+
+    public void setbDEngSMng_AddUpToAmt(BigDecimal bDEngSMng_AddUpToAmt) {
+        this.bDEngSMng_AddUpToAmt = bDEngSMng_AddUpToAmt;
     }
 
     /*智能字段End*/

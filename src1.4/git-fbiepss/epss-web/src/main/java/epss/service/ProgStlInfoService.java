@@ -111,7 +111,7 @@ public class ProgStlInfoService {
         String periodNo=progStlInfoShowPara.getPeriodNo();
         String strReturnTemp="";
         if(EnumResType.RES_TYPE3.getCode().equals(stlType)||
-                EnumResType.RES_TYPE4.getCode().equals(stlType)){ //分包进度结算
+                EnumResType.RES_TYPE4.getCode().equals(stlType)||EnumResType.RES_TYPE8.getCode().equals(stlType)){ //分包进度结算
             // 取出分包合同的类型
             CttInfo cttInfoTemp=cttInfoService.getCttInfoByPkId(cttPkid);
             String strCttInfoTypeTemp=ToolUtil.getStrIgnoreNull(cttInfoTemp.getType());
@@ -122,9 +122,12 @@ public class ProgStlInfoService {
                     getMaxPeriodNo(EnumResType.RES_TYPE4.getCode(),cttPkid));
             String stlmentMaxPeriod = ToolUtil.getStrIgnoreNull(
                     getMaxPeriodNo(EnumResType.RES_TYPE5.getCode(),cttPkid));
+            String fMaxPeriod = ToolUtil.getStrIgnoreNull(
+                    getMaxPeriodNo(EnumResType.RES_TYPE8.getCode(),cttPkid));
             String quantityStatus="";
             String materialStatus="";
             String stlmentStatus="";
+            String fStatus="";
             ProgStlInfo progStlInfoTemp=new ProgStlInfo();
             progStlInfoTemp.setStlType(EnumResType.RES_TYPE3.getCode());
             progStlInfoTemp.setStlPkid(cttPkid);
@@ -147,9 +150,16 @@ public class ProgStlInfoService {
             if(progStlInfoListTemp.size()>0) {
                 stlmentStatus=ToolUtil.getStrIgnoreNull(progStlInfoListTemp.get(0).getFlowStatus());
             }
+
+            progStlInfoTemp.setStlType(EnumResType.RES_TYPE8.getCode());
+            progStlInfoTemp.setPeriodNo(fMaxPeriod);
+            progStlInfoListTemp=getInitStlListByModel(progStlInfoTemp);
+            if(progStlInfoListTemp.size()>0) {
+                fStatus=ToolUtil.getStrIgnoreNull(progStlInfoListTemp.get(0).getFlowStatus());
+            }
             System.out.println("\n数量结算最大期号："+quantityMaxPeriod+"\n材料结算最大期号："+materialMaxPeriod+"\n结算单最大期号："+stlmentMaxPeriod);
             System.out.println("\n数量结算最大期号对应状态标志："+quantityStatus+"\n材料结算最大期号对应状态标志："+materialStatus+"\n结算单最大期号对应状态标志："+stlmentStatus);
-
+            // 数量
             if (EnumResType.RES_TYPE3.getCode().equals(stlType)){
                 //和自身比较
                 if (periodNo.compareTo(quantityMaxPeriod)<=0){//1.和自身期号比较
@@ -176,6 +186,46 @@ public class ProgStlInfoService {
                         }
                     }
                 }
+
+                // 分包合同类型 数量和安全施工措施费 ,strCttInfoTypeTemp 根据分包合同主键查询得到
+                if(EnumSubcttType.TYPE4.getCode().equals(strCttInfoTypeTemp)) {
+                    // 和安全措施费用
+                    if (!("".equals(fMaxPeriod)) && periodNo.compareTo(fMaxPeriod) != 0) {
+                        if (quantityMaxPeriod.compareTo(fMaxPeriod) != 0) {
+                            strReturnTemp = "第[" + quantityMaxPeriod + "]期分包数量结算已经开始，请录入[" + quantityMaxPeriod + "]期的分包安全措施费结算数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(fStatus) > 0) {
+                            strReturnTemp = "安全措施费结算第[" + quantityMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
+                    }
+                }
+            // 分包合同类型 数量+材料+安全施
+                if(EnumSubcttType.TYPE6.getCode().equals(strCttInfoTypeTemp)) {
+                    // 和材料比较
+                    if (!("".equals(materialMaxPeriod)) && periodNo.compareTo(materialMaxPeriod) != 0) {
+                        if (quantityMaxPeriod.compareTo(materialMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
+                            strReturnTemp = "第[" + fMaxPeriod + "]期分包数量结算已经开始，请录入[" + fMaxPeriod + "]期的分包材料数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus) > 0) {
+                            strReturnTemp = "材料结算第[" + materialMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
+                    }
+                    // 和安全措施费
+                    if (!("".equals(fMaxPeriod)) && periodNo.compareTo(fMaxPeriod) != 0) {
+                        if (quantityMaxPeriod.compareTo(fMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
+                            strReturnTemp = "第[" + fMaxPeriod + "]期分包数量结算已经开始，请录入[" + fMaxPeriod + "]期的分包安全措施费数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(fStatus) > 0) {
+                            strReturnTemp = "安全措施费结算第[" + fMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
+                    }
+                }
                 //和结算单比较
                 if (!("".equals(stlmentMaxPeriod))&&periodNo.compareTo(stlmentMaxPeriod)>0){
                     if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(stlmentStatus)>=0){//2.和自身状态比较
@@ -184,6 +234,7 @@ public class ProgStlInfoService {
                     }
                 }
             }
+            // 材料
             if (EnumResType.RES_TYPE4.getCode().equals(stlType)){
                 //和自身比较
                 if (periodNo.compareTo(materialMaxPeriod)<=0){//1.和自身期号比较
@@ -210,6 +261,124 @@ public class ProgStlInfoService {
                         }
                     }
                 }
+                // 材料+安全措施
+                if(EnumSubcttType.TYPE5.getCode().equals(strCttInfoTypeTemp)) {
+                    // 安全措施
+                    if (!("".equals(fMaxPeriod)) && periodNo.compareTo(fMaxPeriod) != 0) {
+                        if (materialMaxPeriod.compareTo(fMaxPeriod) != 0) {
+                            strReturnTemp = "第[" + materialMaxPeriod + "]期分包材料结算已经开始，请录入[" + materialMaxPeriod + "]期的分包安全措施费数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(fStatus) > 0) {
+                            strReturnTemp = "安全措施费第[" + quantityMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
+                    }
+                }
+                // 分包合同类型 数量+材料+安全
+                if(EnumSubcttType.TYPE6.getCode().equals(strCttInfoTypeTemp)) {
+                    // 和数量
+                    if (!("".equals(materialMaxPeriod)) && periodNo.compareTo(materialMaxPeriod) != 0) {
+                        if (materialMaxPeriod.compareTo(quantityMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
+                            strReturnTemp = "第[" + materialMaxPeriod + "]期分包安全措施费结算已经开始，请录入[" + materialMaxPeriod + "]期的分包材料数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus) > 0) {
+                            strReturnTemp = "数量结算第[" + materialMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
+                    }
+                    // 和安全措施费
+                    if (!("".equals(fMaxPeriod)) && periodNo.compareTo(fMaxPeriod) != 0) {
+                        if (materialMaxPeriod.compareTo(fMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
+                            strReturnTemp = "第[" + materialMaxPeriod + "]期分包数量结算已经开始，请录入[" + materialMaxPeriod + "]期的分包安全措施费数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(fStatus) > 0) {
+                            strReturnTemp = "安全措施费结算第[" + materialMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
+                    }
+                }
+                //和结算单比较
+                if (!("".equals(stlmentMaxPeriod))&&periodNo.compareTo(stlmentMaxPeriod)>0){
+                    if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(stlmentStatus)>=0){//2.和自身状态比较
+                        strReturnTemp="结算单第["+stlmentMaxPeriod+"]期数据还未批准通过，不能录入新数据!";
+                        return strReturnTemp;
+                    }
+                }
+            }
+
+            // 费用
+            if (EnumResType.RES_TYPE8.getCode().equals(stlType)){
+                //和自身比较
+                if (periodNo.compareTo(fMaxPeriod)<=0){//1.和自身期号比较
+                    strReturnTemp="应录入大于[" + fMaxPeriod + "]期的分包安全措施费结算数据!";
+                    return strReturnTemp;
+                }else {
+                    if (!("".equals(fMaxPeriod))&&
+                            EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(fStatus)>0){//2.和自身状态比较  最近一期的数据有没有复核
+                        strReturnTemp="分包安全措施费结算第["+fMaxPeriod+"]期数据还未复合通过，不能录入新数据!";
+                        return strReturnTemp;
+                    }
+                }
+                // 分包合同类型为复合型的情况，才审查其它几种结算单
+//                TYPE4("4","数量和安全施工措施费"),
+//                        TYPE5("5","材料和安全施工措施费"),
+//                        TYPE6("6","数量材料和安全措施费");
+                if(EnumSubcttType.TYPE4.getCode().equals(strCttInfoTypeTemp)) { // 分包合同类型 数量和安全施工措施费 ,strCttInfoTypeTemp 根据分包合同主键查询得到
+                    // 和数量比较
+                    if (!("".equals(quantityMaxPeriod)) && periodNo.compareTo(quantityMaxPeriod) != 0) {
+                        if (quantityMaxPeriod.compareTo(fMaxPeriod) != 0) {
+                            strReturnTemp = "第[" + fMaxPeriod + "]期分包安全措施费结算已经开始，请录入[" + fMaxPeriod + "]期的分包数量结算数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus) > 0) {
+                            strReturnTemp = "数量结算第[" + quantityMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
+                    }
+                }
+
+                if(EnumSubcttType.TYPE5.getCode().equals(strCttInfoTypeTemp)) {
+                    // 和材料比较
+                    if (!("".equals(materialMaxPeriod)) && periodNo.compareTo(materialMaxPeriod) != 0) {
+                        if (materialMaxPeriod.compareTo(fMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
+                            strReturnTemp = "第[" + fMaxPeriod + "]期分包安全措施费结算已经开始，请录入[" + fMaxPeriod + "]期的分包材料结算数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus) > 0) {
+                            strReturnTemp = "材料结算第[" + materialMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
+                    }
+                }
+                if(EnumSubcttType.TYPE6.getCode().equals(strCttInfoTypeTemp)) {
+                    // 和数量比较
+                    if (!("".equals(quantityMaxPeriod)) && periodNo.compareTo(quantityMaxPeriod) != 0) {
+                        if (quantityMaxPeriod.compareTo(fMaxPeriod) != 0) {
+                            strReturnTemp = "第[" + fMaxPeriod + "]期分包安全措施费结算已经开始，请录入[" + fMaxPeriod + "]期的分包数量结算数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus) > 0) {
+                            strReturnTemp = "数量结算第[" + quantityMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
+                    }
+
+                    // 和材料比较
+                    if (!("".equals(materialMaxPeriod)) && periodNo.compareTo(materialMaxPeriod) != 0) {
+                        if (materialMaxPeriod.compareTo(fMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
+                            strReturnTemp = "第[" + fMaxPeriod + "]期分包安全措施费结算已经开始，请录入[" + fMaxPeriod + "]期的分包材料结算数据！";
+                            return strReturnTemp;
+                        }
+                        if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus) > 0) {
+                            strReturnTemp = "材料结算第[" + materialMaxPeriod + "]期数据还未复合通过，不能录入新数据!";
+                            return strReturnTemp;
+                        }
+                    }
+                }
+
                 //和结算单比较
                 if (!("".equals(stlmentMaxPeriod))&&periodNo.compareTo(stlmentMaxPeriod)>0){
                     if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(stlmentStatus)>=0){//2.和自身状态比较
@@ -486,11 +655,11 @@ public class ProgStlInfoService {
     @Transactional
     public void updAutoLinkTask(ProgStlInfo progStlInfoPara) {
         // 数量结算
-        if (EnumResType.RES_TYPE3.getCode().equals(progStlInfoPara.getStlType())) {
+        if (EnumResType.RES_TYPE3.getCode().equals(progStlInfoPara.getStlType())) { // 分包合同类型
             if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfoPara.getFlowStatus())&&
                     EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode().equals(progStlInfoPara.getFlowStatusReason())){
                 CttInfo cttInfoTemp =cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid());
-                if (("3").equals(cttInfoTemp.getType())||("6").equals(cttInfoTemp.getType())){
+                if (("3").equals(cttInfoTemp.getType())){   // 分包是复合型
                     ProgStlInfoShow progStlInfoShowQryM =new ProgStlInfoShow();
                     progStlInfoShowQryM.setStlType("4");
                     progStlInfoShowQryM.setStlPkid(progStlInfoPara.getStlPkid());
@@ -514,6 +683,97 @@ public class ProgStlInfoService {
                                     progStlInfoPara.setAutoLinkAdd("1");
                                 }
                             }
+                        }
+                    }
+                } if (("4").equals(cttInfoTemp.getType())){  // 数量+安全措施   枚举EnumSubcttType  =  4
+                    ProgStlInfoShow progStlInfoShowQryF =new ProgStlInfoShow();
+                    progStlInfoShowQryF.setStlPkid(progStlInfoPara.getStlPkid());
+                    progStlInfoShowQryF.setStlType("8");    //  费用结算单  EnumResType  =8
+                    progStlInfoShowQryF.setPeriodNo(progStlInfoPara.getPeriodNo());
+                    List<ProgStlInfoShow> progStlInfoShowConstructsTemp =selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryF);
+                    if (progStlInfoShowConstructsTemp.size()==0){
+                        progStlInfoPara.setAutoLinkAdd("0");
+                        progStlInfoShowQryF.setAutoLinkAdd("1");
+                        progStlInfoShowQryF.setId(getMaxId(progStlInfoShowQryF.getStlType()));
+                        addSubStlFInfoAndItemInitDataAction(progStlInfoShowQryF);
+                    }else{
+                        for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
+                            if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
+                                progStlInfoPara.setAutoLinkAdd("0");
+                                progStlInfoShowQryF.setAutoLinkAdd("1");
+                                updateRecord(progStlInfoShowQryF);
+                            }else{
+                                if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                    progStlInfoPara.setAutoLinkAdd("0");
+                                }else{
+                                    progStlInfoPara.setAutoLinkAdd("1");
+                                }
+                            }
+                        }
+                    }
+                }
+                else if(("6").equals(cttInfoTemp.getType())){
+                    {  //
+                        ProgStlInfoShow progStlInfoShowQryF =new ProgStlInfoShow();
+                        progStlInfoShowQryF.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoShowQryF.setStlType("8");
+                        progStlInfoShowQryF.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        List<ProgStlInfoShow> progStlInfoShowFConstructsTemp =selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryF);
+
+                        ProgStlInfoShow progStlInfoShowQryM =new ProgStlInfoShow();
+                        progStlInfoShowQryM.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoShowQryM.setStlType("4");
+                        progStlInfoShowQryM.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        List<ProgStlInfoShow> progStlInfoShowMConstructsTemp =selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryM);
+
+                        if (progStlInfoShowMConstructsTemp.size()==0 &&progStlInfoShowFConstructsTemp.size()==0 ) {
+                            progStlInfoPara.setAutoLinkAdd("0");
+                            progStlInfoShowQryF.setAutoLinkAdd("1");
+                            progStlInfoShowQryF.setId(getMaxId(progStlInfoShowQryF.getStlType()));
+                            addSubStlFInfoAndItemInitDataAction(progStlInfoShowQryF);
+
+                            progStlInfoPara.setAutoLinkAdd("0");
+                            progStlInfoShowQryM.setAutoLinkAdd("1");
+                            progStlInfoShowQryM.setId(getMaxId(progStlInfoShowQryM.getStlType()));
+                            addSubStlMInfoAndItemInitDataAction(progStlInfoShowQryM);
+                        }else if(progStlInfoShowMConstructsTemp.size()==0  &&progStlInfoShowFConstructsTemp.size()!=0){
+                            progStlInfoPara.setAutoLinkAdd("0");
+                            progStlInfoShowQryM.setAutoLinkAdd("1");
+                            progStlInfoShowQryM.setId(getMaxId(progStlInfoShowQryM.getStlType()));
+                            addSubStlMInfoAndItemInitDataAction(progStlInfoShowQryM);
+                        }else if(progStlInfoShowMConstructsTemp.size()!=0  &&progStlInfoShowFConstructsTemp.size()==0){
+                            progStlInfoPara.setAutoLinkAdd("0");
+                            progStlInfoShowQryF.setAutoLinkAdd("1");
+                            progStlInfoShowQryF.setId(getMaxId(progStlInfoShowQryF.getStlType()));
+                            addSubStlFInfoAndItemInitDataAction(progStlInfoShowQryF);
+                        }else{
+                            for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowFConstructsTemp) {
+                                if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
+                                    progStlInfoPara.setAutoLinkAdd("0");
+                                    progStlInfoShowQryF.setAutoLinkAdd("1");
+                                    updateRecord(progStlInfoShowQryF);
+                                }else{
+                                    if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                        progStlInfoPara.setAutoLinkAdd("0");
+                                    }else{
+                                        progStlInfoPara.setAutoLinkAdd("1");
+                                    }
+                                }
+                            }
+                            for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowMConstructsTemp) {
+                                if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
+                                    progStlInfoPara.setAutoLinkAdd("0");
+                                    progStlInfoShowQryM.setAutoLinkAdd("1");
+                                    updateRecord(progStlInfoShowQryM);
+                                }else{
+                                    if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                        progStlInfoPara.setAutoLinkAdd("0");
+                                    }else{
+                                        progStlInfoPara.setAutoLinkAdd("1");
+                                    }
+                                }
+                            }
+
                         }
                     }
                 }
@@ -548,6 +808,41 @@ public class ProgStlInfoService {
                             progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
                             insertRecord(progStlInfoSubStlmentTemp);
                         }
+                    } else if(EnumSubcttType.TYPE4.getCode().equals(  // 安全措施+数量
+                            cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
+                        ProgStlInfo progStlInfoSubFTemp = new ProgStlInfo();
+                        progStlInfoSubFTemp.setStlType(EnumResType.RES_TYPE8.getCode());
+                        progStlInfoSubFTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoSubFTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        progStlInfoSubFTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+
+                        if (getInitStlListByModel(progStlInfoSubFTemp).size() > 0) {
+                            progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                            progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                            progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                            insertRecord(progStlInfoSubStlmentTemp);
+                        }
+                    }else if(EnumSubcttType.TYPE6.getCode().equals(  // 安全措施+材料+数量
+                            cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
+                        ProgStlInfo progStlInfoSubMTemp = new ProgStlInfo();
+                        progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE4.getCode());
+                        progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+
+                        ProgStlInfo progStlInfoSubFTemp = new ProgStlInfo();
+                        progStlInfoSubFTemp.setStlType(EnumResType.RES_TYPE8.getCode());
+                        progStlInfoSubFTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoSubFTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        progStlInfoSubFTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+
+                        //
+                        if (getInitStlListByModel(progStlInfoSubFTemp).size() > 0 && getInitStlListByModel(progStlInfoSubMTemp).size() > 0) {
+                            progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                            progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                            progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                            insertRecord(progStlInfoSubStlmentTemp);
+                        }
                     }
                 }
             }
@@ -567,7 +862,7 @@ public class ProgStlInfoService {
             if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfoPara.getFlowStatus())&&
                     EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode().equals(progStlInfoPara.getFlowStatusReason())){
                 CttInfo cttInfoTemp =cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid());
-                if (("3").equals(cttInfoTemp.getType())||("6").equals(cttInfoTemp.getType())){
+                if (("3").equals(cttInfoTemp.getType())){   // 分包是复合型
                     ProgStlInfoShow progStlInfoShowQryQ =new ProgStlInfoShow();
                     progStlInfoShowQryQ.setStlPkid(progStlInfoPara.getStlPkid());
                     progStlInfoShowQryQ.setStlType("3");
@@ -581,9 +876,9 @@ public class ProgStlInfoService {
                     }else{
                         for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
                             if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
-                                progStlInfoPara.setAutoLinkAdd("0");
-                                progStlInfoShowQryQ.setAutoLinkAdd("1");
-                                updateRecord(progStlInfoShowQryQ);
+                                    progStlInfoPara.setAutoLinkAdd("0");
+                                    progStlInfoShowQryQ.setAutoLinkAdd("1");
+                                    updateRecord(progStlInfoShowQryQ);
                             }else{
                                 if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
                                     progStlInfoPara.setAutoLinkAdd("0");
@@ -591,6 +886,98 @@ public class ProgStlInfoService {
                                     progStlInfoPara.setAutoLinkAdd("1");
                                 }
                             }
+                        }
+                    }
+                }
+                if (("5").equals(cttInfoTemp.getType())){  // 材料+安全措施   枚举EnumSubcttType  =  4
+                    ProgStlInfoShow progStlInfoShowQryF =new ProgStlInfoShow();
+                    progStlInfoShowQryF.setStlPkid(progStlInfoPara.getStlPkid());
+                    progStlInfoShowQryF.setStlType("8");    //  数量结算单  EnumResType  =3
+                    progStlInfoShowQryF.setPeriodNo(progStlInfoPara.getPeriodNo());
+                    List<ProgStlInfoShow> progStlInfoShowConstructsTemp =selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryF);
+                    if (progStlInfoShowConstructsTemp.size()==0){
+                        progStlInfoPara.setAutoLinkAdd("0");
+                        progStlInfoShowQryF.setAutoLinkAdd("1");
+                        progStlInfoShowQryF.setId(getMaxId(progStlInfoShowQryF.getStlType()));
+                        addSubStlFInfoAndItemInitDataAction(progStlInfoShowQryF);
+                    }else{
+                        for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
+                            if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
+                                progStlInfoPara.setAutoLinkAdd("0");
+                                progStlInfoShowQryF.setAutoLinkAdd("1");
+                                updateRecord(progStlInfoShowQryF);
+                            }else{
+                                if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                    progStlInfoPara.setAutoLinkAdd("0");
+                                }else{
+                                    progStlInfoPara.setAutoLinkAdd("1");
+                                }
+                            }
+                        }
+                    }
+                }
+                else if(("6").equals(cttInfoTemp.getType())){
+                    {  //
+                        ProgStlInfoShow progStlInfoShowQryF =new ProgStlInfoShow();
+                        progStlInfoShowQryF.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoShowQryF.setStlType("8");
+                        progStlInfoShowQryF.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        List<ProgStlInfoShow> progStlInfoShowFConstructsTemp =selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryF);
+
+                        ProgStlInfoShow progStlInfoShowQryQ =new ProgStlInfoShow();
+                        progStlInfoShowQryQ.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoShowQryQ.setStlType("3");
+                        progStlInfoShowQryQ.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        List<ProgStlInfoShow> progStlInfoShowQConstructsTemp =selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryQ);
+
+                        if (progStlInfoShowQConstructsTemp.size()==0 && progStlInfoShowFConstructsTemp.size()==0 ) {
+                            progStlInfoPara.setAutoLinkAdd("0");
+                            progStlInfoShowQryF.setAutoLinkAdd("1");
+                            progStlInfoShowQryF.setId(getMaxId(progStlInfoShowQryF.getStlType()));
+                            addSubStlFInfoAndItemInitDataAction(progStlInfoShowQryF);
+
+                            progStlInfoPara.setAutoLinkAdd("0");
+                            progStlInfoShowQryQ.setAutoLinkAdd("1");
+                            progStlInfoShowQryQ.setId(getMaxId(progStlInfoShowQryQ.getStlType()));
+                            addSubStlQInfoAndItemInitDataAction(progStlInfoShowQryQ);
+                        }else if(progStlInfoShowQConstructsTemp.size()==0  && progStlInfoShowFConstructsTemp.size()!=0){
+                            progStlInfoPara.setAutoLinkAdd("0");
+                            progStlInfoShowQryQ.setAutoLinkAdd("1");
+                            progStlInfoShowQryQ.setId(getMaxId(progStlInfoShowQryQ.getStlType()));
+                            addSubStlQInfoAndItemInitDataAction(progStlInfoShowQryQ);
+                        }else if(progStlInfoShowQConstructsTemp.size()!=0  && progStlInfoShowFConstructsTemp.size()==0){
+                            progStlInfoPara.setAutoLinkAdd("0");
+                            progStlInfoShowQryF.setAutoLinkAdd("1");
+                            progStlInfoShowQryF.setId(getMaxId(progStlInfoShowQryF.getStlType()));
+                            addSubStlFInfoAndItemInitDataAction(progStlInfoShowQryF);
+                        }else{
+                            for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowFConstructsTemp) {
+                                if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
+                                    progStlInfoPara.setAutoLinkAdd("0");
+                                    progStlInfoShowQryF.setAutoLinkAdd("1");
+                                    updateRecord(progStlInfoShowQryF);
+                                }else{
+                                    if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                        progStlInfoPara.setAutoLinkAdd("0");
+                                    }else{
+                                        progStlInfoPara.setAutoLinkAdd("1");
+                                    }
+                                }
+                            }
+                            for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowQConstructsTemp) {
+                                if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
+                                    progStlInfoPara.setAutoLinkAdd("0");
+                                    progStlInfoShowQryQ.setAutoLinkAdd("1");
+                                    updateRecord(progStlInfoShowQryQ);
+                                }else{
+                                    if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                        progStlInfoPara.setAutoLinkAdd("0");
+                                    }else{
+                                        progStlInfoPara.setAutoLinkAdd("1");
+                                    }
+                                }
+                            }
+
                         }
                     }
                 }
@@ -614,12 +1001,47 @@ public class ProgStlInfoService {
                     }else if(EnumSubcttType.TYPE3.getCode().equals(
                         cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
                         ProgStlInfo progStlInfoSubMTemp = new ProgStlInfo();
-                        progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE3.getCode());
+                        progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE3.getCode()); // 数量
                         progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
                         progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
                         progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                         // 本分包合同及本期的分包材料结算也复核了
                         if (getInitStlListByModel(progStlInfoSubMTemp).size() > 0) {
+                            progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                            progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                            progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                            insertRecord(progStlInfoSubStlmentTemp);    // 出价格结算单
+                        }
+                    } else if(EnumSubcttType.TYPE5.getCode().equals(  // 安全措施+材料
+                            cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
+                        ProgStlInfo progStlInfoSubFTemp = new ProgStlInfo();
+                        progStlInfoSubFTemp.setStlType(EnumResType.RES_TYPE8.getCode());
+                        progStlInfoSubFTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoSubFTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        progStlInfoSubFTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+
+                        if (getInitStlListByModel(progStlInfoSubFTemp).size() > 0) {
+                            progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                            progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                            progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                            insertRecord(progStlInfoSubStlmentTemp);
+                        }
+                    }else if(EnumSubcttType.TYPE6.getCode().equals(  // 安全措施+材料+数量
+                            cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
+                        ProgStlInfo progStlInfoSubQTemp = new ProgStlInfo();
+                        progStlInfoSubQTemp.setStlType(EnumResType.RES_TYPE3.getCode());
+                        progStlInfoSubQTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoSubQTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        progStlInfoSubQTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+
+                        ProgStlInfo progStlInfoSubFTemp = new ProgStlInfo();
+                        progStlInfoSubFTemp.setStlType(EnumResType.RES_TYPE8.getCode());
+                        progStlInfoSubFTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoSubFTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        progStlInfoSubFTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+
+                        //
+                        if (getInitStlListByModel(progStlInfoSubFTemp).size() > 0 && getInitStlListByModel(progStlInfoSubQTemp).size() > 0) {
                             progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
                             progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
                             progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
@@ -639,8 +1061,215 @@ public class ProgStlInfoService {
                 }
             }
         }
+        else //安全措施结算
+            if (EnumResType.RES_TYPE8.getCode().equals(progStlInfoPara.getStlType())) {
+                if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(progStlInfoPara.getFlowStatus())&&
+                        EnumFlowStatusReason.FLOW_STATUS_REASON0.getCode().equals(progStlInfoPara.getFlowStatusReason())){
+                    CttInfo cttInfoTemp =cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid());
+                    // // 下面数字来自 EnumSubcttType 枚舉 分包是复合型 安全措施费和其他费组合 先组合材料   EnumResType
+                    //  progStlInfoShowQryF.setStlType("4");  来自EnumResType   决定每个结算单是那种,首先做个数量 3  材料 5 安全措施是8
+                    if (("4").equals(cttInfoTemp.getType())){  // 数量+安全措施   枚举EnumSubcttType  =  4
+                        ProgStlInfoShow progStlInfoShowQryQ =new ProgStlInfoShow();
+                        progStlInfoShowQryQ.setStlPkid(progStlInfoPara.getStlPkid());
+                        progStlInfoShowQryQ.setStlType("3");    //  数量结算单  EnumResType  =3
+                        progStlInfoShowQryQ.setPeriodNo(progStlInfoPara.getPeriodNo());
+                        List<ProgStlInfoShow> progStlInfoShowConstructsTemp =selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryQ);
+                        if (progStlInfoShowConstructsTemp.size()==0){
+                            progStlInfoPara.setAutoLinkAdd("0");
+                            progStlInfoShowQryQ.setAutoLinkAdd("1");
+                            progStlInfoShowQryQ.setId(getMaxId(progStlInfoShowQryQ.getStlType()));
+                            addSubStlQInfoAndItemInitDataAction(progStlInfoShowQryQ);
+                        }else{
+                            for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
+                                if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
+                                    progStlInfoPara.setAutoLinkAdd("0");
+                                    progStlInfoShowQryQ.setAutoLinkAdd("1");
+                                    updateRecord(progStlInfoShowQryQ);
+                                }else{
+                                    if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                        progStlInfoPara.setAutoLinkAdd("0");
+                                    }else{
+                                        progStlInfoPara.setAutoLinkAdd("1");
+                                    }
+                                }
+                            }
+                        }
+                    }else if(("5").equals(cttInfoTemp.getType())){   // TYPE5("5","材料和安全施工措施费"),
+                        {  //
+                            ProgStlInfoShow progStlInfoShowQryM =new ProgStlInfoShow();
+                            progStlInfoShowQryM.setStlPkid(progStlInfoPara.getStlPkid());
+                            progStlInfoShowQryM.setStlType("4"); // RES_TYPE4("4","分包进度材料消耗量结算"),
+                            progStlInfoShowQryM.setPeriodNo(progStlInfoPara.getPeriodNo());
+                            List<ProgStlInfoShow> progStlInfoShowConstructsTemp =selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryM);
+                            if (progStlInfoShowConstructsTemp.size()==0){
+                                progStlInfoPara.setAutoLinkAdd("0");
+                                progStlInfoShowQryM.setAutoLinkAdd("1");
+                                progStlInfoShowQryM.setId(getMaxId(progStlInfoShowQryM.getStlType()));
+                                addSubStlMInfoAndItemInitDataAction(progStlInfoShowQryM);
+
+                            }else{
+                                for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowConstructsTemp) {
+                                    if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
+                                        progStlInfoPara.setAutoLinkAdd("0");
+                                        progStlInfoShowQryM.setAutoLinkAdd("1");
+                                        updateRecord(progStlInfoShowQryM);
+                                    }else{
+                                        if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                            progStlInfoPara.setAutoLinkAdd("0");
+                                        }else{
+                                            progStlInfoPara.setAutoLinkAdd("1");
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }else if(("6").equals(cttInfoTemp.getType())){
+                        {  //
+                            ProgStlInfoShow progStlInfoShowQryQ =new ProgStlInfoShow();
+                            progStlInfoShowQryQ.setStlPkid(progStlInfoPara.getStlPkid());
+                            progStlInfoShowQryQ.setStlType("3");
+                            progStlInfoShowQryQ.setPeriodNo(progStlInfoPara.getPeriodNo());
+                            List<ProgStlInfoShow> progStlInfoShowQConstructsTemp =selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryQ);
+
+                            ProgStlInfoShow progStlInfoShowQryM =new ProgStlInfoShow();
+                            progStlInfoShowQryM.setStlPkid(progStlInfoPara.getStlPkid());
+                            progStlInfoShowQryM.setStlType("4");
+                            progStlInfoShowQryM.setPeriodNo(progStlInfoPara.getPeriodNo());
+                            List<ProgStlInfoShow> progStlInfoShowMConstructsTemp =selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowQryM);
+
+                            if (progStlInfoShowMConstructsTemp.size()==0 &&progStlInfoShowQConstructsTemp.size()==0 ) {
+                                progStlInfoPara.setAutoLinkAdd("0");
+                                progStlInfoShowQryQ.setAutoLinkAdd("1");
+                                progStlInfoShowQryQ.setId(getMaxId(progStlInfoShowQryQ.getStlType()));
+                                addSubStlQInfoAndItemInitDataAction(progStlInfoShowQryQ);
+
+                                progStlInfoPara.setAutoLinkAdd("0");
+                                progStlInfoShowQryM.setAutoLinkAdd("1");
+                                progStlInfoShowQryM.setId(getMaxId(progStlInfoShowQryM.getStlType()));
+                                addSubStlMInfoAndItemInitDataAction(progStlInfoShowQryM);
+                            }else if(progStlInfoShowMConstructsTemp.size()==0  &&progStlInfoShowQConstructsTemp.size()!=0){
+                                progStlInfoPara.setAutoLinkAdd("0");
+                                progStlInfoShowQryM.setAutoLinkAdd("1");
+                                progStlInfoShowQryM.setId(getMaxId(progStlInfoShowQryM.getStlType()));
+                                addSubStlMInfoAndItemInitDataAction(progStlInfoShowQryM);
+                            }else if(progStlInfoShowMConstructsTemp.size()!=0  &&progStlInfoShowQConstructsTemp.size()==0){
+                                progStlInfoPara.setAutoLinkAdd("0");
+                                progStlInfoShowQryQ.setAutoLinkAdd("1");
+                                progStlInfoShowQryQ.setId(getMaxId(progStlInfoShowQryQ.getStlType()));
+                                addSubStlQInfoAndItemInitDataAction(progStlInfoShowQryQ);
+                            }else{
+                                for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowQConstructsTemp) {
+                                    if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
+                                        progStlInfoPara.setAutoLinkAdd("0");
+                                        progStlInfoShowQryQ.setAutoLinkAdd("1");
+                                        updateRecord(progStlInfoShowQryQ);
+                                    }else{
+                                        if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                            progStlInfoPara.setAutoLinkAdd("0");
+                                        }else{
+                                            progStlInfoPara.setAutoLinkAdd("1");
+                                        }
+                                    }
+                                }
+                                for (ProgStlInfoShow esISSOMPCUnit : progStlInfoShowMConstructsTemp) {
+                                    if(("").equals(ToolUtil.getStrIgnoreNull(esISSOMPCUnit.getFlowStatus()))){
+                                        progStlInfoPara.setAutoLinkAdd("0");
+                                        progStlInfoShowQryM.setAutoLinkAdd("1");
+                                        updateRecord(progStlInfoShowQryM);
+                                    }else{
+                                        if(("1").equals(esISSOMPCUnit.getAutoLinkAdd())){
+                                            progStlInfoPara.setAutoLinkAdd("0");
+                                        }else{
+                                            progStlInfoPara.setAutoLinkAdd("1");
+                                        }
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }else{// 其它结算复核 则自动出价格结算单
+                    // 先看本分包合同及本期的分包结算单
+                    ProgStlInfo progStlInfoSubStlmentTemp=new ProgStlInfo();
+                    progStlInfoSubStlmentTemp.setStlType(EnumResType.RES_TYPE5.getCode());
+                    progStlInfoSubStlmentTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                    progStlInfoSubStlmentTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                    // 状态为复核，且状态原因为复核通过
+                    if (EnumFlowStatus.FLOW_STATUS2.getCode().equals(progStlInfoPara.getFlowStatus()) &&
+                            EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode().equals(progStlInfoPara.getFlowStatusReason())) {
+                        // 本分包合同及本期的分包结算单不存在
+                        if(getInitStlListByModel(progStlInfoSubStlmentTemp).size()<=0) {
+                            if(EnumSubcttType.TYPE2.getCode().equals(   //  安全措施 非复合型
+                                    cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
+                                progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                                progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                                progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                                insertRecord(progStlInfoSubStlmentTemp);
+                            }else if(EnumSubcttType.TYPE4.getCode().equals(  // 安全措施+数量
+                                    cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
+                                ProgStlInfo progStlInfoSubQTemp = new ProgStlInfo();
+                                progStlInfoSubQTemp.setStlType(EnumResType.RES_TYPE3.getCode());
+                                progStlInfoSubQTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                                progStlInfoSubQTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                                progStlInfoSubQTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                                // 本分包合同及本期的分包材料结算也复核了
+                                if (getInitStlListByModel(progStlInfoSubQTemp).size() > 0) {
+                                    progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                                    progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                                    progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                                    insertRecord(progStlInfoSubStlmentTemp);
+                                }
+                            }else if(EnumSubcttType.TYPE5.getCode().equals(  // 安全措施+材料
+                                    cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
+                                ProgStlInfo progStlInfoSubMTemp = new ProgStlInfo();
+                                progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE4.getCode());
+                                progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                                progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                                progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+
+                                if (getInitStlListByModel(progStlInfoSubMTemp).size() > 0) {
+                                    progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                                    progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                                    progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                                    insertRecord(progStlInfoSubStlmentTemp);
+                                }
+                            }else if(EnumSubcttType.TYPE6.getCode().equals(  // 安全措施+材料+数量
+                                    cttInfoService.getCttInfoByPkId(progStlInfoPara.getStlPkid()).getType())) {
+                                ProgStlInfo progStlInfoSubQTemp = new ProgStlInfo();
+                                progStlInfoSubQTemp.setStlType(EnumResType.RES_TYPE3.getCode());
+                                progStlInfoSubQTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                                progStlInfoSubQTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                                progStlInfoSubQTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+
+                                ProgStlInfo progStlInfoSubMTemp = new ProgStlInfo();
+                                progStlInfoSubMTemp.setStlType(EnumResType.RES_TYPE4.getCode());
+                                progStlInfoSubMTemp.setStlPkid(progStlInfoPara.getStlPkid());
+                                progStlInfoSubMTemp.setPeriodNo(progStlInfoPara.getPeriodNo());
+                                progStlInfoSubMTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+
+                                //
+                                if (getInitStlListByModel(progStlInfoSubMTemp).size() > 0 && getInitStlListByModel(progStlInfoSubQTemp).size() > 0) {
+                                    progStlInfoSubStlmentTemp.setId(getStrMaxStlId(progStlInfoSubStlmentTemp.getStlType()));
+                                    progStlInfoSubStlmentTemp.setFlowStatus(EnumFlowStatus.FLOW_STATUS2.getCode());
+                                    progStlInfoSubStlmentTemp.setFlowStatusReason(EnumFlowStatusReason.FLOW_STATUS_REASON3.getCode());
+                                    insertRecord(progStlInfoSubStlmentTemp);
+                                }
+                            }
+                        }
+                    }
+                    if(EnumFlowStatusReason.FLOW_STATUS_REASON4.getCode().equals(progStlInfoPara.getFlowStatusReason())){
+                        // 删除分包结算单信息数据
+                        ProgStlInfoExample exampleSubMStlInfo = new ProgStlInfoExample();
+                        exampleSubMStlInfo.createCriteria()
+                                .andStlTypeEqualTo(EnumResType.RES_TYPE5.getCode())
+                                .andStlPkidEqualTo(progStlInfoSubStlmentTemp.getStlPkid())
+                                .andPeriodNoEqualTo(progStlInfoSubStlmentTemp.getPeriodNo());
+                        progStlInfoMapper.deleteByExample(exampleSubMStlInfo);
+                    }
+                }
+            }
         updateRecord(progStlInfoPara);
-    }
+        }
     // 更新 End
 
     // 删除 Start
@@ -812,7 +1441,17 @@ public class ProgStlInfoService {
         Integer intTemp;
         String strMaxId = getStrMaxStlId(strStlType);
         if (StringUtils.isEmpty(ToolUtil.getStrIgnoreNull(strMaxId))) {
-            strMaxId = "STLQ" + ToolUtil.getStrToday() + "001";
+            String  stltemp  = "STLQ";
+            if(strStlType!=null ) {
+                if (strStlType.equals("3")) {
+                    stltemp = "STLQ";
+                } else if (strStlType.equals("4")) {
+                    stltemp = "STLM";
+                } else if (strStlType.equals("8")){
+                    stltemp = "STLF" ;
+                }
+            }
+            strMaxId = stltemp + ToolUtil.getStrToday() + "001";
         } else {
             if (strMaxId.length() > 3) {
                 String strTemp = strMaxId.substring(strMaxId.length() - 3).replaceFirst("^0+", "");

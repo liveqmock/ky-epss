@@ -46,7 +46,13 @@ public class ProgStlItemSubFShow implements Serializable {
     private String engSMng_LastUpdByName;
     private String engSMng_LastUpdTime;
     private Integer engSMng_RecVersion;
+    private String engSMng_Remark;
     private Boolean isUptoCttAmtFlag;
+    private Boolean isUptoCttQtyFlag;
+    private Boolean isRenderedFlag;
+
+//    private String engSMng_BeginToCurrentPeriodEQty;
+//    private String engSMng_CurrentPeriodEQty;
 
     public ProgStlItemSubFShow() {
 
@@ -315,5 +321,29 @@ public class ProgStlItemSubFShow implements Serializable {
 
     public void setIsUptoCttAmtFlag(Boolean isUptoCttAmtFlag) {
         this.isUptoCttAmtFlag = isUptoCttAmtFlag;
+    }
+
+    public Boolean getIsRenderedFlag() {
+        return isRenderedFlag;
+    }
+
+    public void setIsRenderedFlag(Boolean isRenderedFlag) {
+        this.isRenderedFlag = isRenderedFlag;
+    }
+
+    public Boolean getIsUptoCttQtyFlag() {
+        return isUptoCttQtyFlag;
+    }
+
+    public void setIsUptoCttQtyFlag(Boolean isUptoCttQtyFlag) {
+        this.isUptoCttQtyFlag = isUptoCttQtyFlag;
+    }
+
+    public String getEngSMng_Remark() {
+        return engSMng_Remark;
+    }
+
+    public void setEngSMng_Remark(String engSMng_Remark) {
+        this.engSMng_Remark = engSMng_Remark;
     }
 }
