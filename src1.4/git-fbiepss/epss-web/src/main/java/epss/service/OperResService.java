@@ -1,14 +1,14 @@
 package epss.service;
 
+import epss.common.enums.EnumArchivedFlag;
 import epss.common.enums.EnumResType;
+import epss.common.enums.EnumTaskDoneFlag;
 import epss.repository.model.*;
-import epss.repository.model.model_show.ProgStlInfoShow;
+import epss.repository.model.model_show.*;
 import org.springframework.transaction.annotation.Transactional;
 import skyline.util.ToolUtil;
 import epss.repository.dao.OperResMapper;
 import epss.repository.dao.not_mybatis.MyOperResMapper;
-import epss.repository.model.model_show.CttInfoShow;
-import epss.repository.model.model_show.OperResShow;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.util.List;
@@ -58,6 +58,29 @@ public class OperResService {
         operResPara.setLastUpdTime(strLastUpdTime);
         operResMapper.insertSelective(operResPara);
     }
+
+    @Transactional
+    public void insertRecordsBatch(String strFuncSelectedPara,List<OperFuncResShow> operFuncResShowListPara,List<DeptOperShow> deptOperShowSeledListPara){//批量插入操作，需加入事务控制
+        OperRes operResTemp = new OperRes();
+        for (OperFuncResShow operFuncResShowUnit : operFuncResShowListPara) {
+            operResTemp.setInfoType(operFuncResShowUnit.getResType());
+            operResTemp.setInfoPkid(operFuncResShowUnit.getResPkid());
+            operResTemp.setFlowStatus(strFuncSelectedPara);
+            deleteRecord(operResTemp);
+            for (DeptOperShow deptOperShowUnit : deptOperShowSeledListPara) {
+                operResTemp = new OperRes();
+                operResTemp.setOperPkid(deptOperShowUnit.getPkid());
+                operResTemp.setInfoType(operFuncResShowUnit.getResType());
+                operResTemp.setInfoPkid(operFuncResShowUnit.getResPkid());
+                operResTemp.setFlowStatus(strFuncSelectedPara);
+                operResTemp.setArchivedFlag(EnumArchivedFlag.ARCHIVED_FLAG0.getCode());
+                operResTemp.setType("business");
+                operResTemp.setTaskdoneFlag(EnumTaskDoneFlag.TASK_DONE_FLAG0.getCode());
+                insertRecord(operResTemp);
+            }
+        }
+    }
+
     public void updateRecord(OperRes operResPara){
         String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
         String strLastUpdTime=ToolUtil.getStrLastUpdTime();

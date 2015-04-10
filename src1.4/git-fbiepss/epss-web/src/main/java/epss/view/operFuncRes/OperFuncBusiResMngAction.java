@@ -73,6 +73,10 @@ public class OperFuncBusiResMngAction implements Serializable{
     private String strTkcttInfoName;
 
     private String strBtnRender;
+
+    private String strFuncSelected;
+    private List<OperFuncResShow> operFuncResShowList;//批量更新，存放选中资源
+
     @PostConstruct
     public void init() {
         beansMap = new HashMap();
@@ -87,7 +91,9 @@ public class OperFuncBusiResMngAction implements Serializable{
         resRoot = new DefaultTreeNode("ROOT", null);
         initDeptOper();
         beansMap.put("operFuncResShowFowExcelList", operFuncResShowFowExcelList);
+        operFuncResShowList=new ArrayList<OperFuncResShow>();
     }
+
     private void initRes(){
         resRoot = new DefaultTreeNode("ROOT", null);
         OperFuncResShow operFuncResShowTemp=new OperFuncResShow();
@@ -698,6 +704,7 @@ public class OperFuncBusiResMngAction implements Serializable{
         // 资源-用户-功能
         initRes();
         initFuncListByResType(resRoot);
+        operFuncResShowList.clear();
     }
 
     public void selectRecordAction(String strSubmitTypePara,OperFuncResShow operFuncResShowPara) {
@@ -752,6 +759,45 @@ public class OperFuncBusiResMngAction implements Serializable{
             deptOperShowSeledList.add(deptOperShowPara);
         }else{
             deptOperShowSeledList.remove(deptOperShowPara);
+        }
+    }
+
+    public void selectFuncDispatchAction(String strFuncSelectedPara) {//批量操作，初始化人员列表
+        if (operFuncResShowList.size()==1){
+            initDeptOper();
+            deptOperShowSeledList.clear();
+            OperResShow operResShowTemp = new OperResShow();
+            operResShowTemp.setInfoType(operFuncResShowList.get(0).getResType());
+            operResShowTemp.setInfoPkid(operFuncResShowList.get(0).getResPkid());
+            operResShowTemp.setFlowStatus(strFuncSelectedPara);
+            List<OperResShow> operResShowListTemp = operResService.selectOperaResRecordsByModelShow(operResShowTemp);
+            if (operResShowListTemp.size() > 0) {
+                recursiveOperTreeNodeForFuncChange(deptOperRoot, operResShowListTemp);
+            }
+            strFuncSelected=strFuncSelectedPara;
+        }else if (operFuncResShowList.size()>1){
+            initDeptOper();
+            deptOperShowSeledList.clear();
+            strFuncSelected=strFuncSelectedPara;
+        }
+        else{
+            MessageUtil.addError("请选择操作资源！");
+        }
+    }
+
+    public boolean clickFuncDispatchAction() {//批量操作，初始化人员列表
+        if (operFuncResShowList.size()>0){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public void selResRecordsAction(OperFuncResShow operFuncResShowPara){//批量更新，资源选择监听函数
+        if (operFuncResShowPara.getIsSeled()){//被选中，执行该判断
+            operFuncResShowList.add(operFuncResShowPara);
+        }else{//取消选择
+            operFuncResShowList.remove(operFuncResShowPara);
         }
     }
 
@@ -844,6 +890,10 @@ public class OperFuncBusiResMngAction implements Serializable{
                     operResService.insertRecord(operResTemp);
                 }
                 MessageUtil.addInfo("权限添加成功!");
+            } else if (strSubmitTypePara.equals("BatchPower")) {//批量权限指派
+                operResService.insertRecordsBatch(strFuncSelected,operFuncResShowList,deptOperShowSeledList);
+                operFuncResShowList.clear();
+                MessageUtil.addInfo("权限指派成功!");
             }
             initRes();
             initFuncListByResType(resRoot);
@@ -1050,5 +1100,13 @@ public class OperFuncBusiResMngAction implements Serializable{
 
     public void setStrBtnRender(String strBtnRender) {
         this.strBtnRender = strBtnRender;
+    }
+
+    public List<OperFuncResShow> getOperFuncResShowList() {
+        return operFuncResShowList;
+    }
+
+    public void setOperFuncResShowList(List<OperFuncResShow> operFuncResShowList) {
+        this.operFuncResShowList = operFuncResShowList;
     }
 }
