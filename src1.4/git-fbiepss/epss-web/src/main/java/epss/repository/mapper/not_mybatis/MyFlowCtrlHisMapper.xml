@@ -66,10 +66,10 @@
             and f.info_Pkid=trim(#{infoPkid})
         </if>
         <if test="createdTime != null and createdTime != ''">
-            and created_time &gt;=trim(#{createdTime})
+            and f.created_time &gt;=trim(#{createdTime})
         </if>
         <if test="endTime != null and endTime != ''">
-            and created_time &lt;=trim(#{endTime})
+            and f.created_time &lt;=trim(#{endTime})
         </if>
 
             order by
