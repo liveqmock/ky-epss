@@ -60,9 +60,10 @@ public class SubcttItemAction {
 
     private CttInfo cttInfo;
     private CttItemShow cttItemShowSel;
-    private CttItemShow cttItemShowAdd;
+    private CttItemShow cttItemQShowAdd;
     private CttItemShow cttItemShowUpd;
     private CttItemShow cttItemShowDel;
+    private CttItemShow cttItemFShowAdd;
     private List<CttItem> cttItemList;
     /*列表中选择一行*/
     private CttItemShow cttItemShowSelected;
@@ -126,7 +127,7 @@ public class SubcttItemAction {
                     strPassVisible = "false";
                 }
             }
-            resetAction();
+            resetAction("");
             initData() ;
         }catch (Exception e){
             logger.error("初始化失败", e);
@@ -296,14 +297,18 @@ public class SubcttItemAction {
     }
 
     /*重置*/
-    public void resetAction(){
+    public void resetAction(String strMitType){
         strSubmitType="Add";
+        if (ToolUtil.getStrIgnoreNull(strMitType).equals("FAdd")){
+            strSubmitType="FAdd";
+        }
         styleModel=new StyleModel();
         styleModel.setDisabled_Flag("false");
         cttItemShowSel =new CttItemShow(strBelongToType ,strCttInfoPkid);
-        cttItemShowAdd =new CttItemShow(strBelongToType ,strCttInfoPkid);
+        cttItemQShowAdd =new CttItemShow(strBelongToType ,strCttInfoPkid);
         cttItemShowUpd =new CttItemShow(strBelongToType ,strCttInfoPkid);
         cttItemShowDel =new CttItemShow(strBelongToType ,strCttInfoPkid);
+        cttItemFShowAdd =new CttItemShow(strBelongToType ,strCttInfoPkid);
     }
     /*右单击事件*/
     public void selectRecordAction(String strSubmitTypePara,CttItemShow cttItemShowSeledPara){
@@ -346,13 +351,13 @@ public class SubcttItemAction {
         BigDecimal bigDecimal;
         CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCttInfoPkid);
         if (strSubmitType.equals("Add")){
-            if(cttItemShowAdd.getContractUnitPrice()==null|| cttItemShowAdd.getContractQuantity()==null){
+            if(cttItemQShowAdd.getContractUnitPrice()==null|| cttItemQShowAdd.getContractQuantity()==null){
                 bigDecimal=null;
             }
             else{
-                bigDecimal = cttItemShowAdd.getContractUnitPrice().multiply(cttItemShowAdd.getContractQuantity());
+                bigDecimal = cttItemQShowAdd.getContractUnitPrice().multiply(cttItemQShowAdd.getContractQuantity());
             }
-            cttItemShowAdd.setContractAmount(bigDecimal);
+            cttItemQShowAdd.setContractAmount(bigDecimal);
         }
         if (strSubmitType.equals("Upd")){
             if(cttItemShowUpd.getContractUnitPrice()==null|| cttItemShowUpd.getContractQuantity()==null){
@@ -368,7 +373,10 @@ public class SubcttItemAction {
     public Boolean blurStrNoToGradeAndOrderid(){
         CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCttInfoPkid);
         if (strSubmitType.equals("Add")){
-            cttItemShowTemp = cttItemShowAdd;
+            cttItemShowTemp = cttItemQShowAdd;
+        }
+        if (strSubmitType.equals("FAdd")){
+            cttItemShowTemp = cttItemFShowAdd;
         }
         if (strSubmitType.equals("Upd")){
             cttItemShowTemp = cttItemShowUpd;
@@ -445,7 +453,10 @@ public class SubcttItemAction {
     public Boolean blurCorrespondingPkid(){
         CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCttInfoPkid);
         if (strSubmitType.equals("Add")){
-            cttItemShowTemp = cttItemShowAdd;
+            cttItemShowTemp = cttItemQShowAdd;
+        }
+        if (strSubmitType.equals("FAdd")){
+            cttItemShowTemp = cttItemFShowAdd;
         }
         if (strSubmitType.equals("Upd")){
             cttItemShowTemp = cttItemShowUpd;
@@ -500,17 +511,29 @@ public class SubcttItemAction {
                 }
 
                 if(strSubmitType.equals("Add")){
-                    if(!ToolUtil.getStrIgnoreNull(cttItemShowAdd.getName()).equals("")){
+                    if(!ToolUtil.getStrIgnoreNull(cttItemQShowAdd.getName()).equals("")){
 //                        Integer intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowAdd.getName());
-                        String intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowAdd.getName());
+                        String intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemQShowAdd.getName());
 
                         if(!intIndex.equals("-1")){
-                            cttItemShowAdd.setSpareField(intIndex.toString());
+                            cttItemQShowAdd.setSpareField(intIndex.toString());
                         }
                     }
-                    cttItemService.setAfterThisOrderidPlusOneByNode(cttItemShowAdd);
-                    resetAction();
-                }else if(strSubmitType.equals("Upd")){
+                    cttItemService.setAfterThisOrderidPlusOneByNode(cttItemQShowAdd);
+                    resetAction("");
+                }
+                else if(strSubmitType.equals("FAdd")){
+                    if(!ToolUtil.getStrIgnoreNull(cttItemFShowAdd.getName()).equals("")){
+                        String intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemFShowAdd.getName());
+
+                        if(!intIndex.equals("-1")){
+                            cttItemFShowAdd.setSpareField(intIndex.toString());
+                        }
+                    }
+                    cttItemService.setAfterThisOrderidPlusOneByNode(cttItemFShowAdd);
+                    resetAction("FAdd");
+                }
+                else if(strSubmitType.equals("Upd")){
                     if(!ToolUtil.getStrIgnoreNull(cttItemShowUpd.getName()).equals("")){
                         String intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemShowUpd.getName());
                         if(!intIndex.equals("-1")){
@@ -523,6 +546,8 @@ public class SubcttItemAction {
             switch (strSubmitType){
                 case "Add" : MessageUtil.addInfo("增加数据完成。");
                     break;
+                case "FAdd" : MessageUtil.addInfo("增加数据完成。");
+                    break;
                 case "Upd" : MessageUtil.addInfo("更新数据完成。");
                     break;
                 case "Del" : MessageUtil.addInfo("删除数据完成。");
@@ -532,6 +557,8 @@ public class SubcttItemAction {
         catch (Exception e){
             switch (strSubmitType){
                 case "Add" : MessageUtil.addError("增加数据失败，"+ e.getMessage());
+                    break;
+                case "FAdd" : MessageUtil.addInfo("增加数据失败,"+  e.getMessage());
                     break;
                 case "Upd" : MessageUtil.addError("更新数据失败，"+ e.getMessage());
                     break;
@@ -544,7 +571,10 @@ public class SubcttItemAction {
 	private Boolean subMitActionPreCheck(){
         CttItemShow cttItemShowTemp =new CttItemShow(strBelongToType ,strCttInfoPkid);
         if (strSubmitType.equals("Add")){
-            cttItemShowTemp = cttItemShowAdd;
+            cttItemShowTemp = cttItemQShowAdd;
+        }
+        if (strSubmitType.equals("FAdd")){
+            cttItemShowTemp = cttItemFShowAdd;
         }
         if (strSubmitType.equals("Upd")){
             cttItemShowTemp = cttItemShowUpd;
@@ -1041,12 +1071,12 @@ public class SubcttItemAction {
         return styleModel;
     }
 
-    public CttItemShow getCttItemShowAdd() {
-        return cttItemShowAdd;
+    public CttItemShow getCttItemQShowAdd() {
+        return cttItemQShowAdd;
     }
 
-    public void setCttItemShowAdd(CttItemShow cttItemShowAdd) {
-        this.cttItemShowAdd = cttItemShowAdd;
+    public void setCttItemQShowAdd(CttItemShow cttItemQShowAdd) {
+        this.cttItemQShowAdd = cttItemQShowAdd;
     }
 
     public CttItemShow getCttItemShowUpd() {
@@ -1145,5 +1175,14 @@ public class SubcttItemAction {
     public void setStrFlowStatusRemark(String strFlowStatusRemark) {
         this.strFlowStatusRemark = strFlowStatusRemark;
     }
-/*智能字段End*/
+
+    public CttItemShow getcttItemFShowAdd() {
+        return cttItemFShowAdd;
+    }
+
+    public void setcttItemFShowAdd(CttItemShow cttItemFShowAdd) {
+        this.cttItemFShowAdd = cttItemFShowAdd;
+    }
+
+    /*智能字段End*/
 }
