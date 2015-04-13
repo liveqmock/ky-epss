@@ -17,49 +17,53 @@
     <select id="selectListByFlowCtrlHis" parameterType="epss.repository.model.model_show.FlowCtrlShow"
             resultMap="BaseResultMapFlowCtrlShowRes">
         <![CDATA[
-             select
-                   info_pkid
-                  ,info_type
-                  ,flow_status
-                  ,createdByName
-                  ,(case created_time when '1990-0-0' then else created_time end) as created_time
-                  ,PERIOD_NO as periodNo
-             from
-                 (select f.info_pkid
-                         ,f.info_type
-                         ,IFNULL(f.flow_status,'-100') flow_status
-                         ,f.ARCHIVED_FLAG
-                         ,name as createdByName
-                         ,IFNULL(f.created_time,'1990-0-0') created_time
-                         ,PERIOD_NO
-                         ,row_number() over(partition by
-                                            f.info_pkid
-                                            ,f.info_type
-                                            ,f.flow_status
-                                            ,f.PERIOD_NO
-                                        order by
-                                             f.info_pkid
-                                             ,f.info_type
-                                             ,f.flow_status
-                                             ,IFNULL(f.created_time,'1990-0-0')
-                                             ,PERIOD_NO
-                                             ,CREATED_BY_NAME desc) cn
-             from flow_ctrl_his f
-             left join oper o
-             on o.pkid = f.created_by)
-             where cn = 1 and ARCHIVED_FLAG='0' and flow_status!='-100'
+
+            select      f.info_pkid as info_pkid
+                         ,f.info_type as info_type
+                         ,f.flow_status as flow_status
+                         ,f.created_time as created_time
+                         ,f.PERIOD_NO as periodNo
+                         , o.name as createdByName
+                from  flow_ctrl_his f,
+                      (select   info_pkid
+                                ,info_type
+                                ,flow_status
+                                ,CREATED_BY
+                                ,PERIOD_NO
+                                ,max(CREATED_TIME) as created_time
+                      from  flow_ctrl_his
+                      where flow_status!=""
+                      group by
+                                 info_pkid
+                                ,info_type
+                                ,flow_status
+                                ,PERIOD_NO
+                      ) a    left join oper o on o.pkid = a.CREATED_BY
+            where
+
+                              f.info_pkid =a.info_pkid
+            and
+                              f.info_type = a.info_type
+            and
+                              f.flow_status  = a.flow_status
+            and
+                              f.PERIOD_NO =a.PERIOD_NO
+            and
+                              f.created_time = a.created_time
+            and            f.FLOW_STATUS !=""
+            and           f.ARCHIVED_FLAG =0
         ]]>
         <if test="infoType != null and infoType != ''">
-            and info_type=trim(#{infoType})
+            and f.info_type=trim(#{infoType})
         </if>
         <if test="periodNo != null and periodNo != ''">
-            and PERIOD_NO =trim(#{periodNo})
+            and f.PERIOD_NO =trim(#{periodNo})
         </if>
         <if test="flowStatus != null and flowStatus != ''">
-            and flow_status=trim(#{flowStatus})
+            and f.flow_status=trim(#{flowStatus})
         </if>
         <if test="infoPkid != null and infoPkid != ''">
-            and info_Pkid=trim(#{infoPkid})
+            and f.info_Pkid=trim(#{infoPkid})
         </if>
         <if test="createdTime != null and createdTime != ''">
             and created_time &gt;=trim(#{createdTime})
@@ -67,5 +71,13 @@
         <if test="endTime != null and endTime != ''">
             and created_time &lt;=trim(#{endTime})
         </if>
+
+            order by
+
+            f.info_pkid
+            ,f.info_type
+            ,f.flow_status
+            ,f.PERIOD_NO
+            desc
     </select>
 </mapper>
