@@ -30,14 +30,19 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table   tableName="TID_KEYS">
+        <table tableName="PTMENU">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
 
 
         <!--业务类例子 -->
-        <!--<table   tableName="OPER_RES">
+        <!--
+	<table   tableName="TID_KEYS">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
+        </table>
+	<table   tableName="OPER_RES">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>

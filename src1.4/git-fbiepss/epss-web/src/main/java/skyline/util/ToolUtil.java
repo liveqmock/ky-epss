@@ -59,6 +59,10 @@ public class ToolUtil {
         return bigDecimalPara==null?new BigDecimal(0):bigDecimalPara;
     }
 
+    public static Boolean Is0Null (BigDecimal bigDecimalPara){
+        return bigDecimalPara==null?true:(bigDecimal0.compareTo(bigDecimalPara)==0?true:false);
+    }
+
     public static BigDecimal getBdFrom0ToNull(BigDecimal bigDecimalPara){
         return bigDecimalPara==null?null:(bigDecimal0.compareTo(bigDecimalPara)==0?null:bigDecimalPara);
     }

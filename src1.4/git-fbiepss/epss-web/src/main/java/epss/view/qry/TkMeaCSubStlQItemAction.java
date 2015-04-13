@@ -175,10 +175,10 @@ public class TkMeaCSubStlQItemAction {
                 qryTkMeaCSStlQShowTemp.setTkcttItem_No(tkcttItemShowUnit.getStrNo());
                 qryTkMeaCSStlQShowTemp.setTkcttItem_Name(tkcttItemShowUnit.getName());
                 qryTkMeaCSStlQShowTemp.setTkcttItem_Unit(tkcttItemShowUnit.getUnit());
-                qryTkMeaCSStlQShowTemp.setTkcttItem_CttUnitPrice(tkcttItemShowUnit.getContractUnitPrice());
-                qryTkMeaCSStlQShowTemp.setTkcttItem_CttQty(tkcttItemShowUnit.getContractQuantity());
-                if(tkcttItemShowUnit.getContractUnitPrice()!=null&&
-                        tkcttItemShowUnit.getContractQuantity()!=null) {
+                qryTkMeaCSStlQShowTemp.setTkcttItem_CttUnitPrice(ToolUtil.getBdFrom0ToNull(tkcttItemShowUnit.getContractUnitPrice()));
+                qryTkMeaCSStlQShowTemp.setTkcttItem_CttQty(ToolUtil.getBdFrom0ToNull(tkcttItemShowUnit.getContractQuantity()));
+                if(!ToolUtil.Is0Null(qryTkMeaCSStlQShowTemp.getTkcttItem_CttUnitPrice())&&
+                        !ToolUtil.Is0Null(qryTkMeaCSStlQShowTemp.getTkcttItem_CttQty())) {
                     qryTkMeaCSStlQShowTemp.setTkcttItem_CttAmt(
                             tkcttItemShowUnit.getContractUnitPrice().multiply(tkcttItemShowUnit.getContractQuantity()));
                     tkcttItem_CttAmt_TotalAmtOfAllItem=tkcttItem_CttAmt_TotalAmtOfAllItem.add(
@@ -230,10 +230,10 @@ public class TkMeaCSubStlQItemAction {
                         tkMeaCstplUnitTemp.setCstplItem_Pkid(cstplItemShowUnit.getPkid());
                         tkMeaCstplUnitTemp.setCstplItem_No(cstplItemShowUnit.getStrNo());
                         tkMeaCstplUnitTemp.setCstplItem_Name(cstplItemShowUnit.getName());
-                        tkMeaCstplUnitTemp.setCstplItem_UnitPrice(cstplItemShowUnit.getContractUnitPrice());
-                        tkMeaCstplUnitTemp.setCstplItem_Qty(cstplItemShowUnit.getContractQuantity());
-                        if(ToolUtil.getBdIgnoreNull(cstplItemShowUnit.getContractUnitPrice()).compareTo(ToolUtil.bigDecimal0)>0&&
-                           ToolUtil.getBdIgnoreNull(cstplItemShowUnit.getContractQuantity()).compareTo(ToolUtil.bigDecimal0)>0) {
+                        tkMeaCstplUnitTemp.setCstplItem_UnitPrice(ToolUtil.getBdFrom0ToNull(cstplItemShowUnit.getContractUnitPrice()));
+                        tkMeaCstplUnitTemp.setCstplItem_Qty(ToolUtil.getBdFrom0ToNull(cstplItemShowUnit.getContractQuantity()));
+                        if(!ToolUtil.Is0Null(cstplItemShowUnit.getContractUnitPrice())&&
+                           !ToolUtil.Is0Null(cstplItemShowUnit.getContractQuantity())) {
                             tkMeaCstplUnitTemp.setCstplItem_Amt(
                                     cstplItemShowUnit.getContractUnitPrice().multiply(cstplItemShowUnit.getContractQuantity()));
                         }
@@ -293,11 +293,11 @@ public class TkMeaCSubStlQItemAction {
                     qryTkMeaCSStlQShowTempRe.setCstplItem_Name(cstplItemShowUnit.getName());
                     qryTkMeaCSStlQShowTempRe.setCstplItem_UnitPrice(cstplItemShowUnit.getContractUnitPrice());
                     qryTkMeaCSStlQShowTempRe.setCstplItem_Qty(cstplItemShowUnit.getContractQuantity());
-                    if(!ToolUtil.getBdIgnoreNull(cstplItemShowUnit.getContractAmount()).equals(ToolUtil.bigDecimal0)) {
+                    if(!ToolUtil.Is0Null(cstplItemShowUnit.getContractAmount())) {
                         qryTkMeaCSStlQShowTempRe.setCstplItem_Amt(cstplItemShowUnit.getContractAmount());
                     } else{
-                        if(cstplItemShowUnit.getContractUnitPrice()!=null&&
-                                cstplItemShowUnit.getContractQuantity()!=null) {
+                        if(!ToolUtil.Is0Null(cstplItemShowUnit.getContractUnitPrice())&&
+                                !ToolUtil.Is0Null(cstplItemShowUnit.getContractQuantity())) {
                             qryTkMeaCSStlQShowTempRe.setCstplItem_Amt(
                                     cstplItemShowUnit.getContractUnitPrice().multiply(cstplItemShowUnit.getContractQuantity()));
                         }

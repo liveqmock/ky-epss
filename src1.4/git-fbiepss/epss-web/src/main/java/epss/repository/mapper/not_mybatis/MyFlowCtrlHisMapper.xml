@@ -22,7 +22,7 @@
                   ,info_type
                   ,flow_status
                   ,createdByName
-                  ,decode(created_time,'1990-0-0','',created_time) as created_time
+                  ,(case created_time when '1990-0-0' then else created_time end) as created_time
                   ,PERIOD_NO as periodNo
              from
                  (select f.info_pkid
@@ -30,7 +30,7 @@
                          ,IFNULL(f.flow_status,'-100') flow_status
                          ,f.ARCHIVED_FLAG
                          ,name as createdByName
-                         ,nvl(f.created_time,'1990-0-0') created_time
+                         ,IFNULL(f.created_time,'1990-0-0') created_time
                          ,PERIOD_NO
                          ,row_number() over(partition by
                                             f.info_pkid
@@ -41,7 +41,7 @@
                                              f.info_pkid
                                              ,f.info_type
                                              ,f.flow_status
-                                             ,nvl(f.created_time,'1990-0-0')
+                                             ,IFNULL(f.created_time,'1990-0-0')
                                              ,PERIOD_NO
                                              ,CREATED_BY_NAME desc) cn
              from flow_ctrl_his f
@@ -67,11 +67,5 @@
         <if test="endTime != null and endTime != ''">
             and created_time &lt;=trim(#{endTime})
         </if>
-        <!--<if test="createdByName != null and createdByName != ''">-->
-            <!--and createdByName like CONCAT('%',CONCAT(trim(#{createdByName}),'%'))-->
-        <!--</if>-->
-
-
-
     </select>
 </mapper>

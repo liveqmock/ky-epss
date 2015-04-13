@@ -159,7 +159,8 @@
                             <p:selectOneMenu id="infotypeAdd" value="#{menuAction.ptmenuAdd.infotype}">
                                 <f:selectItems value="#{esCommon.resTypeList}"/>
                             </p:selectOneMenu>
-                            <p:selectOneMenu id="菜单类型" value="#{menuAction.ptmenuAdd.menuType}">
+                            <p:outputLabel value="菜单类型：" for="menuTypeUpd"/>
+                            <p:selectOneMenu id="menuTypeAdd" value="#{menuAction.ptmenuAdd.menuType}">
                                 <f:selectItems value="#{menuAction.menuTypeList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="功能类型：" for="flowstatusAdd"/>
