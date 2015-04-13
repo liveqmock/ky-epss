@@ -93,7 +93,10 @@ public class FlowCtrlHisService {
                     flowCtrlShowList.add(fcsParam);
                 }
             }else{
-                if(flowCtrlshows.get(i-1).getInfoPkid().equals(flowCtrlshow.getInfoPkid())&&flowCtrlshows.get(i-1).getInfoType().equals(flowCtrlshow.getInfoType())){
+                String perioNo = flowCtrlshows.get(i-1).getPeriodNo()==null?"":flowCtrlshows.get(i-1).getPeriodNo();
+                String perioNo2 = flowCtrlshow.getPeriodNo()==null?"":flowCtrlshow.getPeriodNo();
+                if(flowCtrlshows.get(i-1).getInfoPkid().equals(flowCtrlshow.getInfoPkid())&&flowCtrlshows.get(i-1).getInfoType().equals(flowCtrlshow.getInfoType())&&perioNo.equals(perioNo2)){
+
                     //取出上一次的endTime 就是这次的开始时间
                     String benginTime = flowCtrlshows.get(i-1).getEndTime();
                     //取出当前这次createTime就是这次的结束时间
