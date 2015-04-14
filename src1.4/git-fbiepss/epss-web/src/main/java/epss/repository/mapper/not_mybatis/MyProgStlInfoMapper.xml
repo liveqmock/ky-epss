@@ -136,7 +136,7 @@
             and
                 eic.CTT_TYPE='0'
             left outer join
-                 SIGN_PART eicust   --连客户信息
+                 SIGN_PART eicust
             on
                  eicust.PKID=eic.SIGN_PART_B
             where

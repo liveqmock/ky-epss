@@ -47,7 +47,7 @@
                                 </f:facet>
                             </p:ajaxStatus>
                         </h:panelGrid>
-                        <h:panelGrid id="funcId"  columns="7" style="text-align: center" >
+                        <h:panelGrid id="funcId"  columns="8" style="text-align: center" >
                             <h:outputText value="权限指派: "  />
                             <p:commandButton id="mngBtnId" value="录入"
                                              update=":form:pgViewForBatchPower,:form:msgs"
@@ -85,6 +85,12 @@
                                              onclick="#{operFuncBusiResMngAction.clickFuncDispatchAction()}?wVDlgViewForBatchPower.show():''"
                                              title="View">
                             </p:commandButton>
+                            <p:commandButton id="qryBtnId" value="查询"
+                                             update=":form:pgViewForBatchPower,:form:msgs"
+                                             action="#{operFuncBusiResMngAction.selectFuncDispatchAction('6')}"
+                                             onclick="#{operFuncBusiResMngAction.clickFuncDispatchAction()}?wVDlgViewForBatchPower.show():''"
+                                             title="View">
+                            </p:commandButton>
                         </h:panelGrid>
                     </h:panelGrid>
                     <p:treeTable id="resTreeTable"
@@ -101,7 +107,7 @@
                                  scrollHeight="500">
                         <p:ajax event="collapse" update=":form:msgs"
                                 listener="#{operFuncBusiResMngAction.onNodeCollapse}" />
-                        <p:column headerText="名称" style="width:400px;">
+                        <p:column headerText="资源名称" style="width:400px;">
                             <p:selectBooleanCheckbox  value="#{document.isSeled}"
                                                       rendered="#{document.resPkid eq 'ROOT'?'false':'true'}">
                                 <p:ajax  listener="#{operFuncBusiResMngAction.selResRecordsAction(document)}" update=":form:resTreeTable,:form:funcId,:form:msgs"/>

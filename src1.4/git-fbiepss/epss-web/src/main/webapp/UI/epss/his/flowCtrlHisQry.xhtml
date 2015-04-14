@@ -60,11 +60,9 @@
                                 <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHis.periodNo}"
                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                             </h:panelGrid>
-                            <h:panelGrid columns="6">
+                            <h:panelGrid columns="7">
                                 <p:outputLabel value="创建人名：" for="createdByName"/>
                                 <p:inputText id="createdByName" value="#{flowCtrlHisAction.flowCtrlShow.createdByName}"/>
-                            </h:panelGrid>
-                            <h:panelGrid columns="4">
                                 <p:outputLabel value="创建时间：" for="createdate"/>
                                 <p:inputText id="createdate" value="#{flowCtrlHisAction.flowCtrlShow.createdTime}"
                                              onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
