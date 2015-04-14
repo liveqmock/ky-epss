@@ -105,22 +105,7 @@ public class FlowCtrlHisService {
                     flowCtrlshow.setCreatedTime(benginTime);
                     flowCtrlshow.setEndTime(endTime);
                     flowCtrlShowList.add(flowCtrlshow);
-                    //hu注释掉
-                    //防止flowStatus为相同并且flowStatus不等于5  要在最后一条加上下一状态
-//                    if(i==flowCtrlshows.size()-1&&!"5".equals(flowCtrlshow.getFlowStatus())){
-//                        FlowCtrlShow fcsParam = new FlowCtrlShow();
-//                        try {
-//                            fcsParam = (FlowCtrlShow) BeanUtils.cloneBean(flowCtrlshow);
-//                        } catch (Exception e) {
-//                            e.printStackTrace();
-//                        }
-//                        //状态就是上这次次状态加1，作为下一次的状态
-//                        fcsParam.setFlowStatus("".equals(flowCtrlshow.getFlowStatus())||flowCtrlshow.getFlowStatus()==null?"" : String.valueOf(Integer.parseInt(flowCtrlshow.getFlowStatus()) + 1));
-//                        fcsParam.setCreatedByName("");
-//                        fcsParam.setCreatedTime(fcsParam.getEndTime());
-//                        fcsParam.setEndTime("");
-//                        flowCtrlShowList.add(fcsParam);
-//                    }
+
                 }else{
                      //判断上一次的FlowStatus是否为5
                     //如果不等于数据库中FlowStatus的最大数，
@@ -151,6 +136,21 @@ public class FlowCtrlHisService {
                     }
                     flowCtrlShowList.add(flowCtrlshow);
                 }
+            }
+            //防止flowStatus为相同并且flowStatus不等于5  要在最后一条加上下一状态
+            if(i==flowCtrlshows.size()-1&&!"5".equals(flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus())){
+                FlowCtrlShow fcsParam = new FlowCtrlShow();
+                try {
+                    fcsParam = (FlowCtrlShow) BeanUtils.cloneBean(flowCtrlshows.get(flowCtrlshows.size()-1));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //状态就是上这次次状态加1，作为下一次的状态
+                fcsParam.setFlowStatus("".equals(flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus())||flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus()==null?"" : String.valueOf(Integer.parseInt(flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus()) + 1));
+                fcsParam.setCreatedByName("");
+                fcsParam.setCreatedTime(fcsParam.getEndTime());
+                fcsParam.setEndTime("");
+                flowCtrlShowList.add(fcsParam);
             }
            i++;
         }
