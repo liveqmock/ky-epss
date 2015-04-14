@@ -18,40 +18,16 @@
             resultMap="BaseResultMapFlowCtrlShowRes">
         <![CDATA[
 
-            select      f.info_pkid as info_pkid
-                         ,f.info_type as info_type
-                         ,f.flow_status as flow_status
-                         ,f.created_time as created_time
-                         ,f.PERIOD_NO as periodNo
-                         , o.name as createdByName
-                from  flow_ctrl_his f,
-                      (select   info_pkid
-                                ,info_type
-                                ,flow_status
-                                ,CREATED_BY
-                                ,PERIOD_NO
-                                ,max(CREATED_TIME) as created_time
-                      from  flow_ctrl_his
-                      where flow_status!=""
-                      group by
-                                 info_pkid
-                                ,info_type
-                                ,flow_status
-                                ,PERIOD_NO
-                      ) a    left join oper o on o.pkid = a.CREATED_BY
-            where
 
-                              f.info_pkid =a.info_pkid
-            and
-                              f.info_type = a.info_type
-            and
-                              f.flow_status  = a.flow_status
-            and
-                              f.PERIOD_NO =a.PERIOD_NO
-            and
-                              f.created_time = a.created_time
-            and            f.FLOW_STATUS !=""
-            and           f.ARCHIVED_FLAG =0
+select   f.info_pkid as info_pkid
+         ,f.info_type as info_type
+         ,f.flow_status as flow_status
+         ,f.PERIOD_NO as periodNo
+         ,max(CREATED_TIME) as created_time
+         ,f.CREATED_BY_NAME as createdByName
+from  flow_ctrl_his f
+where f.flow_status!=""
+   and f.ARCHIVED_FLAG =0
         ]]>
         <if test="infoType != null and infoType != ''">
             and f.info_type=trim(#{infoType})
@@ -71,13 +47,10 @@
         <if test="endTime != null and endTime != ''">
             and f.created_time &lt;=trim(#{endTime})
         </if>
-
-            order by
-
-            f.info_pkid
-            ,f.info_type
-            ,f.flow_status
-            ,f.PERIOD_NO
-            desc
+group by
+        info_pkid
+        ,info_type
+        ,PERIOD_NO
+        ,flow_status
     </select>
 </mapper>
