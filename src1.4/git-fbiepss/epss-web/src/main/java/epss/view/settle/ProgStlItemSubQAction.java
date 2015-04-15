@@ -288,14 +288,14 @@ public class ProgStlItemSubQAction {
                 bdCurrentPeriodEQtyTotal=
                         bdCurrentPeriodEQtyTotal.add(ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getEngQMng_CurrentPeriodEQty()));
                 //费税率金额不计入小计（费税率为子项时），当前和开累不计入大计
-                if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade()>1){
+                if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade()>1 && (!itemUnit.getSubctt_SpareField().equals("F1"))){
                     bdAmountTotal=bdAmountTotal.add(
                             ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getSubctt_ContractAmount()).subtract(
                                     ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getSubctt_ContractAmount())));
                 }else{
                     bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
                 }
-            if(itemUnit.getSubctt_SpareField()==null){
+            if(itemUnit.getSubctt_SpareField()==null ||(itemUnit.getSubctt_SpareField().equals("F1")) ){
                 bdAmountAllTotal=bdAmountAllTotal.add(ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
                 bdBeginToCurrentPeriodEQtyAllTotal=
                         bdBeginToCurrentPeriodEQtyAllTotal.add(ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()));
@@ -346,7 +346,7 @@ public class ProgStlItemSubQAction {
                 progStlItemSubQShowTemp.setSubctt_Pkid("total" + i);
                 progStlItemSubQShowTemp.setSubctt_ContractQuantity(
                         ToolUtil.getBdFrom0ToNull(bdQuantityTotal));
-                if(itemUnitNext.getSubctt_SpareField()==null){
+                if((itemUnitNext.getSubctt_SpareField()==null)||(itemUnit.getSubctt_SpareField().equals("F1"))){
                     progStlItemSubQShowTemp.setSubctt_ContractAmount(
                             ToolUtil.getStrIgnoreNull(bdAmountTotal+""));
                     progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(
@@ -354,17 +354,19 @@ public class ProgStlItemSubQAction {
                     progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(
                             ToolUtil.getStrIgnoreNull(bdCurrentPeriodEQtyTotal+""));
                 }else{
-                    if(bdAmountTotal.compareTo(ToolUtil.bigDecimal0)>0){
-                        progStlItemSubQShowTemp.setSubctt_ContractAmount(
-                                ToolUtil.getStrIgnoreNull(bdAmountTotal+"%"));
-                    }
-                    if(bdBeginToCurrentPeriodEQtyTotal.compareTo(ToolUtil.bigDecimal0)>0){
-                        progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(
-                                ToolUtil.getStrIgnoreNull(bdBeginToCurrentPeriodEQtyTotal+"%"));
-                    }
-                    if(bdCurrentPeriodEQtyTotal.compareTo(ToolUtil.bigDecimal0)>0){
-                        progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(
-                                ToolUtil.getStrIgnoreNull(bdCurrentPeriodEQtyTotal+"%"));
+                    if (! itemUnit.getSubctt_SpareField().equals("F1")){
+                        if (bdAmountTotal.compareTo(ToolUtil.bigDecimal0) > 0) {
+                            progStlItemSubQShowTemp.setSubctt_ContractAmount(
+                                    ToolUtil.getStrIgnoreNull(bdAmountTotal + "%"));
+                        }
+                        if (bdBeginToCurrentPeriodEQtyTotal.compareTo(ToolUtil.bigDecimal0) > 0) {
+                            progStlItemSubQShowTemp.setEngQMng_BeginToCurrentPeriodEQty(
+                                    ToolUtil.getStrIgnoreNull(bdBeginToCurrentPeriodEQtyTotal + "%"));
+                        }
+                        if (bdCurrentPeriodEQtyTotal.compareTo(ToolUtil.bigDecimal0) > 0) {
+                            progStlItemSubQShowTemp.setEngQMng_CurrentPeriodEQty(
+                                    ToolUtil.getStrIgnoreNull(bdCurrentPeriodEQtyTotal + "%"));
+                        }
                     }
                 }
                 progStlItemSubQShowTemp.setIsRenderedFlag(false);

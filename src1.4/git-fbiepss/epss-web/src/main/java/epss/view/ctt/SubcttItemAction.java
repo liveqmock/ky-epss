@@ -297,7 +297,7 @@ public class SubcttItemAction {
     }
 
     /*重置*/
-    public void resetAction(String strMitType){
+    public void resetAction(String strMitType   ){
         strSubmitType="Add";
         if (ToolUtil.getStrIgnoreNull(strMitType).equals("FAdd")){
             strSubmitType="FAdd";
@@ -424,17 +424,28 @@ public class SubcttItemAction {
                 return strNoBlurFalse();
             }
             else{
+
                 List<CttItem> itemHieRelapListSubTemp=new ArrayList<>();
                 itemHieRelapListSubTemp=getEsCttItemListByParentPkid(
                         cttItemShowTemp1.getPkid(),
                         cttItemList);
                 if(itemHieRelapListSubTemp .size() ==0){
+                    if (cttItemShowTemp1.getSignPartAPrice()!= null ||cttItemShowTemp1.getContractQuantity() != null
+                            ||cttItemShowTemp1.getContractUnitPrice() != null ){
+                        MessageUtil.addError("请确认输入的编码！该编码不符合规范，"+strParentNo+"不能有子项");
+                        return strNoBlurFalse();
+                    }
                     if(!cttItemShowTemp.getStrNo().equals(strParentNo+".1") ){
                         MessageUtil.addError("请确认输入的编码！该编码不符合规范，应输入" + strParentNo + ".1！");
                         return strNoBlurFalse();
                     }
                 }
                 else{
+                    if (cttItemShowTemp1.getSignPartAPrice()!= null ||cttItemShowTemp1.getContractQuantity() != null
+                         ||cttItemShowTemp1.getContractUnitPrice() != null ){
+                        MessageUtil.addError("请确认输入的编码！该编码不符合规范，"+strParentNo+"不能有子项");
+                        return strNoBlurFalse();
+                    }
                     String strOrderid=strIgnoreSpaceOfStr.substring(intLastIndexof+1);
                     if(itemHieRelapListSubTemp.size() +1<Integer.parseInt(strOrderid)){
                         MessageUtil.addError("请确认输入的编码！该编码不符合规范，应输入" + strParentNo +
@@ -727,7 +738,7 @@ public class SubcttItemAction {
                         if (ToolUtil.bigDecimal0.compareTo(ToolUtil.getBdIgnoreNull(cttItemTemp.getContractQuantity()))!=0){
                             checkQZero=1;
                         }
-                        if (!ToolUtil.getStrIgnoreNull(cttItemTemp.getSpareField()).equals("F1") ){
+                        if (ToolUtil.getStrIgnoreNull(cttItemTemp.getSpareField()).equals("F1") ){
                             checkSpare=1;
                         }
                     }

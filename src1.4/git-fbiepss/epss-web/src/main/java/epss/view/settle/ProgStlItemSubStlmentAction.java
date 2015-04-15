@@ -192,7 +192,7 @@ public class ProgStlItemSubStlmentAction {
             /*records0,records1导出excel报表使用*/
                 List<ProgStlItemSubStlmentShow> records0 = new ArrayList<ProgStlItemSubStlmentShow>();
                 List<ProgStlItemSubStlmentShow> records1 = new ArrayList<ProgStlItemSubStlmentShow>();
-                List<ProgStlItemSubStlmentShow> records2 = new ArrayList<ProgStlItemSubStlmentShow>();
+                List<ProgStlItemSubStlmentShow> records10 = new ArrayList<ProgStlItemSubStlmentShow>();
             /*表内容设定，批准，查P表*/
                 for (ProgStlItemSubStlment progStlItemSubStlment : progStlItemSubStlmentList) {
                     ProgStlItemSubStlmentShow progStlItemSubStlmentShowTemp =
@@ -207,13 +207,14 @@ public class ProgStlItemSubStlmentAction {
                         if (EnumResType.RES_TYPE4.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
                             records1.add(progStlItemSubStlmentShowTemp);
                         }
-                        if (EnumResType.RES_TYPE4.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
-                            records1.add(progStlItemSubStlmentShowTemp);
+                        if (EnumResType.RES_TYPE8.getCode().equals(progStlItemSubStlmentShowTemp.getEngPMng_SubStlType())) {
+                            records10.add(progStlItemSubStlmentShowTemp);
                         }
                     }
                 }
                 beansMap.put("records0", records0);
                 beansMap.put("records1", records1);
+                beansMap.put("records10", records10);
                 List<FlowCtrlHis> flowCtrlHisForSubcttStlList =
                         flowCtrlHisService.getSubStlListByFlowCtrlHis(progStlInfo.getStlPkid(), progStlInfo.getPeriodNo());
                 for (FlowCtrlHis flowCtrlHisTemp : flowCtrlHisForSubcttStlList) {

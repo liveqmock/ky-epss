@@ -272,12 +272,12 @@ public class ProgStlItemSubMAction {
             bdCurrentPeriodMQtyTotal=
                     bdCurrentPeriodMQtyTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getEngMMng_CurrentPeriodMQty()));
             //费税率金额不计入小计（费税率为子项时），当前和开累不计入大计
-            if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade()>1){
+            if(itemUnit.getSubctt_SpareField()!=null&&itemUnit.getSubctt_Grade()>1 && (!itemUnit.getSubctt_SpareField().equals("F1")) ){
                 bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount())).subtract(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
             }else{
                 bdAmountTotal=bdAmountTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
             }
-            if(itemUnit.getSubctt_SpareField()==null){
+            if(itemUnit.getSubctt_SpareField()==null ||(itemUnit.getSubctt_SpareField().equals("F1"))){
                 bdAmountAllTotal=bdAmountAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractAmount()));
             }
             bdBeginToCurrentPeriodMQtyAllTotal=

@@ -346,13 +346,7 @@ public class ProgStlItemSubFAction {
             ProgStlItemSubFShowTemp.setSubctt_ContractUnitPrice(itemUnit.getContractUnitPrice());
             ProgStlItemSubFShowTemp.setSubctt_ContractQuantity(itemUnit.getContractQuantity());
             ProgStlItemSubFShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
-//            ProgStlItemSubFShowTemp.setSubctt_ContractAmount(itemUnit.getContractAmount());
-//            if(itemUnit.getSpareField()!=null&&(!ToolUtil.getStrIgnoreNull(itemUnit.getSpareField()).equals("F1"))){
-//                ProgStlItemSubFShowTemp.setSubctt_ContractAmount(ToolUtil.getStrFromBdIgnoreZeroNull("#,##0.00%",itemUnit.getContractAmount()));
-//            }else{
-//                String strSubctt_ContractAmountInPercent=ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.000",itemUnit.getContractAmount());
-//                ProgStlItemSubFShowTemp.setSubctt_ContractAmount(strSubctt_ContractAmountInPercent);
-//            }
+
             ProgStlItemSubFShowTemp.setSubctt_SignPartAPrice(itemUnit.getSignPartAPrice());
             ProgStlItemSubFShowTemp.setSubctt_SpareField(itemUnit.getSpareField());
 
@@ -368,15 +362,8 @@ public class ProgStlItemSubFAction {
                 ProgStlItemSubFShowTemp.setEngSMng_PeriodNo(progStlItemSubF.getPeriodNo());
                 ProgStlItemSubFShowTemp.setEngSMng_SubcttPkid(progStlItemSubF.getSubcttPkid());
                 ProgStlItemSubFShowTemp.setEngSMng_SubcttItemPkid(progStlItemSubF.getSubcttItemPkid());
-//                if(ProgStlItemSubFShowTemp.getSubctt_SpareField()!=null &&(!ToolUtil.getStrIgnoreNull(itemUnit.getSpareField()).equals("F1"))){
-//                    String strEngQMng_BeginToCurrentPeriodEQtyInPercent=ToolUtil.getStrFromBdIgnoreZeroNull("#,##0.00%", progStlItemSubF.getAddUpToAmt());
-//                    ProgStlItemSubFShowTemp.setEngSMng_ThisStageAmt(ToolUtil.getBdFromStrOrBdIgnoreNull(strEngQMng_BeginToCurrentPeriodEQtyInPercent));
-//                    String strEengQMng_CurrentPeriodEQtyInPercentInPercent=ToolUtil.getStrFromBdIgnoreZeroNull("#,##0.00%", progStlItemSubF.getThisStageAmt());
-//                    ProgStlItemSubFShowTemp.setEngSMng_ThisStageAmt(ToolUtil.getBdFromStrOrBdIgnoreNull(strEengQMng_CurrentPeriodEQtyInPercentInPercent));
-//                }else{
-                    ProgStlItemSubFShowTemp.setEngSMng_AddUpToAmt( progStlItemSubF.getAddUpToAmt());
-                    ProgStlItemSubFShowTemp.setEngSMng_ThisStageAmt( progStlItemSubF.getThisStageAmt());
-//                }
+                ProgStlItemSubFShowTemp.setEngSMng_AddUpToAmt( progStlItemSubF.getAddUpToAmt());
+                ProgStlItemSubFShowTemp.setEngSMng_ThisStageAmt( progStlItemSubF.getThisStageAmt());
                 ProgStlItemSubFShowTemp.setEngSMng_ArchivedFlag(progStlItemSubF.getArchivedFlag());
                 ProgStlItemSubFShowTemp.setEngSMng_CreatedBy(progStlItemSubF.getCreatedBy());
                 String strCreatedByNameTemp=cttInfoService.getUserName(progStlItemSubF.getCreatedBy());
