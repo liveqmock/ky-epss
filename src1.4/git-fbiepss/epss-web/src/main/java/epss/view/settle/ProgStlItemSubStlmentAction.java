@@ -234,6 +234,14 @@ public class ProgStlItemSubStlmentAction {
                         } else if (EnumFlowStatus.FLOW_STATUS2.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
                             beansMap.put("esInitPowerHisForSubcttStlMDoubleCheck", flowCtrlHisTemp);
                         }
+                    } else if (EnumResType.RES_TYPE8.getCode().equals(flowCtrlHisTemp.getInfoType())) {
+                        if (EnumFlowStatus.FLOW_STATUS0.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                            beansMap.put("esInitPowerHisForSubcttStlFMng", flowCtrlHisTemp);
+                        } else if (EnumFlowStatus.FLOW_STATUS1.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                            beansMap.put("esInitPowerHisForSubcttStlFCheck", flowCtrlHisTemp);
+                        } else if (EnumFlowStatus.FLOW_STATUS2.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
+                            beansMap.put("esInitPowerHisForSubcttStlFDoubleCheck", flowCtrlHisTemp);
+                        }
                     } else if (("Account".equals(strFlowType) || "Qry".equals(strFlowType)) &&
                             EnumResType.RES_TYPE5.getCode().equals(flowCtrlHisTemp.getInfoType())) {
                         if (EnumFlowStatus.FLOW_STATUS3.getCode().equals(flowCtrlHisTemp.getFlowStatus())) {
@@ -489,9 +497,10 @@ public class ProgStlItemSubStlmentAction {
             stl10.setEngPMng_PeriodNo(progStlInfo.getPeriodNo());
             progStlItemSubStlmentShowList.add(stl10);
             progStlItemSubStlmentShowListForApprove.add(stl10);
+
             BigDecimal bdTotalAmtFtemp = new BigDecimal(0);
             BigDecimal bdTotalAllAmtFtemp = new BigDecimal(0);
-
+            List<ProgStlItemSubStlmentShow> records10 = new ArrayList<ProgStlItemSubStlmentShow>();
 
             for (ProgStlItemSubStlmentShow itemUnit : progStlItemSubStlmentShowListForSubcttEngF) {
                 // 从抽取结算数据
@@ -519,11 +528,9 @@ public class ProgStlItemSubStlmentAction {
                             ToolUtil.getBdIgnoreNull(itemUnit.getEngPMng_BeginToCurrentPeriodAmt())) ;
                     progStlItemSubStlmentShowList.add(itemUnit);
                     progStlItemSubStlmentShowListForApprove.add(itemUnit);
+                    records10.add(itemUnit);
                 }
             }
-
-            List<ProgStlItemSubStlmentShow> records10 = new ArrayList<ProgStlItemSubStlmentShow>();
-            records10.addAll(progStlItemSubStlmentShowList);
             beansMap.put("records10", records10);
 
             //1小计
@@ -669,6 +676,22 @@ public class ProgStlItemSubStlmentAction {
             String mDoubleCheckImagName =
                     getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMDoubleCheck"));
             beansMap.put("mDoubleCheckImagName",mDoubleCheckImagName);
+        }
+
+        if (beansMap.get("esInitPowerHisForSubcttStlFMng") != null) {
+            String fMngImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlFMng"));
+            beansMap.put("fMngImagName",fMngImagName);
+        }
+        if (beansMap.get("esInitPowerHisForSubcttStlFCheck") != null) {
+            String fCheckImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlFCheck"));
+            beansMap.put("fCheckImagName",fCheckImagName);
+        }
+        if (beansMap.get("esInitPowerHisForSubcttStlMDoubleCheck") != null) {
+            String fDoubleCheckImagName =
+                    getOperAttachment(beansMap.get("esInitPowerHisForSubcttStlMDoubleCheck"));
+            beansMap.put("fDoubleCheckImagName",fDoubleCheckImagName);
         }
 
         if (beansMap.get("esInitPowerHisForSubcttStlPApprove") != null) {
