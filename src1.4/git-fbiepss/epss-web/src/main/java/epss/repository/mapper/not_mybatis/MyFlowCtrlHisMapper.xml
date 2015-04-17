@@ -18,7 +18,6 @@
             resultMap="BaseResultMapFlowCtrlShowRes">
         <![CDATA[
 
-
 select   f.info_pkid as info_pkid
          ,f.info_type as info_type
          ,f.flow_status as flow_status
@@ -28,6 +27,8 @@ select   f.info_pkid as info_pkid
 from  flow_ctrl_his f
 where f.flow_status!=""
    and f.ARCHIVED_FLAG =0
+   and f.flow_status <=3
+
         ]]>
         <if test="infoType != null and infoType != ''">
             and f.info_type=trim(#{infoType})

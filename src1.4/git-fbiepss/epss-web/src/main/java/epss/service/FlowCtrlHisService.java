@@ -77,21 +77,21 @@ public class FlowCtrlHisService {
             if(i==0){
                 flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
                 flowCtrlShowList.add(flowCtrlshow);
-                //防止flowStatus为相同并且flowStatus不等于5  要在最后一条加上下一状态
-                if(i==flowCtrlshows.size()-1&&!"5".equals(flowCtrlshow.getFlowStatus())){
-                    FlowCtrlShow fcsParam = new FlowCtrlShow();
-                    try {
-                        fcsParam = (FlowCtrlShow) BeanUtils.cloneBean(flowCtrlshow);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    //状态就是上这次次态加1，作为下一次的状态
-                    fcsParam.setFlowStatus("".equals(flowCtrlshow.getFlowStatus())||flowCtrlshow.getFlowStatus()==null?"" : String.valueOf(Integer.parseInt(flowCtrlshow.getFlowStatus()) + 1));
-                    fcsParam.setCreatedByName("");
-                    fcsParam.setCreatedTime(fcsParam.getEndTime());
-                    fcsParam.setEndTime("");
-                    flowCtrlShowList.add(fcsParam);
-                }
+                //防止flowStatus为相同并且flowStatus不等于3  要在最后一条加上下一状态
+//                if(i==flowCtrlshows.size()-1&&!"3".equals(flowCtrlshow.getFlowStatus())){
+//                    FlowCtrlShow fcsParam = new FlowCtrlShow();
+//                    try {
+//                        fcsParam = (FlowCtrlShow) BeanUtils.cloneBean(flowCtrlshow);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    //状态就是上这次次态加1，作为下一次的状态
+//                    fcsParam.setFlowStatus("".equals(flowCtrlshow.getFlowStatus())||flowCtrlshow.getFlowStatus()==null?"" : String.valueOf(Integer.parseInt(flowCtrlshow.getFlowStatus()) + 1));
+//                    fcsParam.setCreatedByName("");
+//                    fcsParam.setCreatedTime(fcsParam.getEndTime());
+//                    fcsParam.setEndTime("");
+//                    flowCtrlShowList.add(fcsParam);
+//                }
             }else{
                 String perioNo = flowCtrlshows.get(i-1).getPeriodNo()==null?"":flowCtrlshows.get(i-1).getPeriodNo();
                 String perioNo2 = flowCtrlshow.getPeriodNo()==null?"":flowCtrlshow.getPeriodNo();
@@ -107,11 +107,11 @@ public class FlowCtrlHisService {
                     flowCtrlShowList.add(flowCtrlshow);
 
                 }else{
-                     //判断上一次的FlowStatus是否为5
+                     //判断上一次的FlowStatus是否为3
                     //如果不等于数据库中FlowStatus的最大数，
                     // 则说明这个操作没有执行完，
                     //要为下一状态添加开始时间
-                    if(!"5".equals(flowCtrlshows.get(i-1).getFlowStatus())){
+                    if(!"3".equals(flowCtrlshows.get(i-1).getFlowStatus())){
                         //取出上一個FlowCtrlShow
                         FlowCtrlShow fcs = flowCtrlshows.get(i-1);
                         FlowCtrlShow fcsParam = new FlowCtrlShow();
@@ -133,12 +133,19 @@ public class FlowCtrlHisService {
                             flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
                             flowCtrlshow.setCreatedTime("");
                         }
+                    }else{
+                        //上一次FlowStatus是3时
+                        //并且本身这次为0是
+                        if("0".equals(flowCtrlshow.getFlowStatus())){
+                            flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
+                        }
                     }
                     flowCtrlShowList.add(flowCtrlshow);
                 }
             }
-            //防止flowStatus为相同并且flowStatus不等于5  要在最后一条加上下一状态
-            if(i==flowCtrlshows.size()-1&&!"5".equals(flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus())){
+
+            //防止flowStatus为相同并且flowStatus不等于3 要在最后一条加上下一状态
+            if(i==flowCtrlshows.size()-1&&!"3".equals(flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus())){
                 FlowCtrlShow fcsParam = new FlowCtrlShow();
                 try {
                     fcsParam = (FlowCtrlShow) BeanUtils.cloneBean(flowCtrlshows.get(flowCtrlshows.size()-1));
@@ -153,7 +160,10 @@ public class FlowCtrlHisService {
                 flowCtrlShowList.add(fcsParam);
             }
            i++;
+
         }
+
+
 
         //去掉FlowStatus为0 也就是初始
         for(FlowCtrlShow flowCtrlShow: flowCtrlShowList){
