@@ -64,6 +64,7 @@ public class SubcttItemAction {
     private CttItemShow cttItemShowUpd;
     private CttItemShow cttItemShowDel;
     private CttItemShow cttItemFShowAdd;
+    private CttItemShow cttItemFShowUpd;
     private List<CttItem> cttItemList;
     /*列表中选择一行*/
     private CttItemShow cttItemShowSelected;
@@ -309,6 +310,7 @@ public class SubcttItemAction {
         cttItemShowUpd =new CttItemShow(strBelongToType ,strCttInfoPkid);
         cttItemShowDel =new CttItemShow(strBelongToType ,strCttInfoPkid);
         cttItemFShowAdd =new CttItemShow(strBelongToType ,strCttInfoPkid);
+        cttItemFShowUpd =new CttItemShow(strBelongToType ,strCttInfoPkid);
     }
     /*右单击事件*/
     public void selectRecordAction(String strSubmitTypePara,CttItemShow cttItemShowSeledPara){
@@ -332,6 +334,13 @@ public class SubcttItemAction {
                 cttItemShowUpd.setStrCorrespondingItemNo(
                         ToolUtil.getIgnoreSpaceOfStr(cttItemShowUpd.getStrCorrespondingItemNo()));
                 esCommon.getIndexOfSubcttItemNamelist(cttItemShowUpd.getName());
+            }
+            if(strSubmitTypePara.equals("FUpd")){
+                cttItemFShowUpd =(CttItemShow) BeanUtils.cloneBean(cttItemShowSeledPara) ;
+                cttItemFShowUpd.setStrNo(ToolUtil.getIgnoreSpaceOfStr(cttItemFShowUpd.getStrNo())) ;
+                cttItemFShowUpd.setStrCorrespondingItemNo(
+                        ToolUtil.getIgnoreSpaceOfStr(cttItemFShowUpd.getStrCorrespondingItemNo()));
+                esCommon.getIndexOfSubcttItemNamelist(cttItemFShowUpd.getName());
             }
             if(strSubmitTypePara.equals("Del")){
                 cttItemShowDel =(CttItemShow) BeanUtils.cloneBean(cttItemShowSeledPara) ;
@@ -380,6 +389,9 @@ public class SubcttItemAction {
         }
         if (strSubmitType.equals("Upd")){
             cttItemShowTemp = cttItemShowUpd;
+        }
+        if (strSubmitType.equals("FUpd")){
+            cttItemShowTemp = cttItemFShowUpd;
         }
         String strIgnoreSpaceOfStr= ToolUtil.getIgnoreSpaceOfStr(cttItemShowTemp.getStrNo());
         if(StringUtils .isEmpty(strIgnoreSpaceOfStr)){
@@ -472,6 +484,9 @@ public class SubcttItemAction {
         if (strSubmitType.equals("Upd")){
             cttItemShowTemp = cttItemShowUpd;
         }
+        if (strSubmitType.equals("FUpd")){
+            cttItemShowTemp = cttItemFShowUpd;
+        }
         if(cttItemShowTemp.getStrCorrespondingItemNo()==null||
                 cttItemShowTemp.getStrCorrespondingItemNo().equals("")){
             cttItemShowTemp.setCorrespondingPkid(null);
@@ -553,6 +568,15 @@ public class SubcttItemAction {
                     }
                     cttItemService.updateRecord(cttItemShowUpd);
                 }
+                else if(strSubmitType.equals("FUpd")){
+                    if(!ToolUtil.getStrIgnoreNull(cttItemShowUpd.getName()).equals("")){
+                        String intIndex= esCommon.getIndexOfSubcttItemNamelist(cttItemFShowUpd.getName());
+                        if(!intIndex.equals("-1")){
+                            cttItemFShowUpd.setSpareField(intIndex.toString());
+                        }
+                    }
+                    cttItemService.updateRecord(cttItemFShowUpd);
+                }
             }
             switch (strSubmitType){
                 case "Add" : MessageUtil.addInfo("增加数据完成。");
@@ -560,6 +584,8 @@ public class SubcttItemAction {
                 case "FAdd" : MessageUtil.addInfo("增加数据完成。");
                     break;
                 case "Upd" : MessageUtil.addInfo("更新数据完成。");
+                    break;
+                case "FUpd" : MessageUtil.addInfo("更新数据完成。");
                     break;
                 case "Del" : MessageUtil.addInfo("删除数据完成。");
             }
@@ -572,6 +598,8 @@ public class SubcttItemAction {
                 case "FAdd" : MessageUtil.addInfo("增加数据失败,"+  e.getMessage());
                     break;
                 case "Upd" : MessageUtil.addError("更新数据失败，"+ e.getMessage());
+                    break;
+                case "FUpd" : MessageUtil.addError("更新数据失败，"+ e.getMessage());
                     break;
                 case "Del" : MessageUtil.addError("删除数据失败，"+ e.getMessage());
             }
@@ -589,6 +617,9 @@ public class SubcttItemAction {
         }
         if (strSubmitType.equals("Upd")){
             cttItemShowTemp = cttItemShowUpd;
+        }
+        if (strSubmitType.equals("FUpd")){
+            cttItemShowTemp = cttItemFShowUpd;
         }
         if (StringUtils.isEmpty(cttItemShowTemp.getStrNo())) {
             MessageUtil.addError("请输入编号！");
@@ -1187,13 +1218,22 @@ public class SubcttItemAction {
         this.strFlowStatusRemark = strFlowStatusRemark;
     }
 
-    public CttItemShow getcttItemFShowAdd() {
+    public CttItemShow getCttItemFShowAdd() {
         return cttItemFShowAdd;
     }
 
-    public void setcttItemFShowAdd(CttItemShow cttItemFShowAdd) {
+    public void setCttItemFShowAdd(CttItemShow cttItemFShowAdd) {
         this.cttItemFShowAdd = cttItemFShowAdd;
     }
+
+    public CttItemShow getCttItemFShowUpd() {
+        return cttItemFShowUpd;
+    }
+
+    public void setCttItemFShowUpd(CttItemShow cttItemFShowUpd) {
+        this.cttItemFShowUpd = cttItemFShowUpd;
+    }
+
 
     /*智能字段End*/
 }

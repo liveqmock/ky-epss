@@ -39,7 +39,7 @@ public interface MyFlowCtrlHisMapper {
             "         from " +
             "            FLOW_CTRL_HIS  " +
             "         where  " +
-            "            INFO_TYPE in ('3','4','5') " +
+            "            INFO_TYPE in ('3','4','5','8') " +
             "         and " +
             "            INFO_PKID=#{infoPkid} " +
             "         and " +
