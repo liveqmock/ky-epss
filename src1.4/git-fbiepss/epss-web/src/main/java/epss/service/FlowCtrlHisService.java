@@ -71,27 +71,10 @@ public class FlowCtrlHisService {
         List<FlowCtrlShow> flowCtrlshows = myFlowCtrlHisMapper.selectListByFlowCtrlHis(flowCtrlShowParam);
         List<FlowCtrlShow> flowCtrlShowList = new ArrayList<>();
         List<FlowCtrlShow> returnFlowCtrlShowList = new ArrayList<>();
-
-
         for (FlowCtrlShow flowCtrlshow: flowCtrlshows) {
             if(i==0){
                 flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
                 flowCtrlShowList.add(flowCtrlshow);
-                //防止flowStatus为相同并且flowStatus不等于3  要在最后一条加上下一状态
-//                if(i==flowCtrlshows.size()-1&&!"3".equals(flowCtrlshow.getFlowStatus())){
-//                    FlowCtrlShow fcsParam = new FlowCtrlShow();
-//                    try {
-//                        fcsParam = (FlowCtrlShow) BeanUtils.cloneBean(flowCtrlshow);
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    //状态就是上这次次态加1，作为下一次的状态
-//                    fcsParam.setFlowStatus("".equals(flowCtrlshow.getFlowStatus())||flowCtrlshow.getFlowStatus()==null?"" : String.valueOf(Integer.parseInt(flowCtrlshow.getFlowStatus()) + 1));
-//                    fcsParam.setCreatedByName("");
-//                    fcsParam.setCreatedTime(fcsParam.getEndTime());
-//                    fcsParam.setEndTime("");
-//                    flowCtrlShowList.add(fcsParam);
-//                }
             }else{
                 String perioNo = flowCtrlshows.get(i-1).getPeriodNo()==null?"":flowCtrlshows.get(i-1).getPeriodNo();
                 String perioNo2 = flowCtrlshow.getPeriodNo()==null?"":flowCtrlshow.getPeriodNo();
@@ -105,7 +88,6 @@ public class FlowCtrlHisService {
                     flowCtrlshow.setCreatedTime(benginTime);
                     flowCtrlshow.setEndTime(endTime);
                     flowCtrlShowList.add(flowCtrlshow);
-
                 }else{
                      //判断上一次的FlowStatus是否为3
                     //如果不等于数据库中FlowStatus的最大数，
@@ -135,11 +117,11 @@ public class FlowCtrlHisService {
                         }
                     }else{
                         //上一次FlowStatus是3时
-                        //并且本身这次为0是   "5".equals(flowCtrlshow.getInfoType())
+                        //并且本身这次为0是
+                        // "5".equals(flowCtrlshow.getInfoType())
                         //if("0".equals(flowCtrlshow.getFlowStatus())){
                             flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
                         //}
-
                     }
                     flowCtrlShowList.add(flowCtrlshow);
                 }
@@ -161,13 +143,11 @@ public class FlowCtrlHisService {
                 flowCtrlShowList.add(fcsParam);
             }
            i++;
-
         }
 
         //去掉FlowStatus为0 也就是初始
         for(FlowCtrlShow flowCtrlShow: flowCtrlShowList){
             if(!"0".equals(flowCtrlShow.getFlowStatus())){
-
                 //从所有的数据中筛选符合页面上搜索的创建记录名
                 //因为这样就不会和时间有冲突了
                 if(StringUtils.isNotBlank(flowCtrlShowParam.getCreatedByName())){
