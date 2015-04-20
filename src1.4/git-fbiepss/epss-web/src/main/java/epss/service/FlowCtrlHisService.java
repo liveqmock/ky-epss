@@ -131,7 +131,7 @@ public class FlowCtrlHisService {
                         }else{
                             //如果不是0的时候要把数据库的这条数据的creattime变成它的结束时间，并且开始时间为空
                             flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
-                            flowCtrlshow.setCreatedTime("");
+                            //flowCtrlshow.setCreatedTime("");
                         }
                     }else{
                         //上一次FlowStatus是3时
