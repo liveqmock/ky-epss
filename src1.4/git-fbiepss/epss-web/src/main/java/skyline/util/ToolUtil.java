@@ -9,6 +9,7 @@ import skyline.platform.db.DatabaseConnection;
 import skyline.platform.db.RecordSet;
 import skyline.platform.form.config.SystemAttributeNames;
 import skyline.platform.security.OperatorManager;
+import skyline.platform.utils.PropertyManager;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -21,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class ToolUtil {
+    private static String operResCtrl=null;
     public static final BigDecimal bigDecimal0=new BigDecimal(0);
     public static Boolean strIsDigit(String strPara){
         String strRegex = "[1-9]\\d*(\\.[1-9]\\d*)*";
@@ -367,6 +369,14 @@ public class ToolUtil {
         }
 
     }
+
+    public static String getOperResCtrl(){
+        if (operResCtrl == null){
+            operResCtrl = PropertyManager.getProperty("OPER_RES_CTRL");
+        }
+        return operResCtrl;
+    }
+
     public static void main(String[] argv) {
         System.out.println(getDateString("2004-10-20"));
     }

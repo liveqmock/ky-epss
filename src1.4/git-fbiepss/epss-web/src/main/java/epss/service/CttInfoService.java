@@ -265,6 +265,11 @@ public class CttInfoService {
     }
 
     public List<CttInfoShow> selectCttByStatusFlagBegin_End(CttInfoShow cttInfoShowPara){
+        //从Oper_Res表中去当前用户的权限资源从而进行权限过滤
+        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
+        String strOperResCtrlTemp=ToolUtil.getOperResCtrl();
+        cttInfoShowPara.setIsOperShareSqlScript(strOperResCtrlTemp);
+        cttInfoShowPara.setOnlineOperPkid(strOperatorIdTemp);
         return myCttInfoMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
     }
 

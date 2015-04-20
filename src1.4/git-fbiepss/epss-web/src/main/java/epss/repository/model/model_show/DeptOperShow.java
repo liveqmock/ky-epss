@@ -10,11 +10,17 @@ public class DeptOperShow {
     private String type;
     private String isDisabled;
     private Boolean isSeled;
+    private String deptPkid;
     private String deptId;
     private String deptName;
+    private String deptRemark;
+    private String deptParentPkid;
+    private String operPkid;
     private String operId;
     private String operType;
     private String operName;
+    private String operRemark;
+
     public String getPkid() {
         return pkid;
     }
@@ -63,12 +69,12 @@ public class DeptOperShow {
         this.isSeled = isSeled;
     }
 
-    public String getDeptName() {
-        return deptName;
+    public String getDeptPkid() {
+        return deptPkid;
     }
 
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
+    public void setDeptPkid(String deptPkid) {
+        this.deptPkid = deptPkid;
     }
 
     public String getDeptId() {
@@ -79,12 +85,52 @@ public class DeptOperShow {
         this.deptId = deptId;
     }
 
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    public String getDeptRemark() {
+        return deptRemark;
+    }
+
+    public void setDeptRemark(String deptRemark) {
+        this.deptRemark = deptRemark;
+    }
+
+    public String getDeptParentPkid() {
+        return deptParentPkid;
+    }
+
+    public void setDeptParentPkid(String deptParentPkid) {
+        this.deptParentPkid = deptParentPkid;
+    }
+
+    public String getOperPkid() {
+        return operPkid;
+    }
+
+    public void setOperPkid(String operPkid) {
+        this.operPkid = operPkid;
+    }
+
     public String getOperId() {
         return operId;
     }
 
     public void setOperId(String operId) {
         this.operId = operId;
+    }
+
+    public String getOperType() {
+        return operType;
+    }
+
+    public void setOperType(String operType) {
+        this.operType = operType;
     }
 
     public String getOperName() {
@@ -95,11 +141,11 @@ public class DeptOperShow {
         this.operName = operName;
     }
 
-    public String getOperType() {
-        return operType;
+    public String getOperRemark() {
+        return operRemark;
     }
 
-    public void setOperType(String operType) {
-        this.operType = operType;
+    public void setOperRemark(String operRemark) {
+        this.operRemark = operRemark;
     }
 }

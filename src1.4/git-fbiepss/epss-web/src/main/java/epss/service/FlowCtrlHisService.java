@@ -163,8 +163,6 @@ public class FlowCtrlHisService {
 
         }
 
-
-
         //去掉FlowStatus为0 也就是初始
         for(FlowCtrlShow flowCtrlShow: flowCtrlShowList){
             if(!"0".equals(flowCtrlShow.getFlowStatus())){

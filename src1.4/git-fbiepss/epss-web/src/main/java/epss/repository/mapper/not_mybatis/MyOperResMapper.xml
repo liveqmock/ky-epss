@@ -10,7 +10,7 @@
         <result column="FLOW_STATUS" jdbcType="CHAR" property="flowStatus" />
         <result column="INFO_TYPE" jdbcType="CHAR" property="infoType" />
         <result column="INFO_PKID" jdbcType="VARCHAR" property="infoPkid" />
-        <result column="INFO_PKID_NAME" jdbcType="VARCHAR" property="infoPkidName" />
+        <result column="INFO_NAME" jdbcType="VARCHAR" property="infoName" />
         <result column="ARCHIVED_FLAG" jdbcType="CHAR" property="archivedFlag" />
         <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
         <result column="CREATED_BY_NAME" jdbcType="VARCHAR" property="createdByName" />
@@ -34,7 +34,7 @@
                 t.INFO_TYPE,
                 t.INFO_PKID,
                 IFNULL((select name from CTT_INFO where PKID=t.INFO_PKID ),
-                    (select MENULABEL from PTMENU where PKID=t.INFO_PKID))as INFO_PKID_NAME,
+                    (select MENULABEL from PTMENU where PKID=t.INFO_PKID))as INFO_NAME,
                 t.ARCHIVED_FLAG,
                 t.CREATED_BY,
                 (select name from oper where PKID=t.CREATED_BY) as CREATED_BY_NAME,

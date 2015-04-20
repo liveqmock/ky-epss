@@ -12,34 +12,10 @@ package skyline.util;
  * ∞Ê»®£∫leonwoo
  */
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.TimeZone;
-import java.util.TreeSet;
-import java.util.Vector;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.jsp.JspWriter;
-
-import org.apache.commons.beanutils.PropertyUtils;
-
-import skyline.platform.db.DBUtil;
-import skyline.platform.utils.Basic;
+import java.util.*;
 
 public class StringUtils {
 

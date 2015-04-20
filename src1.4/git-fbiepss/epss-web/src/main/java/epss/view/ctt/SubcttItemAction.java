@@ -298,7 +298,7 @@ public class SubcttItemAction {
     }
 
     /*ÖØÖÃ*/
-    public void resetAction(String strMitType   ){
+    public void resetAction(String strMitType){
         strSubmitType="Add";
         if (ToolUtil.getStrIgnoreNull(strMitType).equals("FAdd")){
             strSubmitType="FAdd";
@@ -436,7 +436,6 @@ public class SubcttItemAction {
                 return strNoBlurFalse();
             }
             else{
-
                 List<CttItem> itemHieRelapListSubTemp=new ArrayList<>();
                 itemHieRelapListSubTemp=getEsCttItemListByParentPkid(
                         cttItemShowTemp1.getPkid(),

@@ -25,8 +25,8 @@ import java.util.List;
  */
 @ManagedBean
 @ViewScoped
-public class OperFuncResQryAction implements Serializable{
-    private static final Logger logger = LoggerFactory.getLogger(OperFuncResQryAction.class);
+public class OperResQryAction implements Serializable{
+    private static final Logger logger = LoggerFactory.getLogger(OperResQryAction.class);
     @ManagedProperty(value = "#{operResService}")
     private OperResService operResService;
     @ManagedProperty(value = "#{deptOperService}")
@@ -73,8 +73,8 @@ public class OperFuncResQryAction implements Serializable{
     public void onQueryAction() {
         try {
             operResShowQryList.clear();
-            if (!("".equals(ToolUtil.getStrIgnoreNull(operResShowQry.getInfoPkidName()).trim()))) {
-                operResShowQry.setInfoPkidName("%"+operResShowQry.getInfoPkidName()+"%");
+            if (!("".equals(ToolUtil.getStrIgnoreNull(operResShowQry.getInfoName()).trim()))) {
+                operResShowQry.setInfoName("%"+operResShowQry.getInfoName()+"%");
             }
             String strOperIdTemp=ToolUtil.getStrIgnoreNull(operResShowQry.getOperId()).trim();
             if (!("".equals(strOperIdTemp))) {
@@ -94,9 +94,9 @@ public class OperFuncResQryAction implements Serializable{
                         );
                     }
                     if(ToolUtil.getStrIgnoreNull(operResShowQryTempList.get(i).getInfoType()).length()>0) {
-                        operResShowQryTempList.get(i).setInfoPkidName(
+                        operResShowQryTempList.get(i).setInfoName(
                                 "(" + EnumResType.getValueByKey(operResShowQryTempList.get(i).getInfoType()).getTitle() + ")-"
-                                        + operResShowQryTempList.get(i).getInfoPkidName()
+                                        + operResShowQryTempList.get(i).getInfoName()
                         );
                     }
                     operResShowQryList.add(operResShowQryTempList.get(i));

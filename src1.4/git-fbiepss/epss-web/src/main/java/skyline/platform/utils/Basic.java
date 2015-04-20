@@ -11,8 +11,7 @@ import java.util.*;
  * @version 1.0
  */
 
-public class Basic
-{
+public class Basic{
     private static String Db_Type = null;
 	
 	public Basic()
@@ -326,7 +325,6 @@ public class Basic
         return new String( stringbuffer.toString() );
     }
     
-    
     public static String getDbType()
     {
     	if (Db_Type == null)
@@ -340,71 +338,4 @@ public class Basic
     	return Db_Type;
     		
     }
-    
-    
-    
-
-/*
-    /// <summary>
-    /// 格式一个输入串为库日期格式
-    /// </summary>
-    /// <param name="InputDate">输入串</param>
-    /// <returns>库日期格式串</returns>
-    public static String FormatDate(String InputDate){
-      Date date= new Date(InputDate);
-      return FormatDate(date);
-    }
-
-    /// <summary>
-    /// 格式一个输入 DateTime 为库日期格式
-    /// </summary>
-    /// <param name="InputDate">输入 DateTime</param>
-    /// <returns>库日期格式串</returns>
-    public static String FormatDate(Date InputDate)
-    {
-       return Integer.toString(InputDate.getYear()) + "/" + Integer.toString(InputDate.getMonth()) + "/" + Integer.toString(InputDate.getDay());
-      }
-
-      /// <summary>
-      /// 格式一个输入串为库时间格式
-      /// </summary>
-      /// <param name="InputTime">输入串</param>
-      /// <returns>库时间格式串</returns>
-      public static String FormatTime(String InputTime){
-        Date date= new Date(InputTime);
-        return FormatTime(date);
-      }
-
-      /// <summary>
-      /// 格式一个输入 DateTime 为库时间格式
-      /// </summary>
-      /// <param name="InputTime">输入 DateTime</param>
-      /// <returns>库时间格式串</returns>
-      public static String FormatTime(Date InputTime){
-        return InputTime.getHours() + ":" + InputTime.getMinutes() + ":" + InputTime.getSeconds();
-      }
-
-      /// <summary>
-      /// 格式一个输入串为库日期时间格式
-      /// </summary>
-      /// <param name="InputDateTime">输入串</param>
-      /// <returns>库日期时间格式串</returns>
-      public static String FormatDateTime(String InputDateTime)
-      {
-        Date date= new Date(InputDateTime);
-        return FormatTime(date);
-
-      }
-
-      /// <summary>
-      /// 格式一个输入 DateTime 为库日期时间格式
-      /// </summary>
-      /// <param name="InputDateTime">输入 DateTime</param>
-      /// <returns>库日期时间格式串</returns>
-      public static String FormatDateTime(Date InputDateTime)
-      {
-        return FormatDate(InputDateTime) + " " + FormatTime(InputDateTime);
-      }
-<<<<<<< Basic.java
-*/
 }

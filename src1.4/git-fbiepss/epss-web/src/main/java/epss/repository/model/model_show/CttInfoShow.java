@@ -41,6 +41,9 @@ public class CttInfoShow implements Serializable {
     private Integer recVersion;
     private String type;
     private Boolean isSeled;
+
+    private String isOperShareSqlScript;
+    private String onlineOperPkid;
     public String getPkid() {
         return pkid;
     }
@@ -322,5 +325,19 @@ public class CttInfoShow implements Serializable {
         this.isSeled = isSeled;
     }
 
+    public String getIsOperShareSqlScript() {
+        return isOperShareSqlScript;
+    }
 
+    public void setIsOperShareSqlScript(String isOperShareSqlScript) {
+        this.isOperShareSqlScript = isOperShareSqlScript;
+    }
+
+    public String getOnlineOperPkid() {
+        return onlineOperPkid;
+    }
+
+    public void setOnlineOperPkid(String onlineOperPkid) {
+        this.onlineOperPkid = onlineOperPkid;
+    }
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MyShareMoudle">
+    <sql id="operResCtrl">
+        <![CDATA[
+         inner join
+              OPER_RES orShareCtrl
+         on
+              orShareCtrl.OPER_PKID=#{onlineOperPkid}
+         and
+              orShareCtrl.FLOW_STATUS='6'
+         and
+              IFNULL(orShareCtrl.TID,'Z')=IFNULL(ci.TID,'Z')
+         and
+              orShareCtrl.INFO_TYPE=ci.CTT_TYPE
+         and
+              orShareCtrl.INFO_PKID=ci.PKID
+        ]]>
+    </sql>
+</mapper>

@@ -23,7 +23,7 @@ public class MenuService {
     @Autowired
     private PtmenuMapper ptmenuMapper;
 
-    public List<Ptmenu> selectListByModel(Ptmenu ptmenuPara) {
+    public List<Ptmenu> selectListByModelOrderLevelidx(Ptmenu ptmenuPara) {
         PtmenuExample example= new PtmenuExample();
         PtmenuExample.Criteria criteria = example.createCriteria();
         criteria.andMenuidLike("%" + ToolUtil.getStrIgnoreNull(ptmenuPara.getMenuid()) + "%")
@@ -36,6 +36,21 @@ public class MenuService {
             criteria.andMenuTypeLike("%"+ptmenuPara .getMenuType()+"%");
         }
         example.setOrderByClause("LEVELIDX ASC") ;
+        return ptmenuMapper.selectByExample(example);
+    }
+    public List<Ptmenu> selectListByModelOrderLabel(Ptmenu ptmenuPara) {
+        PtmenuExample example= new PtmenuExample();
+        PtmenuExample.Criteria criteria = example.createCriteria();
+        criteria.andMenuidLike("%" + ToolUtil.getStrIgnoreNull(ptmenuPara.getMenuid()) + "%")
+                .andMenulabelLike("%" + ToolUtil.getStrIgnoreNull(ptmenuPara.getMenulabel()) + "%")
+                .andTargetmachineLike("%" + ToolUtil.getStrIgnoreNull(ptmenuPara.getTargetmachine()) + "%");
+        if (!ToolUtil.getStrIgnoreNull(ptmenuPara.getMenudesc()).equals("")){
+            criteria.andMenudescLike("%"+ptmenuPara .getMenudesc()+"%");
+        }
+        if (!ToolUtil.getStrIgnoreNull(ptmenuPara.getMenuType()).equals("")){
+            criteria.andMenuTypeLike("%"+ptmenuPara .getMenuType()+"%");
+        }
+        example.setOrderByClause("TARGETMACHINE,MENULABEL ASC") ;
         return ptmenuMapper.selectByExample(example);
     }
 

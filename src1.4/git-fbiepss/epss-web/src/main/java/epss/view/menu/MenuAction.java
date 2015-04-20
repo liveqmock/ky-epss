@@ -87,7 +87,7 @@ public class MenuAction {
 
     public void onQueryAction(String strQryMsgOutPara) {
         try {
-            this.ptmenuList = menuService.selectListByModel(ptmenuQry);
+            this.ptmenuList = menuService.selectListByModelOrderLevelidx(ptmenuQry);
             if(strQryMsgOutPara.equals("true")) {
                 if (ptmenuList.isEmpty()) {
                     MessageUtil.addWarn("没有查询到数据。");

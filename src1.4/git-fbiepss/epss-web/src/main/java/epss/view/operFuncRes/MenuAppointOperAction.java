@@ -4,7 +4,7 @@ import epss.common.enums.EnumArchivedFlag;
 import epss.repository.model.OperRes;
 import epss.repository.model.Ptmenu;
 import epss.repository.model.model_show.DeptOperShow;
-import epss.repository.model.model_show.OperFuncResShow;
+import epss.repository.model.model_show.OperAppointShow;
 import epss.repository.model.model_show.OperResShow;
 import epss.service.*;
 import org.primefaces.model.DefaultTreeNode;
@@ -24,8 +24,8 @@ import java.util.*;
 
 @ManagedBean
 @ViewScoped
-public class OperFuncSysResMngAction implements Serializable{
-    private static final Logger logger = LoggerFactory.getLogger(OperFuncSysResMngAction.class);
+public class MenuAppointOperAction implements Serializable{
+    private static final Logger logger = LoggerFactory.getLogger(MenuAppointOperAction.class);
     @ManagedProperty(value = "#{operResService}")
     private OperResService operResService;
     @ManagedProperty(value = "#{deptOperService}")
@@ -33,8 +33,8 @@ public class OperFuncSysResMngAction implements Serializable{
     @ManagedProperty(value = "#{menuService}")
     private MenuService menuService;
 
-    private OperFuncResShow operFuncResShowSeled;
-    private List<OperFuncResShow> operFuncResShowList;
+    private OperAppointShow operAppointShowSeled;
+    private List<OperAppointShow> operAppointShowList;
     private List<DeptOperShow> deptOperShowSeledList;
     private TreeNode deptOperRoot;
     private List<SelectItem> menuTypeList;
@@ -43,7 +43,7 @@ public class OperFuncSysResMngAction implements Serializable{
     @PostConstruct
     public void init() {
         try {
-            operFuncResShowList = new ArrayList<>();
+            operAppointShowList = new ArrayList<>();
             deptOperShowSeledList = new ArrayList<>();
             menuTypeList = new ArrayList<>();
             strMenuTypeSeled = "0";
@@ -62,10 +62,10 @@ public class OperFuncSysResMngAction implements Serializable{
     }
     private void initRes(String strMenuTypePara){
         deptOperShowSeledList.clear();
-        operFuncResShowList.clear();
+        operAppointShowList.clear();
         Ptmenu ptmenuTemp=new Ptmenu();
         ptmenuTemp.setMenuType(strMenuTypePara);
-        List<Ptmenu> ptmenuListTemp=menuService.selectListByModel(ptmenuTemp);
+        List<Ptmenu> ptmenuListTemp=menuService.selectListByModelOrderLabel(ptmenuTemp);
         OperRes operResTemp=new OperRes();
         operResTemp.setType("system");
         List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
@@ -82,11 +82,11 @@ public class OperFuncSysResMngAction implements Serializable{
                     }
                 }
             }
-            OperFuncResShow operFuncResShowTemp=new OperFuncResShow();
-            operFuncResShowTemp.setResPkid(ptmenuUnit.getPkid());
-            operFuncResShowTemp.setResName(ptmenuUnit.getMenulabel());
-            operFuncResShowTemp.setInputOperName(strInputOperName);
-            operFuncResShowList.add(operFuncResShowTemp);
+            OperAppointShow operAppointShowTemp =new OperAppointShow();
+            operAppointShowTemp.setResPkid(ptmenuUnit.getPkid());
+            operAppointShowTemp.setResName(ptmenuUnit.getMenulabel());
+            operAppointShowTemp.setInputOperName(strInputOperName);
+            operAppointShowList.add(operAppointShowTemp);
         }
     }
     private void initDeptOper(){
@@ -143,12 +143,12 @@ public class OperFuncSysResMngAction implements Serializable{
         }
     }
 
-    public void selectRecordAction(OperFuncResShow operFuncResShowPara) {
+    public void selectRecordAction(OperAppointShow operAppointShowPara) {
         try {
-            operFuncResShowSeled=operFuncResShowPara;
+            operAppointShowSeled = operAppointShowPara;
             initDeptOper();
             OperRes operResTemp=new OperRes();
-            operResTemp.setInfoPkid(operFuncResShowSeled.getResPkid());
+            operResTemp.setInfoPkid(operAppointShowSeled.getResPkid());
             operResTemp.setType("system");
             List<OperResShow> operResShowListTemp=operResService.selectOperaResRecordsByModel(operResTemp);
             recursiveOperTreeNodeForExpand(deptOperRoot,operResShowListTemp);
@@ -173,7 +173,7 @@ public class OperFuncSysResMngAction implements Serializable{
         try {
             if (strSubmitTypePara.equals("Power")) {
                 OperRes operResTemp = new OperRes();
-                operResTemp.setInfoPkid(operFuncResShowSeled.getResPkid());
+                operResTemp.setInfoPkid(operAppointShowSeled.getResPkid());
                 operResService.deleteRecord(operResTemp);
                 operResTemp.setArchivedFlag(EnumArchivedFlag.ARCHIVED_FLAG0.getCode());
                 operResTemp.setType("system");
@@ -225,12 +225,12 @@ public class OperFuncSysResMngAction implements Serializable{
         this.deptOperShowSeledList = deptOperShowSeledList;
     }
 
-    public List<OperFuncResShow> getOperFuncResShowList() {
-        return operFuncResShowList;
+    public List<OperAppointShow> getOperAppointShowList() {
+        return operAppointShowList;
     }
 
-    public void setOperFuncResShowList(List<OperFuncResShow> operFuncResShowList) {
-        this.operFuncResShowList = operFuncResShowList;
+    public void setOperAppointShowList(List<OperAppointShow> operAppointShowList) {
+        this.operAppointShowList = operAppointShowList;
     }
 
     public String getStrMenuTypeSeled() {

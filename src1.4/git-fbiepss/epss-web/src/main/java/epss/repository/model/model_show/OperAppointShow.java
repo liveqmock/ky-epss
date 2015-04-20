@@ -1,6 +1,6 @@
 package epss.repository.model.model_show;
 
-public class OperFuncResShow {
+public class OperAppointShow {
     private String resType;
     private String resPkid;
     private String resName;
@@ -16,6 +16,8 @@ public class OperFuncResShow {
     private String accountOperName;
     private String placeOnFileOperPkid;
     private String placeOnFileOperName;
+    private String qryOperPkid;
+    private String qryOperName;
     private String remark;
     private Boolean isSeled;
     private String isActived;
@@ -208,6 +210,22 @@ public class OperFuncResShow {
 
     public void setIsAccount(String isAccount) {
         this.isAccount = isAccount;
+    }
+
+    public String getQryOperPkid() {
+        return qryOperPkid;
+    }
+
+    public void setQryOperPkid(String qryOperPkid) {
+        this.qryOperPkid = qryOperPkid;
+    }
+
+    public String getQryOperName() {
+        return qryOperName;
+    }
+
+    public void setQryOperName(String qryOperName) {
+        this.qryOperName = qryOperName;
     }
 
     public String getIsPlaceOnFile() {

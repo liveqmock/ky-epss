@@ -497,7 +497,6 @@ public class ProgStlItemSubStlmentAction {
             stl10.setEngPMng_PeriodNo(progStlInfo.getPeriodNo());
             progStlItemSubStlmentShowList.add(stl10);
             progStlItemSubStlmentShowListForApprove.add(stl10);
-
             BigDecimal bdTotalAmtFtemp = new BigDecimal(0);
             BigDecimal bdTotalAllAmtFtemp = new BigDecimal(0);
             List<ProgStlItemSubStlmentShow> records10 = new ArrayList<ProgStlItemSubStlmentShow>();

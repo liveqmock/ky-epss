@@ -15,7 +15,8 @@ public enum EnumFlowStatus {
     FLOW_STATUS2("2","¸´ºË"),
     FLOW_STATUS3("3","Åú×¼"),
     FLOW_STATUS4("4","¼ÇÕË"),
-    FLOW_STATUS5("5","¹éµµ");
+    FLOW_STATUS5("5","¹éµµ"),
+    FLOW_STATUS6("6","²éÑ¯");
     private String code = null;
     private String title = null;
     private static Hashtable<String, EnumFlowStatus> aliasEnums;

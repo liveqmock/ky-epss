@@ -30,11 +30,10 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
-        <table tableName="PTMENU">
+        <table tableName="CTT_INFO">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-
 
         <!--业务类例子 -->
         <!--
@@ -107,7 +106,9 @@
         </table>
         <table   tableName="PTLOGICACT">
         </table>
-        <table   tableName="PTMENU">
+        <table tableName="PTMENU">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
         <table   tableName="SYS_LOCK">
         </table>

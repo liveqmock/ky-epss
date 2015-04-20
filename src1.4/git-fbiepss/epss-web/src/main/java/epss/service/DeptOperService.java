@@ -60,6 +60,29 @@ public class DeptOperService {
             return operMapper.selectByPrimaryKey(deptOperShowPara.getPkid());
         }
     }
+    public List<Oper> getOperListByModelShow(DeptOperShow deptOperShowPara){
+        OperExample example=new OperExample();
+        OperExample.Criteria criteria = example.createCriteria();
+        //可以为NULL的项
+        // 部门ID
+        if(!ToolUtil.getStrIgnoreNull(deptOperShowPara.getOperId()).equals("")){
+            criteria.andIdLike("%"+deptOperShowPara.getOperId()+"%");
+        }
+        // 部门名称
+        if(!ToolUtil.getStrIgnoreNull(deptOperShowPara.getOperName()).equals("")){
+            criteria.andNameLike("%"+deptOperShowPara.getOperName()+"%");
+        }
+        // 接收者Pkid
+        if(!ToolUtil.getStrIgnoreNull(deptOperShowPara.getDeptPkid()).equals("")){
+            criteria.andDeptPkidEqualTo(deptOperShowPara.getDeptPkid());
+        }
+        // 备注内容
+        if(!ToolUtil.getStrIgnoreNull(deptOperShowPara.getOperRemark()).equals("")){
+            criteria.andRemarkLike("%"+ deptOperShowPara.getOperRemark()+"%");
+        }
+        example.setOrderByClause("NAME ASC") ;
+        return operMapper.selectByExample(example);
+    }
 
     public String getStrMaxDeptId(){
         return ToolUtil.getMaxIdPlusOne("DEPT",myDeptAndOperMapper.getStrMaxDeptId()) ;

@@ -24,21 +24,17 @@
                 <p:growl id="msgs" showDetail="true" />
                 <h:panelGrid id="pdQry" columns="1">
                     <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
-                        <h:panelGrid columns="6">
+                        <h:panelGrid columns="9" style="text-align: center">
                             <p:outputLabel value="总包合同名：" for="infoType"/>
-                            <p:inputText id="infoType" value="#{operFuncBusiResMngAction.strTkcttInfoName}"
+                            <p:inputText id="infoType" value="#{resAppointOperAction.strTkcttInfoName}"
                                              style="width:133px">
                             </p:inputText>
                             <p:commandButton id="qryBtn" value="查询"
-                                             action="#{operFuncBusiResMngAction.onQueryAction('true')}"
-                                             update="resTreeTable,msgs">
-                            </p:commandButton>
-                            <p:commandButton id="resetBtn" value="重置"
-                                             type="reset"
-                                             update="pgCondition,msgs">
+                                             action="#{resAppointOperAction.onQueryAction()}"
+                                             update="resTreeTable,msgs,pgCondition">
                             </p:commandButton>
                             <p:commandButton value="导出到EXCEL"
-                                             action="#{operFuncBusiResMngAction.onExportExcel}"
+                                             action="#{resAppointOperAction.onExportExcel}"
                                              update="msgs"
                                              ajax="false">
                             </p:commandButton>
@@ -51,33 +47,79 @@
                                 </f:facet>
                             </p:ajaxStatus>
                         </h:panelGrid>
+                        <h:panelGrid id="funcId"  columns="8" style="text-align: center" >
+                            <h:outputText value="权限指派: "  />
+                            <p:commandButton id="mngBtnId" value="录入"
+                                             update=":form:pgViewForBatchPower,:form:msgs"
+                                             action="#{resAppointOperAction.selectFuncDispatchAction('0')}"
+                                             onclick="#{resAppointOperAction.clickFuncDispatchAction()}?wVDlgViewForBatchPower.show():''"
+                                             title="View">
+                            </p:commandButton>
+                            <p:commandButton id="checkBtnId" value="审核"
+                                             update=":form:pgViewForBatchPower,:form:msgs"
+                                             action="#{resAppointOperAction.selectFuncDispatchAction('1')}"
+                                             onclick="#{resAppointOperAction.clickFuncDispatchAction()}?wVDlgViewForBatchPower.show():''"
+                                             title="View">
+                            </p:commandButton>
+                            <p:commandButton id="doubleCheckBtnId" value="复核"
+                                             update=":form:pgViewForBatchPower,:form:msgs"
+                                             action="#{resAppointOperAction.selectFuncDispatchAction('2')}"
+                                             onclick="#{resAppointOperAction.clickFuncDispatchAction()}?wVDlgViewForBatchPower.show():''"
+                                             title="View">
+                            </p:commandButton>
+                            <p:commandButton id="approveBtnId" value="批准"
+                                             update=":form:pgViewForBatchPower,:form:msgs"
+                                             action="#{resAppointOperAction.selectFuncDispatchAction('3')}"
+                                             onclick="#{resAppointOperAction.clickFuncDispatchAction()}?wVDlgViewForBatchPower.show():''"
+                                             title="View">
+                            </p:commandButton>
+                            <p:commandButton id="accountBtnId" value="记账"
+                                             update=":form:pgViewForBatchPower,:form:msgs"
+                                             action="#{resAppointOperAction.selectFuncDispatchAction('4')}"
+                                             onclick="#{resAppointOperAction.clickFuncDispatchAction()}?wVDlgViewForBatchPower.show():''"
+                                             title="View">
+                            </p:commandButton>
+                            <p:commandButton id="fileBtnId" value="归档"
+                                             update=":form:pgViewForBatchPower,:form:msgs"
+                                             action="#{resAppointOperAction.selectFuncDispatchAction('5')}"
+                                             onclick="#{resAppointOperAction.clickFuncDispatchAction()}?wVDlgViewForBatchPower.show():''"
+                                             title="View">
+                            </p:commandButton>
+                            <p:commandButton id="qryBtnId" value="查询"
+                                             update=":form:pgViewForBatchPower,:form:msgs"
+                                             action="#{resAppointOperAction.selectFuncDispatchAction('6')}"
+                                             onclick="#{resAppointOperAction.clickFuncDispatchAction()}?wVDlgViewForBatchPower.show():''"
+                                             title="View">
+                            </p:commandButton>
+                        </h:panelGrid>
                     </h:panelGrid>
-
                     <p:treeTable id="resTreeTable"
-                                 value="#{operFuncBusiResMngAction.resRoot}"
+                                 value="#{resAppointOperAction.resRoot}"
                                  var="document"
-                                 selectionMode="single"
                                  dynamic="true"
                                  cache="false"
+                                 resizableColumns="true"
                                  rowStyleClass="#{document.resType eq '1' ? 'rowGreenyellowStyle'
                                                       :document.resType eq '2' ? 'rowLavenderStyle':document.resType eq '3' ? 'rowLavenderStyle'
                                                       :document.resType eq '4' ? 'rowLavenderStyle':document.resType eq '5' ? 'rowLavenderStyle':null}"
                                  emptyMessage="数据记录为空..."
                                  scrollable="true"
                                  scrollHeight="500">
-                        <!--document.resType eq '0' ? 'rowLavenderStyle':document.resType eq '6' ? 'rowLavenderStyle':document.resType eq '7' ? 'rowLavenderStyle'
-                        :-->
                         <p:ajax event="collapse" update=":form:msgs"
-                                listener="#{operFuncBusiResMngAction.onNodeCollapse}" />
-                        <p:ajax event="select" listener="#{operFuncBusiResMngAction.onRowSelect}" update=":form:resTreeTable"/>
-                        <p:column headerText="名称" style="width:400px;">
+                                listener="#{resAppointOperAction.onNodeCollapse}" />
+                        <p:column headerText="资源名称" style="width:400px;">
+                            <p:selectBooleanCheckbox  value="#{document.isSeled}"
+                                                      rendered="#{document.resPkid eq 'ROOT'?'false':'true'}">
+                                <p:ajax  listener="#{resAppointOperAction.selResRecordsAction(document)}"
+                                         update=":form:resTreeTable,:form:funcId,:form:msgs"/>
+                            </p:selectBooleanCheckbox>
                             <h:outputText value="#{document.resName}"/>
                         </p:column>
-                        <p:column headerText="操作" style="width:75px;text-align: left;">
+                        <p:column headerText="资源操作" style="width:75px;text-align: left;">
                             <p:commandButton
                                     icon="ui-icon-plus"
                                     style="height:18px;width:18px"
-                                    action="#{operFuncBusiResMngAction.selectRecordAction('Add',document)}"
+                                    action="#{resAppointOperAction.selectRecordAction('Add',document)}"
                                     rendered="#{document.resType eq null ? 'true':
                                                             document.resType eq '0' ? 'true':
                                                             document.resType eq '1' ? 'true':'false'}"
@@ -87,7 +129,7 @@
                             <p:commandButton
                                     icon="ui-icon-pencil"
                                     style="height:18px;width:18px"
-                                    action="#{operFuncBusiResMngAction.selectRecordAction('Upd',document)}"
+                                    action="#{resAppointOperAction.selectRecordAction('Upd',document)}"
                                     rendered="#{document.resPkid eq 'ROOT'?'false':
                                                             document.resType eq '0' ? 'true':
                                                             document.resType eq '1' ? 'true':
@@ -98,7 +140,7 @@
                             <p:commandButton
                                     icon="ui-icon-trash"
                                     style="height:18px;width:18px"
-                                    action="#{operFuncBusiResMngAction.selectRecordAction('Del',document)}"
+                                    action="#{resAppointOperAction.selectRecordAction('Del',document)}"
                                     rendered="#{document.resPkid eq 'ROOT'?'false':
                                                             document.resType eq '0' ? 'true':
                                                             document.resType eq '1' ? 'true':
@@ -108,87 +150,24 @@
                             </p:commandButton>
                         </p:column>
                         <p:column headerText="录入" style="width:100px;">
-                            <p:commandButton icon="ui-icon-search"
-                                             style="height:18px;width:18px"
-                                             action="#{operFuncBusiResMngAction.selectRecordAction('Sel',document,'0')}"
-                                             rendered="#{operFuncBusiResMngAction.strBtnRender eq 'true'?
-                                                                document.isActived eq 'true'?
-                                                                document.isMng eq '0'?
-                                                                document.resPkid eq 'ROOT'?'false':'true':'false':'false':'false'}"
-                                             update=":form:pgViewForPower,:form:msgs"
-                                             onclick="wVDlgViewForPower.show()"
-                                             title="View">
-                            </p:commandButton>
                             <h:outputText value="#{document.inputOperName}"/>
                         </p:column>
                         <p:column headerText="审核" style="width:100px;">
-                            <p:commandButton icon="ui-icon-search"
-                                             style="height:18px;width:18px"
-                                             action="#{operFuncBusiResMngAction.selectRecordAction('Sel',document,'1')}"
-                                             rendered="#{operFuncBusiResMngAction.strBtnRender eq 'true'?
-                                                                document.isActived eq 'true'?
-                                                                document.isCheck eq '1'?
-                                                                document.resPkid eq 'ROOT'?'false':'true':'false':'false':'false'}"
-                                             update=":form:pgViewForPower,:form:msgs"
-                                             onclick="wVDlgViewForPower.show()"
-                                             title="View">
-                            </p:commandButton>
                             <h:outputText value="#{document.checkOperName}"/>
                         </p:column>
                         <p:column headerText="复核" style="width:100px;">
-                            <p:commandButton icon="ui-icon-search"
-                                             style="height:18px;width:18px"
-                                             action="#{operFuncBusiResMngAction.selectRecordAction('Sel',document,'2')}"
-                                             rendered="#{operFuncBusiResMngAction.strBtnRender eq 'true'?
-                                                                document.isActived eq 'true'?
-                                                                document.isDoubleCheck eq '2'?
-                                                                document.resPkid eq 'ROOT'?'false':'true':'false':'false':'false'}"
-                                             update=":form:pgViewForPower,:form:msgs"
-                                             onclick="wVDlgViewForPower.show()"
-                                             title="View">
-                            </p:commandButton>
                             <h:outputText value="#{document.doubleCheckOperName}"/>
                         </p:column>
                         <p:column headerText="批准" style="width:100px;">
-                            <p:commandButton icon="ui-icon-search"
-                                             style="height:18px;width:18px"
-                                             action="#{operFuncBusiResMngAction.selectRecordAction('Sel',document,'3')}"
-                                             rendered="#{operFuncBusiResMngAction.strBtnRender eq 'true'?
-                                                                document.isActived eq 'true'?
-                                                                document.isApprove eq '3'?
-                                                                document.resPkid eq 'ROOT'?'false':'true':'false':'false':'false'}"
-                                             update=":form:pgViewForPower,:form:msgs"
-                                             onclick="wVDlgViewForPower.show()"
-                                             title="View">
-                            </p:commandButton>
                             <h:outputText value="#{document.approveOperName}"/>
                         </p:column>
                         <p:column headerText="记账" style="width:100px;">
-                            <p:commandButton icon="ui-icon-search"
-                                             style="height:18px;width:18px"
-                                             action="#{operFuncBusiResMngAction.selectRecordAction('Sel',document,'4')}"
-                                             rendered="#{operFuncBusiResMngAction.strBtnRender eq 'true'?
-                                                                document.isActived eq 'true'?
-                                                                document.isAccount eq '4'?
-                                                                document.resPkid eq 'ROOT'?'false':'true':'false':'false':'false'}"
-                                             update=":form:pgViewForPower,:form:msgs"
-                                             onclick="wVDlgViewForPower.show()"
-                                             title="View">
-                            </p:commandButton>
                             <h:outputText value="#{document.accountOperName}"/>
                         </p:column>
+                        <p:column headerText="查询" style="width:100px;">
+                            <h:outputText value="#{document.qryOperName}"/>
+                        </p:column>
                         <p:column headerText="归档" style="width:100px;">
-                            <p:commandButton icon="ui-icon-search"
-                                             style="height:18px;width:18px"
-                                             action="#{operFuncBusiResMngAction.selectRecordAction('Sel',document,'5')}"
-                                             rendered="#{operFuncBusiResMngAction.strBtnRender eq 'true'?
-                                                                document.isActived eq 'true'?
-                                                                document.isPlaceOnFile eq '5'?
-                                                                document.resPkid eq 'ROOT'?'false':'true':'false':'false':'false'}"
-                                             update=":form:pgViewForPower,:form:msgs"
-                                             onclick="wVDlgViewForPower.show()"
-                                             title="View">
-                            </p:commandButton>
                             <h:outputText value="#{document.placeOnFileOperName}"/>
                         </p:column>
                     </p:treeTable>
@@ -200,12 +179,12 @@
                         <h:panelGrid columns="2">
                             <p:outputLabel value="名称：" for="nameForAdd"/>
                             <p:inputText id="nameForAdd"
-                                         value="#{operFuncBusiResMngAction.cttInfoShowAdd.name}"/>
+                                         value="#{resAppointOperAction.cttInfoShowAdd.name}"/>
                         </h:panelGrid>
                         <h:panelGrid id="pgOperBtnForAdd" columns="2">
                             <p:commandButton id="submitBtnForAdd"
                                              value="提交"
-                                             action="#{operFuncBusiResMngAction.onClickForMngAction('Add')}"
+                                             action="#{resAppointOperAction.onClickForMngAction('Add')}"
                                              update=":form:resTreeTable,msgs,pgOperBtnForAdd">
                             </p:commandButton>
                             <p:commandButton id="resetBtnForAdd" value="重置"
@@ -222,13 +201,13 @@
                         <h:panelGrid columns="2">
                             <p:outputLabel value="名称：" for="nameForUpd"/>
                             <p:inputText id="nameForUpd"
-                                           value="#{operFuncBusiResMngAction.cttInfoShowUpd.name}"
+                                           value="#{resAppointOperAction.cttInfoShowUpd.name}"
                                            style="width:400px;"/>
                         </h:panelGrid>
                         <h:panelGrid id="pgOperBtnForUpd" columns="2">
                             <p:commandButton id="submitBtnForUpd"
                                              value="提交"
-                                             action="#{operFuncBusiResMngAction.onClickForMngAction('Upd')}"
+                                             action="#{resAppointOperAction.onClickForMngAction('Upd')}"
                                              update=":form:resTreeTable,msgs,pgOperBtnForUpd"
                                              oncomplete="wVDlgViewForUpd.hide()">
                             </p:commandButton>
@@ -245,31 +224,32 @@
                     <h:panelGrid id="pgViewForDel">
                         <h:panelGrid columns="2">
                             <p:outputLabel value="名称：" for="nameForDel"/>
-                            <p:inputText id="nameForDel" value="#{operFuncBusiResMngAction.cttInfoShowDel.name}"
+                            <p:inputText id="nameForDel" value="#{resAppointOperAction.cttInfoShowDel.name}"
                                          style="width:400px;background-color:gainsboro;" readonly="true"/>
                         </h:panelGrid>
                         <h:panelGrid id="pgOperBtnForDel">
                             <p:commandButton id="submitBtnForDel"
                                              value="提交"
-                                             action="#{operFuncBusiResMngAction.onClickForMngAction('Del')}"
+                                             action="#{resAppointOperAction.onClickForMngAction('Del')}"
                                              update=":form:resTreeTable,msgs,pgOperBtnForDel"
                                              oncomplete="wVDlgViewForDel.hide()">
                             </p:commandButton>
                         </h:panelGrid>
                     </h:panelGrid>
                 </p:dialog>
-                <p:dialog id="dlgViewForPower" header="人员列表" widgetVar="wVDlgViewForPower"
+                <p:dialog id="dlgViewForBatchPower" header="人员列表" widgetVar="wVDlgViewForBatchPower"
                           resizable="false" modal="true"
-                          showEffect="clip" hideEffect="fold">
-                    <h:panelGrid id="pgViewForPower" style="width: 100%">
-                        <p:treeTable id="operTreeTable"
-                                     value="#{operFuncBusiResMngAction.deptOperRoot}"
+                          showEffect="clip" hideEffect="fold" height="280">
+
+                    <h:panelGrid id="pgViewForBatchPower" style="width: 100%">
+                        <p:treeTable id="operTreeTableForBatchPower"
+                                     value="#{resAppointOperAction.deptOperRoot}"
                                      var="node"
                                      dynamic="true"
                                      cache="false"
                                      rowStyleClass="#{node.type  eq '1' ? null:'rowGrayStyle'}"
                                      scrollable="true"
-                                     scrollHeight="200">
+                                     scrollHeight="220">
                             <p:column headerText="机构" style="width:200px;text-align:left">
                                 <h:outputText value="#{node.type eq '0' ? node.name:''}"/>
                             </p:column>
@@ -279,19 +259,22 @@
                             <p:column headerText="选择" style="width:30px;text-align:center">
                                 <p:selectBooleanCheckbox value="#{node.isSeled}"
                                                          rendered="#{node.type eq '0'?'false':node.pkid eq 'ROOT'?'false':'true'}">
-                                    <p:ajax listener="#{operFuncBusiResMngAction.selOperRecordAction(node)}"/>
+                                    <p:ajax listener="#{resAppointOperAction.selOperRecordAction(node)}"/>
                                 </p:selectBooleanCheckbox>
                             </p:column>
                         </p:treeTable>
                     </h:panelGrid>
-                    <h:panelGrid columns="2">
-                        <p:commandButton id="submitBtnForPower"
+                    <!--
+                                        style="position: absolute;padding-right: 0;right: 0"
+                    -->
+                    <h:panelGrid columns="2" style="width: 100%">
+                        <p:outputLabel value="(不选人员,直接点击[提交]按钮,即为删除该权限下的人员指派。)" style="width: 100%"/>
+                        <p:commandButton id="submitBtnForBatchPower"
                                          value="提交"
-                                         action="#{operFuncBusiResMngAction.onClickForMngAction('Power')}"
-                                         update=":form:resTreeTable,msgs"
-                                         oncomplete="wVDlgViewForPower.hide()">
+                                         action="#{resAppointOperAction.onClickForMngAction('BatchPower')}"
+                                         update=":form:resTreeTable,pgCondition,msgs"
+                                         oncomplete="wVDlgViewForBatchPower.hide()">
                         </p:commandButton>
-                        <p:outputLabel value="(不选人员,直接点击[提交]按钮,即为删除该权限下的人员指派。)"/>
                     </h:panelGrid>
                 </p:dialog>
             </div>

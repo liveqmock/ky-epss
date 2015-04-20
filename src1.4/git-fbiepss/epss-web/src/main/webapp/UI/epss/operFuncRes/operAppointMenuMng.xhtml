@@ -1,0 +1,102 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
+        <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <div style="margin:5px;">
+                <p:growl id="msgs" showDetail="true" />
+                <p:panel id="ppDataTable">
+                     <p:dataTable id="operDataTable"
+                                 widgetVar="widOperDataTable"
+                                 value="#{operAppointMenuAction.menuAppointShowList}"
+                                 var="record"
+                                 rowKey="#{record.operPkid}"
+                                 resizableColumns="true"
+                                 selectionMode="single"
+                                 filteredValue="#{operAppointMenuAction.filteredMenuAppointShowList}"
+                                 emptyMessage="数据记录为空..."
+                                 rowIndexVar="row"
+                                 scrollable="true"
+                                 scrollHeight="400">
+                        <f:facet name="header" style="text-align:left;">
+                            <div style="text-align:left;">
+                                <h:outputText value="查找所有的列：" />
+                                <p:inputText id="globalFilter"
+                                             onkeyup="widOperDataTable.filter()"
+                                             style="width:150px"
+                                             placeholder="Enter keyword"/>
+                            </div>
+                        </f:facet>
+                        <p:column headerText="序号" style="width:20px">
+                            <h:outputText value="#{row + 1}"/>
+                        </p:column>
+                        <p:column filterBy="#{record.operName}" filterMatchMode="contains"
+                                  headerText="人员" style="width:120px;">
+                            <h:outputText value="#{record.operName}"/>
+                        </p:column>
+                        <p:column headerText="操作" style="width:20px;text-align:center;" >
+                            <p:commandButton icon="ui-icon-search"
+                                             style="height:18px;width:18px"
+                                             action="#{operAppointMenuAction.selectRecordAction(record)}"
+                                             update=":form:pgViewForOper,:form:msgs"
+                                             onclick="wVDlgViewForOper.show()"
+                                             title="View">
+                            </p:commandButton>
+                        </p:column>
+                        <p:column filterBy="#{record.infoName}" filterMatchMode="contains"
+                                  headerText="资源">
+                            <h:outputText value="#{record.infoName}"/>
+                        </p:column>
+                    </p:dataTable>
+                    <p:dialog id="dlgViewForOper" header="资源指派" widgetVar="wVDlgViewForOper"
+                              resizable="false" modal="true"
+                              showEffect="clip" hideEffect="fold">
+                        <h:panelGrid id="pgViewForOper">
+                            <h:panelGrid columns="2">
+                                <p:commandButton id="submitBtnForOper"
+                                                 value="提交"
+                                                 action="#{operAppointMenuAction.onClickForMngAction()}"
+                                                 update=":form:operDataTable,msgs"
+                                                 oncomplete="wVDlgViewForOper.hide()">
+                                </p:commandButton>
+                                <p:outputLabel value="(不选资源,直接点击[提交]按钮,即为删除资源指派。)"/>
+                            </h:panelGrid>
+                            <p:panel header="资源列表">
+                                <p:dataTable id="resDataTable"
+                                             value="#{operAppointMenuAction.menuAppointShowList_Res}"
+                                             var="record"
+                                             selection="#{operAppointMenuAction.menuAppointSel}"
+                                             rowKey="#{record.infoPkid}"
+                                             scrollable="true"
+                                             scrollHeight="300"
+                                             emptyMessage="数据记录为空...">
+                                    <p:column selectionMode="multiple" style="width:16px;text-align:center"/>
+                                    <p:column headerText="资源" style="width:200px;text-align:left">
+                                        <h:outputText value="#{record.infoName}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+                        </h:panelGrid>
+                    </p:dialog>
+                </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

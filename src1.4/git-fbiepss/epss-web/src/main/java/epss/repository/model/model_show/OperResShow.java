@@ -10,7 +10,7 @@ public class OperResShow {
     private String flowStatusName;
     private String infoType;
     private String infoPkid;
-    private String infoPkidName;
+    private String infoName;
     private String archivedFlag;
     private String createdBy;
     private String createdByName;
@@ -123,12 +123,12 @@ public class OperResShow {
         this.flowStatusName = flowStatusName;
     }
 
-    public String getInfoPkidName() {
-        return infoPkidName;
+    public String getInfoName() {
+        return infoName;
     }
 
-    public void setInfoPkidName(String infoPkidName) {
-        this.infoPkidName = infoPkidName;
+    public void setInfoName(String infoName) {
+        this.infoName = infoName;
     }
 
     public String getCreatedByName() {

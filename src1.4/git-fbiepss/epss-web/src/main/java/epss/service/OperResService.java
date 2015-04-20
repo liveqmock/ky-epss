@@ -27,6 +27,12 @@ public class OperResService {
     @Resource
     private CttItemService cttItemService;
 
+    public List<OperResShow> getMenuAppointShowList(OperResShow operResShowPara){
+        return myOperResMapper.getMenuAppointShowList(
+                ToolUtil.getStrIgnoreNull(operResShowPara.getOperPkid()),
+                ToolUtil.getStrIgnoreNull(operResShowPara.getInfoPkid()));
+    }
+
     public List<OperResShow> selectOperaResRecordsByModelShow(OperResShow operResShowPara){
         return myOperResMapper.selectOperaResRecordsByModelShow(operResShowPara);
     }
@@ -60,18 +66,20 @@ public class OperResService {
     }
 
     @Transactional
-    public void insertRecordsBatch(String strFuncSelectedPara,List<OperFuncResShow> operFuncResShowListPara,List<DeptOperShow> deptOperShowSeledListPara){//批量插入操作，需加入事务控制
+    public void insertRecordsBatch(String strFuncSelectedPara,
+                                   List<OperAppointShow> operAppointShowListPara,
+                                   List<DeptOperShow> deptOperShowSeledListPara){//批量插入操作，需加入事务控制
         OperRes operResTemp = new OperRes();
-        for (OperFuncResShow operFuncResShowUnit : operFuncResShowListPara) {
-            operResTemp.setInfoType(operFuncResShowUnit.getResType());
-            operResTemp.setInfoPkid(operFuncResShowUnit.getResPkid());
+        for (OperAppointShow operAppointShowUnit : operAppointShowListPara) {
+            operResTemp.setInfoType(operAppointShowUnit.getResType());
+            operResTemp.setInfoPkid(operAppointShowUnit.getResPkid());
             operResTemp.setFlowStatus(strFuncSelectedPara);
             deleteRecord(operResTemp);
             for (DeptOperShow deptOperShowUnit : deptOperShowSeledListPara) {
                 operResTemp = new OperRes();
                 operResTemp.setOperPkid(deptOperShowUnit.getPkid());
-                operResTemp.setInfoType(operFuncResShowUnit.getResType());
-                operResTemp.setInfoPkid(operFuncResShowUnit.getResPkid());
+                operResTemp.setInfoType(operAppointShowUnit.getResType());
+                operResTemp.setInfoPkid(operAppointShowUnit.getResPkid());
                 operResTemp.setFlowStatus(strFuncSelectedPara);
                 operResTemp.setArchivedFlag(EnumArchivedFlag.ARCHIVED_FLAG0.getCode());
                 operResTemp.setType("business");
@@ -122,6 +130,19 @@ public class OperResService {
                 .andInfoPkidEqualTo(cttInfoShowPara.getPkid());
         operResMapper.deleteByExample(example);
         return "删除数据完成。";
+    }
+
+    public void deleteRecordByResPkid(OperRes operResPara){
+        OperResExample example =new OperResExample();
+        OperResExample.Criteria criteria = example.createCriteria();
+        criteria.andInfoPkidEqualTo(operResPara.getInfoPkid());
+        operResMapper.deleteByExample(example);
+    }
+    public void deleteRecordByOperPkid(OperRes operResPara){
+        OperResExample example =new OperResExample();
+        OperResExample.Criteria criteria = example.createCriteria();
+        criteria.andOperPkidEqualTo(operResPara.getOperPkid());
+        operResMapper.deleteByExample(example);
     }
 
     public OperRes fromOperShowToModel(OperResShow record) {
