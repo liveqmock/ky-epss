@@ -46,7 +46,7 @@ public class FlowCtrlHisAction {
     private List<SelectItem> esInitCtt2List;
     private List<FlowCtrlShow> flowCtrlShowList;
     private String strTkcttCstplSelected;
-    private boolean Flag = true;
+    private boolean Flag = false;
 
     @PostConstruct
     public void init() {
