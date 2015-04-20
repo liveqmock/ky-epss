@@ -135,10 +135,11 @@ public class FlowCtrlHisService {
                         }
                     }else{
                         //上一次FlowStatus是3时
-                        //并且本身这次为0是
-                        if("0".equals(flowCtrlshow.getFlowStatus())){
+                        //并且本身这次为0是   "5".equals(flowCtrlshow.getInfoType())
+                        //if("0".equals(flowCtrlshow.getFlowStatus())){
                             flowCtrlshow.setEndTime(flowCtrlshow.getCreatedTime());
-                        }
+                        //}
+
                     }
                     flowCtrlShowList.add(flowCtrlshow);
                 }
@@ -166,6 +167,7 @@ public class FlowCtrlHisService {
         //去掉FlowStatus为0 也就是初始
         for(FlowCtrlShow flowCtrlShow: flowCtrlShowList){
             if(!"0".equals(flowCtrlShow.getFlowStatus())){
+
                 //从所有的数据中筛选符合页面上搜索的创建记录名
                 //因为这样就不会和时间有冲突了
                 if(StringUtils.isNotBlank(flowCtrlShowParam.getCreatedByName())){
@@ -173,9 +175,15 @@ public class FlowCtrlHisService {
                         returnFlowCtrlShowList.add(flowCtrlShow);
                     }
                 }else{
-                    returnFlowCtrlShowList.add(flowCtrlShow);
+                    //去除分包数量结算和分包材料结算的批准
+                    if("3".equals(flowCtrlShow.getInfoType())||"4".equals(flowCtrlShow.getInfoType())){
+                        if(!"3".equals(flowCtrlShow.getFlowStatus())){
+                            returnFlowCtrlShowList.add(flowCtrlShow);
+                        }
+                    }else{
+                        returnFlowCtrlShowList.add(flowCtrlShow);
+                    }
                 }
-
             }
         }
         return returnFlowCtrlShowList;

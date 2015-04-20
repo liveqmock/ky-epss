@@ -46,7 +46,7 @@ public class FlowCtrlHisAction {
     private List<SelectItem> esInitCtt2List;
     private List<FlowCtrlShow> flowCtrlShowList;
     private String strTkcttCstplSelected;
-
+    private boolean Flag = true;
 
     @PostConstruct
     public void init() {
@@ -103,6 +103,13 @@ public class FlowCtrlHisAction {
 
     public void setEsInitPowerHisActionOfPowerPkidAction(){
         String strCttType= flowCtrlHis.getInfoType();
+        //hu ×·¼Ó
+        if("1".equals(strCttType)||"2".equals(strCttType)||"0".equals(strCttType)){
+            Flag = false;
+        }else{
+            Flag = true;
+        }
+        //hu×·¼Ó½áÊø
         if(strCttType.equals("")){
             flowCtrlHis.setInfoPkid("");
             strRendered1="false";
@@ -313,5 +320,11 @@ public class FlowCtrlHisAction {
         this.flowCtrlShow = flowCtrlShow;
     }
 
+    public boolean isFlag() {
+        return Flag;
+    }
 
+    public void setFlag(boolean flag) {
+        Flag = flag;
+    }
 }
