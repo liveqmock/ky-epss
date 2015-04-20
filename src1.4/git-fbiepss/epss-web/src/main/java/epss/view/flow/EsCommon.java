@@ -139,6 +139,18 @@ public class EsCommon implements Serializable {
         return "-1";
     }
 
+    // 根据费用index 得到 费用名称 ,如 根据 'F1' 获得对应项 '安全措施费'
+    public String getLabelSubcttItemNamelist(String strLabel){
+        if(!StringUtils.isEmpty(strLabel)){
+            for(SelectItem itemUnit:subcttItemNamelist){
+                if(itemUnit.getValue().equals(strLabel)){
+                    return subcttItemNamelist.get(subcttItemNamelist.indexOf(itemUnit)).getLabel().toString();
+                }
+            }
+        }
+        return "-1";
+    }
+
     public String getLabelByValueInresTypeList(String strValue){
         if(!StringUtils.isEmpty(strValue)){
             for(SelectItem itemUnit:resTypeList){

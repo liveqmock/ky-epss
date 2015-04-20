@@ -177,7 +177,12 @@ public class ProgStlInfoService {
                     //和材料比较
                     if (!("".equals(materialMaxPeriod)) && periodNo.compareTo(materialMaxPeriod) != 0) {
                         if (quantityMaxPeriod.compareTo(materialMaxPeriod) != 0) {
-                            strReturnTemp = "第[" + materialMaxPeriod + "]期分包材料结算已经开始，请录入[" + materialMaxPeriod + "]期的分包数量结算数据！";
+                            if (quantityMaxPeriod.compareTo(materialMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + quantityMaxPeriod + "]期分包材料结算数据!";
+                            }
+                            if (quantityMaxPeriod.compareTo(materialMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + materialMaxPeriod + "]期分包数量结算数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus) > 0) {
@@ -192,7 +197,12 @@ public class ProgStlInfoService {
                     // 和安全措施费用
                     if (!("".equals(fMaxPeriod)) && periodNo.compareTo(fMaxPeriod) != 0) {
                         if (quantityMaxPeriod.compareTo(fMaxPeriod) != 0) {
-                            strReturnTemp = "第[" + quantityMaxPeriod + "]期分包数量结算已经开始，请录入[" + quantityMaxPeriod + "]期的分包安全措施费结算数据！";
+                            if (quantityMaxPeriod.compareTo(fMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + quantityMaxPeriod + "]期分包安全措施费结算数据!";
+                            }
+                            if (quantityMaxPeriod.compareTo(fMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + fMaxPeriod + "]期分包数量结算数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(fStatus) > 0) {
@@ -206,7 +216,12 @@ public class ProgStlInfoService {
                     // 和材料比较
                     if (!("".equals(materialMaxPeriod)) && periodNo.compareTo(materialMaxPeriod) != 0) {
                         if (quantityMaxPeriod.compareTo(materialMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
-                            strReturnTemp = "第[" + fMaxPeriod + "]期分包数量结算已经开始，请录入[" + fMaxPeriod + "]期的分包材料数据！";
+                            if (quantityMaxPeriod.compareTo(materialMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + quantityMaxPeriod + "]期分包材料结算数据!";
+                            }
+                            if (quantityMaxPeriod.compareTo(materialMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + materialMaxPeriod + "]期分包数量结算数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus) > 0) {
@@ -217,7 +232,12 @@ public class ProgStlInfoService {
                     // 和安全措施费
                     if (!("".equals(fMaxPeriod)) && periodNo.compareTo(fMaxPeriod) != 0) {
                         if (quantityMaxPeriod.compareTo(fMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
-                            strReturnTemp = "第[" + fMaxPeriod + "]期分包数量结算已经开始，请录入[" + fMaxPeriod + "]期的分包安全措施费数据！";
+                            if (quantityMaxPeriod.compareTo(fMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + quantityMaxPeriod + "]期分包安全措施费结算数据!";
+                            }
+                            if (quantityMaxPeriod.compareTo(fMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + fMaxPeriod + "]期分包数量结算数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(fStatus) > 0) {
@@ -251,8 +271,13 @@ public class ProgStlInfoService {
                 if(EnumSubcttType.TYPE3.getCode().equals(strCttInfoTypeTemp)) {
                     //和数量比较
                     if (!("".equals(quantityMaxPeriod)) && periodNo.compareTo(quantityMaxPeriod) != 0) {
-                        if (quantityMaxPeriod.compareTo(materialMaxPeriod) != 0) {
-                            strReturnTemp = "第[" + quantityMaxPeriod + "]期分包数量结算已经开始，请录入[" + quantityMaxPeriod + "]期的分包材料结算数据！";
+                        if (materialMaxPeriod.compareTo(quantityMaxPeriod) != 0) {
+                            if (materialMaxPeriod.compareTo(quantityMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + quantityMaxPeriod + "]期分包数量结算数据!";
+                            }
+                            if (materialMaxPeriod.compareTo(materialMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + quantityMaxPeriod + "]期分包材料结算数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus) > 0) {
@@ -266,7 +291,12 @@ public class ProgStlInfoService {
                     // 安全措施
                     if (!("".equals(fMaxPeriod)) && periodNo.compareTo(fMaxPeriod) != 0) {
                         if (materialMaxPeriod.compareTo(fMaxPeriod) != 0) {
-                            strReturnTemp = "第[" + materialMaxPeriod + "]期分包材料结算已经开始，请录入[" + materialMaxPeriod + "]期的分包安全措施费数据！";
+                            if (materialMaxPeriod.compareTo(fMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + materialMaxPeriod + "]期分包安全措施费结算数据!";
+                            }
+                            if (materialMaxPeriod.compareTo(fMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + fMaxPeriod + "]期分包材料结算数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(fStatus) > 0) {
@@ -280,7 +310,12 @@ public class ProgStlInfoService {
                     // 和数量
                     if (!("".equals(materialMaxPeriod)) && periodNo.compareTo(materialMaxPeriod) != 0) {
                         if (materialMaxPeriod.compareTo(quantityMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
-                            strReturnTemp = "第[" + materialMaxPeriod + "]期分包安全措施费结算已经开始，请录入[" + materialMaxPeriod + "]期的分包材料数据！";
+                            if (materialMaxPeriod.compareTo(quantityMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + quantityMaxPeriod + "]期分包数量结算数据!";
+                            }
+                            if (materialMaxPeriod.compareTo(materialMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + quantityMaxPeriod + "]期分包材料结算数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus) > 0) {
@@ -291,7 +326,12 @@ public class ProgStlInfoService {
                     // 和安全措施费
                     if (!("".equals(fMaxPeriod)) && periodNo.compareTo(fMaxPeriod) != 0) {
                         if (materialMaxPeriod.compareTo(fMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
-                            strReturnTemp = "第[" + materialMaxPeriod + "]期分包数量结算已经开始，请录入[" + materialMaxPeriod + "]期的分包安全措施费数据！";
+                            if (materialMaxPeriod.compareTo(fMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + materialMaxPeriod + "]期分包安全措施费结算数据!";
+                            }
+                            if (materialMaxPeriod.compareTo(fMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + fMaxPeriod + "]期分包材料结算数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(fStatus) > 0) {
@@ -330,7 +370,12 @@ public class ProgStlInfoService {
                     // 和数量比较
                     if (!("".equals(quantityMaxPeriod)) && periodNo.compareTo(quantityMaxPeriod) != 0) {
                         if (quantityMaxPeriod.compareTo(fMaxPeriod) != 0) {
-                            strReturnTemp = "第[" + fMaxPeriod + "]期分包安全措施费结算已经开始，请录入[" + fMaxPeriod + "]期的分包数量结算数据！";
+                            if (quantityMaxPeriod.compareTo(fMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + quantityMaxPeriod + "]期分包安全措施费结算数据!";
+                            }
+                            if (quantityMaxPeriod.compareTo(fMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + fMaxPeriod + "]期分包数量结算数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus) > 0) {
@@ -344,7 +389,12 @@ public class ProgStlInfoService {
                     // 和材料比较
                     if (!("".equals(materialMaxPeriod)) && periodNo.compareTo(materialMaxPeriod) != 0) {
                         if (materialMaxPeriod.compareTo(fMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
-                            strReturnTemp = "第[" + fMaxPeriod + "]期分包安全措施费结算已经开始，请录入[" + fMaxPeriod + "]期的分包材料结算数据！";
+                            if (materialMaxPeriod.compareTo(fMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + materialMaxPeriod + "]期分包安全措施费结算数据!";
+                            }
+                            if (materialMaxPeriod.compareTo(fMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + fMaxPeriod + "]期分包数量材料数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus) > 0) {
@@ -357,7 +407,12 @@ public class ProgStlInfoService {
                     // 和数量比较
                     if (!("".equals(quantityMaxPeriod)) && periodNo.compareTo(quantityMaxPeriod) != 0) {
                         if (quantityMaxPeriod.compareTo(fMaxPeriod) != 0) {
-                            strReturnTemp = "第[" + fMaxPeriod + "]期分包安全措施费结算已经开始，请录入[" + fMaxPeriod + "]期的分包数量结算数据！";
+                            if (quantityMaxPeriod.compareTo(fMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + quantityMaxPeriod + "]期分包安全措施费结算数据!";
+                            }
+                            if (quantityMaxPeriod.compareTo(fMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + fMaxPeriod + "]期分包数量结算数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(quantityStatus) > 0) {
@@ -369,7 +424,12 @@ public class ProgStlInfoService {
                     // 和材料比较
                     if (!("".equals(materialMaxPeriod)) && periodNo.compareTo(materialMaxPeriod) != 0) {
                         if (materialMaxPeriod.compareTo(fMaxPeriod) != 0) {   // 材料和安全措施 的结算最大期号 不一致;type5 类型合同应该是他们的期号一直,不一致说明某种结算还没做
-                            strReturnTemp = "第[" + fMaxPeriod + "]期分包安全措施费结算已经开始，请录入[" + fMaxPeriod + "]期的分包材料结算数据！";
+                            if (materialMaxPeriod.compareTo(fMaxPeriod)>0){
+                                strReturnTemp = "请先录入[" + materialMaxPeriod + "]期分包安全措施费结算数据!";
+                            }
+                            if (materialMaxPeriod.compareTo(fMaxPeriod)<0){
+                                strReturnTemp = "请先录入[" + fMaxPeriod + "]期分包数量材料数据!";
+                            }
                             return strReturnTemp;
                         }
                         if (EnumFlowStatus.FLOW_STATUS2.getCode().compareTo(materialStatus) > 0) {
