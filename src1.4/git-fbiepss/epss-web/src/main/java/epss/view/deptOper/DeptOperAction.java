@@ -1,5 +1,6 @@
 package epss.view.deptOper;
 
+import epss.common.enums.EnumUserType;
 import skyline.security.DESHelper;
 import epss.repository.model.Dept;
 import epss.repository.model.Oper;
@@ -97,8 +98,15 @@ public class DeptOperAction implements Serializable {
             enableSIList.add(new SelectItem("1", "可用"));
             enableSIList.add(new SelectItem("0", "不可用"));
             operTypeSIList= new ArrayList<>();
-            operTypeSIList.add(new SelectItem("2", "业务人员"));
-            operTypeSIList.add(new SelectItem("1", "系统管理员"));
+            operTypeSIList.add(new SelectItem(
+                    EnumUserType.USER_TYPE3.getCode(),
+                    EnumUserType.USER_TYPE3.getTitle()));
+            operTypeSIList.add(new SelectItem(
+                    EnumUserType.USER_TYPE2.getCode(),
+                    EnumUserType.USER_TYPE2.getTitle()));
+            operTypeSIList.add(new SelectItem(
+                    EnumUserType.USER_TYPE1.getCode(),
+                    EnumUserType.USER_TYPE1.getTitle()));
             deptSIList=new ArrayList<>();
             List<Dept> deptListTemp=deptOperService.getDeptList();
             for(Dept dept:deptListTemp){
@@ -160,7 +168,7 @@ public class DeptOperAction implements Serializable {
 
     private void recursiveTreeNode(String strParentPkidPara, TreeNode parentNode)
             throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        List<DeptOperShow> deptOperShowTempList= deptOperService.selectDeptAndOperRecords(strParentPkidPara);
+        List<DeptOperShow> deptOperShowTempList= deptOperService.selectDeptAndOperRecords(strParentPkidPara,"Mng");
         for (int i = 0; i < deptOperShowTempList.size(); i++) {
             TreeNode childNodeTemp = new DefaultTreeNode(deptOperShowTempList.get(i), parentNode);
             DeptOperShow deptOperShowForExcelTemp= (DeptOperShow)BeanUtils.cloneBean(deptOperShowTempList.get(i));

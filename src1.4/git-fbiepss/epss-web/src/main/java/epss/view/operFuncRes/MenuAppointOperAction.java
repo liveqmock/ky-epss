@@ -102,7 +102,7 @@ public class MenuAppointOperAction implements Serializable{
     }
 
     private void recursiveOperTreeNode(String strParentPkidPara, TreeNode parentNode) {
-        List<DeptOperShow> operResShowListTemp = deptOperService.selectDeptAndOperRecords(strParentPkidPara);
+        List<DeptOperShow> operResShowListTemp = deptOperService.selectDeptAndOperRecords(strParentPkidPara,"Mng");
         for (DeptOperShow anOperResShowListTemp : operResShowListTemp) {
             TreeNode childNodeTemp = new DefaultTreeNode(anOperResShowListTemp, parentNode);
             recursiveOperTreeNode(anOperResShowListTemp.getPkid(), childNodeTemp);

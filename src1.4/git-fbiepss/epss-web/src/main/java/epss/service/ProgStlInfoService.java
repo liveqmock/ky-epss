@@ -553,7 +553,7 @@ public class ProgStlInfoService {
         flowCtrlHis.setFlowStatusRemark(progStlInfoPara.getFlowStatusRemark());
         flowCtrlHis.setCreatedTime(progStlInfoPara.getCreatedTime());
         flowCtrlHis.setCreatedBy(progStlInfoPara.getCreatedBy());
-        flowCtrlHis.setOperType(EnumOperType.OPER_TYPE0.getCode());
+        flowCtrlHis.setOperType(EnumDBOperType.DBOPER_TYPE0.getCode());
         return flowCtrlHis;
     }
     public FlowCtrlHis fromProgStlInfoShowToFlowCtrlHis(ProgStlInfoShow progStlInfoShowPara){
@@ -568,7 +568,7 @@ public class ProgStlInfoService {
         flowCtrlHis.setFlowStatusRemark(progStlInfoShowPara.getFlowStatusRemark());
         flowCtrlHis.setCreatedTime(progStlInfoShowPara.getCreatedTime());
         flowCtrlHis.setCreatedBy(progStlInfoShowPara.getCreatedBy());
-        flowCtrlHis.setOperType(EnumOperType.OPER_TYPE0.getCode());
+        flowCtrlHis.setOperType(EnumDBOperType.DBOPER_TYPE0.getCode());
         return flowCtrlHis;
     }
     public ProgStlInfo fromModelShowToModel(ProgStlInfoShow progStlInfoShowPara){

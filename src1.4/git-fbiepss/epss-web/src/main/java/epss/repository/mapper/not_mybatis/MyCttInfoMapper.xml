@@ -62,7 +62,7 @@
                 CTT_INFO ci
         ]]>
 
-        <if test="isOperShareSqlScript == 'true'">
+        <if test="qryCtrlOperShareSqlScript == 'true'">
             <include refid="MyShareMoudle.operResCtrl" />
         </if>
 

@@ -1,6 +1,7 @@
 package epss.service;
 
-import epss.common.enums.EnumOperType;
+import epss.common.enums.EnumDBOperType;
+import epss.common.enums.EnumUserType;
 import epss.repository.dao.CttInfoMapper;
 import epss.repository.dao.not_mybatis.MyCttInfoMapper;
 import epss.repository.dao.not_mybatis.MyDeptAndOperMapper;
@@ -150,7 +151,7 @@ public class CttInfoService {
         cttInfoTemp.setLastUpdTime(strLastUpdTimeTemp);
         cttInfoMapper.insertSelective(cttInfoTemp);
         flowCtrlHisService.insertRecord(
-                fromCttInfoToFlowCtrlHis(cttInfoTemp,EnumOperType.OPER_TYPE0.getCode()));
+                fromCttInfoToFlowCtrlHis(cttInfoTemp, EnumDBOperType.DBOPER_TYPE0.getCode()));
     }
     @Transactional
     public void insertRecord(CttInfo cttInfoPara) {
@@ -163,7 +164,7 @@ public class CttInfoService {
         cttInfoPara.setLastUpdTime(strLastUpdTimeTemp);
         cttInfoMapper.insertSelective(cttInfoPara);
         flowCtrlHisService.insertRecord(
-                fromCttInfoToFlowCtrlHis(cttInfoPara,EnumOperType.OPER_TYPE0.getCode()));
+                fromCttInfoToFlowCtrlHis(cttInfoPara, EnumDBOperType.DBOPER_TYPE0.getCode()));
     }
     @Transactional
     public String updateRecord(CttInfoShow cttInfoShowPara){
@@ -188,14 +189,14 @@ public class CttInfoService {
         cttInfoPara.setLastUpdTime(ToolUtil.getStrLastUpdTime());
         cttInfoMapper.updateByPrimaryKey(cttInfoPara);
         flowCtrlHisService.insertRecord(
-                fromCttInfoToFlowCtrlHis(cttInfoPara,EnumOperType.OPER_TYPE1.getCode()));
+                fromCttInfoToFlowCtrlHis(cttInfoPara, EnumDBOperType.DBOPER_TYPE1.getCode()));
         return "0";
     }
     @Transactional
     public int deleteRecord(String strCttInfoPkidPara){
         CttInfo cttInfoTemp = getCttInfoByPkId(strCttInfoPkidPara);
         flowCtrlHisService.insertRecord(
-                fromCttInfoToFlowCtrlHis(cttInfoTemp,EnumOperType.OPER_TYPE1.getCode()));
+                fromCttInfoToFlowCtrlHis(cttInfoTemp, EnumDBOperType.DBOPER_TYPE1.getCode()));
         return cttInfoMapper.deleteByPrimaryKey(strCttInfoPkidPara);
     }
 
@@ -255,10 +256,6 @@ public class CttInfoService {
         cttInfoShowTemp.setType(cttInfoPara.getType());
         return cttInfoShowTemp;
     }
-    //更新甲供材情况
-    public int updateByPKid(CttInfo cttInfoPara){
-        return cttInfoMapper.updateByPrimaryKey(cttInfoPara);
-    }
 
     public Integer getChildrenOfThisRecordInEsInitCtt(String strCttType,String strBelongToPkid){
         return myCttInfoMapper.getChildrenOfThisRecordInEsInitCtt(strCttType,strBelongToPkid);
@@ -266,10 +263,19 @@ public class CttInfoService {
 
     public List<CttInfoShow> selectCttByStatusFlagBegin_End(CttInfoShow cttInfoShowPara){
         //从Oper_Res表中去当前用户的权限资源从而进行权限过滤
-        String strOperatorIdTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
+        String strOperPkidTemp=ToolUtil.getOperatorManager().getOperator().getPkid();
+        String strOperTypeTemp=ToolUtil.getOperatorManager().getOperator().getType();
         String strOperResCtrlTemp=ToolUtil.getOperResCtrl();
-        cttInfoShowPara.setIsOperShareSqlScript(strOperResCtrlTemp);
-        cttInfoShowPara.setOnlineOperPkid(strOperatorIdTemp);
+        if("true".equals(strOperResCtrlTemp)){
+            if(EnumUserType.USER_TYPE3.getCode().equals(strOperTypeTemp)){
+                cttInfoShowPara.setQryCtrlOperShareSqlScript("true");
+            }else{
+                cttInfoShowPara.setQryCtrlOperShareSqlScript("false");
+            }
+        }else{
+            cttInfoShowPara.setQryCtrlOperShareSqlScript("false");
+        }
+        cttInfoShowPara.setQryCtrlOperPkid(strOperPkidTemp);
         return myCttInfoMapper.selectCttByStatusFlagBegin_End(cttInfoShowPara);
     }
 

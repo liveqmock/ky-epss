@@ -34,8 +34,8 @@ public class DeptOperService {
     @Resource
     private OperMapper operMapper;
 
-    public List<DeptOperShow> selectDeptAndOperRecords(String parentPkidPara) {
-        return myDeptAndOperMapper.selectDeptAndOperRecords(parentPkidPara);
+    public List<DeptOperShow> selectDeptAndOperRecords(String parentPkidPara,String strQryFlag) {
+        return myDeptAndOperMapper.selectDeptAndOperRecords(parentPkidPara,strQryFlag);
     }
 
     public List<Dept> getDeptList() {

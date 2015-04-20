@@ -6,7 +6,7 @@
          inner join
               OPER_RES orShareCtrl
          on
-              orShareCtrl.OPER_PKID=#{onlineOperPkid}
+              orShareCtrl.OPER_PKID=#{qryCtrlOperPkid}
          and
               orShareCtrl.FLOW_STATUS='6'
          and

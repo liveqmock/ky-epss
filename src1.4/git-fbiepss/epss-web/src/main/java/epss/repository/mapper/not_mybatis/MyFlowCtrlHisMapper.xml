@@ -48,7 +48,6 @@ where f.flow_status!=""
         <if test="endTime != null and endTime != ''">
             and f.created_time &lt;=trim(#{endTime})
         </if>
-
 group by
         info_pkid
         ,info_type

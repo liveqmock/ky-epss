@@ -32,8 +32,8 @@ public interface MyDeptAndOperMapper {
             "        oper " +
             "     where " +
             "        dept_pkid=#{parentPkid}" +
-           /* "     and" +
-            "        type !='0'" +*/
+            "     and" +
+            "        (case when #{qryFlag} = 'Qry' then type else '3' end)='3'" +
             "    ) " +
             " union " +
             "    (select " +
@@ -48,7 +48,8 @@ public interface MyDeptAndOperMapper {
             "        parentpkid=#{parentPkid}" +
             "     ) " +
             " order by name asc")
-    List<DeptOperShow> selectDeptAndOperRecords(@Param("parentPkid") String parentPkidPara);
+    List<DeptOperShow> selectDeptAndOperRecords(@Param("parentPkid") String parentPkidPara,
+                                                @Param("qryFlag") String qryFlagPara);
     @Select("   select " +
             "       NAME as username" +
             "   from" +

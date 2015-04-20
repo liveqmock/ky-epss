@@ -9,16 +9,16 @@ import java.util.Hashtable;
  * Time: 9:58:32
  * To change this template use File | Settings | File Templates.
  */
-public enum EnumOperType {
-    OPER_TYPE0("0","增加"),
-    OPER_TYPE1("1","更新"),
-    OPER_TYPE2("2","删除"),
-    OPER_TYPE3("3","查询");
+public enum EnumDBOperType {
+    DBOPER_TYPE0("0","增加"),
+    DBOPER_TYPE1("1","更新"),
+    DBOPER_TYPE2("2","删除"),
+    DBOPER_TYPE3("3","查询");
     private String code = null;
     private String title = null;
-    private static Hashtable<String, EnumOperType> aliasEnums;
+    private static Hashtable<String, EnumDBOperType> aliasEnums;
 
-    EnumOperType(String code, String title){
+    EnumDBOperType(String code, String title){
         this.init(code, title);
     }
 
@@ -35,7 +35,7 @@ public enum EnumOperType {
         aliasEnums.put(title, this);
     }
 
-    public static EnumOperType getValueByKey(String alias) {
+    public static EnumDBOperType getValueByKey(String alias) {
         return aliasEnums.get(alias);
     }
 
