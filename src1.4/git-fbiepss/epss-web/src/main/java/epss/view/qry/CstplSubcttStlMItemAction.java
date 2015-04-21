@@ -17,7 +17,7 @@ import skyline.util.MessageUtil;
 import skyline.util.ToolUtil;
 import epss.service.*;
 import epss.service.EsQueryService;
-import epss.view.flow.EsCommon;
+import epss.view.EsCommon;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 import org.apache.commons.beanutils.BeanUtils;

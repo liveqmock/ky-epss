@@ -12,7 +12,7 @@ import skyline.util.JxlsManager;
 import skyline.util.ToolUtil;
 import epss.repository.model.*;
 import epss.service.*;
-import epss.view.flow.EsCommon;
+import epss.view.EsCommon;
 import epss.view.flow.EsFlowControl;
 import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
@@ -30,7 +30,6 @@ import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
 import java.io.*;
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 

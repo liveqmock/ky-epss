@@ -1,4 +1,4 @@
-package epss.view.flow;
+package epss.view;
 
 /**
  * Created with IntelliJ IDEA.
@@ -8,12 +8,10 @@ package epss.view.flow;
  * To change this template use File | Settings | File Templates.
  */
 
-import skyline.util.ToolUtil;
 import epss.repository.model.SignPart;
 import epss.service.SignPartService;
 import org.apache.commons.lang.StringUtils;
 import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import epss.service.ToolsService;

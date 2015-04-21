@@ -4,7 +4,7 @@ import epss.common.enums.EnumResType;
 import epss.common.enums.EnumFlowStatus;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.service.*;
-import epss.view.flow.EsCommon;
+import epss.view.EsCommon;
 import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;

@@ -20,7 +20,7 @@ import epss.repository.model.*;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
 import epss.service.*;
-import epss.view.flow.EsCommon;
+import epss.view.EsCommon;
 import epss.view.flow.EsFlowControl;
 import jxl.write.WriteException;
 import org.apache.commons.beanutils.BeanUtils;
@@ -914,7 +914,7 @@ public class SubcttItemAction {
     public void onExportExcel()throws IOException, WriteException {
         String excelFilename = "分包合同-" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + ".xls";
         JxlsManager jxls = new JxlsManager();
-        jxls.exportList(excelFilename, beansMap,"oriSubctt.xls");
+        jxls.exportList(excelFilename, beansMap, "oriSubctt.xls");
     }
 
     //附件相关方法

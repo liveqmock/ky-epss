@@ -6,7 +6,7 @@ import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.CttItemShow;
 import epss.service.CttInfoService;
 import epss.service.CttItemService;
-import epss.view.flow.EsCommon;
+import epss.view.EsCommon;
 import epss.view.flow.EsFlowControl;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.lang.StringUtils;
