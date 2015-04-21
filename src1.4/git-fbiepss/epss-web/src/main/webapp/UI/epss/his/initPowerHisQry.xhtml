@@ -34,17 +34,7 @@
                                     <p:ajax update="msgs,pgCondition"
                                             listener="#{flowCtrlHisAction.setEsInitPowerHisActionOfPowerPkidAction}"/>
                                 </p:selectOneMenu>
-                                <p:outputLabel id="strLabel1"
-                                                value="#{flowCtrlHisAction.strLabel1}："
-                                                for="tkcttCstpl"
-                                                rendered="#{flowCtrlHisAction.strRendered1}"/>
-                                <p:selectOneMenu id="tkcttCstpl"
-                                                 value="#{flowCtrlHisAction.strTkcttCstplSelected}"
-                                                 rendered="#{flowCtrlHisAction.strRendered1}">
-                                    <f:selectItems value="#{flowCtrlHisAction.esInitCtt1List}"/>
-                                    <p:ajax update="msgs,pgCondition"
-                                            listener="#{flowCtrlHisAction.setFromTkAndCttToSStlAction}"/>
-                                </p:selectOneMenu>
+
                                 <p:outputLabel id="strLabel2"
                                                value="#{flowCtrlHisAction.strLabel2}："
                                                for="subcttStlTkcttMeaSta"

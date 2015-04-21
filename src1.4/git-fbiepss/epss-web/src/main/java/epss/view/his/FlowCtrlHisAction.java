@@ -6,6 +6,7 @@ import epss.repository.model.FlowCtrlHis;
 import epss.repository.model.model_show.FlowCtrlShow;
 import epss.service.CttInfoService;
 import epss.service.FlowCtrlHisService;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import skyline.util.MessageUtil;
@@ -47,6 +48,9 @@ public class FlowCtrlHisAction {
     private List<FlowCtrlShow> flowCtrlShowList;
     private String strTkcttCstplSelected;
     private boolean Flag = false;
+    private List<SelectItem> selectItemList_067;
+    private List<SelectItem> selectItemList_1;
+    private List<SelectItem> selectItemList_23458;
 
     @PostConstruct
     public void init() {
@@ -54,9 +58,11 @@ public class FlowCtrlHisAction {
         flowCtrlShow = new FlowCtrlShow();
         esInitCtt1List=new ArrayList<SelectItem> ();
         esInitCtt2List=new ArrayList<SelectItem> ();
+
         strRendered1="false";
         strRendered2="false";
         resetAction();
+        onQueryCttInfo();
     }
 
     public String onQueryAction(String strQryMsgOutPara) {
@@ -100,86 +106,157 @@ public class FlowCtrlHisAction {
         return null;
     }
 
+    private void onQueryCttInfo(){
+        List<CttInfo> cttInfoList = cttInfoService.getEsInitCttListByCttType(null);
+        if(cttInfoList.size()>0){
+            selectItemList_067 = new ArrayList<SelectItem> ();
+            selectItemList_1 = new ArrayList<SelectItem> ();
+            selectItemList_23458 = new ArrayList<SelectItem> ();
+            SelectItem all=new SelectItem("","全部");
+            selectItemList_23458.add(all);
+            selectItemList_1.add(all);
+            selectItemList_067.add(all);
+            for(CttInfo cttInfo: cttInfoList){
+                if(EnumResType.RES_TYPE0.getCode().equals(cttInfo.getCttType())
+                        ||EnumResType.RES_TYPE6.getCode().equals(cttInfo.getCttType())
+                        ||EnumResType.RES_TYPE7.getCode().equals(cttInfo.getCttType())){
+                    SelectItem selectItem067 = new SelectItem();
+                    selectItem067.setValue(cttInfo.getPkid());
+                    selectItem067.setLabel(cttInfo.getName());
+                    selectItemList_067.add(selectItem067);
+                }else if(EnumResType.RES_TYPE1.getCode().equals(cttInfo.getCttType())){
+                    SelectItem selectItem1 = new SelectItem();
+                    selectItem1.setValue(cttInfo.getPkid());
+                    selectItem1.setLabel(cttInfo.getName());
+                    selectItemList_1.add(selectItem1);
+                }else if(EnumResType.RES_TYPE2.getCode().equals(cttInfo.getCttType())
+                        ||EnumResType.RES_TYPE3.getCode().equals(cttInfo.getCttType())
+                        ||EnumResType.RES_TYPE4.getCode().equals(cttInfo.getCttType())
+                        ||EnumResType.RES_TYPE5.getCode().equals(cttInfo.getCttType())
+                        ||EnumResType.RES_TYPE8.getCode().equals(cttInfo.getCttType())){
+                    SelectItem selectItem23458 = new SelectItem();
+                    selectItem23458.setValue(cttInfo.getPkid());
+                    selectItem23458.setLabel(cttInfo.getName());
+                    selectItemList_23458.add(selectItem23458);
+                }
+            }
+        }
+    }
 
     public void setEsInitPowerHisActionOfPowerPkidAction(){
         String strCttType= flowCtrlHis.getInfoType();
+        if(StringUtils.isBlank(strCttType)){
+            strRendered2 = "false";
+            return;
+        }else{
+            strRendered2 = "true";
+        }
         //hu 追加
         if("1".equals(strCttType)||"2".equals(strCttType)||"0".equals(strCttType)){
             Flag = false;
         }else{
             Flag = true;
+        }//hu追加结束
+        if(EnumResType.RES_TYPE0.getCode().equals(strCttType)
+                ||EnumResType.RES_TYPE6.getCode().equals(strCttType)
+                ||EnumResType.RES_TYPE7.getCode().equals(strCttType)){
+                     esInitCtt2List = selectItemList_067;
+                     strLabel2 = EnumResType.RES_TYPE0.getTitle();
+        }else if(EnumResType.RES_TYPE1.getCode().equals(strCttType)){
+                     esInitCtt2List = selectItemList_1;
+                     strLabel2 = EnumResType.RES_TYPE1.getTitle();
+        }else if(EnumResType.RES_TYPE2.getCode().equals(strCttType)
+                ||EnumResType.RES_TYPE3.getCode().equals(strCttType)
+                ||EnumResType.RES_TYPE4.getCode().equals(strCttType)
+                ||EnumResType.RES_TYPE5.getCode().equals(strCttType)
+                ||EnumResType.RES_TYPE8.getCode().equals(strCttType)){
+                     esInitCtt2List = selectItemList_23458;
+                     strLabel2 = EnumResType.RES_TYPE2.getTitle();
         }
-        //hu追加结束
-        if(strCttType.equals("")){
-            flowCtrlHis.setInfoPkid("");
-            strRendered1="false";
-            strRendered2="false";
-            esInitCtt1List=new ArrayList<SelectItem>();
-            esInitCtt2List=new ArrayList<SelectItem>();
-            return;
-        }
-        if(strCttType.equals(EnumResType.RES_TYPE0.getCode())
-        ||strCttType.equals(EnumResType.RES_TYPE6.getCode())
-        ||strCttType.equals(EnumResType.RES_TYPE7.getCode())){
-            strLabel1="";
-            strLabel2= EnumResType.RES_TYPE0.getTitle();
-            strRendered1="false";
-            strRendered2="true";
-            List<CttInfo> cttInfoListTemp =new ArrayList<CttInfo>();
-            cttInfoListTemp = cttInfoService.getEsInitCttListByCttType(EnumResType.RES_TYPE0.getCode());
-            esInitCtt1List=new ArrayList<SelectItem>();
-            esInitCtt2List=new ArrayList<SelectItem>();
-            SelectItem selectItem=new SelectItem("","全部");
-            esInitCtt2List.add(selectItem);
-            if(cttInfoListTemp.size()>0){
-                for(CttInfo itemUnit: cttInfoListTemp){
-                    selectItem=new SelectItem();
-                    selectItem.setValue(itemUnit.getPkid());
-                    selectItem.setLabel(itemUnit.getName());
-                    esInitCtt2List.add(selectItem);
-                }
-            }
-        }
-        else if(strCttType.equals(EnumResType.RES_TYPE1.getCode())){
-            strLabel1= EnumResType.RES_TYPE0.getTitle();
-            strLabel2= EnumResType.RES_TYPE1.getTitle();
-            strRendered1="true";
-            strRendered2="true";
-            List<CttInfo> cttInfoListTemp =new ArrayList<CttInfo>();
-            cttInfoListTemp = cttInfoService.getEsInitCttListByCttType(EnumResType.RES_TYPE0.getCode());
-            esInitCtt1List=new ArrayList<SelectItem>();
-            esInitCtt2List=new ArrayList<SelectItem>();
-            SelectItem selectItem=new SelectItem("","全部");
-            esInitCtt1List.add(selectItem);
-            if(cttInfoListTemp.size()>0){
-                for(CttInfo itemUnit: cttInfoListTemp){
-                    selectItem=new SelectItem();
-                    selectItem.setValue(itemUnit.getPkid());
-                    selectItem.setLabel(itemUnit.getName());
-                    esInitCtt1List.add(selectItem);
-                }
-            }
-        }else{
-            strLabel1= EnumResType.RES_TYPE1.getTitle();
-            strLabel2= EnumResType.getValueByKey(strCttType).getTitle();
-            strRendered1="true";
-            strRendered2="true";
-            List<CttInfo> cttInfoListTemp =new ArrayList<CttInfo>();
-            cttInfoListTemp = cttInfoService.getEsInitCttListByCttType(EnumResType.RES_TYPE1.getCode());
-            esInitCtt1List=new ArrayList<SelectItem>();
-            esInitCtt2List=new ArrayList<SelectItem>();
-            SelectItem selectItem=new SelectItem("","全部");
-            esInitCtt1List.add(selectItem);
-            if(cttInfoListTemp.size()>0){
-                for(CttInfo itemUnit: cttInfoListTemp){
-                    selectItem=new SelectItem();
-                    selectItem.setValue(itemUnit.getPkid());
-                    selectItem.setLabel(itemUnit.getName());
-                    esInitCtt1List.add(selectItem);
-                }
-            }
-        }
+        strRendered2 = "true";
     }
+
+//    public void setEsInitPowerHisActionOfPowerPkidAction(){
+//        String strCttType= flowCtrlHis.getInfoType();
+//        //hu 追加
+//        if("1".equals(strCttType)||"2".equals(strCttType)||"0".equals(strCttType)){
+//            Flag = false;
+//        }else{
+//            Flag = true;
+//        }
+//        //hu追加结束
+//        if(strCttType.equals("")){
+//            flowCtrlHis.setInfoPkid("");
+//            strRendered1="false";
+//            strRendered2="false";
+//            esInitCtt1List=new ArrayList<SelectItem>();
+//            esInitCtt2List=new ArrayList<SelectItem>();
+//            return;
+//        }
+//        //如果是总包合同、总包进度工程量统计结算、总包进度工程量计量结算
+//        if(strCttType.equals(EnumResType.RES_TYPE0.getCode())
+//        ||strCttType.equals(EnumResType.RES_TYPE6.getCode())
+//        ||strCttType.equals(EnumResType.RES_TYPE7.getCode())){
+//            strLabel1="";
+//            strLabel2= EnumResType.RES_TYPE0.getTitle();
+//            strRendered1="false";
+//            strRendered2="true";
+//            List<CttInfo> cttInfoListTemp =new ArrayList<CttInfo>();
+//            cttInfoListTemp = cttInfoService.getEsInitCttListByCttType(EnumResType.RES_TYPE0.getCode());
+//            esInitCtt1List=new ArrayList<SelectItem>();
+//            esInitCtt2List=new ArrayList<SelectItem>();
+//            SelectItem selectItem=new SelectItem("","全部");
+//            esInitCtt2List.add(selectItem);
+//            if(cttInfoListTemp.size()>0){
+//                for(CttInfo itemUnit: cttInfoListTemp){
+//                    selectItem=new SelectItem();
+//                    selectItem.setValue(itemUnit.getPkid());
+//                    selectItem.setLabel(itemUnit.getName());
+//                    esInitCtt2List.add(selectItem);
+//                }
+//            }
+//        }
+//        //如果是成本计划
+//        else if(strCttType.equals(EnumResType.RES_TYPE1.getCode())){
+//            strLabel1= EnumResType.RES_TYPE0.getTitle();
+//            strLabel2= EnumResType.RES_TYPE1.getTitle();
+//            strRendered1="true";
+//            strRendered2="true";
+//            List<CttInfo> cttInfoListTemp =new ArrayList<CttInfo>();
+//            cttInfoListTemp = cttInfoService.getEsInitCttListByCttType(EnumResType.RES_TYPE0.getCode());
+//            esInitCtt1List=new ArrayList<SelectItem>();
+//            esInitCtt2List=new ArrayList<SelectItem>();
+//            SelectItem selectItem=new SelectItem("","全部");
+//            esInitCtt1List.add(selectItem);
+//            if(cttInfoListTemp.size()>0){
+//                for(CttInfo itemUnit: cttInfoListTemp){
+//                    selectItem=new SelectItem();
+//                    selectItem.setValue(itemUnit.getPkid());
+//                    selectItem.setLabel(itemUnit.getName());
+//                    esInitCtt1List.add(selectItem);
+//                }
+//            }
+//        }else{
+//            strLabel1= EnumResType.RES_TYPE1.getTitle();
+//            strLabel2= EnumResType.getValueByKey(strCttType).getTitle();
+//            strRendered1="true";
+//            strRendered2="true";
+//            List<CttInfo> cttInfoListTemp =new ArrayList<CttInfo>();
+//            cttInfoListTemp = cttInfoService.getEsInitCttListByCttType(EnumResType.RES_TYPE1.getCode());
+//            esInitCtt1List=new ArrayList<SelectItem>();
+//            esInitCtt2List=new ArrayList<SelectItem>();
+//            SelectItem selectItem=new SelectItem("","全部");
+//            esInitCtt1List.add(selectItem);
+//            if(cttInfoListTemp.size()>0){
+//                for(CttInfo itemUnit: cttInfoListTemp){
+//                    selectItem=new SelectItem();
+//                    selectItem.setValue(itemUnit.getPkid());
+//                    selectItem.setLabel(itemUnit.getName());
+//                    esInitCtt1List.add(selectItem);
+//                }
+//            }
+//        }
+//    }
 
     public void setFromTkAndCttToSStlAction(){
         List<CttInfo> cttInfoListTemp =new ArrayList<CttInfo>();
