@@ -269,13 +269,14 @@ public class ProgStlItemSubQAction {
             // 控制画面上的按钮显示
             // 累积数已达到合同数量,字段为str,判断条件做修改
             if(!("").equals(ToolUtil.getStrIgnoreNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty()))) {
-                if (itemUnit.getEngQMng_BeginToCurrentPeriodEQty()
-                        .compareTo(ToolUtil.getStrFromBdIgnoreZeroNull("#,###,###,###,##0.00", itemUnit.getSubctt_ContractQuantity()))>=0) {
+                if (ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getEngQMng_BeginToCurrentPeriodEQty())
+                        .compareTo(  itemUnit.getSubctt_ContractQuantity())>=0) {  // 此处用数字类型数据作比较
                     itemUnit.setIsUptoCttQtyFlag(true);
                 }
             }
             // 框架项
-            if(ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_ContractAmount()).compareTo("0")==0){
+            if(ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_ContractAmount()).compareTo("0")==0
+                    ||ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_ContractAmount()).equals("")){
                 itemUnit.setIsRenderedFlag(false);
             }
             if(ToolUtil.getStrIgnoreNull(itemUnit.getSubctt_SpareField()).length()>0){

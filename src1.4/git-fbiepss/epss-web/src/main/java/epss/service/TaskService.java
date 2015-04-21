@@ -194,7 +194,8 @@ public class TaskService {
                     if(detailTaskShowUnit.getOperResFlowStatus().equals(detailTaskShowUnit.getFlowStatus())) {
                         detailTaskShowUnit.setIsOwnTaskFlowFlag("true");
                         if (EnumResType.RES_TYPE3.getCode().equals(detailTaskShowUnit.getType())
-                                ||EnumResType.RES_TYPE4.getCode().equals(detailTaskShowUnit.getType())){
+                                ||EnumResType.RES_TYPE4.getCode().equals(detailTaskShowUnit.getType())
+                                ||EnumResType.RES_TYPE8.getCode().equals(detailTaskShowUnit.getType())){
                             ProgStlInfo progStlInfoTemp=new ProgStlInfo();
                             progStlInfoTemp.setStlType(EnumResType.RES_TYPE5.getCode());
                             progStlInfoTemp.setStlPkid(detailTaskShowUnit.getStlPkid());

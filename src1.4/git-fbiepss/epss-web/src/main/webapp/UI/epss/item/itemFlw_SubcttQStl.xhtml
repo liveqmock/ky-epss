@@ -121,6 +121,7 @@
                             <p:column headerText="操作" style="width:30px;text-align: center;">
                                 <p:commandButton  icon="ui-icon-search"
                                                   style="height:18px;width:18px"
+                                                  rendered="#{record.subctt_ContractUnitPrice ge 0 ? 'true': 'false'}"
                                                   action="#{progStlItemSubQAction.selectRecordAction('Sel',record)}"
                                                   update="pdt,:form:pgView,:form:msgs"
                                                   onclick="PF('wVDlgView').show()">

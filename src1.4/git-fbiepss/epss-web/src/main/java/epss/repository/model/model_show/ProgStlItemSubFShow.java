@@ -184,7 +184,7 @@ public class ProgStlItemSubFShow implements Serializable {
     }
 
     public void setSubctt_SpareField(String subctt_SpareField) {
-        this.subctt_SpareField = subctt_SpareField==null?subctt_SpareField:"";
+        this.subctt_SpareField = subctt_SpareField;
     }
 
     public String getEngSMng_Pkid() {

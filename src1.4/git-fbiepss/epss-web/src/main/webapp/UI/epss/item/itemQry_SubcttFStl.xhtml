@@ -29,53 +29,33 @@
         <h:panelGrid columns="2">
             <h:panelGrid>
                 <h:panelGrid columns="6">
-                    <p:outputLabel value="合同编号：" for="cttId"/>
-                    <h:inputText id="cttId"
-                                 value="#{progStlInfoSubFTTAction.progStlInfoShowUpd.id}"
-                                 style="background-color:gainsboro;" readonly="true"/>
+                    <p:outputLabel value="合同编号：" for="stlId"/>
+                    <p:inputText id="stlId" value="#{progStlItemSubFAction.progStlInfoShow.stlId}"
+                                 readonly="true" style="background-color:gainsboro;"/>
                     <p:outputLabel value="合同名称：" for="cttName"/>
-                    <h:inputText id="cttName"
-                                 value="#{progStlInfoSubFTTAction.progStlInfoShowUpd.stlName}"
-                                 style="background-color:gainsboro;" readonly="true"/>
-                    <p:outputLabel value="合同类型：" for="type"/>
-                    <p:inputText id="type" value="#{progStlInfoSubFTTAction.progStlInfoShowUpd.typeName}"
+                    <p:inputText id="cttName" value="#{progStlItemSubFAction.progStlInfoShow.stlName}"
+                                 readonly="true" style="background-color:gainsboro;"/>
+                    <p:outputLabel value="期数编码：" for="periodNo"/>
+                    <p:inputText id="periodNo" value="#{progStlItemSubFAction.progStlInfoShow.periodNo}"
                                  readonly="true" style="background-color:gainsboro;"/>
                 </h:panelGrid>
-                <h:panelGrid columns="7">
+                <h:panelGrid columns="6">
+                    <p:outputLabel value="合同类型：" for="type"/>
+                    <p:inputText id="type" value="#{progStlItemSubFAction.progStlInfoShow.type}"
+                                 readonly="true" style="background-color:gainsboro;"/>
                     <p:outputLabel value="结算编号：" for="id"/>
-                    <h:inputText id="id"
-                                 style="width:106px"
-                                 value="#{progStlInfoSubFTTAction.progStlInfoShowUpd.id}" />
-                    <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
-                                     action="#{progStlInfoSubFTTAction.setMaxNoPlusOne()}"
-                                     update="id"
-                                     style="height:20px">
-                    </p:commandButton>
-                    <p:outputLabel value="期数编码：" for="periodNo"/>
-                    <h:inputText id="periodNo"
-                                 value="#{progStlInfoSubFTTAction.progStlInfoShowUpd.periodNo}"
-                                 style="background-color:gainsboro;" readonly="true"/>
-                    <p:outputLabel value="备注内容：" for="remark"/>
-                    <h:inputText id="remark"
-                                 value="#{progStlInfoSubFTTAction.progStlInfoShowUpd.remark}"/>
+                    <p:inputText id="id" value="#{progStlItemSubFAction.progStlInfoShow.id}"
+                                 readonly="true" style="background-color:gainsboro;"/>
                 </h:panelGrid>
             </h:panelGrid>
-            <h:panelGrid columns="2" >
-                <p:commandButton id="submitBtn"
-                                 value="提交"
-                                 rendered="#{progStlItemSubFAction.strPassVisible}"
-                                 action="#{progStlInfoSubFTTAction.onClickForMngAction()}"
-                                 update="msgs,ppInfo">
-                </p:commandButton>
-                <p:ajaxStatus style="width:16px;height:16px;">
-                    <f:facet name="start">
-                        <h:graphicImage value="/images/ajaxloading.gif"/>
-                    </f:facet>
-                    <f:facet name="complete">
-                        <h:outputText value=""/>
-                    </f:facet>
-                </p:ajaxStatus>
-            </h:panelGrid>
+            <p:ajaxStatus style="width:16px;height:16px;">
+                <f:facet name="start">
+                    <h:graphicImage value="/images/ajaxloading.gif"/>
+                </f:facet>
+                <f:facet name="complete">
+                    <h:outputText value=""/>
+                </f:facet>
+            </p:ajaxStatus>
         </h:panelGrid>
     </p:panel>
     <p:panel header="备注" style="height:90px">
@@ -90,55 +70,32 @@
             </p:commandButton>
         </h:panelGrid>
     </p:panel>
-    <p:panel header="录入完了确认" id="ppFlow" style="height:90px">
-        <h:panelGrid columns="2">
-            <p:outputLabel value="录入备注：" for="flowRemark"/>
-            <p:inputTextarea id="flowRemark"
-                             rows="1"
-                             autoResize="false"
-                             value="#{progStlItemSubFAction.strFlowStatusRemark}"/>
-        </h:panelGrid>
-        <h:panelGrid>
-            <p:commandButton id="endInputBtn" value="录入完成"
-                             action="#{progStlItemSubFAction.onClickForPowerAction('Pass')}"
-                             update="msgs,ppInfo,ppFlow,ppDetail"
-                             rendered="#{progStlItemSubFAction.strPassVisible}">
-            </p:commandButton>
-            <p:commandButton id="startInputBtn" value="录入未完"
-                             action="#{progStlItemSubFAction.onClickForPowerAction('Fail')}"
-                             update="msgs,ppInfo,ppFlow,ppDetail"
-                             rendered="#{progStlItemSubFAction.strPassFailVisible}">
-            </p:commandButton>
-        </h:panelGrid>
-    </p:panel>
 </h:panelGrid>
-<p:panel id="ppDetail" header="分包进度安全措施费结算内容">
+<p:panel header="分包进度工程量结算内容">
 <p:dataTable id="pdt" style="width:100%;"
              value="#{progStlItemSubFAction.progStlItemSubFShowList}"
              var="record"
              rowKey="#{record.subctt_Pkid}"
              selectionMode="single"
              paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
-                                     {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
              paginator="true"
              paginatorPosition="bottom"
              rows="15"
              rowsPerPageTemplate="500,200,100,45,30,15"
-             rowStyleClass="#{ record.subctt_SpareField ne 'F1'? 'rowGrayStyle':
-             record.isUptoCttQtyFlag ? 'rowGreenyellowStyle' :null }"
              rowIndexVar="row"
              emptyMessage="数据记录为空..."
+             widgetVar="dtItemDetail"
+             rowStyleClass="#{ record.subctt_SpareField ne 'F1'? 'rowGrayStyle':null}"
              scrollable="true"
              scrollHeight="440">
-
-    <p:column headerText="操作" style="width:40px;text-align: center"
-              rendered='#{progStlItemSubFAction.strPassVisible}'>
-        <p:commandButton  icon="ui-icon-pencil"
+    <p:column headerText="操作" style="width:30px;text-align: center;">
+        <p:commandButton  icon="ui-icon-search"
                           style="height:18px;width:18px"
                           rendered="#{record.subctt_SpareField eq 'F1'? 'true':'false'}"
-                          actionListener="#{progStlItemSubFAction.selectRecordAction('Upd',record)}"
-                          update="pdt,:form:pgViewForUpd"
-                          onclick="PF('wVDlgViewForUpd').show()">
+                          action="#{progStlItemSubFAction.selectRecordAction('Sel',record)}"
+                          update="pdt,:form:pgView,:form:msgs"
+                          onclick="PF('wVDlgView').show()">
         </p:commandButton>
     </p:column>
     <p:column style="width:40px" headerText="序号" >
@@ -169,7 +126,7 @@
             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
         </h:outputText>
         <h:outputText value="#{record.subctt_ContractAmount}" style="float: right"
-                         rendered="#{record.subctt_SpareField ne null? record.subctt_SpareField ne 'F1'? true :false :false}">
+                      rendered="#{record.subctt_SpareField ne null? record.subctt_SpareField ne 'F1'? true :false :false}">
             <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
         </h:outputText>
     </p:column>
@@ -180,13 +137,13 @@
     </p:column>
     <p:column style="width:110px" headerText="开累安全措施费">
         <h:outputText value="#{record.engSMng_AddUpToAmt}" style="float: right"
-                       >
+                >
             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
         </h:outputText>
     </p:column>
     <p:column style="width:110px" headerText="当期安全措施费">
         <h:outputText value="#{record.engSMng_ThisStageAmt}" style="float: right"
-                    >
+                >
             <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
         </h:outputText>
     </p:column>
@@ -216,80 +173,75 @@
         </h:outputText>
     </p:column>
 </p:dataTable>
-<p:dialog id="dlgViewForUpd" header="分包安全措施费结算更新信息" widgetVar="wVDlgViewForUpd"
+<p:dialog id="dlgView" header="分包安全措施费结算信息" widgetVar="wVDlgView"
           resizable="false" modal="true"
           showEffect="clip" hideEffect="fold">
-    <h:panelGrid id="pgViewForUpd">
+    <h:panelGrid id="pgView">
         <h:panelGrid columns="4">
-            <p:outputLabel for="noItemHieRelapForUpd" value="项目编号:" />
-            <h:inputText id="noItemHieRelapForUpd"
-                         value="#{progStlItemSubFAction.progStlItemSubFShowUpd.subctt_StrNo}"
+            <p:outputLabel for="noItemHieRelap" value="项目编号:" />
+            <h:inputText id="noItemHieRelap"
+                         value="#{progStlItemSubFAction.progStlItemSubFShowSel.subctt_StrNo}"
                          style="background-color:gainsboro"
                          readonly="true">
             </h:inputText>
-            <p:outputLabel for="nameForUpd" value="项目名称:" />
-            <h:inputText id="nameForUpd"
-                         value="#{progStlItemSubFAction.progStlItemSubFShowUpd.subctt_Name}"
+            <p:outputLabel for="name" value="项目名称:" />
+            <h:inputText id="name"
+                         value="#{progStlItemSubFAction.progStlItemSubFShowSel.subctt_Name}"
                          style="background-color:gainsboro"
                          readonly="true"/>
-            <p:outputLabel for="contractQuantityItemInfoForUpd" value="合同费用:"/>
-            <h:inputText id="contractQuantityItemInfoForUpd"
-                         value="#{progStlItemSubFAction.progStlItemSubFShowUpd.subctt_ContractAmount}"
+            <p:outputLabel for="contractQuantityItemInfo" value="合同费用:"/>
+            <h:inputText id="contractQuantityItemInfo"
+                         value="#{progStlItemSubFAction.progStlItemSubFShowSel.subctt_ContractAmount}"
                          style="background-color:gainsboro;text-align:right;"
                          readonly="true">
                 <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
             </h:inputText>
-            <p:outputLabel for="engSMng_BeginToCurrentPeriodEQtyForUpd" value="开累费用:"
-                           rendered="#{progStlItemSubFAction.progStlItemSubFShowUpd.subctt_SpareField ne null?
-                                      progStlItemSubFAction.progStlItemSubFShowUpd.subctt_SpareField ne 'F1'? false :true
+            <p:outputLabel for="engSMng_BeginToCurrentPeriodEQty" value="开累费用:"
+                           rendered="#{progStlItemSubFAction.progStlItemSubFShowSel.subctt_SpareField ne null?
+                                      progStlItemSubFAction.progStlItemSubFShowSel.subctt_SpareField ne 'F1'? false :true
                                        :true}"/>
-            <h:inputText id="engSMng_BeginToCurrentPeriodEQtyForUpd"
-                         value="#{progStlItemSubFAction.progStlItemSubFShowUpd.engSMng_AddUpToAmt}"
+            <h:inputText id="engSMng_BeginToCurrentPeriodEQty"
+                         value="#{progStlItemSubFAction.progStlItemSubFShowSel.engSMng_AddUpToAmt}"
                          style="background-color:gainsboro;text-align:right;"
                          readonly="true"
-                         rendered="#{progStlItemSubFAction.progStlItemSubFShowUpd.subctt_SpareField ne null?
-                                      progStlItemSubFAction.progStlItemSubFShowUpd.subctt_SpareField ne 'F1'? false :true
+                         rendered="#{progStlItemSubFAction.progStlItemSubFShowSel.subctt_SpareField ne null?
+                                      progStlItemSubFAction.progStlItemSubFShowSel.subctt_SpareField ne 'F1'? false :true
                                        :true}">
                 <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
             </h:inputText>
-            <p:outputLabel for="engSMng_BeginToCurrentPeriodEQtyForUpd2" value="开累费用量:"
-                           rendered="#{progStlItemSubFAction.progStlItemSubFShowUpd.subctt_SpareField ne null?
-                                      progStlItemSubFAction.progStlItemSubFShowUpd.subctt_SpareField ne 'F1'? true :false
+            <p:outputLabel for="engSMng_BeginToCurrentPeriodEQty2" value="开累费用量:"
+                           rendered="#{progStlItemSubFAction.progStlItemSubFShowSel.subctt_SpareField ne null?
+                                      progStlItemSubFAction.progStlItemSubFShowSel.subctt_SpareField ne 'F1'? true :false
                                        :false}"/>
-            <h:inputText id="engSMng_BeginToCurrentPeriodEQtyForUpd2"
-                         value="#{progStlItemSubFAction.progStlItemSubFShowUpd.engSMng_AddUpToAmt}"
+            <h:inputText id="engSMng_BeginToCurrentPeriodEQty2"
+                         value="#{progStlItemSubFAction.progStlItemSubFShowSel.engSMng_AddUpToAmt}"
                          style="background-color:gainsboro;text-align:right;"
                          readonly="true"
-                         rendered="#{progStlItemSubFAction.progStlItemSubFShowUpd.subctt_SpareField ne null?
-                                      progStlItemSubFAction.progStlItemSubFShowUpd.subctt_SpareField ne 'F1'? true :false
+                         rendered="#{progStlItemSubFAction.progStlItemSubFShowSel.subctt_SpareField ne null?
+                                      progStlItemSubFAction.progStlItemSubFShowSel.subctt_SpareField ne 'F1'? true :false
                                        :false}">
                 <f:convertNumber type="percent" pattern="#,###,###,###,##0.00%"/>
             </h:inputText>
-            <p:outputLabel for="engSMng_CurrentPeriodEQtyForUpd" value="本期费用:"/>
-            <h:inputText id="engSMng_CurrentPeriodEQtyForUpd"
-                         value="#{progStlItemSubFAction.progStlItemSubFShowUpd.engSMng_ThisStageAmt}"
-                         style="text-align:right;float:left">
+            <p:outputLabel for="engSMng_CurrentPeriodEQty" value="本期费用:"/>
+            <h:inputText id="engSMng_CurrentPeriodEQty"
+                         value="#{progStlItemSubFAction.progStlItemSubFShowSel.engSMng_ThisStageAmt}"
+                         style="background-color:gainsboro"
+                         readonly="true">
                 <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
-                <p:ajax event="blur" update="msgs,engSMng_BeginToCurrentPeriodEQtyForUpd"
+                <p:ajax event="blur" update="msgs,engSMng_BeginToCurrentPeriodEQty"
                         listener="#{progStlItemSubFAction.blurengFMng_CurrentPeriodFAmt('blur')}"/>
             </h:inputText>
-            <p:outputLabel for="remarkForUpd" value="合同备注:" />
-            <h:inputText id="remarkForUpd"
-                         value="#{progStlItemSubFAction.progStlItemSubFShowUpd.subctt_Remark}"
+            <p:outputLabel for="remarkdel" value="合同备注:" />
+            <h:inputText id="remarkdel"
+                         value="#{progStlItemSubFAction.progStlItemSubFShowSel.subctt_Remark}"
                          style="background-color:gainsboro"
                          readonly="true"/>
-            <p:outputLabel for="engSMng_RemarkForUpd" value="结算备注:" />
-            <h:inputText id="engSMng_RemarkForUpd"
-                         value="#{progStlItemSubFAction.progStlItemSubFShowUpd.engSMng_Remark}"/>
+            <p:outputLabel for="engSMng_Remark" value="结算备注:" />
+            <h:inputText id="engSMng_Remark"
+                         value="#{progStlItemSubFAction.progStlItemSubFShowSel.engSMng_Remark}"
+                         style="background-color:gainsboro"
+                         readonly="true"/>
 
-        </h:panelGrid>
-        <h:panelGrid columns="1">
-            <p:commandButton id="submitBtnForUpd"
-                             value="提交（更新）"
-                             action="#{progStlItemSubFAction.submitThisRecordAction}"
-                             update="pdt,msgs"
-                             oncomplete="wVDlgViewForUpd.hide()">
-            </p:commandButton>
         </h:panelGrid>
     </h:panelGrid>
 </p:dialog>
@@ -346,7 +298,7 @@
                 <p:commandButton icon="ui-icon-trash"
                                  style="height:18px;width:18px"
                                  action="#{progStlItemSubFAction.delAttachmentRecordAction(recordAttachment)}"
-                                 update=":form:pgAttachmentView,:form:msgs">
+                                 Selate=":form:pgAttachmentView,:form:msgs">
                 </p:commandButton>
             </p:column>
         </p:dataTable>
