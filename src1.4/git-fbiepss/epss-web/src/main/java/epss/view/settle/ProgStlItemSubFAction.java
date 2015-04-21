@@ -30,6 +30,7 @@ import javax.faces.component.html.HtmlGraphicImage;
 import javax.faces.context.FacesContext;
 import java.io.*;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -245,6 +246,13 @@ public class ProgStlItemSubFAction {
         ProgStlItemSubFShow itemUnitNext=new ProgStlItemSubFShow();
         for(int i=0;i< progStlItemSubMShowListTemp.size();i++){
             itemUnit = progStlItemSubMShowListTemp.get(i);
+            if ( itemUnit.getSubctt_SpareField()!=null && itemUnit.getSubctt_SpareField().equals("F1")){
+            // 此处用数字类型数据作比较   开累量与合同金额比 此处和数量单不一样
+                if (ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getEngSMng_AddUpToAmt())
+                        .compareTo(  ToolUtil.getBdFromStrOrBdIgnoreNull(itemUnit.getSubctt_ContractAmount()))>=0) {
+                    itemUnit.setIsUptoCttQtyFlag(true);
+                }
+            }
             bdQuantityTotal=bdQuantityTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
             bdQuantityAllTotal=bdQuantityAllTotal.add(ToolUtil.getBdIgnoreNull(itemUnit.getSubctt_ContractQuantity()));
             bdBeginToCurrentPeriodFQtyTotal=

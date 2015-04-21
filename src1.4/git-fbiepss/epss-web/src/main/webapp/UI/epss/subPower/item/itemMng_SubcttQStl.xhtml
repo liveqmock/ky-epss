@@ -125,7 +125,8 @@
                                      rows="15"
                                      rowsPerPageTemplate="500,200,100,45,30,15"
                                      rowStyleClass="#{
-                                                         record.subctt_SpareField ne null? 'rowGrayStyle':
+                                                         record.subctt_SpareField ne null?
+                                                         record.subctt_SpareField ne 'F1' ? 'rowGrayStyle':null :
                                                          record.subctt_ContractAmount eq null? 'rowGrayStyle':
                                                          record.isUptoCttQtyFlag? 'rowGreenyellowStyle':null}"
                                      rowIndexVar="row"
