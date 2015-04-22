@@ -106,7 +106,9 @@ public class CttInfoService {
     public List<CttInfo> getEsInitCttListByCttType(String strCttType) {
         CttInfoExample example= new CttInfoExample();
         CttInfoExample.Criteria criteria = example.createCriteria();
-        criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(strCttType));
+        if(!"".equals(ToolUtil.getStrIgnoreNull(strCttType))){
+            criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(strCttType));
+        }
         example.setOrderByClause("ID ASC") ;
         return cttInfoMapper.selectByExample(example);
     }
