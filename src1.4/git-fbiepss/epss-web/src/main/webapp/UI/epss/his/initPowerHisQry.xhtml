@@ -41,7 +41,8 @@
                                                rendered="#{flowCtrlHisAction.strRendered2}"/>
                                 <p:selectOneMenu id="subcttStlTkcttMeaSta"
                                                  value="#{flowCtrlHisAction.flowCtrlHis.infoPkid}"
-                                                 rendered="#{flowCtrlHisAction.strRendered2}">
+                                                 rendered="#{flowCtrlHisAction.strRendered2}"
+                                                 filter="true" filterMatchMode="contains">
                                     <f:selectItems value="#{flowCtrlHisAction.esInitCtt2List}"/>
                                 </p:selectOneMenu>
                             </h:panelGrid>

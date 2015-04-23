@@ -109,7 +109,7 @@ public class CttInfoService {
         if(!"".equals(ToolUtil.getStrIgnoreNull(strCttType))){
             criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(strCttType));
         }
-        example.setOrderByClause("ID ASC") ;
+        example.setOrderByClause("NAME ASC") ;
         return cttInfoMapper.selectByExample(example);
     }
 

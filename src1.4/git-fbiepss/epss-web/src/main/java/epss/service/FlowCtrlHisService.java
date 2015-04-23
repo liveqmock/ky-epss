@@ -105,7 +105,11 @@ public class FlowCtrlHisService {
                         //設置開始時間就是上次的結束時間
                         fcsParam.setCreatedTime(fcs.getEndTime());
                         //状态就是上一次状态加1,作为下一次的状态
-                        fcsParam.setFlowStatus("".equals(fcs.getFlowStatus())||fcs.getFlowStatus()==null?"" : String.valueOf(Integer.parseInt(fcs.getFlowStatus()) + 1));
+                        fcsParam.setFlowStatus("".equals(fcs.getFlowStatus())||
+                                                         fcs.getFlowStatus()==null?"" :
+                                                          String.valueOf(Integer.parseInt(fcs.getFlowStatus()) + 1
+                                                        )
+                                              );
                         flowCtrlShowList.add(fcsParam);
                         //如果FlowStatus是0时，可以把它本身的开始时间设置为本身的结束时间，为下一状态使用
                         if("0".equals(flowCtrlshow.getFlowStatus())){
@@ -136,7 +140,11 @@ public class FlowCtrlHisService {
                     e.printStackTrace();
                 }
                 //状态就是上这次次状态加1，作为下一次的状态
-                fcsParam.setFlowStatus("".equals(flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus())||flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus()==null?"" : String.valueOf(Integer.parseInt(flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus()) + 1));
+                fcsParam.setFlowStatus("".equals(flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus())
+                                                 ||flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus()==null?"" :
+                                                   String.valueOf(Integer.parseInt(flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus()) + 1
+                                                 )
+                                       );
                 fcsParam.setCreatedByName("");
                 fcsParam.setCreatedTime(fcsParam.getEndTime());
                 fcsParam.setEndTime("");
@@ -151,7 +159,8 @@ public class FlowCtrlHisService {
                 //从所有的数据中筛选符合页面上搜索的创建记录名
                 //因为这样就不会和时间有冲突了
                 if(StringUtils.isNotBlank(flowCtrlShowParam.getCreatedByName())){
-                    if(StringUtils.isNotBlank(flowCtrlShow.getCreatedByName())&&flowCtrlShow.getCreatedByName().contains(flowCtrlShowParam.getCreatedByName().trim())){
+                    if(StringUtils.isNotBlank(flowCtrlShow.getCreatedByName())&&
+                       flowCtrlShow.getCreatedByName().contains(flowCtrlShowParam.getCreatedByName().trim())){
                         returnFlowCtrlShowList.add(flowCtrlShow);
                     }
                 }else{
@@ -167,7 +176,6 @@ public class FlowCtrlHisService {
             }
         }
         return returnFlowCtrlShowList;
-
     }//追加结束
 
 

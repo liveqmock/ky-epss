@@ -41,13 +41,15 @@
                                                rendered="#{flowCtrlHisAction.strRendered2}"/>
                                 <p:selectOneMenu id="subcttStlTkcttMeaSta"
                                                  value="#{flowCtrlHisAction.flowCtrlHis.infoPkid}"
-                                                 rendered="#{flowCtrlHisAction.strRendered2}">
+                                                 rendered="#{flowCtrlHisAction.strRendered2}"
+                                                 filter="true" filterMatchMode="contains">
                                     <f:selectItems value="#{flowCtrlHisAction.esInitCtt2List}"/>
                                 </p:selectOneMenu>
                             </h:panelGrid>
                             <h:panelGrid columns="6">
                                 <p:outputLabel value="期数编码：" for="pno" rendered="#{flowCtrlHisAction.flag}" />
-                                <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHis.periodNo}" rendered="#{flowCtrlHisAction.flag}"
+                                <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHis.periodNo}"
+                                             rendered="#{flowCtrlHisAction.flag}"
                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                             </h:panelGrid>
                             <h:panelGrid columns="6">
@@ -94,6 +96,7 @@
                              {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                              paginator="true"
                              paginatorPosition="bottom"
+                             sortMode="multiple"
                              rows="15"
                              rowIndexVar="row"
                              rowsPerPageTemplate="500,200,100,45,30,15"
@@ -117,13 +120,13 @@
                     <p:column headerText="流程节点" style="text-align:center">
                         <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
                     </p:column>
-                    <p:column headerText="创建记录人" style="text-align:center">
+                    <p:column headerText="责任人" style="text-align:center">
                         <h:outputText value="#{record.createdByName}"/>
                     </p:column>
-                    <p:column headerText="创建时间" style="text-align:center">
+                    <p:column headerText="开始时间" style="text-align:center">
                         <h:outputText value="#{record.createdTime}"/>
                     </p:column>
-                    <p:column headerText="结束时间" style="text-align:center">
+                    <p:column headerText="结束时间" sortBy="#{record.endTime}" style="text-align:center">
                         <h:outputText value="#{record.endTime}"/>
                     </p:column>
                 </p:dataTable>
