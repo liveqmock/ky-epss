@@ -109,7 +109,7 @@ public class CttInfoService {
         if(!"".equals(ToolUtil.getStrIgnoreNull(strCttType))){
             criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(strCttType));
         }
-        example.setOrderByClause("NAME ASC") ;
+        example.setOrderByClause("convert(NAME using gbk)  ASC") ;
         return cttInfoMapper.selectByExample(example);
     }
 
