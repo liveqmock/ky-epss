@@ -18,40 +18,59 @@
             resultMap="BaseResultMapFlowCtrlShowRes">
         <![CDATA[
 
-select   f.info_pkid as info_pkid
-         ,f.info_type as info_type
-         ,f.flow_status as flow_status
-         ,f.PERIOD_NO as periodNo
-         ,max(CREATED_TIME) as created_time
-         ,f.CREATED_BY_NAME as createdByName
-from  flow_ctrl_his f
-where f.flow_status!=""
-   and f.ARCHIVED_FLAG =0
-   and f.flow_status <=3
+select  ff.info_pkid as info_pkid
+        ,ff.info_type as info_type
+        ,ff.flow_status as flow_status
+        ,ff.PERIOD_NO as periodNo
+        ,ff.CREATED_BY_NAME as createdByName
+        ,ff.created_time as created_time
+ from  flow_ctrl_his ff,
+(
+    select   info_pkid
+               ,info_type
+               ,flow_status
+               ,PERIOD_NO
+              ,max(CREATED_TIME) as created_time
+    from  flow_ctrl_his
+    where flow_status!=""
+        and ARCHIVED_FLAG =0
+        and flow_status <=3
+   group by
+        info_pkid
+        ,info_type
+        ,PERIOD_NO
+        ,flow_status
+)   f
+where  f.info_pkid = ff.info_pkid
+and f.info_type = ff.info_type
+and f.flow_status = ff.flow_status
+and f.PERIOD_NO = ff.PERIOD_NO
+and f.created_time = ff.created_time
 
         ]]>
         <if test="infoType != null and infoType != ''">
-            and f.info_type=trim(#{infoType})
+            and ff.info_type=trim(#{infoType})
         </if>
         <if test="periodNo != null and periodNo != ''">
             and f.PERIOD_NO =trim(#{periodNo})
         </if>
         <if test="flowStatus != null and flowStatus != ''">
-            and f.flow_status=trim(#{flowStatus})
+            and ff.flow_status=trim(#{flowStatus})
         </if>
         <if test="infoPkid != null and infoPkid != ''">
-            and f.info_Pkid=trim(#{infoPkid})
+            and ff.info_Pkid=trim(#{infoPkid})
         </if>
         <if test="createdTime != null and createdTime != ''">
-            and f.created_time &gt;=trim(#{createdTime})
+            and ff.created_time &gt;=trim(#{createdTime})
         </if>
         <if test="endTime != null and endTime != ''">
-            and f.created_time &lt;=trim(#{endTime})
+            and ff.created_time &lt;=trim(#{endTime})
         </if>
+
 group by
-        info_pkid
-        ,info_type
-        ,PERIOD_NO
-        ,flow_status
+        ff.info_pkid
+        ,ff.info_type
+        ,ff.PERIOD_NO
+        ,ff.flow_status
     </select>
 </mapper>
