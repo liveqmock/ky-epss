@@ -15,86 +15,86 @@
                 arg.doType = "select";
                 if(flowStatus=="0") { // 刚录入
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../subPower/item/tkctt_ItemMng.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../mng/ctt/tkctt_ItemMng.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
                     }else if (infoType == '1') {// 成本计划
-                        var rtn = dialog("../subPower/item/cstpl_ItemMng.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../mng/ctt/cstpl_ItemMng.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '2') {// 分包合同
-                        var rtn = dialog("../subPower/item/subctt_ItemMng.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../mng/ctt/subctt_ItemMng.xhtml?strFlowType=Mng&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '3') {// 分包数量结算
-                        var rtn = dialog("../subPower/item/subctt_QItemMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../mng/prog/subctt_QItemMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '4') {// 分包材料结算
-                        var rtn = dialog("../subPower/item/subctt_MItemMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../mng/prog/subctt_MItemMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '5'){
                     }else if (infoType == '6') {// 总包统计结算
-                        var rtn = dialog("../subPower/item/tkctt_StaItemMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../mng/prog/tkctt_StaItemMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7') {// 总包计量结算
-                        var rtn = dialog("../subPower/item/tkctt_MeaItemMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../mng/prog/tkctt_MeaItemMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '8') {// 分包安全措施結算
-                        var rtn = dialog("../subPower/item/subctt_FItemMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../mng/prog/subctt_FItemMng.xhtml?strFlowType=Mng&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="1") { // 刚审核
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../item/tkctt_MeaItemFlw.xhtml?strFlowType=Check&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/ctt/tkctt_ItemFlw.xhtml?strFlowType=Check&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
                     }else if (infoType == '1') {// 成本计划
-                        var rtn = dialog("../item/cstpl_ItemFlw.xhtml?strFlowType=Check&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/ctt/cstpl_ItemFlw.xhtml?strFlowType=Check&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '2') {// 分包合同
-                        var rtn = dialog("../item/subctt_ItemFlw.xhtml?strFlowType=Check&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/ctt/subctt_ItemFlw.xhtml?strFlowType=Check&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '3') {// 分包数量结算
-                        var rtn = dialog("../item/subctt_QItemFlw.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/subctt_QItemFlw.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '4') {// 分包材料结算
-                        var rtn = dialog("../item/subctt_MItemFlw.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/subctt_MItemFlw.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '6') {// 总包统计结算
-                        var rtn = dialog("../item/tkctt_StaItemFlw.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/tkctt_StaItemFlw.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7') {// 总包计量结算
-                        var rtn = dialog("../item/tkctt_MeaItemFlw.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/tkctt_MeaItemFlw.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '8') {// 分包安全措施结算
-                        var rtn = dialog("../item/subctt_FItemFlw.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/subctt_FItemFlw.xhtml?strFlowType=Check&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="2") { // 刚复核
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../item/tkctt_MeaItemFlw.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/ctt/tkctt_MeaItemFlw.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
                     }else if (infoType == '1') {// 成本计划
-                        var rtn = dialog("../item/cstpl_ItemFlw.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/ctt/cstpl_ItemFlw.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '2') {// 分包合同
-                        var rtn = dialog("../item/subctt_ItemFlw.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/ctt/subctt_ItemFlw.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '3') {// 分包数量结算
-                        var rtn = dialog("../item/subctt_QItemFlw.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/subctt_QItemFlw.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '4') {// 分包材料结算
-                        var rtn = dialog("../item/subctt_MItemFlw.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/subctt_MItemFlw.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '6') {// 总包统计结算
-                        var rtn = dialog("../item/tkctt_StaItemFlw.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/tkctt_StaItemFlw.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7') {// 总包计量结算
-                        var rtn = dialog("../item/tkctt_MeaItemFlw.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/tkctt_MeaItemFlw.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '8') {// 分包安全措施结算
-                        var rtn = dialog("../item/subctt_FItemFlw.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/subctt_FItemFlw.xhtml?strFlowType=DoubleCheck&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="3") { // 刚批准
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../item/tkctt_MeaItemFlw.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/ctt/tkctt_MeaItemFlw.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '1') {// 成本计划
-                        var rtn = dialog("../item/cstpl_ItemFlw.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/ctt/cstpl_ItemFlw.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '2') {// 分包合同
-                        var rtn = dialog("../item/subctt_ItemFlw.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/ctt/subctt_ItemFlw.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '3') {// 分包数量结算
-                        var rtn = dialog("../item/subctt_QItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/subctt_QItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '4') {// 分包价格结算
-                        var rtn = dialog("../item/subctt_MItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/subctt_MItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '5') {// 分包材料结算
-                        var rtn = dialog("../item/subctt_PItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/subctt_PItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     } else if (infoType == '6') {// 总包统计结算
-                        var rtn = dialog("../item/tkctt_StaItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/tkctt_StaItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     } else if (infoType == '7') {// 总包计量结算
-                        var rtn = dialog("../item/tkctt_MeaItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/tkctt_MeaItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     } else if (infoType == '8') {// 分包安全措施结算
-                        var rtn = dialog("../item/subctt_FItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/subctt_FItemFlw.xhtml?strFlowType=Approve&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="4") { // 刚记帐
                     if (infoType == '5') {// 分包价格结算
-                        var rtn = dialog("../item/subctt_PItemFlw.xhtml?strFlowType=Account&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/prog/subctt_PItemFlw.xhtml?strFlowType=Account&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }
                 document.getElementById("form:qryBtn").click();
@@ -106,85 +106,85 @@
                 arg.doType = "select";
                 if(flowStatus=="0") { // 刚录入
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../item/tkctt_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/tkctt_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
                     }else if (infoType == '1') {// 成本计划
-                        var rtn = dialog("../item/cstpl_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/cstpl_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '2') {// 分包合同
-                        var rtn = dialog("../item/subctt_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/subctt_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '3') {// 分包数量结算
-                        var rtn = dialog("../item/subctt_QItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_QItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '4') {// 分包材料结算
-                        var rtn = dialog("../item/subctt_MItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_MItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '6') {// 总包统计结算
-                        var rtn = dialog("../item/tkctt_StaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/tkctt_StaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7') {// 总包计量结算
-                        var rtn = dialog("../item/tkctt_MeaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/tkctt_MeaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '8') {
-                        var rtn = dialog("../item/subctt_FItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_FItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="1") { // 刚审核
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../item/tkctt_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/tkctt_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
                     }else if (infoType == '1') {// 成本计划
-                        var rtn = dialog("../item/cstpl_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/cstpl_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '2') {// 分包合同
-                        var rtn = dialog("../item/subctt_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/subctt_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '3') {// 分包数量结算
-                        var rtn = dialog("../item/subctt_QItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_QItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '4') {// 分包材料结算
-                        var rtn = dialog("../item/subctt_MItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_MItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '6') {// 总包统计结算
-                        var rtn = dialog("../item/tkctt_StaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/tkctt_StaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7') {// 总包计量结算
-                        var rtn = dialog("../item/tkctt_MeaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/tkctt_MeaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '8') {
-                        var rtn = dialog("../item/subctt_FItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_FItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="2") { // 刚复核
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../item/tkctt_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/tkctt_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
                     }else if (infoType == '1') {// 成本计划
-                        var rtn = dialog("../item/cstpl_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/cstpl_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '2') {// 分包合同
-                        var rtn = dialog("../item/subctt_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/subctt_ItemQry.xhtml?strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '3') {// 分包数量结算
-                        var rtn = dialog("../item/subctt_QItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_QItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '4') {// 分包材料结算
-                        var rtn = dialog("../item/subctt_MItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_MItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '6') {// 总包统计结算
-                        var rtn = dialog("../item/tkctt_StaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/tkctt_StaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '7') {// 总包计量结算
-                        var rtn = dialog("../item/tkctt_MeaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/tkctt_MeaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '8') {
-                        var rtn = dialog("../item/subctt_FItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_FItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="3") { // 刚批准
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../item/tkctt_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/tkctt_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '1') {// 成本计划
-                        var rtn = dialog("../item/cstpl_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/cstpl_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '2') {// 分包合同
-                        var rtn = dialog("../item/subctt_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/ctt/subctt_ItemQry.xhtml?strCttInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '3') {// 分包数量结算
-                        var rtn = dialog("../item/subctt_QItemQry.xhtml?strStlInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_QItemQry.xhtml?strStlInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '4') {// 分包价格结算
-                        var rtn = dialog("../item/subctt_MItemQry.xhtml?strStlInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_MItemQry.xhtml?strStlInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '5') {// 分包材料结算
-                        var rtn = dialog("../item/subctt_PItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_PItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     } else if (infoType == '6') {// 总包统计结算
-                        var rtn = dialog("../item/tkctt_StaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/tkctt_StaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     } else if (infoType == '7') {// 总包计量结算
-                        var rtn = dialog("../item/tkctt_MeaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/tkctt_MeaItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '8') {
-                        var rtn = dialog("../item/subctt_FItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_FItemQry.xhtml?strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }else
                 if(flowStatus=="4") { // 刚记帐
                     if (infoType == '5') {// 分包价格结算
-                        var rtn = dialog("../item/subctt_PItemQry.xhtml?strFlowType=Account&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
+                        var rtn = dialog("../qry/prog/subctt_PItemQry.xhtml?strFlowType=Account&amp;strStlInfoPkid=" +infoPkid, arg, sfeature);
                     }
                 }
                 document.getElementById("form:qryBtn").click();
