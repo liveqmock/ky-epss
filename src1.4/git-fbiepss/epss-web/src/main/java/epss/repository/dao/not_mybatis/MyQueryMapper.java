@@ -86,15 +86,16 @@ public interface MyQueryMapper {
             " inner join" +//联分包工程数量详细项
             "    (" +
             "       select" +
-            "            subctt_pkid,period_no,subctt_item_pkid," +
-            "            current_period_m_qty,begin_to_current_period_m_qty" +
+            "            t2.subctt_pkid,ta.period_no,t2.subctt_item_pkid," +
+            "            t2.current_period_m_qty,t2.begin_to_current_period_m_qty" +
             "       from (" +
             "             select" +
-            "                  psism.subctt_pkid,psism.period_no,psism.subctt_item_pkid," +
-            "                  psism.current_period_m_qty,psism.begin_to_current_period_m_qty," +
-            "                  row_number() over " +
-            "                       (partition by psism.subctt_pkid,psism.subctt_item_pkid" +
-            "                        order by psism.period_no desc)rn" +
+            "                  psism.subctt_pkid,psism.subctt_item_pkid," +
+//            "                  psism.current_period_m_qty,psism.begin_to_current_period_m_qty," +
+            "                  max(psism.period_no) period_no"+
+//            "                  row_number() over " +
+//            "                       (partition by psism.subctt_pkid,psism.subctt_item_pkid" +
+//            "                        order by psism.period_no desc)rn" +
             "            from " +
             "                  PROG_STL_ITEM_SUB_M psism" +
             "            inner join" +
@@ -109,8 +110,12 @@ public interface MyQueryMapper {
             "                  eis.FLOW_STATUS='2'" +
             "            and" +
             "                  eis.period_no<=#{strPeriodNo}" +
-            "           ) ta " +
-            "       where rn=1" +
+            "            group by " +
+            "              psism.subctt_pkid,psism.subctt_item_pkid" +
+            "           ) ta  ,PROG_STL_ITEM_SUB_M t2" +
+            "           where  t2.subctt_pkid = ta.subctt_pkid " +
+            "           and t2.subctt_item_pkid = ta.subctt_item_pkid " +
+            "            and t2.period_no = ta.period_no " +
             "    )ps_info_item" +
             " on" +
             "    c_info_item.BELONG_TO_PKID=ps_info_item.subctt_pkid" +
@@ -230,15 +235,16 @@ public interface MyQueryMapper {
             " inner join" +//联分包工程数量详细项
             "    (" +
             "       select" +
-            "            subctt_pkid,period_no,subctt_item_pkid," +
-            "            current_period_e_qty,begin_to_current_period_e_qty" +
+            "            t2.subctt_pkid,t2.period_no,t2.subctt_item_pkid," +
+            "            t2.current_period_e_qty,t2.begin_to_current_period_e_qty" +
             "       from (" +
             "             select" +
-            "                  psisq.subctt_pkid,psisq.period_no,psisq.subctt_item_pkid," +
-            "                  psisq.current_period_e_qty,psisq.begin_to_current_period_e_qty," +
-            "                  row_number() over " +
-            "                       (partition by psisq.subctt_pkid,psisq.subctt_item_pkid" +
-            "                        order by psisq.period_no desc)rn" +
+            "                  psisq.subctt_pkid,psisq.subctt_item_pkid," +
+            "                   max(psisq.period_no) period_no " +
+//            "                  psisq.current_period_e_qty,psisq.begin_to_current_period_e_qty," +
+//            "                  row_number() over " +
+//            "                       (partition by psisq.subctt_pkid,psisq.subctt_item_pkid" +
+//            "                        order by psisq.period_no desc)rn" +
             "            from " +
             "                  PROG_STL_ITEM_SUB_Q psisq" +
             "            inner join" +
@@ -253,8 +259,14 @@ public interface MyQueryMapper {
             "                  eis.FLOW_STATUS='2'" +
             "            and" +
             "                  eis.period_no<=#{strPeriodNo}" +
-            "           ) ta " +
-            "       where rn=1" +
+            "           group by  psisq.subctt_pkid, psisq.subctt_item_pkid  ) ta " +
+            "       , PROG_STL_ITEM_SUB_Q t2 " +
+            "       where  " +
+            "           t2.subctt_pkid=ta.subctt_pkid" +
+            "       and  " +
+            "           t2.subctt_item_pkid=ta.subctt_item_pkid " +
+            "       and " +
+            "           t2.period_no=ta.period_no " +
             "    )ps_info_item" +
             " on" +
             "    c_info_item.BELONG_TO_PKID=ps_info_item.subctt_pkid" +
