@@ -21,7 +21,7 @@
                         "resizable:yes;scroll:yes;status:no;minimize:yes;maximize:yes;";
                 var arg = new Object();
                 arg.doType = "select";
-                var rtn = dialog("../../item/subctt_ItemQry.xhtml?strFlowType=Qry&amp;strType=2&amp;strCttInfoPkid=" + pkid + "", arg, sfeature);
+                var rtn = dialog("../ctt/subctt_ItemQry.xhtml?strFlowType=Qry&amp;strType=2&amp;strCttInfoPkid=" + pkid + "", arg, sfeature);
             }
         </script>
     </ui:define>
@@ -95,7 +95,7 @@
                                  widgetVar="DtInitSubcttList"
                                  scrollable="true"
                                  scrollHeight="430">
-                        <p:column headerText="操作" style="width:65px;text-align: center;">
+                        <p:column headerText="操作" style="width:40px;text-align: center;">
                             <p:commandButton  icon="ui-icon-search"
                                               style="height:18px;width:18px"
                                               actionListener="#{subcttInfoAction.selectRecordAction('Sel',record)}"

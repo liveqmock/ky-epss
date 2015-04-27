@@ -54,7 +54,7 @@
                 }else
                 if(flowStatus=="2") { // 刚复核
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../flw/ctt/tkctt_MeaItemFlw.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/ctt/tkctt_ItemFlw.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
                     }else if (infoType == '1') {// 成本计划
                         var rtn = dialog("../flw/ctt/cstpl_ItemFlw.xhtml?strFlowType=DoubleCheck&amp;strCttInfoPkid=" +infoPkid, arg, sfeature);
                     }else if (infoType == '2') {// 分包合同
@@ -73,7 +73,7 @@
                 }else
                 if(flowStatus=="3") { // 刚批准
                     if (infoType == '0') {// 总包合同
-                        var rtn = dialog("../flw/ctt/tkctt_MeaItemFlw.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
+                        var rtn = dialog("../flw/ctt/tkctt_ItemFlw.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '1') {// 成本计划
                         var rtn = dialog("../flw/ctt/cstpl_ItemFlw.xhtml?strFlowType=Approve&amp;strCttInfoPkid=" + infoPkid, arg, sfeature);
                     } else if (infoType == '2') {// 分包合同
