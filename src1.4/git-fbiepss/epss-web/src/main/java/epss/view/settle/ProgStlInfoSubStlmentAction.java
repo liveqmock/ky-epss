@@ -45,7 +45,6 @@ public class ProgStlInfoSubStlmentAction {
     private List<SelectItem> subcttList;
     private List<SelectItem> subcttPStlFormFlagList;
 
-    private String strCttInfoPkid;
     private String strSubcttPStlFormFlag;
 
     @PostConstruct
@@ -53,20 +52,14 @@ public class ProgStlInfoSubStlmentAction {
         try {
             progStlInfoShowQry =new ProgStlInfoShow();
             progStlInfoShowList = new ArrayList<>();
-            strCttInfoPkid="";
-            Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-            if (parammap.containsKey("strCttInfoPkid")){
-                strCttInfoPkid=parammap.get("strCttInfoPkid").toString();
-                subcttPStlFormFlagList = new ArrayList<>();
-                subcttPStlFormFlagList.add(new SelectItem("1", "已形成"));
-                subcttPStlFormFlagList.add(new SelectItem("0", "未形成"));
-                strSubcttPStlFormFlag="1";
-            }
+            subcttPStlFormFlagList = new ArrayList<>();
+            subcttPStlFormFlagList.add(new SelectItem("1", "已形成"));
+            subcttPStlFormFlagList.add(new SelectItem("0", "未形成"));
+            strSubcttPStlFormFlag="1";
 
             //在某一成本计划下的分包合同
             CttInfoShow cttInfoShowPara=new CttInfoShow();
             cttInfoShowPara.setCttType(EnumResType.RES_TYPE2.getCode());
-            cttInfoShowPara.setParentPkid(strCttInfoPkid);
             cttInfoShowPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
             List<CttInfoShow> cttInfoShowList =
                     cttInfoService.getListShowByModelShow(cttInfoShowPara);
@@ -93,12 +86,10 @@ public class ProgStlInfoSubStlmentAction {
                 List<ProgStlInfoShow> progStlInfoShowListTemp = new ArrayList<>();
                 List<ProgStlInfoShow> itemEsInitNotFormStlListTemp =
                         progStlInfoService.getNotFormSubcttStlP(
-                                strCttInfoPkid,
                                 ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
                                 ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo()));
                 List<ProgStlInfoShow> getFormPreSubcttStlP =
                         progStlInfoService.getFormPreSubcttStlP(
-                                strCttInfoPkid,
                                 ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
                                 ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo()));
                 for (ProgStlInfoShow itemUnitAll : itemEsInitNotFormStlListTemp) {
@@ -153,7 +144,6 @@ public class ProgStlInfoSubStlmentAction {
                 progStlInfoShowList.clear();
                 progStlInfoShowList =
                 progStlInfoService.getFormedAfterEsInitSubcttStlPList(
-                        strCttInfoPkid,
                         ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
                         ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo())
                 );

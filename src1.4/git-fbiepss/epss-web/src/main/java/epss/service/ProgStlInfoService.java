@@ -1492,31 +1492,18 @@ public class ProgStlInfoService {
         return myProgStlInfoMapper.selectSubcttStlQMByStatusFlagBegin_End(progStlInfoShowPara);
     }
 
-    public List<ProgStlInfoShow> getNotFormSubcttStlP(String strParentPkid,
-                                                               String strStlPkid,
-                                                               String strPeriodNo){
-        return myProgStlInfoMapper.getNotFormSubcttStlP(strParentPkid, strStlPkid, strPeriodNo);
+    public List<ProgStlInfoShow> getNotFormSubcttStlP(String strStlPkid,
+                                                       String strPeriodNo){
+        return myProgStlInfoMapper.getNotFormSubcttStlP(strStlPkid, strPeriodNo);
     }
-    public List<ProgStlInfoShow> getFormPreSubcttStlP(String strParentPkid,
-                                                               String strStlPkid,
-                                                               String strPeriodNo){
-        return myProgStlInfoMapper.getFormPreSubcttStlP(strParentPkid,strStlPkid,strPeriodNo);
-    }
-    public List<ProgStlInfoShow> selectFormingEsInitSubcttStlP(String strParentPkid,
-                                                               String strStlPkid,
-                                                               String strPeriodNo){
-        return myProgStlInfoMapper.selectFormingEsInitSubcttStlP(strParentPkid,strStlPkid,strPeriodNo);
-    }
-    public List<ProgStlInfoShow> selectFormedEsInitSubcttStlP(String strParentPkid,
-                                                              String strStlPkid,
-                                                              String strPeriodNo){
-        return myProgStlInfoMapper.selectFormedEsInitSubcttStlPList(strParentPkid,strStlPkid,strPeriodNo);
+    public List<ProgStlInfoShow> getFormPreSubcttStlP(String strStlPkid,
+                                                       String strPeriodNo){
+        return myProgStlInfoMapper.getFormPreSubcttStlP(strStlPkid,strPeriodNo);
     }
 
-    public List<ProgStlInfoShow> getFormedAfterEsInitSubcttStlPList(String strParentPkid,
-                                                                    String strStlPkid,
-                                                                    String strPeriodNo){
-        return myProgStlInfoMapper.getFormedAfterEsInitSubcttStlPList(strParentPkid,strStlPkid,strPeriodNo);
+    public List<ProgStlInfoShow> getFormedAfterEsInitSubcttStlPList(String strStlPkid,
+                                                                     String strPeriodNo){
+        return myProgStlInfoMapper.getFormedAfterEsInitSubcttStlPList(strStlPkid,strPeriodNo);
     }
 
     public List<ProgStlInfoShow> selectTkcttStlSMByStatusFlagBegin_End(ProgStlInfoShow progStlInfoShowPara){

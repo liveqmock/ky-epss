@@ -175,13 +175,10 @@ public interface MyProgStlInfoMapper {
             "     SIGN_PART eicust" +
             " on" +
             "     ecinfo.SIGN_PART_B=eicust.PKID" +
-            " where" +
-            "     ecinfo.PARENT_PKID = #{strParentPkid}" +
             " order by" +
             "     eispower.STL_PKID,eispower.PERIOD_NO")
-    List<ProgStlInfoShow> getNotFormSubcttStlP(@Param("strParentPkid") String strParentPkid,
-                                                        @Param("strStlPkid") String strStlPkid,
-                                                        @Param("strPeriodNo") String strPeriodNo);
+    List<ProgStlInfoShow> getNotFormSubcttStlP(@Param("strStlPkid") String strStlPkid,
+                                               @Param("strPeriodNo") String strPeriodNo);
     @Select("select" +
             " eispower.PKID as pkid" +
             " from"+
@@ -239,147 +236,11 @@ public interface MyProgStlInfoMapper {
             ")eispower" +
             " on"+
             " ecinfo.PKID=eispower.STL_PKID" +
-            " where" +
-            " ecinfo.PARENT_PKID = #{strParentPkid}" +
             " order by" +
             " eispower.STL_PKID,eispower.PERIOD_NO")
-    List<ProgStlInfoShow> getFormPreSubcttStlP(@Param("strParentPkid") String strParentPkid,
-                                               @Param("strStlPkid") String strStlPkid,
+    List<ProgStlInfoShow> getFormPreSubcttStlP(@Param("strStlPkid") String strStlPkid,
                                                @Param("strPeriodNo") String strPeriodNo);
-    @Select("select distinct" +
-            " eispower.PKID as pkid" +
-            ",eispower.STL_PKID as stlPkid" +
-            ",eispower.PERIOD_NO as periodNo" +
-            ",ecinfo.NAME as stlName" +
-            ",eicust.NAME as signPartBName" +
-            ",eispower.FLOW_STATUS as flowStatus"+
-            " from"+
-            " CTT_INFO ecinfo" +
-            " inner join" +
-            "(" +
-            " select" +
-            " min(eisqm1.PKID) as PKID" +
-            ",eisqm1.STL_PKID" +
-            ",eisqm1.PERIOD_NO" +
-            ",eisqm1.FLOW_STATUS" +
-            " from" +
-            "(" +
-            "select" +
-            " eis.PKID " +
-            ",eis.ID " +
-            ",eis.STL_TYPE " +
-            ",eis.STL_PKID " +
-            ",eis.PERIOD_NO " +
-            ",eis.FLOW_STATUS " +
-            " from" +
-            " PROG_STL_INFO eis" +
-            " where" +
-            " eis.STL_PKID like CONCAT('%',CONCAT(trim(#{strStlPkid}),'%')) " +
-            " and" +
-            " eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{strPeriodNo}),'%')) " +
-            " and" +
-            " (eis.STL_TYPE='3' or eis.STL_TYPE='4')" +
-            ")eisqm1" +
-            ",(" +
-            "select" +
-            " eis.PKID " +
-            ",eis.ID " +
-            ",eis.STL_TYPE " +
-            ",eis.STL_PKID " +
-            ",eis.PERIOD_NO " +
-            ",eis.FLOW_STATUS " +
-            " from" +
-            " PROG_STL_INFO eis" +
-            " where" +
-            " eis.STL_PKID like CONCAT('%',CONCAT(trim(#{strStlPkid}),'%')) " +
-            " and" +
-            " eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{strPeriodNo}),'%')) " +
-            " and" +
-            " (eis.STL_TYPE='3' or eis.STL_TYPE='4')" +
-            ")eisqm2" +
-            " where" +
-            " eisqm1.STL_TYPE!=eisqm2.STL_TYPE" +
-            " and" +
-            " eisqm1.STL_PKID=eisqm2.STL_PKID" +
-            " and" +
-            " eisqm1.PERIOD_NO=eisqm2.PERIOD_NO" +
-            " and" +
-            " (eisqm1.FLOW_STATUS='2' and eisqm2.FLOW_STATUS='2')" +
-            " group by eisqm1.STL_PKID,eisqm1.PERIOD_NO,eisqm1.FLOW_STATUS" +
-            ")eispower" +
-            " on"+
-            " ecinfo.PKID=eispower.STL_PKID" +
-            " left outer join" +
-            " SIGN_PART eicust" +
-            " on" +
-            " ecinfo.SIGN_PART_B=eicust.PKID" +
-            " where" +
-            " ecinfo.PARENT_PKID = #{strParentPkid}" +
-            " order by" +
-            " eispower.STL_PKID,eispower.PERIOD_NO")
-    List<ProgStlInfoShow> selectFormingEsInitSubcttStlP(@Param("strParentPkid") String strParentPkid,
-                                                        @Param("strStlPkid") String strStlPkid,
-                                                        @Param("strPeriodNo") String strPeriodNo);
-    @Select("select " +
-            "      eispower.PKID as pkid" +
-            "     ,eispower.ID as id" +
-            "     ,eispower.STL_TYPE as stlType" +
-            "     ,eispower.STL_PKID as stlPkid" +
-            "     ,eispower.PERIOD_NO as periodNo" +
-            "     ,eispower.ATTACHMENT as attachment" +
-            "     ,ecinfo.NAME as stlName" +
-            "     ,eicust.NAME as signPartBName"+
-            "     ,eispower.REMARK as remark" +
-            "     ,eispower.ARCHIVED_FLAG as archivedFlag" +
-            "     ,eispower.CREATED_BY as createdBy" +
-            "     ,eispower.CREATED_TIME as createdTime"+
-            "     ,eispower.LAST_UPD_BY as lastUpdBy" +
-            "     ,eispower.LAST_UPD_TIME as lastUpdTime" +
-            "     ,eispower.FLOW_STATUS as flowStatus" +
-            "     ,eispower.FLOW_STATUS_REASON as flowStatusReason" +
-            " from " +
-            "     CTT_INFO ecinfo " +
-            " inner join"+
-            "     (" +
-            "         select " +
-            "               eis.PKID" +
-            "               ,eis.ID" +
-            "               ,eis.STL_TYPE" +
-            "               ,eis.STL_PKID" +
-            "               ,eis.PERIOD_NO" +
-            "               ,eis.ATTACHMENT" +
-            "               ,eis.REMARK" +
-            "               ,eis.ARCHIVED_FLAG" +
-            "               ,eis.CREATED_BY" +
-            "               ,eis.CREATED_TIME"+
-            "               ,eis.LAST_UPD_BY" +
-            "               ,eis.LAST_UPD_TIME" +
-            "               ,eis.FLOW_STATUS" +
-            "               ,eis.FLOW_STATUS_REASON" +
-            "         from" +
-            "               PROG_STL_INFO eis" +
-            "         where " +
-            "               eis.STL_PKID like CONCAT('%',CONCAT(trim(#{strStlPkid}),'%'))" +
-            "         and " +
-            "               eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{strPeriodNo}),'%'))" +
-            "         and " +
-            "               eis.STL_TYPE='5'" +
-            "         and " +
-            "               eis.FLOW_STATUS>='2'" +
-            "     )eispower" +
-            " on " +
-            "     ecinfo.PKID=eispower.STL_PKID" +
-            " left outer join " +
-            "     SIGN_PART eicust" +
-            " on " +
-            "     ecinfo.SIGN_PART_B=eicust.PKID" +
-            " where " +
-            "     ecinfo.PARENT_PKID = #{strParentPkid}" +
-            " order by " +
-            "     eispower.FLOW_STATUS,eispower.PERIOD_NO desc,eispower.ID asc")
-    List<ProgStlInfoShow> selectFormedEsInitSubcttStlPList(@Param("strParentPkid") String strParentPkid,
-                                                           @Param("strStlPkid") String strStlPkid,
-                                                           @Param("strPeriodNo") String strPeriodNo);
+
     @Select(" select " +
             "      eispower.PKID as pkid" +
             "     ,eispower.ID as id" +
@@ -433,12 +294,9 @@ public interface MyProgStlInfoMapper {
             "     SIGN_PART eicust" +
             " on " +
             "     ecinfo.SIGN_PART_B=eicust.PKID" +
-            " where " +
-            "     ecinfo.PARENT_PKID = #{strParentPkid}" +
             " order by " +
             "     eispower.FLOW_STATUS,eispower.PERIOD_NO desc,eispower.ID asc")
-    List<ProgStlInfoShow> getFormedAfterEsInitSubcttStlPList(@Param("strParentPkid") String strParentPkid,
-                                                             @Param("strStlPkid") String strStlPkid,
+    List<ProgStlInfoShow> getFormedAfterEsInitSubcttStlPList(@Param("strStlPkid") String strStlPkid,
                                                              @Param("strPeriodNo") String strPeriodNo);
     // 分包结算单 End
 }
