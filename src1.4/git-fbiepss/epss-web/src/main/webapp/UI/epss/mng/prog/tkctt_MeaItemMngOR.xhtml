@@ -1,0 +1,342 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/ui.xhtml">
+    <ui:define name="head">
+        <link type="text/css" href="#{request.contextPath}/css/epss.css" rel="stylesheet"/>
+        <script type="text/javascript" src="#{request.contextPath}/js/pub.js"/>
+        <script type="text/javascript" language="javascript">
+            $(function(){ $("html").css("overflowX","hidden");});
+            document.onkeydown = function TabReplace() {
+                if (event.keyCode == 13) {
+                    if (event.srcElement.tagName != 'BUTTON')
+                        event.keyCode = 9;
+                    else
+                        event.srcElement.click();
+                }
+            }
+        </script>
+    </ui:define>
+    <ui:define name="content">
+        <h:form id="form">
+            <div style="margin:5px;">
+                <p:panel>
+                    <p:growl id="msgs" showDetail="true"/>
+                    <h:panelGrid columns="3">
+                        <p:panel  header="总包进度计量结算信息" id="ppInfo">
+                            <h:panelGrid columns="2">
+                                <h:panelGrid>
+                                    <h:panelGrid columns="7">
+                                        <p:outputLabel value="总包合同：" for="cttName"/>
+                                        <h:inputText id="cttName"
+                                                     value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.stlName}"
+                                                     style="background-color:gainsboro;" readonly="true"/>
+                                        <p:outputLabel value="期数编码：  " for="periodNo"/>
+                                        <h:inputText id="periodNo" value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.periodNo}"
+                                                     style="background-color:gainsboro;" readonly="true"/>
+                                        <p:outputLabel value="结算编号：" for="id"/>
+                                        <h:inputText id="id" value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.id}"/>
+                                        <p:commandButton id="autoSetIdBtn" icon="ui-icon-plus"
+                                                         action="#{progStlInfoTkMeaTTAction.setMaxNoPlusOne()}"
+                                                         update="id"
+                                                         style="height:20px">
+                                        </p:commandButton>
+                                    </h:panelGrid>
+                                    <h:panelGrid columns="6">
+                                        <p:outputLabel value="备注内容：" for="remark"/>
+                                            <p:inputText id="remark" value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.remark}"/>
+                                            <p:outputLabel for="recVersion" value="修改次数：" />
+                                            <h:inputText id="recVersion"
+                                                         value="#{progStlInfoTkMeaTTAction.progStlInfoShowUpd.recVersion}"
+                                                         style="background-color:gainsboro;text-align:right;" readonly="true">
+                                                <f:convertNumber type="number" pattern="#,###,###,###,##0"/>
+                                            </h:inputText>
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2" >
+                                    <p:commandButton id="submitBtn"
+                                                rendered="#{progStlItemTkMeaAction.strPassVisible}"
+                                                value="提交"
+                                                action="#{progStlInfoTkMeaTTAction.onClickForMngAction()}"
+                                                update="msgs,ppInfo">
+                                    </p:commandButton>
+                                    <p:ajaxStatus style="width:16px;height:16px;">
+                                        <f:facet name="start">
+                                            <h:graphicImage value="/images/ajaxloading.gif"/>
+                                        </f:facet>
+                                        <f:facet name="complete">
+                                            <h:outputText value=""/>
+                                        </f:facet>
+                                    </p:ajaxStatus>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="备注" style="height:90px">
+                            <h:panelGrid>
+                                <p:commandButton value="附件"
+                                                 update=":form:msgs"
+                                                 onclick="PF('wvAttachmentList').show()">
+                                </p:commandButton>
+				                <p:commandButton value="导出到EXCEL"
+                                                action="#{progStlItemTkMeaAction.onExportExcel}"
+                                                ajax="false">
+                            	</p:commandButton>
+                            </h:panelGrid>
+                        </p:panel>
+                        <p:panel header="录入完了确认" id="ppFlow" style="height:90px">
+                            <h:panelGrid columns="2">
+				                <p:outputLabel  value="录入备注：" for="flowRemark"/>
+                            <p:inputTextarea id="flowRemark"
+                                                 rows="1"
+                                                 autoResize="false"
+                                             value="#{progStlItemTkMeaAction.strFlowStatusRemark}"/>
+                            </h:panelGrid>
+                            <h:panelGrid>
+                            <p:commandButton id="endInputBtn" value="录入完成"
+                                             action="#{progStlItemTkMeaAction.onClickForPowerAction('Pass')}"
+                                                 update="msgs,ppInfo,ppFlow,ppDetail"
+                                             rendered="#{progStlItemTkMeaAction.strPassVisible}">
+                            </p:commandButton>
+                            <p:commandButton id="startInputBtn" value="录入未完"
+                                             action="#{progStlItemTkMeaAction.onClickForPowerAction('Fail')}"
+                                                 update="msgs,ppInfo,ppFlow,ppDetail"
+                                             rendered="#{progStlItemTkMeaAction.strPassFailVisible}">
+                            </p:commandButton>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:panelGrid>
+                    <p:panel id="ppDetail" header="总包进度计量结算内容">
+                        <p:dataTable id="pdt" style="width:100%;"
+                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowList}"
+                                 var="record"
+                                 rowKey="#{record.tkctt_Pkid}"
+                                 selectionMode="single"
+                                 paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                 {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 paginator="true"
+                                 paginatorPosition="bottom"
+                                 rows="15"
+                                 rowsPerPageTemplate="500,200,100,45,30,15"
+                                 rowIndexVar="row"
+                                 emptyMessage="数据记录为空..."
+                                 rowStyleClass="#{record.tkctt_Unit eq null? 'rowGrayStyle':
+                                                  record.isUptoCttQtyFlag? 'rowGreenyellowStyle':null}"
+                                 scrollable="true"
+                                 scrollHeight="425">
+                        <p:column headerText="操作" style="width:40px;text-align: center;"
+                                  rendered='#{progStlItemTkMeaAction.strPassVisible}'>
+                            <p:commandButton  icon="ui-icon-pencil"
+                                              style="height:18px;width:18px"
+                                              rendered="#{record.tkctt_Unit eq null? 'false':'true'}"
+                                              actionListener="#{progStlItemTkMeaAction.selectRecordAction('Upd',record)}"
+                                              update="pdt,:form:pgViewForUpd"
+                                              oncomplete="PF('wVDlgViewForUpd').show()">
+                            </p:commandButton>
+                        </p:column>
+                        <p:column headerText="序号" style="width:30px">
+                            <h:outputText value="#{row + 1}"/>
+                        </p:column>
+                        <p:column style="width:100px" headerText="项目编号">
+                            <h:outputText value="#{record.tkctt_StrNo}" escape="false"/>
+                        </p:column>
+                        <p:column style="width:200px" headerText="项目名称">
+                            <h:outputText value="#{record.tkctt_Name}" />
+                        </p:column>
+                        <p:column style="width:60px" headerText="项目单位">
+                            <h:outputText value="#{record.tkctt_Unit}" style="text-align:right"/>
+                        </p:column>
+                        <p:column style="width:80px" headerText="合同单价">
+                            <h:outputText value="#{record.tkctt_ContractUnitPrice}" style="text-align: right">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            </h:outputText>
+                        </p:column>
+			            <p:column style="width:110px" headerText="合同金额">
+                            <h:outputText value="#{record.tkctt_ContractAmount}" style="text-align: right">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="width:110px" headerText="合同工程量">
+                            <h:outputText value="#{record.tkctt_ContractQuantity}" style="text-align: right">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="开累工程量" style="width:110px">
+                            <h:outputText value="#{record.eng_BeginToCurrentPeriodEQty}" style="text-align: right">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="开累工程额" style="width:110px">
+                            <h:outputText value="#{record.eng_BeginToCurrentPeriodEAmount}" style="text-align: right">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="当期工程量" style="width:110px">
+                            <h:outputText value="#{record.eng_CurrentPeriodEQty}" style="text-align: right">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="当期工程额" style="width:110px">
+                            <h:outputText value="#{record.eng_CurrentPeriodEAmount}" style="text-align: right">
+                                <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                            </h:outputText>
+                        </p:column>
+			            <p:column style="width:200px" headerText="合同备注">
+                                <h:outputText value="#{record.tkctt_Remark}" />
+                        </p:column>
+                        <p:column style="width:200px" headerText="结算备注">
+                                <h:outputText value="#{record.eng_Remark}" />
+                        </p:column>
+                        <p:column style="width:100px" headerText="数据来源">
+                            <h:outputText value="#{record.eng_OriginFlag}" />
+                        </p:column>
+                        <p:column style="width:100px" headerText="创建人">
+                            <h:outputText value="#{record.eng_CreatedByName}" />
+                        </p:column>
+                        <p:column style="width:120px" headerText="创建时间">
+                            <h:outputText value="#{record.eng_CreatedTime}" />
+                        </p:column>
+                        <p:column style="width:100px" headerText="修改人">
+                            <h:outputText value="#{record.eng_LastUpdByName}" />
+                        </p:column>
+                        <p:column style="width:120px" headerText="修改时间">
+                            <h:outputText value="#{record.eng_LastUpdTime}" />
+                        </p:column>
+                        <p:column style="width:80px" headerText="修改次数">
+                            <h:outputText value="#{record.eng_RecVersion}" style="float: right">
+                            </h:outputText>
+                        </p:column>
+                    </p:dataTable>
+                        <p:dialog id="dlgViewForUpd" header="总包数量计量更新信息" widgetVar="wVDlgViewForUpd"
+                                  resizable="false" modal="true"
+                                  showEffect="clip" hideEffect="fold">
+                            <h:panelGrid id="pgViewForUpd">
+                                <h:panelGrid columns="4">
+                                    <p:outputLabel for="noItemHieRelapForUpd" value="编号:"/>
+                                    <h:inputText id="noItemHieRelapForUpd"
+                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowUpd.tkctt_StrNo}"
+                                                 style="background-color:gainsboro"
+                                                 readonly="true">
+                                    </h:inputText>
+                                    <p:outputLabel for="nameForUpd" value="名称:"/>
+                                    <h:inputText id="nameForUpd"
+                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowUpd.tkctt_Name}"
+                                                 style="background-color:gainsboro"
+                                                 readonly="true"/>
+                                    <p:outputLabel for="unitItemInfoForUpd" value="单位:"/>
+                                    <h:inputText id="unitItemInfoForUpd"
+                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowUpd.tkctt_Unit}"
+                                                 style="background-color:gainsboro"
+                                                 readonly="true"/>
+                                    <p:outputLabel for="contractUnitPriceItemInfoForUpd" value="合同单价:"/>
+                                    <h:inputText id="contractUnitPriceItemInfoForUpd"
+                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowUpd.tkctt_ContractUnitPrice}"
+                                                 style="background-color:gainsboro;text-align:right;"
+                                                 readonly="true">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="contractQuantityItemInfoForUpd" value="合同数量:"/>
+                                    <h:inputText id="contractQuantityItemInfoForUpd"
+                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowUpd.tkctt_ContractQuantity}"/>
+				                    <p:outputLabel for="remarkForUpd" value="合同备注:"/>
+                                    <h:inputText id="remarkForUpd"
+                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowUpd.tkctt_Remark}"
+                                                 style="background-color:gainsboro"
+                                                 readonly="true">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="eng_BeginToCurrentPeriodEQtyForUpd" value="开累工程量:"/>
+                                    <h:inputText id="eng_BeginToCurrentPeriodEQtyForUpd"
+                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowUpd.eng_BeginToCurrentPeriodEQty}"
+                                                 style="background-color:gainsboro;text-align:right;"
+                                                 readonly="true">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                    </h:inputText>
+                                    <p:outputLabel for="eng_CurrentPeriodEQtyForUpd" value="本期工程量:"/>
+                                    <h:inputText id="eng_CurrentPeriodEQtyForUpd"
+                                                 value="#{progStlItemTkMeaAction.progStlItemTkMeaShowUpd.eng_CurrentPeriodEQty}"
+                                                 style="text-align:right;">
+                                        <f:convertNumber type="number" pattern="#,###,###,###,##0.00"/>
+                                        <p:ajax event="blur" update="msgs,eng_BeginToCurrentPeriodEQtyForUpd"
+                                                listener="#{progStlItemTkMeaAction.blurEng_CurrentPeriodEQty('blur')}"/>
+                                    </h:inputText>
+                                </h:panelGrid>
+                                <h:panelGrid id="pgOperBtnForUpd" >
+                                    <p:commandButton id="submitBtnForUpd"
+                                                     value="提交（更新）"
+                                                     action="#{progStlItemTkMeaAction.submitThisRecordAction}"
+                                                     update="pgViewForUpd,pdt,msgs"
+						                             oncomplete="wVDlgViewForUpd.hide()">
+                                    </p:commandButton>
+                                </h:panelGrid>
+                            </h:panelGrid>
+                        </p:dialog>
+                        <p:dialog id="dLAttachmentList" widgetVar="wvAttachmentList" modal="true"
+                                  showEffect="clip" hideEffect="fold" header="附件列表">
+                            <p:growl id="messages" showDetail="true"/>
+                            <h:panelGrid id="pgAttachmentView">
+                                <p:fileUpload id="attachmentName" fileUploadListener="#{progStlItemTkMeaAction.upload}"
+                                              mode="advanced"
+                                              sizeLimit="5000000"
+                                              multiple="true"
+                                              label="选择" showButtons="true"
+                                              cancelLabel="全部取消" uploadLabel="全部上传" process="@this"
+                                              allowTypes="/(\.|\/)(gif|jpe?g|png|xls|xlsx|doc|docx|pdf)$/"
+                                              update="pdtAttachmentList,attachmentName">
+                                </p:fileUpload>
+                                <p:dataTable id="pdtAttachmentList" style="width:100%;"
+                                             value="#{progStlItemTkMeaAction.attachmentList}"
+                                             var="recordAttachment"
+                                             rowKey="#{recordAttachment.COLUMN_NAME}"
+                                             selectionMode="single"
+                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks}
+                                                         {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                             paginator="true"
+                                             paginatorPosition="bottom"
+                                             rows="5"
+                                             rowsPerPageTemplate="100,50,30,15,5"
+                                             emptyMessage="数据记录为空...">
+                                    <p:column headerText="附件ID" style="text-align:left">
+                                        <h:outputText value="#{recordAttachment.COLUMN_ID}"/>
+                                    </p:column>
+                                    <p:column headerText="附件名" style="text-align:left">
+                                        <h:outputText value="#{recordAttachment.COLUMN_NAME}"/>
+                                    </p:column>
+                                    <p:column headerText="缩略图" style="text-align:center" rendered="false">
+                                        <h:graphicImage value="#{recordAttachment.COLUMN_NAME}" styleClass="img"/>
+                                    </p:column>
+                                    <p:column headerText="预览">
+                                        <p:commandButton icon="ui-icon-search"
+                                                         id="selectButton" update=":form:imageShow"
+                                                         style="height:18px;width:18px"
+                                                         action="#{progStlItemTkMeaAction.onViewAttachment(recordAttachment)}"
+                                                         oncomplete="dlgWvView.show()"
+                                                         title="View">
+                                        </p:commandButton>
+                                    </p:column>
+                                    <p:column headerText="操作" style="width:62px;text-align: center;">
+                                        <p:commandButton icon="ui-icon-arrowrefresh-1-w"
+                                                         style="height:18px;width:18px"
+                                                         ajax="false"
+                                                         actionListener="#{progStlItemTkMeaAction.download(recordAttachment)}">
+                                            <p:fileDownload value="#{progStlItemTkMeaAction.downloadFile}"/>
+                                        </p:commandButton>
+                                        <p:commandButton icon="ui-icon-trash"
+                                                         style="height:18px;width:18px"
+                                                         action="#{progStlItemTkMeaAction.delAttachmentRecordAction(recordAttachment)}"
+                                                         update=":form:pgAttachmentView,:form:msgs">
+                                        </p:commandButton>
+                                    </p:column>
+                                </p:dataTable>
+                                <p:dialog id="imageShow" widgetVar="dlgWvView" height="400px" modal="false">
+                                    <h:graphicImage binding="#{progStlItemTkMeaAction.image}"/>
+                                </p:dialog>
+                            </h:panelGrid>
+                        </p:dialog>
+                    </p:panel>
+                </p:panel>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
