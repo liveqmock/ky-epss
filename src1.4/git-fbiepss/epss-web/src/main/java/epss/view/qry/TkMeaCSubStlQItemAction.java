@@ -73,10 +73,11 @@ public class TkMeaCSubStlQItemAction {
             beansMap = new HashMap();
             reportHeader =new ReportHeader();
             // 获取已经批准了的总包合同列表
+            CttInfoShow cttInfoShowPara=new CttInfoShow();
+            cttInfoShowPara.setCttType(EnumResType.RES_TYPE0.getCode());
+            cttInfoShowPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
             List<CttInfoShow> cttInfoShowList =
-                    cttInfoService.getCttInfoListByCttType_Status(
-                            EnumResType.RES_TYPE0.getCode()
-                            , EnumFlowStatus.FLOW_STATUS3.getCode());
+                    cttInfoService.getListShowByModelShow(cttInfoShowPara);
             tkcttList=new ArrayList<SelectItem>();
             if(cttInfoShowList.size()>0){
                 SelectItem selectItem=new SelectItem("","");

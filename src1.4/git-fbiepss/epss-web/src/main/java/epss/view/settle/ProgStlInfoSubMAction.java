@@ -77,11 +77,12 @@ public class ProgStlInfoSubMAction {
 
             resetAction();
             //在某一成本计划下的分包合同
+            CttInfoShow cttInfoShowPara=new CttInfoShow();
+            cttInfoShowPara.setCttType(EnumResType.RES_TYPE2.getCode());
+            cttInfoShowPara.setParentPkid(strCttInfoPkid);
+            cttInfoShowPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
             List<CttInfoShow> cttInfoShowList =
-                    cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
-                            EnumResType.RES_TYPE2.getCode()
-                            , strCttInfoPkid
-                            , EnumFlowStatus.FLOW_STATUS3.getCode());
+                    cttInfoService.getListShowByModelShow(cttInfoShowPara);
             subcttList = new ArrayList<>();
             if (cttInfoShowList.size() > 0) {
                 SelectItem selectItem = new SelectItem("", "全部");

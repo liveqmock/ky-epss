@@ -63,10 +63,11 @@ public class CstplSubcttStlMItemAction {
         try {
             beansMap = new HashMap();
             reportHeader =new ReportHeader();
+            CttInfoShow cttInfoShowPara=new CttInfoShow();
+            cttInfoShowPara.setCttType(EnumResType.RES_TYPE1.getCode());
+            cttInfoShowPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
             List<CttInfoShow> cttInfoShowList =
-                    cttInfoService.getCttInfoListByCttType_Status(
-                            EnumResType.RES_TYPE1.getCode()
-                            , EnumFlowStatus.FLOW_STATUS3.getCode());
+                    cttInfoService.getListShowByModelShow(cttInfoShowPara);
             cstplList=new ArrayList<SelectItem>();
             if(cttInfoShowList.size()>0){
                 SelectItem selectItem=new SelectItem("","");

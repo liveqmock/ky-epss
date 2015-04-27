@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import skyline.util.ToolUtil;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -68,26 +69,17 @@ public class CttInfoService {
         if(!ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttEndDate()).equals("")){
             criteria.andCttEndDateLike(ToolUtil.getStrIgnoreNull(cttInfoShowPara.getCttEndDate()));
         }
-        example.setOrderByClause("ID ASC") ;
+        example.setOrderByClause("convert(NAME using gbk)  ASC") ;
         return cttInfoMapper.selectByExample(example);
     }
-    public List<CttInfo> getListByModel(CttInfo cttInfoPara) {
-        return getListByModelShow(fromModelToModelShow(cttInfoPara));
-    }
-
-    public List<CttInfoShow> getCttInfoListByCttType_Status(
-            String strCttyTypePara,String strStatusPara) {
-        return myCttInfoMapper.getCttInfoListByCttType_Status(strCttyTypePara,strStatusPara);
-    }
-
-    public List<CttInfoShow> getCttInfoListByCttType_ParentPkid_Status(
-            String strCttyTypePara,
-            String strParentPkidPara,
-            String strStatusPara) {
-        return myCttInfoMapper.getCttInfoListByCttType_ParentPkid_Status(
-                strCttyTypePara,
-                strParentPkidPara,
-                strStatusPara);
+    public List<CttInfoShow> getListShowByModelShow(CttInfoShow cttInfoShowPara) {
+        List<CttInfo> cttInfoListTemp=getListByModelShow(cttInfoShowPara);
+        List<CttInfoShow> cttInfoShowListTemp=new ArrayList<>();
+        for(CttInfo cttInfoUnit:cttInfoListTemp){
+            CttInfoShow cttInfoShowTemp=fromModelToModelShow(cttInfoUnit);
+            cttInfoShowListTemp.add(cttInfoShowTemp);
+        }
+        return cttInfoShowListTemp;
     }
 
     public List<CttInfoShow> selectRecordsFromCtt(String parentPkidPara,String strTkcttInfoNamePara){
@@ -99,7 +91,7 @@ public class CttInfoService {
         CttInfoExample.Criteria criteria = example.createCriteria();
         criteria.andCttTypeEqualTo(ToolUtil.getStrIgnoreNull(strCttType))
                 .andParentPkidEqualTo(ToolUtil.getStrIgnoreNull(strBelongToPkid));
-        example.setOrderByClause("ID ASC") ;
+        example.setOrderByClause("convert(NAME using gbk)  ASC") ;
         return cttInfoMapper.selectByExample(example);
     }
 

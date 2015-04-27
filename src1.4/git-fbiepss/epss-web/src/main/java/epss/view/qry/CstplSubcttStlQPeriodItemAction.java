@@ -101,12 +101,12 @@ public class CstplSubcttStlQPeriodItemAction {
             if (parammap.containsKey("strCttInfoPkid")){
                 strCstplPkid=parammap.get("strCttInfoPkid").toString();
             }
-
+            CttInfoShow cttInfoShowPara=new CttInfoShow();
+            cttInfoShowPara.setCttType(EnumResType.RES_TYPE2.getCode());
+            cttInfoShowPara.setParentPkid(strCstplPkid);
+            cttInfoShowPara.setFlowStatus(EnumFlowStatus.FLOW_STATUS3.getCode());
             List<CttInfoShow> cttInfoShowList =
-                    cttInfoService.getCttInfoListByCttType_ParentPkid_Status(
-                            EnumResType.RES_TYPE2.getCode()
-                            , strCstplPkid
-                            , EnumFlowStatus.FLOW_STATUS3.getCode());
+                    cttInfoService.getListShowByModelShow(cttInfoShowPara);
             subcttList=new ArrayList<SelectItem>();
             if(cttInfoShowList.size()>0){
                 SelectItem selectItem=new SelectItem("","");

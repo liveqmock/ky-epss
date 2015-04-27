@@ -21,35 +21,6 @@ public interface MyCttInfoMapper {
     @Select("select max(id) from CTT_INFO where ctt_type = #{strCttType}")
     String getStrMaxCttId(@Param("strCttType") String strCttType);
 
-    @Select(" select" +
-                 " eci.PKID" +
-                 ",eci.NAME" +
-            " from" +
-                 " CTT_INFO eci" +
-            " where" +
-                 " eci.CTT_TYPE = #{strCttType}" +
-            " and" +
-                 " eci.FLOW_STATUS = #{strFlowStatus}" +
-            " order by eci.NAME ")
-    List<CttInfoShow> getCttInfoListByCttType_Status(@Param("strCttType") String strCttType,
-                                                     @Param("strFlowStatus") String strFlowStatus);
-    @Select(" select" +
-                " eci.PKID" +
-                ",eci.NAME" +
-            " from" +
-                " CTT_INFO eci" +
-            " where" +
-                " eci.CTT_TYPE = #{strCttType}" +
-            " and" +
-                " eci.PARENT_PKID = #{strParentPkid}" +
-            " and" +
-                " eci.FLOW_STATUS = #{strFlowStatus}" +
-            " order by " +
-                " eci.NAME ")
-    List<CttInfoShow> getCttInfoListByCttType_ParentPkid_Status(@Param("strCttType") String strCttType,
-                                                                @Param("strParentPkid") String strParentPkid,
-                                                                @Param("strFlowStatus") String strFlowStatus);
-
     @Select("select " +
             "      count(1)" +
             " from " +

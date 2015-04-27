@@ -81,7 +81,7 @@
                              emptyMessage="数据记录为空..."
                              widgetVar="DtInitSubcttList"
                              scrollable="true">
-                    <p:column headerText="操作" style="width:61px;text-align: center;">
+                    <p:column headerText="操作" style="width:40px;text-align: center;">
                         <p:commandButton  icon="ui-icon-search"
                                           style="height:18px;width:18px"
                                           actionListener="#{progStlInfoSubMAction.selectRecordAction('Sel',record)}"
@@ -99,7 +99,7 @@
                     <p:column headerText="结算编号" style="text-align:center;width:120px">
                         <h:outputText value="#{record.id}"/>
                     </p:column>
-                    <p:column headerText="分包合同" style="text-align:left;width:200px">
+                    <p:column headerText="分包合同" style="text-align:left;">
                         <h:outputText value="#{record.stlName}"/>
                     </p:column>
                     <p:column headerText="协作单位" style="text-align:left;width:200px">
