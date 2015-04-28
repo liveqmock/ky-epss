@@ -186,68 +186,6 @@ public interface MyProgStlInfoMapper {
             "     eispower.STL_PKID,eispower.PERIOD_NO")
     List<ProgStlInfoShow> getNotFormSubcttStlP(@Param("strStlPkid") String strStlPkid,
                                                @Param("strPeriodNo") String strPeriodNo);
-    @Select("select" +
-            " eispower.PKID as pkid" +
-            " from"+
-            " CTT_INFO ecinfo" +
-            " inner join" +
-            "(" +
-            " select" +
-            " eisqm1.PKID" +
-            ",eisqm1.STL_PKID" +
-            ",eisqm1.PERIOD_NO" +
-            ",eisqm1.FLOW_STATUS" +
-            " from" +
-            "(" +
-            "select" +
-            " eis.PKID " +
-            ",eis.ID " +
-            ",eis.STL_TYPE " +
-            ",eis.STL_PKID " +
-            ",eis.PERIOD_NO " +
-            ",eis.FLOW_STATUS " +
-            " from" +
-            " PROG_STL_INFO eis" +
-            " where" +
-            " eis.STL_PKID like CONCAT('%',CONCAT(trim(#{strStlPkid}),'%')) " +
-            " and" +
-            " eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{strPeriodNo}),'%')) " +
-            " and" +
-            " (eis.STL_TYPE='3' or eis.STL_TYPE='4' or eis.STL_TYPE='8' )" +
-            ")eisqm1" +
-            ",(" +
-            "select" +
-            " eis.PKID " +
-            ",eis.ID " +
-            ",eis.STL_TYPE " +
-            ",eis.STL_PKID " +
-            ",eis.PERIOD_NO " +
-            ",eis.FLOW_STATUS " +
-            " from" +
-            " PROG_STL_INFO eis" +
-            " where" +
-            " eis.STL_PKID like CONCAT('%',CONCAT(trim(#{strStlPkid}),'%')) " +
-            " and" +
-            " eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{strPeriodNo}),'%')) " +
-            " and" +
-            " (eis.STL_TYPE='3' or eis.STL_TYPE='4' or eis.STL_TYPE='8' )" +
-            ")eisqm2" +
-            " where" +
-            " eisqm1.STL_TYPE!=eisqm2.STL_TYPE" +
-            " and" +
-            " eisqm1.STL_PKID=eisqm2.STL_PKID" +
-            " and" +
-            " eisqm1.PERIOD_NO=eisqm2.PERIOD_NO" +
-            " and" +
-            " (eisqm1.FLOW_STATUS='2' and eisqm2.FLOW_STATUS='2')" +
-            ")eispower" +
-            " on"+
-            " ecinfo.PKID=eispower.STL_PKID" +
-            " order by" +
-            " eispower.STL_PKID,eispower.PERIOD_NO")
-    List<ProgStlInfoShow> getFormPreSubcttStlP(@Param("strStlPkid") String strStlPkid,
-                                               @Param("strPeriodNo") String strPeriodNo);
-
     @Select(" select " +
             "      eispower.PKID as pkid" +
             "     ,eispower.ID as id" +

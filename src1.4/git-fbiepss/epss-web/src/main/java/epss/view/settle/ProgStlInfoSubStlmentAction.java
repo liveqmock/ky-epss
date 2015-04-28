@@ -89,22 +89,7 @@ public class ProgStlInfoSubStlmentAction {
                         progStlInfoService.getNotFormSubcttStlP(
                                 ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
                                 ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo()));
-//                List<ProgStlInfoShow> getFormPreSubcttStlP =
-//                        progStlInfoService.getFormPreSubcttStlP(
-//                                ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
-//                                ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo()));
-//                for (ProgStlInfoShow itemUnitAll : itemEsInitNotFormStlListTemp) {
-//                    Boolean isHasSame = false;
-//                    for (ProgStlInfoShow itemUnitForming : getFormPreSubcttStlP) {
-//                        if (itemUnitAll.getPkid().equals(itemUnitForming.getPkid())) {
-//                            isHasSame = true;
-//                            break;
-//                        }
-//                    }
-//                    if (isHasSame.equals(false)) {
-//                        progStlInfoShowListTemp.add(itemUnitAll);
-//                    }
-//                }
+
                 progStlInfoShowListTemp =  itemEsInitNotFormStlListTemp;
                 ProgStlInfoShow progStlInfoShow1Temp;
                 for (int i = 0; i < progStlInfoShowListTemp.size(); i++) {
