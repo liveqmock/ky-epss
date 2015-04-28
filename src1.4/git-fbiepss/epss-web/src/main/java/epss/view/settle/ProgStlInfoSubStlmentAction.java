@@ -89,7 +89,6 @@ public class ProgStlInfoSubStlmentAction {
                         progStlInfoService.getNotFormSubcttStlP(
                                 ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getStlPkid()),
                                 ToolUtil.getStrIgnoreNull(progStlInfoShowQry.getPeriodNo()));
-
                 progStlInfoShowListTemp =  itemEsInitNotFormStlListTemp;
                 ProgStlInfoShow progStlInfoShow1Temp;
                 for (int i = 0; i < progStlInfoShowListTemp.size(); i++) {
