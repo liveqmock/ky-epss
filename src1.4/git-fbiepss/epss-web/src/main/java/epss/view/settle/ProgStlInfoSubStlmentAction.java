@@ -2,6 +2,7 @@ package epss.view.settle;
 
 import epss.common.enums.EnumFlowStatus;
 import epss.common.enums.EnumResType;
+import epss.common.enums.EnumSubcttType;
 import epss.repository.model.model_show.CttInfoShow;
 import epss.repository.model.model_show.ProgStlInfoShow;
 import epss.service.CttInfoService;
@@ -53,9 +54,9 @@ public class ProgStlInfoSubStlmentAction {
             progStlInfoShowQry =new ProgStlInfoShow();
             progStlInfoShowList = new ArrayList<>();
             subcttPStlFormFlagList = new ArrayList<>();
-            subcttPStlFormFlagList.add(new SelectItem("1", "已形成"));
             subcttPStlFormFlagList.add(new SelectItem("0", "未形成"));
-            strSubcttPStlFormFlag="1";
+            subcttPStlFormFlagList.add(new SelectItem("1", "已形成"));
+            strSubcttPStlFormFlag="0";
 
             //在某一成本计划下的分包合同
             CttInfoShow cttInfoShowPara=new CttInfoShow();
@@ -107,36 +108,40 @@ public class ProgStlInfoSubStlmentAction {
 
                 ProgStlInfoShow progStlInfoShow1Temp;
                 for (int i = 0; i < progStlInfoShowListTemp.size(); i++) {
-                    if (progStlInfoShowListTemp.get(i).getStlType().equals("3")) {
-                        progStlInfoShowListTemp.get(i).setId("分包数量结算(" + progStlInfoShowListTemp.get(i).getId() + ")");
-                    } else if (progStlInfoShowListTemp.get(i).getStlType().equals("4")) {
-                        progStlInfoShowListTemp.get(i).setId("分包材料结算(" + progStlInfoShowListTemp.get(i).getId() + ")");
+                    ProgStlInfoShow progStlInfoShowTemp=progStlInfoShowListTemp.get(i);
+                    progStlInfoShowTemp.setTypeName(EnumSubcttType.getValueByKey(progStlInfoShowTemp.getType()).getTitle());
+                    if (progStlInfoShowTemp.getStlType().equals("3")) {
+                        progStlInfoShowTemp.setId("分包数量结算(" + progStlInfoShowTemp.getId() + ")");
+                    } else if (progStlInfoShowTemp.getStlType().equals("4")) {
+                        progStlInfoShowTemp.setId("分包材料结算(" + progStlInfoShowTemp.getId() + ")");
                     }
                     if (i == 0) {
                         progStlInfoShow1Temp = new ProgStlInfoShow();
                         progStlInfoShow1Temp.setPkid(i + "");
-                        progStlInfoShow1Temp.setId("分包结算单");
-                        progStlInfoShow1Temp.setStlName(progStlInfoShowListTemp.get(i).getStlName());
-                        progStlInfoShow1Temp.setSignPartBName(progStlInfoShowListTemp.get(i).getSignPartBName());
-                        progStlInfoShow1Temp.setPeriodNo(progStlInfoShowListTemp.get(i).getPeriodNo());
+                        progStlInfoShow1Temp.setId("分包结算单(合同类型："+progStlInfoShowTemp.getTypeName()+")");
+                        progStlInfoShow1Temp.setStlName(progStlInfoShowTemp.getStlName());
+                        progStlInfoShow1Temp.setSignPartBName(progStlInfoShowTemp.getSignPartBName());
+                        progStlInfoShow1Temp.setPeriodNo(progStlInfoShowTemp.getPeriodNo());
+                        progStlInfoShow1Temp.setRowStyle("Group");
                         progStlInfoShowList.add(progStlInfoShow1Temp);
                         progStlInfoShowList.add(progStlInfoShowListTemp.get(0));
                     } else {
                         if (progStlInfoShowListTemp.get(i - 1).getStlPkid().equals(
-                                progStlInfoShowListTemp.get(i).getStlPkid()) &&
+                                progStlInfoShowTemp.getStlPkid()) &&
                                 progStlInfoShowListTemp.get(i - 1).getPeriodNo().equals(
-                                        progStlInfoShowListTemp.get(i).getPeriodNo())
+                                        progStlInfoShowTemp.getPeriodNo())
                                 ) {
-                            progStlInfoShowList.add(progStlInfoShowListTemp.get(i));
+                            progStlInfoShowList.add(progStlInfoShowTemp);
                         } else {
                             progStlInfoShow1Temp = new ProgStlInfoShow();
                             progStlInfoShow1Temp.setPkid(i + "");
-                            progStlInfoShow1Temp.setId("分包结算单");
-                            progStlInfoShow1Temp.setStlName(progStlInfoShowListTemp.get(i).getStlName());
-                            progStlInfoShow1Temp.setSignPartBName(progStlInfoShowListTemp.get(i).getSignPartBName());
-                            progStlInfoShow1Temp.setPeriodNo(progStlInfoShowListTemp.get(i).getPeriodNo());
+                            progStlInfoShow1Temp.setId("分包结算单(合同类型："+progStlInfoShowTemp.getTypeName()+")");
+                            progStlInfoShow1Temp.setStlName(progStlInfoShowTemp.getStlName());
+                            progStlInfoShow1Temp.setSignPartBName(progStlInfoShowTemp.getSignPartBName());
+                            progStlInfoShow1Temp.setPeriodNo(progStlInfoShowTemp.getPeriodNo());
+                            progStlInfoShow1Temp.setRowStyle("Group");
                             progStlInfoShowList.add(progStlInfoShow1Temp);
-                            progStlInfoShowList.add(progStlInfoShowListTemp.get(i));
+                            progStlInfoShowList.add(progStlInfoShowTemp);
                         }
                     }
                 }

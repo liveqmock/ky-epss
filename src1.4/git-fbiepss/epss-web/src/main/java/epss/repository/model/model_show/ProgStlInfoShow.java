@@ -34,6 +34,7 @@ public class ProgStlInfoShow {
     private String type;
     private String typeName;
     private String autoLinkAdd;
+    private String rowStyle;
 
     public String getPkid() {
         return pkid;
@@ -249,5 +250,13 @@ public class ProgStlInfoShow {
 
     public void setRecVersion(Integer recVersion) {
         this.recVersion = recVersion;
+    }
+
+    public String getRowStyle() {
+        return rowStyle;
+    }
+
+    public void setRowStyle(String rowStyle) {
+        this.rowStyle = rowStyle;
     }
 }

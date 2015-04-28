@@ -147,6 +147,7 @@ public interface MyProgStlInfoMapper {
             "     ,eispower.STL_PKID as stlPkid" +
             "     ,eispower.PERIOD_NO as periodNo" +
             "     ,ecinfo.NAME as stlName" +
+            "     ,ecinfo.TYPE as type" +
             "     ,eicust.NAME as signPartBName" +
             "     ,eispower.FLOW_STATUS as flowStatus"+
             " from"+
