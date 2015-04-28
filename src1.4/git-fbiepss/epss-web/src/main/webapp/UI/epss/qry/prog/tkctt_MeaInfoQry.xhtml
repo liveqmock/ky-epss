@@ -35,13 +35,16 @@
                     <h:panelGrid id="pdQry" columns="3" style="width: 100%">
                         <h:panelGrid columns="9">
                             <p:outputLabel value="结算编号：" for="id"/>
-                            <p:inputText id="id" value="#{progStlInfoTkMeaAction.progStlInfoShowQry.id}"/>
+                            <p:inputText id="id"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowQry.id}"/>
                             <p:outputLabel value="总包合同：" for="tkcttPkid"/>
-                            <p:selectOneMenu id="tkcttPkid" value="#{progStlInfoTkMeaAction.progStlInfoShowQry.stlPkid}">
+                            <p:selectOneMenu id="tkcttPkid"
+                                             value="#{progStlInfoTkMeaAction.progStlInfoShowQry.stlPkid}">
                                 <f:selectItems value="#{progStlInfoTkMeaAction.tkcttList}"/>
                             </p:selectOneMenu>
                             <p:outputLabel value="期数编码：" for="periodNo"/>
-                            <p:inputText id="periodNo" value="#{progStlInfoTkMeaAction.progStlInfoShowQry.periodNo}"
+                            <p:inputText id="periodNo"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowQry.periodNo}"
                                          onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                         </h:panelGrid>
                         <h:panelGrid columns="3">
@@ -98,7 +101,7 @@
                     <p:column headerText="结算编号" style="width:120px;text-align:center">
                         <h:outputText value="#{record.id}"/>
                     </p:column>
-                    <p:column headerText="总包合同" style="width:400px;text-align:left">
+                    <p:column headerText="总包合同" style="text-align:left">
                         <h:outputText value="#{record.stlName}"/>
                     </p:column>
                     <p:column headerText="期数编码" style="width:60px;text-align:center">
@@ -117,23 +120,27 @@
                     <h:panelGrid id="pgView">
                         <h:panelGrid columns="2">
                             <p:outputLabel value="结算编号：" for="idForDlg"/>
-                            <p:inputText id="idForDlg" value="#{progStlInfoTkMeaAction.progStlInfoShowSel.id}"
+                            <p:inputText id="idForDlg"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowSel.id}"
                                          readonly="true"
                                          style="background-color:gainsboro"/>
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <p:outputLabel value="总包合同：" for="tkcttPkidForDlg"/>
-                            <p:inputText id="tkcttPkidForDlg" value="#{progStlInfoTkMeaAction.progStlInfoShowSel.stlName}"
+                            <p:inputText id="tkcttPkidForDlg"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowSel.stlName}"
                                          readonly="true"
                                          style="background-color:gainsboro;width:328px"/>
                         </h:panelGrid>
                         <h:panelGrid columns="4">
                             <p:outputLabel value="期数编码：" for="periodNoForDlg"/>
-                            <p:inputText id="periodNoForDlg" value="#{progStlInfoTkMeaAction.progStlInfoShowSel.periodNo}"
+                            <p:inputText id="periodNoForDlg"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowSel.periodNo}"
                                          readonly="true"
                                          style="background-color:gainsboro"/>
                             <p:outputLabel value="备注内容：" for="remarkForDlg"/>
-                            <p:inputText id="remarkForDlg" value="#{progStlInfoTkMeaAction.progStlInfoShowSel.remark}"
+                            <p:inputText id="remarkForDlg"
+                                         value="#{progStlInfoTkMeaAction.progStlInfoShowSel.remark}"
                                          readonly="true"
                                          style="background-color:gainsboro"/>
                         </h:panelGrid>
