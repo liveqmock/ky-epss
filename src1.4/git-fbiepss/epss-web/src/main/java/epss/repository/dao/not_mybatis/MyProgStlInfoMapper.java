@@ -150,6 +150,7 @@ public interface MyProgStlInfoMapper {
             "     ,ecinfo.TYPE as type" +
             "     ,eicust.NAME as signPartBName" +
             "     ,eispower.FLOW_STATUS as flowStatus"+
+            "     ,eispower.FLOW_STATUS_REASON as flowStatusReason "+
             " from"+
             "     CTT_INFO ecinfo" +
             " inner join" +
@@ -161,6 +162,7 @@ public interface MyProgStlInfoMapper {
             "              ,eis.STL_PKID " +
             "              ,eis.PERIOD_NO " +
             "              ,eis.FLOW_STATUS " +
+            "              ,eis.FLOW_STATUS_REASON " +
             "          from" +
             "              PROG_STL_INFO eis" +
             "          where" +
@@ -168,8 +170,12 @@ public interface MyProgStlInfoMapper {
             "          and " +
             "              eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{strPeriodNo}),'%')) " +
             "          and " +
-            "              (eis.STL_TYPE='3' or eis.STL_TYPE='4')" +
-            "     )eispower" +
+            "              (eis.STL_TYPE='3' or eis.STL_TYPE='4' or eis.STL_TYPE='8')" +
+
+            "    AND NOT EXISTS " +
+            "           ( select  stl_pkid,period_no from   prog_stl_info tt   where  tt.stl_type ='5' " +
+            "             and  tt.stl_pkid=eis.stl_pkid  and   tt.period_no =eis.period_no  ) " +
+            "        )eispower" +
             " on"+
             "     ecinfo.PKID=eispower.STL_PKID" +
             " left outer join" +
@@ -207,7 +213,7 @@ public interface MyProgStlInfoMapper {
             " and" +
             " eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{strPeriodNo}),'%')) " +
             " and" +
-            " (eis.STL_TYPE='3' or eis.STL_TYPE='4')" +
+            " (eis.STL_TYPE='3' or eis.STL_TYPE='4' or eis.STL_TYPE='8' )" +
             ")eisqm1" +
             ",(" +
             "select" +
@@ -224,7 +230,7 @@ public interface MyProgStlInfoMapper {
             " and" +
             " eis.PERIOD_NO like CONCAT('%',CONCAT(trim(#{strPeriodNo}),'%')) " +
             " and" +
-            " (eis.STL_TYPE='3' or eis.STL_TYPE='4')" +
+            " (eis.STL_TYPE='3' or eis.STL_TYPE='4' or eis.STL_TYPE='8' )" +
             ")eisqm2" +
             " where" +
             " eisqm1.STL_TYPE!=eisqm2.STL_TYPE" +
@@ -287,7 +293,7 @@ public interface MyProgStlInfoMapper {
             "         and " +
             "             eis.STL_TYPE='5'" +
             "         and " +
-            "             eis.FLOW_STATUS>='3'"+
+            "             eis.FLOW_STATUS>='2'"+
             "     )eispower" +
             " on " +
             "     ecinfo.PKID=eispower.STL_PKID" +
