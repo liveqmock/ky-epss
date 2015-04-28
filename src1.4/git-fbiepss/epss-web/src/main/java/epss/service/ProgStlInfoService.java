@@ -1496,10 +1496,6 @@ public class ProgStlInfoService {
                                                        String strPeriodNo){
         return myProgStlInfoMapper.getNotFormSubcttStlP(strStlPkid, strPeriodNo);
     }
-    public List<ProgStlInfoShow> getFormPreSubcttStlP(String strStlPkid,
-                                                       String strPeriodNo){
-        return myProgStlInfoMapper.getFormPreSubcttStlP(strStlPkid,strPeriodNo);
-    }
 
     public List<ProgStlInfoShow> getFormedAfterEsInitSubcttStlPList(String strStlPkid,
                                                                      String strPeriodNo){
