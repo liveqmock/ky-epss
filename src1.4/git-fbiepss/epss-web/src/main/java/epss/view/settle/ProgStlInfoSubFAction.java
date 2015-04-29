@@ -69,10 +69,6 @@ public class ProgStlInfoSubFAction {
 
             this.progStlInfoShowList = new ArrayList<>();
             String strCttInfoPkid="";
-            int teststr=1;
-            if (!teststr){
-
-            }
             Map parammap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
             if (parammap.containsKey("strCttInfoPkid")){
                 strCttInfoPkid=parammap.get("strCttInfoPkid").toString();
