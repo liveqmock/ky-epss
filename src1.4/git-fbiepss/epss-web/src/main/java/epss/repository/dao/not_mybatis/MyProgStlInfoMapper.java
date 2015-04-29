@@ -172,10 +172,18 @@ public interface MyProgStlInfoMapper {
             "          and " +
             "              (eis.STL_TYPE='3' or eis.STL_TYPE='4' or eis.STL_TYPE='8')" +
 
-            "    AND NOT EXISTS " +
-            "           ( select  stl_pkid,period_no from   prog_stl_info tt   where  tt.stl_type ='5' " +
-            "             and  tt.stl_pkid=eis.stl_pkid  and   tt.period_no =eis.period_no  ) " +
-            "        )eispower" +
+            "          AND NOT EXISTS " +
+            "           ( select  stl_pkid," +
+            "                     period_no" +
+            "             from" +
+            "                 prog_stl_info tt" +
+            "             where " +
+            "                 tt.stl_type = '5'" +
+            "             and  " +
+            "                 tt.stl_pkid = eis.stl_pkid" +
+            "             and " +
+            "                 tt.period_no = eis.period_no) " +
+            "     )eispower" +
             " on"+
             "     ecinfo.PKID=eispower.STL_PKID" +
             " left outer join" +
