@@ -125,6 +125,7 @@ public class OperAppointMenuAction implements Serializable{
         try {
             OperRes operResTemp = new OperRes();
             operResTemp.setOperPkid(operResShowSeled.getOperPkid());
+            operResTemp.setType("system");
             operResService.deleteRecordByOperPkid(operResTemp);
             for (OperResShow operResShowUnit : operResSel) {
                 operResTemp.setInfoPkid(operResShowUnit.getInfoPkid());
