@@ -115,7 +115,7 @@ public class ResAppointOperAction implements Serializable{
         deptOperShowTemp.setName("机构人员信息");
         deptOperShowTemp.setType("0");
         TreeNode node0 = new DefaultTreeNode(deptOperShowTemp, deptOperRoot);
-        recursiveOperTreeNode(deptOperShowTemp, node0,strQryFlagPara);
+        recursiveOperTreeNode("ROOT", node0,strQryFlagPara);
         node0.setExpanded(true);
     }
     private void recursiveResTreeNode(String strParentPkidPara,TreeNode parentNode)
@@ -211,7 +211,7 @@ public class ResAppointOperAction implements Serializable{
             TreeNode childNodeTemp = new DefaultTreeNode(operAppointShowTemp, parentNode);
             OperAppointShow operAppointShowForExcelTemp = (OperAppointShow)BeanUtils.cloneBean(operAppointShowTemp);
             operAppointShowForExcelTemp.setResName(
-            ToolUtil.padLeftSpace_DoLevel(Integer.parseInt(operAppointShowForExcelTemp.getResType()), operAppointShowForExcelTemp.getResName()));
+                    ToolUtil.padLeftSpace_DoLevel(Integer.parseInt(operAppointShowForExcelTemp.getResType()), operAppointShowForExcelTemp.getResName()));
             operAppointShowFowExcelList.add(operAppointShowForExcelTemp);
             // 结算信息
             if(cttInfoShowTemp.getCttType().equals(EnumResType.RES_TYPE0.getCode())) {
@@ -708,13 +708,12 @@ public class ResAppointOperAction implements Serializable{
             recursiveResTreeNode(operAppointShowTemp.getResPkid(),childNodeTemp);
         }
     }
-    private void recursiveOperTreeNode(DeptOperShow deptOperShowPara,TreeNode parentNode,String strQryFlagPara){
-        deptOperShowPara.setQryFlag(strQryFlagPara);
+    private void recursiveOperTreeNode(String strParentPkidPara,TreeNode parentNode,String strQryFlagPara){
         List<DeptOperShow> operResShowListTemp=
-                deptOperService.selectDeptAndOperRecords(deptOperShowPara);
+                deptOperService.selectDeptAndOperRecords(strParentPkidPara,strQryFlagPara);
         for (int i=0;i<operResShowListTemp.size();i++){
             TreeNode childNode = new DefaultTreeNode(operResShowListTemp.get(i), parentNode);
-            recursiveOperTreeNode(operResShowListTemp.get(i), childNode,strQryFlagPara);
+            recursiveOperTreeNode(operResShowListTemp.get(i).getPkid(), childNode,strQryFlagPara);
         }
     }
 
@@ -933,10 +932,10 @@ public class ResAppointOperAction implements Serializable{
                 } else {
                     cttInfoService.insertRecord(cttInfoShowAdd);
                     MessageUtil.addInfo("新增数据完成。");
-					String strCttTypeTemp=cttInfoShowAdd.getCttType();
-					String strParentPkidTemp=cttInfoShowAdd.getParentPkid();
+                    String strCttTypeTemp=cttInfoShowAdd.getCttType();
+                    String strParentPkidTemp=cttInfoShowAdd.getParentPkid();
                     cttInfoShowAdd = new CttInfoShow();
-					cttInfoShowAdd.setCttType(strCttTypeTemp);
+                    cttInfoShowAdd.setCttType(strCttTypeTemp);
                     cttInfoShowAdd.setParentPkid(strParentPkidTemp);
                     cttInfoShowAdd.setId(setMaxNoPlusOne(cttInfoShowAdd.getCttType()));
                 }
