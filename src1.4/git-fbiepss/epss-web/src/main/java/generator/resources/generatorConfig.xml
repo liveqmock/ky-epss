@@ -30,87 +30,90 @@
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
+        <!--业务类例子 -->
+
+        <table tableName="TID_KEYS">
+                <property name="ignoreQualifiersAtRuntime" value="true" />
+                <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
+            </table>
+        <table tableName="OPER_RES">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
+        </table>
+        <table tableName="FLOW_CTRL_HIS">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
+        </table>
+        <table tableName="SIGN_PART">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
+        </table>
         <table tableName="CTT_INFO">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-
-        <!--业务类例子 -->
-        <!--
-	<table   tableName="TID_KEYS">
+        <table tableName="CTT_ITEM">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-	<table   tableName="OPER_RES">
+        <table tableName="PROG_STL_INFO">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="FLOW_CTRL_HIS">
+        <table tableName="PROG_STL_ITEM_SUB_F">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="SIGN_PART">
+        <table tableName="PROG_STL_ITEM_SUB_M">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="CTT_INFO">
+        <table tableName="PROG_STL_ITEM_SUB_Q">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="CTT_ITEM">
+        <table tableName="PROG_STL_ITEM_SUB_STLMENT">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="PROG_STL_INFO">
+        <table tableName="PROG_STL_ITEM_TK_EST">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="PROG_STL_ITEM_SUB_F">
+        <table tableName="PROG_STL_ITEM_TK_MEA">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="PROG_STL_ITEM_SUB_M">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
-        </table>
-        <table   tableName="PROG_STL_ITEM_SUB_Q">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
-        </table>
-        <table   tableName="PROG_STL_ITEM_SUB_STLMENT">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
-        </table>
-        <table   tableName="PROG_STL_ITEM_TK_EST">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
-        </table>
-        <table   tableName="PROG_STL_ITEM_TK_MEA">
-            <property name="ignoreQualifiersAtRuntime" value="true" />
-            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
-        </table>-->
         <!--平台类 有几个表并不是Mybatis自动生成的，更新慎用-->
-        <!--<table   tableName="DEPT">
+        <table tableName="PTENUDETAIL">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="OPER">
+        <table tableName="PTENUMAIN">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="PTENUDETAIL">
+        <table tableName="PTERROR">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="PTENUMAIN">
-        </table>
-        <table   tableName="PTERROR">
-        </table>
-        <table   tableName="PTLOGICACT">
+        <table tableName="PTLOGICACT">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
         <table tableName="PTMENU">
             <property name="ignoreQualifiersAtRuntime" value="true" />
             <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
         </table>
-        <table   tableName="SYS_LOCK">
+        <!--<table tableName="DEPT">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
+        </table>
+        <table tableName="OPER">
+            <property name="ignoreQualifiersAtRuntime" value="true" />
+            <generatedKey column="pkid" sqlStatement="select uuid()" identity="false"/>
+        </table>
+        <table tableName="SYS_LOCK">
         </table>
         <table tableName="all_tab_columns"/>-->
     </context>
