@@ -44,7 +44,7 @@ select  ff.info_pkid as info_pkid
 where  f.info_pkid = ff.info_pkid
 and f.info_type = ff.info_type
 and f.flow_status = ff.flow_status
-and f.PERIOD_NO = ff.PERIOD_NO
+and IFNULL(f.PERIOD_NO,'') = IFNULL(ff.PERIOD_NO,'')
 and f.created_time = ff.created_time
 
         ]]>
