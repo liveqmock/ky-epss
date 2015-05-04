@@ -17,35 +17,34 @@
     <select id="selectListByFlowCtrlHis" parameterType="epss.repository.model.model_show.FlowCtrlShow"
             resultMap="BaseResultMapFlowCtrlShowRes">
         <![CDATA[
-
-select  ff.info_pkid as info_pkid
-        ,ff.info_type as info_type
-        ,ff.flow_status as flow_status
-        ,ff.PERIOD_NO as periodNo
-        ,ff.CREATED_BY_NAME as createdByName
-        ,ff.created_time as created_time
- from  flow_ctrl_his ff,
-(
-    select   info_pkid
-               ,info_type
-               ,flow_status
-               ,PERIOD_NO
-              ,max(CREATED_TIME) as created_time
-    from  flow_ctrl_his
-    where flow_status!=""
-        and ARCHIVED_FLAG =0
-        and flow_status <=3
-   group by
-        info_pkid
-        ,info_type
-        ,PERIOD_NO
-        ,flow_status
-)   f
-where  f.info_pkid = ff.info_pkid
-and f.info_type = ff.info_type
-and f.flow_status = ff.flow_status
-and IFNULL(f.PERIOD_NO,'') = IFNULL(ff.PERIOD_NO,'')
-and f.created_time = ff.created_time
+            select  ff.info_pkid as info_pkid
+                    ,ff.info_type as info_type
+                    ,ff.flow_status as flow_status
+                    ,ff.PERIOD_NO as periodNo
+                    ,ff.CREATED_BY_NAME as createdByName
+                    ,ff.created_time as created_time
+             from  flow_ctrl_his ff,
+            (
+                select   info_pkid
+                           ,info_type
+                           ,flow_status
+                           ,PERIOD_NO
+                          ,max(CREATED_TIME) as created_time
+                from  flow_ctrl_his
+                where flow_status!=""
+                    and ARCHIVED_FLAG =0
+                    and flow_status <=3
+               group by
+                    info_pkid
+                    ,info_type
+                    ,PERIOD_NO
+                    ,flow_status
+            )   f
+            where  f.info_pkid = ff.info_pkid
+            and f.info_type = ff.info_type
+            and f.flow_status = ff.flow_status
+            and IFNULL(f.PERIOD_NO,'') = IFNULL(ff.PERIOD_NO,'')
+            and f.created_time = ff.created_time
 
         ]]>
         <if test="infoType != null and infoType != ''">
@@ -67,10 +66,13 @@ and f.created_time = ff.created_time
             and ff.created_time &lt;=trim(#{endTime})
         </if>
 
-group by
-        ff.info_pkid
-        ,ff.info_type
-        ,ff.PERIOD_NO
-        ,ff.flow_status
+        group by
+            ff.info_pkid
+            ,ff.info_type
+            ,ff.PERIOD_NO
+            ,ff.flow_status
+        order by ff.info_type
+            ,ff.PERIOD_NO
+            ,ff.flow_status
     </select>
 </mapper>

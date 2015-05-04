@@ -66,7 +66,7 @@ public class FlowCtrlHisService {
      * @param flowCtrlShowParam
      * @return
      */
-    public List<FlowCtrlShow> selectListByFlowCtrlHis(FlowCtrlShow flowCtrlShowParam) {
+    public List<FlowCtrlShow> selectListByFlowCtrlHis(FlowCtrlShow flowCtrlShowParam,String strFinish_FlagPara) {
         int i=0;
         List<FlowCtrlShow> flowCtrlshows = myFlowCtrlHisMapper.selectListByFlowCtrlHis(flowCtrlShowParam);
         List<FlowCtrlShow> flowCtrlShowList = new ArrayList<>();
@@ -158,20 +158,30 @@ public class FlowCtrlHisService {
             if(!"0".equals(flowCtrlShow.getFlowStatus())){
                 //从所有的数据中筛选符合页面上搜索的创建记录名
                 //因为这样就不会和时间有冲突了
-                if(StringUtils.isNotBlank(flowCtrlShowParam.getCreatedByName())){
+                /*if(StringUtils.isNotBlank(flowCtrlShowParam.getCreatedByName())){
                     if(StringUtils.isNotBlank(flowCtrlShow.getCreatedByName())&&
                        flowCtrlShow.getCreatedByName().contains(flowCtrlShowParam.getCreatedByName().trim())){
                         returnFlowCtrlShowList.add(flowCtrlShow);
                     }
-                }else{
-                    //去除分包数量结算和分包材料结算的批准
-                    if("3".equals(flowCtrlShow.getInfoType())||"4".equals(flowCtrlShow.getInfoType())){
-                        if(!"3".equals(flowCtrlShow.getFlowStatus())){
-                            returnFlowCtrlShowList.add(flowCtrlShow);
-                        }
-                    }else{
+                }else{*/
+                if("".equals(strFinish_FlagPara)) {
+
+                }else if("0".equals(strFinish_FlagPara)) {
+                    if (StringUtils.isNotBlank(flowCtrlShow.getEndTime())) {
+                        continue;
+                    }
+                }else if("1".equals(strFinish_FlagPara)) {
+                    if (!StringUtils.isNotBlank(flowCtrlShow.getEndTime())) {
+                        continue;
+                    }
+                }
+                //去除分包数量结算和分包材料结算的批准
+                if ("3".equals(flowCtrlShow.getInfoType()) || "4".equals(flowCtrlShow.getInfoType())) {
+                    if (!"3".equals(flowCtrlShow.getFlowStatus())) {
                         returnFlowCtrlShowList.add(flowCtrlShow);
                     }
+                } else {
+                    returnFlowCtrlShowList.add(flowCtrlShow);
                 }
             }
         }

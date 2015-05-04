@@ -52,12 +52,21 @@ public class FlowCtrlHisAction {
     private List<SelectItem> selectItemList_1;
     private List<SelectItem> selectItemList_23458;
 
+    // 完成情况
+    private String strFinish_Flag;
+    private List<SelectItem> finish_FlagList;
+
     @PostConstruct
     public void init() {
         this.flowCtrlHisList = new ArrayList<FlowCtrlHis>();
         flowCtrlShow = new FlowCtrlShow();
         esInitCtt1List=new ArrayList<SelectItem> ();
         esInitCtt2List=new ArrayList<SelectItem> ();
+        finish_FlagList=new ArrayList<>();
+
+        finish_FlagList.add(new SelectItem("", "全部"));
+        finish_FlagList.add(new SelectItem("0", "在途"));
+        finish_FlagList.add(new SelectItem("1", "完成"));
 
         strRendered1="false";
         strRendered2="false";
@@ -124,7 +133,7 @@ public class FlowCtrlHisAction {
             flowCtrlShow.setInfoPkid(flowCtrlHis.getInfoPkid());
             flowCtrlShow.setPeriodNo(flowCtrlHis.getPeriodNo());
 
-            flowCtrlShowList = flowCtrlHisService.selectListByFlowCtrlHis(flowCtrlShow);
+            flowCtrlShowList = flowCtrlHisService.selectListByFlowCtrlHis(flowCtrlShow,strFinish_Flag);
             if(strQryMsgOutPara.equals("true")){
                 if (flowCtrlShowList.isEmpty()) {
                     MessageUtil.addWarn("没有查询到数据。");
@@ -292,5 +301,21 @@ public class FlowCtrlHisAction {
 
     public void setFlag(boolean flag) {
         Flag = flag;
+    }
+
+    public List<SelectItem> getFinish_FlagList() {
+        return finish_FlagList;
+    }
+
+    public void setFinish_FlagList(List<SelectItem> finish_FlagList) {
+        this.finish_FlagList = finish_FlagList;
+    }
+
+    public String getStrFinish_Flag() {
+        return strFinish_Flag;
+    }
+
+    public void setStrFinish_Flag(String strFinish_Flag) {
+        this.strFinish_Flag = strFinish_Flag;
     }
 }

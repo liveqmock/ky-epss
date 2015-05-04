@@ -27,7 +27,7 @@
                     <h:panelGrid id="pgCondition" columns="2" style="width: 100%">
                         <h:panelGrid>
                             <h:panelGrid columns="6">
-                                <p:outputLabel value="所属种类：" for="infoType"/>
+                                <p:outputLabel value="任务类别：" for="infoType"/>
                                 <p:selectOneMenu id="infoType" value="#{flowCtrlHisAction.flowCtrlHis.infoType}"
                                                  style="width:133px">
                                     <f:selectItems value="#{esCommon.resTypeList}"/>
@@ -53,16 +53,13 @@
                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                             </h:panelGrid>
                             <h:panelGrid columns="6">
-                                <p:outputLabel value="创建人名：" for="createdByName"/>
-                                <p:inputText id="createdByName" value="#{flowCtrlHisAction.flowCtrlShow.createdByName}"/>
-                                <p:outputLabel value="创建时间：" for="createdate"/>
-                                <p:inputText id="createdate" value="#{flowCtrlHisAction.flowCtrlShow.createdTime}"
-                                             onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
-                                ~
-                                <p:inputText id="endtime" value="#{flowCtrlHisAction.flowCtrlShow.endTime}"
-                                             onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
+                                <p:outputLabel value="完成情况：" for="finishFlag"/>
+                                <p:selectOneMenu id="finishFlag"
+                                                 value="#{flowCtrlHisAction.strFinish_Flag}"
+                                                 style="width:133px">
+                                    <f:selectItems value="#{flowCtrlHisAction.finish_FlagList}"/>
+                                </p:selectOneMenu>
                             </h:panelGrid>
-
                         </h:panelGrid>
                         <h:panelGrid columns="2">
                             <h:panelGrid>

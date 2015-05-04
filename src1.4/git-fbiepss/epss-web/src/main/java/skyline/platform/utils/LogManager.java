@@ -57,12 +57,7 @@ public class LogManager {
           else if (errorindex == null && errorindex.equals(""))
               message ="没赋错误编码！";
           else{
-               Pterror pterror = new Pterror();
-               pterror = (Pterror)pterror.findFirstByWhere(" where MOUDLEID = '"+moudleID+"' and ERRORTYPE= '"+errorType+"' and ERRORINDEX ='"+errorindex+"'");
-               if (pterror != null)
-                    message = pterror.getMessage();
-               else
-                    message ="错误信息没有定义！";
+
           }
           //写日志
          if (isWriteLog)
