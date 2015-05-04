@@ -3,6 +3,7 @@ package epss.service;
 import epss.repository.dao.FlowCtrlHisMapper;
 import epss.repository.dao.OperMapper;
 import epss.repository.dao.not_mybatis.MyFlowCtrlHisMapper;
+import epss.repository.dao.not_mybatis.MyOperResMapper;
 import epss.repository.model.FlowCtrlHis;
 import epss.repository.model.FlowCtrlHisExample;
 import epss.repository.model.Oper;
@@ -34,6 +35,8 @@ public class FlowCtrlHisService {
     private MyFlowCtrlHisMapper myFlowCtrlHisMapper;
     @Resource
     private OperMapper operMapper;
+    @Resource
+    private MyOperResMapper myOperResMapper;
 
     public List<FlowCtrlHis> selectListByModel(FlowCtrlHis flowCtrlHis) {
         FlowCtrlHisExample example= new FlowCtrlHisExample();
@@ -110,6 +113,11 @@ public class FlowCtrlHisService {
                                                           String.valueOf(Integer.parseInt(fcs.getFlowStatus()) + 1
                                                         )
                                               );
+                        //负责人
+                        fcsParam.setCreatedByName(
+                                myOperResMapper.getCreateByNameByFlowStatusAndInfoPkid(fcsParam.getInfoPkid(),
+                                        fcsParam.getFlowStatus(),
+                                        fcsParam.getInfoType()));
                         flowCtrlShowList.add(fcsParam);
                         //如果FlowStatus是0时，可以把它本身的开始时间设置为本身的结束时间，为下一状态使用
                         if("0".equals(flowCtrlshow.getFlowStatus())){
@@ -145,7 +153,11 @@ public class FlowCtrlHisService {
                                                    String.valueOf(Integer.parseInt(flowCtrlshows.get(flowCtrlshows.size()-1).getFlowStatus()) + 1
                                                  )
                                        );
-                fcsParam.setCreatedByName("");
+                //负责人
+                fcsParam.setCreatedByName(
+                        myOperResMapper.getCreateByNameByFlowStatusAndInfoPkid(fcsParam.getInfoPkid(),
+                                                                                 fcsParam.getFlowStatus(),
+                                                                                 fcsParam.getInfoType()));
                 fcsParam.setCreatedTime(fcsParam.getEndTime());
                 fcsParam.setEndTime("");
                 flowCtrlShowList.add(fcsParam);

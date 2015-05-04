@@ -67,11 +67,13 @@
         </if>
 
         group by
-            ff.info_pkid
-            ,ff.info_type
+             ff.info_type
+            ,ff.info_pkid
             ,ff.PERIOD_NO
             ,ff.flow_status
-        order by ff.info_type
+        order by
+             ff.info_type
+            ,ff.info_pkid
             ,ff.PERIOD_NO
             ,ff.flow_status
     </select>

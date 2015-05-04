@@ -73,4 +73,15 @@ public interface MyOperResMapper {
             "     ma.type='system'")
     List<OperResShow> getMenuAppointShowList(@Param("operPkid") String operPkidPara,
                                                  @Param("infoPkid") String infoPkidPara);
+
+    //hu×·¼Ó
+    @Select("select Group_concat(distinct o.name) from oper_res  operres ,oper o " +
+            "where " +
+            "    operres.oper_pkid=o.pkid  " +
+            "and " +
+            "    operres.info_pkid =#{infoPkid} " +
+            "and " +
+            "    operres.flow_status =#{flowStatus} " +
+            "and operres.info_type = #{infoType}")
+    String getCreateByNameByFlowStatusAndInfoPkid(@Param("infoPkid") String infoPkid,@Param("flowStatus") String flowStatus,@Param("infoType") String infoType);
 }
