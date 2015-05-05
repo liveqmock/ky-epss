@@ -3,7 +3,7 @@ package epss.view.his;
 import epss.common.enums.EnumResType;
 import epss.repository.model.CttInfo;
 import epss.repository.model.FlowCtrlHis;
-import epss.repository.model.model_show.FlowCtrlShow;
+import epss.repository.model.model_show.FlowCtrlHisShow;
 import epss.service.CttInfoService;
 import epss.service.FlowCtrlHisService;
 import org.apache.commons.lang.StringUtils;
@@ -35,8 +35,7 @@ public class FlowCtrlHisAction {
     @ManagedProperty(value = "#{cttInfoService}")
     private CttInfoService cttInfoService;
 
-    private FlowCtrlHis flowCtrlHis;
-    private FlowCtrlShow flowCtrlShow;
+    private FlowCtrlHisShow flowCtrlHisShowQry;
     private List<FlowCtrlHis> flowCtrlHisList;
 
     private String strRendered1;
@@ -45,37 +44,36 @@ public class FlowCtrlHisAction {
     private String strLabel2;
     private List<SelectItem> esInitCtt1List;
     private List<SelectItem> esInitCtt2List;
-    private List<FlowCtrlShow> flowCtrlShowList;
+    private List<FlowCtrlHisShow> flowCtrlHisShowList;
     private String strTkcttCstplSelected;
     private boolean Flag = false;
     private List<SelectItem> selectItemList_067;
     private List<SelectItem> selectItemList_1;
     private List<SelectItem> selectItemList_23458;
 
-    // 完成情况
-    private String strFinish_Flag;
-    private List<SelectItem> finish_FlagList;
+    // 完成情况列表
+    private List<SelectItem> finishFlagList;
 
     @PostConstruct
     public void init() {
         this.flowCtrlHisList = new ArrayList<FlowCtrlHis>();
-        flowCtrlShow = new FlowCtrlShow();
-        esInitCtt1List=new ArrayList<SelectItem> ();
-        esInitCtt2List=new ArrayList<SelectItem> ();
-        finish_FlagList=new ArrayList<>();
+        flowCtrlHisShowQry = new FlowCtrlHisShow();
+        esInitCtt1List=new ArrayList<> ();
+        esInitCtt2List=new ArrayList<> ();
+        finishFlagList=new ArrayList<>();
 
-        finish_FlagList.add(new SelectItem("", "全部"));
-        finish_FlagList.add(new SelectItem("0", "在途"));
-        finish_FlagList.add(new SelectItem("1", "完成"));
+        finishFlagList.add(new SelectItem("", "全部"));
+        finishFlagList.add(new SelectItem("0", "在途"));
+        finishFlagList.add(new SelectItem("1", "完成"));
 
         strRendered1="false";
         strRendered2="false";
         resetAction();
         List<CttInfo> cttInfoList = cttInfoService.getEsInitCttListByCttType(null);
         if(cttInfoList.size()>0){
-            selectItemList_067 = new ArrayList<SelectItem> ();
-            selectItemList_1 = new ArrayList<SelectItem> ();
-            selectItemList_23458 = new ArrayList<SelectItem> ();
+            selectItemList_067 = new ArrayList<> ();
+            selectItemList_1 = new ArrayList<> ();
+            selectItemList_23458 = new ArrayList<> ();
             SelectItem all=new SelectItem("","全部");
             selectItemList_23458.add(all);
             selectItemList_1.add(all);
@@ -109,7 +107,7 @@ public class FlowCtrlHisAction {
 
     public String onQueryAction(String strQryMsgOutPara) {
         try {
-            this.flowCtrlHisList = flowCtrlHisService.selectListByModel(flowCtrlHis);
+            this.flowCtrlHisList = flowCtrlHisService.selectListByModel(flowCtrlHisShowQry);
             if(strQryMsgOutPara.equals("true")){
                 if (flowCtrlHisList.isEmpty()) {
                     MessageUtil.addWarn("没有查询到数据。");
@@ -129,13 +127,9 @@ public class FlowCtrlHisAction {
      */
     public String onQueryFlowCtrlHisAction(String strQryMsgOutPara) {
         try {
-            flowCtrlShow.setInfoType(flowCtrlHis.getInfoType());
-            flowCtrlShow.setInfoPkid(flowCtrlHis.getInfoPkid());
-            flowCtrlShow.setPeriodNo(flowCtrlHis.getPeriodNo());
-
-            flowCtrlShowList = flowCtrlHisService.selectListByFlowCtrlHis(flowCtrlShow,strFinish_Flag);
+            flowCtrlHisShowList = flowCtrlHisService.selectListByFlowCtrlHis(flowCtrlHisShowQry);
             if(strQryMsgOutPara.equals("true")){
-                if (flowCtrlShowList.isEmpty()) {
+                if (flowCtrlHisShowList.isEmpty()) {
                     MessageUtil.addWarn("没有查询到数据。");
                 }
             }
@@ -147,7 +141,7 @@ public class FlowCtrlHisAction {
     }
 
     public void setEsInitPowerHisActionOfPowerPkidAction(){
-        String strCttType= flowCtrlHis.getInfoType();
+        String strCttType= flowCtrlHisShowQry.getInfoType();
         if(StringUtils.isBlank(strCttType)){
             strRendered2 = "false";
             return;
@@ -180,23 +174,7 @@ public class FlowCtrlHisAction {
     }
 
     public void resetAction(){
-        flowCtrlHis =new FlowCtrlHis() ;
-    }
-
-    public List<FlowCtrlHis> getFlowCtrlHisList() {
-        return flowCtrlHisList;
-    }
-
-    public void setFlowCtrlHisList(List<FlowCtrlHis> flowCtrlHisList) {
-        this.flowCtrlHisList = flowCtrlHisList;
-    }
-
-    public FlowCtrlHis getEsInitPower() {
-        return flowCtrlHis;
-    }
-
-    public void setEsInitPower(FlowCtrlHis flowCtrlHis) {
-        this.flowCtrlHis = flowCtrlHis;
+        flowCtrlHisShowQry =new FlowCtrlHisShow() ;
     }
 
     public FlowCtrlHisService getFlowCtrlHisService() {
@@ -207,14 +185,6 @@ public class FlowCtrlHisAction {
         this.flowCtrlHisService = flowCtrlHisService;
     }
 
-    public FlowCtrlHis getFlowCtrlHis() {
-        return flowCtrlHis;
-    }
-
-    public void setFlowCtrlHis(FlowCtrlHis flowCtrlHis) {
-        this.flowCtrlHis = flowCtrlHis;
-    }
-
     public CttInfoService getCttInfoService() {
         return cttInfoService;
     }
@@ -223,12 +193,20 @@ public class FlowCtrlHisAction {
         this.cttInfoService = cttInfoService;
     }
 
-    public String getStrTkcttCstplSelected() {
-        return strTkcttCstplSelected;
+    public FlowCtrlHisShow getFlowCtrlHisShowQry() {
+        return flowCtrlHisShowQry;
     }
 
-    public void setStrTkcttCstplSelected(String strTkcttCstplSelected) {
-        this.strTkcttCstplSelected = strTkcttCstplSelected;
+    public void setFlowCtrlHisShowQry(FlowCtrlHisShow flowCtrlHisShowQry) {
+        this.flowCtrlHisShowQry = flowCtrlHisShowQry;
+    }
+
+    public List<FlowCtrlHis> getFlowCtrlHisList() {
+        return flowCtrlHisList;
+    }
+
+    public void setFlowCtrlHisList(List<FlowCtrlHis> flowCtrlHisList) {
+        this.flowCtrlHisList = flowCtrlHisList;
     }
 
     public String getStrRendered1() {
@@ -279,20 +257,20 @@ public class FlowCtrlHisAction {
         this.esInitCtt2List = esInitCtt2List;
     }
 
-    public List<FlowCtrlShow> getFlowCtrlShowList() {
-        return flowCtrlShowList;
+    public List<FlowCtrlHisShow> getFlowCtrlHisShowList() {
+        return flowCtrlHisShowList;
     }
 
-    public void setFlowCtrlShowList(List<FlowCtrlShow> flowCtrlShowList) {
-        this.flowCtrlShowList = flowCtrlShowList;
+    public void setFlowCtrlHisShowList(List<FlowCtrlHisShow> flowCtrlHisShowList) {
+        this.flowCtrlHisShowList = flowCtrlHisShowList;
     }
 
-    public FlowCtrlShow getFlowCtrlShow() {
-        return flowCtrlShow;
+    public String getStrTkcttCstplSelected() {
+        return strTkcttCstplSelected;
     }
 
-    public void setFlowCtrlShow(FlowCtrlShow flowCtrlShow) {
-        this.flowCtrlShow = flowCtrlShow;
+    public void setStrTkcttCstplSelected(String strTkcttCstplSelected) {
+        this.strTkcttCstplSelected = strTkcttCstplSelected;
     }
 
     public boolean isFlag() {
@@ -303,19 +281,35 @@ public class FlowCtrlHisAction {
         Flag = flag;
     }
 
-    public List<SelectItem> getFinish_FlagList() {
-        return finish_FlagList;
+    public List<SelectItem> getSelectItemList_067() {
+        return selectItemList_067;
     }
 
-    public void setFinish_FlagList(List<SelectItem> finish_FlagList) {
-        this.finish_FlagList = finish_FlagList;
+    public void setSelectItemList_067(List<SelectItem> selectItemList_067) {
+        this.selectItemList_067 = selectItemList_067;
     }
 
-    public String getStrFinish_Flag() {
-        return strFinish_Flag;
+    public List<SelectItem> getSelectItemList_1() {
+        return selectItemList_1;
     }
 
-    public void setStrFinish_Flag(String strFinish_Flag) {
-        this.strFinish_Flag = strFinish_Flag;
+    public void setSelectItemList_1(List<SelectItem> selectItemList_1) {
+        this.selectItemList_1 = selectItemList_1;
+    }
+
+    public List<SelectItem> getSelectItemList_23458() {
+        return selectItemList_23458;
+    }
+
+    public void setSelectItemList_23458(List<SelectItem> selectItemList_23458) {
+        this.selectItemList_23458 = selectItemList_23458;
+    }
+
+    public List<SelectItem> getFinishFlagList() {
+        return finishFlagList;
+    }
+
+    public void setFinishFlagList(List<SelectItem> finishFlagList) {
+        this.finishFlagList = finishFlagList;
     }
 }

@@ -1,10 +1,7 @@
 package epss.repository.dao.not_mybatis;
 
 import epss.repository.model.FlowCtrlHis;
-import epss.repository.model.ProgStlInfo;
-import epss.repository.model.model_show.CttInfoShow;
-import epss.repository.model.model_show.FlowCtrlShow;
-import epss.repository.model.model_show.ProgStlInfoShow;
+import epss.repository.model.model_show.FlowCtrlHisShow;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Component;
@@ -60,5 +57,5 @@ public interface MyFlowCtrlHisMapper {
     List<FlowCtrlHis> getSubStlListByFlowCtrlHis(@Param("infoPkid") String infoPkid,
                                                  @Param("periodNo") String periodNo);
 
-    List<FlowCtrlShow> selectListByFlowCtrlHis(FlowCtrlShow flowCtrlShow);
+    List<FlowCtrlHisShow> selectListByFlowCtrlHis(FlowCtrlHisShow flowCtrlHisShow);
 }

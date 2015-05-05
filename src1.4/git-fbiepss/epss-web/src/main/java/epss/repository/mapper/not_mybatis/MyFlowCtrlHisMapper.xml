@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="epss.repository.dao.not_mybatis.MyFlowCtrlHisMapper">
-    <resultMap id="BaseResultMapFlowCtrlShowRes" type="epss.repository.model.model_show.FlowCtrlShow">
+    <resultMap id="BaseResultMapFlowCtrlShowRes" type="epss.repository.model.model_show.FlowCtrlHisShow">
         <result column="info_pkid" jdbcType="VARCHAR" property="infoPkid" />
         <result column="info_type" jdbcType="VARCHAR" property="infoType" />
         <result column="flow_status" jdbcType="CHAR" property="flowStatus" />
@@ -14,7 +14,7 @@
        2015-03-24追加
        auto:hu
     -->
-    <select id="selectListByFlowCtrlHis" parameterType="epss.repository.model.model_show.FlowCtrlShow"
+    <select id="selectListByFlowCtrlHis" parameterType="epss.repository.model.model_show.FlowCtrlHisShow"
             resultMap="BaseResultMapFlowCtrlShowRes">
         <![CDATA[
             select  ff.info_pkid as info_pkid

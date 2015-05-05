@@ -28,7 +28,7 @@
                         <h:panelGrid>
                             <h:panelGrid columns="6">
                                 <p:outputLabel value="任务类别：" for="infoType"/>
-                                <p:selectOneMenu id="infoType" value="#{flowCtrlHisAction.flowCtrlHis.infoType}"
+                                <p:selectOneMenu id="infoType" value="#{flowCtrlHisAction.flowCtrlHisShowQry.infoType}"
                                                  style="width:133px">
                                     <f:selectItems value="#{esCommon.resTypeList}"/>
                                     <p:ajax update="msgs,pgCondition"
@@ -40,7 +40,7 @@
                                                for="subcttStlTkcttMeaSta"
                                                rendered="#{flowCtrlHisAction.strRendered2}"/>
                                 <p:selectOneMenu id="subcttStlTkcttMeaSta"
-                                                 value="#{flowCtrlHisAction.flowCtrlHis.infoPkid}"
+                                                 value="#{flowCtrlHisAction.flowCtrlHisShowQry.infoPkid}"
                                                  rendered="#{flowCtrlHisAction.strRendered2}"
                                                  filter="true" filterMatchMode="contains">
                                     <f:selectItems value="#{flowCtrlHisAction.esInitCtt2List}"/>
@@ -48,16 +48,18 @@
                             </h:panelGrid>
                             <h:panelGrid columns="6">
                                 <p:outputLabel value="期数编码：" for="pno" rendered="#{flowCtrlHisAction.flag}" />
-                                <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHis.periodNo}"
+                                <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHisShowQry.periodNo}"
                                              rendered="#{flowCtrlHisAction.flag}"
                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                             </h:panelGrid>
-                            <h:panelGrid columns="6">
+                            <h:panelGrid columns="4">
+                                <p:outputLabel value="经办人名：" for="createdByName"/>
+                                <p:inputText id="createdByName" value="#{flowCtrlHisAction.flowCtrlHisShowQry.createdByName}"/>
                                 <p:outputLabel value="完成情况：" for="finishFlag"/>
                                 <p:selectOneMenu id="finishFlag"
-                                                 value="#{flowCtrlHisAction.strFinish_Flag}"
+                                                 value="#{flowCtrlHisAction.flowCtrlHisShowQry.finishFlag}"
                                                  style="width:133px">
-                                    <f:selectItems value="#{flowCtrlHisAction.finish_FlagList}"/>
+                                    <f:selectItems value="#{flowCtrlHisAction.finishFlagList}"/>
                                 </p:selectOneMenu>
                             </h:panelGrid>
                         </h:panelGrid>
@@ -85,7 +87,7 @@
                 </p:panel>
                 <!--列表维护-->
                 <p:dataTable id="pdt" style="width:100%;"
-                             value="#{flowCtrlHisAction.flowCtrlShowList}"
+                             value="#{flowCtrlHisAction.flowCtrlHisShowList}"
                              var="record"
                              rowKey="#{record.infoPkid}"
                              selectionMode="single"
@@ -117,7 +119,7 @@
                     <p:column headerText="流程节点" style="text-align:center">
                         <h:outputText value="#{esFlowControl.getLabelByValueInStatusFlaglist(record.flowStatus)}"/>
                     </p:column>
-                    <p:column headerText="责任人" style="text-align:center">
+                    <p:column headerText="经办人" style="text-align:center">
                         <h:outputText value="#{record.createdByName}"/>
                     </p:column>
                     <p:column headerText="开始时间" style="text-align:center">

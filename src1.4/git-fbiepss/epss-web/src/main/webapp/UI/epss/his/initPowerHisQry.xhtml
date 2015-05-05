@@ -28,7 +28,8 @@
                         <h:panelGrid>
                             <h:panelGrid columns="6">
                                 <p:outputLabel value="所属种类：" for="infoType"/>
-                                <p:selectOneMenu id="infoType" value="#{flowCtrlHisAction.flowCtrlHis.infoType}"
+                                <p:selectOneMenu id="infoType"
+                                                 value="#{flowCtrlHisAction.flowCtrlHisShowQry.infoType}"
                                                  style="width:133px">
                                     <f:selectItems value="#{esCommon.resTypeList}"/>
                                     <p:ajax update="msgs,pgCondition"
@@ -40,7 +41,7 @@
                                                for="subcttStlTkcttMeaSta"
                                                rendered="#{flowCtrlHisAction.strRendered2}"/>
                                 <p:selectOneMenu id="subcttStlTkcttMeaSta"
-                                                 value="#{flowCtrlHisAction.flowCtrlHis.infoPkid}"
+                                                 value="#{flowCtrlHisAction.flowCtrlHisShowQry.infoPkid}"
                                                  rendered="#{flowCtrlHisAction.strRendered2}"
                                                  filter="true" filterMatchMode="contains">
                                     <f:selectItems value="#{flowCtrlHisAction.esInitCtt2List}"/>
@@ -48,22 +49,27 @@
                             </h:panelGrid>
                             <h:panelGrid columns="6">
                                 <p:outputLabel value="期数编码：" for="pno"/>
-                                <p:inputText id="pno" value="#{flowCtrlHisAction.flowCtrlHis.periodNo}"
+                                <p:inputText id="pno"
+                                             value="#{flowCtrlHisAction.flowCtrlHisShowQry.periodNo}"
                                     onclick="WdatePicker({dateFmt:'yyyyMM'})"/>
                                 <p:outputLabel value="状态标志：" for="sf"/>
-                                <p:selectOneMenu id="sf" value="#{flowCtrlHisAction.flowCtrlHis.flowStatus}">
+                                <p:selectOneMenu id="sf"
+                                                 value="#{flowCtrlHisAction.flowCtrlHisShowQry.flowStatus}">
                                     <f:selectItems value="#{esCommon.flowStatusList}"/>
                                 </p:selectOneMenu>
                                 <p:outputLabel value="状态原因：" for="flowStatusReason"/>
-                                <p:selectOneMenu id="flowStatusReason" value="#{flowCtrlHisAction.flowCtrlHis.flowStatusReason}">
+                                <p:selectOneMenu id="flowStatusReason"
+                                                 value="#{flowCtrlHisAction.flowCtrlHisShowQry.flowStatusReason}">
                                     <f:selectItems value="#{esCommon.flowStatusReasonList}"/>
                                 </p:selectOneMenu>
                             </h:panelGrid>
                             <h:panelGrid columns="4">
                                 <p:outputLabel value="创建人名：" for="createid"/>
-                                <p:inputText id="createid" value="#{flowCtrlHisAction.flowCtrlHis.createdByName}"/>
+                                <p:inputText id="createid"
+                                             value="#{flowCtrlHisAction.flowCtrlHisShowQry.createdByName}"/>
                                 <p:outputLabel value="创建时间：" for="createdate"/>
-                                <p:inputText id="createdate" value="#{flowCtrlHisAction.flowCtrlHis.createdTime}"
+                                <p:inputText id="createdate"
+                                             value="#{flowCtrlHisAction.flowCtrlHisShowQry.createdTime}"
                                              onclick="WdatePicker({dateFmt:'yyyy-MM-dd'})"/>
                             </h:panelGrid>
                         </h:panelGrid>
