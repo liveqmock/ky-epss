@@ -161,23 +161,43 @@
                     <p:column style="width:200px" headerText="分包_项目名称">
                         <h:outputText value="#{record.subcttItem_Name}"/>
                     </p:column>
-                    <p:column style="width:120px" headerText="分包结算_本期数量">
-                        <h:outputText value="#{record.subcttStlItem_ThisStageQty}" style="float: right" >
-                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
-                        </h:outputText>
-                    </p:column>
-                    <p:column style="width:120px" headerText="分包结算_本期金额">
+                    <p:column style="width:120px" headerText="分包数量结算_本期数量">
+                    <h:outputText value="#{record.subcttStlItem_ThisStageQty}" style="float: right" >
+                        <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                    </h:outputText>
+                </p:column>
+                    <p:column style="width:120px" headerText="分包数量结算_本期金额">
                         <h:outputText value="#{record.subcttStlItem_ThisStageAmt}" style="float: right" >
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:outputText>
                     </p:column>
-                    <p:column style="width:120px" headerText="分包结算_累计数量">
+                    <p:column style="width:120px" headerText="分包数量结算_累计数量">
                         <h:outputText value="#{record.subcttStlItem_AddUpQty}" style="float: right" >
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:outputText>
                     </p:column>
-                    <p:column style="width:120px" headerText="分包结算_累计金额">
+                    <p:column style="width:120px" headerText="分包数量结算_累计金额">
                         <h:outputText value="#{record.subcttStlItem_AddUpAmt}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:120px" headerText="分包材料结算_本期数量">
+                        <h:outputText value="#{record.subcttStlItem_ThisStageMQty}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:120px" headerText="分包材料结算_本期金额">
+                        <h:outputText value="#{record.subcttStlItem_ThisStageMAmt}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:120px" headerText="分包材料结算_累计数量">
+                        <h:outputText value="#{record.subcttStlItem_AddUpMQty}" style="float: right" >
+                            <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column style="width:120px" headerText="分包材料结算_累计金额">
+                        <h:outputText value="#{record.subcttStlItem_AddUpMAmt}" style="float: right" >
                             <f:convertNumber type="number" pattern="#,###,###,###,##0.000"/>
                         </h:outputText>
                     </p:column>

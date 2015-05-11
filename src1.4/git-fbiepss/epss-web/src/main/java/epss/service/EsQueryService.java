@@ -34,4 +34,7 @@ public class EsQueryService {
     public List<QryTkMeaCSStlQShow> getCSStlQBySignPartList(String strCttInfoPkidPara,String strPeriodNo){
         return myQueryMapper.getCSStlQBySignPartList(strCttInfoPkidPara,strPeriodNo) ;
     }
+    public List<QryTkMeaCSStlQShow> getCSStlMBySignPartList(String strCttInfoPkidPara,String strPeriodNo){
+        return myQueryMapper.getCSStlMBySignPartList(strCttInfoPkidPara,strPeriodNo) ;
+    }
 }

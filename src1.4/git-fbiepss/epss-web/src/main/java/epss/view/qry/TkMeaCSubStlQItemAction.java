@@ -153,22 +153,25 @@ public class TkMeaCSubStlQItemAction {
 
         /*拼装列表*/
         try {
-            qryTkMeaCSStlQShowList =new ArrayList<QryTkMeaCSStlQShow>();
-            QryTkMeaCSStlQShow qryTkMeaCSStlQShowForTotalAmtOfAllItem=new QryTkMeaCSStlQShow();
-            BigDecimal tkcttItem_CttAmt_TotalAmtOfAllItem=new BigDecimal(0);
-            BigDecimal tkcttStlItem_ThisStageAmt_TotalAmtOfAllItem=new BigDecimal(0);
-            BigDecimal tkcttStlItem_AddUpAmt__TotalAmtOfAllItem=new BigDecimal(0);
-            BigDecimal cstplItem_Amt_TotalAmtOfAllItem=new BigDecimal(0);
-            BigDecimal cstplTkcttItem_TotalAmt_TotalAmtOfAllItem=new BigDecimal(0);
-            BigDecimal tkcttStlCstplItem_ThisStageAmt_TotalAmtOfAllItem=new BigDecimal(0);
-            BigDecimal tkcttStlCstplItem_AddUpAmt_TotalAmtOfAllItem=new BigDecimal(0);
-            BigDecimal subcttStlItem_ThisStageAmt_TotalAmtOfAllItem=new BigDecimal(0);
-            BigDecimal subcttStlItem_AddUpAmt_TotalAmtOfAllItem=new BigDecimal(0);
-            BigDecimal meaSItem_AddUpAmt_TotalAmtOfAllItem=new BigDecimal(0);
-            BigDecimal meaSCstplItem_AddUpAmt_TotalAmtOfAllItem=new BigDecimal(0);
-            for(CttItemShow tkcttItemShowUnit : tkcttItemShowList){
-                Boolean insertedFlag=false ;
-                QryTkMeaCSStlQShow qryTkMeaCSStlQShowTemp =new QryTkMeaCSStlQShow();
+            qryTkMeaCSStlQShowList = new ArrayList<QryTkMeaCSStlQShow>();
+            QryTkMeaCSStlQShow qryTkMeaCSStlQShowForTotalAmtOfAllItem = new QryTkMeaCSStlQShow();
+            BigDecimal tkcttItem_CttAmt_TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal tkcttStlItem_ThisStageAmt_TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal tkcttStlItem_AddUpAmt__TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal cstplItem_Amt_TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal cstplTkcttItem_TotalAmt_TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal tkcttStlCstplItem_ThisStageAmt_TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal tkcttStlCstplItem_AddUpAmt_TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal subcttStlItem_ThisStageAmt_TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal subcttStlItem_AddUpAmt_TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal meaSItem_AddUpAmt_TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal meaSCstplItem_AddUpAmt_TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal subcttStlItem_ThisStageMAmt_TotalAmtOfAllItem = new BigDecimal(0);
+            BigDecimal subcttStlItem_AddUpMAmt_TotalAmtOfAllItem = new BigDecimal(0);
+
+            for (CttItemShow tkcttItemShowUnit : tkcttItemShowList) {
+                Boolean insertedFlag = false;
+                QryTkMeaCSStlQShow qryTkMeaCSStlQShowTemp = new QryTkMeaCSStlQShow();
 
                  // 总包合同
                 qryTkMeaCSStlQShowTemp.setTkcttItem_Pkid(tkcttItemShowUnit.getPkid());
@@ -310,8 +313,11 @@ public class TkMeaCSubStlQItemAction {
             }
 
             // 4。分包结算
-            List<QryTkMeaCSStlQShow> subcttStlQBySignPartList=
+            List<QryTkMeaCSStlQShow> subcttStlQBySignPartList =
                     esQueryService.getCSStlQBySignPartList(esCstplInfo.getPkid(), strPeriodNo);
+
+            List<QryTkMeaCSStlQShow> subcttStlMBySignPartList =
+                    esQueryService.getCSStlMBySignPartList(esCstplInfo.getPkid(), strPeriodNo);
 
             // 根据成本计划项插接分包合同项
             List<QryTkMeaCSStlQShow> qryTkMeaCSStlQShowListTemp=new ArrayList<>();
@@ -432,6 +438,175 @@ public class TkMeaCSubStlQItemAction {
                             ToolUtil.getBdIgnoreNull(tkMeaCstplUnit.getMeaSCstplItem_AddUpAmt()));
                 }
             }
+
+            // 材料
+            List<QryTkMeaCSStlQShow> qryTkMeaCSStlMShowListTemp = new ArrayList<>();
+            qryTkMeaCSStlMShowListTemp.addAll(qryTkMeaCSStlQShowList);
+            qryTkMeaCSStlQShowList.clear();
+            for (int j = 0; j < qryTkMeaCSStlMShowListTemp.size(); j++) {
+                QryTkMeaCSStlQShow tkMeaCstplUnit = new QryTkMeaCSStlQShow();
+                tkMeaCstplUnit = (QryTkMeaCSStlQShow) BeanUtils.cloneBean(qryTkMeaCSStlMShowListTemp.get(j));
+                Boolean insertedFlag = false;
+                String CstplItem_Pkidtemp1 = "";
+                String CstplItem_Pkidtemp2 = "";
+                BigDecimal bdSubcttCttAmtTotal = new BigDecimal(0);
+                //获取这次和下次成本计划pkid ,最后判断两次pkid是否相等,相等这次数据不使用,不相等使用,只用一次成本计划pkid,对应项与用这次pkid进行对应
+                if (j < qryTkMeaCSStlMShowListTemp.size() - 1) {
+                    CstplItem_Pkidtemp1 = ToolUtil.getStrIgnoreNull((qryTkMeaCSStlMShowListTemp.get(j).getCstplItem_Pkid()));
+                    CstplItem_Pkidtemp2 = ToolUtil.getStrIgnoreNull((qryTkMeaCSStlMShowListTemp.get(j + 1).getCstplItem_Pkid()));
+                } else {
+                    CstplItem_Pkidtemp1 = ToolUtil.getStrIgnoreNull((qryTkMeaCSStlMShowListTemp.get(j).getCstplItem_Pkid()));
+                    CstplItem_Pkidtemp2 = ToolUtil.getStrIgnoreNull((qryTkMeaCSStlMShowListTemp.get(j).getCstplItem_Pkid())) + "error";
+                }
+                String fgtemp = "Y";  //   N 下条pkid 不等; Y 下条pkid 相等
+                if (!CstplItem_Pkidtemp1.
+                        equals(CstplItem_Pkidtemp2)) {
+                    fgtemp = "N";
+                    // 数量差
+                    // 计量分包结算金额差
+                    // 计量成本分包结算金额差
+                    BigDecimal meaSItem_AddUpQty = tkMeaCstplUnit.getMeaSItem_AddUpQty();
+                    BigDecimal meaSItem_AddUpAmtTemp = tkMeaCstplUnit.getMeaSItem_AddUpAmt();
+                    BigDecimal meaSCstplItem_AddUpAmtTemp = tkMeaCstplUnit.getMeaSCstplItem_AddUpAmt();
+
+                    for (int i = 0; i < subcttStlMBySignPartList.size(); i++) {
+                        QryTkMeaCSStlQShow tkMeaCstplUnitTemp = (QryTkMeaCSStlQShow) BeanUtils.cloneBean(tkMeaCstplUnit);
+                        // 成本计划项遇到目标分包合同项
+                        // 分包信息和成本信息多对一,会有第二次循环,这样insertedFlag在第二次为true这样第二次显示时去掉总包信息你
+                        if (ToolUtil.getStrIgnoreNull(tkMeaCstplUnitTemp.getCstplItem_Pkid()).equals(
+                                subcttStlMBySignPartList.get(i).getSubcttItem_CorrPkid())) {
+
+                            // 目标分包合同项的合同单价
+                            BigDecimal bdSubcttCttUnitPrice = ToolUtil.getBdIgnoreNull(subcttStlMBySignPartList.get(i).getSubcttItem_UnitPrice());
+                            // 目标分包合同项的当期数量，当期金额
+                            BigDecimal bdThisStageMQty = ToolUtil.getBdIgnoreNull(subcttStlMBySignPartList.get(i).getSubcttStlItem_ThisStageMQty());
+                            BigDecimal bdThisStageMAmt = bdThisStageMQty.multiply(bdSubcttCttUnitPrice);
+                            // 目标分包合同项的开累数量，开累金额
+                            BigDecimal bdAddUpToMQty = ToolUtil.getBdIgnoreNull(subcttStlMBySignPartList.get(i).getSubcttStlItem_AddUpMQty());
+                            BigDecimal bdAddUpToMAmt = bdAddUpToMQty.multiply(bdSubcttCttUnitPrice);
+
+                            // 累计目标分包合同项的合同数量，合同单价，合同金额
+//                            bdSubcttCttQtyTotal = bdSubcttCttQtyTotal.add(bdAddUpToMQty);
+                            bdSubcttCttAmtTotal = bdSubcttCttAmtTotal.add(bdAddUpToMAmt);  // 本次的金额
+
+                            //总包合同
+                            if (insertedFlag.equals(true)) {
+                                tkMeaCstplUnitTemp.setTkcttItem_Pkid(null);
+                                tkMeaCstplUnitTemp.setTkcttItem_No(null);
+                                tkMeaCstplUnitTemp.setTkcttItem_Name(null);
+                                tkMeaCstplUnitTemp.setTkcttItem_Unit(null);
+                                tkMeaCstplUnitTemp.setTkcttItem_CttUnitPrice(null);
+                                tkMeaCstplUnitTemp.setTkcttItem_CttQty(null);
+                                tkMeaCstplUnitTemp.setTkcttItem_CttAmt(null);
+                                tkMeaCstplUnitTemp.setTkcttStlItem_ThisStageQty(null);
+                                tkMeaCstplUnitTemp.setTkcttStlItem_ThisStageAmt(null);
+                                tkMeaCstplUnitTemp.setTkcttStlCstplItem_ThisStageAmt(null);
+                                tkMeaCstplUnitTemp.setTkcttStlItem_AddUpQty(null);
+                                tkMeaCstplUnitTemp.setTkcttStlItem_AddUpAmt(null);
+                                tkMeaCstplUnitTemp.setTkcttStlCstplItem_AddUpAmt(null);
+                                tkMeaCstplUnitTemp.setCstplItem_Name(null);
+                                tkMeaCstplUnitTemp.setCstplItem_UnitPrice(null);
+                                tkMeaCstplUnitTemp.setCstplItem_Qty(null);
+                                tkMeaCstplUnitTemp.setCstplItem_Amt(null);
+                                tkMeaCstplUnitTemp.setCstplTkcttItem_TotalAmt(null);
+                                tkMeaCstplUnitTemp.setCstplTkcttItem_TotalUnitPrice(null);
+
+                                tkMeaCstplUnitTemp.setSubcttStlItem_ThisStageQty(null);
+                                tkMeaCstplUnitTemp.setSubcttStlItem_ThisStageAmt(null);
+                                tkMeaCstplUnitTemp.setSubcttStlItem_AddUpQty(null);
+                                tkMeaCstplUnitTemp.setSubcttStlItem_AddUpAmt(null);
+                                tkMeaCstplUnitTemp.setMeaSItem_AddUpQty(null);  // 计量分包比较-数量
+                                tkMeaCstplUnitTemp.setMeaSItem_AddUpAmt(null);
+                                tkMeaCstplUnitTemp.setMeaSCstplItem_AddUpAmt(null);
+
+                            }
+
+                            insertedFlag = true;
+                            // 分包合同
+                            tkMeaCstplUnitTemp.setSubcttItem_Name(subcttStlMBySignPartList.get(i).getSubcttItem_Name());
+                            tkMeaCstplUnitTemp.setSubcttItem_CorrPkid(subcttStlMBySignPartList.get(i).getSubcttItem_CorrPkid());
+                            tkMeaCstplUnitTemp.setSubcttItem_SignPartName(subcttStlMBySignPartList.get(i).getSubcttItem_SignPartName());
+
+                            // 分包结算 材料本期合计
+                            tkMeaCstplUnitTemp.setSubcttStlItem_ThisStageMQty(bdThisStageMQty);
+                            tkMeaCstplUnitTemp.setSubcttStlItem_ThisStageMAmt(bdThisStageMAmt);
+                            subcttStlItem_ThisStageMAmt_TotalAmtOfAllItem = subcttStlItem_ThisStageMAmt_TotalAmtOfAllItem.add(
+                                    ToolUtil.getBdIgnoreNull(tkMeaCstplUnitTemp.getSubcttStlItem_ThisStageMAmt()));
+                            // 材料总合计
+                            tkMeaCstplUnitTemp.setSubcttStlItem_AddUpMQty(bdAddUpToMQty);
+                            tkMeaCstplUnitTemp.setSubcttStlItem_AddUpMAmt(bdAddUpToMAmt);
+                            subcttStlItem_AddUpMAmt_TotalAmtOfAllItem = subcttStlItem_AddUpMAmt_TotalAmtOfAllItem.add(
+                                    ToolUtil.getBdIgnoreNull(tkMeaCstplUnitTemp.getSubcttStlItem_AddUpMAmt()));
+
+                            // 最后一项之前的项
+                            if (i < subcttStlMBySignPartList.size() - 1) {    // 材料列表的最后一行之前
+                                // 下一项仍是目标分包合同项
+                                //  成本pkid 和对应下一项分包,把本条信息写入list,继续下次循环,这次成本不能对应下个分包合同, 则需要记下此次的计量数据,最后进行合计
+                                if (tkMeaCstplUnitTemp.getCstplItem_Pkid().equals(
+                                        subcttStlMBySignPartList.get(i + 1).getSubcttItem_CorrPkid())) {
+                                    // 成本计划再设定
+                                    tkMeaCstplUnitTemp.setMeaSItem_AddUpQty(null);
+                                    tkMeaCstplUnitTemp.setMeaSItem_AddUpAmt(null);
+                                    tkMeaCstplUnitTemp.setMeaSCstplItem_AddUpAmt(null);
+                                    qryTkMeaCSStlQShowList.add(tkMeaCstplUnitTemp);
+                                }// 下一项不是目标分包合同项
+                                else {   // 对 当前分包数据进行合计
+
+//                                    tkMeaCstplUnitTemp.setMeaSItem_AddUpQty(
+//                                            ToolUtil.getBdIgnoreNull(meaSItem_AddUpQty) );
+                                    //  用已有的计量比较差 再除去本次的材料费
+                                    tkMeaCstplUnitTemp.setMeaSItem_AddUpAmt(    //计量分包结算金额差
+                                            ToolUtil.getBdIgnoreNull(meaSItem_AddUpAmtTemp).add(bdSubcttCttAmtTotal));
+                                    tkMeaCstplUnitTemp.setMeaSCstplItem_AddUpAmt(   // 计量成本分包结算金额差
+                                            ToolUtil.getBdIgnoreNull(meaSCstplItem_AddUpAmtTemp).add(bdSubcttCttAmtTotal));
+                                    qryTkMeaCSStlQShowList.add(tkMeaCstplUnitTemp);
+                                    // 合计 用外循环的计量比较值 和本次  此处和数量的写法不一样  原有的比较值踢出这次的材料合计值
+                                    meaSItem_AddUpAmt_TotalAmtOfAllItem = meaSItem_AddUpAmt_TotalAmtOfAllItem.subtract(
+                                            ToolUtil.getBdIgnoreNull(bdSubcttCttAmtTotal));
+                                    meaSCstplItem_AddUpAmt_TotalAmtOfAllItem = meaSCstplItem_AddUpAmt_TotalAmtOfAllItem.subtract(
+                                            ToolUtil.getBdIgnoreNull(bdSubcttCttAmtTotal));
+//                                    break;
+                                }
+                            } else {
+                                // 总包计量与分包结算值差
+                                tkMeaCstplUnitTemp.setMeaSItem_AddUpQty(meaSItem_AddUpQty);
+                                tkMeaCstplUnitTemp.setMeaSItem_AddUpAmt(                    // 计量分包结算金额差
+                                        meaSCstplItem_AddUpAmtTemp.add(bdSubcttCttAmtTotal));
+                                tkMeaCstplUnitTemp.setMeaSCstplItem_AddUpAmt(               // 计量成本分包结算金额差
+                                        meaSCstplItem_AddUpAmtTemp.add(bdSubcttCttAmtTotal));
+
+                                qryTkMeaCSStlQShowList.add(tkMeaCstplUnitTemp);
+                                meaSItem_AddUpAmt_TotalAmtOfAllItem = meaSItem_AddUpAmt_TotalAmtOfAllItem.subtract(
+                                        ToolUtil.getBdIgnoreNull(bdSubcttCttAmtTotal));
+                                meaSCstplItem_AddUpAmt_TotalAmtOfAllItem = meaSCstplItem_AddUpAmt_TotalAmtOfAllItem.subtract(
+                                        ToolUtil.getBdIgnoreNull(bdSubcttCttAmtTotal));
+                            }
+                        }
+                    }
+                } else {
+                    fgtemp = "Y";
+
+                }
+                //  insertedFlag -false 说明  没有对应材料    fgtemp 没有本条与下条pkid不一致
+                //insertedFlag -false  +fgtemp N
+                //  没有匹配的材料数据,直接写入showlist
+                if (insertedFlag.equals(false) && fgtemp.equals("N")) {
+                    tkMeaCstplUnit.setMeaSItem_AddUpQty(tkMeaCstplUnit.getTkcttStlItem_AddUpQty());
+                    tkMeaCstplUnit.setMeaSItem_AddUpAmt(tkMeaCstplUnit.getTkcttStlItem_AddUpAmt());
+                    tkMeaCstplUnit.setMeaSCstplItem_AddUpAmt(tkMeaCstplUnit.getTkcttStlCstplItem_AddUpAmt());
+                    qryTkMeaCSStlQShowList.add(tkMeaCstplUnit);
+                    // 不需要总合计值
+                }
+                //  重复的pkid ,最后一项之前数据置空  总合计使用的数据进行合计
+                if (insertedFlag.equals(false) && fgtemp.equals("Y")) {
+                    tkMeaCstplUnit.setMeaSItem_AddUpQty(null);
+                    tkMeaCstplUnit.setMeaSItem_AddUpAmt(null);
+                    tkMeaCstplUnit.setMeaSCstplItem_AddUpAmt(null);
+                    qryTkMeaCSStlQShowList.add(tkMeaCstplUnit);
+                    // 总合计不需要
+                }
+
+            }
             qryTkMeaCSStlQShowForTotalAmtOfAllItem.setTkcttItem_Name("合计");
             qryTkMeaCSStlQShowForTotalAmtOfAllItem.setTkcttItem_CttAmt(tkcttItem_CttAmt_TotalAmtOfAllItem);
             qryTkMeaCSStlQShowForTotalAmtOfAllItem.setTkcttStlItem_ThisStageAmt(tkcttStlItem_ThisStageAmt_TotalAmtOfAllItem);
@@ -444,6 +619,8 @@ public class TkMeaCSubStlQItemAction {
             qryTkMeaCSStlQShowForTotalAmtOfAllItem.setSubcttStlItem_AddUpAmt(subcttStlItem_AddUpAmt_TotalAmtOfAllItem);
             qryTkMeaCSStlQShowForTotalAmtOfAllItem.setMeaSItem_AddUpAmt(meaSItem_AddUpAmt_TotalAmtOfAllItem);
             qryTkMeaCSStlQShowForTotalAmtOfAllItem.setMeaSCstplItem_AddUpAmt(meaSCstplItem_AddUpAmt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setSubcttStlItem_ThisStageMAmt(subcttStlItem_ThisStageMAmt_TotalAmtOfAllItem);
+            qryTkMeaCSStlQShowForTotalAmtOfAllItem.setSubcttStlItem_AddUpMAmt(subcttStlItem_AddUpMAmt_TotalAmtOfAllItem);
             qryTkMeaCSStlQShowList.add(qryTkMeaCSStlQShowForTotalAmtOfAllItem);
             // 将分析活动数据装填到Excel中
             qryTkMeaCSStlQShowListForExcel =new ArrayList<QryTkMeaCSStlQShow>();

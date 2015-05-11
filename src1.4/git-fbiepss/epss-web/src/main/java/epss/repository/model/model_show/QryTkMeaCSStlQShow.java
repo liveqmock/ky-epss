@@ -68,6 +68,19 @@ public class QryTkMeaCSStlQShow implements Serializable {
 
     private String itemRemark;
 
+
+    // 材料
+    private BigDecimal subcttStlItem_ThisStageMQty;
+    // 当期分包结算开累工程数量
+    private BigDecimal subcttStlItem_AddUpMQty;
+    // 当期分包结算工程金额
+    private BigDecimal subcttStlItem_ThisStageMAmt;
+    // 当期分包结算开累工程金额
+    private BigDecimal subcttStlItem_AddUpMAmt;
+
+
+
+
     public String getTkcttItem_Pkid() {
         return tkcttItem_Pkid;
     }
@@ -338,5 +351,38 @@ public class QryTkMeaCSStlQShow implements Serializable {
 
     public void setItemRemark(String itemRemark) {
         this.itemRemark = itemRemark;
+    }
+
+
+    public BigDecimal getSubcttStlItem_ThisStageMQty() {
+        return subcttStlItem_ThisStageMQty;
+    }
+
+    public void setSubcttStlItem_ThisStageMQty(BigDecimal subcttStlItem_ThisStageMQty) {
+        this.subcttStlItem_ThisStageMQty = subcttStlItem_ThisStageMQty;
+    }
+
+    public BigDecimal getSubcttStlItem_AddUpMQty() {
+        return subcttStlItem_AddUpMQty;
+    }
+
+    public void setSubcttStlItem_AddUpMQty(BigDecimal subcttStlItem_AddUpMQty) {
+        this.subcttStlItem_AddUpMQty = subcttStlItem_AddUpMQty;
+    }
+
+    public BigDecimal getSubcttStlItem_ThisStageMAmt() {
+        return subcttStlItem_ThisStageMAmt;
+    }
+
+    public void setSubcttStlItem_ThisStageMAmt(BigDecimal subcttStlItem_ThisStageMAmt) {
+        this.subcttStlItem_ThisStageMAmt = subcttStlItem_ThisStageMAmt;
+    }
+
+    public BigDecimal getSubcttStlItem_AddUpMAmt() {
+        return subcttStlItem_AddUpMAmt;
+    }
+
+    public void setSubcttStlItem_AddUpMAmt(BigDecimal subcttStlItem_AddUpMAmt) {
+        this.subcttStlItem_AddUpMAmt = subcttStlItem_AddUpMAmt;
     }
 }
