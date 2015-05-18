@@ -17,23 +17,25 @@ import java.util.List;
 @Component
 public interface MyTaskMapper {
     @Select(" select " +
-            "   distinct IFNULL(opr.FLOW_STATUS,'0') as flowStatus" +
+            "   distinct opr.FLOW_STATUS as flowStatus" +
             " from" +
             "   OPER_RES opr" +
             " where" +
             "   opr.TYPE='business'" +
+            " and trim(IFNULL(opr.FLOW_STATUS,''))!=''"+
             " order by" +
             "   opr.FLOW_STATUS")
     List<TaskShow> getTaskFlowGroup();
 
     @Select(" select " +
-            "   distinct IFNULL(opr.FLOW_STATUS,'0') as flowStatus" +
+            "   distinct opr.FLOW_STATUS as flowStatus" +
             " from" +
             "   OPER_RES opr" +
             " where" +
             "   opr.OPER_PKID=#{strOperPkid}" +
             " and " +
             "   opr.TYPE='business'" +
+            " and trim(IFNULL(opr.FLOW_STATUS,''))!=''"+
             " order by" +
             "   opr.FLOW_STATUS")
     List<TaskShow> getOwnTaskFlowGroup(@Param("strOperPkid") String strOperPkid);
