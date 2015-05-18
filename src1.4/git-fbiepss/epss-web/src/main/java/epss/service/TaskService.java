@@ -131,7 +131,8 @@ public class TaskService {
                         if (detailTaskShowUnit.getFlowStatus() != null) {
                             if (EnumFlowStatus.FLOW_STATUS2.getCode().equals(detailTaskShowUnit.getFlowStatus())) {
                                 if (EnumResType.RES_TYPE3.getCode().equals(detailTaskShowUnit.getType()) ||
-                                        EnumResType.RES_TYPE4.getCode().equals(detailTaskShowUnit.getType())) {
+                                        EnumResType.RES_TYPE4.getCode().equals(detailTaskShowUnit.getType())
+                                        || EnumResType.RES_TYPE8.getCode().equals(detailTaskShowUnit.getType())) {
                                     continue;
                                 }
                             }

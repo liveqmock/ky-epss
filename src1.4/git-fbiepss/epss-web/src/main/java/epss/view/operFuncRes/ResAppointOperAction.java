@@ -973,6 +973,10 @@ public class ResAppointOperAction implements Serializable{
                 }
                 MessageUtil.addInfo("权限添加成功!");
             } else if (strSubmitTypePara.equals("BatchPower")) {//批量权限指派
+                if (ToolUtil.getStrIgnoreNull(strFuncSelected).equals("")||operAppointShowList.size()<1||deptOperShowSeledList.size()<1){
+                    MessageUtil.addInfo("操作超时!");
+                    return  ;
+                }
                 operResService.insertRecordsBatch(strFuncSelected, operAppointShowList,deptOperShowSeledList);
                 operAppointShowListForSaveExpandLocation.clear();
                 operAppointShowListForSaveExpandLocation.addAll(operAppointShowList);

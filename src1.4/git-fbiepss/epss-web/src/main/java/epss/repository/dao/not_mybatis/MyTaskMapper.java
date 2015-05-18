@@ -22,7 +22,6 @@ public interface MyTaskMapper {
             "   OPER_RES opr" +
             " where" +
             "   opr.TYPE='business'" +
-            " and trim(IFNULL(opr.FLOW_STATUS,''))!=''"+
             " order by" +
             "   opr.FLOW_STATUS")
     List<TaskShow> getTaskFlowGroup();
@@ -35,7 +34,6 @@ public interface MyTaskMapper {
             "   opr.OPER_PKID=#{strOperPkid}" +
             " and " +
             "   opr.TYPE='business'" +
-            " and trim(IFNULL(opr.FLOW_STATUS,''))!=''"+
             " order by" +
             "   opr.FLOW_STATUS")
     List<TaskShow> getOwnTaskFlowGroup(@Param("strOperPkid") String strOperPkid);
