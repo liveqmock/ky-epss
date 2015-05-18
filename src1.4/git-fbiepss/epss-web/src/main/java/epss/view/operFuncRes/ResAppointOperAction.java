@@ -229,43 +229,43 @@ public class ResAppointOperAction implements Serializable{
                 strPlaceOnFileOperName = "";
                 strQryOperName="";
                 for (OperResShow operResShowUnit : operResShowForStlListTemp) {
-                    if (operResShowUnit.getFlowStatus().equals("0")) {
+                    if ("0".equals(operResShowUnit.getFlowStatus())) {
                         if (strInputOperName.length() == 0) {
                             strInputOperName = operResShowUnit.getOperName();
                         } else {
                             strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("1")) {
+                    } else if ("1".equals(operResShowUnit.getFlowStatus())) {
                         if (strCheckOperName.length() == 0) {
                             strCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("2")) {
+                    } else if ("2".equals(operResShowUnit.getFlowStatus())) {
                         if (strDoubleCheckOperName.length() == 0) {
                             strDoubleCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("3")) {
+                    } else if ("3".equals(operResShowUnit.getFlowStatus())) {
                         if (strApproveOperName.length() == 0) {
                             strApproveOperName = operResShowUnit.getOperName();
                         } else {
                             strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("4")) {
+                    } else if ("4".equals(operResShowUnit.getFlowStatus())) {
                         if (strAccountOperName.length() == 0) {
                             strAccountOperName = operResShowUnit.getOperName();
                         } else {
                             strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("5")) {
+                    } else if ("5".equals(operResShowUnit.getFlowStatus())) {
                         if (strPlaceOnFileOperName.length() == 0) {
                             strPlaceOnFileOperName = operResShowUnit.getOperName();
                         } else {
                             strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
                         }
-                    }else if (operResShowUnit.getFlowStatus().equals("6")) {
+                    }else if ("6".equals(operResShowUnit.getFlowStatus())) {
                         if (strQryOperName.length() == 0) {
                             strQryOperName = operResShowUnit.getOperName();
                         } else {
@@ -304,43 +304,43 @@ public class ResAppointOperAction implements Serializable{
                 strPlaceOnFileOperName = "";
                 strQryOperName="";
                 for (OperResShow operResShowUnit : operResShowForStlListTemp) {
-                    if (operResShowUnit.getFlowStatus().equals("0")) {
+                    if ("0".equals(operResShowUnit.getFlowStatus())) {
                         if (strInputOperName.length() == 0) {
                             strInputOperName = operResShowUnit.getOperName();
                         } else {
                             strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("1")) {
+                    } else if ("1".equals(operResShowUnit.getFlowStatus())) {
                         if (strCheckOperName.length() == 0) {
                             strCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("2")) {
+                    } else if ("2".equals(operResShowUnit.getFlowStatus())) {
                         if (strDoubleCheckOperName.length() == 0) {
                             strDoubleCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("3")) {
+                    } else if ("3".equals(operResShowUnit.getFlowStatus())) {
                         if (strApproveOperName.length() == 0) {
                             strApproveOperName = operResShowUnit.getOperName();
                         } else {
                             strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("4")) {
+                    } else if ("4".equals(operResShowUnit.getFlowStatus())) {
                         if (strAccountOperName.length() == 0) {
                             strAccountOperName = operResShowUnit.getOperName();
                         } else {
                             strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("5")) {
+                    } else if ("5".equals(operResShowUnit.getFlowStatus())) {
                         if (strPlaceOnFileOperName.length() == 0) {
                             strPlaceOnFileOperName = operResShowUnit.getOperName();
                         } else {
                             strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
                         }
-                    }else if (operResShowUnit.getFlowStatus().equals("6")) {
+                    }else if ("6".equals(operResShowUnit.getFlowStatus())) {
                         if (strQryOperName.length() == 0) {
                             strQryOperName = operResShowUnit.getOperName();
                         } else {
@@ -378,43 +378,43 @@ public class ResAppointOperAction implements Serializable{
                 strPlaceOnFileOperName = "";
                 strQryOperName="";
                 for (OperResShow operResShowUnit : operResShowForStlListTemp) {
-                    if (operResShowUnit.getFlowStatus().equals("0")) {
+                    if ("0".equals(operResShowUnit.getFlowStatus())) {
                         if (strInputOperName.length() == 0) {
                             strInputOperName = operResShowUnit.getOperName();
                         } else {
                             strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("1")) {
+                    } else if ("1".equals(operResShowUnit.getFlowStatus())) {
                         if (strCheckOperName.length() == 0) {
                             strCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("2")) {
+                    } else if ("2".equals(operResShowUnit.getFlowStatus())) {
                         if (strDoubleCheckOperName.length() == 0) {
                             strDoubleCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("3")) {
+                    } else if ("3".equals(operResShowUnit.getFlowStatus())) {
                         if (strApproveOperName.length() == 0) {
                             strApproveOperName = operResShowUnit.getOperName();
                         } else {
                             strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("4")) {
+                    } else if ("4".equals(operResShowUnit.getFlowStatus())) {
                         if (strAccountOperName.length() == 0) {
                             strAccountOperName = operResShowUnit.getOperName();
                         } else {
                             strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("5")) {
+                    } else if ("5".equals(operResShowUnit.getFlowStatus())) {
                         if (strPlaceOnFileOperName.length() == 0) {
                             strPlaceOnFileOperName = operResShowUnit.getOperName();
                         } else {
                             strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
                         }
-                    }else if (operResShowUnit.getFlowStatus().equals("6")) {
+                    }else if ("6".equals(operResShowUnit.getFlowStatus())) {
                         if (strQryOperName.length() == 0) {
                             strQryOperName = operResShowUnit.getOperName();
                         } else {
@@ -454,43 +454,43 @@ public class ResAppointOperAction implements Serializable{
                 strPlaceOnFileOperName = "";
                 strQryOperName="";
                 for (OperResShow operResShowUnit : operResShowForStlListTemp) {
-                    if (operResShowUnit.getFlowStatus().equals("0")) {
+                    if ("0".equals(operResShowUnit.getFlowStatus())) {
                         if (strInputOperName.length() == 0) {
                             strInputOperName = operResShowUnit.getOperName();
                         } else {
                             strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("1")) {
+                    } else if ("1".equals(operResShowUnit.getFlowStatus())) {
                         if (strCheckOperName.length() == 0) {
                             strCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("2")) {
+                    } else if ("2".equals(operResShowUnit.getFlowStatus())) {
                         if (strDoubleCheckOperName.length() == 0) {
                             strDoubleCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("3")) {
+                    } else if ("3".equals(operResShowUnit.getFlowStatus())) {
                         if (strApproveOperName.length() == 0) {
                             strApproveOperName = operResShowUnit.getOperName();
                         } else {
                             strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("4")) {
+                    } else if ("4".equals(operResShowUnit.getFlowStatus())) {
                         if (strAccountOperName.length() == 0) {
                             strAccountOperName = operResShowUnit.getOperName();
                         } else {
                             strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("5")) {
+                    } else if ("5".equals(operResShowUnit.getFlowStatus())) {
                         if (strPlaceOnFileOperName.length() == 0) {
                             strPlaceOnFileOperName = operResShowUnit.getOperName();
                         } else {
                             strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
                         }
-                    }else if (operResShowUnit.getFlowStatus().equals("6")) {
+                    }else if ("6".equals(operResShowUnit.getFlowStatus())) {
                         if (strQryOperName.length() == 0) {
                             strQryOperName = operResShowUnit.getOperName();
                         } else {
@@ -530,43 +530,43 @@ public class ResAppointOperAction implements Serializable{
                 strPlaceOnFileOperName = "";
                 strQryOperName="";
                 for (OperResShow operResShowUnit : operResShowForStlListTemp) {
-                    if (operResShowUnit.getFlowStatus().equals("0")) {
+                    if ("0".equals(operResShowUnit.getFlowStatus())) {
                         if (strInputOperName.length() == 0) {
                             strInputOperName = operResShowUnit.getOperName();
                         } else {
                             strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("1")) {
+                    } else if ("1".equals(operResShowUnit.getFlowStatus())) {
                         if (strCheckOperName.length() == 0) {
                             strCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("2")) {
+                    } else if ("2".equals(operResShowUnit.getFlowStatus())) {
                         if (strDoubleCheckOperName.length() == 0) {
                             strDoubleCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("3")) {
+                    } else if ("3".equals(operResShowUnit.getFlowStatus())) {
                         if (strApproveOperName.length() == 0) {
                             strApproveOperName = operResShowUnit.getOperName();
                         } else {
                             strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("4")) {
+                    } else if ("4".equals(operResShowUnit.getFlowStatus())) {
                         if (strAccountOperName.length() == 0) {
                             strAccountOperName = operResShowUnit.getOperName();
                         } else {
                             strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("5")) {
+                    } else if ("5".equals(operResShowUnit.getFlowStatus())) {
                         if (strPlaceOnFileOperName.length() == 0) {
                             strPlaceOnFileOperName = operResShowUnit.getOperName();
                         } else {
                             strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
                         }
-                    }else if (operResShowUnit.getFlowStatus().equals("6")) {
+                    }else if ("6".equals(operResShowUnit.getFlowStatus())) {
                         if (strQryOperName.length() == 0) {
                             strQryOperName = operResShowUnit.getOperName();
                         } else {
@@ -606,43 +606,43 @@ public class ResAppointOperAction implements Serializable{
                 strPlaceOnFileOperName = "";
                 strQryOperName="";
                 for (OperResShow operResShowUnit : operResShowForStlListTemp) {
-                    if (operResShowUnit.getFlowStatus().equals("0")) {
+                    if ("0".equals(operResShowUnit.getFlowStatus())) {
                         if (strInputOperName.length() == 0) {
                             strInputOperName = operResShowUnit.getOperName();
                         } else {
                             strInputOperName = strInputOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("1")) {
+                    } else if ("1".equals(operResShowUnit.getFlowStatus())) {
                         if (strCheckOperName.length() == 0) {
                             strCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strCheckOperName = strCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("2")) {
+                    } else if ("2".equals(operResShowUnit.getFlowStatus())) {
                         if (strDoubleCheckOperName.length() == 0) {
                             strDoubleCheckOperName = operResShowUnit.getOperName();
                         } else {
                             strDoubleCheckOperName = strDoubleCheckOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("3")) {
+                    } else if ("3".equals(operResShowUnit.getFlowStatus())) {
                         if (strApproveOperName.length() == 0) {
                             strApproveOperName = operResShowUnit.getOperName();
                         } else {
                             strApproveOperName = strApproveOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("4")) {
+                    } else if ("4".equals(operResShowUnit.getFlowStatus())) {
                         if (strAccountOperName.length() == 0) {
                             strAccountOperName = operResShowUnit.getOperName();
                         } else {
                             strAccountOperName = strAccountOperName + "," + operResShowUnit.getOperName();
                         }
-                    } else if (operResShowUnit.getFlowStatus().equals("5")) {
+                    } else if ("5".equals(operResShowUnit.getFlowStatus())) {
                         if (strPlaceOnFileOperName.length() == 0) {
                             strPlaceOnFileOperName = operResShowUnit.getOperName();
                         } else {
                             strPlaceOnFileOperName = strPlaceOnFileOperName + "," + operResShowUnit.getOperName();
                         }
-                    }else if (operResShowUnit.getFlowStatus().equals("6")) {
+                    }else if ("6".equals(operResShowUnit.getFlowStatus())) {
                         if (strQryOperName.length() == 0) {
                             strQryOperName = operResShowUnit.getOperName();
                         } else {

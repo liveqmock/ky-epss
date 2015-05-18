@@ -17,7 +17,7 @@ import java.util.List;
 @Component
 public interface MyTaskMapper {
     @Select(" select " +
-            "   distinct opr.FLOW_STATUS as flowStatus" +
+            "   distinct IFNULL(opr.FLOW_STATUS,'0') as flowStatus" +
             " from" +
             "   OPER_RES opr" +
             " where" +
@@ -27,7 +27,7 @@ public interface MyTaskMapper {
     List<TaskShow> getTaskFlowGroup();
 
     @Select(" select " +
-            "   distinct opr.FLOW_STATUS as flowStatus" +
+            "   distinct IFNULL(opr.FLOW_STATUS,'0') as flowStatus" +
             " from" +
             "   OPER_RES opr" +
             " where" +
