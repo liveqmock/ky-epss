@@ -565,8 +565,8 @@ public class ProgStlItemSubStlmentAction {
             stl7.setSubctt_ItemName("其它(质保金)");
             stl7.setEngPMng_PeriodNo(progStlInfo.getPeriodNo());
             stl7.setSubctt_ContractUnitPrice(bdRates[1]);
-            stl7.setEngPMng_CurrentPeriodAmt(bdCurrentPeriodTotalAmtTemp.multiply(bdRates[1]));
-            stl7.setEngPMng_BeginToCurrentPeriodAmt(bdCurrentPeriodTotalAmtTemp.multiply(bdRates[1]));
+            stl7.setEngPMng_CurrentPeriodAmt(stl2.getEngPMng_CurrentPeriodAmt().multiply(bdRates[1]));
+            stl7.setEngPMng_BeginToCurrentPeriodAmt(stl2.getEngPMng_BeginToCurrentPeriodAmt().multiply(bdRates[1]));
             progStlItemSubStlmentShowList.add(stl7);
             progStlItemSubStlmentShowListForApprove.add(stl7);
 
