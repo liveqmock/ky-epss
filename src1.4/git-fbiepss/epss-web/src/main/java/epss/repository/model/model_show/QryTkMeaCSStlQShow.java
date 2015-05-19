@@ -78,9 +78,6 @@ public class QryTkMeaCSStlQShow implements Serializable {
     // 当期分包结算开累工程金额
     private BigDecimal subcttStlItem_AddUpMAmt;
 
-
-
-
     public String getTkcttItem_Pkid() {
         return tkcttItem_Pkid;
     }

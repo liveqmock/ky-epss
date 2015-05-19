@@ -259,7 +259,7 @@ public class TkMeaCSubStlQItemAction {
                     cstplTkcttItem_TotalAmt_TotalAmtOfAllItem=cstplTkcttItem_TotalAmt_TotalAmtOfAllItem.add(
                             ToolUtil.getBdIgnoreNull(qryTkMeaCSStlQShowList.get(qryTkMeaCSStlQShowList.size()-1).getCstplTkcttItem_TotalAmt()));
                     if(ToolUtil.getBdIgnoreNull(tkcttItemShowUnit.getContractQuantity()).compareTo(ToolUtil.bigDecimal0)>0) {
-                        // 算出机量产值单价
+                        // 算出计量产值单价
                         BigDecimal bdCstplTkcttItem_TotalUnitPrice=
                                 bdCstplTkcttItem_TotalAmt.divide(tkcttItemShowUnit.getContractQuantity(),6,BigDecimal.ROUND_HALF_UP);
                         qryTkMeaCSStlQShowList.get(qryTkMeaCSStlQShowList.size()-1).setCstplTkcttItem_TotalUnitPrice(bdCstplTkcttItem_TotalUnitPrice);
